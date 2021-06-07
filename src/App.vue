@@ -10,19 +10,24 @@
 @import 'assets/style/base';
 @import 'assets/style/define';
 
-// #app {
-//   font-family: Avenir, Helvetica, Arial, sans-serif;
-//   -webkit-font-smoothing: antialiased;
-//   -moz-osx-font-smoothing: grayscale;
-//   text-align: center;
-//   color: #2c3e50;
-// }
+#app {
+  height: 100%;
+  width: 100%;
+  // font-family: Avenir, Helvetica, Arial, sans-serif;
+  // -webkit-font-smoothing: antialiased;
+  // -moz-osx-font-smoothing: grayscale;
+  // text-align: center;
+  // color: #2c3e50;
+}
 
 body {
+  height: 100vh;
+  width: 100vw;
+  box-sizing: border-box;
   overflow-x: hidden;
 
-  // &::-webkit-scrollbar{
-  //   width: 0;
-  // }
+  &::-webkit-scrollbar {
+    width: 0;
+  }
 }
 </style>
