@@ -38,6 +38,15 @@
     // 强制单行注释格式：'//' 后必跟空格
     "comment-format": [true, "check-space"],
 
+    // 位置因缺少空格而报的错
+    "one-line": [
+      true,
+      "check-open-brace",
+      "check-catch",
+      "check-else",
+      "check-whitespace"
+    ],
+
     // 任何情况下，if / for / do / while 后必须通过 {} 包裹代码块
     "curly": false,
 
@@ -67,6 +76,9 @@
 
     // 检查对象文字中键的排序。
     "object-literal-sort-keys": false,
+
+    // 关闭对象中括号内只能用变量
+    "no-string-literal": false,
 
     // // 字符串文字需要单引号或双引号。
     "quotemark": false

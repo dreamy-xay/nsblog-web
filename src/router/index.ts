@@ -10,7 +10,7 @@ const routes: RouteConfig[] = [
     meta: {
       title: 'blog主页'
     },
-    component: () => import('../views/home/Home.vue')
+    component: () => import('@/views/home/Home.vue')
   },
   {
     path: '/admin',
@@ -18,11 +18,19 @@ const routes: RouteConfig[] = [
     meta: {
       title: '后台管理页面'
     },
-    component: () => import('../views/admin/Admin.vue')
+    component: () => import('@/views/admin/Admin.vue')
+  },
+  {
+    path: '/admin/login',
+    name: 'adminLogin',
+    meta: {
+      title: '管理员登录'
+    },
+    component: () => import('@/views/admin/login/Login.vue')
   },
   {
     path: '*',
-    component: () => import('../views/Error.vue'),
+    component: () => import('@/views/Error.vue'),
     meta: {
       title: '对不起！您访问的页面不存在'
     }
