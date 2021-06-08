@@ -118,8 +118,7 @@ export default {
       }
 
       &::selection {
-        color: #fff;
-        background: rgba(255, 255, 255, 0.3);
+        background: transparent;
       }
 
       &.password-width {

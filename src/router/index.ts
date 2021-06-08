@@ -29,11 +29,16 @@ const routes: RouteConfig[] = [
     component: () => import('@/views/admin/login/Login.vue')
   },
   {
-    path: '*',
-    component: () => import('@/views/Error.vue'),
+    path: '/404',
+    name: '404',
     meta: {
       title: '对不起！您访问的页面不存在'
-    }
+    },
+    component: () => import('@/views/Error.vue')
+  },
+  {
+    path: '*',
+    redirect: '/404'
   }
 ];
 

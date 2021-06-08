@@ -102,6 +102,7 @@ export default {
         font-size: 14px;
         margin-left: 12px;
         cursor: default;
+        user-select: none;
       }
     }
 
@@ -119,6 +120,7 @@ export default {
       span {
         font-size: 14px;
         margin-right: 30px;
+        user-select: none;
       }
     }
 
