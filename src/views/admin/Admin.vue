@@ -10,7 +10,13 @@
       class="admin-right"
       :style="{width: 'calc(100% - ' + menuWidth + 'px)'}"
     >
-      <admin-top-bar @mainMenuClick="topBarMenuClick"></admin-top-bar>
+      <admin-top-bar
+        :notice-sum="noticeSum"
+        @mainMenuClick="topBarMenuClick"
+        @noticeClick="topBarNoticeClick"
+        @searchClick="topBarSearchClick"
+        @logoutClick="topBarLogoutClick"
+      ></admin-top-bar>
       <div class="right-content">
 
       </div>
@@ -19,9 +25,9 @@
 </template>
 
 <script lang="ts">
-import { verifyToken } from '@/network/token';
-import adminMenu from '@/views/admin/childComs/adminMenu.vue';
-import adminTopBar from '@/views/admin/childComs/adminTopBar.vue';
+import { verifyToken, clearToken } from '@/network/token';
+import adminTopBar from '@/views/admin/childComs/AdminTopBar.vue';
+import adminMenu from '@/views/admin/childComs/AdminMenu.vue';
 
 export default {
   name: 'Admin',
@@ -29,6 +35,7 @@ export default {
     return {
       menuCollapse: false,
       menuWidth: 210,
+      noticeSum: 30,
     };
   },
   watch: {
@@ -39,6 +46,15 @@ export default {
   methods: {
     topBarMenuClick() {
       (this as any).menuCollapse = !(this as any).menuCollapse;
+    },
+    topBarNoticeClick() {
+      console.log('notice');
+    },
+    topBarSearchClick(searchValue: string) {
+      console.log('searchValue:' + searchValue);
+    },
+    topBarLogoutClick() {
+      clearToken();
     },
   },
   beforeCreate() {
@@ -61,7 +77,6 @@ export default {
   .admin-left {
     height: 100%;
     float: left;
-    background-color: red;
     transition: all 0.3s ease-in-out;
   }
 
@@ -72,7 +87,7 @@ export default {
     transition: all 0.3s ease-in-out;
 
     .right-content {
-      height: 1000px;
+      height: 100%;
       width: 100%;
     }
   }

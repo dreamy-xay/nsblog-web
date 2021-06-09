@@ -97,7 +97,7 @@ export default {
     };
   },
   methods: {
-    menuHover(isShow: boolean) {
+    menuHover(isShow: boolean, delay: number) {
       (this as any).menuShow = isShow;
     },
     issueClick() {

@@ -1,55 +1,47 @@
 <template>
   <div class="admin-menu">
     <el-menu
-      class="el-menu-vertical-demo"
+      class="admin-menu-el"
       :collapse="isCollapse"
+      background-color="#252636"
+      text-color="#d1d5db"
+      active-text-color="#ffffff"
+      :router="true"
     >
-      <el-submenu
-        index="1"
-        :show-timeout="2000"
-        :hide-timeout="2000"
-      >
-        <template slot="title">
-          <i class="el-icon-location"></i>
-          <span slot="title">导航一</span>
-        </template>
-        <el-menu-item-group>
-          <span slot="title">分组一</span>
-          <el-menu-item index="1-1">选项1</el-menu-item>
-          <el-menu-item index="1-2">选项2</el-menu-item>
-        </el-menu-item-group>
-        <el-menu-item-group title="分组2">
-          <el-menu-item index="1-3">选项3</el-menu-item>
-        </el-menu-item-group>
-        <el-submenu index="1-4">
-          <span slot="title">选项4</span>
-          <el-menu-item index="1-4-1">选项1</el-menu-item>
+      <template v-for="(item,index) in menuList">
+        <el-submenu
+          v-if="item.child.length > 0"
+          :index="item.url"
+          :key="index"
+        >
+          <template #title>
+            <i
+              :class="'iconfont ' + item.icon"
+              v-if="item.icon !== ''"
+            ></i>
+            <span slot="title">{{item.title}}</span>
+          </template>
+          <el-menu-item
+            v-for="(subitem, subindex) in item.child"
+            :index="subitem.url"
+            :key="subindex"
+          >
+            <i :class="'iconfont ' + subitem.icon"></i>
+            <span slot="title">{{subitem.title}}</span>
+          </el-menu-item>
         </el-submenu>
-      </el-submenu>
-      <el-menu-item
-        index="2"
-        :show-timeout="2000"
-        :hide-timeout="2000"
-      >
-        <i class="el-icon-menu"></i>
-        <span slot="title">导航二</span>
-      </el-menu-item>
-      <el-menu-item
-        index="3"
-        :show-timeout="2000"
-        :hide-timeout="2000"
-      >
-        <i class="el-icon-document"></i>
-        <span slot="title">导航三</span>
-      </el-menu-item>
-      <el-menu-item
-        index="4"
-        :show-timeout="2000"
-        :hide-timeout="2000"
-      >
-        <i class="el-icon-setting"></i>
-        <span slot="title">导航四</span>
-      </el-menu-item>
+        <el-menu-item
+          v-if="item.child.length === 0"
+          :index="item.url"
+          :key="index"
+        >
+          <i
+            :class="'iconfont ' + item.icon"
+            v-if="item.icon !== ''"
+          ></i>
+          <span slot="title">{{item.title}}</span>
+        </el-menu-item>
+      </template>
     </el-menu>
   </div>
 </template>
@@ -63,7 +55,36 @@ export default {
       required: true,
     },
   },
-  data() {},
+  data() {
+    return {
+      menuList: [
+        { title: '仪表盘', icon: 'blog-data', url: '/admin/dataAnalyze', child: [] },
+        {
+          title: '文章',
+          icon: 'blog-arcitle',
+          url: 'article',
+          child: [
+            { title: '发布', icon: 'blog-edit-blog', url: '/admin/article/release' },
+            { title: '管理', icon: 'blog-ma', url: '/admin/article/manage' },
+          ],
+        },
+        { title: '评论', icon: 'blog-commit', url: '/admin/comment', child: [] },
+        { title: '分类/标签', icon: 'blog-tag', url: '/admin/categoryLabel', child: [] },
+        { title: '文件', icon: 'blog-file', url: '/admin/file', child: [] },
+        { title: '友链', icon: 'blog-link', url: '/admin/friendChain', child: [] },
+        { title: '访客', icon: 'blog-visitor', url: '/admin/visitor', child: [] },
+        {
+          title: '系统设置',
+          icon: 'blog-setting',
+          url: 'setting',
+          child: [
+            { title: '基本功能', icon: 'blog-feature', url: '/admin/setting/feature' },
+            { title: '个人信息', icon: 'blog-geren', url: '/admin/article/personInfo' },
+          ],
+        },
+      ],
+    };
+  },
   methods: {},
 };
 </script>
@@ -72,9 +93,15 @@ export default {
 .admin-menu {
   width: 100%;
   height: 100%;
+  background-color: #252636;
 
-  .el-menu-vertical-demo:not(.el-menu--collapse) {
+  .admin-menu-el:not(.el-menu--collapse) {
     width: 210px;
+  }
+
+  .iconfont {
+    font-size: 20px;
+    margin-right: 10px;
   }
 }
 </style>
