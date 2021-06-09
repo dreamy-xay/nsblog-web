@@ -26,7 +26,7 @@ const routes: RouteConfig[] = [
     meta: {
       title: '管理员登录'
     },
-    component: () => import('@/views/admin/login/Login.vue')
+    component: () => import('@/views/adminLogin/AdminLogin.vue')
   },
   {
     path: '/404',

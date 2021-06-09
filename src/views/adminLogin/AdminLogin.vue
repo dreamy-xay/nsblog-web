@@ -1,12 +1,15 @@
 <template>
-  <div class="login">
+  <div
+    class="admin-login"
+    ref="adminLoginPage"
+  >
     <div
       :style="{backgroundImage: 'url(' + loginBackground + ')',}"
-      class="login-mask"
+      class="admin-login-mask"
       :class="{'input-focus': isInputFocus}"
     >
     </div>
-    <div class="login-head">
+    <div class="admin-login-head">
       <div class="login-head-menu">
         <i
           class="iconfont blog-caidan"
@@ -59,19 +62,19 @@
         ></i>
       </div>
     </div>
-    <div class="login-body">
-      <login-from @input-focus="inputFocus"></login-from>
+    <div class="admin-login-body">
+      <admin-login-from @input-focus="inputFocus"></admin-login-from>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import loginFrom from '@/views/admin/login/childComps/loginFrom.vue';
+import adminLoginFrom from '@/views/adminLogin/childComps/AdminLoginFrom.vue';
 import html2canvas from 'html2canvas';
 import { downLoadFile } from '@/util/util';
 
 export default {
-  name: 'login',
+  name: 'adminLogin',
   data() {
     return {
       loginBackground: '/login/background.png',
@@ -107,7 +110,7 @@ export default {
       console.log('facebook click');
     },
     cameraClick() {
-      html2canvas(document.body).then((canvas) => {
+      html2canvas((this as any).$refs.adminLoginPage).then((canvas) => {
         downLoadFile('admin', canvas.toDataURL('png'));
       });
     },
@@ -116,18 +119,18 @@ export default {
     },
   },
   components: {
-    loginFrom,
+    adminLoginFrom,
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.login {
+.admin-login {
   width: 100%;
   height: 100%;
   overflow: hidden;
 
-  .login-mask {
+  .admin-login-mask {
     position: fixed;
     left: 0;
     top: 0;
@@ -147,7 +150,7 @@ export default {
     }
   }
 
-  .login-head {
+  .admin-login-head {
     width: 100%;
     height: 32px;
     margin-top: 20px;
@@ -251,7 +254,7 @@ export default {
     }
   }
 
-  .login-body {
+  .admin-login-body {
     width: 100%;
     height: calc(100% - 52px);
     display: flex;

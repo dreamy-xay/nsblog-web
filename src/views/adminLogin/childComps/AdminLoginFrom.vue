@@ -1,5 +1,5 @@
 <template>
-  <div class="login-from">
+  <div class="admin-login-from">
     <div class="login-from-head">
       <i class="iconfont blog-note"></i>
     </div>
@@ -10,15 +10,18 @@
         placeholder="UserName.."
         @focus="$emit('input-focus', true)"
         @blur="$emit('input-focus', false)"
+        @keyup.enter="$refs.adminLoginInputPassword.focus()"
       >
       <i class="iconfont blog-zhanghu icon-username"></i>
       <input
         :type="passwordType"
         v-model="password"
+        ref="adminLoginInputPassword"
         placeholder="PassWord.."
         :class="{'password-width': !passwordShow && password !== ''}"
         @focus="$emit('input-focus', true)"
         @blur="$emit('input-focus', false)"
+        @keyup.enter="$refs.adminLoginSubmit.click()"
       >
       <i class="iconfont blog-ziyuan icon-password"></i>
       <i
@@ -30,6 +33,7 @@
     <div
       class="login-from-footer"
       role="button"
+      ref="adminLoginSubmit"
       @click="submitClick"
     >
       Submit
@@ -42,7 +46,7 @@ import { adminLogin } from '@/network/api';
 import { setToken } from '@/network/token';
 
 export default {
-  name: 'loginFrom',
+  name: 'adminLoginFrom',
   data() {
     return {
       username: '',
@@ -77,7 +81,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.login-from {
+.admin-login-from {
   height: 306px;
   width: 310px;
 
