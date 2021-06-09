@@ -1,18 +1,132 @@
 <template>
-  <div class="admin-avatar">
-
+  <div
+    class="admin-avatar"
+    :class="{'admin-avatar-min': isCollapse}"
+  >
+    <div
+      class="admin-avatar-left"
+      :class="{'left-scale': isCollapse}"
+    >
+      <el-avatar
+        :src="avatar"
+        alt="admin"
+        :size="65"
+      ></el-avatar>
+    </div>
+    <div
+      class="admin-avatar-right"
+      :style="{opacity: adminAvatarRightOpacity}"
+    >
+      <div class="right-nickname">
+        {{nickname}}
+      </div>
+      <div class="right-profile">
+        {{profile}}
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang='ts'>
 export default {
   name: 'adminAvatar',
+  props: {
+    isCollapse: {
+      type: Boolean,
+      required: true,
+    },
+    avatar: {
+      type: String,
+      default: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
+    },
+    nickname: {
+      type: String,
+      default: 'Jone Doe',
+    },
+    profile: {
+      type: String,
+      default: 'Lorem ipsum dolor sit amet consectetur',
+    },
+  },
+  watch: {
+    isCollapse(isCollapse: boolean) {
+      if (isCollapse) (this as any).adminAvatarRightOpacity = 0;
+      else
+        setTimeout(() => {
+          (this as any).adminAvatarRightOpacity = 1;
+        }, 300);
+    },
+  },
+  data() {
+    return {
+      adminAvatarRightOpacity: (this as any).isCollapse ? 0 : 1,
+    };
+  },
+  methods: {},
 };
 </script>
 
 <style lang="scss" scoped>
 .admin-avatar {
   width: 100%;
-  height: 100px;
+  height: 65px;
+  overflow: hidden;
+  // position: sticky;
+  // top: 0;
+  // left: 0;
+  // z-index: 10;
+  background-color: #252636;
+  padding: 25px 0;
+  transition: all 0.3s ease-in-out;
+
+  &.admin-avatar-min {
+    padding: 5px 0;
+  }
+
+  .admin-avatar-left {
+    float: left;
+    margin-left: 15px;
+    width: 75px;
+    height: 100%;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+
+    &.left-scale {
+      width: 64px;
+      transform: scale(0.6);
+      margin-left: 0;
+    }
+  }
+
+  .admin-avatar-right {
+    float: right;
+    margin-right: 10px;
+    width: 110px;
+    height: 100%;
+    overflow: hidden;
+    color: #d1d5db;
+    // opacity: 0;
+
+    .right-nickname {
+      float: right;
+      width: 100%;
+      height: 29px;
+      line-height: 29px;
+    }
+
+    .right-profile {
+      float: right;
+      width: 100%;
+      height: 36px;
+      font-size: 12px;
+      line-height: 18px;
+      /* 文字溢出显示 */
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+  }
 }
 </style>

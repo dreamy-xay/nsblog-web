@@ -4,7 +4,12 @@
       class="admin-left"
       :style="{width: menuWidth + 'px'}"
     >
-      <admin-avatar></admin-avatar>
+      <admin-avatar
+        :is-collapse="menuCollapse"
+        :avatar="adminInfo.avatar"
+        :profile="adminInfo.profile"
+        :nickname="adminInfo.nickname"
+      ></admin-avatar>
       <admin-menu
         :is-collapse="menuCollapse"
         :menu-list="menuList"
@@ -40,6 +45,7 @@ export default {
       menuCollapse: false,
       menuWidth: 210,
       noticeSum: 30,
+      adminInfo: (this as any).$route.params,
       menuList: [
         { title: '仪表盘', icon: 'blog-data', url: '/admin/dataAnalyze', child: [] },
         {
