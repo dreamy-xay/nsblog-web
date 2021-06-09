@@ -1,9 +1,9 @@
 @font-face {
     font-family: "iconfont";
     /* Project id 2580201 */
-    src: url('//at.alicdn.com/t/font_2580201_dcjklnmhsq.woff2?t=1623221383809') format('woff2'),
-        url('//at.alicdn.com/t/font_2580201_dcjklnmhsq.woff?t=1623221383809') format('woff'),
-        url('//at.alicdn.com/t/font_2580201_dcjklnmhsq.ttf?t=1623221383809') format('truetype');
+    src: url('//at.alicdn.com/t/font_2580201_omy3uiul24i.woff2?t=1623241427099') format('woff2'),
+        url('//at.alicdn.com/t/font_2580201_omy3uiul24i.woff?t=1623241427099') format('woff'),
+        url('//at.alicdn.com/t/font_2580201_omy3uiul24i.ttf?t=1623241427099') format('truetype');
 }
 
 .iconfont {
@@ -12,6 +12,70 @@
     font-style: normal;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+.blog-geren:before {
+    content: "\e631";
+}
+
+.blog-feature:before {
+    content: "\e605";
+}
+
+.blog-visitor:before {
+    content: "\e679";
+}
+
+.blog-tag:before {
+    content: "\e60a";
+}
+
+.blog-setting:before {
+    content: "\e651";
+}
+
+.blog-arcitle:before {
+    content: "\e643";
+}
+
+.blog-ma:before {
+    content: "\e671";
+}
+
+.blog-link:before {
+    content: "\e627";
+}
+
+.blog-edit-blog:before {
+    content: "\e624";
+}
+
+.blog-file:before {
+    content: "\e622";
+}
+
+.blog-data:before {
+    content: "\e644";
+}
+
+.blog-commit:before {
+    content: "\e6b7";
+}
+
+.blog-tongzhi:before {
+    content: "\e625";
+}
+
+.blog-search:before {
+    content: "\e650";
+}
+
+.blog-cancel:before {
+    content: "\e6b4";
+}
+
+.blog-logout:before {
+    content: "\e66b";
 }
 
 .blog-caidan1:before {

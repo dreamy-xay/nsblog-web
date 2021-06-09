@@ -39,3 +39,10 @@ export function setToken(token: string, expires: number = 86400): void {
   };
   store.set('token', JSON.stringify(options));
 }
+
+/*
+ * 清空token值
+ */
+export function clearToken(token: string = 'token'): void {
+  store.remove(token);
+}
