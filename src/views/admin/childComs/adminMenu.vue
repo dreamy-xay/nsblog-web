@@ -1,13 +1,14 @@
 <template>
   <div class="admin-menu">
     <el-menu
-      default-active="1-4-1"
       class="el-menu-vertical-demo"
-      @open="handleOpen"
-      @close="handleClose"
       :collapse="isCollapse"
     >
-      <el-submenu index="1">
+      <el-submenu
+        index="1"
+        :show-timeout="2000"
+        :hide-timeout="2000"
+      >
         <template slot="title">
           <i class="el-icon-location"></i>
           <span slot="title">导航一</span>
@@ -25,18 +26,27 @@
           <el-menu-item index="1-4-1">选项1</el-menu-item>
         </el-submenu>
       </el-submenu>
-      <el-menu-item index="2">
+      <el-menu-item
+        index="2"
+        :show-timeout="2000"
+        :hide-timeout="2000"
+      >
         <i class="el-icon-menu"></i>
         <span slot="title">导航二</span>
       </el-menu-item>
       <el-menu-item
         index="3"
-        disabled
+        :show-timeout="2000"
+        :hide-timeout="2000"
       >
         <i class="el-icon-document"></i>
         <span slot="title">导航三</span>
       </el-menu-item>
-      <el-menu-item index="4">
+      <el-menu-item
+        index="4"
+        :show-timeout="2000"
+        :hide-timeout="2000"
+      >
         <i class="el-icon-setting"></i>
         <span slot="title">导航四</span>
       </el-menu-item>
@@ -47,12 +57,24 @@
 <script lang="ts">
 export default {
   name: 'adminMenu',
+  props: {
+    isCollapse: {
+      type: Boolean,
+      required: true,
+    },
+  },
+  data() {},
+  methods: {},
 };
 </script>
 
 <style lang="scss" scoped>
 .admin-menu {
-  width: 210px;
+  width: 100%;
   height: 100%;
+
+  .el-menu-vertical-demo:not(.el-menu--collapse) {
+    width: 210px;
+  }
 }
 </style>
