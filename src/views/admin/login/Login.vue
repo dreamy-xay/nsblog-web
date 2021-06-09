@@ -1,17 +1,42 @@
 <template>
-  <div
-    class="login"
-    :style="{backgroundImage: 'url(' + loginBackground + ')'}"
-  >
+  <div class="login">
+    <div
+      :style="{backgroundImage: 'url(' + loginBackground + ')',}"
+      class="login-mask"
+      :class="{'input-focus': isInputFocus}"
+    >
+    </div>
     <div class="login-head">
       <div class="login-head-menu">
         <i
           class="iconfont blog-caidan"
-          @click="menuClick"
+          :class="{'menu-light': menuShow}"
+          @mouseenter="menuHover(true)"
+          @mouseleave="menuHover(false)"
           role="button"
         ></i>
-        <span>MENU</span>
+        <span :class="{'menu-light': menuShow}">MENU</span>
+        <div
+          class="menu"
+          :class="{'menu-show': menuShow}"
+          @mouseenter="menuHover(true)"
+          @mouseleave="menuHover(false)"
+        >
+          <div class="menu-empty"></div>
+          <div class="menu-card">
+            <div
+              class="menu-item"
+              v-for="(item, index) in menuItems"
+              :key="index"
+              @click="item.click"
+              role="button"
+            >
+              {{item.name}}
+            </div>
+          </div>
+        </div>
       </div>
+
       <div class="login-head-other">
         <span
           @click="issueClick"
@@ -35,24 +60,42 @@
       </div>
     </div>
     <div class="login-body">
-      <login-from></login-from>
+      <login-from @input-focus="inputFocus"></login-from>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import loginFrom from '@/views/admin/login/childComps/loginFrom.vue';
+import html2canvas from 'html2canvas';
+import { downLoadFile } from '@/util/util';
 
 export default {
   name: 'login',
   data() {
     return {
       loginBackground: '/login/background.png',
+      isInputFocus: false,
+      menuShow: false,
+      menuItems: [
+        {
+          name: '回到主页',
+          click: () => {
+            (this as any).$router.push('/');
+          },
+        },
+        {
+          name: '背景偏好',
+          click: () => {
+            (this as any).menuShow = false;
+          },
+        },
+      ],
     };
   },
   methods: {
-    menuClick() {
-      console.log('menu click');
+    menuHover(isShow: boolean) {
+      (this as any).menuShow = isShow;
     },
     issueClick() {
       console.log('issue click');
@@ -64,7 +107,12 @@ export default {
       console.log('facebook click');
     },
     cameraClick() {
-      console.log('camera click');
+      html2canvas(document.body).then((canvas) => {
+        downLoadFile('admin', canvas.toDataURL('png'));
+      });
+    },
+    inputFocus(isFocus: boolean) {
+      (this as any).isInputFocus = isFocus;
     },
   },
   components: {
@@ -77,22 +125,41 @@ export default {
 .login {
   width: 100%;
   height: 100%;
-  background-position: center;
-  background-size: cover;
   overflow: hidden;
+
+  .login-mask {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-position: center;
+    background-size: cover;
+    transition: transform 0.25s, filter 0.25s;
+    background-attachment: fixed;
+    background-blend-mode: darken;
+    backface-visibility: hidden;
+    z-index: -2;
+
+    &.input-focus {
+      filter: blur(10px);
+      transform: scale(1.1);
+    }
+  }
 
   .login-head {
     width: 100%;
     height: 32px;
     margin-top: 20px;
     padding: 0 40px;
-    color: rgba(255, 255, 255, 0.75);
+    color: rgba(255, 255, 255, 0.6);
 
     .login-head-menu {
       display: flex;
       align-items: center;
       float: left;
       height: 100%;
+      position: relative;
 
       .iconfont {
         font-size: 30px;
@@ -103,6 +170,50 @@ export default {
         margin-left: 12px;
         cursor: default;
         user-select: none;
+      }
+
+      .menu {
+        overflow: hidden;
+        width: 160px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+        transition: 0.25s cubic-bezier(0.65, 0.05, 0.1, 1);
+        transform: scale(0.5);
+        transform-origin: 5% 22%;
+
+        &.menu-show {
+          opacity: 1;
+          transform: scale(1);
+        }
+
+        .menu-card {
+          background-color: transparent;
+          border-radius: 10px;
+          box-shadow: rgba(0, 0, 0, 0.05) 0 2px 10px;
+          background-color: rgba(255, 255, 255, 0.7);
+          overflow: hidden;
+
+          .menu-item {
+            padding-left: 20px;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            color: rgba(20, 20, 20, 0.9);
+            font-size: 11px;
+            transition: 0.25s;
+            user-select: none;
+
+            &:hover {
+              background-color: rgba(148, 117, 117, 0.6);
+            }
+          }
+        }
+      }
+
+      .menu-empty {
+        height: 40px;
+        width: 100%;
       }
     }
 
@@ -125,14 +236,17 @@ export default {
     }
 
     .login-head-menu .iconfont,
+    .login-head-menu span,
     .login-head-other .iconfont,
     .login-head-other span {
       transition: all 0.4s;
     }
 
     .login-head-menu .iconfont:hover,
+    .login-head-menu .iconfont:hover ~ span,
     .login-head-other .iconfont:hover,
-    .login-head-other span:hover {
+    .login-head-other span:hover,
+    .menu-light {
       color: white;
     }
   }

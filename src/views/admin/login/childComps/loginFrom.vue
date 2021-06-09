@@ -8,6 +8,8 @@
         type="text"
         v-model="username"
         placeholder="UserName.."
+        @focus="$emit('input-focus', true)"
+        @blur="$emit('input-focus', false)"
       >
       <i class="iconfont blog-zhanghu icon-username"></i>
       <input
@@ -15,6 +17,8 @@
         v-model="password"
         placeholder="PassWord.."
         :class="{'password-width': !passwordShow && password !== ''}"
+        @focus="$emit('input-focus', true)"
+        @blur="$emit('input-focus', false)"
       >
       <i class="iconfont blog-ziyuan icon-password"></i>
       <i
