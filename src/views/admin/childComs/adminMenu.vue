@@ -5,6 +5,7 @@
       :collapse="isCollapse"
       background-color="#252636"
       text-color="#d1d5db"
+      :default-active="menuList.length && activeFirst ? menuList[0].url : ''"
       active-text-color="#ffffff"
       :router="true"
     >
@@ -55,8 +56,12 @@ export default {
       required: true,
     },
     menuList: {
-      type: Object,
+      type: Array,
       required: true,
+    },
+    activeFirst: {
+      type: Boolean,
+      default: true,
     },
   },
 };
@@ -74,7 +79,7 @@ export default {
 
   .iconfont {
     font-size: 20px;
-    margin-right: 10px;
+    margin-right: 15px;
   }
 }
 </style>

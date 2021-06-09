@@ -4,6 +4,7 @@
       class="admin-left"
       :style="{width: menuWidth + 'px'}"
     >
+      <admin-avatar></admin-avatar>
       <admin-menu
         :is-collapse="menuCollapse"
         :menu-list="menuList"
@@ -21,7 +22,6 @@
         @logoutClick="topBarLogoutClick"
       ></admin-top-bar>
       <div class="right-content">
-
       </div>
     </div>
   </div>
@@ -31,6 +31,7 @@
 import { verifyToken, clearToken } from '@/network/token';
 import adminTopBar from '@/views/admin/childComs/AdminTopBar.vue';
 import adminMenu from '@/views/admin/childComs/AdminMenu.vue';
+import AdminAvatar from '@/views/admin/childComs/AdminAvatar.vue';
 
 export default {
   name: 'Admin',
@@ -83,6 +84,7 @@ export default {
       console.log('searchValue:' + searchValue);
     },
     topBarLogoutClick() {
+      (this as any).$router.replace('/admin/login');
       clearToken();
     },
   },
@@ -93,6 +95,7 @@ export default {
   components: {
     adminMenu,
     adminTopBar,
+    AdminAvatar,
   },
 };
 </script>
@@ -101,6 +104,7 @@ export default {
 .admin {
   width: 100%;
   height: 100%;
+  background-color: #2a2b3d;
   overflow: hidden;
 
   .admin-left {
@@ -116,8 +120,18 @@ export default {
     transition: all 0.3s ease-in-out;
 
     .right-content {
-      height: 100%;
       width: 100%;
+    }
+  }
+
+  .admin-left,
+  .admin-right {
+    overflow: scroll;
+    overflow-x: hidden;
+
+    &::-webkit-scrollbar {
+      width: 0;
+      opacity: 0;
     }
   }
 }
