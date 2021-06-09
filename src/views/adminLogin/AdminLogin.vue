@@ -14,7 +14,7 @@
         <i
           class="iconfont blog-caidan"
           :class="{'menu-light': menuShow}"
-          @mouseenter="menuHover(true)"
+          @mouseenter="menuHover(true, 300)"
           @mouseleave="menuHover(false)"
           role="button"
         ></i>
@@ -22,8 +22,8 @@
         <div
           class="menu"
           :class="{'menu-show': menuShow}"
-          @mouseenter="menuHover(true)"
-          @mouseleave="menuHover(false)"
+          @mouseenter="menuHover(true, 300)"
+          @mouseleave="menuHover(false, 300)"
         >
           <div class="menu-empty"></div>
           <div class="menu-card">
@@ -63,7 +63,10 @@
       </div>
     </div>
     <div class="admin-login-body">
-      <admin-login-from @input-focus="inputFocus"></admin-login-from>
+      <admin-login-from
+        @inputFocus="inputFocus"
+        @loginClick="loginClick"
+      ></admin-login-from>
     </div>
   </div>
 </template>
@@ -72,6 +75,8 @@
 import adminLoginFrom from '@/views/adminLogin/childComps/AdminLoginFrom.vue';
 import html2canvas from 'html2canvas';
 import { downLoadFile } from '@/util/util';
+import { adminLogin } from '@/network/api';
+import { setToken } from '@/network/token';
 
 export default {
   name: 'adminLogin',
@@ -94,11 +99,17 @@ export default {
           },
         },
       ],
+      delayTimer: null,
     };
   },
   methods: {
-    menuHover(isShow: boolean, delay: number) {
-      (this as any).menuShow = isShow;
+    menuHover(isShow: boolean, delay: number = 0) {
+      if ((this as any).delayTimer) clearTimeout((this as any).delayTimer);
+      (this as any).delayTimer = setTimeout(() => {
+        (this as any).menuShow = isShow;
+        clearTimeout((this as any).delayTimer);
+        (this as any).delayTimer = null;
+      }, delay);
     },
     issueClick() {
       console.log('issue click');
@@ -116,6 +127,16 @@ export default {
     },
     inputFocus(isFocus: boolean) {
       (this as any).isInputFocus = isFocus;
+    },
+    loginClick(username: string, password: string) {
+      adminLogin(username, password)
+        .then((res) => {
+          setToken(res.token);
+          (this as any).$router.push({ path: '/admin', params: res });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
   components: {

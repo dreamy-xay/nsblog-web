@@ -183,6 +183,7 @@ export default {
 
       &.input-focus {
         background-color: rgba(255, 255, 255, 0.4);
+        box-shadow: 0 0 0 2px rgba(196, 189, 141, 0.25);
       }
 
       .blog-cancel {

@@ -8,8 +8,8 @@
         type="text"
         v-model="username"
         placeholder="UserName.."
-        @focus="$emit('input-focus', true)"
-        @blur="$emit('input-focus', false)"
+        @focus="$emit('inputFocus', true)"
+        @blur="$emit('inputFocus', false)"
         @keyup.enter="$refs.adminLoginInputPassword.focus()"
       >
       <i class="iconfont blog-zhanghu icon-username"></i>
@@ -19,8 +19,8 @@
         ref="adminLoginInputPassword"
         placeholder="PassWord.."
         :class="{'password-width': !passwordShow && password !== ''}"
-        @focus="$emit('input-focus', true)"
-        @blur="$emit('input-focus', false)"
+        @focus="$emit('inputFocus', true)"
+        @blur="$emit('inputFocus', false)"
         @keyup.enter="$refs.adminLoginSubmit.click()"
       >
       <i class="iconfont blog-ziyuan icon-password"></i>
@@ -42,9 +42,6 @@
 </template>
 
 <script lang="ts">
-import { adminLogin } from '@/network/api';
-import { setToken } from '@/network/token';
-
 export default {
   name: 'adminLoginFrom',
   data() {
@@ -63,17 +60,7 @@ export default {
   methods: {
     submitClick() {
       if ((this as any).username && (this as any).password) {
-        console.log('username:' + (this as any).username);
-        console.log('password:' + (this as any).password);
-        adminLogin((this as any).username, (this as any).password)
-          .then((res) => {
-            console.log(res);
-            setToken(res.token);
-            (this as any).$router.replace({ path: '/admin' });
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        (this as any).$emit('loginClick', (this as any).username, (this as any).password);
       }
     },
   },
