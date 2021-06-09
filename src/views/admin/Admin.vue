@@ -4,7 +4,10 @@
       class="admin-left"
       :style="{width: menuWidth + 'px'}"
     >
-      <admin-menu :is-collapse="menuCollapse"></admin-menu>
+      <admin-menu
+        :is-collapse="menuCollapse"
+        :menu-list="menuList"
+      ></admin-menu>
     </div>
     <div
       class="admin-right"
@@ -36,6 +39,32 @@ export default {
       menuCollapse: false,
       menuWidth: 210,
       noticeSum: 30,
+      menuList: [
+        { title: '仪表盘', icon: 'blog-data', url: '/admin/dataAnalyze', child: [] },
+        {
+          title: '文章',
+          icon: 'blog-arcitle',
+          url: 'article',
+          child: [
+            { title: '发布', icon: 'blog-edit-blog', url: '/admin/article/release' },
+            { title: '管理', icon: 'blog-ma', url: '/admin/article/manage' },
+          ],
+        },
+        { title: '评论', icon: 'blog-commit', url: '/admin/comment', child: [] },
+        { title: '分类/标签', icon: 'blog-tag', url: '/admin/categoryLabel', child: [] },
+        { title: '文件', icon: 'blog-file', url: '/admin/file', child: [] },
+        { title: '友链', icon: 'blog-link', url: '/admin/friendChain', child: [] },
+        { title: '访客', icon: 'blog-visitor', url: '/admin/visitor', child: [] },
+        {
+          title: '系统设置',
+          icon: 'blog-setting',
+          url: 'setting',
+          child: [
+            { title: '基本功能', icon: 'blog-feature', url: '/admin/setting/feature' },
+            { title: '个人信息', icon: 'blog-geren', url: '/admin/article/personInfo' },
+          ],
+        },
+      ],
     };
   },
   watch: {
