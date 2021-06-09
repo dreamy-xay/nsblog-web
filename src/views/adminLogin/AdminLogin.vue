@@ -156,6 +156,7 @@ export default {
     margin-top: 20px;
     padding: 0 40px;
     color: rgba(255, 255, 255, 0.6);
+    box-sizing: border-box;
 
     .login-head-menu {
       display: flex;

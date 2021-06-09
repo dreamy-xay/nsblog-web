@@ -17,7 +17,7 @@
       >
         <el-badge
           :value="noticeSum"
-          :max="99"
+          :max="maxNoticeSum"
           type="danger"
         ><i class="iconfont blog-tongzhi"></i></el-badge>
       </div>
@@ -65,6 +65,10 @@ export default {
       type: Number,
       required: true,
     },
+    maxNoticeSum: {
+      type: Number,
+      default: 99,
+    },
   },
   data() {
     return {
@@ -90,6 +94,8 @@ export default {
   height: 70px;
   background-color: #6f6486;
   position: sticky;
+  top: 0;
+  right: 0;
   overflow: hidden;
 
   .admin-top-bar-left,
