@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-10 10:41:00
+ * @LastEditTime: 2021-06-11 00:06:07
 -->
 
 <template>
@@ -125,7 +125,7 @@ export default {
 .admin {
   width: 100%;
   height: 100%;
-  background-color: #2a2b3d;
+  background-color: $admin-background-color;
   overflow: hidden;
 
   .admin-left {

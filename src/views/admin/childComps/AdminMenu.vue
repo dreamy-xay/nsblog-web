@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 12:02:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-10 11:31:20
+ * @LastEditTime: 2021-06-11 00:41:14
 -->
 
 <template>
@@ -12,10 +12,10 @@
     <el-menu
       class="admin-menu-el"
       :collapse="isCollapse"
-      background-color="#252636"
-      text-color="#d1d5db"
+      :background-color="styles.adminMenuBackgroundColor"
+      :text-color="styles.adminMenuTextColor"
       :default-active="defaultActive"
-      active-text-color="#ffffff"
+      :active-text-color="styles.adminMenuActiveTextColor"
       :router="true"
     >
       <template v-for="(item,index) in menuList">
@@ -66,6 +66,7 @@
  * @author: dreamy-xay
  */
 
+import styles from '@/assets/style/define.scss';
 export default {
   name: 'adminMenu',
   props: {
@@ -87,6 +88,11 @@ export default {
       return (this as any).menuList.length && (this as any).activeFirst ? (this as any).$route.path : '';
     },
   },
+  data() {
+    return {
+      styles,
+    };
+  },
 };
 </script>
 
@@ -94,7 +100,7 @@ export default {
 .admin-menu {
   width: 100%;
   height: 100%;
-  background-color: #252636;
+  background-color: $admin-menu-background-color;
 
   .admin-menu-el:not(.el-menu--collapse) {
     width: 210px;
