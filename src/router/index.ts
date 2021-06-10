@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-10 10:45:03
+ * @LastEditTime: 2021-06-10 11:28:53
  */
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
@@ -23,11 +23,20 @@ const routes: RouteConfig[] = [
   {
     path: '/admin',
     name: 'admin',
+    redirect: '/admin/dataAnalyze',
     meta: {
       title: '后台管理页面'
     },
     component: () => import('@/views/admin/Admin.vue'),
     children: [
+      {
+        path: 'dataAnalyze',
+        name: 'dataAnalyze',
+        meta: {
+          title: '数据统计页面(仪表盘)'
+        },
+        component: () => import('@/views/admin/childComps/DataAnalyze.vue')
+      },
       {
         path: 'article/manage',
         name: 'articleManage',
