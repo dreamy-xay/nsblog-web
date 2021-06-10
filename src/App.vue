@@ -1,3 +1,11 @@
+<!--
+ * @Description:
+ * @Version:
+ * @Autor: dreamy-xay
+ * @Date: 2021-06-09 08:19:13
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-06-10 19:15:49
+-->
 <template>
   <div id="app">
     <router-view />
@@ -25,6 +33,7 @@ body {
   width: 100vw;
   box-sizing: border-box;
   overflow-x: hidden;
+  background-color: rgb(51, 51, 51); // filter: blur();
 
   &::-webkit-scrollbar {
     width: 0;
