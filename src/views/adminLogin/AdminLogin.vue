@@ -1,3 +1,12 @@
+<!--
+ * @Description: 管理员登陆界面
+ * @Version:
+ * @Autor: dreamy-xay
+ * @Date: 2021-06-09 08:19:13
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-06-10 10:06:06
+-->
+
 <template>
   <div
     class="admin-login"
@@ -72,6 +81,11 @@
 </template>
 
 <script lang="ts">
+/**
+ * @description: 管理员登陆界面
+ * @author: dreamy-xay
+ */
+
 import adminLoginFrom from '@/views/adminLogin/childComps/AdminLoginFrom.vue';
 import html2canvas from 'html2canvas';
 import { downLoadFile } from '@/util/util';

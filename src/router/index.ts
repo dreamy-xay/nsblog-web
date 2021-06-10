@@ -1,3 +1,11 @@
+/*
+ * @Description:
+ * @Version:
+ * @Autor: dreamy-xay
+ * @Date: 2021-06-09 08:19:13
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-06-10 10:45:03
+ */
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 
@@ -18,7 +26,25 @@ const routes: RouteConfig[] = [
     meta: {
       title: '后台管理页面'
     },
-    component: () => import('@/views/admin/Admin.vue')
+    component: () => import('@/views/admin/Admin.vue'),
+    children: [
+      {
+        path: 'article/manage',
+        name: 'articleManage',
+        meta: {
+          title: '文章管理页面'
+        },
+        component: () => import('@/views/admin/childComps/ArticleManage.vue')
+      },
+      {
+        path: 'comment',
+        name: 'commentManage',
+        meta: {
+          title: '评论管理页面'
+        },
+        component: () => import('@/views/admin/childComps/CommentManage.vue')
+      }
+    ]
   },
   {
     path: '/admin/login',

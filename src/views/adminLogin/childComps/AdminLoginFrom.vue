@@ -1,3 +1,13 @@
+<!--
+ * @Description: 管理员登陆界面表单
+ * @Version:
+ * @Autor: dreamy-xay
+ * @Date: 2021-06-09 08:19:13
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-06-10 10:06:13
+-->
+
+
 <template>
   <div class="admin-login-from">
     <div class="login-from-head">
@@ -42,6 +52,17 @@
 </template>
 
 <script lang="ts">
+/**
+ * @description: 管理员登陆界面表单
+ * @event loginClick 登录点击递交触发事件 `账号密码均不为空时触发`
+ * @param {String} loginClick.username 管理员账户名
+ * @param {String} loginClick.password 管理员密码
+ *
+ * @event inputFocus 输入框聚焦触发事件
+ * @param {Boolean} inputFocus.isFocus 是否触发事件状态
+ * @author: dreamy-xay
+ */
+
 export default {
   name: 'adminLoginFrom',
   data() {

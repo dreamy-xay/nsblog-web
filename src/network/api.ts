@@ -1,7 +1,20 @@
+/*
+ * @Description:  部分api
+ * @Version:
+ * @Autor: dreamy-xay
+ * @Date: 2021-06-09 08:19:13
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-06-10 10:30:56
+ */
+
 import { request, get, post } from '@/network/request';
 
-/*
- * adminLogin
+/**
+ * @description: 管理员登录
+ * @param {string} account 管理员账户名
+ * @param {string} password 管理员密码
+ * @return {Promise<any>} 返回请求的 Promise
+ * @author: dreamy-xay
  */
 export function adminLogin(account: string, password: string): Promise<any> {
   return post({

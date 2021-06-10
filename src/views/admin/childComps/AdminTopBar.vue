@@ -1,3 +1,12 @@
+<!--
+ * @Description:
+ * @Version:
+ * @Autor: dreamy-xay
+ * @Date: 2021-06-09 13:15:08
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-06-10 09:47:37
+-->
+
 <template>
   <div class="admin-top-bar">
     <div class="admin-top-bar-left">
@@ -58,6 +67,17 @@
 </template>
 
 <script lang="ts">
+/**
+ * @description: 管理员界面顶部栏
+ * @param {Number} noticeSum 通知数量 `必传参数`
+ * @param {Number} maxNoticeSum 最大限制通知数量 `默认为99`
+ * @event mainMenuClick 主菜单按钮点击事件
+ * @event noticeClick 通知按钮点击事件
+ * @event searchClick 搜索点击事件
+ * @event logoutClick 登出点击事件
+ * @author: dreamy-xay
+ */
+
 export default {
   name: 'adminTopBar',
   props: {

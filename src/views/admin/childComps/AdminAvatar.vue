@@ -1,3 +1,12 @@
+<!--
+ * @Description: 管理员界面右侧栏管理员头像
+ * @Version:
+ * @Autor: dreamy-xay
+ * @Date: 2021-06-09 15:56:22
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-06-10 09:41:47
+-->
+
 <template>
   <div
     class="admin-avatar"
@@ -10,6 +19,7 @@
       <el-avatar
         :src="avatar"
         alt="admin"
+        @error="$emit('error', $event)"
         :size="65"
       ></el-avatar>
     </div>
@@ -20,14 +30,24 @@
       <div class="right-nickname">
         {{nickname}}
       </div>
-      <div class="right-profile">
-        {{profile}}
+      <div class="right-signature">
+        {{signature}}
       </div>
     </div>
   </div>
 </template>
 
 <script lang='ts'>
+/**
+ * @description: 管理员界面右侧栏管理员头像
+ * @param {Boolean} isCollapse 菜单是否折叠 `必传参数`
+ * @param {String} avatar 头像链接  `必传参数`
+ * @param {String} nickname 昵称 `必传参数`
+ * @param {String} signature 个性签名 `必传参数`
+ * @event error 头像加载失败时触发
+ * @author: dreamy-xay
+ */
+
 export default {
   name: 'adminAvatar',
   props: {
@@ -43,7 +63,7 @@ export default {
       type: String,
       default: 'Jone Doe',
     },
-    profile: {
+    signature: {
       type: String,
       default: 'Lorem ipsum dolor sit amet consectetur',
     },
@@ -114,7 +134,7 @@ export default {
       line-height: 29px;
     }
 
-    .right-profile {
+    .right-signature {
       float: right;
       width: 100%;
       height: 36px;

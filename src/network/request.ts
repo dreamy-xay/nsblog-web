@@ -1,4 +1,13 @@
-import axios from 'axios';
+/*
+ * @Description: 封装axios
+ * @Version:
+ * @Autor: dreamy-xay
+ * @Date: 2021-06-09 08:19:13
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-06-10 10:32:10
+ */
+
+import axios, { AxiosRequestConfig } from 'axios';
 import { getToken } from './token';
 
 // 1.创建axios的实例
@@ -7,7 +16,13 @@ const instance = axios.create({
   timeout: 5000
 });
 
-export function request(option: object): Promise<any> {
+/**
+ * @description: request请求
+ * @param {AxiosRequestConfig} options axios参数(请参考AxiosRequestConfig)
+ * @return {Promise<any>} 返回请求后的Promise
+ * @author: dreamy-xay
+ */
+export function request(options: AxiosRequestConfig): Promise<any> {
   return new Promise((resolve, reject) => {
     // 配置请求和响应拦截
     instance.interceptors.request.use(
@@ -47,7 +62,7 @@ export function request(option: object): Promise<any> {
     );
 
     // 2.传入对象进行网络请求
-    instance(option)
+    instance(options)
       .then(res => {
         resolve(res);
       })
@@ -57,14 +72,28 @@ export function request(option: object): Promise<any> {
   });
 }
 
-export function get(options: object): Promise<any> {
+/**
+ * @description: get请求
+ * @param {AxiosRequestConfig} options axios参数(请参考AxiosRequestConfig)
+ * @return {Promise<any>} 返回请求后的Promise
+ * @author: dreamy-xay
+ */
+export function get(options: AxiosRequestConfig): Promise<any> {
+  if (options['method']) delete options['method'];
   return request({
     ...options,
     method: 'GET'
   });
 }
 
-export function post(options: object): Promise<any> {
+/**
+ * @description: post请求
+ * @param {AxiosRequestConfig} options axios参数(请参考AxiosRequestConfig)
+ * @return {Promise<any>} 返回请求后的Promise
+ * @author: dreamy-xay
+ */
+export function post(options: AxiosRequestConfig): Promise<any> {
+  if (options['method']) delete options['method'];
   return request({
     ...options,
     method: 'POST'

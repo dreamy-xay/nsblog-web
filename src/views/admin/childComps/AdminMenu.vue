@@ -1,3 +1,12 @@
+<!--
+ * @Description: 管理员界面右侧栏菜单
+ * @Version:
+ * @Autor: dreamy-xay
+ * @Date: 2021-06-09 12:02:13
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-06-10 09:54:19
+-->
+
 <template>
   <div class="admin-menu">
     <el-menu
@@ -28,7 +37,7 @@
             :key="subindex"
           >
             <i :class="'iconfont ' + subitem.icon"></i>
-            <span slot="title">{{subitem.title}}</span>
+            <span slot="title">{{(item.icon !== '' && isCollapse ? '　' : '') + subitem.title}}</span>
           </el-menu-item>
         </el-submenu>
         <el-menu-item
@@ -38,6 +47,7 @@
         >
           <i
             :class="'iconfont ' + item.icon"
+            style="margin-right: 15px;"
             v-if="item.icon !== ''"
           ></i>
           <span slot="title">{{item.title}}</span>
@@ -48,6 +58,14 @@
 </template>
 
 <script lang="ts">
+/**
+ * @description: 管理员界面右侧栏菜单
+ * @param {Boolean} isCollapse 菜单是否折叠 `必传参数`
+ * @param {Array} menuList 自定义菜单列表，默认格式 [{title,icon,url,child:[{title,icon,url},...]},...] `必传参数`
+ * @param {Boolean} activeFirst 是否首次激活第一项菜单 `默认true`
+ * @author: dreamy-xay
+ */
+
 export default {
   name: 'adminMenu',
   props: {

@@ -1,11 +1,23 @@
+/*
+ * @Description: token基本操作
+ * @Version:
+ * @Autor: dreamy-xay
+ * @Date: 2021-06-09 08:19:13
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-06-10 10:21:21
+ */
+
 import store from 'storejs';
 import { Base64 } from 'js-base64';
 import { Md5 } from 'ts-md5/dist/md5';
 
-/*
- * 验证token合法
+/**
+ * @description:
+ * @param {string} originToken  源token，即从浏览器获取的token(被JSON.stringify化的对象) `默认自动从浏览器获取`
+ * @return {{ status: boolean; token: string }} 返回一个对象 内置 status,token 属性，status为token是否有效状态，token为获取的最初由后台发送过来的token
+ * @author: dreamy-xay
  */
-export function verifyToken(originToken = store.get('token')): { status: boolean; token: string } {
+export function verifyToken(originToken: string = store.get('token')): { status: boolean; token: string } {
   if (originToken) {
     const { token, code, startTime, expires } = JSON.parse(originToken);
     if (token !== null && code !== null && startTime !== null && expires !== null)
@@ -18,8 +30,10 @@ export function verifyToken(originToken = store.get('token')): { status: boolean
   } else return { status: false, token: '' };
 }
 
-/*
- * 获取处理后的token值
+/**
+ * @description: 获取处理后的token值
+ * @return {string} 返回发送给后台的转码token
+ * @author: dreamy-xay
  */
 export function getToken(): string {
   const token = verifyToken().token; // 后端返回的token值
@@ -27,21 +41,29 @@ export function getToken(): string {
   return `Basic ${baseCode}`;
 }
 
-/*
- * 设置token值
+/**
+ * @description: 设置token值
+ * @param {string} token 后台返回的token
+ * @param {number} expires  token从现在起有效期限(以秒记) `默认为86400(1天)`
+ * @param {string} tokenKey token存入本地浏览器 localStorage 中的键值 `默认为'token'`
+ * @return {void}
+ * @author: dreamy-xay
  */
-export function setToken(token: string, expires: number = 86400): void {
+export function setToken(token: string, expires: number = 86400, tokenKey: string = 'token'): void {
   const options: object = {
     token,
     code: Md5.hashStr(token),
     startTime: new Date().getTime(),
     expires
   };
-  store.set('token', JSON.stringify(options));
+  store.set(tokenKey, JSON.stringify(options));
 }
 
-/*
- * 清空token值
+/**
+ * @description: 清空token值
+ * @param {string} token 清空本地浏览器 localStorage 中指定键值token
+ * @return {*}
+ * @author: dreamy-xay
  */
 export function clearToken(token: string = 'token'): void {
   store.remove(token);
