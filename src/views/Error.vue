@@ -1,3 +1,12 @@
+<!--
+ * @Description: 404界面
+ * @Version:
+ * @Autor: dreamy-xay
+ * @Date: 2021-06-09 08:19:13
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-06-10 09:53:56
+-->
+
 <template>
   <div class="error">
     <svg
@@ -323,6 +332,11 @@
 </template>
 
 <script lang="ts">
+/**
+ * @description: 404界面
+ * @author: dreamy-xay
+ */
+
 export default {
   name: 'Error',
   methods: {

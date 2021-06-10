@@ -1,3 +1,12 @@
+<!--
+ * @Description: 博客主页
+ * @Version:
+ * @Autor: dreamy-xay
+ * @Date: 2021-06-09 08:19:13
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-06-10 10:11:30
+-->
+
 <template>
   <div class="home">
     <a
@@ -11,6 +20,11 @@
 </template>
 
 <script lang="ts">
+/**
+ * @description: 博客主页
+ * @author: dreamy-xay
+ */
+
 export default {
   name: 'Home',
 };

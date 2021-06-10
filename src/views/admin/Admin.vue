@@ -1,3 +1,12 @@
+<!--
+ * @Description: 管理员管理界面
+ * @Version:
+ * @Autor: dreamy-xay
+ * @Date: 2021-06-09 08:19:13
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-06-10 10:41:00
+-->
+
 <template>
   <div class="admin">
     <div
@@ -7,7 +16,7 @@
       <admin-avatar
         :is-collapse="menuCollapse"
         :avatar="adminInfo.avatar"
-        :profile="adminInfo.profile"
+        :signature="adminInfo.signature"
         :nickname="adminInfo.nickname"
       ></admin-avatar>
       <admin-menu
@@ -27,16 +36,22 @@
         @logoutClick="topBarLogoutClick"
       ></admin-top-bar>
       <div class="right-content">
+        <router-view></router-view>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+/**
+ * @description: 管理员管理界面
+ * @author: dreamy-xay
+ */
+
 import { verifyToken, clearToken } from '@/network/token';
-import adminTopBar from '@/views/admin/childComs/AdminTopBar.vue';
-import adminMenu from '@/views/admin/childComs/AdminMenu.vue';
-import AdminAvatar from '@/views/admin/childComs/AdminAvatar.vue';
+import adminTopBar from '@/views/admin/childComps/AdminTopBar.vue';
+import adminMenu from '@/views/admin/childComps/AdminMenu.vue';
+import AdminAvatar from '@/views/admin/childComps/AdminAvatar.vue';
 
 export default {
   name: 'Admin',

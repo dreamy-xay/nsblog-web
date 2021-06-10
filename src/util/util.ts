@@ -1,3 +1,19 @@
+/*
+ * @Description: 实用工具函数
+ * @Version:
+ * @Autor: dreamy-xay
+ * @Date: 2021-06-09 11:22:38
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-06-10 10:11:16
+ */
+
+/**
+ * @description: 浏览器下载文件
+ * @param {string} fileName
+ * @param {any} canvasImg
+ * @return {void}
+ * @author: dreamy-xay
+ */
 export function downLoadFile(fileName: string, canvasImg: any): void {
   // 创建一个a标签
   const a = document.createElement('a');
