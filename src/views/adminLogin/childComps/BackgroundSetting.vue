@@ -1,0 +1,58 @@
+<!--
+ * @Description:
+ * @Version:
+ * @Autor: dreamy-xay
+ * @Date: 2021-06-10 21:55:59
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-06-10 23:04:32
+-->
+<template>
+  <div class="background-setting">
+    <base-popup
+      :show="popShow"
+      @close="close"
+      title="背景图像偏好"
+    >
+    </base-popup>
+  </div>
+</template>
+
+<script lang="ts">
+/**
+ * @description:
+ * @param {Boolean} show 背景设置弹出框是否显示 `必传参数`
+ * @author: dreamy-xay
+ */
+
+import basePopup from '@/components/content/BasePopup.vue';
+export default {
+  name: 'backgroundSetting',
+  props: {
+    show: {
+      type: Boolean,
+      required: true,
+    },
+  },
+  watch: {
+    show(isShow: boolean) {
+      if (isShow) (this as any).popShow = true;
+    },
+  },
+  data() {
+    return {
+      popShow: (this as any).show,
+    };
+  },
+  methods: {
+    close() {
+      (this as any).popShow = false;
+    },
+  },
+  components: {
+    basePopup,
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+</style>

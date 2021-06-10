@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-10 10:06:06
+ * @LastEditTime: 2021-06-10 22:47:16
 -->
 
 <template>
@@ -77,6 +77,7 @@
         @loginClick="loginClick"
       ></admin-login-from>
     </div>
+    <background-setting :show="backgroundSettingPopupShow"></background-setting>
   </div>
 </template>
 
@@ -87,6 +88,7 @@
  */
 
 import adminLoginFrom from '@/views/adminLogin/childComps/AdminLoginFrom.vue';
+import backgroundSetting from '@/views/adminLogin/childComps/BackgroundSetting.vue';
 import html2canvas from 'html2canvas';
 import { downLoadFile } from '@/util/util';
 import { adminLogin } from '@/network/api';
@@ -102,18 +104,15 @@ export default {
       menuItems: [
         {
           name: '回到主页',
-          click: () => {
-            (this as any).$router.push('/');
-          },
+          click: (this as any).goHome,
         },
         {
-          name: '背景偏好',
-          click: () => {
-            (this as any).menuShow = false;
-          },
+          name: '背景图像偏好',
+          click: (this as any).backgroundSetting,
         },
       ],
       delayTimer: null,
+      backgroundSettingPopupShow: false,
     };
   },
   methods: {
@@ -152,9 +151,21 @@ export default {
           console.log(err);
         });
     },
+    /* menuMethods */
+    goHome() {
+      (this as any).$router.push('/');
+    },
+    backgroundSetting() {
+      (this as any).backgroundSettingPopupShow = true;
+      (this as any).menuShow = false;
+      setTimeout(() => {
+        (this as any).backgroundSettingPopupShow = false;
+      }, 0);
+    },
   },
   components: {
     adminLoginFrom,
+    backgroundSetting,
   },
 };
 </script>
@@ -218,20 +229,31 @@ export default {
         left: 0;
         top: 0;
         opacity: 0;
-        transition: 0.25s cubic-bezier(0.65, 0.05, 0.1, 1);
-        transform: scale(0.5);
+        transition: 0.3s cubic-bezier(0.65, 0.05, 0.1, 1);
         transform-origin: 5% 22%;
 
         &.menu-show {
           opacity: 1;
-          transform: scale(1);
+          animation: menuShowScale 0.3s cubic-bezier(0.65, 0.05, 0.1, 1);
+        }
+
+        @keyframes menuShowScale {
+          0% {
+            transform: scale(0.5);
+          }
+          60% {
+            transform: scale(1.03);
+          }
+          100% {
+            transform: scale(1);
+          }
         }
 
         .menu-card {
           background-color: transparent;
           border-radius: 10px;
           box-shadow: rgba(0, 0, 0, 0.05) 0 2px 10px;
-          background-color: rgba(255, 255, 255, 0.7);
+          background-color: rgba(255, 255, 255, 1);
           overflow: hidden;
 
           .menu-item {
@@ -244,7 +266,7 @@ export default {
             user-select: none;
 
             &:hover {
-              background-color: rgba(148, 117, 117, 0.6);
+              background-color: rgba(0, 0, 0, 0.15);
             }
           }
         }
@@ -278,7 +300,7 @@ export default {
     .login-head-menu span,
     .login-head-other .iconfont,
     .login-head-other span {
-      transition: all 0.4s;
+      transition: color 0.4s;
     }
 
     .login-head-menu .iconfont:hover,
