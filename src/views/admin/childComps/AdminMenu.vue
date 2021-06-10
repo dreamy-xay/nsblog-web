@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 12:02:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-10 09:54:19
+ * @LastEditTime: 2021-06-10 11:31:20
 -->
 
 <template>
@@ -14,7 +14,7 @@
       :collapse="isCollapse"
       background-color="#252636"
       text-color="#d1d5db"
-      :default-active="menuList.length && activeFirst ? menuList[0].url : ''"
+      :default-active="defaultActive"
       active-text-color="#ffffff"
       :router="true"
     >
@@ -80,6 +80,11 @@ export default {
     activeFirst: {
       type: Boolean,
       default: true,
+    },
+  },
+  computed: {
+    defaultActive() {
+      return (this as any).menuList.length && (this as any).activeFirst ? (this as any).$route.path : '';
     },
   },
 };
