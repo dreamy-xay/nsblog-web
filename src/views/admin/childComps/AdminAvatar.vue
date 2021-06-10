@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 15:56:22
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-10 09:41:47
+ * @LastEditTime: 2021-06-11 00:42:49
 -->
 
 <template>
@@ -95,7 +95,7 @@ export default {
   // top: 0;
   // left: 0;
   // z-index: 10;
-  background-color: #252636;
+  background-color: $admin-menu-background-color;
   padding: 25px 0;
   transition: all 0.3s ease-in-out;
 
@@ -124,7 +124,7 @@ export default {
     width: 110px;
     height: 100%;
     overflow: hidden;
-    color: #d1d5db;
+    color: $admin-menu-text-color;
     // opacity: 0;
 
     .right-nickname {

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 13:15:08
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-10 09:47:37
+ * @LastEditTime: 2021-06-11 01:03:59
 -->
 
 <template>
@@ -112,7 +112,7 @@ export default {
 .admin-top-bar {
   width: 100%;
   height: 70px;
-  background-color: #6f6486;
+  background-color: $admin-top-bar-background-color;
   position: sticky;
   top: 0;
   right: 0;
@@ -140,13 +140,13 @@ export default {
       margin-left: 20px;
 
       &:hover {
-        background-color: #5e4d81;
+        background-color: $admin-top-bar-menu-hover-background-color;
       }
 
       .iconfont {
         font-size: 35px;
         font-weight: 600;
-        color: white;
+        color: $admin-top-bar-menu-icon-color;
       }
     }
   }
@@ -157,12 +157,12 @@ export default {
     .right-logout {
       float: right;
       margin-right: 20px;
-      color: #d6cbcb;
+      color: $admin-top-bar-logout-text-color;
       transition: all 0.4s;
       line-height: 70px;
 
       &:hover {
-        color: white;
+        color: $admin-top-bar-logout-hover-text-color;
       }
 
       .iconfont {
@@ -176,7 +176,7 @@ export default {
       float: right;
       height: 35px;
       width: 230px;
-      background-color: rgba(255, 255, 255, 0.2);
+      background-color: $admin-top-bar-search-background-color;
       border-radius: 5px;
       overflow: hidden;
       margin-right: 20px;
@@ -190,19 +190,19 @@ export default {
         padding-right: 16px;
         width: 195px;
         font-size: 14px;
-        background-color: rgba(255, 255, 255, 0.8);
-        color: #6c757d;
+        background-color: $admin-top-bar-search-input-background-color;
+        color: $admin-top-bar-search-input-text-color;
         line-height: 35px;
         letter-spacing: 1px;
         transition: all 0.4s;
 
         &:focus {
-          background-color: white;
+          background-color: $admin-top-bar-search-input-focus-background-color;
         }
       }
 
       &.input-focus {
-        background-color: rgba(255, 255, 255, 0.4);
+        background-color: $admin-top-bar-search-focus-background-color;
         box-shadow: 0 0 0 2px rgba(196, 189, 141, 0.25);
       }
 
@@ -224,14 +224,14 @@ export default {
         top: 2.5px;
 
         &:hover .iconfont {
-          color: white;
+          color: $admin-top-bar-search-hover-icon-color;
         }
 
         .iconfont {
           transition: all 0.4s;
           line-height: 30px;
           font-size: 20px;
-          color: #371777;
+          color: $admin-top-bar-search-icon-color;
         }
       }
     }
@@ -243,11 +243,11 @@ export default {
 
       .iconfont {
         font-size: 24px;
-        color: #d6cbcb;
+        color: $admin-top-bar-notice-icon-color;
         transition: all 0.4s;
 
         &:hover {
-          color: white;
+          color: $admin-top-bar-notice-hover-icon-color;
         }
       }
     }
