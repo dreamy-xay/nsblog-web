@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-10 10:21:21
+ * @LastEditTime: 2021-06-11 22:15:23
  */
 
 import store from 'storejs';
@@ -44,12 +44,12 @@ export function getToken(): string {
 /**
  * @description: 设置token值
  * @param {string} token 后台返回的token
- * @param {number} expires  token从现在起有效期限(以秒记) `默认为86400(1天)`
+ * @param {number} expires  token从现在起有效期限(以秒记) `默认为172800(2天)`
  * @param {string} tokenKey token存入本地浏览器 localStorage 中的键值 `默认为'token'`
  * @return {void}
  * @author: dreamy-xay
  */
-export function setToken(token: string, expires: number = 86400, tokenKey: string = 'token'): void {
+export function setToken(token: string, expires: number = 172800, tokenKey: string = 'token'): void {
   const options: object = {
     token,
     code: Md5.hashStr(token),
@@ -62,7 +62,7 @@ export function setToken(token: string, expires: number = 86400, tokenKey: strin
 /**
  * @description: 清空token值
  * @param {string} token 清空本地浏览器 localStorage 中指定键值token
- * @return {*}
+ * @return {void}
  * @author: dreamy-xay
  */
 export function clearToken(token: string = 'token'): void {

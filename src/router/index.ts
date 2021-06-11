@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-10 11:28:53
+ * @LastEditTime: 2021-06-11 21:33:48
  */
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
@@ -23,7 +23,6 @@ const routes: RouteConfig[] = [
   {
     path: '/admin',
     name: 'admin',
-    redirect: '/admin/dataAnalyze',
     meta: {
       title: '后台管理页面'
     },

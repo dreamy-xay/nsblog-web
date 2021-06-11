@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-11 00:06:07
+ * @LastEditTime: 2021-06-11 22:15:50
 -->
 
 <template>
@@ -49,6 +49,7 @@
  */
 
 import { verifyToken, clearToken } from '@/network/token';
+import { getAdminInfo } from '@/network/api';
 import adminTopBar from '@/views/admin/childComps/AdminTopBar.vue';
 import adminMenu from '@/views/admin/childComps/AdminMenu.vue';
 import AdminAvatar from '@/views/admin/childComps/AdminAvatar.vue';
@@ -109,9 +110,19 @@ export default {
       clearToken();
     },
   },
-  beforeCreate() {
+  created() {
     // return;
     if (!verifyToken().status) (this as any).$router.replace({ path: '/admin/login' });
+    else {
+      (this as any).$router.replace({ path: '/admin/dataAnalyze' });
+      getAdminInfo()
+        .then((res) => {
+          (this as any).adminInfo = res;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   },
   components: {
     adminMenu,

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-10 22:47:16
+ * @LastEditTime: 2021-06-11 22:22:40
 -->
 
 <template>
@@ -145,9 +145,10 @@ export default {
       adminLogin(username, password)
         .then((res) => {
           setToken(res.token);
-          (this as any).$router.push({ path: '/admin', params: res });
+          (this as any).$router.push({ name: 'dataAnalyze', params: res });
         })
         .catch((err) => {
+          alert('账号或密码错误');
           console.log(err);
         });
     },

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-10 10:06:13
+ * @LastEditTime: 2021-06-11 22:12:29
 -->
 
 
@@ -31,19 +31,20 @@
         :class="{'password-width': !passwordShow && password !== ''}"
         @focus="$emit('inputFocus', true)"
         @blur="$emit('inputFocus', false)"
-        @keyup.enter="$refs.adminLoginSubmit.click()"
+        @keyup.enter="submitClick"
+        @keyup.ctrl.shift.83="passwordShow = !passwordShow"
       >
       <i class="iconfont blog-ziyuan icon-password"></i>
       <i
         class="iconfont password-show icon-password-eye"
         :class="{'blog-eyeshow': passwordShow, 'blog-eyehidden': !passwordShow}"
+        role="button"
         @click="passwordShow = !passwordShow"
       ></i>
     </div>
     <div
       class="login-from-footer"
       role="button"
-      ref="adminLoginSubmit"
       @click="submitClick"
     >
       Submit

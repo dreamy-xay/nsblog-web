@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-10 10:30:56
+ * @LastEditTime: 2021-06-11 22:13:10
  */
 
 import { request, get, post } from '@/network/request';
@@ -20,5 +20,16 @@ export function adminLogin(account: string, password: string): Promise<any> {
   return post({
     url: 'api/private/v1/auth/admin',
     data: { account, password }
+  });
+}
+
+/**
+ * @description: 获取管理员信息
+ * @return {Promise<any>} 返回请求的 Promise
+ * @author: dreamy-xay
+ */
+export function getAdminInfo(): Promise<any> {
+  return get({
+    url: 'api/private/v1/admin'
   });
 }
