@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-11 22:22:40
+ * @LastEditTime: 2021-06-11 23:41:18
 -->
 
 <template>
@@ -148,7 +148,13 @@ export default {
           (this as any).$router.push({ name: 'dataAnalyze', params: res });
         })
         .catch((err) => {
-          alert('账号或密码错误');
+          (this as any).$message({
+            showClose: true,
+            message: '账号或者密码错误',
+            type: 'error',
+            duration: 2000,
+            customClass: 'admin-login-error',
+          });
           console.log(err);
         });
     },
@@ -321,5 +327,12 @@ export default {
     justify-content: center;
     overflow: hidden;
   }
+}
+</style>
+
+
+<style>
+.admin-login-error {
+  border: 1px solid rgba(255, 0, 0, 0.4);
 }
 </style>

@@ -4,11 +4,14 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-11 22:15:50
+ * @LastEditTime: 2021-06-11 23:46:37
 -->
 
 <template>
-  <div class="admin">
+  <div
+    class="admin"
+    v-show="pageShow"
+  >
     <div
       class="admin-left"
       :style="{width: menuWidth + 'px'}"
@@ -58,6 +61,7 @@ export default {
   name: 'Admin',
   data() {
     return {
+      pageShow: false,
       menuCollapse: false,
       menuWidth: 210,
       noticeSum: 30,
@@ -114,14 +118,17 @@ export default {
     // return;
     if (!verifyToken().status) (this as any).$router.replace({ path: '/admin/login' });
     else {
-      (this as any).$router.replace({ path: '/admin/dataAnalyze' });
-      getAdminInfo()
-        .then((res) => {
-          (this as any).adminInfo = res;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      (this as any).pageShow = true;
+      if ((this as any).$route.path == '/admin') {
+        (this as any).$router.replace({ path: '/admin/dataAnalyze' });
+        getAdminInfo()
+          .then((res) => {
+            (this as any).adminInfo = res;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     }
   },
   components: {

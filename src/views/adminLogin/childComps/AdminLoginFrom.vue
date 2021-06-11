@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-11 22:12:29
+ * @LastEditTime: 2021-06-11 23:51:54
 -->
 
 
@@ -20,7 +20,7 @@
         placeholder="UserName.."
         @focus="$emit('inputFocus', true)"
         @blur="$emit('inputFocus', false)"
-        @keyup.enter="$refs.adminLoginInputPassword.focus()"
+        @keyup.enter="password !== '' ? submitClick() : $refs.adminLoginInputPassword.focus()"
       >
       <i class="iconfont blog-zhanghu icon-username"></i>
       <input
