@@ -18,7 +18,7 @@ import { request, get, post } from '@/network/request';
  */
 export function adminLogin(account: string, password: string): Promise<any> {
   return post({
-    url: 'api/private/v1/login',
+    url: 'api/private/v1/auth/admin',
     data: { account, password }
   });
 }

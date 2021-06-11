@@ -21,7 +21,7 @@ export function verifyToken(originToken: string = store.get('token')): { status:
   if (originToken) {
     const { token, code, startTime, expires } = JSON.parse(originToken);
     if (token !== null && code !== null && startTime !== null && expires !== null)
-      if (startTime + expires * 1000 < new Date().getTime()) return { status: Md5.hashStr(token) === code, token };
+      if (startTime + expires * 1000 >= new Date().getTime()) return { status: Md5.hashStr(token) === code, token };
       else {
         store.remove('token');
         return { status: false, token: '' };
