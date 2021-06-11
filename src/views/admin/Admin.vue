@@ -110,7 +110,7 @@ export default {
     },
   },
   beforeCreate() {
-    return;
+    // return;
     if (!verifyToken().status) (this as any).$router.replace({ path: '/admin/login' });
   },
   components: {
