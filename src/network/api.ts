@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-12 00:33:45
+ * @LastEditTime: 2021-06-12 00:38:44
  */
 
 import { request, get, post } from '@/network/request';
@@ -30,6 +30,6 @@ export function adminLogin(account: string, password: string): Promise<any> {
  */
 export function getAdminInfo(): Promise<any> {
   return get({
-    url: 'api/private/v1/auth/admin'
+    url: 'api/private/v1/admin'
   });
 }
