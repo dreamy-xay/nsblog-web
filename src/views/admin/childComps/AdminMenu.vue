@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 12:02:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-11 00:41:14
+ * @LastEditTime: 2021-06-12 13:47:02
 -->
 
 <template>
@@ -58,6 +58,8 @@
 </template>
 
 <script lang="ts">
+import styles from '@/assets/style/define.scss';
+
 /**
  * @description: 管理员界面右侧栏菜单
  * @param {Boolean} isCollapse 菜单是否折叠 `必传参数`
@@ -66,7 +68,6 @@
  * @author: dreamy-xay
  */
 
-import styles from '@/assets/style/define.scss';
 export default {
   name: 'adminMenu',
   props: {

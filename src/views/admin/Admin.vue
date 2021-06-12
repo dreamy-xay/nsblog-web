@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-12 00:34:06
+ * @LastEditTime: 2021-06-12 14:16:12
 -->
 
 <template>
@@ -46,16 +46,16 @@
 </template>
 
 <script lang="ts">
+import { verifyToken, clearToken } from '@/network/token';
+import { getAdminInfo } from '@/network/api';
+import AdminTopBar from '@/views/admin/childComps/AdminTopBar.vue';
+import AdminMenu from '@/views/admin/childComps/AdminMenu.vue';
+import AdminAvatar from '@/views/admin/childComps/AdminAvatar.vue';
+
 /**
  * @description: 管理员管理界面
  * @author: dreamy-xay
  */
-
-import { verifyToken, clearToken } from '@/network/token';
-import { getAdminInfo } from '@/network/api';
-import adminTopBar from '@/views/admin/childComps/AdminTopBar.vue';
-import adminMenu from '@/views/admin/childComps/AdminMenu.vue';
-import AdminAvatar from '@/views/admin/childComps/AdminAvatar.vue';
 
 export default {
   name: 'Admin',
@@ -135,8 +135,8 @@ export default {
     }
   },
   components: {
-    adminMenu,
-    adminTopBar,
+    AdminMenu,
+    AdminTopBar,
     AdminAvatar,
   },
 };

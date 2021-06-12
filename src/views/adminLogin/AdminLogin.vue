@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-11 23:41:18
+ * @LastEditTime: 2021-06-12 15:29:58
 -->
 
 <template>
@@ -78,27 +78,34 @@
       ></admin-login-from>
     </div>
     <background-setting :show="backgroundSettingPopupShow"></background-setting>
+    <base-verification
+      ref="adminLoginVerify"
+      @success="verifySuccess"
+      @error="verifyError"
+    ></base-verification>
   </div>
 </template>
 
 <script lang="ts">
-/**
- * @description: 管理员登陆界面
- * @author: dreamy-xay
- */
-
 import adminLoginFrom from '@/views/adminLogin/childComps/AdminLoginFrom.vue';
 import backgroundSetting from '@/views/adminLogin/childComps/BackgroundSetting.vue';
+import BaseVerification from '@/components/content/BaseVerification.vue';
 import html2canvas from 'html2canvas';
 import { downLoadFile } from '@/util/util';
 import { adminLogin } from '@/network/api';
 import { setToken } from '@/network/token';
+
+/**
+ * @description: 管理员登陆界面
+ * @author: dreamy-xay
+ */
 
 export default {
   name: 'adminLogin',
   data() {
     return {
       loginBackground: '/login/background.png',
+      adminLoginInfo: { username: '', password: '' },
       isInputFocus: false,
       menuShow: false,
       menuItems: [
@@ -142,7 +149,12 @@ export default {
       (this as any).isInputFocus = isFocus;
     },
     loginClick(username: string, password: string) {
-      adminLogin(username, password)
+      (this as any).adminLoginInfo = { username, password };
+      (this as any).$refs.adminLoginVerify.open();
+    },
+    verifySuccess() {
+      (this as any).$refs.adminLoginVerify.close();
+      adminLogin((this as any).adminLoginInfo.username, (this as any).adminLoginInfo.password)
         .then((res) => {
           setToken(res.token);
           (this as any).$router.push({ name: 'dataAnalyze', params: res });
@@ -157,6 +169,7 @@ export default {
           });
           console.log(err);
         });
+      (this as any).adminLoginInfo = { username: '', password: '' };
     },
     /* menuMethods */
     goHome() {
@@ -173,6 +186,7 @@ export default {
   components: {
     adminLoginFrom,
     backgroundSetting,
+    BaseVerification,
   },
 };
 </script>
