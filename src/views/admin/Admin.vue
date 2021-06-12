@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: clq
- * @LastEditTime: 2021-06-12 16:25:16
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-06-12 21:42:51
 -->
 
 <template>
@@ -114,24 +114,21 @@ export default {
       clearToken();
     },
   },
-  created() {
+  mounted() {
     // return;
     if (!verifyToken().status) (this as any).$router.replace({ path: '/admin/login' });
     else {
       (this as any).pageShow = true;
-      if ((this as any).$route.path === '/admin') {
-        (this as any).$router.replace({ path: '/admin/dataAnalyze' });
-        getAdminInfo()
-          .then((res) => {
-            (this as any).adminInfo = res;
-          })
-          .catch((err) => {
-            clearToken();
-            (this as any).$router.replace({ path: '/admin/login' });
-            console.log(999);
-            console.log(err);
-          });
-      }
+      if ((this as any).$route.path === '/admin') (this as any).$router.replace({ path: '/admin/dataAnalyze' });
+      getAdminInfo()
+        .then((res) => {
+          (this as any).adminInfo = res;
+        })
+        .catch((err) => {
+          clearToken();
+          (this as any).$router.replace({ path: '/admin/login' });
+          console.log(err);
+        });
     }
   },
   components: {

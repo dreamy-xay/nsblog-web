@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 13:15:08
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-11 01:03:59
+ * @LastEditTime: 2021-06-12 17:52:52
 -->
 
 <template>
@@ -15,7 +15,7 @@
         role="button"
         @click="$emit('mainMenuClick')"
       >
-        <i class="iconfont blog-caidan1"></i>
+        <i class="iconfont blog-menu"></i>
       </div>
     </div>
     <div class="admin-top-bar-right">

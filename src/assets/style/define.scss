@@ -8,7 +8,6 @@ $body-background-color: rgb(51, 51, 51);
  * admin-page 
  */
 
-
 /* menu */
 
 $admin-background-color: #2a2b3d;
@@ -20,7 +19,6 @@ $admin-menu-active-text-color: #ffffff;
     adminMenuTextColor: $admin-menu-text-color;
     adminMenuActiveTextColor: $admin-menu-active-text-color;
 }
-
 
 /* top-bar */
 
@@ -38,3 +36,6 @@ $admin-top-bar-search-icon-color: #371777;
 $admin-top-bar-search-hover-icon-color: white;
 $admin-top-bar-notice-icon-color: #d6cbcb;
 $admin-top-bar-notice-hover-icon-color: #ffffff;
+
+/* admin-window */
+$admin-window-title-text-color: #cccdce;

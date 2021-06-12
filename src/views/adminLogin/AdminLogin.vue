@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-12 15:29:58
+ * @LastEditTime: 2021-06-12 20:54:58
 -->
 
 <template>
@@ -81,7 +81,6 @@
     <base-verification
       ref="adminLoginVerify"
       @success="verifySuccess"
-      @error="verifyError"
     ></base-verification>
   </div>
 </template>
@@ -104,7 +103,7 @@ export default {
   name: 'adminLogin',
   data() {
     return {
-      loginBackground: '/login/background.png',
+      loginBackground: '/adminLogin/background.png',
       adminLoginInfo: { username: '', password: '' },
       isInputFocus: false,
       menuShow: false,

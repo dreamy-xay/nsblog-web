@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 15:56:22
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-11 00:42:49
+ * @LastEditTime: 2021-06-12 21:07:23
 -->
 
 <template>
@@ -28,10 +28,10 @@
       :style="{opacity: adminAvatarRightOpacity}"
     >
       <div class="right-nickname">
-        {{nickname}}
+        {{nickname ? nickname : '📝'}}
       </div>
       <div class="right-signature">
-        {{signature}}
+        {{signature ? signature : 'づ￣ 3￣)づ'}}
       </div>
     </div>
   </div>
@@ -57,15 +57,15 @@ export default {
     },
     avatar: {
       type: String,
-      default: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
+      default: '/admin/avatarLoading.gif',
     },
     nickname: {
       type: String,
-      default: 'Jone Doe',
+      default: null,
     },
     signature: {
       type: String,
-      default: 'Lorem ipsum dolor sit amet consectetur',
+      default: null,
     },
   },
   watch: {

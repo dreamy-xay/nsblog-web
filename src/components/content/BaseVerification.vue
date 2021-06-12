@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-12 13:08:14
- * @LastEditors: clq
- * @LastEditTime: 2021-06-12 16:42:48
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-06-12 20:17:32
 -->
 <template>
   <div
@@ -35,16 +35,18 @@ import PuzzleVerification from 'vue-puzzle-verification';
  * @description: 基本滑动验证框
  * @param {String} blockType 滑块的形状，可选参数('square', 'puzzle') `默认为puzzle`
  * @param {Number} blockSize 滑块的大小（正方形），不能大于画布尺寸 `默认为40`
- * @param {Number} blockRadius 滑块圆角的大小，仅当其形状是square有效 `默认为8`
+ * @param {Number} blockRadius 滑块圆角的大小，仅当其形状是square有效 `默认为4`
  * @param {Array} imageList 传入的图片 `默认为两张动图`
  * @param {Number} width 画布图片的宽度 `默认为260`
  * @param {Number} height 画布图片的高度 `默认为120`
  * @param {Number} offsetX 画布水平偏移量 `默认为0`
  * @param {Number} offsetY 画布垂直偏移量 `默认为0`
- * @param {Number} deviation 滑块吻合的误差 `默认为4`
+ * @param {Number} deviation 滑块吻合的误差 `默认为8`
  * @param {Number} wraperPadding 滑块随机出现的范围，数字越大，范围越大(不能大于画布尺寸) `默认为20`
  * @event success 拼接成功时的触发事件
  * @event error 拼接失败时的触发事件
+ * @method open 打开验证码框
+ * @method close 关闭验证码框
  * @author: dreamy-xay
  */
 
@@ -65,7 +67,7 @@ export default {
     },
     imageList: {
       type: Array,
-      default: () => ['http://img.netbian.com/file/2021/0611/2b7c53e80482dc1856611156e042d41b.jpg'],
+      default: () => ['https://files-cdn.cnblogs.com/files/dreamy-xay/200R0103J1-1.bmp'],
     },
     width: {
       type: Number,
