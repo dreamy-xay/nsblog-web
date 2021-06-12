@@ -1,14 +1,11 @@
 <template>
-  <div class="article-manage">
-    <el-container>
-      <el-header style="margin-top: 20px">
-        <!-- 导航栏 -->
-        <el-breadcrumb separator=">>">
-          <el-breadcrumb-item>首页</el-breadcrumb-item>
-          <el-breadcrumb-item>文章管理</el-breadcrumb-item>
-        </el-breadcrumb>
-      </el-header>
-      <!-- 文章数据表单 -->
+  <admin-window
+    bind-class="article-manage"
+    title="文章"
+    ref="adminWindow"
+  >
+    <!-- 文章数据表单 -->
+    <div class="article-manage-table">
       <el-table
         class="el-table-article"
         :data="articles"
@@ -109,6 +106,8 @@
           </template>
         </el-table-column>
       </el-table>
+    </div>
+    <div class="article-manage-pagination">
       <!-- 分页导航 -->
       <el-pagination
         @size-change="handleSizeChange"
@@ -121,14 +120,14 @@
         style="marginTop:12px"
       >
       </el-pagination>
-    </el-container>
-  </div>
+    </div>
+  </admin-window>
 </template>
 
 <script lang='ts'>
+import AdminWindow from '@/components/common/AdminWindow.vue';
 export default {
   name: 'articleManage',
-  props: {},
   data() {
     return {
       articles: [
@@ -179,28 +178,40 @@ export default {
       console.log(`当前页: ${val}`);
     },
     // 改变表格体样式
-    cellStyle(row: any, column: any, rowIndex: any, columnIndex: any): String {
+    cellStyle(row: any, column: any, rowIndex: any, columnIndex: any): string {
       return 'background:#6F6486;color:white;borderStyle:none';
     },
     // 改变表格头样式
-    headerCellStyle(row: any, column: any, rowIndex: any, columnIndex: any): String {
+    headerCellStyle(row: any, column: any, rowIndex: any, columnIndex: any): string {
       return 'background:#6F6486;color:white;borderStyle:none';
     },
+  },
+  mounted() {
+    (this as any).$refs.adminWindow.push('管理');
+  },
+  components: {
+    AdminWindow,
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .atricle-manage {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
+  .atricle-manage-table {
+    width: 100%;
+    overflow: hidden;
 
-  ::v-deep {
-    .el-table {
-      width: 80%;
-      margin-left: 20px;
+    ::v-deep {
+      .el-table {
+        width: 80%;
+        margin-left: 20px;
+      }
     }
+  }
+
+  .atricle-manage-pagination {
+    width: 100%;
+    overflow: hidden;
   }
 }
 </style>

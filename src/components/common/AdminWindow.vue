@@ -4,14 +4,11 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-12 18:26:18
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-12 21:42:14
+ * @LastEditTime: 2021-06-12 22:33:21
 -->
 
 <template>
-  <div
-    class="admin-window"
-    :class="bindClass"
-  >
+  <div class="admin-window">
     <div class="admin-window-title">
       <el-breadcrumb
         :separator="separator"
@@ -25,13 +22,27 @@
         >{{item.name}}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <div class="admin-window-content">
+    <div
+      class="admin-window-content"
+      :class="bindClass"
+    >
       <slot></slot>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+/**
+ * @description: 管理员界面窗口
+ * @param {String} bindClass 窗口外层绑定类 `默认为空`
+ * @param {[String, Object]} 窗口标题，可以为对象或者字符串 `必传参数`
+ * @param {String} separator 窗口标题面包屑分隔符 `默认为 '/'`
+ * @param {String} separatorClass 窗口标题面包屑分隔符指定字体图标类 `默认为空`
+ * @method push 添加面包屑
+ * @method pop 删除栈顶面包屑
+ * @author: dreamy-xay
+ */
+
 export default {
   name: 'adminWindow',
   props: {
