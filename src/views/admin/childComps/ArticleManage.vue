@@ -1,15 +1,19 @@
 <template>
   <div class="article-manage">
-    <el-container class="article-manage-container">
-      <el-header>
-        <h3 style="color:white">文章管理</h3>
+    <el-container>
+      <el-header style="margin-top: 20px">
+        <!-- 导航栏 -->
+        <el-breadcrumb separator=">>">
+          <el-breadcrumb-item>首页</el-breadcrumb-item>
+          <el-breadcrumb-item>文章管理</el-breadcrumb-item>
+        </el-breadcrumb>
       </el-header>
       <!-- 文章数据表单 -->
       <el-table
         class="el-table-article"
         :data="articles"
-        border
-        style="width: 100%"
+        :cell-style="cellStyle(row,column,rowIndex,columnIndex)"
+        :header-cell-style="headerCellStyle(row,column,rowIndex,columnIndex)"
       >
         <el-table-column
           prop="title"
@@ -174,6 +178,14 @@ export default {
     handleCurrentChange(val: number) {
       console.log(`当前页: ${val}`);
     },
+    // 改变表格体样式
+    cellStyle(row: any, column: any, rowIndex: any, columnIndex: any): String {
+      return 'background:#6F6486;color:white;borderStyle:none';
+    },
+    // 改变表格头样式
+    headerCellStyle(row: any, column: any, rowIndex: any, columnIndex: any): String {
+      return 'background:#6F6486;color:white;borderStyle:none';
+    },
   },
 };
 </script>
@@ -183,15 +195,12 @@ export default {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  .el-table thead {
-    background-color: #000;
-  }
-}
 
-.container {
-  padding: 10px;
-}
-.el-table-article {
-  width: 100%;
+  ::v-deep {
+    .el-table {
+      width: 80%;
+      margin-left: 20px;
+    }
+  }
 }
 </style>

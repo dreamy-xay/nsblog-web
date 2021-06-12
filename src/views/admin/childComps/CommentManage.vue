@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-06-10 17:27:54
  * @LastEditors: clq
- * @LastEditTime: 2021-06-12 17:06:38
+ * @LastEditTime: 2021-06-12 20:18:25
 -->
 <template>
   <div class="comment-manage">
@@ -23,56 +23,55 @@
         v-model="activeNames"
         @change="handleChange"
       >
-        <el-collapse-item
-          class="el-collapse-item-comment"
+        <div
           v-for="article in articles"
           :key="article.articleId"
-          :name="article.articleId"
-          :title="article.articleTitle"
         >
-          <!-- 评论表格 -->
-          <el-table
-            :data="commentDate"
-            style="width: 100%;margin-left: 20px;margin-right: 20px;"
-            row-key="id"
-            border
-            default-expand-all
-            :tree-props="{children: 'children'}"
-          >
-            <el-table-column
-              prop="content"
-              label="内容"
+          <el-collapse-item>
+            <template slot="title">{{article.articleTitle}}</template>
+            <el-table
+              :data="commentDate"
+              row-key="id"
+              border
+              default-expand-all
+              :tree-props="{children: 'children'}"
             >
-            </el-table-column>
-            <el-table-column
-              prop="date"
-              label="日期"
-              width="180"
-            >
-            </el-table-column>
-            <el-table-column
-              prop="name"
-              label="评论人"
-              width="180"
-            >
-            </el-table-column>
-            <el-table-column label="操作">
-              <template slot-scope="scope">
-                <el-popconfirm
-                  title="确定要删除该评论吗?"
-                  @confirm="commentDelete(scope.row.id)"
-                >
-                  <el-button
-                    type="danger"
-                    slot="reference"
+              <el-table-column
+                prop="content"
+                label="内容"
+              >
+              </el-table-column>
+              <el-table-column
+                prop="date"
+                label="日期"
+                width="180"
+              >
+              </el-table-column>
+              <el-table-column
+                prop="name"
+                label="评论人"
+                width="180"
+              >
+              </el-table-column>
+              <el-table-column label="操作">
+                <template slot-scope="scope">
+                  <el-popconfirm
+                    title="确定要删除该评论吗?"
+                    @confirm="commentDelete(scope.row.id)"
                   >
-                    删除
-                  </el-button>
-                </el-popconfirm>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-collapse-item>
+                    <el-button
+                      type="danger"
+                      slot="reference"
+                    >
+                      删除
+                    </el-button>
+                  </el-popconfirm>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-collapse-item>
+        </div>
+
       </el-collapse>
     </el-container>
   </div>
@@ -150,6 +149,14 @@ export default {
       console.log(val);
       console.log('handleChange');
     },
+    // 改变表格体样式
+    // cellStyle(row: any, column: any, rowIndex: any, columnIndex: any): String {
+    //   return 'background:#6F6486;color:white';
+    // },
+    // 改变表格头样式
+    // headerCellStyle(row: any, column: any, rowIndex: any, columnIndex: any): String {
+    //   return 'background:#6F6486;color:white';
+    // },
   },
 };
 </script>
@@ -160,13 +167,37 @@ export default {
   height: 100%;
   overflow: hidden;
 
-  .el-collapse-comment {
-    margin-left: 20px;
-    margin-right: 20px;
-  }
-  .el-collapse-item-comment {
-    // padding-left: 20px;
-    font-size: 20px !important;
+  ::v-deep {
+    // 修改折叠面板样式
+    .el-collapse {
+      box-sizing: border-box;
+      padding-left: 25px;
+      border: none;
+      // 面板头部样式
+      .el-collapse-item__header {
+        border: none;
+        padding-left: 25px;
+        background-color: #6f6486;
+        color: white;
+        font-size: 16px;
+      }
+      // 折叠体样式
+      .el-collapse-item__wrap {
+        background-color: #6f6486;
+        border: none;
+        // 折叠体内容样式
+        .el-collapse-item__content {
+          background-color: #6f6486;
+          padding: 0;
+        }
+      }
+    }
+    .el-table {
+      width: 97%;
+      margin-left: 20px;
+      margin-right: 20px;
+      margin-bottom: 20px;
+    }
   }
 }
 </style>

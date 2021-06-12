@@ -4,123 +4,98 @@
  * @Autor: clq
  * @Date: 2021-06-11 10:09:23
  * @LastEditors: clq
- * @LastEditTime: 2021-06-12 16:29:15
+ * @LastEditTime: 2021-06-12 20:10:46
 -->
 <template>
-  <el-container>
-    <el-header style="margin-top:20px">
-      <!-- 面包屑导航 -->
-      <el-breadcrumb separator=">>">
-        <el-breadcrumb-item>首页</el-breadcrumb-item>
-        <el-breadcrumb-item>分类/标签管理</el-breadcrumb-item>
-      </el-breadcrumb>
-    </el-header>
-    <el-main>
-      <!-- 分类卡片 -->
-      <el-card class="category">
-        <div slot="header">
-          <span>分类列表</span>
-          <el-button
-            type="primary"
-            style="float:right"
-            @click="addCategory()"
-          >新增</el-button>
-        </div>
-        <span
-          v-for="category in categories"
-          :key="category.categroyId"
-        >
-          <el-popconfirm
-            icon="el-icon-info"
-            icon-color="red"
-            title="确定要删除该分类吗?"
-            confirm-button-tet='确定'
-            cancel-button-text='取消'
-          >
+  <div class="category-label">
+    <el-container>
+      <el-header style="margin-top:20px">
+        <!-- 面包屑导航 -->
+        <el-breadcrumb separator=">>">
+          <el-breadcrumb-item>首页</el-breadcrumb-item>
+          <el-breadcrumb-item>分类/标签管理</el-breadcrumb-item>
+        </el-breadcrumb>
+      </el-header>
+      <el-main>
+        <!-- 分类卡片 -->
+        <el-card class="category-card">
+          <div slot="header">
+            <span>分类列表</span>
             <el-button
+              class="add-button"
               type="primary"
-              slot="reference"
-              style="margin-right:20px"
-            >{{category.name}} ({{category.articleNum}})</el-button>
-          </el-popconfirm>
-        </span>
-
-        <!-- <el-popover
-          v-for="category in categories"
-          :key="category.categroyId"
-          placement="top"
-          width="160"
-          v-model="visible"
-        >
-          <p>确定要删除该标签吗?</p>
-          <div style="text-align:right">
-            <el-button
-              size="mini"
-              type='text'
-              @click="visible = false"
-            >取消</el-button>
-            <el-button
-              size="mini"
-              type="primary"
-              @click="visible = false"
-            >确定</el-button>
+              @click="addCategory()"
+            >新增</el-button>
           </div>
+          <span
+            v-for="category in categories"
+            :key="category.categroyId"
+          >
+            <el-popconfirm
+              icon="el-icon-info"
+              icon-color="red"
+              title="确定要删除该分类吗?"
+              confirm-button-tet='确定'
+              cancel-button-text='取消'
+            >
+              <el-button
+                type="primary"
+                slot="reference"
+                style="margin-right:20px"
+              >{{category.name}} ({{category.articleNum}})</el-button>
+            </el-popconfirm>
+          </span>
+        </el-card>
+        <!-- 标签卡片 -->
+        <el-card class="label-card">
+          <div slot="header">
+            <span>标签列表</span>
+          </div>
+          <span
+            v-for="label in labels"
+            :key="label.labelId"
+          >
+            <el-popconfirm
+              icon="el-icon-info"
+              icon-color="red"
+              title="确定要删除该分类吗?"
+              confirm-button-tet='确定'
+              cancel-button-text='取消'
+            >
+              <el-button
+                type="primary"
+                slot="reference"
+                style="margin-right:20px"
+              >{{label.name}} ({{label.articleNum}})</el-button>
+            </el-popconfirm>
+          </span>
+        </el-card>
+      </el-main>
+
+      <el-dialog
+        title="新增分类"
+        :visible.sync='addCategoryDialogVisible'
+        width="30%"
+      >
+        <el-input
+          placeholder="请输入新类名"
+          v-model="newCategoryName"
+          clearable
+        >
+        </el-input>
+        <span slot="footer">
+          <el-button
+            type="text"
+            @click="cancel()"
+          >取消</el-button>
           <el-button
             type="primary"
-            slot="reference"
-          >{{category.name}}</el-button>
-        </el-popover> -->
-
-      </el-card>
-      <!-- 标签卡片 -->
-      <el-card class="label">
-        <div slot="header">
-          <span>标签列表</span>
-        </div>
-        <span
-          v-for="label in labels"
-          :key="label.labelId"
-        >
-          <el-popconfirm
-            icon="el-icon-info"
-            icon-color="red"
-            title="确定要删除该分类吗?"
-            confirm-button-tet='确定'
-            cancel-button-text='取消'
-          >
-            <el-button
-              type="primary"
-              slot="reference"
-              style="margin-right:20px"
-            >{{label.name}} ({{label.articleNum}})</el-button>
-          </el-popconfirm>
+            @click="confirm()"
+          >确定</el-button>
         </span>
-      </el-card>
-    </el-main>
-
-    <el-dialog
-      title="新增分类"
-      :visible.sync='addCategoryDialogVisible'
-      width="30%"
-    >
-      <el-input
-        placeholder="请输入新类名"
-        v-model="newCategoryName"
-        clearable
-      >
-      </el-input>
-      <span slot="footer">
-        <el-button
-          type="text"
-          @click="cancel()"
-        >取消</el-button>
-        <el-button
-          type="primary"
-          @click="confirm()"
-        >确定</el-button>
-      </span>
-    </el-dialog>
-  </el-container>
+      </el-dialog>
+    </el-container>
+  </div>
 </template>
 
 <script lang="ts">
@@ -190,11 +165,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.category {
-  margin-bottom: 20px;
-}
+.category-label {
+  .category-card {
+    margin-bottom: 20px;
+    background: #6f6486;
+    color: #fff;
+    border-color: #2a2b3d;
+    .add-button {
+      position: relative;
+      top: -8px;
+      float: right;
+    }
+  }
 
-.label {
-  margin-bottom: 20px;
+  .label-card {
+    background: #6f6486;
+    color: #fff;
+    border-color: #2a2b3d;
+  }
 }
 </style>
