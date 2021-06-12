@@ -4,19 +4,11 @@
  * @Autor: clq
  * @Date: 2021-06-10 17:27:54
  * @LastEditors: clq
- * @LastEditTime: 2021-06-12 20:18:25
+ * @LastEditTime: 2021-06-12 23:40:23
 -->
 <template>
-  <div class="comment-manage">
-    <el-container>
-      <el-header style="margin-top: 20px">
-        <!-- 导航栏 -->
-        <el-breadcrumb separator=">>">
-          <el-breadcrumb-item>首页</el-breadcrumb-item>
-          <el-breadcrumb-item>评论管理</el-breadcrumb-item>
-        </el-breadcrumb>
-      </el-header>
-
+  <admin-window title="评论">
+    <div class="comment-manage">
       <!-- 文章折叠面板 -->
       <el-collapse
         class="el-collapse-comment"
@@ -71,13 +63,14 @@
             </el-table>
           </el-collapse-item>
         </div>
-
       </el-collapse>
-    </el-container>
-  </div>
+    </div>
+  </admin-window>
+
 </template>
 
 <script lang='ts'>
+import AdminWindow from '@/components/common/AdminWindow.vue';
 export default {
   name: 'commentManage',
   props: {},
@@ -158,6 +151,9 @@ export default {
     //   return 'background:#6F6486;color:white';
     // },
   },
+  components: {
+    AdminWindow,
+  },
 };
 </script>
 
@@ -175,19 +171,19 @@ export default {
       border: none;
       // 面板头部样式
       .el-collapse-item__header {
-        border: none;
+        border-top: 1px solid #ccc;
         padding-left: 25px;
-        background-color: #6f6486;
+        background-color: #313348;
         color: white;
         font-size: 16px;
       }
       // 折叠体样式
       .el-collapse-item__wrap {
-        background-color: #6f6486;
+        background-color: #313348;
         border: none;
         // 折叠体内容样式
         .el-collapse-item__content {
-          background-color: #6f6486;
+          background-color: #313348;
           padding: 0;
         }
       }

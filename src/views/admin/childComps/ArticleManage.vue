@@ -10,7 +10,7 @@
         class="el-table-article"
         :data="articles"
         :cell-style="cellStyle(row,column,rowIndex,columnIndex)"
-        :header-cell-style="headerCellStyle(row,column,rowIndex,columnIndex)"
+        :header-cell-style="{background:'#313348',color:'#606266'}"
       >
         <el-table-column
           prop="title"
@@ -179,12 +179,12 @@ export default {
     },
     // 改变表格体样式
     cellStyle(row: any, column: any, rowIndex: any, columnIndex: any): string {
-      return 'background:#6F6486;color:white;borderStyle:none';
+      return 'background:#313348;color:white;';
     },
     // 改变表格头样式
-    headerCellStyle(row: any, column: any, rowIndex: any, columnIndex: any): string {
-      return 'background:#6F6486;color:white;borderStyle:none';
-    },
+    // headerCellStyle(row: any, column: any, rowIndex: any, columnIndex: any): string {
+    //   return 'background:#313348;color:white';
+    // },
   },
   mounted() {
     (this as any).$refs.adminWindow.push('管理');
@@ -200,18 +200,19 @@ export default {
   .atricle-manage-table {
     width: 100%;
     overflow: hidden;
-
-    ::v-deep {
-      .el-table {
-        width: 80%;
-        margin-left: 20px;
-      }
-    }
   }
 
   .atricle-manage-pagination {
     width: 100%;
     overflow: hidden;
+  }
+}
+</style>
+
+<style lang="scss">
+.article-manage {
+  .el-table__header-wrapper > table {
+    background-color: #313348 !important;
   }
 }
 </style>

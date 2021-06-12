@@ -4,73 +4,64 @@
  * @Autor: clq
  * @Date: 2021-06-11 10:09:23
  * @LastEditors: clq
- * @LastEditTime: 2021-06-12 20:10:46
+ * @LastEditTime: 2021-06-12 23:50:37
 -->
 <template>
-  <div class="category-label">
-    <el-container>
-      <el-header style="margin-top:20px">
-        <!-- 面包屑导航 -->
-        <el-breadcrumb separator=">>">
-          <el-breadcrumb-item>首页</el-breadcrumb-item>
-          <el-breadcrumb-item>分类/标签管理</el-breadcrumb-item>
-        </el-breadcrumb>
-      </el-header>
-      <el-main>
-        <!-- 分类卡片 -->
-        <el-card class="category-card">
-          <div slot="header">
-            <span>分类列表</span>
+  <admin-window title="分类/标签管理">
+    <div class="category-label">
+      <!-- 分类卡片 -->
+      <el-card class="category-card">
+        <div slot="header">
+          <span>分类列表</span>
+          <el-button
+            class="add-button"
+            type="primary"
+            @click="addCategory()"
+          >新增</el-button>
+        </div>
+        <span
+          v-for="category in categories"
+          :key="category.categroyId"
+        >
+          <el-popconfirm
+            icon="el-icon-info"
+            icon-color="red"
+            title="确定要删除该分类吗?"
+            confirm-button-tet='确定'
+            cancel-button-text='取消'
+          >
             <el-button
-              class="add-button"
               type="primary"
-              @click="addCategory()"
-            >新增</el-button>
-          </div>
-          <span
-            v-for="category in categories"
-            :key="category.categroyId"
+              slot="reference"
+              style="margin-right:20px"
+            >{{category.name}} ({{category.articleNum}})</el-button>
+          </el-popconfirm>
+        </span>
+      </el-card>
+      <!-- 标签卡片 -->
+      <el-card class="label-card">
+        <div slot="header">
+          <span>标签列表</span>
+        </div>
+        <span
+          v-for="label in labels"
+          :key="label.labelId"
+        >
+          <el-popconfirm
+            icon="el-icon-info"
+            icon-color="red"
+            title="确定要删除该分类吗?"
+            confirm-button-tet='确定'
+            cancel-button-text='取消'
           >
-            <el-popconfirm
-              icon="el-icon-info"
-              icon-color="red"
-              title="确定要删除该分类吗?"
-              confirm-button-tet='确定'
-              cancel-button-text='取消'
-            >
-              <el-button
-                type="primary"
-                slot="reference"
-                style="margin-right:20px"
-              >{{category.name}} ({{category.articleNum}})</el-button>
-            </el-popconfirm>
-          </span>
-        </el-card>
-        <!-- 标签卡片 -->
-        <el-card class="label-card">
-          <div slot="header">
-            <span>标签列表</span>
-          </div>
-          <span
-            v-for="label in labels"
-            :key="label.labelId"
-          >
-            <el-popconfirm
-              icon="el-icon-info"
-              icon-color="red"
-              title="确定要删除该分类吗?"
-              confirm-button-tet='确定'
-              cancel-button-text='取消'
-            >
-              <el-button
-                type="primary"
-                slot="reference"
-                style="margin-right:20px"
-              >{{label.name}} ({{label.articleNum}})</el-button>
-            </el-popconfirm>
-          </span>
-        </el-card>
-      </el-main>
+            <el-button
+              type="primary"
+              slot="reference"
+              style="margin-right:20px"
+            >{{label.name}} ({{label.articleNum}})</el-button>
+          </el-popconfirm>
+        </span>
+      </el-card>
 
       <el-dialog
         title="新增分类"
@@ -94,11 +85,12 @@
           >确定</el-button>
         </span>
       </el-dialog>
-    </el-container>
-  </div>
+    </div>
+  </admin-window>
 </template>
 
 <script lang="ts">
+import AdminWindow from '@/components/common/AdminWindow.vue';
 export default {
   name: 'categoryLabelManage',
   props: {},
@@ -161,6 +153,9 @@ export default {
       (this as any).addCategoryDialogVisible = false;
     },
   },
+  components: {
+    AdminWindow,
+  },
 };
 </script>
 
@@ -168,7 +163,7 @@ export default {
 .category-label {
   .category-card {
     margin-bottom: 20px;
-    background: #6f6486;
+    background: #313348;
     color: #fff;
     border-color: #2a2b3d;
     .add-button {
@@ -179,7 +174,7 @@ export default {
   }
 
   .label-card {
-    background: #6f6486;
+    background: #313348;
     color: #fff;
     border-color: #2a2b3d;
   }
