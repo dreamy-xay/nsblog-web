@@ -1,122 +1,124 @@
 <template>
-  <el-container class="container">
-    <el-header>
-      <h3 style="color:white">文章管理</h3>
-    </el-header>
-    <!-- 文章数据表单 -->
-    <el-table
-      class="el-table-article"
-      :data="articles"
-      border
-      style="width: 100%"
-    >
-      <el-table-column
-        prop="title"
-        label="文章标题"
+  <div class="article-manage">
+    <el-container class="article-manage-container">
+      <el-header>
+        <h3 style="color:white">文章管理</h3>
+      </el-header>
+      <!-- 文章数据表单 -->
+      <el-table
+        class="el-table-article"
+        :data="articles"
+        border
+        style="width: 100%"
       >
-      </el-table-column>
-      <el-table-column label="类型">
-        <template slot-scope="scope">
-          <el-tag
-            type="success"
-            size="small"
-          >{{scope.row.type}}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="publishTime"
-        label="发布时间"
-      >
-      </el-table-column>
-      <el-table-column
-        prop="pageView"
-        label="浏览量"
-      >
-      </el-table-column>
-      <el-table-column
-        prop="tag"
-        label="标签"
-      >
-        <template slot-scope="scope1">
-          <el-tag
-            v-for="item in scope1.row.tag"
-            :key="item"
-            size="small"
-            style="marginRight:6px"
-          >{{item}}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="category"
-        label="所属分类"
-      >
-        <template slot-scope="scope1">
-          <el-tag
-            v-for="item in scope1.row.category"
-            :key="item"
-            size="small"
-            style="marginRight:6px"
-          >{{item}}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="publishStatus"
-        label="发布状态"
-      >
-      </el-table-column>
-      <el-table-column
-        prop="operation"
-        label="操作"
-        width="280px"
-      >
-        <template slot-scope="scope">
-          <el-row :gutter="40">
-            <el-col :span="6">
-              <el-button
-                size="mini"
-                type="primary"
-                icon="el-icon-edit"
-                @click="articleEdit(scope.$id)"
-              >编辑</el-button>
-            </el-col>
-            <el-col :span="6">
-              <el-popconfirm
-                title="这是一段内容确定删除吗？"
-                @confirm="articleDelete(scope.$id)"
-              >
+        <el-table-column
+          prop="title"
+          label="文章标题"
+        >
+        </el-table-column>
+        <el-table-column label="类型">
+          <template slot-scope="scope">
+            <el-tag
+              type="success"
+              size="small"
+            >{{scope.row.type}}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="publishTime"
+          label="发布时间"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="pageView"
+          label="浏览量"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="tag"
+          label="标签"
+        >
+          <template slot-scope="scope1">
+            <el-tag
+              v-for="item in scope1.row.tag"
+              :key="item"
+              size="small"
+              style="marginRight:6px"
+            >{{item}}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="category"
+          label="所属分类"
+        >
+          <template slot-scope="scope1">
+            <el-tag
+              v-for="item in scope1.row.category"
+              :key="item"
+              size="small"
+              style="marginRight:6px"
+            >{{item}}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="publishStatus"
+          label="发布状态"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="operation"
+          label="操作"
+          width="280px"
+        >
+          <template slot-scope="scope">
+            <el-row :gutter="40">
+              <el-col :span="6">
                 <el-button
-                  slot="reference"
-                  icon="el-icon-delete"
-                  type="danger"
                   size="mini"
-                >删除</el-button>
-              </el-popconfirm>
-            </el-col>
-            <el-col :span="6">
-              <el-button
-                size="mini"
-                type="warning"
-                icon="el-icon-view"
-                @click="articlePreview(scope.$id)"
-              >预览</el-button>
-            </el-col>
-          </el-row>
-        </template>
-      </el-table-column>
-    </el-table>
-    <!-- 分页导航 -->
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="currentPage"
-      :page-sizes="pageSizes"
-      :page-size="pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-      style="marginTop:12px"
-    >
-    </el-pagination>
-  </el-container>
+                  type="primary"
+                  icon="el-icon-edit"
+                  @click="articleEdit(scope.$id)"
+                >编辑</el-button>
+              </el-col>
+              <el-col :span="6">
+                <el-popconfirm
+                  title="这是一段内容确定删除吗？"
+                  @confirm="articleDelete(scope.$id)"
+                >
+                  <el-button
+                    slot="reference"
+                    icon="el-icon-delete"
+                    type="danger"
+                    size="mini"
+                  >删除</el-button>
+                </el-popconfirm>
+              </el-col>
+              <el-col :span="6">
+                <el-button
+                  size="mini"
+                  type="warning"
+                  icon="el-icon-view"
+                  @click="articlePreview(scope.$id)"
+                >预览</el-button>
+              </el-col>
+            </el-row>
+          </template>
+        </el-table-column>
+      </el-table>
+      <!-- 分页导航 -->
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="pageSizes"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        style="marginTop:12px"
+      >
+      </el-pagination>
+    </el-container>
+  </div>
 </template>
 
 <script lang='ts'>
@@ -176,7 +178,16 @@ export default {
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
+.atricle-manage {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  .el-table thead {
+    background-color: #000;
+  }
+}
+
 .container {
   padding: 10px;
 }

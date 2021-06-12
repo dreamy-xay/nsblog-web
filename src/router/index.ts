@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-12 16:07:07
+ * @LastEditors: clq
+ * @LastEditTime: 2021-06-12 16:15:08
  */
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
@@ -48,7 +48,7 @@ const routes: RouteConfig[] = [
         path: 'article/release',
         name: 'articleRelease',
         meta: {
-          title: '文章管理页面'
+          title: '文章编辑发布页面'
         },
         component: () => import('@/views/admin/childComps/ArticleRelease.vue')
       },
@@ -59,6 +59,14 @@ const routes: RouteConfig[] = [
           title: '评论管理页面'
         },
         component: () => import('@/views/admin/childComps/CommentManage.vue')
+      },
+      {
+        path: 'categoryLabel',
+        name: 'categoryLabelManage',
+        meta: {
+          title: '标签/分类管理页面'
+        },
+        component: () => import('@/views/admin/childComps/CategoryLabelManage.vue')
       }
     ]
   },

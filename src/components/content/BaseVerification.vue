@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-12 13:08:14
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-12 15:25:05
+ * @LastEditors: clq
+ * @LastEditTime: 2021-06-12 16:42:48
 -->
 <template>
   <div
@@ -65,7 +65,7 @@ export default {
     },
     imageList: {
       type: Array,
-      default: () => ['http://pic.jj20.com/up/allimg/1114/061221113052/210612113052-2.jpg'],
+      default: () => ['http://img.netbian.com/file/2021/0611/2b7c53e80482dc1856611156e042d41b.jpg'],
     },
     width: {
       type: Number,
