@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-11 21:33:48
+ * @LastEditTime: 2021-06-12 16:07:07
  */
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
@@ -43,6 +43,14 @@ const routes: RouteConfig[] = [
           title: '文章管理页面'
         },
         component: () => import('@/views/admin/childComps/ArticleManage.vue')
+      },
+      {
+        path: 'article/release',
+        name: 'articleRelease',
+        meta: {
+          title: '文章管理页面'
+        },
+        component: () => import('@/views/admin/childComps/ArticleRelease.vue')
       },
       {
         path: 'comment',

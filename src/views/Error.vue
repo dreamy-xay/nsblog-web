@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-10 09:53:56
+ * @LastEditTime: 2021-06-12 15:40:38
 -->
 
 <template>
@@ -348,6 +348,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.error {
+  background-color: #fff;
+  height: 100%;
+  width: 100%;
+}
+
 .me404 {
   width: 1000px;
   height: 480px;
