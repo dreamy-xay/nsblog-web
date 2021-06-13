@@ -8,12 +8,14 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@packy-tang/vue-tinymce": "^1.1.2",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "element-ui": "^2.15.2",
     "html2canvas": "^1.0.0-rc.7",
     "js-base64": "^3.6.1",
     "storejs": "^1.1.0",
+    "tinymce": "^5.8.1",
     "ts-md5": "^1.2.8",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",

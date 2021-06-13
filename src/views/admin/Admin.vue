@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-12 21:42:51
+ * @LastEditTime: 2021-06-13 00:05:25
 -->
 
 <template>
@@ -119,7 +119,8 @@ export default {
     if (!verifyToken().status) (this as any).$router.replace({ path: '/admin/login' });
     else {
       (this as any).pageShow = true;
-      if ((this as any).$route.path === '/admin') (this as any).$router.replace({ path: '/admin/dataAnalyze' });
+      if ((this as any).$route.path === '/admin' || (this as any).$route.path === '/admin/')
+        (this as any).$router.replace({ path: '/admin/dataAnalyze' });
       getAdminInfo()
         .then((res) => {
           (this as any).adminInfo = res;
