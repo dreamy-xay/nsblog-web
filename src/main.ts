@@ -1,10 +1,10 @@
 /*
- * @Description:
+ * @Description: main.ts
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-11 20:18:55
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-13 22:48:26
+ * @LastEditTime: 2021-06-13 23:06:41
  */
 import Vue from 'vue';
 import App from './App.vue';

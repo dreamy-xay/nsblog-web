@@ -4,19 +4,34 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-11 23:20:34
+ * @LastEditTime: 2021-06-15 01:13:44
  */
 
 import axios, { AxiosRequestConfig } from 'axios';
 import { getToken } from './token';
 
+export interface RequestLC {
+  beforeRequest?(): void;
+  afterResopnse?(): void;
+  successBeforeRequest?(): void;
+  successAfterResopnse?(): void;
+  failBeforeRequest?(): void;
+  failAfterResopnse?(): void;
+}
+
+/**
+ * @description: 请求配置接口
+ * @author: dreamy-xay
+ */
+export interface RequestConfig extends AxiosRequestConfig, RequestLC {}
+
 /**
  * @description: request请求
- * @param {AxiosRequestConfig} options axios参数(请参考AxiosRequestConfig)
+ * @param {RequestConfig} options axios参数(请参考AxiosRequestConfig，附加参数参考RequestConfig)
  * @return {Promise<any>} 返回请求后的Promise
  * @author: dreamy-xay
  */
-export function request(options: AxiosRequestConfig): Promise<any> {
+export function request(options: RequestConfig): Promise<any> {
   return new Promise((resolve, reject) => {
     // 1.创建axios的实例
     const instance = axios.create({
@@ -27,7 +42,9 @@ export function request(options: AxiosRequestConfig): Promise<any> {
     // 配置请求和响应拦截
     instance.interceptors.request.use(
       params => {
-        // 1.当发送网络请求时, 在页面中添加一个loading组件, 作为动画
+        // 1.当发送网络请求时, 在页面中添加一个loading组件, 作为动画，或者执行一段程序
+        if (options.successBeforeRequest) options.successBeforeRequest();
+        if (options.beforeRequest) options.beforeRequest();
 
         // 2.某些请求要求用户必须登录, 判断用户是否有token, 如果没有token跳转到login页面
         params.headers['Authorization'] = getToken();
@@ -38,12 +55,16 @@ export function request(options: AxiosRequestConfig): Promise<any> {
         return params;
       },
       err => {
+        if (options.failBeforeRequest) options.failBeforeRequest();
+        if (options.beforeRequest) options.beforeRequest();
         return err;
       }
     );
 
     instance.interceptors.response.use(
       response => {
+        if (options.successAfterResopnse) options.successAfterResopnse();
+        if (options.afterResopnse) options.afterResopnse();
         return response.data;
       },
       err => {
@@ -57,11 +78,19 @@ export function request(options: AxiosRequestConfig): Promise<any> {
               break;
           }
         }
+        if (options.failAfterResopnse) options.failAfterResopnse();
+        if (options.afterResopnse) options.afterResopnse();
         return err;
       }
     );
 
     // 2.传入对象进行网络请求
+    // if (options['beforeRequest']) delete options['beforeRequest'];
+    // if (options['afterResopnse']) delete options['afterResopnse'];
+    // if (options['successBeforeRequest']) delete options['successBeforeRequest'];
+    // if (options['failBeforeRequest']) delete options['failBeforeRequest'];
+    // if (options['successAfterResopnse']) delete options['successAfterResopnse'];
+    // if (options['failAfterResopnse']) delete options['failAfterResopnse'];
     instance(options)
       .then(res => {
         resolve(res);
@@ -74,11 +103,11 @@ export function request(options: AxiosRequestConfig): Promise<any> {
 
 /**
  * @description: get请求
- * @param {AxiosRequestConfig} options axios参数(请参考AxiosRequestConfig)
+ * @param {RequestConfig} options axios参数(请参考AxiosRequestConfig，附加参数参考RequestConfig)
  * @return {Promise<any>} 返回请求后的Promise
  * @author: dreamy-xay
  */
-export function get(options: AxiosRequestConfig): Promise<any> {
+export function get(options: RequestConfig): Promise<any> {
   if (options['method']) delete options['method'];
   return request({
     ...options,
@@ -88,11 +117,11 @@ export function get(options: AxiosRequestConfig): Promise<any> {
 
 /**
  * @description: post请求
- * @param {AxiosRequestConfig} options axios参数(请参考AxiosRequestConfig)
+ * @param {RequestConfig} options axios参数(请参考AxiosRequestConfig，附加参数参考RequestConfig)
  * @return {Promise<any>} 返回请求后的Promise
  * @author: dreamy-xay
  */
-export function post(options: AxiosRequestConfig): Promise<any> {
+export function post(options: RequestConfig): Promise<any> {
   if (options['method']) delete options['method'];
   return request({
     ...options,

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-12 13:08:14
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-12 20:17:32
+ * @LastEditTime: 2021-06-14 23:18:56
 -->
 <template>
   <div
@@ -67,7 +67,7 @@ export default {
     },
     imageList: {
       type: Array,
-      default: () => ['https://files-cdn.cnblogs.com/files/dreamy-xay/200R0103J1-1.bmp'],
+      default: () => ['https://i.loli.net/2021/06/14/Hy3aqAOpWUwc2Eh.jpg'],
     },
     width: {
       type: Number,

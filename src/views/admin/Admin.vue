@@ -4,14 +4,11 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-13 00:05:25
+ * @LastEditTime: 2021-06-15 01:28:00
 -->
 
 <template>
-  <div
-    class="admin"
-    v-show="pageShow"
-  >
+  <div class="admin">
     <div
       class="admin-left"
       :style="{width: menuWidth + 'px'}"
@@ -47,7 +44,8 @@
 
 <script lang="ts">
 import { verifyToken, clearToken } from '@/network/token';
-import { getAdminInfo } from '@/network/api';
+import { getAdminInfo } from '@/network/admin/api';
+import { Loading } from 'element-ui';
 import AdminTopBar from '@/views/admin/childComps/AdminTopBar.vue';
 import AdminMenu from '@/views/admin/childComps/AdminMenu.vue';
 import AdminAvatar from '@/views/admin/childComps/AdminAvatar.vue';
@@ -61,7 +59,6 @@ export default {
   name: 'Admin',
   data() {
     return {
-      pageShow: false,
       menuCollapse: false,
       menuWidth: 210,
       noticeSum: 30,
@@ -100,15 +97,19 @@ export default {
     },
   },
   methods: {
+    // 顶部栏菜单按钮点击
     topBarMenuClick() {
       (this as any).menuCollapse = !(this as any).menuCollapse;
     },
+    // 顶部栏通知按钮点击
     topBarNoticeClick() {
       console.log('notice');
     },
+    // 顶部栏搜索按钮点击
     topBarSearchClick(searchValue: string) {
       console.log('searchValue:' + searchValue);
     },
+    // 顶部栏登出按钮点击
     topBarLogoutClick() {
       (this as any).$router.replace('/admin/login');
       clearToken();
@@ -116,12 +117,23 @@ export default {
   },
   mounted() {
     // return;
+    // 验证token
     if (!verifyToken().status) (this as any).$router.replace({ path: '/admin/login' });
     else {
-      (this as any).pageShow = true;
+      // 如果当前路由状态有误则重定向
       if ((this as any).$route.path === '/admin' || (this as any).$route.path === '/admin/')
         (this as any).$router.replace({ path: '/admin/dataAnalyze' });
-      getAdminInfo()
+
+      // 获取管理员信息，同时加载loading组件
+      let loadingInstance: any;
+      getAdminInfo({
+        beforeRequest() {
+          loadingInstance = Loading.service({ fullscreen: true });
+        },
+        afterResopnse() {
+          loadingInstance.close();
+        },
+      })
         .then((res) => {
           (this as any).adminInfo = res;
         })
