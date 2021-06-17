@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: clq
- * @LastEditTime: 2021-06-12 16:15:08
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-06-17 15:18:12
  */
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
@@ -34,7 +34,7 @@ const routes: RouteConfig[] = [
         meta: {
           title: '数据统计页面(仪表盘)'
         },
-        component: () => import('@/views/admin/childComps/DataAnalyze.vue')
+        component: () => import('@/views/admin/childComps/pages/dataAnalyze/DataAnalyze.vue')
       },
       {
         path: 'article/manage',
@@ -42,7 +42,7 @@ const routes: RouteConfig[] = [
         meta: {
           title: '文章管理页面'
         },
-        component: () => import('@/views/admin/childComps/ArticleManage.vue')
+        component: () => import('@/views/admin/childComps/pages/articleManage/ArticleManage.vue')
       },
       {
         path: 'article/release',
@@ -50,7 +50,7 @@ const routes: RouteConfig[] = [
         meta: {
           title: '文章编辑发布页面'
         },
-        component: () => import('@/views/admin/childComps/ArticleRelease.vue')
+        component: () => import('@/views/admin/childComps/pages/articleRelease/ArticleRelease.vue')
       },
       {
         path: 'comment',
@@ -58,7 +58,7 @@ const routes: RouteConfig[] = [
         meta: {
           title: '评论管理页面'
         },
-        component: () => import('@/views/admin/childComps/CommentManage.vue')
+        component: () => import('@/views/admin/childComps/pages/commentManage/CommentManage.vue')
       },
       {
         path: 'categoryLabel',
@@ -66,7 +66,7 @@ const routes: RouteConfig[] = [
         meta: {
           title: '标签/分类管理页面'
         },
-        component: () => import('@/views/admin/childComps/CategoryLabelManage.vue')
+        component: () => import('@/views/admin/childComps/pages/categoryLabelManage/CategoryLabelManage.vue')
       }
     ]
   },

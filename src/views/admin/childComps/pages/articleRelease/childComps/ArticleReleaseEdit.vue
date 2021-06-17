@@ -1,36 +1,45 @@
 <!--
- * @Description: 文章编辑发布页面
+ * @Description: tinymce 编辑器
  * @Version:
  * @Autor: dreamy-xay
- * @Date: 2021-06-12 16:03:06
+ * @Date: 2021-06-17 15:19:24
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-17 12:03:58
+ * @LastEditTime: 2021-06-17 15:34:23
 -->
 
+
 <template>
-  <admin-window
-    title="文章"
-    bind-class="article-release"
-    ref="adminWindow"
-  >
+  <div class="article-release-edit">
     <vue-tinymce
       class="tinymce"
       v-model="content"
       :setting="setting"
     />
-  </admin-window>
+  </div>
 </template>
 
 <script lang="ts">
-import AdminWindow from '@/components/common/AdminWindow.vue';
-
 /**
- * @description: 文章编辑发布页面
+ * @description: tinymce 编辑器
+ * @param {String} icons 编辑器图标主题 `默认为 christmas`
+ * @param {String} skin 编辑器皮肤 `默认为 oxide-dark`
+ * @event input 输入监听事件，监听输入值的变化，参数 content
+ * @method getContent 获取输入框的内容
  * @author: dreamy-xay
  */
 
 export default {
-  name: 'articleRelease',
+  name: 'ArticleReleaseEdit',
+  props: {
+    icons: {
+      type: String,
+      default: 'christmas',
+    },
+    skin: {
+      type: String,
+      default: 'oxide-dark',
+    },
+  },
   data() {
     return {
       contentCache: (this as any).$store.state.articleReleaseContentCache,
@@ -38,12 +47,15 @@ export default {
       setting: {
         menubar: false,
         language: 'zh_CN',
+        icons: (this as any).icons,
+        // theme: 'silver',
+        skin: (this as any).skin,
         plugins:
           'print preview searchreplace autolink directionality visualblocks visualchars fullscreen image link media template code codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists wordcount imagetools textpattern help emoticons autosave kityformula-editor bdmap indent2em autoresize axupimgs',
         toolbar:
-          'code undo redo restoredraft | cut copy paste pastetext | forecolor backcolor bold italic underline strikethrough link anchor | alignleft aligncenter alignright alignjustify outdent indent | \
+          'code undo redo restoredraft | cut copy paste pastetext | forecolor backcolor bold italic underline strikethrough link anchor | alignleft aligncenter alignright alignjustify outdent indent | fullscreen | \
     styleselect formatselect fontselect fontsizeselect | bullist numlist | blockquote subscript superscript removeformat | \
-    table image media charmap emoticons hr pagebreak insertdatetime print preview | fullscreen | kityformula-editor bdmap indent2em lineheight axupimgs',
+    table image media charmap emoticons hr pagebreak insertdatetime print preview | kityformula-editor bdmap indent2em lineheight axupimgs',
         height: 650, // 编辑器高度
         min_height: 400,
         /*content_css: [ // 可设置编辑区内容展示的css，谨慎使用
@@ -86,18 +98,21 @@ export default {
   },
   watch: {
     content(val: string) {
+      (this as any).$emit('input', val);
       if ((this as any).content !== (this as any).contentCache)
         (this as any).$store.commit('setArticleReleaseIsSave', false);
       else (this as any).$store.commit('setArticleReleaseIsSave', true);
     },
   },
   methods: {
+    getContent(): string {
+      return (this as any).content;
+    },
     exitWarn(next: () => void): void {
       if ((this as any).$store.state.articleReleaseIsSave) {
         next();
         return;
       }
-
       (this as any)
         .$confirm('您编辑的内容尚未保存，是否需要保存修改？', '提示', {
           confirmButtonText: '确定',
@@ -128,21 +143,16 @@ export default {
       return true;
     };
   },
-  mounted() {
-    (this as any).$refs.adminWindow.push('发布');
-  },
   beforeDestroy() {
     // 更新文章缓存
     (this as any).$store.commit('setArticleReleaseContentCache', (this as any).content);
   },
-  components: { AdminWindow },
 };
 </script>
 
 <style lang="scss" scoped>
-.article-release {
-  .tinymce {
-    height: 500px;
-  }
+.article-release-edit {
+  width: 100%;
+  overflow: hidden;
 }
 </style>
