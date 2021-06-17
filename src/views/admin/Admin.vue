@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-15 01:28:00
+ * @LastEditTime: 2021-06-15 11:31:35
 -->
 
 <template>
@@ -64,21 +64,26 @@ export default {
       noticeSum: 30,
       adminInfo: (this as any).$route.params,
       menuList: [
-        { title: '仪表盘', icon: 'blog-data', url: '/admin/dataAnalyze', child: [] },
+        { title: '仪表盘', icon: 'blog-data', url: '/admin/dataAnalyze' },
         {
           title: '文章',
           icon: 'blog-arcitle',
           url: 'article',
           child: [
-            { title: '发布', icon: 'blog-edit-blog', url: '/admin/article/release' },
+            {
+              title: '发布',
+              icon: 'blog-edit-blog',
+              url: '/admin/article/release',
+              destory: (this as any).articleReleaseDestory,
+            },
             { title: '管理', icon: 'blog-ma', url: '/admin/article/manage' },
           ],
         },
-        { title: '评论', icon: 'blog-commit', url: '/admin/comment', child: [] },
-        { title: '分类/标签', icon: 'blog-tag', url: '/admin/categoryLabel', child: [] },
-        { title: '文件', icon: 'blog-file', url: '/admin/file', child: [] },
-        { title: '友链', icon: 'blog-link', url: '/admin/friendChain', child: [] },
-        { title: '访客', icon: 'blog-visitor', url: '/admin/visitor', child: [] },
+        { title: '评论', icon: 'blog-commit', url: '/admin/comment' },
+        { title: '分类/标签', icon: 'blog-tag', url: '/admin/categoryLabel' },
+        { title: '文件', icon: 'blog-file', url: '/admin/file' },
+        { title: '友链', icon: 'blog-link', url: '/admin/friendChain' },
+        { title: '访客', icon: 'blog-visitor', url: '/admin/visitor' },
         {
           title: '系统设置',
           icon: 'blog-setting',
@@ -114,6 +119,13 @@ export default {
       (this as any).$router.replace('/admin/login');
       clearToken();
     },
+    /* 页面前置菜单销毁 */
+    articleReleaseDestory(next: () => void): void {
+      (this as any).$store.state.articleReleaseDestory(next);
+    },
+    /* 页面事件 */
+    // 页面事件初始化
+    pageEventInit() {},
   },
   mounted() {
     // return;
@@ -143,6 +155,9 @@ export default {
           console.log(err);
         });
     }
+
+    // 激活页面事件
+    (this as any).pageEventInit();
   },
   components: {
     AdminMenu,

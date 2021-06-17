@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 12:02:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-12 13:47:02
+ * @LastEditTime: 2021-06-15 14:20:19
 -->
 
 <template>
@@ -16,18 +16,19 @@
       :text-color="styles.adminMenuTextColor"
       :default-active="defaultActive"
       :active-text-color="styles.adminMenuActiveTextColor"
-      :router="true"
+      ref="adminMenuEl"
     >
       <template v-for="(item,index) in menuList">
         <el-submenu
-          v-if="item.child.length > 0"
+          v-if="item.child && item.child.length > 0"
           :index="item.url"
           :key="index"
+          popper-class="admin-menu-el-popper"
         >
           <template #title>
             <i
-              :class="'iconfont ' + item.icon"
               v-if="item.icon !== ''"
+              :class="'iconfont ' + item.icon"
             ></i>
             <span slot="title">{{item.title}}</span>
           </template>
@@ -35,15 +36,17 @@
             v-for="(subitem, subindex) in item.child"
             :index="subitem.url"
             :key="subindex"
+            @click="callback(index, subindex)"
           >
             <i :class="'iconfont ' + subitem.icon"></i>
-            <span slot="title">{{(item.icon !== '' && isCollapse ? '　' : '') + subitem.title}}</span>
+            <span slot="title">{{subitem.title}}</span>
           </el-menu-item>
         </el-submenu>
         <el-menu-item
-          v-if="item.child.length === 0"
+          v-if="!item.child"
           :index="item.url"
           :key="index"
+          @click="callback(index, -1)"
         >
           <i
             :class="'iconfont ' + item.icon"
@@ -63,8 +66,7 @@ import styles from '@/assets/style/define.scss';
 /**
  * @description: 管理员界面右侧栏菜单
  * @param {Boolean} isCollapse 菜单是否折叠 `必传参数`
- * @param {Array} menuList 自定义菜单列表，默认格式 [{title,icon,url,child:[{title,icon,url},...]},...] `必传参数`
- * @param {Boolean} activeFirst 是否首次激活第一项菜单 `默认true`
+ * @param {Array} menuList 自定义菜单列表，默认格式 [{title,icon,url,child:[{title,icon,url},...]},destory,...] `必传参数`
  * @author: dreamy-xay
  */
 
@@ -79,20 +81,58 @@ export default {
       type: Array,
       required: true,
     },
-    activeFirst: {
-      type: Boolean,
-      default: true,
-    },
-  },
-  computed: {
-    defaultActive() {
-      return (this as any).menuList.length && (this as any).activeFirst ? (this as any).$route.path : '';
-    },
   },
   data() {
     return {
       styles,
+      preIndex: [0, -1],
     };
+  },
+  methods: {
+    callback(index: number, subindex: number): void {
+      const pre: number[] = (this as any).preIndex;
+      const currentMenuItem =
+        subindex < 0 ? (this as any).menuList[index] : (this as any).menuList[index].child[subindex];
+
+      const preMenuItem = pre[1] < 0 ? (this as any).menuList[pre[0]] : (this as any).menuList[pre[0]].child[pre[1]];
+      if (preMenuItem.destory) {
+        (this as any).$refs.adminMenuEl.updateActiveIndex(preMenuItem.url);
+        preMenuItem.destory(() => {
+          if ((this as any).$route.path !== currentMenuItem.url) {
+            (this as any).preIndex = [index, subindex];
+            (this as any).$router.push(currentMenuItem.url);
+          }
+        });
+      } else if ((this as any).$route.path !== currentMenuItem.url) {
+        (this as any).preIndex = [index, subindex];
+        (this as any).$router.push(currentMenuItem.url);
+      }
+    },
+  },
+  created() {
+    // 查询preIndex
+    let flag: boolean;
+    const path: string = (this as any).$route.path;
+    for (let i: number = 0; i < (this as any).menuList.length; ++i) {
+      if ((this as any).menuList[i].url === path) {
+        (this as any).preIndex = [i, -1];
+        break;
+      } else if ((this as any).menuList[i].child) {
+        flag = false;
+        for (let j: number = 0; j < (this as any).menuList[i].child.length; ++j)
+          if ((this as any).menuList[i].child[j].url === path) {
+            flag = true;
+            (this as any).preIndex = [i, j];
+            break;
+          }
+        if (flag) break;
+      }
+    }
+  },
+  computed: {
+    defaultActive() {
+      return (this as any).menuList.length ? (this as any).$route.path : '';
+    },
   },
 };
 </script>
@@ -109,6 +149,14 @@ export default {
 
   .iconfont {
     font-size: 20px;
+    margin-right: 15px;
+  }
+}
+</style>
+
+<style lang="scss">
+.admin-menu-el-popper {
+  .iconfont {
     margin-right: 15px;
   }
 }

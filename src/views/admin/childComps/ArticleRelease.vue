@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-12 16:03:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-13 23:03:31
+ * @LastEditTime: 2021-06-15 18:03:06
 -->
 
 <template>
@@ -33,7 +33,7 @@ export default {
   name: 'articleRelease',
   data() {
     return {
-      content: '<h1 style="text-align: center; color: pink">创新型笔记分享部落阁</h1>',
+      content: (this as any).$store.state.articleReleaseContentCache,
       setting: {
         menubar: false,
         toolbar:
@@ -47,8 +47,35 @@ export default {
       },
     };
   },
+  methods: {
+    exitWarn(next?: () => void) {
+      (this as any)
+        .$confirm('您编辑的内容尚未保存，是否需要保存修改？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+        .then(() => {
+          (this as any).$message({
+            type: 'success',
+            message: '保存成功!',
+          });
+          if (typeof next === 'function') next();
+        })
+        .catch(() => {
+          if (typeof next === 'function') next();
+        });
+    },
+  },
+  created() {
+    (this as any).$store.commit('setArticleReleaseDestory', (this as any).exitWarn);
+    window.onbeforeunload = (this as any).exitWarn;
+  },
   mounted() {
     (this as any).$refs.adminWindow.push('发布');
+  },
+  beforeDestroy() {
+    (this as any).$store.commit('setArticleReleaseContentCache', (this as any).content);
   },
   components: { AdminWindow },
 };

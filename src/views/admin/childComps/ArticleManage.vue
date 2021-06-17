@@ -4,7 +4,7 @@
     title="文章"
     ref="adminWindow"
   >
-    <!-- 文章数据表单 -->
+    <!-- 文章数据表单
     <div class="article-manage-table">
       <el-table
         class="el-table-article"
@@ -108,7 +108,6 @@
       </el-table>
     </div>
     <div class="article-manage-pagination">
-      <!-- 分页导航 -->
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -120,7 +119,7 @@
         style="marginTop:12px"
       >
       </el-pagination>
-    </div>
+    </div> -->
   </admin-window>
 </template>
 

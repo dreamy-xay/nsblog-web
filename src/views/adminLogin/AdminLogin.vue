@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-15 00:10:49
+ * @LastEditTime: 2021-06-15 10:59:08
 -->
 
 <template>
@@ -163,7 +163,7 @@ export default {
             showClose: true,
             message: '账号或者密码错误',
             type: 'error',
-            duration: 2000,
+            duration: 1000,
             customClass: 'admin-login-error',
           });
           console.log(err);
