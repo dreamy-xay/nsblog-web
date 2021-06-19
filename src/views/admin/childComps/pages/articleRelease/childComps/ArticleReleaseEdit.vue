@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-17 15:19:24
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-19 13:11:51
+ * @LastEditTime: 2021-06-19 14:06:49
 -->
 
 
@@ -137,14 +137,15 @@ export default Vue.extend({
   },
   created() {
     this.$store.commit('setArticleReleaseDestory', this.exitWarn);
-    // 退出监听
     window.onbeforeunload = () => {
-      return this.$route.path === 'admin/article/release';
+      return true;
     };
   },
   beforeDestroy() {
     // 更新文章缓存
     this.$store.commit('setArticleReleaseContentCache', this.content);
+    // 删除全局注册
+    window.onbeforeunload = null;
   },
 });
 </script>

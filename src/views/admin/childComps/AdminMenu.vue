@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 12:02:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-19 13:37:32
+ * @LastEditTime: 2021-06-19 13:51:59
 -->
 
 <template>
@@ -92,7 +92,7 @@ export default Vue.extend({
   methods: {
     callback(index: number, subindex: number): void {
       const pre: number[] = this.preIndex;
-      const menuList: any = this.menuList[index];
+      const menuList: any = this.menuList;
       const currentMenuItem = subindex < 0 ? menuList[index] : menuList[index].child[subindex];
 
       const preMenuItem = pre[1] < 0 ? menuList[pre[0]] : menuList[pre[0]].child[pre[1]];

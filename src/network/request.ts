@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-15 01:13:44
+ * @LastEditTime: 2021-06-19 14:10:14
  */
 
 import axios, { AxiosRequestConfig } from 'axios';
@@ -85,12 +85,6 @@ export function request(options: RequestConfig): Promise<any> {
     );
 
     // 2.传入对象进行网络请求
-    // if (options['beforeRequest']) delete options['beforeRequest'];
-    // if (options['afterResopnse']) delete options['afterResopnse'];
-    // if (options['successBeforeRequest']) delete options['successBeforeRequest'];
-    // if (options['failBeforeRequest']) delete options['failBeforeRequest'];
-    // if (options['successAfterResopnse']) delete options['successAfterResopnse'];
-    // if (options['failAfterResopnse']) delete options['failAfterResopnse'];
     instance(options)
       .then(res => {
         resolve(res);
