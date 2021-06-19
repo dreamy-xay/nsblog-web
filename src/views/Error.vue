@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-12 15:40:38
+ * @LastEditTime: 2021-06-19 13:13:09
 -->
 
 <template>
@@ -332,19 +332,20 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue';
 /**
  * @description: 404界面
  * @author: dreamy-xay
  */
 
-export default {
+export default Vue.extend({
   name: 'Error',
   methods: {
     goHome() {
       (this as any).$router.push('/');
     },
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

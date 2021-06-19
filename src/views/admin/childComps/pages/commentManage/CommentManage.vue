@@ -1,10 +1,10 @@
 <!--
- * @Description:
+ * @Description: 评论管理
  * @Version:
  * @Autor: clq
  * @Date: 2021-06-10 17:27:54
- * @LastEditors: clq
- * @LastEditTime: 2021-06-12 23:40:23
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-06-19 13:43:04
 -->
 <template>
   <admin-window title="评论">
@@ -70,8 +70,15 @@
 </template>
 
 <script lang='ts'>
+import Vue from 'vue';
 import AdminWindow from '@/components/common/AdminWindow.vue';
-export default {
+
+/**
+ * @description: 评论管理
+ * @author: dreamy-xay
+ */
+
+export default Vue.extend({
   name: 'commentManage',
   props: {},
   data() {
@@ -154,7 +161,7 @@ export default {
   components: {
     AdminWindow,
   },
-};
+});
 </script>
 
 <style lang='scss' scoped>

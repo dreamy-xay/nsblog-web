@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 12:02:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-15 14:20:19
+ * @LastEditTime: 2021-06-19 13:37:32
 -->
 
 <template>
@@ -61,6 +61,7 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue';
 import styles from '@/assets/style/define.scss';
 
 /**
@@ -70,7 +71,7 @@ import styles from '@/assets/style/define.scss';
  * @author: dreamy-xay
  */
 
-export default {
+export default Vue.extend({
   name: 'adminMenu',
   props: {
     isCollapse: {
@@ -90,39 +91,40 @@ export default {
   },
   methods: {
     callback(index: number, subindex: number): void {
-      const pre: number[] = (this as any).preIndex;
-      const currentMenuItem =
-        subindex < 0 ? (this as any).menuList[index] : (this as any).menuList[index].child[subindex];
+      const pre: number[] = this.preIndex;
+      const menuList: any = this.menuList[index];
+      const currentMenuItem = subindex < 0 ? menuList[index] : menuList[index].child[subindex];
 
-      const preMenuItem = pre[1] < 0 ? (this as any).menuList[pre[0]] : (this as any).menuList[pre[0]].child[pre[1]];
+      const preMenuItem = pre[1] < 0 ? menuList[pre[0]] : menuList[pre[0]].child[pre[1]];
       if (preMenuItem.destory) {
-        (this as any).$refs.adminMenuEl.updateActiveIndex(preMenuItem.url);
+        (this.$refs.adminMenuEl as any).updateActiveIndex(preMenuItem.url);
         preMenuItem.destory(() => {
-          if ((this as any).$route.path !== currentMenuItem.url) {
-            (this as any).preIndex = [index, subindex];
-            (this as any).$router.push(currentMenuItem.url);
+          if (this.$route.path !== currentMenuItem.url) {
+            this.preIndex = [index, subindex];
+            this.$router.push(currentMenuItem.url);
           }
         });
-      } else if ((this as any).$route.path !== currentMenuItem.url) {
-        (this as any).preIndex = [index, subindex];
-        (this as any).$router.push(currentMenuItem.url);
+      } else if (this.$route.path !== currentMenuItem.url) {
+        this.preIndex = [index, subindex];
+        this.$router.push(currentMenuItem.url);
       }
     },
   },
   created() {
     // 查询preIndex
     let flag: boolean;
-    const path: string = (this as any).$route.path;
-    for (let i: number = 0; i < (this as any).menuList.length; ++i) {
-      if ((this as any).menuList[i].url === path) {
-        (this as any).preIndex = [i, -1];
+    const path: string = this.$route.path;
+    const menuList: any = this.menuList;
+    for (let i: number = 0; i < this.menuList.length; ++i) {
+      if (menuList[i].url === path) {
+        this.preIndex = [i, -1];
         break;
-      } else if ((this as any).menuList[i].child) {
+      } else if (menuList[i].child) {
         flag = false;
-        for (let j: number = 0; j < (this as any).menuList[i].child.length; ++j)
-          if ((this as any).menuList[i].child[j].url === path) {
+        for (let j: number = 0; j < menuList[i].child.length; ++j)
+          if (menuList[i].child[j].url === path) {
             flag = true;
-            (this as any).preIndex = [i, j];
+            this.preIndex = [i, j];
             break;
           }
         if (flag) break;
@@ -131,10 +133,10 @@ export default {
   },
   computed: {
     defaultActive() {
-      return (this as any).menuList.length ? (this as any).$route.path : '';
+      return this.menuList.length ? this.$route.path : '';
     },
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-15 11:31:35
+ * @LastEditTime: 2021-06-19 13:44:53
 -->
 
 <template>
@@ -43,6 +43,7 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue';
 import { verifyToken, clearToken } from '@/network/token';
 import { getAdminInfo } from '@/network/admin/api';
 import { Loading } from 'element-ui';
@@ -55,14 +56,14 @@ import AdminAvatar from '@/views/admin/childComps/AdminAvatar.vue';
  * @author: dreamy-xay
  */
 
-export default {
+export default Vue.extend({
   name: 'Admin',
   data() {
     return {
       menuCollapse: false,
       menuWidth: 210,
       noticeSum: 30,
-      adminInfo: (this as any).$route.params,
+      adminInfo: this.$route.params,
       menuList: [
         { title: '仪表盘', icon: 'blog-data', url: '/admin/dataAnalyze' },
         {
@@ -98,13 +99,13 @@ export default {
   },
   watch: {
     menuCollapse(isCollapse: boolean) {
-      (this as any).menuWidth = isCollapse ? 64 : 210;
+      this.menuWidth = isCollapse ? 64 : 210;
     },
   },
   methods: {
     // 顶部栏菜单按钮点击
     topBarMenuClick() {
-      (this as any).menuCollapse = !(this as any).menuCollapse;
+      this.menuCollapse = !this.menuCollapse;
     },
     // 顶部栏通知按钮点击
     topBarNoticeClick() {
@@ -116,12 +117,12 @@ export default {
     },
     // 顶部栏登出按钮点击
     topBarLogoutClick() {
-      (this as any).$router.replace('/admin/login');
+      this.$router.replace('/admin/login');
       clearToken();
     },
     /* 页面前置菜单销毁 */
     articleReleaseDestory(next: () => void): void {
-      (this as any).$store.state.articleReleaseDestory(next);
+      this.$store.state.articleReleaseDestory(next);
     },
     /* 页面事件 */
     // 页面事件初始化
@@ -130,11 +131,11 @@ export default {
   mounted() {
     // return;
     // 验证token
-    if (!verifyToken().status) (this as any).$router.replace({ path: '/admin/login' });
+    if (!verifyToken().status) this.$router.replace({ path: '/admin/login' });
     else {
       // 如果当前路由状态有误则重定向
-      if ((this as any).$route.path === '/admin' || (this as any).$route.path === '/admin/')
-        (this as any).$router.replace({ path: '/admin/dataAnalyze' });
+      if (this.$route.path === '/admin' || this.$route.path === '/admin/')
+        this.$router.replace({ path: '/admin/dataAnalyze' });
 
       // 获取管理员信息，同时加载loading组件
       let loadingInstance: any;
@@ -147,24 +148,24 @@ export default {
         },
       })
         .then((res) => {
-          (this as any).adminInfo = res;
+          this.adminInfo = res;
         })
         .catch((err) => {
           clearToken();
-          (this as any).$router.replace({ path: '/admin/login' });
+          this.$router.replace({ path: '/admin/login' });
           console.log(err);
         });
     }
 
     // 激活页面事件
-    (this as any).pageEventInit();
+    this.pageEventInit();
   },
   components: {
     AdminMenu,
     AdminTopBar,
     AdminAvatar,
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

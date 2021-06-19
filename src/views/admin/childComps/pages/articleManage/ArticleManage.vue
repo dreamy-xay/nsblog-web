@@ -1,3 +1,12 @@
+<!--
+ * @Description: 文章管理
+ * @Version:
+ * @Autor: dreamy-xay
+ * @Date: 2021-06-12 23:58:01
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-06-19 13:40:04
+-->
+
 <template>
   <admin-window
     bind-class="article-manage"
@@ -124,8 +133,14 @@
 </template>
 
 <script lang='ts'>
+import Vue from 'vue';
 import AdminWindow from '@/components/common/AdminWindow.vue';
-export default {
+
+/**
+ * @description: 文章管理
+ * @author: dreamy-xay
+ */
+export default Vue.extend({
   name: 'articleManage',
   data() {
     return {
@@ -186,12 +201,12 @@ export default {
     // },
   },
   mounted() {
-    (this as any).$refs.adminWindow.push('管理');
+    (this.$refs.adminWindow as any).push('管理');
   },
   components: {
     AdminWindow,
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-10 19:56:00
+ * @LastEditTime: 2021-06-19 13:12:40
 -->
 
 <template>
@@ -20,14 +20,15 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue';
 /**
  * @description: 博客主页
  * @author: dreamy-xay
  */
 
-export default {
+export default Vue.extend({
   name: 'Home',
-};
+});
 </script>
 
 <style lang="scss" scoped>

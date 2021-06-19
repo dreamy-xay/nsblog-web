@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-12 16:03:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-17 15:24:23
+ * @LastEditTime: 2021-06-19 13:40:45
 -->
 
 <template>
@@ -18,6 +18,7 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue';
 import AdminWindow from '@/components/common/AdminWindow.vue';
 import ArticleReleaseEdit from '@/views/admin/childComps/pages/articleRelease/childComps/ArticleReleaseEdit.vue';
 
@@ -26,16 +27,16 @@ import ArticleReleaseEdit from '@/views/admin/childComps/pages/articleRelease/ch
  * @author: dreamy-xay
  */
 
-export default {
+export default Vue.extend({
   name: 'articleRelease',
   mounted() {
-    (this as any).$refs.adminWindow.push('发布');
+    (this.$refs.adminWindow as any).push('发布');
   },
   components: {
     AdminWindow,
     ArticleReleaseEdit,
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

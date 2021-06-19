@@ -1,10 +1,10 @@
 <!--
- * @Description:
+ * @Description: 分类标签
  * @Version:
  * @Autor: clq
  * @Date: 2021-06-11 10:09:23
- * @LastEditors: clq
- * @LastEditTime: 2021-06-12 23:50:37
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-06-19 13:42:13
 -->
 <template>
   <admin-window title="分类/标签管理">
@@ -90,8 +90,15 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue';
 import AdminWindow from '@/components/common/AdminWindow.vue';
-export default {
+
+/**
+ * @description: 分类标签
+ * @author: dreamy-xay
+ */
+
+export default Vue.extend({
   name: 'categoryLabelManage',
   props: {},
   data() {
@@ -142,21 +149,21 @@ export default {
   methods: {
     // 新增分类
     addCategory() {
-      (this as any).addCategoryDialogVisible = true;
+      this.addCategoryDialogVisible = true;
     },
     // 取消增加分类
     cancel() {
-      (this as any).addCategoryDialogVisible = false;
+      this.addCategoryDialogVisible = false;
     },
     // 确定增加分类
     confirm() {
-      (this as any).addCategoryDialogVisible = false;
+      this.addCategoryDialogVisible = false;
     },
   },
   components: {
     AdminWindow,
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

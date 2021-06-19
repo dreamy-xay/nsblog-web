@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-12 13:47:47
+ * @LastEditTime: 2021-06-19 13:32:36
 -->
 
 
@@ -53,6 +53,7 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue';
 /**
  * @description: 管理员登陆界面表单
  * @event loginClick 登录点击递交触发事件 `账号密码均不为空时触发`
@@ -63,7 +64,7 @@
  * @author: dreamy-xay
  */
 
-export default {
+export default Vue.extend({
   name: 'adminLoginFrom',
   data() {
     return {
@@ -75,17 +76,17 @@ export default {
   },
   watch: {
     passwordShow(isShow: boolean) {
-      (this as any).passwordType = isShow ? 'text' : 'password';
+      this.passwordType = isShow ? 'text' : 'password';
     },
   },
   methods: {
     submitClick() {
-      if ((this as any).username && (this as any).password) {
-        (this as any).$emit('loginClick', (this as any).username, (this as any).password);
+      if (this.username && this.password) {
+        this.$emit('loginClick', this.username, this.password);
       }
     },
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

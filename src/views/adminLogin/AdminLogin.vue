@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-15 10:59:08
+ * @LastEditTime: 2021-06-19 13:31:26
 -->
 
 <template>
@@ -86,6 +86,7 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue';
 import adminLoginFrom from '@/views/adminLogin/childComps/AdminLoginFrom.vue';
 import backgroundSetting from '@/views/adminLogin/childComps/BackgroundSetting.vue';
 import BaseVerification from '@/components/content/BaseVerification.vue';
@@ -99,7 +100,7 @@ import { setToken } from '@/network/token';
  * @author: dreamy-xay
  */
 
-export default {
+export default Vue.extend({
   name: 'adminLogin',
   data() {
     return {
@@ -123,11 +124,11 @@ export default {
   },
   methods: {
     menuHover(isShow: boolean, delay: number = 0) {
-      if ((this as any).delayTimer) clearTimeout((this as any).delayTimer);
+      if (this.delayTimer) clearTimeout((this as any).delayTimer);
       (this as any).delayTimer = setTimeout(() => {
-        (this as any).menuShow = isShow;
+        this.menuShow = isShow;
         clearTimeout((this as any).delayTimer);
-        (this as any).delayTimer = null;
+        this.delayTimer = null;
       }, delay);
     },
     issueClick() {
@@ -140,26 +141,26 @@ export default {
       console.log('facebook click');
     },
     cameraClick() {
-      html2canvas((this as any).$refs.adminLoginPage).then((canvas) => {
+      html2canvas(this.$refs.adminLoginPage as any).then((canvas) => {
         downLoadFile('admin', canvas.toDataURL('png'));
       });
     },
     inputFocus(isFocus: boolean) {
-      (this as any).isInputFocus = isFocus;
+      this.isInputFocus = isFocus;
     },
     loginClick(username: string, password: string) {
-      (this as any).adminLoginInfo = { username, password };
-      (this as any).$refs.adminLoginVerify.open();
+      this.adminLoginInfo = { username, password };
+      (this.$refs.adminLoginVerify as any).open();
     },
     verifySuccess() {
-      (this as any).$refs.adminLoginVerify.close();
-      adminLogin((this as any).adminLoginInfo.username, (this as any).adminLoginInfo.password)
+      (this.$refs.adminLoginVerify as any).close();
+      adminLogin(this.adminLoginInfo.username, this.adminLoginInfo.password)
         .then((res) => {
           setToken(res.token);
-          (this as any).$router.push({ name: 'dataAnalyze', params: res });
+          this.$router.push({ name: 'dataAnalyze', params: res });
         })
         .catch((err) => {
-          (this as any).$message({
+          this.$message({
             showClose: true,
             message: '账号或者密码错误',
             type: 'error',
@@ -168,17 +169,17 @@ export default {
           });
           console.log(err);
         });
-      (this as any).adminLoginInfo = { username: '', password: '' };
+      this.adminLoginInfo = { username: '', password: '' };
     },
     /* menuMethods */
     goHome() {
-      (this as any).$router.push('/');
+      this.$router.push('/');
     },
     backgroundSetting() {
-      (this as any).backgroundSettingPopupShow = true;
-      (this as any).menuShow = false;
+      this.backgroundSettingPopupShow = true;
+      this.menuShow = false;
       setTimeout(() => {
-        (this as any).backgroundSettingPopupShow = false;
+        this.backgroundSettingPopupShow = false;
       }, 0);
     },
   },
@@ -187,7 +188,7 @@ export default {
     backgroundSetting,
     BaseVerification,
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

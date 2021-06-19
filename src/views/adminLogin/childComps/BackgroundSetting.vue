@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-10 21:55:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-10 23:04:32
+ * @LastEditTime: 2021-06-19 13:33:17
 -->
 <template>
   <div class="background-setting">
@@ -18,6 +18,7 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue';
 /**
  * @description:
  * @param {Boolean} show 背景设置弹出框是否显示 `必传参数`
@@ -25,7 +26,7 @@
  */
 
 import basePopup from '@/components/content/BasePopup.vue';
-export default {
+export default Vue.extend({
   name: 'backgroundSetting',
   props: {
     show: {
@@ -35,23 +36,23 @@ export default {
   },
   watch: {
     show(isShow: boolean) {
-      if (isShow) (this as any).popShow = true;
+      if (isShow) this.popShow = true;
     },
   },
   data() {
     return {
-      popShow: (this as any).show,
+      popShow: this.show,
     };
   },
   methods: {
     close() {
-      (this as any).popShow = false;
+      this.popShow = false;
     },
   },
   components: {
     basePopup,
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

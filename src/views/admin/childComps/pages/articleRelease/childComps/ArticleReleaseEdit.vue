@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-17 15:19:24
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-17 15:34:23
+ * @LastEditTime: 2021-06-19 13:11:51
 -->
 
 
@@ -19,6 +19,7 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue';
 /**
  * @description: tinymce 编辑器
  * @param {String} icons 编辑器图标主题 `默认为 christmas`
@@ -28,7 +29,7 @@
  * @author: dreamy-xay
  */
 
-export default {
+export default Vue.extend({
   name: 'ArticleReleaseEdit',
   props: {
     icons: {
@@ -42,14 +43,14 @@ export default {
   },
   data() {
     return {
-      contentCache: (this as any).$store.state.articleReleaseContentCache,
-      content: (this as any).$store.state.articleReleaseContentCache,
+      contentCache: this.$store.state.articleReleaseContentCache,
+      content: this.$store.state.articleReleaseContentCache,
       setting: {
         menubar: false,
         language: 'zh_CN',
-        icons: (this as any).icons,
+        icons: this.icons,
         // theme: 'silver',
-        skin: (this as any).skin,
+        skin: this.skin,
         plugins:
           'print preview searchreplace autolink directionality visualblocks visualchars fullscreen image link media template code codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists wordcount imagetools textpattern help emoticons autosave kityformula-editor bdmap indent2em autoresize axupimgs',
         toolbar:
@@ -98,29 +99,27 @@ export default {
   },
   watch: {
     content(val: string) {
-      (this as any).$emit('input', val);
-      if ((this as any).content !== (this as any).contentCache)
-        (this as any).$store.commit('setArticleReleaseIsSave', false);
-      else (this as any).$store.commit('setArticleReleaseIsSave', true);
+      this.$emit('input', val);
+      if (this.content !== this.contentCache) this.$store.commit('setArticleReleaseIsSave', false);
+      else this.$store.commit('setArticleReleaseIsSave', true);
     },
   },
   methods: {
     getContent(): string {
-      return (this as any).content;
+      return this.content;
     },
     exitWarn(next: () => void): void {
-      if ((this as any).$store.state.articleReleaseIsSave) {
+      if (this.$store.state.articleReleaseIsSave) {
         next();
         return;
       }
-      (this as any)
-        .$confirm('您编辑的内容尚未保存，是否需要保存修改？', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-        })
+      this.$confirm('您编辑的内容尚未保存，是否需要保存修改？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
         .then(() => {
-          (this as any).$message({
+          this.$message({
             type: 'success',
             showClose: true,
             duration: 1000,
@@ -128,7 +127,7 @@ export default {
           });
 
           // 设置已保存
-          (this as any).$store.commit('setArticleReleaseIsSave', true);
+          this.$store.commit('setArticleReleaseIsSave', true);
           next();
         })
         .catch(() => {
@@ -137,17 +136,17 @@ export default {
     },
   },
   created() {
-    (this as any).$store.commit('setArticleReleaseDestory', (this as any).exitWarn);
+    this.$store.commit('setArticleReleaseDestory', this.exitWarn);
     // 退出监听
     window.onbeforeunload = () => {
-      return true;
+      return this.$route.path === 'admin/article/release';
     };
   },
   beforeDestroy() {
     // 更新文章缓存
-    (this as any).$store.commit('setArticleReleaseContentCache', (this as any).content);
+    this.$store.commit('setArticleReleaseContentCache', this.content);
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

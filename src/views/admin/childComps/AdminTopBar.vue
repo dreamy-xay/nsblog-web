@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 13:15:08
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-12 17:52:52
+ * @LastEditTime: 2021-06-19 13:34:07
 -->
 
 <template>
@@ -67,6 +67,7 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue';
 /**
  * @description: 管理员界面顶部栏
  * @param {Number} noticeSum 通知数量 `必传参数`
@@ -78,7 +79,7 @@
  * @author: dreamy-xay
  */
 
-export default {
+export default Vue.extend({
   name: 'adminTopBar',
   props: {
     noticeSum: {
@@ -99,13 +100,13 @@ export default {
   },
   methods: {
     searchClick() {
-      if ((this as any).searchValue) (this as any).$emit('searchClick', (this as any).searchValue);
+      if (this.searchValue) this.$emit('searchClick', this.searchValue);
     },
     cancelClick() {
-      (this as any).searchValue = '';
+      this.searchValue = '';
     },
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

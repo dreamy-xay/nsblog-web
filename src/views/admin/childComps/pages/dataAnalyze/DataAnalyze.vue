@@ -1,10 +1,10 @@
 <!--
- * @Description:
+ * @Description: 数据统计
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-10 11:25:27
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-12 22:46:17
+ * @LastEditTime: 2021-06-19 13:43:41
 -->
 
 <template>
@@ -17,6 +17,7 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue';
 import AdminWindow from '@/components/common/AdminWindow.vue';
 
 /**
@@ -24,12 +25,12 @@ import AdminWindow from '@/components/common/AdminWindow.vue';
  * @author: dreamy-xay
  */
 
-export default {
+export default Vue.extend({
   name: 'dataAnalyze',
   components: {
     AdminWindow,
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

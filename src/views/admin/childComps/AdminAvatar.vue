@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 15:56:22
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-12 21:07:23
+ * @LastEditTime: 2021-06-19 13:38:17
 -->
 
 <template>
@@ -38,6 +38,7 @@
 </template>
 
 <script lang='ts'>
+import Vue from 'vue';
 /**
  * @description: 管理员界面右侧栏管理员头像
  * @param {Boolean} isCollapse 菜单是否折叠 `必传参数`
@@ -48,7 +49,7 @@
  * @author: dreamy-xay
  */
 
-export default {
+export default Vue.extend({
   name: 'adminAvatar',
   props: {
     isCollapse: {
@@ -82,8 +83,7 @@ export default {
       adminAvatarRightOpacity: (this as any).isCollapse ? 0 : 1,
     };
   },
-  methods: {},
-};
+});
 </script>
 
 <style lang="scss" scoped>
