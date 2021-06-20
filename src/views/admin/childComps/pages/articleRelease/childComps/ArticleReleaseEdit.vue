@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-17 15:19:24
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-20 17:07:35
+ * @LastEditTime: 2021-06-20 21:03:14
 -->
 
 
@@ -114,35 +114,8 @@ export default Vue.extend({
     getContent(): string {
       return this.content;
     },
-    exitWarn(next: () => void): void {
-      if (this.$store.state.articleReleaseIsSave) {
-        next();
-        return;
-      }
-      this.$confirm('您编辑的内容尚未保存，是否需要保存修改？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      })
-        .then(() => {
-          this.$message({
-            type: 'success',
-            showClose: true,
-            duration: 1000,
-            message: '保存成功!',
-          });
-
-          // 设置已保存
-          this.$store.commit('setArticleReleaseIsSave', true);
-          next();
-        })
-        .catch(() => {
-          next();
-        });
-    },
   },
   created() {
-    this.$store.commit('setArticleReleaseDestory', this.exitWarn);
     window.onbeforeunload = () => {
       return true;
     };
@@ -156,6 +129,8 @@ export default Vue.extend({
   beforeDestroy() {
     // 更新文章缓存
     this.$store.commit('setArticleReleaseContentCache', this.content);
+    // 下次不更新不用提示
+    this.$store.commit('setArticleReleaseIsSave', true);
     // 删除全局注册
     window.onbeforeunload = null;
   },

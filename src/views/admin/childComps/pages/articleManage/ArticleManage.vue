@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-12 23:58:01
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-06-20 17:41:03
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-06-20 18:46:08
 -->
 
 <template>
@@ -458,7 +458,7 @@ export default Vue.extend({
         val.category.some((val2) => {
           if (val2 === command) (this as any).filterArticles.push(val);
         });
-        return true; //返回true继续迭代,默认返回false终止迭代
+        return true; // 返回true继续迭代,默认返回false终止迭代
       });
       this.updateShowArticle();
     },
