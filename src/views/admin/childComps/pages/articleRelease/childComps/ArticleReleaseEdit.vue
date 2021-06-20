@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-17 15:19:24
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-20 12:09:43
+ * @LastEditTime: 2021-06-20 17:07:35
 -->
 
 
@@ -20,6 +20,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import { Loading } from 'element-ui';
 /**
  * @description: tinymce 编辑器
  * @param {String} icons 编辑器图标主题 `默认为 christmas`
@@ -95,6 +96,10 @@ export default Vue.extend({
         },
         toolbar_sticky: true,
         autosave_ask_before_unload: false,
+        // 初始化后回调函数
+        init_instance_callback: () => {
+          (this as any).loadingInstance.close();
+        },
       },
     };
   },
@@ -142,6 +147,12 @@ export default Vue.extend({
       return true;
     };
   },
+  mounted() {
+    (this as any).loadingInstance = Loading.service({
+      target: this.$el as HTMLElement,
+      customClass: 'admin-release-edit-loading',
+    });
+  },
   beforeDestroy() {
     // 更新文章缓存
     this.$store.commit('setArticleReleaseContentCache', this.content);
@@ -155,5 +166,16 @@ export default Vue.extend({
 .article-release-edit {
   width: 100%;
   overflow: hidden;
+}
+</style>
+
+
+<style lang="scss">
+.admin-release-edit-loading {
+  background-color: $admin-loading-background-color !important;
+
+  .el-loading-spinner .path {
+    stroke: $admin-loading-stroke;
+  }
 }
 </style>

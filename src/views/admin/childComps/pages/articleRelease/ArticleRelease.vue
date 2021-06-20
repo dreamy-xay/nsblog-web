@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-12 16:03:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-20 16:09:31
+ * @LastEditTime: 2021-06-20 17:25:05
 -->
 
 <template>
@@ -17,7 +17,10 @@
       :types="types"
       :categories="categories"
     />
-    <article-release-edit icons="default" />
+
+    <div class="article-release-editor">
+      <article-release-edit icons="default" />
+    </div>
   </admin-window>
 </template>
 
@@ -66,6 +69,13 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .article-release {
-  background-color: transparent;
+  margin-bottom: 50px;
+  overflow: hidden;
+
+  .article-release-editor {
+    margin-top: 20px;
+    width: 100%;
+    overflow: hidden;
+  }
 }
 </style>

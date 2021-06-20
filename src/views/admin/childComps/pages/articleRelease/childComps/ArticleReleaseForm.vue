@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-19 15:43:33
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-20 16:20:00
+ * @LastEditTime: 2021-06-20 17:41:39
 -->
 
 <template>
@@ -103,6 +103,7 @@
       </el-form-item>
       <slot></slot>
     </el-form>
+    <article-release-form-cover-select ref="articleReleaseFormCoverSelect" />
   </div>
 </template>
 
@@ -110,6 +111,7 @@
 import Vue from 'vue';
 import BaseTagInput from '@/components/content/BaseTagInput.vue';
 import BaseTagInputSelect from '@/components/content/BaseTagInputSelect.vue';
+import ArticleReleaseFormCoverSelect from '@/views/admin/childComps/pages/articleRelease/childComps/ArticleReleaseFormCoverSelect.vue';
 
 /**
  * @description: 写文章信息表单
@@ -150,7 +152,9 @@ export default Vue.extend({
       return this.form;
     },
     // 封面图片点击
-    coverSelectClick() {},
+    coverSelectClick() {
+      (this.$refs.articleReleaseFormCoverSelect as any).open();
+    },
     // 标签分类重复
     tagHandleRepeat(isTag: boolean) {
       this.$message({
@@ -174,10 +178,15 @@ export default Vue.extend({
     },
     // 输入改变
     tagHandleInputChange(value: string) {},
+    // 模态框关闭前
+    dialogBeforeClose(next: any) {
+      next();
+    },
   },
   components: {
     BaseTagInputSelect,
     BaseTagInput,
+    ArticleReleaseFormCoverSelect,
   },
 });
 </script>
