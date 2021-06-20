@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-12 16:03:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-20 21:02:50
+ * @LastEditTime: 2021-06-20 21:47:45
 -->
 
 <template>
@@ -18,10 +18,10 @@
       :categories="categories"
       :file-image-list="fileImageList"
     />
-
     <div class="article-release-editor">
       <article-release-edit icons="default" />
     </div>
+    <article-release-setting />
   </admin-window>
 </template>
 
@@ -30,6 +30,7 @@ import Vue from 'vue';
 import AdminWindow from '@/components/common/AdminWindow.vue';
 import ArticleReleaseForm from '@/views/admin/childComps/pages/articleRelease/childComps/ArticleReleaseForm.vue';
 import ArticleReleaseEdit from '@/views/admin/childComps/pages/articleRelease/childComps/ArticleReleaseEdit.vue';
+import ArticleReleaseSetting from '@/views/admin/childComps/pages/articleRelease/childComps/ArticleReleaseSetting.vue';
 
 /**
  * @description: 文章编辑发布页面
@@ -100,6 +101,7 @@ export default Vue.extend({
     AdminWindow,
     ArticleReleaseForm,
     ArticleReleaseEdit,
+    ArticleReleaseSetting,
   },
 });
 </script>

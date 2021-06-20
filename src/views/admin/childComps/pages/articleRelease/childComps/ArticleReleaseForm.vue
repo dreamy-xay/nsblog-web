@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-19 15:43:33
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-20 21:13:46
+ * @LastEditTime: 2021-06-21 00:02:47
 -->
 
 <template>
@@ -12,8 +12,10 @@
     <el-form
       ref="form"
       :model="form"
+      :rules="rules"
       label-width="80px"
       label-position="top"
+      hide-required-asterisk
     >
       <el-form-item
         label="封面图片"
@@ -42,7 +44,10 @@
         justify="space-between"
       >
         <el-col :span="11">
-          <el-form-item label="标题">
+          <el-form-item
+            label="标题"
+            prop="title"
+          >
             <el-input
               v-model="form.title"
               placeholder="请输入文章标题"
@@ -72,7 +77,10 @@
         justify="space-between"
       >
         <el-col :span="11">
-          <el-form-item label="标签">
+          <el-form-item
+            label="标签"
+            prop="tag"
+          >
             <base-tag-input
               :tags="form.tags"
               placeholder="请输入文章标签"
@@ -83,7 +91,10 @@
           </el-form-item>
         </el-col>
         <el-col :span="11">
-          <el-form-item label="分类">
+          <el-form-item
+            label="分类"
+            prop="category"
+          >
             <base-tag-input-select
               :search-list="categories"
               :tags="form.categories"
@@ -95,7 +106,10 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item label="摘要">
+      <el-form-item
+        label="摘要"
+        prop="summary"
+      >
         <el-input
           type="textarea"
           :autosize="{ minRows: 4 }"
@@ -160,6 +174,15 @@ export default Vue.extend({
         tags: []
       } */
       coverImageShow: false, // 封面图片显示
+      rules: {
+        title: [
+          { required: true, message: '请输入文章标题', trigger: 'blur' },
+          { max: 50, message: '长度小于 51 个字符', trigger: 'blur' },
+        ],
+        summary: [{ max: 400, message: '长度小于 401 个字符', trigger: 'blur' }],
+        tag: [{ validator: (this as any).validateTag, trigger: 'blur' }],
+        category: [{ validator: (this as any).validateCategroy, trigger: 'blur' }],
+      },
     };
   },
   watch: {
@@ -230,6 +253,15 @@ export default Vue.extend({
       this.coverImageShow = true;
       (this as any).loadingInstance.close();
     },
+    // 规则验证标签分类数量
+    validateTag(rule: any, value: any, callback: any) {
+      if (this.form.tags.length <= 0) callback(new Error('至少存在一个标签'));
+      else callback();
+    },
+    validateCategroy(rule: any, value: any, callback: any) {
+      if (this.form.categories.length <= 0) callback(new Error('至少存在一个分类'));
+      else callback();
+    },
   },
   mounted() {
     $watchThis = this;
@@ -237,8 +269,6 @@ export default Vue.extend({
   beforeDestroy() {
     // 更新文章表单缓存
     this.$store.commit('setArticleReleaseFormCache', this.form);
-    // 下次不更新不用提示
-    this.$store.commit('setArticleReleaseIsSave', true);
   },
   components: {
     BaseTagInputSelect,

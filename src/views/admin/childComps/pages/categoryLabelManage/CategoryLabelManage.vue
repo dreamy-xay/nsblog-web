@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-06-11 10:09:23
- * @LastEditors: clq
- * @LastEditTime: 2021-06-20 21:32:53
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-06-20 23:36:04
 -->
 <template>
   <admin-window title="分类/标签管理">
@@ -158,11 +158,7 @@ export default Vue.extend({
     // 确定增加分类
     confirm() {
       let repeat: boolean = false;
-      this.categories.forEach((elem) => {
-        if (elem.name === this.newCategoryName) {
-          repeat = true;
-        }
-      });
+      for (const elem of this.categories) if (elem.name === this.newCategoryName) repeat = true;
       if (repeat === true) {
         this.$message({
           showClose: true,

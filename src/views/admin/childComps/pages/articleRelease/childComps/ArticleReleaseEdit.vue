@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-17 15:19:24
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-20 21:03:14
+ * @LastEditTime: 2021-06-20 23:14:13
 -->
 
 
@@ -129,8 +129,6 @@ export default Vue.extend({
   beforeDestroy() {
     // 更新文章缓存
     this.$store.commit('setArticleReleaseContentCache', this.content);
-    // 下次不更新不用提示
-    this.$store.commit('setArticleReleaseIsSave', true);
     // 删除全局注册
     window.onbeforeunload = null;
   },
