@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-06-11 10:09:23
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-19 13:42:13
+ * @LastEditors: clq
+ * @LastEditTime: 2021-06-20 21:32:53
 -->
 <template>
   <admin-window title="分类/标签管理">
@@ -62,7 +62,7 @@
           </el-popconfirm>
         </span>
       </el-card>
-
+      <!-- 新增分类对话框 -->
       <el-dialog
         title="新增分类"
         :visible.sync='addCategoryDialogVisible'
@@ -157,7 +157,20 @@ export default Vue.extend({
     },
     // 确定增加分类
     confirm() {
-      this.addCategoryDialogVisible = false;
+      let repeat: boolean = false;
+      this.categories.forEach((elem) => {
+        if (elem.name === this.newCategoryName) {
+          repeat = true;
+        }
+      });
+      if (repeat === true) {
+        this.$message({
+          showClose: true,
+          message: '类名重复',
+          type: 'error',
+          duration: 1000,
+        });
+      } else this.addCategoryDialogVisible = false;
     },
   },
   components: {

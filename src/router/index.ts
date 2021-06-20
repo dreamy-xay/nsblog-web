@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-17 15:18:12
+ * @LastEditors: clq
+ * @LastEditTime: 2021-06-20 18:57:38
  */
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
@@ -67,6 +67,14 @@ const routes: RouteConfig[] = [
           title: '标签/分类管理页面'
         },
         component: () => import('@/views/admin/childComps/pages/categoryLabelManage/CategoryLabelManage.vue')
+      },
+      {
+        path: 'file',
+        name: 'fileManage',
+        meta: {
+          title: '文件管理页面'
+        },
+        component: () => import("@/views/admin/childComps/pages/fileManage/FileManage.vue")
       }
     ]
   },
