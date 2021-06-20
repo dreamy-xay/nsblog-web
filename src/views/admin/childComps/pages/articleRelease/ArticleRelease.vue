@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-12 16:03:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-19 23:53:56
+ * @LastEditTime: 2021-06-20 16:09:31
 -->
 
 <template>
@@ -43,8 +43,13 @@ export default Vue.extend({
         { value: 3, label: '作品' },
       ],
       categories: [
-        { value: 0, label: 'C++' },
-        { value: 1, label: 'Java' },
+        { id: 0, value: 'C++' },
+        { id: 1, value: 'Java' },
+        { id: 2, value: '数据结构' },
+        { id: 3, value: '算法' },
+        { id: 4, value: 'C语言' },
+        { id: 5, value: 'Python' },
+        { id: 6, value: 'nodejs' },
       ],
     };
   },

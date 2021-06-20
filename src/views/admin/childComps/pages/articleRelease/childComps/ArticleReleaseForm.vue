@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-19 15:43:33
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-20 00:14:58
+ * @LastEditTime: 2021-06-20 16:20:00
 -->
 
 <template>
@@ -70,39 +70,26 @@
       >
         <el-col :span="11">
           <el-form-item label="标签">
-            <div
-              class="tag-input"
-              @click="showTagInput"
-            >
-              <div class="tag-input-empty" />
-              <el-tag
-                v-for="(tag,index) in form.tags"
-                :key="index"
-                :type="tag.type"
-                closable
-                :disable-transitions="false"
-                @close="tagHandleClose(index)"
-                @click.stop=""
-                effect="dark"
-              >
-                {{tag.name}}
-              </el-tag>
-              <el-input
-                class="input-new-tag"
-                v-if="tagInputVisible"
-                v-model="tagInputValue"
-                ref="saveTagInput"
-                size="small"
-                @keyup.enter.native="tagHandleInputConfirm"
-                @blur="tagInputVisible = false"
-              >
-              </el-input>
-            </div>
+            <base-tag-input
+              :tags="form.tags"
+              placeholder="请输入文章标签"
+              @tagRepeat="tagHandleRepeat(true)"
+              @tagClose="tagHandleClose($event, true)"
+              @tagInputConfirm="tagHandleInputConfirm"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="11">
           <el-form-item label="分类">
-            <article-release-form-category />
+            <base-tag-input-select
+              :search-list="categories"
+              :tags="form.categories"
+              @tagClose="tagHandleClose($event, false)"
+              @tagRepeat="tagHandleRepeat(false)"
+              @tagInputSelect="tagHandleInputSelect"
+              @tagInputChange="tagHandleInputChange"
+              placeholder="请选择文章分类"
+            />
           </el-form-item>
         </el-col>
       </el-row>
@@ -114,16 +101,21 @@
           v-model="form.summary"
         ></el-input>
       </el-form-item>
+      <slot></slot>
     </el-form>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import ArticleReleaseFormCategory from '@/views/admin/childComps/pages/articleRelease/childComps/ArticleReleaseFormCategory.vue';
+import BaseTagInput from '@/components/content/BaseTagInput.vue';
+import BaseTagInputSelect from '@/components/content/BaseTagInputSelect.vue';
 
 /**
  * @description: 写文章信息表单
+ * @param {Array} 文章分类类型  `必传参数`
+ * @param {Array} 文章类型列表 `必传参数`
+ * @slot 在表单之下的插槽
  * @author: dreamy-xay
  */
 
@@ -146,59 +138,46 @@ export default Vue.extend({
         title: '',
         name: '',
         type: 0,
-        category: null,
+        categories: [],
         summary: '',
         tags: [],
       },
-      tagInputVisible: false,
-      tagInputValue: '',
     };
   },
   methods: {
+    // 获取表单信息
     getForm() {
       return this.form;
     },
+    // 封面图片点击
     coverSelectClick() {},
-    tagHandleClose(index: number) {
-      this.form.tags.splice(index, 1);
-    },
-    showTagInput() {
-      this.tagInputVisible = true;
-      this.$nextTick(() => {
-        (this.$refs.saveTagInput as any).$refs.input.focus();
+    // 标签分类重复
+    tagHandleRepeat(isTag: boolean) {
+      this.$message({
+        showClose: true,
+        message: (isTag ? '标签' : '分类') + '已经存在',
+        type: 'warning',
+        duration: 1000,
       });
     },
-    tageInputValueEffective(value: string): boolean {
-      if (value) {
-        for (const item of this.form.tags)
-          if (value === (item as any).name) {
-            this.$message({
-              showClose: true,
-              message: '标签已经存在',
-              type: 'warning',
-              duration: 1000,
-              customClass: 'admin-login-error',
-            });
-            return false;
-          }
-        return true;
-      }
-      return false;
+    // 标签分类删除标签
+    tagHandleClose(index: number, isTag: boolean) {
+      isTag ? this.form.tags.splice(index, 1) : this.form.categories.splice(index, 1);
     },
-    tagHandleInputConfirm() {
-      const tageInputValue = this.tagInputValue;
-      const tagType: string[] = ['', 'success', 'info', 'danger', 'warning'];
-      if (this.tageInputValueEffective(tageInputValue)) {
-        (this.form.tags as any).splice(this.form.tags.length, 0, {
-          name: tageInputValue,
-          type: tagType[Math.floor(Math.random() * 5)],
-        });
-        this.tagInputValue = '';
-      }
+    // 添加标签
+    tagHandleInputConfirm(name: string, type: string) {
+      (this.form.tags as any).splice(this.form.tags.length, 0, { name, type });
     },
+    // 添加分类
+    tagHandleInputSelect(name: string, type: string, item: any) {
+      (this.form.categories as any).splice(this.form.categories.length, 0, { name, type });
+    },
+    // 输入改变
+    tagHandleInputChange(value: string) {},
   },
   components: {
-    ArticleReleaseFormCategory,
+    BaseTagInputSelect,
+    BaseTagInput,
   },
 });
 </script>
@@ -251,45 +230,6 @@ export default Vue.extend({
   .type-select {
     width: 100%;
     height: 100%;
-  }
-
-  .tag-input {
-    width: calc(100% - 10px);
-    height: 100%;
-    background-color: $admin-article-release-form-component-background-color;
-    padding: 0 5px;
-    border-radius: 4px;
-    cursor: text;
-    user-select: none;
-    overflow: hidden;
-
-    &::-webkit-scrollbar {
-      width: 0;
-      height: 0;
-      opacity: 0;
-    }
-
-    .tag-input-empty {
-      float: left;
-      width: 0.0001px;
-      height: 40px;
-    }
-
-    /deep/ {
-      .el-tag {
-        margin-right: 5px;
-        cursor: default;
-      }
-
-      .el-input__inner {
-        border: 0;
-      }
-    }
-
-    .input-new-tag {
-      width: 90px;
-      vertical-align: bottom;
-    }
   }
 }
 </style>

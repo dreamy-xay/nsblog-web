@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-12 18:26:18
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-19 15:20:40
+ * @LastEditTime: 2021-06-20 16:20:39
 -->
 
 <template>
@@ -40,6 +40,7 @@
  * @param {String} separatorClass 窗口标题面包屑分隔符指定字体图标类 `默认为空`
  * @method push 添加面包屑
  * @method pop 删除栈顶面包屑
+ * @slot 主题内容的无名插槽
  * @author: dreamy-xay
  */
 
