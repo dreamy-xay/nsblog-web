@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 13:15:08
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-19 13:34:07
+ * @LastEditTime: 2021-06-19 15:03:21
 -->
 
 <template>
@@ -117,6 +117,7 @@ export default Vue.extend({
   position: sticky;
   top: 0;
   right: 0;
+  z-index: 1000;
   overflow: hidden;
 
   .admin-top-bar-left,

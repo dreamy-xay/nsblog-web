@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-19 13:44:53
+ * @LastEditTime: 2021-06-19 15:14:39
 -->
 
 <template>
@@ -141,7 +141,10 @@ export default Vue.extend({
       let loadingInstance: any;
       getAdminInfo({
         beforeRequest() {
-          loadingInstance = Loading.service({ fullscreen: true });
+          loadingInstance = Loading.service({
+            fullscreen: true,
+            customClass: 'admin-loading',
+          });
         },
         afterResopnse() {
           loadingInstance.close();
@@ -189,6 +192,8 @@ export default Vue.extend({
 
     .right-content {
       width: 100%;
+      height: calc(100% - 70px);
+      overflow: hidden;
     }
   }
 
@@ -201,6 +206,17 @@ export default Vue.extend({
       width: 0;
       opacity: 0;
     }
+  }
+}
+</style>
+
+
+<style lang="scss">
+.admin-loading {
+  background-color: $admin-loading-background-color !important;
+
+  .el-loading-spinner .path {
+    stroke: $admin-loading-stroke;
   }
 }
 </style>

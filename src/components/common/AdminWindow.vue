@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-12 18:26:18
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-12 22:33:21
+ * @LastEditTime: 2021-06-19 15:20:40
 -->
 
 <template>
@@ -85,13 +85,17 @@ export default {
 <style lang="scss" scoped>
 .admin-window {
   width: calc(100% - 48px);
+  height: calc(100% - 24px);
   overflow: hidden;
   padding: 24px;
+  padding-bottom: 0;
 
   .admin-window-title {
     width: 100%;
+    height: 18.5px;
     user-select: none;
     overflow: hidden;
+
     /deep/ .el-breadcrumb__item {
       font-size: 19px;
 
@@ -108,8 +112,14 @@ export default {
   }
 
   .admin-window-content {
-    widows: 100%;
-    overflow: hidden;
+    width: 100%;
+    height: calc(100% - 42.5px);
+    overflow-x: hidden;
+
+    &::-webkit-scrollbar {
+      width: 0;
+      opacity: 0;
+    }
   }
 }
 </style>
