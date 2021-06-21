@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-12 16:03:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-20 21:47:45
+ * @LastEditTime: 2021-06-21 17:13:55
 -->
 
 <template>
@@ -14,14 +14,57 @@
     ref="adminWindow"
   >
     <article-release-form
+      ref="articleReleaseForm"
       :types="types"
       :categories="categories"
       :file-image-list="fileImageList"
     />
     <div class="article-release-editor">
-      <article-release-edit icons="default" />
+      <div class="article-release-editor-head">
+        <span>编辑文章</span>
+        <el-tooltip
+          content="设置"
+          placement="top"
+        >
+          <i
+            class="iconfont blog-article-setting"
+            role="button"
+            @click="settingsClick"
+          ></i>
+        </el-tooltip>
+        <el-tooltip
+          content="云端历史"
+          placement="left"
+        >
+          <i
+            class="iconfont blog-yun-lishi"
+            role="button"
+            @click="historyClick"
+          ></i>
+        </el-tooltip>
+      </div>
+      <article-release-edit
+        icons="default"
+        ref="articleReleaseEdit"
+      />
     </div>
-    <article-release-setting />
+    <article-release-setting ref="articleReleaseSetting" />
+    <div class="article-release-submit">
+      <el-button
+        type="warning"
+        size="small"
+        plain
+        class="submit-button"
+        @click="releaseArticleClick(false)"
+      >存为草稿</el-button>
+      <el-button
+        type="success"
+        size="small"
+        plain
+        class="submit-button"
+        @click="releaseArticleClick(true)"
+      >发布</el-button>
+    </div>
   </admin-window>
 </template>
 
@@ -31,6 +74,7 @@ import AdminWindow from '@/components/common/AdminWindow.vue';
 import ArticleReleaseForm from '@/views/admin/childComps/pages/articleRelease/childComps/ArticleReleaseForm.vue';
 import ArticleReleaseEdit from '@/views/admin/childComps/pages/articleRelease/childComps/ArticleReleaseEdit.vue';
 import ArticleReleaseSetting from '@/views/admin/childComps/pages/articleRelease/childComps/ArticleReleaseSetting.vue';
+import { getCategories, getCoverImageList, releaseArticle } from '@/network/admin/api';
 
 /**
  * @description: 文章编辑发布页面
@@ -63,6 +107,7 @@ export default Vue.extend({
     };
   },
   methods: {
+    // 文章编辑页面退出警告
     exitWarn(next: () => void): void {
       if (this.$store.state.articleReleaseIsSave) {
         next();
@@ -89,10 +134,81 @@ export default Vue.extend({
           next();
         });
     },
+    // 获取文章所有信息
+    getArticleAllInfo(callback: any, status: boolean) {
+      (this.$refs.articleReleaseForm as any)
+        .getForm()
+        .then((data: any) => {
+          callback({
+            ...data,
+            ...(this.$refs.articleReleaseSetting as any).getSetting(),
+            content: (this.$refs.articleReleaseEdit as any).getContent(),
+            status,
+          });
+        })
+        .catch((err: any) => {
+          console.log(err);
+          this.$message({
+            message: '文章信息填写不符合规范，请检查',
+            duration: 1000,
+            showClose: true,
+            type: 'error',
+          });
+        });
+    },
+    // 发布文章或者存为草稿
+    releaseArticleClick(status: boolean) {
+      const name = status ? '发布' : '存为草稿';
+      this.getArticleAllInfo((data: any) => {
+        // console.log(data);
+        releaseArticle(data, {})
+          .then(() => {
+            this.$message({
+              message: '文章' + name + '成功',
+              duration: 1000,
+              showClose: true,
+              type: 'success',
+            });
+          })
+          .catch(() => {
+            this.$message({
+              message: '文章' + name + '失败，网络异常',
+              duration: 1000,
+              showClose: true,
+              type: 'error',
+            });
+          });
+      }, status);
+    },
+    // 云端历史
+    historyClick() {
+      (this.$refs.articleReleaseSetting as any).openHistory();
+    },
+    // 文章设置
+    settingsClick() {
+      (this.$refs.articleReleaseSetting as any).openSetting();
+    },
   },
   created() {
     // 检测销毁
     this.$store.commit('setArticleReleaseDestory', this.exitWarn);
+    // 请求数据
+    // 请求所有分类
+    getCategories()
+      .then((data: any) => {
+        this.categories = data;
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+    // 请求所有封面图片
+    getCoverImageList()
+      .then((data: any) => {
+        this.fileImageList = data;
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
   },
   mounted() {
     (this.$refs.adminWindow as any).push('发布');
@@ -112,9 +228,64 @@ export default Vue.extend({
   overflow: hidden;
 
   .article-release-editor {
-    margin-top: 20px;
     width: 100%;
     overflow: hidden;
+
+    .article-release-editor-head {
+      width: 100%;
+      height: 40px;
+      margin-bottom: 10px;
+      overflow: hidden;
+      color: $admin-article-release-form-title-color;
+      user-select: none;
+
+      span {
+        float: left;
+        line-height: 40px;
+        cursor: default;
+      }
+
+      .iconfont {
+        line-height: 40px;
+        float: right;
+        font-size: 19px;
+        margin-right: 20px;
+        transition: all 0.3s;
+        background: none;
+
+        &.blog-article-setting:hover {
+          transform: rotate(120deg);
+        }
+
+        &.blog-yun-lishi:hover {
+          transform: rotateY(180deg);
+        }
+
+        &:hover {
+          color: #ffffff;
+        }
+      }
+    }
+  }
+
+  .article-release-submit {
+    width: 100%;
+    overflow: hidden;
+    padding: 50px 0;
+
+    .setting-button {
+      float: left;
+      margin-left: 30px;
+    }
+
+    .submit-button {
+      float: right;
+      margin-left: 10px;
+
+      &:first-child {
+        margin-right: 30px;
+      }
+    }
   }
 }
 </style>

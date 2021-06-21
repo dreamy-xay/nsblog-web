@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-15 10:11:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-20 23:13:35
+ * @LastEditTime: 2021-06-21 16:04:34
  */
 import Vue from 'vue';
 import Vuex from 'vuex';
@@ -23,7 +23,6 @@ export default new Vuex.Store({
     articleReleaseFormCache: {
       coverImage: '',
       title: '',
-      name: '',
       type: 0,
       categories: [],
       summary: '',

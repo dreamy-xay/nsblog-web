@@ -4,13 +4,13 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-19 15:43:33
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-21 00:02:47
+ * @LastEditTime: 2021-06-21 16:59:27
 -->
 
 <template>
   <div class="article-release-from">
     <el-form
-      ref="form"
+      ref="articleReleaseForm"
       :model="form"
       :rules="rules"
       label-width="80px"
@@ -144,7 +144,6 @@ import ArticleReleaseFormCoverSelect from '@/views/admin/childComps/pages/articl
  * @author: dreamy-xay
  */
 
-let $watchThis: any;
 export default Vue.extend({
   name: 'ArticleReleaseForm',
   props: {
@@ -167,7 +166,6 @@ export default Vue.extend({
       /*    {
         coverImage: '',
         title: '',
-        name: '',
         type: 0,
         categories: [],
         summary: '',
@@ -187,8 +185,8 @@ export default Vue.extend({
   },
   watch: {
     form: {
-      handler: () => {
-        $watchThis.$store.commit('setArticleReleaseIsSave', false);
+      handler() {
+        this.$store.commit('setArticleReleaseIsSave', false);
       },
       deep: true,
     },
@@ -196,7 +194,27 @@ export default Vue.extend({
   methods: {
     // 获取表单信息
     getForm() {
-      return this.form;
+      return new Promise((resolve: (value: unknown) => void, reject: (reason: any) => void) => {
+        (this.$refs.articleReleaseForm as any).validate((pass: boolean, err: any) => {
+          if (pass) resolve(this.formPretreat());
+          else {
+            const error: any = {};
+            for (const key in err) error[key] = err[key][0]['message'];
+            reject(error);
+          }
+        });
+      });
+    },
+    // 表单标签，分类预处理
+    formPretreat() {
+      const form: any = JSON.parse(JSON.stringify(this.form));
+      const tagList: string[] = [];
+      const categoryList: unknown[] = [];
+      for (const tag of form.tags) tagList.push(tag.name);
+      for (const category of form.categories) categoryList.push(category.item);
+      form.tags = tagList;
+      form.categories = categoryList;
+      return form;
     },
     // 封面图片点击
     coverSelectClick() {
@@ -221,7 +239,7 @@ export default Vue.extend({
     },
     // 添加分类
     tagHandleInputSelect(name: string, type: string, item: any) {
-      (this.form.categories as any).splice(this.form.categories.length, 0, { name, type });
+      (this.form.categories as any).splice(this.form.categories.length, 0, { name, type, item });
     },
     // 输入改变
     tagHandleInputChange(value: string) {},
@@ -255,16 +273,13 @@ export default Vue.extend({
     },
     // 规则验证标签分类数量
     validateTag(rule: any, value: any, callback: any) {
-      if (this.form.tags.length <= 0) callback(new Error('至少存在一个标签'));
+      if (this.form.tags.length <= 0) callback('至少存在一个标签');
       else callback();
     },
     validateCategroy(rule: any, value: any, callback: any) {
-      if (this.form.categories.length <= 0) callback(new Error('至少存在一个分类'));
+      if (this.form.categories.length <= 0) callback('至少存在一个分类');
       else callback();
     },
-  },
-  mounted() {
-    $watchThis = this;
   },
   beforeDestroy() {
     // 更新文章表单缓存
