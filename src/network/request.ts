@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-19 14:10:14
+ * @LastEditTime: 2021-06-21 18:24:46
  */
 
 import axios, { AxiosRequestConfig } from 'axios';
@@ -32,7 +32,7 @@ export interface RequestConfig extends AxiosRequestConfig, RequestLC {}
  * @author: dreamy-xay
  */
 export function request(options: RequestConfig): Promise<any> {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve: (value: unknown) => void, reject: (reason: any) => void) => {
     // 1.创建axios的实例
     const instance = axios.create({
       baseURL: 'http://127.0.0.1:3000',
@@ -57,7 +57,7 @@ export function request(options: RequestConfig): Promise<any> {
       err => {
         if (options.failBeforeRequest) options.failBeforeRequest();
         if (options.beforeRequest) options.beforeRequest();
-        return err;
+        return Promise.reject(err);
       }
     );
 
@@ -80,7 +80,7 @@ export function request(options: RequestConfig): Promise<any> {
         }
         if (options.failAfterResopnse) options.failAfterResopnse();
         if (options.afterResopnse) options.afterResopnse();
-        return err;
+        return Promise.reject(err);
       }
     );
 

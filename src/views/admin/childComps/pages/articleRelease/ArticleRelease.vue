@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-12 16:03:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-21 17:13:55
+ * @LastEditTime: 2021-06-21 18:26:30
 -->
 
 <template>
@@ -85,6 +85,7 @@ export default Vue.extend({
   name: 'articleRelease',
   data() {
     return {
+      articleId: null,
       types: [
         { value: 0, label: '博文' },
         { value: 1, label: '随笔' },
@@ -144,6 +145,7 @@ export default Vue.extend({
             ...(this.$refs.articleReleaseSetting as any).getSetting(),
             content: (this.$refs.articleReleaseEdit as any).getContent(),
             status,
+            articleId: this.articleId,
           });
         })
         .catch((err: any) => {
@@ -160,9 +162,12 @@ export default Vue.extend({
     releaseArticleClick(status: boolean) {
       const name = status ? '发布' : '存为草稿';
       this.getArticleAllInfo((data: any) => {
-        // console.log(data);
-        releaseArticle(data, {})
-          .then(() => {
+        console.log(data);
+        releaseArticle(data)
+          .then((res: any) => {
+            // 更新文章的 id
+            this.articleId = res.articleId;
+            // 提示信息
             this.$message({
               message: '文章' + name + '成功',
               duration: 1000,
@@ -170,7 +175,9 @@ export default Vue.extend({
               type: 'success',
             });
           })
-          .catch(() => {
+          .catch((err: any) => {
+            console.log(err);
+            // 提示信息
             this.$message({
               message: '文章' + name + '失败，网络异常',
               duration: 1000,
@@ -196,7 +203,7 @@ export default Vue.extend({
     // 请求所有分类
     getCategories()
       .then((data: any) => {
-        this.categories = data;
+        this.categories = data ? data : [];
       })
       .catch((err: any) => {
         console.log(err);
@@ -204,7 +211,7 @@ export default Vue.extend({
     // 请求所有封面图片
     getCoverImageList()
       .then((data: any) => {
-        this.fileImageList = data;
+        this.fileImageList = data ? data : [];
       })
       .catch((err: any) => {
         console.log(err);
