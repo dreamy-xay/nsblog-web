@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-12 16:03:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-22 11:37:57
+ * @LastEditTime: 2021-06-22 14:27:59
 -->
 
 <template>
@@ -120,11 +120,7 @@ export default Vue.extend({
         type: 'warning',
       })
         .then(() => {
-          this.releaseArticleClick(false, () => {
-            // 设置已保存
-            this.$store.commit('setArticleReleaseIsSave', true);
-            next();
-          });
+          this.releaseArticleClick(false, next);
         })
         .catch(() => {
           next();
@@ -157,7 +153,7 @@ export default Vue.extend({
     releaseArticleClick(status: boolean, success?: any) {
       const name = status ? '发布' : '存为草稿';
       this.getArticleAllInfo((data: any) => {
-        console.log(data);
+        // console.log(data);
         releaseArticle(data)
           .then((res: any) => {
             // 更新文章的 id
@@ -169,7 +165,8 @@ export default Vue.extend({
               showClose: true,
               type: 'success',
             });
-            success && success();
+            if (success) success();
+            this.$store.commit('setArticleReleaseIsSave', true);
           })
           .catch((err: any) => {
             console.log(err);
@@ -199,6 +196,7 @@ export default Vue.extend({
     // 请求所有分类
     getArticleCategories()
       .then((data: any) => {
+        // console.log(data);
         this.categories = data ? data : [];
       })
       .catch((err: any) => {
@@ -207,6 +205,7 @@ export default Vue.extend({
     // 请求所有封面图片
     getCoverImageList()
       .then((data: any) => {
+        // console.log(data);
         this.fileImageList = data ? data : [];
       })
       .catch((err: any) => {

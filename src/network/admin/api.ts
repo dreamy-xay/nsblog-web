@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-22 11:35:29
+ * @LastEditTime: 2021-06-22 13:49:09
  */
 
 import { get, post, RequestLC } from '@/network/request';
@@ -40,7 +40,7 @@ export function getArticleCategories(LC: RequestLC = {}): Promise<any> {
     { id: 6, value: 'nodejs' },
   ] */
   return get({
-    url: 'api/private/v1/admin/category',
+    url: 'api/private/v1/article/category',
     ...LC
   });
 }
@@ -100,7 +100,7 @@ export function releaseArticle(data: any, LC: RequestLC = {}): Promise<any> {
     articleId: 1,
   } */
   return post({
-    url: 'api/private/v1/admin/release/article',
+    url: 'api/private/v1/article',
     data
   });
 }
