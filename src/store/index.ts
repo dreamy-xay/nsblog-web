@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-15 10:11:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-22 11:29:56
+ * @LastEditTime: 2021-06-22 11:46:38
  */
 import Vue from 'vue';
 import Vuex from 'vuex';
@@ -39,6 +39,27 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    // 文章缓存初始化
+    articleCacheInit(state): void {
+      state.articleReleaseIsSave = true;
+      state.articleReleaseContentCache = '';
+      state.articleReleaseFormCache = {
+        coverImage: '',
+        title: '',
+        type: 0,
+        categories: [],
+        summary: '',
+        tags: []
+      };
+      state.articleReleaseSettingCache = {
+        reviewPermission: true,
+        priority: 100,
+        accessPermission: '公开',
+        sharingAgreement: '',
+        passwordProtection: '',
+        friendChain: []
+      };
+    },
     // 设置管理员写文章页面时切换菜单调用的销毁函数
     setArticleReleaseDestory(state, destroy: (next: () => void) => void): void {
       state.articleReleaseDestory = destroy;
