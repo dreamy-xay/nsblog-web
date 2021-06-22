@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-20 21:24:58
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-21 16:48:55
+ * @LastEditTime: 2021-06-22 11:31:38
 -->
 
 <template>
@@ -12,10 +12,67 @@
     <el-dialog
       title="文章设置"
       :visible.sync="dialogVisible"
+      custom-class="article-release-setting-setting"
       width="30%"
     >
       <el-form :model="setting">
-
+        <el-form-item
+          label="访问权限"
+          label-width="70px"
+        >
+          <el-radio-group
+            v-model="setting.accessPermission"
+            size="small"
+            fill="#6F6486"
+          >
+            <el-radio-button label="公开"></el-radio-button>
+            <el-radio-button label="仅登录用户"></el-radio-button>
+            <el-radio-button label="只有我"></el-radio-button>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item
+          label="优先等级"
+          label-width="70px"
+        >
+          <el-input-number
+            v-model="setting.priority"
+            size="small"
+            :min="1"
+            :max="1000"
+          ></el-input-number>
+        </el-form-item>
+        <el-form-item
+          :label="reviewPermissionLabel"
+          label-width="70px"
+        >
+          <el-switch
+            v-model="setting.reviewPermission"
+            active-color="#6F6486"
+          ></el-switch>
+        </el-form-item>
+        <el-form-item
+          label="共享协议"
+          label-width="70px"
+        >
+          <el-input
+            v-model="setting.sharingAgreement"
+            placeholder="Sharing agreement..."
+            size="small"
+            clearable
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          label="密码保护"
+          label-width="70px"
+        >
+          <el-input
+            v-model="setting.passwordProtection"
+            placeholder="Password..."
+            size="small"
+            clearable
+            show-password
+          ></el-input>
+        </el-form-item>
       </el-form>
     </el-dialog>
     <el-drawer
@@ -23,6 +80,9 @@
       :visible.sync="drawerVisible"
       direction="rtl"
     >
+      <div style="display:flex; width: 100%; justify-content: center;">
+        <div style="color: #7F8587; ">暂无历史记录</div>
+      </div>
     </el-drawer>
 
   </div>
@@ -43,15 +103,24 @@ export default Vue.extend({
     return {
       dialogVisible: false,
       drawerVisible: false,
-      setting: {
+      setting: this.$store.state.articleReleaseSettingCache,
+      /*       {
         reviewPermission: true,
         priority: 100,
-        accessPermission: 0,
-        sharingAgreement: null,
-        passwordProtection: null,
+        accessPermission: '公开',
+        sharingAgreement: '',
+        passwordProtection: '',
         friendChain: [],
-      },
+      }, */
     };
+  },
+  watch: {
+    setting: {
+      handler() {
+        this.$store.commit('setArticleReleaseIsSave', false);
+      },
+      deep: true,
+    },
   },
   methods: {
     openSetting() {
@@ -67,7 +136,20 @@ export default Vue.extend({
       this.drawerVisible = false;
     },
     getSetting() {
-      return JSON.parse(JSON.stringify(this.setting));
+      const setting: any = JSON.parse(JSON.stringify(this.setting));
+      const accessPermission: any = { 公开: 1, 仅登录用户: 2, 只有我: 3 };
+      setting.accessPermission = accessPermission[setting.accessPermission];
+      if (setting.sharingAgreement === '') setting.sharingAgreement = null;
+      if (setting.passwordProtection === '') setting.passwordProtection = null;
+      return setting;
+    },
+  },
+  beforeDestroy() {
+    this.$store.commit('articleReleaseSettingCache', this.setting);
+  },
+  computed: {
+    reviewPermissionLabel() {
+      return (this as any).setting.reviewPermission ? '允许评论' : '禁止评论';
     },
   },
 });
@@ -81,6 +163,34 @@ export default Vue.extend({
   .article-release-setting-inner {
     width: 100%;
     overflow: hidden;
+  }
+}
+</style>
+
+<style lang="scss">
+.article-release-setting-setting {
+  .el-radio-button__inner:hover {
+    color: $admin-article-release-setting-form-all-color;
+  }
+
+  .el-input-number {
+    span {
+      background-color: $admin-article-release-setting-form-all-color;
+      color: white;
+    }
+
+    input {
+      outline: none;
+      &:focus {
+        border-color: $admin-article-release-setting-form-all-color;
+      }
+    }
+  }
+
+  .el-input {
+    input:focus {
+      border-color: $admin-article-release-setting-form-all-color;
+    }
   }
 }
 </style>

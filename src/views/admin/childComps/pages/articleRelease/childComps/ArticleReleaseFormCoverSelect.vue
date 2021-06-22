@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-20 17:30:09
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-20 20:34:50
+ * @LastEditTime: 2021-06-22 11:24:18
 -->
 <template>
   <div class="article-release-form-cover-select">
@@ -12,6 +12,7 @@
       title="封面图片选择"
       :visible.sync="dialogVisible"
       width="30%"
+      custom-class="article-release-form-cover-select-setting"
     >
       <el-form :model="form">
         <el-form-item
@@ -46,7 +47,7 @@
       <template #footer>
         <el-button @click="cancelClick">取 消</el-button>
         <el-button
-          type="primary"
+          class="submit"
           @click="submitClick"
         >确 定</el-button>
       </template>
@@ -116,8 +117,34 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .article-release-form-cover-select {
-  /deep/ .el-select {
-    width: 100%;
+  /deep/ {
+    .el-select {
+      width: 100%;
+    }
+  }
+}
+</style>
+
+
+<style lang="scss">
+.article-release-form-cover-select-setting {
+  .submit {
+    background-color: $admin-article-release-form-cover-image-submit-button-background-color;
+    color: $admin-article-release-form-cover-image-submit-button-color;
+
+    &:hover {
+      background-color: $admin-article-release-form-cover-image-submit-button-hover-background-color;
+    }
+  }
+
+  .el-form {
+    input:focus {
+      border-color: $admin-article-release-setting-form-all-color !important;
+    }
+
+    label {
+      color: #666262 !important;
+    }
   }
 }
 </style>

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-15 10:11:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-21 16:04:34
+ * @LastEditTime: 2021-06-22 11:29:56
  */
 import Vue from 'vue';
 import Vuex from 'vuex';
@@ -27,6 +27,15 @@ export default new Vuex.Store({
       categories: [],
       summary: '',
       tags: []
+    },
+    // 文章设置缓存
+    articleReleaseSettingCache: {
+      reviewPermission: true,
+      priority: 100,
+      accessPermission: '公开',
+      sharingAgreement: '',
+      passwordProtection: '',
+      friendChain: []
     }
   },
   mutations: {
@@ -45,6 +54,10 @@ export default new Vuex.Store({
     // 文章表单缓存
     setArticleReleaseFormCache(state, form: any): void {
       state.articleReleaseFormCache = form;
+    },
+    // 文章设置缓存
+    setArticleReleaseSettingCache(state, setting: any): void {
+      state.articleReleaseSettingCache = setting;
     }
   },
   actions: {},

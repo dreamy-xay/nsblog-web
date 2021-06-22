@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-12 12:04:36
+ * @LastEditTime: 2021-06-22 08:58:31
  */
 
 import store from 'storejs';
@@ -61,10 +61,10 @@ export function setToken(token: string, expires: number = 172800, tokenKey: stri
 
 /**
  * @description: 清空token值
- * @param {string} token 清空本地浏览器 localStorage 中指定键值token
+ * @param {string} tokenKey 清空本地浏览器 localStorage 中指定键值token
  * @return {void}
  * @author: dreamy-xay
  */
-export function clearToken(token: string = 'token'): void {
-  store.remove(token);
+export function clearToken(tokenKey: string = 'token'): void {
+  store.remove(tokenKey);
 }
