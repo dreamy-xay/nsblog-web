@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-12 16:03:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-21 18:26:30
+ * @LastEditTime: 2021-06-22 11:37:57
 -->
 
 <template>
@@ -74,7 +74,7 @@ import AdminWindow from '@/components/common/AdminWindow.vue';
 import ArticleReleaseForm from '@/views/admin/childComps/pages/articleRelease/childComps/ArticleReleaseForm.vue';
 import ArticleReleaseEdit from '@/views/admin/childComps/pages/articleRelease/childComps/ArticleReleaseEdit.vue';
 import ArticleReleaseSetting from '@/views/admin/childComps/pages/articleRelease/childComps/ArticleReleaseSetting.vue';
-import { getCategories, getCoverImageList, releaseArticle } from '@/network/admin/api';
+import { getArticleCategories, getCoverImageList, releaseArticle } from '@/network/admin/api';
 
 /**
  * @description: 文章编辑发布页面
@@ -120,16 +120,11 @@ export default Vue.extend({
         type: 'warning',
       })
         .then(() => {
-          this.$message({
-            type: 'success',
-            showClose: true,
-            duration: 1000,
-            message: '保存成功!',
+          this.releaseArticleClick(false, () => {
+            // 设置已保存
+            this.$store.commit('setArticleReleaseIsSave', true);
+            next();
           });
-
-          // 设置已保存
-          this.$store.commit('setArticleReleaseIsSave', true);
-          next();
         })
         .catch(() => {
           next();
@@ -159,7 +154,7 @@ export default Vue.extend({
         });
     },
     // 发布文章或者存为草稿
-    releaseArticleClick(status: boolean) {
+    releaseArticleClick(status: boolean, success?: any) {
       const name = status ? '发布' : '存为草稿';
       this.getArticleAllInfo((data: any) => {
         console.log(data);
@@ -174,6 +169,7 @@ export default Vue.extend({
               showClose: true,
               type: 'success',
             });
+            success && success();
           })
           .catch((err: any) => {
             console.log(err);
@@ -201,7 +197,7 @@ export default Vue.extend({
     this.$store.commit('setArticleReleaseDestory', this.exitWarn);
     // 请求数据
     // 请求所有分类
-    getCategories()
+    getArticleCategories()
       .then((data: any) => {
         this.categories = data ? data : [];
       })

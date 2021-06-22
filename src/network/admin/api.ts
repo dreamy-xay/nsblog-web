@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-21 17:46:33
+ * @LastEditTime: 2021-06-22 11:35:29
  */
 
 import { get, post, RequestLC } from '@/network/request';
@@ -28,7 +28,7 @@ export function getAdminInfo(LC: RequestLC = {}): Promise<any> {
  * @return {Promise<any>} 返回请求的 Promise
  * @author: dreamy-xay
  */
-export function getCategories(LC: RequestLC = {}): Promise<any> {
+export function getArticleCategories(LC: RequestLC = {}): Promise<any> {
   /*  返回数据格式，仅供参考，可以协商
   [
     { id: 0, value: 'C++' },
