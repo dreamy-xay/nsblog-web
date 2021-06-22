@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-06-11 10:09:23
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-20 23:36:04
+ * @LastEditors: clq
+ * @LastEditTime: 2021-06-22 14:51:01
 -->
 <template>
   <admin-window title="分类/标签管理">
@@ -21,7 +21,7 @@
         </div>
         <span
           v-for="category in categories"
-          :key="category.categroyId"
+          :key="category.id"
         >
           <el-popconfirm
             icon="el-icon-info"
@@ -29,12 +29,13 @@
             title="确定要删除该分类吗?"
             confirm-button-tet='确定'
             cancel-button-text='取消'
+            @confirm="deleteCategory(category.id)"
           >
             <el-button
               type="primary"
               slot="reference"
-              style="margin-right:20px"
-            >{{category.name}} ({{category.articleNum}})</el-button>
+              style="margin-right:20px;margin-bottom:20px"
+            >{{category.value}} ({{category.articleNum}})</el-button>
           </el-popconfirm>
         </span>
       </el-card>
@@ -45,7 +46,7 @@
         </div>
         <span
           v-for="label in labels"
-          :key="label.labelId"
+          :key="label.id"
         >
           <el-popconfirm
             icon="el-icon-info"
@@ -53,12 +54,13 @@
             title="确定要删除该分类吗?"
             confirm-button-tet='确定'
             cancel-button-text='取消'
+            @confirm="deleteTag(label.id)"
           >
             <el-button
               type="primary"
               slot="reference"
-              style="margin-right:20px"
-            >{{label.name}} ({{label.articleNum}})</el-button>
+              style="margin-right:20px;margin-bottom:20px;"
+            >{{label.value}} ({{label.articleNum}})</el-button>
           </el-popconfirm>
         </span>
       </el-card>
@@ -92,6 +94,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import AdminWindow from '@/components/common/AdminWindow.vue';
+import { getArticleCategories, getArticleTag, addArticleCategory } from '@/network/admin/api';
 
 /**
  * @description: 分类标签
@@ -108,43 +111,77 @@ export default Vue.extend({
       // 新增分类名
       newCategoryName: '',
       categories: [
-        {
-          categroyId: 1,
-          name: '分类1',
-          articleNum: 1,
-        },
-        {
-          categroyId: 2,
-          name: '分类2',
-          articleNum: 2,
-        },
-        {
-          categroyId: 3,
-          name: '分类3',
-          articleNum: 3,
-        },
+        // {
+        //   id: 1,
+        //   value: '分类1',
+        //   articleNum: 1,
+        // },
+        // {
+        //   id: 2,
+        //   value: '分类2',
+        //   articleNum: 2,
+        // },
+        // {
+        //   id: 3,
+        //   value: '分类3',
+        //   articleNum: 3,
+        // },
       ],
       labels: [
-        {
-          labelId: 1,
-          name: '标签1',
-          articleNum: 1,
-        },
-        {
-          labelId: 2,
-          name: '标签2',
-          articleNum: 2,
-        },
-        {
-          labelId: 3,
-          name: '标签3',
-          articleNum: 3,
-        },
+        // {
+        //   id: 1,
+        //   value: '标签1',
+        //   articleNum: 1,
+        // },
+        // {
+        //   id: 2,
+        //   value: '标签2',
+        //   articleNum: 2,
+        // },
+        // {
+        //   id: 3,
+        //   value: '标签3',
+        //   articleNum: 3,
+        // },
       ],
     };
   },
   created() {
     // 创建组件时从后台获取数据
+    // 获取文章分类
+    getArticleCategories()
+      .then((res) => {
+        console.log('获取文章分类成功');
+        console.log(res);
+        this.categories = res;
+      })
+      .catch((err) => {
+        this.$message({
+          showClose: true,
+          message: '获取文章分类失败',
+          type: 'error',
+          duration: 1000,
+        });
+        console.log('获取文章分类失败');
+        console.log(err);
+      });
+    // 获取文章标签
+    getArticleTag()
+      .then((res) => {
+        console.log('获取文章标签成功');
+        console.log(res);
+        this.labels = res;
+      })
+      .catch((err) => {
+        this.$message({
+          showClose: true,
+          message: '获取文章标签失败',
+          type: 'error',
+          duration: 1000,
+        });
+        console.log('获取文章标签失败');
+        console.log(err);
+      });
   },
   methods: {
     // 新增分类
@@ -157,8 +194,10 @@ export default Vue.extend({
     },
     // 确定增加分类
     confirm() {
+      console.log('确认按钮被点击');
       let repeat: boolean = false;
-      for (const elem of this.categories) if (elem.name === this.newCategoryName) repeat = true;
+      for (const elem of this.categories) if (elem.value === this.newCategoryName) repeat = true;
+      // 类名重复
       if (repeat === true) {
         this.$message({
           showClose: true,
@@ -166,8 +205,51 @@ export default Vue.extend({
           type: 'error',
           duration: 1000,
         });
-      } else this.addCategoryDialogVisible = false;
+      } else {
+        // 向后台发请求增加分类
+        addArticleCategory(this.newCategoryName)
+          .then((res) => {
+            this.$message({
+              showClose: true,
+              message: '新增类名成功',
+              type: 'success',
+              duration: 1000,
+            });
+            // 添加成功后重新从后台获取数据
+            this.categories = [];
+            getArticleCategories()
+              .then((res) => {
+                console.log('获取文章分类成功');
+                console.log(res);
+                this.categories = res;
+              })
+              .catch((err) => {
+                this.$message({
+                  showClose: true,
+                  message: '获取文章分类失败',
+                  type: 'error',
+                  duration: 1000,
+                });
+                console.log('获取文章分类失败');
+                console.log(err);
+              });
+          })
+          .catch((err) => {
+            this.$message({
+              showClose: true,
+              message: '类名重复',
+              type: 'error',
+              duration: 1000,
+            });
+            console.log(err);
+          });
+        this.addCategoryDialogVisible = false;
+      }
     },
+    // 删除标签
+    deleteTag(id: number) {},
+    // 删除分类
+    deleteCategory(id: number) {},
   },
   components: {
     AdminWindow,
