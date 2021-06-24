@@ -1,8 +1,8 @@
 <!--
  * @Author: clq
  * @Date: 2021-06-20 18:35:55
- * @LastEditTime: 2021-06-20 19:56:30
- * @LastEditors: clq
+ * @LastEditTime: 2021-06-24 12:53:40
+ * @LastEditors: dreamy-xay
  * @Description: In User Settings Edit
  * @FilePath: \web\src\views\admin\childComps\pages\fileManage\FileManage.vue
 -->
@@ -76,7 +76,6 @@ export default Vue.extend({
     width: 100%;
     height: 200px;
     margin-top: 20px;
-    background-color: blue;
   }
 }
 </style>

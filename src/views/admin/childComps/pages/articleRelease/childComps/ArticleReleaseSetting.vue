@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-20 21:24:58
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-22 11:31:38
+ * @LastEditTime: 2021-06-24 11:02:18
 -->
 
 <template>
@@ -38,7 +38,7 @@
             v-model="setting.priority"
             size="small"
             :min="1"
-            :max="1000"
+            :max="99999"
           ></el-input-number>
         </el-form-item>
         <el-form-item

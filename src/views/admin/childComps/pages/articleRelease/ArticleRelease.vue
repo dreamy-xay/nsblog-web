@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-12 16:03:06
- * @LastEditors: clq
- * @LastEditTime: 2021-06-24 10:21:00
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-06-24 11:32:52
 -->
 
 <template>
@@ -85,7 +85,7 @@ export default Vue.extend({
   name: 'articleRelease',
   data() {
     return {
-      articleId: this.$store.state.articleIdCache,
+      articleId: this.$store.state.articleReleaseIdCache,
       types: [
         { value: 0, label: '博文' },
         { value: 1, label: '随笔' },
@@ -153,7 +153,7 @@ export default Vue.extend({
     releaseArticleClick(status: boolean, success?: any) {
       const name = status ? '发布' : '存为草稿';
       this.getArticleAllInfo((data: any) => {
-        // console.log(data);
+        console.log(data);
         releaseArticle(data)
           .then((res: any) => {
             // 更新文章的 id
@@ -192,6 +192,7 @@ export default Vue.extend({
   created() {
     // 检测销毁
     this.$store.commit('setArticleReleaseDestory', this.exitWarn);
+    this.$store.commit('setArticleReleaseIdCache', this.articleId);
     // 请求数据
     // 请求所有分类
     getArticleCategories()
