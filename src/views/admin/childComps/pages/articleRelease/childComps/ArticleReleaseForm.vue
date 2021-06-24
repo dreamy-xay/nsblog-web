@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-19 15:43:33
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-21 16:59:27
+ * @LastEditors: clq
+ * @LastEditTime: 2021-06-24 10:13:41
 -->
 
 <template>
@@ -264,12 +264,12 @@ export default Vue.extend({
       });
       this.form.coverImage = '';
       this.coverImageShow = false;
-      (this as any).loadingInstance.close();
+      if ((this as any).loadingInstance) (this as any).loadingInstance.close();
     },
     // 封面图片加载成功
     coverImageLoadingSuccess() {
       this.coverImageShow = true;
-      (this as any).loadingInstance.close();
+      if ((this as any).loadingInstance) (this as any).loadingInstance.close();
     },
     // 规则验证标签分类数量
     validateTag(rule: any, value: any, callback: any) {

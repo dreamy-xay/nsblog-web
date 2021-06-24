@@ -4,10 +4,10 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: clq
- * @LastEditTime: 2021-06-22 22:13:20
+ * @LastEditTime: 2021-06-24 10:33:56
  */
 
-import { get, post, RequestLC } from '@/network/request';
+import { get, post, request, RequestLC } from '@/network/request';
 
 /**
  * @description: 获取管理员信息
@@ -19,6 +19,36 @@ export function getAdminInfo(LC: RequestLC = {}): Promise<any> {
   return get({
     url: 'api/private/v1/admin',
     ...LC
+  });
+}
+
+/**
+ * @description: 获取文章信息
+ * @param {number} id 文章id
+ * @param {RequestLC} LC 请求的生命周期
+ * @return {Promise<any>} 返回请求的 Promise
+ * @author: clq
+ */
+export function getArticle(id: number | null = null, LC: RequestLC = {}) {
+  return get({
+    url: 'api/private/v1/article',
+    params: { id },
+    ...LC
+  });
+}
+
+/**
+ * @description: 删除文章
+ * @param {number} id 待删除文章id
+ * @param {RequestL} LC 请求的生命周期
+ * @return {Promise<any>} 返回请求的 Promise
+ * @author: clq
+ */
+export function deleteArticle(id: number, LC: RequestLC = {}): Promise<any> {
+  return request({
+    url: 'api/private/v1/article',
+    data: { id },
+    method: 'DELETE'
   });
 }
 
@@ -52,11 +82,11 @@ export function getArticleCategories(LC: RequestLC = {}): Promise<any> {
  * @return {Promise<any>} 返回请求的 Promise
  * @author: clq
  */
- export function addArticleCategory(newCategory:string,LC: RequestLC = {}):Promise<any>{
+export function addArticleCategory(newCategory: string, LC: RequestLC = {}): Promise<any> {
   return post({
     url: 'api/private/v1/article/category',
-    data:{name:newCategory}
-  })
+    data: { name: newCategory }
+  });
 }
 
 /**
@@ -66,12 +96,13 @@ export function getArticleCategories(LC: RequestLC = {}): Promise<any> {
  * @return {Promise<any>} 返回请求的 Promise
  * @author: clq
  */
-// export function deleteArticleCategory(delId:number,LC: RequestLC={}):Promise<any>{
-//   return delete({
-//     url: '',
-//     date: {id:delId}
-//   })
-// }
+export function deleteArticleCategory(id: number, LC: RequestLC = {}): Promise<any> {
+  return request({
+    url: 'api/private/v1/article/category',
+    data: { id },
+    method: 'DELETE'
+  });
+}
 
 /**
  * @description: 获取所有文章标签
@@ -79,11 +110,11 @@ export function getArticleCategories(LC: RequestLC = {}): Promise<any> {
  * @return {Promise<any>} 返回请求的 Promise
  * @author: clq
  */
-export function getArticleTag(LC: RequestLC={}):Promise<any>{
+export function getArticleTag(LC: RequestLC = {}): Promise<any> {
   return get({
     url: 'api/private/v1/article/tag',
     ...LC
-  })
+  });
 }
 
 /**
@@ -92,13 +123,13 @@ export function getArticleTag(LC: RequestLC={}):Promise<any>{
  * @return {Promise<any>} 返回请求的 Promise
  * @author: clq
  */
-// export function deleteArticleTag(delId:number,LC: RequestLC={}):Promise<any>{
-//   return delete({
-//     url: 'api/private/v1/article/tag',
-//     date: {id:delId},
-//     ...LC
-//   })
-// }
+export function deleteArticleTag(id: number, LC: RequestLC = {}): Promise<any> {
+  return request({
+    url: 'api/private/v1/article/tag',
+    data: { id },
+    method: 'DELETE'
+  });
+}
 
 /**
  * @description: 获取所有分封面图片文件

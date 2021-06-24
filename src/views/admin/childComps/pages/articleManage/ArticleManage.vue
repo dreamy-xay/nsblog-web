@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-12 23:58:01
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-20 18:46:08
+ * @LastEditors: clq
+ * @LastEditTime: 2021-06-24 10:34:47
 -->
 
 <template>
@@ -77,8 +77,8 @@
               <el-dropdown-item
                 v-for="category in categories"
                 :key="category.id"
-                :command="category.name"
-              >{{category.name}}</el-dropdown-item>
+                :command="category.value"
+              >{{category.value}}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </el-col>
@@ -140,10 +140,11 @@
               size="small"
               disable-transitions
             >{{scope.row.type}}</el-tag>
+            <!-- >{{scope.row.type? "博文":"草稿"}}</el-tag> -->
           </template>
         </el-table-column>
         <el-table-column
-          prop="publishTime"
+          prop="releaseTime"
           label="发布时间"
         >
         </el-table-column>
@@ -220,10 +221,14 @@
             >{{item}}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column
-          prop="publishStatus"
-          label="发布状态"
-        >
+        <el-table-column label="发布状态">
+          <template slot-scope="scope">
+            <el-tag
+              type="success"
+              size="small"
+              disable-transitions
+            >{{scope.row.status? "已发布":"未发布"}}</el-tag>
+          </template>
         </el-table-column>
         <el-table-column
           prop="operation"
@@ -242,7 +247,7 @@
               </el-col>
               <el-col :span="6">
                 <el-popconfirm
-                  title="这是一段内容确定删除吗？"
+                  title="确定要删除此文章？"
                   @confirm="articleDelete(scope.row.id)"
                 >
                   <el-button
@@ -286,6 +291,7 @@
 <script lang='ts'>
 import Vue from 'vue';
 import AdminWindow from '@/components/common/AdminWindow.vue';
+import { getArticle, getArticleCategories, deleteArticle } from '@/network/admin/api';
 
 /**
  * @description: 文章管理
@@ -299,60 +305,23 @@ export default Vue.extend({
       categories: [
         {
           id: 1,
-          name: 'java',
+          value: 'java',
         },
         {
           id: 2,
-          name: 'python',
+          value: 'python',
         },
         {
           id: 3,
-          name: '数据库',
+          value: '数据库',
         },
         {
           id: 4,
-          name: 'vue',
+          value: 'vue',
         },
       ],
       // 所有文章
-      articles: [
-        {
-          id: 1,
-          title: '文章1',
-          type: '博文',
-          publishTime: '2020-2-3',
-          pageView: 12,
-          setTop: true,
-          recommend: true,
-          tag: ['标签1', '标签2'],
-          category: ['java', '数据库'],
-          publishStatus: '已发布',
-        },
-        {
-          id: 2,
-          title: '文章2',
-          type: '博文',
-          publishTime: '2020-2-3',
-          pageView: 12,
-          setTop: true,
-          recommend: false,
-          tag: ['标签1', '标签2'],
-          category: ['python', '分类2'],
-          publishStatus: '已发布',
-        },
-        {
-          id: 3,
-          title: '文章3',
-          type: '草稿',
-          publishTime: '2020-2-3',
-          pageView: 12,
-          setTop: false,
-          recommend: false,
-          tag: ['标签1', '标签2'],
-          category: ['vue', '分类2'],
-          publishStatus: '未发布',
-        },
-      ],
+      articles: [],
       // 过滤后的文章
       filterArticles: [],
       // 要显示的文章
@@ -398,7 +367,7 @@ export default Vue.extend({
       this.filterArticles = [];
       // 从所有文章中筛选草稿
       (this as any).filterArticles = this.articles.filter((elem) => {
-        return elem.type === '草稿';
+        return (elem as any).type === '草稿';
       });
       this.total = this.filterArticles.length;
       // console.log(this.filterArticles);
@@ -412,7 +381,7 @@ export default Vue.extend({
       this.filterArticles = [];
       // 从所有文章中筛选草稿
       (this as any).filterArticles = this.articles.filter((elem) => {
-        return elem.publishStatus === '已发布';
+        return (elem as any).status === '已发布';
       });
       this.total = this.filterArticles.length;
       console.log(this.filterArticles);
@@ -428,7 +397,7 @@ export default Vue.extend({
       this.filterArticles = [];
       // 从所有文章中筛选草稿
       (this as any).filterArticles = this.articles.filter((elem) => {
-        return elem.recommend === true;
+        return (elem as any).recommend === true;
       });
       this.total = this.filterArticles.length;
       console.log(this.filterArticles);
@@ -442,7 +411,7 @@ export default Vue.extend({
       this.filterArticles = [];
       // 从所有文章中筛选草稿
       (this as any).filterArticles = this.articles.filter((elem) => {
-        return elem.setTop === true;
+        return (elem as any).setTop === true;
       });
       this.total = this.filterArticles.length;
       console.log(this.filterArticles);
@@ -455,7 +424,7 @@ export default Vue.extend({
       // console.log(command);
       this.filterArticles = [];
       this.articles.every((val) => {
-        val.category.some((val2) => {
+        (val as any).category.some((val2: any) => {
           if (val2 === command) (this as any).filterArticles.push(val);
         });
         return true; // 返回true继续迭代,默认返回false终止迭代
@@ -485,11 +454,38 @@ export default Vue.extend({
     },
     // 编辑文章
     articleEdit(aid: any) {
-      console.log('待编辑文章Id:' + aid);
+      // console.log('待编辑文章Id:' + aid);
+      getArticle(aid)
+        .then((data: any) => {
+          this.$store.commit('articleCacheInit', data);
+          // setTimeout(() =>
+          (this.$router as any).push({ path: '/admin/article/release' });
+          // }, 100);
+        })
+        .catch((err: any) => {
+          console.log(err);
+        });
     },
     // 删除文章
     articleDelete(aid: number) {
       console.log('待删除文章Id:' + aid);
+      deleteArticle(aid)
+        .then((res: any) => {
+          this.$message({
+            showClose: true,
+            message: '删除文章成功',
+            type: 'success',
+            duration: 2000,
+          });
+        })
+        .catch((err: any) => {
+          this.$message({
+            showClose: true,
+            message: '删除文章失败' + err,
+            type: 'error',
+            duration: 2000,
+          });
+        });
     },
     // 预览文章
     articlePreview(aid: number) {
@@ -529,19 +525,63 @@ export default Vue.extend({
     // headerCellStyle(row: any, column: any, rowIndex: any, columnIndex: any): string {
     //   return 'background:#313348;color:white';
     // },
+    // 更新
+    updateArticle() {
+      // 给分页导航栏总页数赋值
+      this.total = this.articles.length;
+
+      // 初始时没有过滤规则,将所有文章数据放入过滤数组
+      (this as any).filterArticles = this.articles;
+
+      // 根据分页规格,将获取的文章存放到待显示文章数组
+      for (let i = 0; i < this.pageSize; i++) (this as any).showArticles.push(this.filterArticles[i]);
+    },
   },
   // 最早只能在created()中操作data和methods
   created() {
     // 从后台获取文章
-
-    // 给分页导航栏总页数赋值
-    this.total = this.articles.length;
-
-    // 初始时没有过滤规则,将所有文章数据放入过滤数组
-    (this as any).filterArticles = this.articles;
-
-    // 根据分页规格,将获取的文章存放到待显示文章数组
-    for (let i = 0; i < this.pageSize; i++) (this as any).showArticles.push(this.filterArticles[i]);
+    getArticle()
+      .then((data: any[]) => {
+        // console.log(data);
+        const articleList: any = [];
+        const typeList: string[] = ['博文', '随笔', '日记', '作品'];
+        for (const { id, pageView, priority, releaseTime, status, tags, categories, title, type } of data) {
+          articleList.push({
+            id,
+            title,
+            type: typeList[type],
+            releaseTime: releaseTime.split('T')[0],
+            pageView,
+            setTop: priority === 99999,
+            recommend: priority > 1000,
+            tag: tags,
+            category: categories,
+            status: status ? '已发布' : '未发布',
+          });
+        }
+        this.articles = articleList;
+        this.updateArticle();
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+    // 获取文章分类
+    getArticleCategories()
+      .then((res) => {
+        // console.log('获取文章分类成功');
+        // console.log(res);
+        this.categories = res;
+      })
+      .catch((err) => {
+        // this.$message({
+        //   showClose: true,
+        //   message: '获取文章分类失败',
+        //   type: 'error',
+        //   duration: 1000,
+        // });
+        // console.log('获取文章分类失败');
+        console.log(err);
+      });
   },
   mounted() {
     (this.$refs.adminWindow as any).push('管理');

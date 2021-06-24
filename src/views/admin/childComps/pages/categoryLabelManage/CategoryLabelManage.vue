@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-06-11 10:09:23
  * @LastEditors: clq
- * @LastEditTime: 2021-06-22 14:51:01
+ * @LastEditTime: 2021-06-24 09:16:23
 -->
 <template>
   <admin-window title="分类/标签管理">
@@ -94,7 +94,13 @@
 <script lang="ts">
 import Vue from 'vue';
 import AdminWindow from '@/components/common/AdminWindow.vue';
-import { getArticleCategories, getArticleTag, addArticleCategory } from '@/network/admin/api';
+import {
+  getArticleCategories,
+  getArticleTag,
+  addArticleCategory,
+  deleteArticleCategory,
+  deleteArticleTag,
+} from '@/network/admin/api';
 
 /**
  * @description: 分类标签
@@ -116,32 +122,12 @@ export default Vue.extend({
         //   value: '分类1',
         //   articleNum: 1,
         // },
-        // {
-        //   id: 2,
-        //   value: '分类2',
-        //   articleNum: 2,
-        // },
-        // {
-        //   id: 3,
-        //   value: '分类3',
-        //   articleNum: 3,
-        // },
       ],
       labels: [
         // {
         //   id: 1,
         //   value: '标签1',
         //   articleNum: 1,
-        // },
-        // {
-        //   id: 2,
-        //   value: '标签2',
-        //   articleNum: 2,
-        // },
-        // {
-        //   id: 3,
-        //   value: '标签3',
-        //   articleNum: 3,
         // },
       ],
     };
@@ -196,7 +182,7 @@ export default Vue.extend({
     confirm() {
       console.log('确认按钮被点击');
       let repeat: boolean = false;
-      for (const elem of this.categories) if (elem.value === this.newCategoryName) repeat = true;
+      for (const elem of this.categories) if ((elem as any).value === this.newCategoryName) repeat = true;
       // 类名重复
       if (repeat === true) {
         this.$message({
@@ -218,10 +204,10 @@ export default Vue.extend({
             // 添加成功后重新从后台获取数据
             this.categories = [];
             getArticleCategories()
-              .then((res) => {
+              .then((res1) => {
                 console.log('获取文章分类成功');
-                console.log(res);
-                this.categories = res;
+                console.log(res1);
+                this.categories = res1;
               })
               .catch((err) => {
                 this.$message({
@@ -246,10 +232,60 @@ export default Vue.extend({
         this.addCategoryDialogVisible = false;
       }
     },
-    // 删除标签
-    deleteTag(id: number) {},
     // 删除分类
-    deleteCategory(id: number) {},
+    deleteCategory(id: number) {
+      deleteArticleCategory(id)
+        .then((res) => {
+          console.log(res);
+          // 获取文章分类
+          getArticleCategories()
+            .then((res1) => {
+              console.log('获取文章分类成功');
+              console.log(res1);
+              this.categories = res1;
+            })
+            .catch((err) => {
+              this.$message({
+                showClose: true,
+                message: '获取文章分类失败',
+                type: 'error',
+                duration: 1000,
+              });
+              console.log('获取文章分类失败');
+              console.log(err);
+            });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    // 删除标签
+    deleteTag(id: number) {
+      deleteArticleTag(id)
+        .then((res) => {
+          console.log(res);
+          // 获取文章标签
+          getArticleTag()
+            .then((res1) => {
+              console.log('获取文章标签成功');
+              console.log(res1);
+              this.labels = res1;
+            })
+            .catch((err) => {
+              this.$message({
+                showClose: true,
+                message: '获取文章标签失败',
+                type: 'error',
+                duration: 1000,
+              });
+              console.log('获取文章标签失败');
+              console.log(err);
+            });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
   },
   components: {
     AdminWindow,
