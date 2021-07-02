@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-12 23:58:01
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-24 12:48:11
+ * @LastEditTime: 2021-06-24 14:06:07
 -->
 
 <template>
@@ -224,10 +224,10 @@
         <el-table-column label="发布状态">
           <template slot-scope="scope">
             <el-tag
-              type="success"
+              :type="scope.row.status === '已发布' ? 'success' : 'danger'"
               size="small"
               disable-transitions
-            >{{scope.row.status? "已发布":"未发布"}}</el-tag>
+            >{{scope.row.status}}</el-tag>
           </template>
         </el-table-column>
         <el-table-column
@@ -281,7 +281,7 @@
         :page-size="pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
-        style="marginTop:12px"
+        style="marginTop:30px;float: right;"
       >
       </el-pagination>
     </div>
@@ -332,7 +332,7 @@ export default Vue.extend({
       // 分页规格
       pageSizes: [1, 2, 3, 4],
       // 当前分页规格,默认2条每页
-      pageSize: 2,
+      pageSize: 3,
       // 总记录条数
       total: 0,
     };
@@ -355,7 +355,7 @@ export default Vue.extend({
       // 清空过滤数组
       this.filterArticles = [];
       (this as any).filterArticles = this.articles;
-
+      this.total = this.filterArticles.length;
       this.updateShowArticle();
       // console.log(this.showArticles);
     },
@@ -367,7 +367,7 @@ export default Vue.extend({
       this.filterArticles = [];
       // 从所有文章中筛选草稿
       (this as any).filterArticles = this.articles.filter((elem) => {
-        return (elem as any).type === '草稿';
+        return (elem as any).status === '未发布';
       });
       this.total = this.filterArticles.length;
       // console.log(this.filterArticles);
@@ -429,6 +429,7 @@ export default Vue.extend({
         });
         return true; // 返回true继续迭代,默认返回false终止迭代
       });
+      this.total = this.filterArticles.length;
       this.updateShowArticle();
     },
     // 删除选中的所有文章
@@ -605,7 +606,6 @@ export default Vue.extend({
   }
 
   .atricle-manage-pagination {
-    width: 100%;
     overflow: hidden;
   }
 }

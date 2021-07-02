@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-20 21:24:58
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-06-24 11:02:18
+ * @LastEditTime: 2021-06-26 22:38:26
 -->
 
 <template>
@@ -93,7 +93,11 @@ import Vue from 'vue';
 
 /**
  * @description: 文章设置
- * @param {*}
+ * @method openSetting 打开设置弹出框
+ * @method closeSetting 关闭设置弹出框
+ * @method openHistory 打开文章历史版本弹出框
+ * @method closeHistory 关闭文章历史版本弹出框
+ * @method getSetting 获取设置文件
  * @author: dreamy-xay
  */
 
