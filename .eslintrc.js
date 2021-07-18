@@ -1,3 +1,11 @@
+/*
+ * @Description: eslint
+ * @Version:
+ * @Autor: dreamy-xay
+ * @Date: 2021-07-06 12:02:59
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-07-18 10:01:54
+ */
 module.exports = {
   root: true,
   env: {
@@ -12,18 +20,24 @@ module.exports = {
     ecmaVersion: 2020
   },
   rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
+    'no-console': 0,
+    'no-debugger': 0,
+    'indent': 0,
+    'semi': 0,
+    'space-before-function-paren': 0,
+    'comma-dangle': 0,
+    'no-unused-vars': 0,
+    '@typescript-eslint/no-var-requires': 0,
+    '@typescript-eslint/explicit-module-boundary-types': 0,
+    "@typescript-eslint/no-inferrable-types": 0,
   },
-  overrides: [
-    {
-      files: [
-        '**/__tests__/*.{j,t}s?(x)',
-        '**/tests/unit/**/*.spec.{j,t}s?(x)'
-      ],
-      env: {
-        jest: true
-      }
+  overrides: [{
+    files: [
+      '**/__tests__/*.{j,t}s?(x)',
+      '**/tests/unit/**/*.spec.{j,t}s?(x)'
+    ],
+    env: {
+      jest: true
     }
-  ]
-}
+  }]
+};

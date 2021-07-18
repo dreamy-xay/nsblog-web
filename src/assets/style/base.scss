@@ -1,0 +1,59 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: PingFangSC, Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial,
+    sans-serif;
+  //user-select: none;
+  /* 禁止用户鼠标在页面上选中文字/图片等 */
+  -webkit-tap-highlight-color: transparent;
+  /* webkit是苹果浏览器引擎，tap点击，highlight背景高亮，color颜色，颜色用数值调节 */
+  width: 100vw;
+  height: 100vh;
+
+  box-sizing: border-box;
+  overflow-x: hidden;
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+  //overflow-x: hidden;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+i,
+button {
+  outline: none;
+}
+
+input {
+  box-sizing: border-box;
+}
+
+.clearfix::after {
+  clear: both;
+  content: "";
+  display: block;
+  width: 0;
+  height: 0;
+  visibility: hidden;
+}
+
+.clearfix {
+  zoom: 1;
+}
+
+[role="button"] {
+  cursor: pointer;
+}
