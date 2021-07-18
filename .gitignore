@@ -5,6 +5,9 @@ node_modules
 /tests/e2e/videos/
 /tests/e2e/screenshots/
 
+# tsc mock files
+/mock/*.js
+/mock/intercepter/*.js
 
 # local env files
 .env.local
