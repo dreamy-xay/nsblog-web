@@ -1,21 +1,21 @@
 /*
- * @Description:
+ * @Description: 注册指令
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 16:13:51
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-09 21:34:01
+ * @LastEditTime: 2021-07-19 21:35:22
  */
 
 import { debounce, throttle } from 'lodash';
 import { App, nextTick } from 'vue';
 import ResizeObserver from 'resize-observer-polyfill';
 
-export default function(app: App) {
+export default (app: App): void => {
   // 点击元素之外隐藏该元素
   app.directive('clickOutside', {
     beforeMount(el: any, binding: any) {
-      el.__vueClickOutside__ = function documentHandle(e) {
+      el.__vueClickOutside__ = function documentHandle(e: any) {
         if (el.contains(e.target)) {
           return false;
         }
@@ -25,7 +25,7 @@ export default function(app: App) {
       };
       document.addEventListener('click', el.__vueClickOutside__, true);
     },
-    unmounted(el) {
+    unmounted(el: any) {
       document.removeEventListener('click', el.__vueClickOutside__, true);
       delete el.__vueClickOutside__;
     }
@@ -56,4 +56,4 @@ export default function(app: App) {
       el._observer && el._observer.unobserve(el);
     }
   });
-}
+};

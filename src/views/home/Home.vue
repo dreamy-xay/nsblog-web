@@ -4,30 +4,30 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-03 16:26:08
+ * @LastEditTime: 2021-07-19 21:40:19
 -->
 
 <template>
   <div class="home">
-    <a
-      role="button"
-      href="/admin"
-      style="display:flex;  text-align: center; justify-content: center; margin: 300px auto; width: 200px; height: 30px; background: #eeeeee; font-size: 20px"
-    >
-      前往后台管理页面
-    </a>
+    <base-top-bar />
   </div>
 </template>
 
 <script>
+import { defineComponent } from 'vue';
+import BaseTopBar from '@/components/content/baseTopBar/BaseTopBar';
+
 /**
  * @description: 博客主页
  * @author: dreamy-xay
  */
 
-export default {
+export default defineComponent({
   name: 'Home',
-}
+  components: {
+    BaseTopBar,
+  },
+});
 </script>
 
 <style lang="scss" scoped>
