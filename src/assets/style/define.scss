@@ -1,56 +1,23 @@
-/* 
- * body
- */
+/* 全局颜色 */
+$grey-0: #ffffff;
+$grey-1: #f7f7f7;
+$grey-2: #f4f4f4;
+$grey-3: #f0f0f0;
+$grey-4: #e5e5e5;
+$grey-5: #d9d9d9;
+$grey-6: #bfbfbf;
+$grey-7: #8c8c8c;
+$grey-8: #707070;
+$grey-9: #595959;
+$grey-10: #262626;
+$grey-11: #000000;
 
-$body-background-color: rgb(51, 51, 51);
+$green-0: #85e8c7;
+$green-1: #4bd8aa;
+$green-2: #37aa84;
+$green-3: #0aa007;
+$green-4: #065b02;
 
-/* 
- * admin-page 
- */
+$orange-0: #ffb792;
 
-/* menu */
-
-$admin-background-color: #2a2b3d;
-$admin-menu-background-color: #252636;
-$admin-menu-text-color: #d1d5db;
-$admin-menu-active-text-color: #ffffff;
-:export {
-    adminMenuBackgroundColor: $admin-menu-background-color;
-    adminMenuTextColor: $admin-menu-text-color;
-    adminMenuActiveTextColor: $admin-menu-active-text-color;
-}
-
-/* top-bar */
-
-$admin-top-bar-background-color: #6f6486;
-$admin-top-bar-menu-hover-background-color: #5e4d81;
-$admin-top-bar-menu-icon-color: #ffffff;
-$admin-top-bar-logout-text-color: #d6cbcb;
-$admin-top-bar-logout-hover-text-color: #ffffff;
-$admin-top-bar-search-background-color: rgba(255, 255, 255, 0.2);
-$admin-top-bar-search-focus-background-color: rgba(255, 255, 255, 0.4);
-$admin-top-bar-search-input-background-color: rgba(255, 255, 255, 0.8);
-$admin-top-bar-search-input-text-color: #6c757d;
-$admin-top-bar-search-input-focus-background-color: #ffffff;
-$admin-top-bar-search-icon-color: #371777;
-$admin-top-bar-search-hover-icon-color: white;
-$admin-top-bar-notice-icon-color: #d6cbcb;
-$admin-top-bar-notice-hover-icon-color: #ffffff;
-
-/* admin-window */
-$admin-window-title-text-color: #cccdce;
-
-/* loading */
-$admin-loading-background-color: rgba(42, 43, 61, 0.8);
-$admin-loading-stroke: #9084a8;
-
-/* admin-article-release */
-$admin-article-release-form-cover-upload-background-color: #252636;
-$admin-article-release-form-cover-upload-border-color: #666262;
-$admin-article-release-form-cover-upload-hover-border-color: #ffffff;
-$admin-article-release-form-title-color: #d1d5db;
-$admin-article-release-form-component-background-color: #ffffff;
-$admin-article-release-setting-form-all-color: #5e4d81;
-$admin-article-release-form-cover-image-submit-button-background-color: #5e4d81;
-$admin-article-release-form-cover-image-submit-button-hover-background-color: #9281b3;
-$admin-article-release-form-cover-image-submit-button-color: #ffffff;
+$pink-0: #f98fa8;

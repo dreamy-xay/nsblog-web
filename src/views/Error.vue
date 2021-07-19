@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-05 16:27:11
+ * @LastEditTime: 2021-07-19 20:53:54
 -->
 
 <template>
@@ -332,6 +332,7 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue';
 import router from '@/router/index';
 
 /**
@@ -339,7 +340,7 @@ import router from '@/router/index';
  * @author: dreamy-xay
  */
 
-export default {
+export default defineComponent({
   name: 'Error',
   setup() {
     // 回主页
@@ -351,7 +352,7 @@ export default {
       goHome,
     };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

@@ -4,14 +4,17 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:02:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-18 10:12:16
+ * @LastEditTime: 2021-07-19 22:04:29
  */
-import { createApp } from "vue";
-import App from "./App.vue";
-import router from "./router";
-import store from "./store";
-import directives from "./directives";
-import "../mock/mock-app"; // mock拦截
+import { createApp } from 'vue';
+import App from './App.vue';
+import router from './router';
+import store from './store';
+import directives from './directives';
+
+import '../mock/mock-app'; // mock拦截
+
+import installElementPlus from '@/plugins/element';
 
 // 创建app
 const app = createApp(App);
@@ -19,7 +22,10 @@ const app = createApp(App);
 // 注册自定义指令
 directives(app);
 
+// 全局使用ElementPlus
+installElementPlus(app);
+
 app
   .use(store)
   .use(router)
-  .mount("#app");
+  .mount('#app');
