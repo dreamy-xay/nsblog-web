@@ -12,6 +12,7 @@
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": false,
     "strictNullChecks": false,
+    "resolveJsonModule": true,
     // "noImplicitThis": false,
     "sourceMap": true,
     "baseUrl": ".",
@@ -28,7 +29,8 @@
     "tests/**/*.ts",
     "tests/**/*.tsx",
     "mock/**/*.ts",
-    "index.d.ts"
+    "index.d.ts",
+    "pack.d.ts"
   ],
   "exclude": ["node_modules"]
 }

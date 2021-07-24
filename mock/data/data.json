@@ -3,7 +3,7 @@
     {
       "username": "dreamy",
       "password": "123456",
-      "isActive": false,
+      "isActive": true,
       "isSuper": true
     }
   ]

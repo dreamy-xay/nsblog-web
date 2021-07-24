@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-10 17:38:14
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-12 22:25:08
+ * @LastEditTime: 2021-07-24 16:50:01
  */
 
 import Mock, { MockCbOptions } from 'better-mock';
@@ -47,6 +47,39 @@ function paramsObj(url: string): Record<string, unknown> {
     }
   });
   return obj;
+}
+
+/**
+ * @description: 匹配特殊路由
+ * @param {string} url 传入特殊正则路由 `必传参数`
+ * @return {RegExp} 返回特殊正则表达式
+ * @author: dreamy-xay
+ */
+function getUrlRegExp(url: string) {
+  return new RegExp(url.replace(/.*?:\/\/.*?(\/.*)/, '$1').replace(/(.*?):.*?(\/|$)/g, '$1.+$2'));
+}
+
+/**
+ * @description: 获取特殊路由的键值对
+ * @param {string} url 传入特殊正则路由 `必传参数`
+ * @param {string} realUrl 传入真实路由 `必传参数`
+ * @return {Record<string, unknown>} 返回params
+ * @author: dreamy-xay
+ */
+function getParams(url: string, realUrl: string): Record<string, unknown> {
+  url = url.replace(/.*?:\/\/.*?(\/.*)/, '$1').replace(/(.*?)\?.*/, '$1');
+  realUrl = realUrl.replace(/.*?:\/\/.*?(\/.*)/, '$1').replace(/(.*?)\?.*/, '$1');
+
+  const keyArr: string[] = url.match(/(?<=:).*?(?=(\/|$))/g);
+  const ans: Record<string, unknown> = {};
+  for (const key of keyArr) {
+    const preKey: string = url.match(/.*?(?=:)/)[0];
+    const value: string = realUrl.substring(realUrl.indexOf(preKey) + preKey.length).split('/')[0];
+    ans[key] = value;
+    url = url.replace(/(.*?):.*?(\/|$)/, `$1${value}$2`);
+  }
+
+  return ans;
 }
 
 /* 状态码对应文字 */
@@ -105,6 +138,7 @@ export interface Request {
   query: Record<string, unknown>;
   body: Record<string, unknown>;
   headers: Record<string, unknown>;
+  params: Record<string, unknown>;
   path: string;
 }
 
@@ -177,13 +211,15 @@ class ResponseObj implements Response {
  * @author: dreamy-xay
  */
 function request(url: string, type: string, callback: (req: Request, res: Response) => void): void {
-  Mock.mock(new RegExp(url), type, (options: MockCbOptions | any) => {
+  Mock.mock(getUrlRegExp(url), type, (options: MockCbOptions | any) => {
     const req: Request = {
       query: paramsObj(options.url),
       body: JSON.parse(options.body),
+      params: getParams(url, options.url),
       path: options.url,
       headers: options.headers
     };
+
     const res: Response = new ResponseObj();
     console.log('request invoke: ' + options.type.toUpperCase() + ' ' + options.url);
     return callback(req, res);
