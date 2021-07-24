@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-24 13:14:19
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-24 15:14:31
+ * @LastEditTime: 2021-07-24 17:48:20
  */
 
 import * as fs from 'fs';
@@ -17,7 +17,10 @@ import * as path from 'path';
  * @author: dreamy-xay
  */
 function readJson(dir: string): Record<string, Record<string, unknown>[]> {
+  if (process.env.VUE_APP_MOCK_SEVER !== 'false') return require('./data.json');
+
   const jsonFilePath: string = path.join(__dirname, dir + '.json');
+
   // 判断是否存在此文件
   if (fs.existsSync(jsonFilePath))
     // 读取文件内容，并转化为Json对象
@@ -33,6 +36,8 @@ function readJson(dir: string): Record<string, Record<string, unknown>[]> {
  * @author: dreamy-xay
  */
 function writeJson(dir: string, data: Record<string, Record<string, unknown>[]>): boolean {
+  if (process.env.VUE_APP_MOCK_SEVER !== 'false') return false;
+
   const jsonFilePath: string = path.join(__dirname, dir + '.json');
 
   // 判断是否存在此文件
@@ -82,9 +87,9 @@ class DataBaseOp implements DataBaseOperator {
   private table: Record<string, unknown>[];
   private tableKey: string;
 
-  constructor(database: Record<string, Record<string, unknown>[]>, table: string) {
-    this.database = database;
-    this.table = database[table];
+  constructor(filename: string, table: string) {
+    this.database = readJson(filename);
+    this.table = this.database[table];
     this.tableKey = table;
   }
 
@@ -218,5 +223,5 @@ class DataBaseOp implements DataBaseOperator {
  * @author: dreamy-xay
  */
 export default function select(table: string): DataBaseOperator {
-  return new DataBaseOp(readJson('data'), table);
+  return new DataBaseOp('data', table);
 }
