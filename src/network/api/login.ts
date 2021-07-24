@@ -4,10 +4,10 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-10 20:30:04
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-19 20:28:07
+ * @LastEditTime: 2021-07-24 13:10:00
  */
 
-import { request, post, get, del, RequestLifeCycle } from '@/network/request';
+import { post, get, del, put, RequestLifeCycle } from '@/network/request';
 
 /**
  * @description: 管理员登陆
@@ -20,6 +20,7 @@ import { request, post, get, del, RequestLifeCycle } from '@/network/request';
 export function adminLogin(username: string, password: string, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return post({
     url: '/login',
+    ...RLC,
     data: {}
   });
 }

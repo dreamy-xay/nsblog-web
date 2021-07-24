@@ -4,12 +4,13 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-09 17:58:32
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-12 12:44:20
+ * @LastEditTime: 2021-07-24 00:16:45
  */
 
 import { Application } from 'express';
 import loginApi from './intercepter/login';
 import adminApi from './intercepter/admin';
+import userApi from './intercepter/user';
 
 // 拦截请求api
 const BASE_URL: string =
@@ -19,4 +20,5 @@ const BASE_URL: string =
 export default function intercepter(app: Application) {
   loginApi(BASE_URL, app);
   adminApi(BASE_URL, app);
+  userApi(BASE_URL, app);
 }
