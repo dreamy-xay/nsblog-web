@@ -1,0 +1,10 @@
+{
+  "users": [
+    {
+      "username": "dreamy",
+      "password": "123456",
+      "isActive": false,
+      "isSuper": true
+    }
+  ]
+}

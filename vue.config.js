@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:25:41
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-18 10:22:39
+ * @LastEditTime: 2021-07-24 11:18:36
  */
 
 const path = require('path');
@@ -37,12 +37,12 @@ module.exports = {
 
     // 代理配置
     proxy: {
-      '/api': {
+      '/v1': {
         target: `${process.env.VUE_APP_APIHOST}:${process.env.VUE_APP_APIPORT}/`,
         ws: true,
         changOrigin: true,
         pathRewrite: {
-          '^/api': ''
+          '^/v1': ''
         }
       }
     },

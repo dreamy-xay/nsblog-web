@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-12 16:49:03
+ * @LastEditTime: 2021-07-24 13:11:19
  */
 
 import axios, { AxiosRequestConfig } from 'axios';
@@ -88,7 +88,7 @@ export function request(options: RequestConfig): Promise<unknown> {
     // 2.传入对象进行网络请求
     instance(options)
       .then(res => {
-        if (process.env.VUE_APP_MOCK_SEVER !== 'false') {
+        if (process.env.VUE_APP_MOCK !== 'false' && process.env.VUE_APP_MOCK_SEVER !== 'false') {
           if (res.status >= 200 && res.status < 300) resolve(res.data);
           else {
             console.error(
@@ -143,5 +143,19 @@ export function del(options: RequestConfig): Promise<unknown> {
   return request({
     ...options,
     method: 'DELETE'
+  });
+}
+
+/**
+ * @description: put请求
+ * @param {RequestConfig} options axios参数(请参考AxiosRequestConfig，附加参数参考RequestConfig)
+ * @return {Promise<unknown>} 返回请求后的Promise
+ * @author: dreamy-xay
+ */
+export function put(options: RequestConfig): Promise<unknown> {
+  if (options['method']) delete options['method'];
+  return request({
+    ...options,
+    method: 'PUT'
   });
 }
