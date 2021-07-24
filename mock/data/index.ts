@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-24 13:14:19
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-24 17:48:20
+ * @LastEditTime: 2021-07-24 18:24:57
  */
 
 import * as fs from 'fs';
@@ -16,10 +16,8 @@ import * as path from 'path';
  * @return {Record<string, Record<string, unknown>[]>} 返回json对象，读取失败返回undefined
  * @author: dreamy-xay
  */
-function readJson(dir: string): Record<string, Record<string, unknown>[]> {
+function readJson(jsonFilePath: string): Record<string, Record<string, unknown>[]> {
   if (process.env.VUE_APP_MOCK_SEVER !== 'false') return require('./data.json');
-
-  const jsonFilePath: string = path.join(__dirname, dir + '.json');
 
   // 判断是否存在此文件
   if (fs.existsSync(jsonFilePath))
@@ -35,10 +33,8 @@ function readJson(dir: string): Record<string, Record<string, unknown>[]> {
  * @return {boolean} 返回是否成功写入
  * @author: dreamy-xay
  */
-function writeJson(dir: string, data: Record<string, Record<string, unknown>[]>): boolean {
+function writeJson(jsonFilePath: string, data: Record<string, Record<string, unknown>[]>): boolean {
   if (process.env.VUE_APP_MOCK_SEVER !== 'false') return false;
-
-  const jsonFilePath: string = path.join(__dirname, dir + '.json');
 
   // 判断是否存在此文件
   if (fs.existsSync(jsonFilePath)) {
@@ -86,9 +82,11 @@ class DataBaseOp implements DataBaseOperator {
   private database: Record<string, Record<string, unknown>[]>;
   private table: Record<string, unknown>[];
   private tableKey: string;
+  private filePath: string;
 
-  constructor(filename: string, table: string) {
-    this.database = readJson(filename);
+  constructor(filePath: string, table: string) {
+    this.filePath = filePath;
+    this.database = readJson(filePath);
     this.table = this.database[table];
     this.tableKey = table;
   }
@@ -129,13 +127,13 @@ class DataBaseOp implements DataBaseOperator {
   public insertOne(data: Record<string, unknown>): boolean {
     this.table.push(data);
     this.database[this.tableKey] = this.table;
-    return writeJson('data', this.database);
+    return writeJson(this.filePath, this.database);
   }
 
   public insert(data: Record<string, unknown>[]): boolean {
     this.table.splice(this.table.length, 0, ...data);
     this.database[this.tableKey] = this.table;
-    return writeJson('data', this.database);
+    return writeJson(this.filePath, this.database);
   }
 
   public removeOne(match: Record<string, unknown>): boolean {
@@ -152,7 +150,7 @@ class DataBaseOp implements DataBaseOperator {
       }
     }
     this.database[this.tableKey] = this.table;
-    return writeJson('data', this.database);
+    return writeJson(this.filePath, this.database);
   }
 
   public removeAll(match: Record<string, unknown>): boolean {
@@ -167,14 +165,14 @@ class DataBaseOp implements DataBaseOperator {
       if (!flag) table.push(item);
     }
     this.database[this.tableKey] = this.table = table;
-    return writeJson('data', this.database);
+    return writeJson(this.filePath, this.database);
   }
 
   public remove(callback: (item: Record<string, unknown>) => boolean): boolean {
     const table: Record<string, unknown>[] = new Array<Record<string, unknown>>();
     for (const item of this.table) if (callback(item)) table.push(item);
     this.database[this.tableKey] = this.table = table;
-    return writeJson('data', this.database);
+    return writeJson(this.filePath, this.database);
   }
 
   public modifyOne(match: Record<string, unknown>, data: Record<string, unknown>): boolean {
@@ -191,7 +189,7 @@ class DataBaseOp implements DataBaseOperator {
       }
     }
     this.database[this.tableKey] = this.table;
-    return writeJson('data', this.database);
+    return writeJson(this.filePath, this.database);
   }
 
   public modifyAll(match: Record<string, unknown>, data: Record<string, unknown>): boolean {
@@ -205,14 +203,14 @@ class DataBaseOp implements DataBaseOperator {
       if (flag) for (const key in data) if (this.table[i][key]) this.table[i][key] = data[key];
     }
     this.database[this.tableKey] = this.table;
-    return writeJson('data', this.database);
+    return writeJson(this.filePath, this.database);
   }
 
   public modify(callback: (item: Record<string, unknown>) => boolean, data: Record<string, unknown>): boolean {
     for (let i: number = 0; i < this.table.length; ++i)
       if (callback(this.table[i])) for (const key in data) if (this.table[i][key]) this.table[i][key] = data[key];
     this.database[this.tableKey] = this.table;
-    return writeJson('data', this.database);
+    return writeJson(this.filePath, this.database);
   }
 }
 
@@ -223,5 +221,6 @@ class DataBaseOp implements DataBaseOperator {
  * @author: dreamy-xay
  */
 export default function select(table: string): DataBaseOperator {
-  return new DataBaseOp('data', table);
+  const jsonFilePath: string = path.join(__dirname, 'data.json');
+  return new DataBaseOp(jsonFilePath, table);
 }

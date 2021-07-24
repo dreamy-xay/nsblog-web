@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:15:05
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-24 15:18:46
+ * @LastEditTime: 2021-07-24 18:29:18
  */
 import { Random } from 'better-mock';
 import { Application, Request, Response } from 'express';
@@ -18,7 +18,7 @@ export default function(baseUrl: string, app: Application) {
     if (user && user.isActive)
       return res.json({
         username,
-        nickname: Random.natural(0, 1) ? Random.name() : Random.cname(),
+        nickname: Random.natural(0, 1000000) % 2 ? Random.cword(2, 4) : Random.word(4, 8),
         avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', 'test'),
         registration_time: Random.datetime(),
         email: Random.email('qq.com'),
