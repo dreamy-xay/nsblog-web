@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-24 16:25:50
+ * @LastEditTime: 2021-07-26 14:48:51
 -->
 
 <template>
@@ -16,7 +16,6 @@
 <script>
 import { defineComponent } from 'vue';
 import BaseTopBar from '@/components/content/baseTopBar/BaseTopBar';
-import { getUserInfo } from '@/network/api/user';
 
 /**
  * @description: 博客主页
@@ -27,15 +26,6 @@ export default defineComponent({
   name: 'Home',
   components: {
     BaseTopBar,
-  },
-  mounted() {
-    getUserInfo('dreamy')
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   },
 });
 </script>

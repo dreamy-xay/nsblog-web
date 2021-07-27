@@ -4,16 +4,18 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:02:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-18 10:13:48
+ * @LastEditTime: 2021-07-26 19:09:34
  */
 import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } from 'vue-router';
+import loginRouter from './modules/login';
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'Home',
+    name: 'home',
     component: () => import('@/views/home/Home.vue')
   },
+  loginRouter,
   {
     path: '/404',
     name: '404',
