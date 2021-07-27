@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:02:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-06 17:22:55
+ * @LastEditTime: 2021-07-27 17:58:26
 -->
 <template>
   <router-view />
@@ -18,5 +18,6 @@
 #app {
   width: 100%;
   height: 100%;
+  min-width: 1440px;
 }
 </style>
