@@ -1,10 +1,22 @@
 {
-  "users": [
-    {
-      "username": "dreamy",
-      "password": "123456",
-      "isActive": true,
-      "isSuper": true
-    }
-  ]
+	"users": [
+		{
+			"username": "dreamy",
+			"password": "Abcd123456",
+			"email": "123@qq.com",
+			"token": null,
+			"isActive": true,
+			"isSuper": true
+		}
+	],
+	"codes": [
+		{
+			"code": "828579",
+			"email": "2799683828@qq.com"
+		},
+		{
+			"code": "705730",
+			"email": "1985332264@qq.com"
+		}
+	]
 }

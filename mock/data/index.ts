@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-24 13:14:19
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-24 18:24:57
+ * @LastEditTime: 2021-07-29 11:00:00
  */
 
 import * as fs from 'fs';
@@ -39,7 +39,7 @@ function writeJson(jsonFilePath: string, data: Record<string, Record<string, unk
   // 判断是否存在此文件
   if (fs.existsSync(jsonFilePath)) {
     // 写入json文件
-    fs.writeFileSync(jsonFilePath, JSON.stringify(data), 'utf8');
+    fs.writeFileSync(jsonFilePath, JSON.stringify(data, null, '\t'), 'utf8');
     return true;
   }
   return false;
