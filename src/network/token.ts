@@ -4,12 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-18 10:20:59
+ * @LastEditTime: 2021-07-28 16:37:01
  */
 
 import store from 'storejs';
 import { Base64 } from 'js-base64';
-import { Md5 } from 'ts-md5/dist/md5';
+import { decrypt, encrypt } from '@/util/crypto';
 
 export default store;
 
@@ -23,7 +23,7 @@ export function verifyToken(originToken: string = store.get('token')): { status:
   if (originToken) {
     const { token, code, startTime, expires } = JSON.parse(originToken);
     if (token !== null && code !== null && startTime !== null && expires !== null)
-      if (startTime + expires * 1000 >= new Date().getTime()) return { status: Md5.hashStr(token) === code, token };
+      if (startTime + expires * 1000 >= new Date().getTime()) return { status: token === decrypt(code), token };
       else {
         store.remove('token');
         return { status: false, token: '' };
@@ -54,7 +54,7 @@ export function getToken(): string {
 export function setToken(token: string, expires = 172800, tokenKey = 'token'): void {
   const options: unknown = {
     token,
-    code: Md5.hashStr(token),
+    code: encrypt(token),
     startTime: new Date().getTime(),
     expires
   };

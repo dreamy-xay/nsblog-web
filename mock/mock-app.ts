@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-10 17:38:14
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-24 16:50:01
+ * @LastEditTime: 2021-07-29 00:23:29
  */
 
 import Mock, { MockCbOptions } from 'better-mock';
@@ -72,6 +72,9 @@ function getParams(url: string, realUrl: string): Record<string, unknown> {
 
   const keyArr: string[] = url.match(/(?<=:).*?(?=(\/|$))/g);
   const ans: Record<string, unknown> = {};
+
+  if (!keyArr) return ans;
+
   for (const key of keyArr) {
     const preKey: string = url.match(/.*?(?=:)/)[0];
     const value: string = realUrl.substring(realUrl.indexOf(preKey) + preKey.length).split('/')[0];

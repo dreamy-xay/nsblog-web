@@ -1,9 +1,9 @@
 @font-face {
     font-family: "iconfont";
     /* Project id 2675107 */
-    src: url('//at.alicdn.com/t/font_2675107_e022y4qqer.woff2?t=1627307259373') format('woff2'),
-        url('//at.alicdn.com/t/font_2675107_e022y4qqer.woff?t=1627307259373') format('woff'),
-        url('//at.alicdn.com/t/font_2675107_e022y4qqer.ttf?t=1627307259373') format('truetype');
+    src: url('//at.alicdn.com/t/font_2675107_v29fd5pwm8o.woff2?t=1627486883149') format('woff2'),
+        url('//at.alicdn.com/t/font_2675107_v29fd5pwm8o.woff?t=1627486883149') format('woff'),
+        url('//at.alicdn.com/t/font_2675107_v29fd5pwm8o.ttf?t=1627486883149') format('truetype');
 }
 
 .iconfont {
@@ -12,6 +12,26 @@
     font-style: normal;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+.blog-zhifubao:before {
+    content: "\e61b";
+}
+
+.blog-paypal:before {
+    content: "\e684";
+}
+
+.blog-tianjiaweixinzhifu:before {
+    content: "\e60f";
+}
+
+.blog-xinxi:before {
+    content: "\e619";
+}
+
+.blog-shuangjiantouxia:before {
+    content: "\e612";
 }
 
 .blog-smile:before {
@@ -34,7 +54,7 @@
     content: "\f216";
 }
 
-.blog-youjian3:before {
+.blog-email:before {
     content: "\e643";
 }
 

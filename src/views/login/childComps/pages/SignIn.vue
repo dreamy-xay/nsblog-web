@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 14:41:12
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-27 23:43:24
+ * @LastEditTime: 2021-07-28 22:35:11
 -->
 <template>
   <div class="sign-in">
@@ -71,6 +71,8 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import router from '@/router';
+import { authLogin } from '@/network/api/auth';
+import { setToken, clearToken } from '@/network/token';
 import LoginLogo from '@/views/login/childComps/LoginLogo';
 import LoginInput from '@/views/login/childComps/LoginInput';
 import LoginButton from '@/views/login/childComps/LoginButton';
@@ -142,9 +144,20 @@ export default defineComponent({
       const usernameReg = /^[a-zA-Z]([-_a-zA-Z0-9]{0,30})$/;
       const passwordReg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,}$/;
       if (usernameReg.test(username.value) && passwordReg.test(password.value)) {
-        console.log('username:' + username.value);
-        console.log('password:' + password.value);
-        console.log('submit click');
+        authLogin(username.value, password.value)
+          .then((data) => {
+            setToken(data.token);
+            router.back();
+          })
+          .catch((error) => {
+            console.log(error);
+            clearToken();
+            ElNotification({
+              type: 'error',
+              message: '用户不存在或密码错误',
+              duration: 3000,
+            });
+          });
       } else {
         ElNotification({
           type: 'error',

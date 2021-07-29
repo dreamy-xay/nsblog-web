@@ -4,54 +4,52 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 18:50:47
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-27 18:03:12
+ * @LastEditTime: 2021-07-29 19:46:27
 -->
 <template>
   <div class="sign-up">
     <login-logo>
       <div class="sign-up-input">
-        <n-message-provider>
-          <login-input
-            class="username"
-            ref="usernameInput"
-            v-model="username"
-            placeholder="账户"
-            :maxlength="30"
-            :verify="verifyUsername"
-            @enter="submit"
-          />
-          <login-input
-            class="email"
-            ref="emailInput"
-            v-model="email"
-            placeholder="邮箱"
-            :maxlength="255"
-            :verify="verifyEmail"
-            @enter="submit"
-          />
-          <login-input
-            type="password"
-            class="password"
-            ref="passwordInput"
-            v-model="password"
-            placeholder="密码"
-            :maxlength="255"
-            :verify="verifyPassword"
-            show-password
-            @enter="submit"
-          />
-          <login-input
-            type="password"
-            class="confirmed-password"
-            ref="confirmedPasswordInput"
-            v-model="confirmedPassword"
-            placeholder="重复密码"
-            :maxlength="255"
-            :verify="verifyConfirmedPassword"
-            show-password
-            @enter="submit"
-          />
-        </n-message-provider>
+        <login-input
+          class="username"
+          ref="usernameInput"
+          v-model="username"
+          placeholder="账户"
+          :maxlength="30"
+          :verify="verifyUsername"
+          @enter="submit"
+        />
+        <login-input
+          class="email"
+          ref="emailInput"
+          v-model="email"
+          placeholder="邮箱"
+          :maxlength="255"
+          :verify="verifyEmail"
+          @enter="submit"
+        />
+        <login-input
+          type="password"
+          class="password"
+          ref="passwordInput"
+          v-model="password"
+          placeholder="密码"
+          :maxlength="255"
+          :verify="verifyPassword"
+          show-password
+          @enter="submit"
+        />
+        <login-input
+          type="password"
+          class="confirmed-password"
+          ref="confirmedPasswordInput"
+          v-model="confirmedPassword"
+          placeholder="重复密码"
+          :maxlength="255"
+          :verify="verifyConfirmedPassword"
+          show-password
+          @enter="submit"
+        />
         <div class="other">
           <div
             class="right"
@@ -78,6 +76,8 @@ import router from '@/router';
 import LoginLogo from '@/views/login/childComps/LoginLogo';
 import LoginInput from '@/views/login/childComps/LoginInput';
 import LoginButton from '@/views/login/childComps/LoginButton';
+import { signUp } from '@/network/api/user';
+import loginRouter from '@/router/modules/login';
 
 /**
  * @description: 注册账号
@@ -149,7 +149,32 @@ export default defineComponent({
       if (confirmedPassword.value === '' || !confirmedPasswordInput.value.check({ message: '密码不一致' }))
         success = false;
       if (success) {
-        console.log('submit');
+        console.log(999);
+        router.push({
+          name: 'emailVerify',
+          params: {
+            enter: true,
+            email: email.value,
+            click(router) {
+              signUp(username.value, password.value, email.value)
+                .then((data) => {
+                  console.log(data);
+                  router.push({
+                    name: 'success',
+                    params: {
+                      enter: true,
+                      click(router) {
+                        router.push({ name: 'signIn' });
+                      },
+                    },
+                  });
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            },
+          },
+        });
       }
     }
 

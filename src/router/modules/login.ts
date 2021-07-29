@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 19:06:09
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-26 19:09:16
+ * @LastEditTime: 2021-07-28 23:51:50
  */
 
 import { RouteRecordRaw } from 'vue-router';
@@ -43,12 +43,20 @@ const loginRouter: RouteRecordRaw = {
       component: () => import('@/views/login/childComps/pages/ForgotPassword.vue')
     },
     {
-      path: 'signUpSuccess',
-      name: 'signUpSuccess',
+      path: 'success',
+      name: 'success',
       meta: {
         title: '忘记密码'
       },
-      component: () => import('@/views/login/childComps/pages/SignUpSuccess.vue')
+      component: () => import('@/views/login/childComps/pages/Success.vue')
+    },
+    {
+      path: 'emailVerify',
+      name: 'emailVerify',
+      meta: {
+        title: '验证邮箱'
+      },
+      component: () => import('@/views/login/childComps/pages/EmailVerify.vue')
     }
   ]
 };

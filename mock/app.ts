@@ -4,11 +4,11 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-09 17:58:32
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-24 18:08:37
+ * @LastEditTime: 2021-07-29 00:06:14
  */
 
 import { Application } from 'express';
-import loginApi from './intercepter/login';
+import authApi from './intercepter/auth';
 import adminApi from './intercepter/admin';
 import userApi from './intercepter/user';
 
@@ -24,7 +24,7 @@ const BASE_URL: string =
  * @author: dreamy-xay
  */
 export default function intercepter(app: Application) {
-  loginApi(BASE_URL, app);
+  authApi(BASE_URL, app);
   adminApi(BASE_URL, app);
   userApi(BASE_URL, app);
 }
