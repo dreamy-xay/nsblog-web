@@ -1,33 +1,18 @@
 <!--
- * @Description: 注册账号
+ * @Description: 重置密码页面
  * @Version:
  * @Autor: dreamy-xay
- * @Date: 2021-07-26 18:50:47
+ * @Date: 2021-07-30 15:53:04
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-30 15:42:25
+ * @LastEditTime: 2021-07-30 16:26:18
 -->
 <template>
-  <div class="sign-up">
+  <div class="reset-password">
     <login-logo>
-      <div class="sign-up-input">
-        <login-input
-          class="username"
-          ref="usernameInput"
-          v-model="username"
-          placeholder="账户"
-          :maxlength="30"
-          :verify="verifyUsername"
-          @enter="submit"
-        />
-        <login-input
-          class="email"
-          ref="emailInput"
-          v-model="email"
-          placeholder="邮箱"
-          :maxlength="255"
-          :verify="verifyEmail"
-          @enter="submit"
-        />
+      <div class="reset-password-title">
+        重置您的密码
+      </div>
+      <div class="reset-password-input">
         <login-input
           type="password"
           class="password"
@@ -37,7 +22,7 @@
           :maxlength="255"
           :verify="verifyPassword"
           show-password
-          @enter="submit"
+          @enter="passwordEnter"
         />
         <login-input
           type="password"
@@ -60,11 +45,11 @@
           </div>
         </div>
       </div>
-      <div class="sign-up-button">
+      <div class="reset-password-button">
         <login-button
           bind-class="submit"
           @click="submit"
-        >创建账户</login-button>
+        >确认重置</login-button>
       </div>
     </login-logo>
   </div>
@@ -73,67 +58,36 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import router from '@/router';
+import { useRoute } from 'vue-router';
 import LoginLogo from '@/views/login/childComps/LoginLogo';
 import LoginInput from '@/views/login/childComps/LoginInput';
 import LoginButton from '@/views/login/childComps/LoginButton';
-import { signUp, emailValidate } from '@/network/api/user';
 import events from '@/events';
 
 /**
- * @description: 注册账号页面
+ * @description: 重置密码页面
  * @author: dreamy-xay
  */
 
 export default defineComponent({
-  name: 'signUp',
+  name: 'resetPassword',
   components: {
     LoginLogo,
     LoginInput,
     LoginButton,
   },
+  beforeRouteEnter(to, from, next) {
+    if (to.params['enter']) next();
+    else next({ path: from.path });
+  },
   setup() {
-    const username = ref(''); // 账号
-    const email = ref(''); // 邮箱
+    const info = useRoute().params; // 上个页面 params
+    const email = info['email']; // 邮箱号
     const password = ref(''); // 密码
     const confirmedPassword = ref(''); // 验证密码（重复密码）
 
-    const usernameInput = ref(null); // 账号ref
-    const emailInput = ref(null); // 邮箱ref
     const passwordInput = ref(null); // 密码ref
     const confirmedPasswordInput = ref(null); // 验证密码ref
-
-    /**
-     * @description: 跳转到登陆页面
-     * @return {void}
-     * @author: dreamy-xay
-     */
-    function signIn() {
-      router.push({ name: 'signIn' });
-    }
-
-    /**
-     * @description: 验证用户名，字母开头，数字字母组成
-     * @param {string} username 用户名 `必传参数`
-     * @return {boolean} 是否验证成功
-     * @author: dreamy-xay
-     */
-    function verifyUsername(username) {
-      if (username === '') return true;
-      const usernameReg = /^[a-zA-Z]([-_a-zA-Z0-9]{0,30})$/;
-      return usernameReg.test(username);
-    }
-
-    /**
-     * @description: 验证email
-     * @param {string} email 邮箱账号 `必传参数`
-     * @return {boolean} 是否验证成功
-     * @author: dreamy-xay
-     */
-    function verifyEmail(email) {
-      if (email === '') return true;
-      const emailReg = /^[0-9a-zA-Z_.-]+[@][0-9a-zA-Z_.-]+([.][a-zA-Z]+){1,2}$/;
-      return emailReg.test(email);
-    }
 
     /**
      * @description: 验证密码，由大小写字母和数字组成，且大于8位
@@ -159,15 +113,30 @@ export default defineComponent({
     }
 
     /**
+     * @description: 跳转到登陆页面
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function signIn() {
+      router.push({ name: 'signIn' });
+    }
+
+    /**
+     * @description: 账号输入框按下回车键执行函数
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function passwordEnter() {
+      confirmedPassword.value !== '' ? submit() : confirmedPasswordInput.value.loginInput.focus();
+    }
+
+    /**
      * @description: 递交注册
      * @return {void}
      * @author: dreamy-xay
      */
     function submit() {
       let success = true; // 所填信息是否有效
-      if (username.value === '' || !usernameInput.value.check({ message: '用户名不为空且仅由字母数字_-构成' }))
-        success = false;
-      if (email.value === '' || !emailInput.value.check({ message: '邮箱格式不正确' })) success = false;
       if (password.value === '' || !passwordInput.value.check({ message: '密码超过8位且由大小写字母数字构成' }))
         success = false;
       if (confirmedPassword.value === '' || !confirmedPasswordInput.value.check({ message: '密码不一致' }))
@@ -175,56 +144,32 @@ export default defineComponent({
 
       // 如果验证成功
       if (success) {
-        const eventId = 'SignUp' + Math.floor(Math.random() * 1000);
+        const eventId = 'ResetPassword' + Math.floor(Math.random() * 1000);
         // 路由跳转
         router.push({
-          name: 'emailVerify',
+          name: 'success',
           params: {
             enter: true,
-            email: email.value,
+            email,
             eventId,
           },
         });
         // 一次性事件绑定
         events.once(eventId, () => {
-          signUp(username.value, password.value, email.value)
-            .then((data) => {
-              const eventId = 'backSignIn' + Math.floor(Math.random() * 1000);
-              // 路由跳转
-              router.push({
-                name: 'success',
-                params: {
-                  enter: true,
-                  eventId,
-                },
-              });
-
-              // 一次性事件绑定
-              events.once(eventId, () => {
-                router.push({ name: 'signIn' });
-              });
-            })
-            .catch((error) => {
-              console.log(error);
-            });
+          console.log();
         });
       }
     }
 
     return {
-      username,
-      email,
       password,
       confirmedPassword,
-      usernameInput,
-      emailInput,
       passwordInput,
       confirmedPasswordInput,
-      verifyUsername,
-      verifyEmail,
       verifyPassword,
       verifyConfirmedPassword,
       signIn,
+      passwordEnter,
       submit,
     };
   },
@@ -232,23 +177,32 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.sign-up {
+.reset-password {
   width: 100%;
   height: 100%;
 
-  .sign-up-input {
+  .reset-password-title {
     width: 100%;
-    height: 283px;
+    height: 32px;
+    padding-top: 30px;
+    overflow: hidden;
+    line-height: 32px;
+    font-size: 24px;
+    text-align: center;
+    user-select: none;
+    color: $green-1;
+  }
+
+  .reset-password-input {
+    width: 100%;
+    height: 221px;
     overflow: hidden;
 
-    .username {
-      margin-top: 45px;
+    .password {
+      margin-top: 58px;
     }
-
-    .email,
-    .password,
     .confirmed-password {
-      margin-top: 22px;
+      margin-top: 52px;
     }
 
     .other {
@@ -271,7 +225,7 @@ export default defineComponent({
     }
   }
 
-  .sign-up-button {
+  .reset-password-button {
     width: 100%;
     height: 45px;
     overflow: hidden;

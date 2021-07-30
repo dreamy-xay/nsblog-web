@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:15:05
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-29 10:49:40
+ * @LastEditTime: 2021-07-29 22:52:32
  */
 import { Random } from 'better-mock';
 import { Application, Request, Response } from 'express';
@@ -34,7 +34,10 @@ export default function(baseUrl: string, app: Application) {
   // 注册新用户
   app.post(baseUrl + '/users', (req: Request, res: Response) => {
     const { username, email, password } = req.body;
-    if (select('users').insertOne({ username, password, email, token: null, isActive: true, isSuper: false }))
+    const users: DataBaseOperator = select('users');
+    if (users.findOne({ username })) return res.json({ error: 'The user already exists' });
+    if (users.findOne({ email })) return res.json({ error: 'Mailbox has been registered' });
+    if (users.insertOne({ username, password, email, token: null, isActive: true, isSuper: false }))
       return res.json({ username });
     else return res.status(500).json({ error: 'Server errors, create users fail' });
   });

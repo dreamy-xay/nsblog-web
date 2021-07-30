@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 18:58:19
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-29 19:58:06
+ * @LastEditTime: 2021-07-29 22:35:38
 -->
 <template>
   <div class="success">
@@ -27,15 +27,15 @@
 
 <script>
 import { defineComponent } from 'vue';
-import router from '@/router';
 import { useRoute } from 'vue-router';
 import LoginButton from '@/views/login/childComps/LoginButton';
+import events from '@/events';
 
 /**
  * @description: 注册成功页面
- * @param {{enter: boolean, next?: (router) => void, mainContent?: string, subContent?: string}} params router传递params
+ * @param {{enter: boolean, eventId?: string | number, mainContent?: string, subContent?: string, buttonContent?: string}} params router传递params
  *  enter:为true时页面才不会被拦截
- *  next:点击底部按钮将执行的函数
+ *  eventId:一次性绑定事件的ID，在点击底部按钮时触发
  *  mainContent:页面主要内容
  *  subContent:页面次要内容
  *  buttonContent: 按钮内容
@@ -61,7 +61,7 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function submit() {
-      info['click'] && new Function(info.click)(router);
+      if (info['eventId']) events.emit(info.eventId);
     }
 
     return {
