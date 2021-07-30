@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-28 23:10:42
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-29 20:00:17
+ * @LastEditTime: 2021-07-30 15:31:51
 -->
 <template>
   <div class="email-verify">
@@ -37,10 +37,11 @@
       <div class="other">
         <div
           class="right"
+          :class="{'disable': count > 0}"
           role="button"
           @click="sendVCode"
         >
-          发送新验证码
+          {{countStr}}
         </div>
       </div>
     </div>
@@ -56,11 +57,21 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref, watch } from 'vue';
-import router from '@/router';
+import { computed, defineComponent, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import LoginButton from '@/views/login/childComps/LoginButton';
-import { emailSendVCode } from '@/network/api/user';
+import { emailSendVCode, emailValidate } from '@/network/api/user';
+import events from '@/events';
+import { ElNotification } from 'element-plus';
+
+/**
+ * @description: 邮箱验证页面
+ * @param {{enter: boolean, eventId?: string | number, email: string}} params router传递params
+ *  enter:为true时页面才不会被拦截
+ *  eventId:一次性绑定事件的ID，在点击底部按钮时触发
+ *  email: 需要注册的邮箱
+ * @author: dreamy-xay
+ */
 
 export default defineComponent({
   name: 'emailVerify',
@@ -73,30 +84,57 @@ export default defineComponent({
   },
   setup() {
     const info = useRoute().params; // 上个页面 params
-    const email = info['email'] ? info['email'] : '1985332264@qq.com'; // 邮箱号
+    const email = info['email']; // 邮箱号
     const code = ref(''); // 验证码
+    const count = ref(0); // 时间计数器
+
+    // 计算属性 count
+    const countStr = computed(() => {
+      return (count.value ? '(' + count.value + 's)' : '') + '发送新验证码';
+    });
 
     /**
-     * @description:
+     * @description: 发送验证码
      * @return {void}
      * @author: dreamy-xay
      */
     function sendVCode() {
-      emailSendVCode(email)
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      if (email && count.value === 0) {
+        emailSendVCode(email)
+          .then(() => {
+            count.value = 60;
+            const timer = setInterval(() => {
+              --count.value;
+              if (count.value === 0) clearInterval(timer);
+            }, 1000);
+          })
+          .catch((error) => {
+            console.log(error);
+            ElNotification({
+              type: 'error',
+              message: '发送验证码失败',
+              duration: 3000,
+            });
+          });
+      }
     }
+    // 发送
+    sendVCode();
 
+    /**
+     * @description: 输入函数监听
+     * @author: dreamy-xay
+     */
     function input(e) {
       const value = e.target.value;
       if (code.value.length < 6 && /[\d]/.test(value[value.length - 1]) && code.value.length < value.length)
         code.value += value[value.length - 1];
     }
 
+    /**
+     * @description: 删除输入验证码
+     * @author: dreamy-xay
+     */
     function deleteNum(e) {
       if (e.keyCode === 8) {
         code.value = code.value.substring(0, code.value.length - 1);
@@ -109,13 +147,32 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function submit() {
-      console.log(new Function(info.click));
-      info['click'] && new Function(info.click)(router);
+      if (code.value.length === 6)
+        emailValidate(email, code.value)
+          .then((data) => {
+            if (data.error) {
+              ElNotification({
+                type: 'error',
+                message: '验证码错误，验证失败',
+                duration: 3000,
+              });
+            } else if (info['eventId']) events.emit(info.eventId);
+          })
+          .catch((error) => {
+            console.log(error);
+            ElNotification({
+              type: 'error',
+              message: '服务器错误，验证失败',
+              duration: 3000,
+            });
+          });
     }
 
     return {
       email,
       code,
+      count,
+      countStr,
       input,
       deleteNum,
       submit,
@@ -243,6 +300,14 @@ export default defineComponent({
 
         &:hover {
           color: $green-1;
+        }
+
+        &.disable {
+          color: $grey-8;
+
+          &:hover {
+            color: $grey-10;
+          }
         }
       }
     }

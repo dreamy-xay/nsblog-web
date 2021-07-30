@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-27 12:19:40
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-27 12:45:23
+ * @LastEditTime: 2021-07-29 22:25:20
  */
 
 /**
@@ -129,7 +129,7 @@ export default class Events<T extends string | number = string> implements Event
   }
 
   public emit(eventId: T, ...args: any[]): this {
-    let eventInfo: EventInfo | undefined = this.events.get(eventId);
+    const eventInfo: EventInfo | undefined = this.events.get(eventId);
     if (eventInfo) {
       eventInfo[0](...args);
       if (eventInfo[1]) this.off(eventId);
@@ -167,7 +167,7 @@ export default class Events<T extends string | number = string> implements Event
   }
 
   public allEvents(): T[] {
-    let all: T[] = [];
+    const all: T[] = [];
     this.events.forEach((_, event) => {
       all.push(event);
     });
@@ -179,7 +179,7 @@ export default class Events<T extends string | number = string> implements Event
   }
 
   public isOnceEvent(eventId: T): boolean {
-    let eventInfo: EventInfo | undefined = this.events.get(eventId);
+    const eventInfo: EventInfo | undefined = this.events.get(eventId);
     if (eventInfo) return eventInfo[1];
     return false;
   }

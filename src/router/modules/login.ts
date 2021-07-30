@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 19:06:09
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-28 23:51:50
+ * @LastEditTime: 2021-07-30 16:05:14
  */
 
 import { RouteRecordRaw } from 'vue-router';
@@ -57,6 +57,14 @@ const loginRouter: RouteRecordRaw = {
         title: '验证邮箱'
       },
       component: () => import('@/views/login/childComps/pages/EmailVerify.vue')
+    },
+    {
+      path: 'resetPassword',
+      name: 'resetPassword',
+      meta: {
+        title: '重置密码'
+      },
+      component: () => import('@/views/login/childComps/pages/ResetPassword.vue')
     }
   ]
 };

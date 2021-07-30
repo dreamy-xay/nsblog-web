@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 18:56:07
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-27 23:43:36
+ * @LastEditTime: 2021-07-30 15:48:57
 -->
 
 <template>
@@ -49,6 +49,7 @@ import { defineComponent, ref } from 'vue';
 import router from '@/router';
 import LoginInput from '@/views/login/childComps/LoginInput';
 import LoginButton from '@/views/login/childComps/LoginButton';
+import events from '@/events';
 import { ElNotification } from 'element-plus';
 
 /**
@@ -73,7 +74,24 @@ export default defineComponent({
     function submit() {
       const emailReg = /^[0-9a-zA-Z_.-]+[@][0-9a-zA-Z_.-]+([.][a-zA-Z]+){1,2}$/;
       if (emailReg.test(email.value)) {
-        console.log('submit');
+        const eventId = 'ForgotPassword' + Math.floor(Math.random() * 1000);
+        // 路由跳转
+        router.push({
+          name: 'emailVerify',
+          params: {
+            enter: true,
+            email: email.value,
+            eventId,
+          },
+        });
+        // 一次性事件绑定
+        events.once(eventId, () => {
+          router.push({
+            name: 'resetPassword',
+            enter: true,
+            email: email.value,
+          });
+        });
       } else
         ElNotification({
           type: 'error',
