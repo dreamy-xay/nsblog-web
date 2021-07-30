@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-28 23:10:42
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-30 15:31:51
+ * @LastEditTime: 2021-07-30 23:27:32
 -->
 <template>
   <div class="email-verify">
@@ -20,9 +20,11 @@
         <input
           type="text"
           class="input-input"
+          ref="codeInput"
           @input="input"
           :maxlength="6"
           @keydown="deleteNum"
+          @keyup.enter="submit"
           onkeyup="value=value.replace(/[^\d]/g,'')"
         >
         <div
@@ -57,7 +59,7 @@
 </template>
 
 <script>
-import { computed, defineComponent, ref } from 'vue';
+import { computed, defineComponent, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import LoginButton from '@/views/login/childComps/LoginButton';
 import { emailSendVCode, emailValidate } from '@/network/api/user';
@@ -68,7 +70,7 @@ import { ElNotification } from 'element-plus';
  * @description: 邮箱验证页面
  * @param {{enter: boolean, eventId?: string | number, email: string}} params router传递params
  *  enter:为true时页面才不会被拦截
- *  eventId:一次性绑定事件的ID，在点击底部按钮时触发
+ *  eventId:一次性绑定事件的ID，在点击底部按钮时触发，触发事件是如果存在data将会回调data
  *  email: 需要注册的邮箱
  * @author: dreamy-xay
  */
@@ -88,10 +90,29 @@ export default defineComponent({
     const code = ref(''); // 验证码
     const count = ref(0); // 时间计数器
 
+    const codeInput = ref(null); // 输入框ref
+    onMounted(() => {
+      codeInput.value.focus();
+    });
+
     // 计算属性 count
     const countStr = computed(() => {
       return (count.value ? '(' + count.value + 's)' : '') + '发送新验证码';
     });
+
+    /**
+     * @description: 计数器
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function startTime() {
+      count.value = 60;
+      const timer = setInterval(() => {
+        --count.value;
+        if (count.value === 0) clearInterval(timer);
+      }, 1000);
+    }
+    startTime();
 
     /**
      * @description: 发送验证码
@@ -102,11 +123,7 @@ export default defineComponent({
       if (email && count.value === 0) {
         emailSendVCode(email)
           .then(() => {
-            count.value = 60;
-            const timer = setInterval(() => {
-              --count.value;
-              if (count.value === 0) clearInterval(timer);
-            }, 1000);
+            startTime();
           })
           .catch((error) => {
             console.log(error);
@@ -118,8 +135,6 @@ export default defineComponent({
           });
       }
     }
-    // 发送
-    sendVCode();
 
     /**
      * @description: 输入函数监听
@@ -148,23 +163,27 @@ export default defineComponent({
      */
     function submit() {
       if (code.value.length === 6)
-        emailValidate(email, code.value)
+        emailValidate(email, code.value, info['type'])
           .then((data) => {
-            if (data.error) {
+            if (info['eventId']) {
+              if (data) events.emit(info.eventId, data);
+              else events.emit(info.eventId);
+            }
+          })
+          .catch((error, status) => {
+            console.log(error);
+            if (status === 403)
               ElNotification({
                 type: 'error',
                 message: '验证码错误，验证失败',
                 duration: 3000,
               });
-            } else if (info['eventId']) events.emit(info.eventId);
-          })
-          .catch((error) => {
-            console.log(error);
-            ElNotification({
-              type: 'error',
-              message: '服务器错误，验证失败',
-              duration: 3000,
-            });
+            else
+              ElNotification({
+                type: 'error',
+                message: '服务器错误，验证失败',
+                duration: 3000,
+              });
           });
     }
 
@@ -173,6 +192,7 @@ export default defineComponent({
       code,
       count,
       countStr,
+      codeInput,
       input,
       deleteNum,
       submit,

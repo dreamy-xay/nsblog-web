@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-30 15:53:04
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-30 16:26:18
+ * @LastEditTime: 2021-07-30 19:22:52
 -->
 <template>
   <div class="reset-password">
@@ -63,6 +63,8 @@ import LoginLogo from '@/views/login/childComps/LoginLogo';
 import LoginInput from '@/views/login/childComps/LoginInput';
 import LoginButton from '@/views/login/childComps/LoginButton';
 import events from '@/events';
+import { forgotPasswordChange } from '@/network/api/user';
+import { ElNotification } from 'element-plus';
 
 /**
  * @description: 重置密码页面
@@ -144,20 +146,34 @@ export default defineComponent({
 
       // 如果验证成功
       if (success) {
-        const eventId = 'ResetPassword' + Math.floor(Math.random() * 1000);
-        // 路由跳转
-        router.push({
-          name: 'success',
-          params: {
-            enter: true,
-            email,
-            eventId,
-          },
-        });
-        // 一次性事件绑定
-        events.once(eventId, () => {
-          console.log();
-        });
+        // 修改密码
+        forgotPasswordChange(info['username'], password.value, info['data'])
+          .then(() => {
+            const eventId = 'ResetPassword' + Math.floor(Math.random() * 1000);
+            // 路由跳转
+            router.push({
+              name: 'success',
+              params: {
+                enter: true,
+                email,
+                eventId,
+                mainContent: '您已成功重置密码',
+                subContent: '请仔细保管好您的账户信息，重新登录确认账户信息',
+              },
+            });
+            // 一次性事件绑定
+            events.once(eventId, () => {
+              router.push({ name: 'signIn' });
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+            ElNotification({
+              type: 'error',
+              message: '服务器错误，重置密码失败',
+              duration: 3000,
+            });
+          });
       }
     }
 

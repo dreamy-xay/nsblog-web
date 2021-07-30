@@ -4,19 +4,77 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:15:05
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-29 22:52:32
+ * @LastEditTime: 2021-07-30 23:32:02
  */
 import { Random } from 'better-mock';
 import { Application, Request, Response } from 'express';
 import select, { DataBaseOperator } from '../data/index';
+import { decrypt } from './util';
 
 export default function(baseUrl: string, app: Application) {
+  // 注册新用户
+  app.post(baseUrl + '/users', (req: Request, res: Response) => {
+    const { username, email, password } = req.body;
+    const users: DataBaseOperator = select('users');
+    users.insertOne({ username, password, email, token: null, isActive: true, isSuper: false });
+    return res.status(201).json({ username });
+  });
+
+  // 邮箱发送验证码
+  app.post(baseUrl + '/users/email/validation', (req: Request, res: Response) => {
+    const { code, email } = req.body;
+
+    const codes: DataBaseOperator = select('codes');
+
+    codes.insertOne({ code, email });
+    setTimeout(() => {
+      codes.removeOne({ code, email });
+    }, 300000); // 5 分钟后失效
+    return res.send();
+  });
+
+  // 验证验证码
+  app.get(baseUrl + '/users/email/validation', (req: Request, res: Response) => {
+    const { code, email, type } = req.query;
+    if (select('codes').findOne({ code, email })) {
+      if (parseInt(type as string) === 1) {
+        const user: Record<string, unknown> = select('users').findOne({ email });
+        return res.json({ username: user.username, data: user.password });
+      }
+      return res.send();
+    } else return res.status(403).json({ error: 'code error' });
+  });
+
+  // 忘记密码，修改
+  app.post(baseUrl + '/users/password', (req: Request, res: Response) => {
+    const { username, password, data } = req.body;
+    const users: DataBaseOperator = select('users');
+    if (data === users.findOne({ username }).password) {
+      users.modifyOne({ username }, { password });
+      return res.send();
+    } else return res.status(403).json({ error: 'You have no modification' });
+  });
+
+  // 查询存在信息
+  app.get(baseUrl + '/users/exist', (req: Request, res: Response) => {
+    const { username, email } = req.query;
+
+    const users: DataBaseOperator = select('users');
+    if (username && email)
+      return res.json({
+        usernameExist: typeof users.findOne({ username }) !== 'undefined',
+        emailExist: typeof users.findOne({ email }) !== 'undefined'
+      });
+    else if (username) return res.json({ usernameExist: typeof users.findOne({ username }) !== 'undefined' });
+    else if (email) return res.json({ emailExist: typeof users.findOne({ email }) !== 'undefined' });
+    return res.send();
+  });
+
   // 获取用户信息
   app.get(baseUrl + '/users/:username', (req: Request, res: Response) => {
-    const { username } = req.params;
-    const { type } = req.query;
+    const { username, type } = req.query;
     const user = select('users').findOne({ username });
-    if (user && user.isActive)
+    if (user && user.isActive) {
       return res.json({
         username,
         nickname: Random.natural(0, 1000000) % 2 ? Random.cword(2, 4) : Random.word(4, 8),
@@ -28,38 +86,6 @@ export default function(baseUrl: string, app: Application) {
         like_count: Random.natural(0, 1000),
         fans_count: Random.natural(0, 1000)
       });
-    else return res.json({ msg: 'User does not exist' });
-  });
-
-  // 注册新用户
-  app.post(baseUrl + '/users', (req: Request, res: Response) => {
-    const { username, email, password } = req.body;
-    const users: DataBaseOperator = select('users');
-    if (users.findOne({ username })) return res.json({ error: 'The user already exists' });
-    if (users.findOne({ email })) return res.json({ error: 'Mailbox has been registered' });
-    if (users.insertOne({ username, password, email, token: null, isActive: true, isSuper: false }))
-      return res.json({ username });
-    else return res.status(500).json({ error: 'Server errors, create users fail' });
-  });
-
-  // 邮箱发送验证码
-  app.post(baseUrl + '/users/email/validation', (req: Request, res: Response) => {
-    const { code, email } = req.body;
-
-    const codes: DataBaseOperator = select('codes');
-
-    if (codes.insertOne({ code, email })) {
-      setTimeout(() => {
-        codes.removeOne({ code, email });
-      }, 300000); // 5 分钟后失效
-      return res.send();
-    } else return res.status(500).json({ error: 'Server errors' });
-  });
-
-  // 验证验证码
-  app.get(baseUrl + '/users/email/validation', (req: Request, res: Response) => {
-    const { code, email } = req.query;
-    if (select('codes').findOne({ code, email })) return res.send();
-    else return res.json({ error: 'code error' });
+    } else return res.status(410).json({ error: 'User name error' });
   });
 }

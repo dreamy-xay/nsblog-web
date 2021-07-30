@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 18:56:07
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-30 15:48:57
+ * @LastEditTime: 2021-07-30 23:09:46
 -->
 
 <template>
@@ -49,6 +49,7 @@ import { defineComponent, ref } from 'vue';
 import router from '@/router';
 import LoginInput from '@/views/login/childComps/LoginInput';
 import LoginButton from '@/views/login/childComps/LoginButton';
+import { emailSendVCode, exist } from '@/network/api/user';
 import events from '@/events';
 import { ElNotification } from 'element-plus';
 
@@ -74,24 +75,52 @@ export default defineComponent({
     function submit() {
       const emailReg = /^[0-9a-zA-Z_.-]+[@][0-9a-zA-Z_.-]+([.][a-zA-Z]+){1,2}$/;
       if (emailReg.test(email.value)) {
-        const eventId = 'ForgotPassword' + Math.floor(Math.random() * 1000);
-        // 路由跳转
-        router.push({
-          name: 'emailVerify',
-          params: {
-            enter: true,
-            email: email.value,
-            eventId,
-          },
-        });
-        // 一次性事件绑定
-        events.once(eventId, () => {
-          router.push({
-            name: 'resetPassword',
-            enter: true,
-            email: email.value,
+        exist({ email: email.value })
+          .then((data) => {
+            if (data.emailExist)
+              emailSendVCode(email.value)
+                .then(() => {
+                  const eventId = 'ForgotPassword' + Math.floor(Math.random() * 1000);
+                  // 路由跳转
+                  router.push({
+                    name: 'emailVerify',
+                    params: {
+                      enter: true,
+                      email: email.value,
+                      type: 1,
+                      eventId,
+                    },
+                  });
+                  // 一次性事件绑定
+                  events.once(eventId, (data) => {
+                    router.push({
+                      name: 'resetPassword',
+                      params: {
+                        enter: true,
+                        username: data.username,
+                        data: data.data,
+                      },
+                    });
+                  });
+                })
+                .catch((error) => {
+                  console.log(error);
+                  ElNotification({
+                    type: 'error',
+                    message: '发送验证码失败',
+                    duration: 3000,
+                  });
+                });
+            else
+              ElNotification({
+                type: 'warning',
+                message: '该邮箱未注册',
+                duration: 3000,
+              });
+          })
+          .catch((error) => {
+            console.log(error);
           });
-        });
       } else
         ElNotification({
           type: 'error',

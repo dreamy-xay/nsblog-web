@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-24 13:11:19
+ * @LastEditTime: 2021-07-30 22:44:17
  */
 
 import axios, { AxiosRequestConfig } from 'axios';
@@ -32,7 +32,7 @@ export interface RequestConfig extends AxiosRequestConfig, RequestLifeCycle {}
  * @author: dreamy-xay
  */
 export function request(options: RequestConfig): Promise<unknown> {
-  return new Promise((resolve: (value: unknown) => void, reject: (reason: unknown) => void) => {
+  return new Promise((resolve: (...value: unknown[]) => void, reject: (reason: unknown) => void) => {
     // 1.创建axios的实例
     const instance = axios.create({
       baseURL: `${process.env.VUE_APP_APIHOST}:${process.env.VUE_APP_APIPORT}${process.env.VUE_APP_APIROUTER}`,
@@ -66,7 +66,7 @@ export function request(options: RequestConfig): Promise<unknown> {
         if (options.successAfterResopnse) options.successAfterResopnse();
         if (options.afterResopnse) options.afterResopnse();
 
-        return response.data;
+        return response;
       },
       err => {
         if (err && err.response) {
@@ -89,14 +89,14 @@ export function request(options: RequestConfig): Promise<unknown> {
     instance(options)
       .then(res => {
         if (process.env.VUE_APP_MOCK !== 'false' && process.env.VUE_APP_MOCK_SEVER !== 'false') {
-          if (res.status >= 200 && res.status < 300) resolve(res.data);
+          if (res.data.status >= 200 && res.data.status < 300) resolve(res.data.data, res.data.status);
           else {
             console.error(
-              `Failed to load resource: the server responded with a status of ${res.status} (${res.statusText})`
+              `Failed to load resource: the server responded with a status of ${res.data.status} (${res.data.statusText})`
             );
-            reject(new Error(res.statusText));
+            reject(new Error(res.data.statusText));
           }
-        } else resolve(res);
+        } else resolve(res.data, res.status);
       })
       .catch(err => {
         reject(err);

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-09 21:34:55
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-28 17:02:49
+ * @LastEditTime: 2021-07-30 19:59:39
  */
 
 import { Application, Request, Response } from 'express';
@@ -20,20 +20,20 @@ export default function(baseUrl: string, app: Application) {
     if (typeof ans === 'undefined') ans = users.findOne({ email: username });
     return ans && ans.password === password
       ? res.json({ token: createToken(username) })
-      : res.status(403).json({ error: 'Incorrect username or password' });
+      : res.status(401).json({ error: 'Password or username error' });
   });
 
   // 登出
   app.post(baseUrl + '/auth/logout', (req: Request, res: Response) => {
     console.log(req.headers);
     clearToken(req.headers);
-    return res.send();
+    return res.status(200);
   });
 
   // 注销
   app.post(baseUrl + '/auth/logoff', (req: Request, res: Response) => {
     const { username } = getToken(req.headers);
-    if (select('users').modifyOne({ username }, { isActive: false })) return res.send();
-    else return res.status(500).json({ error: 'Server errors, user logoff failure' });
+    select('users').modifyOne({ username }, { isActive: false });
+    return res.status(200);
   });
 }
