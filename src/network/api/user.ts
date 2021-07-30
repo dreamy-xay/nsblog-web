@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:38:31
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-29 11:08:33
+ * @LastEditTime: 2021-07-30 23:31:00
  */
 import { post, get, del, put, RequestLifeCycle } from '@/network/request';
 import { encrypt } from '@/util/crypto';
@@ -19,11 +19,27 @@ import { encrypt } from '@/util/crypto';
  */
 export function getUserInfo(username: string, type: number = 0, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return get({
-    url: `/users/${username}`,
+    url: '/users',
     ...RLC,
     params: {
+      username,
       type
     }
+  });
+}
+
+/**
+ * @description: 查询指定数据是否已存在
+ * @param {object} query 查询的内容
+ * @param {RequestLifeCycle} RLC  请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: dreamy-xay
+ */
+export function exist(query: { username?: string; email?: string }, RLC: RequestLifeCycle = {}): Promise<unknown> {
+  return get({
+    url: '/users/exist',
+    ...RLC,
+    params: query
   });
 }
 
@@ -125,17 +141,45 @@ export async function emailSendVCode(email: string, RLC: RequestLifeCycle = {}):
  * @description: 邮箱验证码校验
  * @param {string} email 邮箱号 `必传参数`
  * @param {string} code 验证码 `必传参数`
+ * @param {number} type 请求验证码类型，0是注册，1是忘记密码验证 `必传参数`
  * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
  * @return {Promise<unknown>} 请求返回promise
  * @author: dreamy-xay
  */
-export function emailValidate(email: string, code: string, RLC: RequestLifeCycle = {}): Promise<unknown> {
+export function emailValidate(email: string, code: string, type: number, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return get({
     url: '/users/email/validation',
     ...RLC,
     params: {
       email,
-      code
+      code,
+      type
+    }
+  });
+}
+
+/**
+ * @description: 忘记密码修改密码
+ * @param {string} username 用户名 `必传参数`
+ * @param {string} password 修改后的密码 `必传参数`
+ * @param {string} data 加密原密码 `必传参数`
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: dreamy-xay
+ */
+export function forgotPasswordChange(
+  username: string,
+  password: string,
+  data: string,
+  RLC: RequestLifeCycle = {}
+): Promise<unknown> {
+  return post({
+    url: '/users/password',
+    ...RLC,
+    data: {
+      username,
+      password,
+      data
     }
   });
 }

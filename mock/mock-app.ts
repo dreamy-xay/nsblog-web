@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-10 17:38:14
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-29 00:23:29
+ * @LastEditTime: 2021-07-30 22:40:12
  */
 
 import Mock, { MockCbOptions } from 'better-mock';
@@ -56,7 +56,7 @@ function paramsObj(url: string): Record<string, unknown> {
  * @author: dreamy-xay
  */
 function getUrlRegExp(url: string) {
-  return new RegExp(url.replace(/.*?:\/\/.*?(\/.*)/, '$1').replace(/(.*?):.*?(\/|$)/g, '$1.+$2'));
+  return new RegExp(url.replace(/.*?:\/\/.*?(\/.*)/, '$1').replace(/(.*?):.*?(\/|$)/g, '$1.+$2') + '(\\?|$)');
 }
 
 /**

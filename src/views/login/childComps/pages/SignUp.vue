@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 18:50:47
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-30 15:42:25
+ * @LastEditTime: 2021-07-30 23:03:41
 -->
 <template>
   <div class="sign-up">
@@ -76,8 +76,9 @@ import router from '@/router';
 import LoginLogo from '@/views/login/childComps/LoginLogo';
 import LoginInput from '@/views/login/childComps/LoginInput';
 import LoginButton from '@/views/login/childComps/LoginButton';
-import { signUp, emailValidate } from '@/network/api/user';
+import { signUp, emailSendVCode, exist } from '@/network/api/user';
 import events from '@/events';
+import { ElNotification } from 'element-plus';
 
 /**
  * @description: 注册账号页面
@@ -175,39 +176,80 @@ export default defineComponent({
 
       // 如果验证成功
       if (success) {
-        const eventId = 'SignUp' + Math.floor(Math.random() * 1000);
-        // 路由跳转
-        router.push({
-          name: 'emailVerify',
-          params: {
-            enter: true,
-            email: email.value,
-            eventId,
-          },
-        });
-        // 一次性事件绑定
-        events.once(eventId, () => {
-          signUp(username.value, password.value, email.value)
-            .then((data) => {
-              const eventId = 'backSignIn' + Math.floor(Math.random() * 1000);
-              // 路由跳转
-              router.push({
-                name: 'success',
-                params: {
-                  enter: true,
-                  eventId,
-                },
+        // 用户没用被注册过
+        exist({
+          username: username.value,
+          email: email.value,
+        })
+          .then((data) => {
+            if (data.usernameExist)
+              ElNotification({
+                type: 'warning',
+                message: '该账户已被注册，请更换账户',
+                duration: 3000,
               });
 
-              // 一次性事件绑定
-              events.once(eventId, () => {
-                router.push({ name: 'signIn' });
-              });
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        });
+            if (data.emailExist)
+              setTimeout(() => {
+                ElNotification({
+                  type: 'warning',
+                  message: '该邮箱已被注册，请更换邮箱',
+                  duration: 3000,
+                });
+              }, 0);
+
+            if (!data.usernameExist && !data.emailExist) {
+              // 发送验证码
+              emailSendVCode(email.value)
+                .then(() => {
+                  const eventId = 'SignUp' + Math.floor(Math.random() * 1000);
+                  // 路由跳转
+                  router.push({
+                    name: 'emailVerify',
+                    params: {
+                      enter: true,
+                      email: email.value,
+                      type: 0,
+                      eventId,
+                    },
+                  });
+                  // 一次性事件绑定
+                  events.once(eventId, () => {
+                    signUp(username.value, password.value, email.value)
+                      .then((data) => {
+                        const eventId = 'backSignIn' + Math.floor(Math.random() * 1000);
+                        // 路由跳转
+                        router.push({
+                          name: 'success',
+                          params: {
+                            enter: true,
+                            eventId,
+                          },
+                        });
+
+                        // 一次性事件绑定
+                        events.once(eventId, () => {
+                          router.push({ name: 'signIn' });
+                        });
+                      })
+                      .catch((error) => {
+                        console.log(error);
+                      });
+                  });
+                })
+                .catch((error) => {
+                  console.log(error);
+                  ElNotification({
+                    type: 'error',
+                    message: '发送验证码失败',
+                    duration: 3000,
+                  });
+                });
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       }
     }
 
