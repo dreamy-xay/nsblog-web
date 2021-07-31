@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 18:56:07
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-30 23:09:46
+ * @LastEditTime: 2021-07-31 20:51:39
 -->
 
 <template>
@@ -92,7 +92,8 @@ export default defineComponent({
                     },
                   });
                   // 一次性事件绑定
-                  events.once(eventId, (data) => {
+                  events.on(eventId, (data) => {
+                    events.off(eventId);
                     router.push({
                       name: 'resetPassword',
                       params: {

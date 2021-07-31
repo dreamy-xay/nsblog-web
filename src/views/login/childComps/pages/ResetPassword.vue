@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-30 15:53:04
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-30 19:22:52
+ * @LastEditTime: 2021-07-31 20:51:53
 -->
 <template>
   <div class="reset-password">
@@ -149,6 +149,7 @@ export default defineComponent({
         // 修改密码
         forgotPasswordChange(info['username'], password.value, info['data'])
           .then(() => {
+            events.off(eventId);
             const eventId = 'ResetPassword' + Math.floor(Math.random() * 1000);
             // 路由跳转
             router.push({
@@ -162,7 +163,8 @@ export default defineComponent({
               },
             });
             // 一次性事件绑定
-            events.once(eventId, () => {
+            events.on(eventId, () => {
+              events.off(eventId);
               router.push({ name: 'signIn' });
             });
           })
