@@ -3,11 +3,12 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:02:59
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-26 19:09:34
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-07-31 23:39:04
  */
 import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 import loginRouter from './modules/login';
+import messageRouter from './modules/message';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -16,6 +17,7 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/home/Home.vue')
   },
   loginRouter,
+  messageRouter,
   {
     path: '/404',
     name: '404',
