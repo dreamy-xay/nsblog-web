@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 18:50:47
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-30 23:03:41
+ * @LastEditTime: 2021-07-31 20:52:08
 -->
 <template>
   <div class="sign-up">
@@ -214,9 +214,10 @@ export default defineComponent({
                     },
                   });
                   // 一次性事件绑定
-                  events.once(eventId, () => {
+                  events.on(eventId, () => {
                     signUp(username.value, password.value, email.value)
                       .then((data) => {
+                        events.off(eventId);
                         const eventId = 'backSignIn' + Math.floor(Math.random() * 1000);
                         // 路由跳转
                         router.push({
@@ -228,7 +229,8 @@ export default defineComponent({
                         });
 
                         // 一次性事件绑定
-                        events.once(eventId, () => {
+                        events.on(eventId, () => {
+                          events.off(eventId);
                           router.push({ name: 'signIn' });
                         });
                       })
