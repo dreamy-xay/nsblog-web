@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-10 17:38:14
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-30 22:40:12
+ * @LastEditTime: 2021-08-03 11:44:18
  */
 
 import Mock, { MockCbOptions } from 'better-mock';
@@ -25,6 +25,20 @@ function isNumber(val: string): boolean {
   const regPos = /^\d+(\.\d+)?$/; //非负浮点数
   const regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
   return regPos.test(val) || regNeg.test(val);
+}
+
+/**
+ * @description: 将对象key全部小写
+ * @param {Record<string, unknown>} obj 传对象 `必传参数`
+ * @return {Record<string, unknown>} 返回格式化后对象
+ * @author: dreamy-xay
+ */
+function lowerObjKey(obj: Record<string, unknown>): Record<string, unknown> {
+  for (const key in obj) {
+    obj[key.toLowerCase()] = obj[key];
+    delete obj[key];
+  }
+  return obj;
 }
 
 /**
@@ -220,7 +234,7 @@ function request(url: string, type: string, callback: (req: Request, res: Respon
       body: JSON.parse(options.body),
       params: getParams(url, options.url),
       path: options.url,
-      headers: options.headers
+      headers: lowerObjKey(options.headers)
     };
 
     const res: Response = new ResponseObj();

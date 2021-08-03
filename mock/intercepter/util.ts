@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-28 00:28:11
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-29 10:35:27
+ * @LastEditTime: 2021-08-03 11:39:37
  */
 
 import { Base64 } from 'js-base64';
@@ -19,7 +19,7 @@ import * as CryptoJS from 'crypto-js';
  * @author: dreamy-xay
  */
 export function getToken(headers: Record<string, unknown>): { token: string; time: number; username: string } {
-  let token: string = (headers['Authorization'] as string).replace('Basic ', '');
+  let token: string = (headers['authorization'] as string).replace('Basic ', '');
   token = decrypt(Base64.fromBase64(token.substr(0, token.length - 1)));
   const [_, time, username]: string[] = token.split('$^$');
   return {

@@ -1,13 +1,13 @@
 {
-  "users": [
-    {
-      "username": "dreamy",
-      "password": "Abcd1234",
-      "email": "123@qq.com",
-      "token": null,
-      "isActive": true,
-      "isSuper": true
-    }
-  ],
-  "codes": []
+	"users": [
+		{
+			"username": "dreamy",
+			"password": "Abcd1234",
+			"email": "123@qq.com",
+			"token": null,
+			"isActive": true,
+			"isSuper": true
+		}
+	],
+	"codes": []
 }
