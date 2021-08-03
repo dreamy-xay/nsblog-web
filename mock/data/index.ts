@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-24 13:14:19
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-29 11:00:00
+ * @LastEditTime: 2021-08-03 13:43:32
  */
 
 import * as fs from 'fs';
@@ -184,7 +184,7 @@ class DataBaseOp implements DataBaseOperator {
           break;
         }
       if (flag) {
-        for (const key in data) if (this.table[i][key]) this.table[i][key] = data[key];
+        for (const key in data) if (this.table[i].hasOwnProperty(key)) this.table[i][key] = data[key];
         break;
       }
     }
@@ -200,7 +200,7 @@ class DataBaseOp implements DataBaseOperator {
           flag = false;
           break;
         }
-      if (flag) for (const key in data) if (this.table[i][key]) this.table[i][key] = data[key];
+      if (flag) for (const key in data) if (this.table[i].hasOwnProperty(key)) this.table[i][key] = data[key];
     }
     this.database[this.tableKey] = this.table;
     return writeJson(this.filePath, this.database);
@@ -208,7 +208,8 @@ class DataBaseOp implements DataBaseOperator {
 
   public modify(callback: (item: Record<string, unknown>) => boolean, data: Record<string, unknown>): boolean {
     for (let i: number = 0; i < this.table.length; ++i)
-      if (callback(this.table[i])) for (const key in data) if (this.table[i][key]) this.table[i][key] = data[key];
+      if (callback(this.table[i]))
+        for (const key in data) if (this.table[i].hasOwnProperty(key)) this.table[i][key] = data[key];
     this.database[this.tableKey] = this.table;
     return writeJson(this.filePath, this.database);
   }

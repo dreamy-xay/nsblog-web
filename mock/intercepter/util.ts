@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-28 00:28:11
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-03 11:39:37
+ * @LastEditTime: 2021-08-03 13:47:22
  */
 
 import { Base64 } from 'js-base64';
@@ -38,6 +38,7 @@ export function getToken(headers: Record<string, unknown>): { token: string; tim
 export function createToken(username: string): string {
   const token: string = encrypt(Random.guid() + '$^$' + new Date().getTime() + '$^$' + username);
   const users: DataBaseOperator = select('users');
+
   if (users.modifyOne({ username }, { token })) return token;
   else return users.findOne({ username }).token as string;
 }
@@ -67,7 +68,12 @@ export function verifyToken(
   const { token, time, username }: { token: string; time: number; username: string } = getToken(headers);
   const users: DataBaseOperator = select('users');
   const user: Record<string, unknown> = users.findOne({ username });
-  if (user && user.isActive && user.token === token && (verifyTime ? new Date().getTime() - time <= 172800 : true))
+  if (
+    user &&
+    user.isActive &&
+    decrypt(user.token as string) === token &&
+    (verifyTime ? new Date().getTime() - time <= 172800 : true)
+  )
     return true;
   if (user && verifyTime) users.modifyOne({ username }, { token: null });
   return false;
