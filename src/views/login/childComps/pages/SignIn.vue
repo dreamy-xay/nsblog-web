@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 14:41:12
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-03 11:51:22
+ * @LastEditTime: 2021-08-03 17:43:07
 -->
 <template>
   <div class="sign-in">
@@ -76,7 +76,7 @@ import { setToken, clearToken } from '@/network/token';
 import LoginLogo from '@/views/login/childComps/LoginLogo';
 import LoginInput from '@/views/login/childComps/LoginInput';
 import LoginButton from '@/views/login/childComps/LoginButton';
-import { ElNotification } from 'element-plus';
+import { useMessage } from 'naive-ui';
 
 export default defineComponent({
   name: 'signIn',
@@ -86,6 +86,7 @@ export default defineComponent({
     LoginInput,
   },
   setup() {
+    const msg = useMessage(); // naive-ui mssage
     const username = ref(''); // 用户名
     const password = ref(''); // 密码
     const passwordInput = ref(null); // 密码输入框dom
@@ -153,19 +154,9 @@ export default defineComponent({
           .catch((error) => {
             console.log(error);
             clearToken();
-            ElNotification({
-              type: 'error',
-              message: '用户不存在或密码错误',
-              duration: 3000,
-            });
+            msg.error('用户不存在或密码错误', { duration: 3000, closable: true });
           });
-      } else {
-        ElNotification({
-          type: 'error',
-          message: '用户不存在或密码错误',
-          duration: 3000,
-        });
-      }
+      } else msg.error('用户不存在或密码错误', { duration: 3000, closable: true });
     }
 
     return {

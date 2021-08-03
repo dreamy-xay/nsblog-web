@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 18:56:07
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-31 20:51:39
+ * @LastEditTime: 2021-08-03 17:43:02
 -->
 
 <template>
@@ -51,7 +51,7 @@ import LoginInput from '@/views/login/childComps/LoginInput';
 import LoginButton from '@/views/login/childComps/LoginButton';
 import { emailSendVCode, exist } from '@/network/api/user';
 import events from '@/events';
-import { ElNotification } from 'element-plus';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description: 忘记密码页面
@@ -65,6 +65,7 @@ export default defineComponent({
     LoginButton,
   },
   setup() {
+    const msg = useMessage(); // naive-ui mssage
     const email = ref(''); // 邮箱号
 
     /**
@@ -106,28 +107,14 @@ export default defineComponent({
                 })
                 .catch((error) => {
                   console.log(error);
-                  ElNotification({
-                    type: 'error',
-                    message: '发送验证码失败',
-                    duration: 3000,
-                  });
+                  msg.error('发送验证码失败', { duration: 3000, closable: true });
                 });
-            else
-              ElNotification({
-                type: 'warning',
-                message: '该邮箱未注册',
-                duration: 3000,
-              });
+            else msg.warning('该邮箱未注册', { duration: 3000, closable: true });
           })
           .catch((error) => {
             console.log(error);
           });
-      } else
-        ElNotification({
-          type: 'error',
-          message: '邮箱格式不正确',
-          duration: 3000,
-        });
+      } else msg.error('邮箱格式不正确', { duration: 3000, closable: true });
     }
 
     /**

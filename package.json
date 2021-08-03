@@ -2,7 +2,6 @@
   "name": "web",
   "version": "1.0.0",
   "private": true,
-  "license": "MIT",
   "scripts": {
     "serve": "tsc ./mock/sever-app.ts && vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -17,7 +16,7 @@
     "element-plus": "^1.0.2-beta.55",
     "js-base64": "^3.6.1",
     "lodash": "^4.17.21",
-    "naive-ui": "^2.15.2",
+    "naive-ui": "^2.11.4",
     "storejs": "^1.1.0",
     "vue": "^3.0.0",
     "vue-class-component": "^8.0.0-0",
@@ -49,6 +48,8 @@
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
     "typescript": "^4.1.6",
+    "vue-cli-plugin-naive-ui": "~0.0.4",
     "vue-jest": "^5.0.0-0"
-  }
+  },
+  "license": "MIT"
 }

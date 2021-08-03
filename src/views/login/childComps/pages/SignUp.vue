@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 18:50:47
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-31 20:52:08
+ * @LastEditTime: 2021-08-03 18:04:31
 -->
 <template>
   <div class="sign-up">
@@ -78,7 +78,7 @@ import LoginInput from '@/views/login/childComps/LoginInput';
 import LoginButton from '@/views/login/childComps/LoginButton';
 import { signUp, emailSendVCode, exist } from '@/network/api/user';
 import events from '@/events';
-import { ElNotification } from 'element-plus';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description: 注册账号页面
@@ -93,6 +93,7 @@ export default defineComponent({
     LoginButton,
   },
   setup() {
+    const msg = useMessage(); // naive-ui mssage
     const username = ref(''); // 账号
     const email = ref(''); // 邮箱
     const password = ref(''); // 密码
@@ -119,7 +120,6 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function verifyUsername(username) {
-      if (username === '') return true;
       const usernameReg = /^[a-zA-Z]([-_a-zA-Z0-9]{0,30})$/;
       return usernameReg.test(username);
     }
@@ -131,7 +131,6 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function verifyEmail(email) {
-      if (email === '') return true;
       const emailReg = /^[0-9a-zA-Z_.-]+[@][0-9a-zA-Z_.-]+([.][a-zA-Z]+){1,2}$/;
       return emailReg.test(email);
     }
@@ -143,7 +142,6 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function verifyPassword(password) {
-      if (password === '') return true;
       const passwordReg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,}$/;
       return passwordReg.test(password);
     }
@@ -155,7 +153,6 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function verifyConfirmedPassword(confirmedPassword) {
-      if (confirmedPassword === '') return true;
       return confirmedPassword === password.value;
     }
 
@@ -166,13 +163,10 @@ export default defineComponent({
      */
     function submit() {
       let success = true; // 所填信息是否有效
-      if (username.value === '' || !usernameInput.value.check({ message: '用户名不为空且仅由字母数字_-构成' }))
-        success = false;
-      if (email.value === '' || !emailInput.value.check({ message: '邮箱格式不正确' })) success = false;
-      if (password.value === '' || !passwordInput.value.check({ message: '密码超过8位且由大小写字母数字构成' }))
-        success = false;
-      if (confirmedPassword.value === '' || !confirmedPasswordInput.value.check({ message: '密码不一致' }))
-        success = false;
+      if (!usernameInput.value.check({ message: '用户名不为空且仅由字母数字和 _- 特殊符号构成' })) success = false;
+      if (!emailInput.value.check({ message: '邮箱格式不正确' })) success = false;
+      if (!passwordInput.value.check({ message: '密码超过8位且由大小写字母和数字构成' })) success = false;
+      if (!confirmedPasswordInput.value.check({ message: '密码不一致' })) success = false;
 
       // 如果验证成功
       if (success) {
@@ -182,25 +176,23 @@ export default defineComponent({
           email: email.value,
         })
           .then((data) => {
-            if (data.usernameExist)
-              ElNotification({
-                type: 'warning',
-                message: '该账户已被注册，请更换账户',
-                duration: 3000,
-              });
+            if (data.usernameExist) msg.warning('该账户已被注册，请更换账户', { duration: 3000, closable: true });
 
             if (data.emailExist)
               setTimeout(() => {
-                ElNotification({
-                  type: 'warning',
-                  message: '该邮箱已被注册，请更换邮箱',
-                  duration: 3000,
-                });
+                msg.warning('该邮箱已被注册，请更换邮箱', { duration: 3000, closable: true });
               }, 0);
 
             if (!data.usernameExist && !data.emailExist) {
+              // 显示发送验证码
+              let loading = msg.loading('验证码发送中', { duration: 0 });
+
               // 发送验证码
-              emailSendVCode(email.value)
+              emailSendVCode(email.value, {
+                afterResopnse() {
+                  loading.destroy();
+                },
+              })
                 .then(() => {
                   const eventId = 'SignUp' + Math.floor(Math.random() * 1000);
                   // 路由跳转
@@ -213,6 +205,7 @@ export default defineComponent({
                       eventId,
                     },
                   });
+
                   // 一次性事件绑定
                   events.on(eventId, () => {
                     signUp(username.value, password.value, email.value)
@@ -241,11 +234,7 @@ export default defineComponent({
                 })
                 .catch((error) => {
                   console.log(error);
-                  ElNotification({
-                    type: 'error',
-                    message: '发送验证码失败',
-                    duration: 3000,
-                  });
+                  msg.error('发送验证码失败', { duration: 3000, closable: true });
                 });
             }
           })
