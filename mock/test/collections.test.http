@@ -1,0 +1,10 @@
+@url=http://localhost:3000/v1
+
+@json=Content-Type: application/json
+
+### 获取全部收藏信息
+get {{url}}/collections?limit=5&offset=0&favorites=
+
+
+### 获取指定收藏夹信息
+get {{url}}/collections?limit=20&offset=0&favorites=1
