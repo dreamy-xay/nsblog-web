@@ -4,12 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:15:05
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-30 23:32:02
+ * @LastEditTime: 2021-08-03 18:16:08
  */
 import { Random } from 'better-mock';
 import { Application, Request, Response } from 'express';
 import select, { DataBaseOperator } from '../data/index';
-import { decrypt } from './util';
+import { clearToken, decrypt } from './util';
 
 export default function(baseUrl: string, app: Application) {
   // 注册新用户
@@ -51,6 +51,7 @@ export default function(baseUrl: string, app: Application) {
     const users: DataBaseOperator = select('users');
     if (data === users.findOne({ username }).password) {
       users.modifyOne({ username }, { password });
+      clearToken(username);
       return res.send();
     } else return res.status(403).json({ error: 'You have no modification' });
   });
