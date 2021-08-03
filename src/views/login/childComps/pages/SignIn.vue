@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 14:41:12
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-30 15:35:29
+ * @LastEditTime: 2021-08-03 11:51:22
 -->
 <template>
   <div class="sign-in">
@@ -143,7 +143,8 @@ export default defineComponent({
     function submit() {
       const usernameReg = /^[a-zA-Z]([-_a-zA-Z0-9]{0,30})$/;
       const passwordReg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,}$/;
-      if (usernameReg.test(username.value) && passwordReg.test(password.value)) {
+      const emailReg = /^[0-9a-zA-Z_.-]+[@][0-9a-zA-Z_.-]+([.][a-zA-Z]+){1,2}$/;
+      if ((usernameReg.test(username.value) || emailReg.test(username.value)) && passwordReg.test(password.value)) {
         authLogin(username.value, password.value)
           .then((data) => {
             setToken(data.token);

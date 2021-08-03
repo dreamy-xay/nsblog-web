@@ -1,0 +1,20 @@
+@url=http://localhost:3000/v1
+
+@json=Content-Type: application/json
+
+@token=Authorization: Basic YmM1NzY1ZDZiOWFhYmM3OGM0YjA4NTM3MmNiOWJhOGMyYjcxZDNkODcyYTI4N2YyNzJjN2JiMWI5MzA4NjU2ZjRiY2Q1ZjU2OTA0YjE3NDI3Y2FhOWE3NmY0N2JlMjU4YzFkMGM2MDIzMjEyYzdiMWZiZTJiMmVlZDJmMWY3NmM=
+
+### 获取历史记录 type0
+get {{url}}/history?limit=20&offset=0&type=0
+{{token}}
+
+
+### 获取历史记录 type1
+get {{url}}/history?limit=20&offset=0&type=1
+{{token}}
+
+
+### 删除历史记录
+delete {{url}}/history/784764?type=1
+{{json}}
+{{token}}

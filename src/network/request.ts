@@ -4,11 +4,11 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-30 22:44:17
+ * @LastEditTime: 2021-08-03 11:17:01
  */
 
 import axios, { AxiosRequestConfig } from 'axios';
-import { getToken } from './token';
+import { getToken, clearToken } from './token';
 
 export interface RequestLifeCycle {
   beforeRequest?(): void;
@@ -69,16 +69,7 @@ export function request(options: RequestConfig): Promise<unknown> {
         return response;
       },
       err => {
-        if (err && err.response) {
-          switch (err.response.status) {
-            case 400:
-              err.message = '请求错误';
-              break;
-            case 401:
-              err.message = '未授权的访问';
-              break;
-          }
-        }
+        if (err && err.response && err.response.status === 401) clearToken();
         if (options.failAfterResopnse) options.failAfterResopnse();
         if (options.afterResopnse) options.afterResopnse();
         return Promise.reject(err);
