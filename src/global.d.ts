@@ -8,4 +8,4 @@
  */
 
 // 静态文件路径
-declare var __static: string;
+declare let __static: string;

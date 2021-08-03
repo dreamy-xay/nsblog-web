@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-30 15:53:04
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-31 20:51:53
+ * @LastEditTime: 2021-08-03 17:42:53
 -->
 <template>
   <div class="reset-password">
@@ -64,7 +64,7 @@ import LoginInput from '@/views/login/childComps/LoginInput';
 import LoginButton from '@/views/login/childComps/LoginButton';
 import events from '@/events';
 import { forgotPasswordChange } from '@/network/api/user';
-import { ElNotification } from 'element-plus';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description: 重置密码页面
@@ -83,6 +83,7 @@ export default defineComponent({
     else next({ path: from.path });
   },
   setup() {
+    const msg = useMessage(); // naive-ui mssage
     const info = useRoute().params; // 上个页面 params
     const email = info['email']; // 邮箱号
     const password = ref(''); // 密码
@@ -170,11 +171,7 @@ export default defineComponent({
           })
           .catch((error) => {
             console.log(error);
-            ElNotification({
-              type: 'error',
-              message: '服务器错误，重置密码失败',
-              duration: 3000,
-            });
+            msg.error('重置密码失败', { duration: 3000, closable: true });
           });
       }
     }

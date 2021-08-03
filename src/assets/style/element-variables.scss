@@ -8,4 +8,8 @@ $--color-primary: $green-0;
 /* icon font path, required */
 $--font-path: "~element-plus/lib/theme-chalk/fonts";
 
-@import "~element-plus/packages/theme-chalk/src/index";
+// 引入后 包会很大
+// @import "~element-plus/packages/theme-chalk/src/index";
+
+// 按需引入  部分scss文件没有用到对应的变量可以不引用
+@import "~element-plus/packages/theme-chalk/src/button";

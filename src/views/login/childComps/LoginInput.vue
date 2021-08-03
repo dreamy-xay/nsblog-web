@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 22:15:27
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-27 23:45:31
+ * @LastEditTime: 2021-08-03 17:41:56
 -->
 <template>
   <div class="login-input">
@@ -32,8 +32,7 @@
 
 <script>
 import { computed, defineComponent, ref, watch } from 'vue';
-// import { useMessage } from 'naive-ui';
-import { ElNotification } from 'element-plus';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description: login路由下页面输入框
@@ -85,6 +84,7 @@ export default defineComponent({
     },
   },
   setup(props, context) {
+    const msg = useMessage(); // naive-ui mssage
     const inputType = ref(props.type !== 'text'); // 输入框类型
     const loginInput = ref(null); // 输入框dom节点
     const efficient = ref(props.verify === null || props.verify('')); // 是否有效
@@ -159,12 +159,9 @@ export default defineComponent({
       if (error.value && typeof messageOptions === 'object') {
         if (!messageOptions['type']) messageOptions['type'] = 'error';
         setTimeout(() => {
-          // useMessage().error(messageOptions.message, {
-          //   duration: messageOptions.duration ? messageOptions.duration : 2000,
-          // });
-          ElNotification({
-            ...messageOptions,
-            duration: messageOptions.duration ? messageOptions.duration : 2000,
+          msg[messageOptions['type']](messageOptions.message, {
+            duration: messageOptions.duration ? messageOptions.duration : 3000,
+            closable: true,
           });
         }, 0);
       }

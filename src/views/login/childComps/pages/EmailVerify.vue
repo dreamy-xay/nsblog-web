@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-28 23:10:42
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-30 23:27:32
+ * @LastEditTime: 2021-08-03 17:33:27
 -->
 <template>
   <div class="email-verify">
@@ -64,7 +64,7 @@ import { useRoute } from 'vue-router';
 import LoginButton from '@/views/login/childComps/LoginButton';
 import { emailSendVCode, emailValidate } from '@/network/api/user';
 import events from '@/events';
-import { ElNotification } from 'element-plus';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description: 邮箱验证页面
@@ -85,6 +85,7 @@ export default defineComponent({
     else next({ path: from.path });
   },
   setup() {
+    const msg = useMessage(); // naive-ui mssage
     const info = useRoute().params; // 上个页面 params
     const email = info['email']; // 邮箱号
     const code = ref(''); // 验证码
@@ -127,10 +128,9 @@ export default defineComponent({
           })
           .catch((error) => {
             console.log(error);
-            ElNotification({
-              type: 'error',
-              message: '发送验证码失败',
+            msg.error('发送验证码失败', {
               duration: 3000,
+              closable: true,
             });
           });
       }
@@ -172,18 +172,8 @@ export default defineComponent({
           })
           .catch((error, status) => {
             console.log(error);
-            if (status === 403)
-              ElNotification({
-                type: 'error',
-                message: '验证码错误，验证失败',
-                duration: 3000,
-              });
-            else
-              ElNotification({
-                type: 'error',
-                message: '服务器错误，验证失败',
-                duration: 3000,
-              });
+            if (status === 403) msg.error('验证码错误，验证失败', { duration: 3000, closable: true });
+            else msg.error('服务器错误，验证失败', { duration: 3000, closable: true });
           });
     }
 

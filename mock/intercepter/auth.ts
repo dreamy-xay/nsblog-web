@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-09 21:34:55
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-03 13:20:26
+ * @LastEditTime: 2021-08-03 17:52:03
  */
 
 import { Application, Request, Response } from 'express';
@@ -25,7 +25,6 @@ export default function(baseUrl: string, app: Application) {
 
   // 登出
   app.post(baseUrl + '/auth/logout', (req: Request, res: Response) => {
-    console.log(req.headers);
     clearToken(req.headers);
     return res.status(200);
   });
