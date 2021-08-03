@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 10:01:23
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-03 11:49:12
+ * @LastEditTime: 2021-08-03 12:50:43
  */
 
 import { Application, Request, Response } from 'express';
@@ -41,9 +41,9 @@ export default function(baseUrl: string, app: Application) {
       return ans;
     }
 
-    if (type == 0) return res.json({ history: getRandom(parseInt(limit as string)) });
-    else if (type == 1) return res.json({ history: getRandom(parseInt(limit as string), false) });
-    else if (type == 2) return res.json({ history: getRandom(parseInt(limit as string), false) });
+    if (type == 0) return res.json({ history: getRandom(Random.natural(0, parseInt(limit as string))) });
+    else if (type == 1) return res.json({ history: getRandom(Random.natural(0, parseInt(limit as string)), false) });
+    else if (type == 2) return res.json({ history: getRandom(Random.natural(0, parseInt(limit as string)), false) });
     else return res.status(403).json({ error: 'error' });
   });
 
