@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 11:59:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-03 12:55:23
+ * @LastEditTime: 2021-08-03 13:47:36
  */
 
 import { Application, Request, Response } from 'express';
@@ -14,6 +14,7 @@ import { verifyToken } from './util';
 export default function(baseUrl: string, app: Application) {
   // 获取收藏夹或者收藏
   app.get(baseUrl + '/collections', (req: Request, res: Response) => {
+    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const { limit, offset, favorites } = req.query;
 
     function getRandom(limit: number): Record<string, unknown>[] {

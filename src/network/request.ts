@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-03 12:08:57
+ * @LastEditTime: 2021-08-03 13:15:56
  */
 
 import axios, { AxiosRequestConfig } from 'axios';
@@ -69,7 +69,7 @@ export function request(options: RequestConfig): Promise<unknown> {
         return response;
       },
       err => {
-        if (err && err.response && err.response.status === 401) clearToken();
+        // if (err && err.response && err.response.status === 401) clearToken();
         if (options.failAfterResopnse) options.failAfterResopnse();
         if (options.afterResopnse) options.afterResopnse();
         return Promise.reject(err);

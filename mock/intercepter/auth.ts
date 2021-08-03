@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-09 21:34:55
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-30 19:59:39
+ * @LastEditTime: 2021-08-03 13:20:26
  */
 
 import { Application, Request, Response } from 'express';
@@ -19,7 +19,7 @@ export default function(baseUrl: string, app: Application) {
     let ans: Record<string, unknown> = users.findOne({ username });
     if (typeof ans === 'undefined') ans = users.findOne({ email: username });
     return ans && ans.password === password
-      ? res.json({ token: createToken(username) })
+      ? res.json({ token: createToken((ans as any).username) })
       : res.status(401).json({ error: 'Password or username error' });
   });
 
