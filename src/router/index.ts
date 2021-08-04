@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:02:59
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-07-31 23:39:04
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-08-04 13:09:00
  */
 import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 import loginRouter from './modules/login';
@@ -18,6 +18,11 @@ const routes: Array<RouteRecordRaw> = [
   },
   loginRouter,
   messageRouter,
+  {
+    path: '/history',
+    name: 'history',
+    component: () => import('@/views/history/History.vue')
+  },
   {
     path: '/404',
     name: '404',

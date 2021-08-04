@@ -4,13 +4,15 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-19 21:30:24
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-04 09:51:45
+ * @LastEditTime: 2021-08-04 14:42:13
  */
 import { App } from 'vue';
 import 'dayjs/locale/zh-cn';
 import locale from 'element-plus/lib/locale';
 import lang from 'element-plus/lib/locale/lang/zh-cn';
+
 import {
+  // ElAffix,
   // ElAlert,
   // ElAside,
   // ElAutocomplete,
@@ -19,7 +21,7 @@ import {
   // ElBadge,
   // ElBreadcrumb,
   // ElBreadcrumbItem,
-  ElButton
+  ElButton,
   // ElButtonGroup,
   // ElCalendar,
   // ElCard,
@@ -36,6 +38,7 @@ import {
   // ElCollapseTransition,
   // ElColorPicker,
   // ElContainer,
+  // ElConfigProvider,
   // ElDatePicker,
   // ElDialog,
   // ElDivider,
@@ -43,12 +46,14 @@ import {
   // ElDropdown,
   // ElDropdownItem,
   // ElDropdownMenu,
+  // ElEmpty,
   // ElFooter,
   // ElForm,
   // ElFormItem,
   // ElHeader,
   // ElIcon,
   // ElImage,
+  // ElImageViewer,
   // ElInput,
   // ElInputNumber,
   // ElLink,
@@ -61,7 +66,6 @@ import {
   // ElPageHeader,
   // ElPagination,
   // ElPopconfirm,
-  // ElPopover,
   // ElPopper,
   // ElProgress,
   // ElRadio,
@@ -89,14 +93,24 @@ import {
   // ElTransfer,
   // ElTree,
   // ElUpload,
+  // ElSpace,
+  // ElSkeleton,
+  // ElSkeletonItem,
+  // ElCheckTag,
+  // ElDescriptions,
+  // ElDescriptionsItem,
+  // ElResult,
+  // ElSelectV2,
   // ElInfiniteScroll,
   // ElLoading,
   // ElMessage
   // ElMessageBox,
   // ElNotification,
+  ElPopover
 } from 'element-plus';
 
 const components = [
+  // ElAffix,
   // ElAlert,
   // ElAside,
   // ElAutocomplete,
@@ -122,6 +136,7 @@ const components = [
   // ElCollapseTransition,
   // ElColorPicker,
   // ElContainer,
+  // ElConfigProvider,
   // ElDatePicker,
   // ElDialog,
   // ElDivider,
@@ -129,12 +144,14 @@ const components = [
   // ElDropdown,
   // ElDropdownItem,
   // ElDropdownMenu,
+  // ElEmpty,
   // ElFooter,
   // ElForm,
   // ElFormItem,
   // ElHeader,
   // ElIcon,
   // ElImage,
+  // ElImageViewer,
   // ElInput,
   // ElInputNumber,
   // ElLink,
@@ -147,7 +164,6 @@ const components = [
   // ElPageHeader,
   // ElPagination,
   // ElPopconfirm,
-  // ElPopover,
   // ElPopper,
   // ElProgress,
   // ElRadio,
@@ -172,9 +188,17 @@ const components = [
   // ElTimeline,
   // ElTimelineItem,
   // ElTooltip,
-  // ElTransfer
+  // ElTransfer,
   // ElTree,
   // ElUpload,
+  // ElSpace,
+  // ElSkeleton,
+  // ElSkeletonItem,
+  // ElCheckTag,
+  // ElDescriptions,
+  // ElDescriptionsItem,
+  // ElResult,
+  // ElSelectV2,
 ];
 
 const plugins = [
@@ -183,6 +207,7 @@ const plugins = [
   // ElMessage
   // ElMessageBox,
   // ElNotification,
+  ElPopover
 ];
 import '@/assets/style/element-variables.scss';
 

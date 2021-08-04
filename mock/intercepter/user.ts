@@ -4,12 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:15:05
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-03 18:16:08
+ * @LastEditTime: 2021-08-04 15:33:23
  */
 import { Random } from 'better-mock';
 import { Application, Request, Response } from 'express';
 import select, { DataBaseOperator } from '../data/index';
-import { clearToken, decrypt } from './util';
+import { clearToken, decrypt, getToken, verifyToken } from './util';
 
 export default function(baseUrl: string, app: Application) {
   // 注册新用户
@@ -72,21 +72,45 @@ export default function(baseUrl: string, app: Application) {
   });
 
   // 获取用户信息
-  app.get(baseUrl + '/users/:username', (req: Request, res: Response) => {
-    const { username, type } = req.query;
+  app.get(baseUrl + '/users', (req: Request, res: Response) => {
+    let username: string = req.query.username as string;
+    if (username === '') {
+      if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
+      username = getToken(req.headers).username;
+    }
+    const type = parseInt(req.query.type as string);
     const user = select('users').findOne({ username });
-    if (user && user.isActive) {
-      return res.json({
-        username,
-        nickname: Random.natural(0, 1000000) % 2 ? Random.cword(2, 4) : Random.word(4, 8),
-        avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', 'test'),
-        registration_time: Random.datetime(),
-        email: Random.email('qq.com'),
-        recommend_count: Random.natural(0, 1000),
-        dynamic_count: Random.natural(0, 1000),
-        like_count: Random.natural(0, 1000),
-        fans_count: Random.natural(0, 1000)
-      });
+    if (type === 0) {
+      if (user && user.isActive) {
+        return res.json({
+          username,
+          nickname: Random.natural(0, 1000000) % 2 ? Random.cword(2, 4) : Random.word(4, 8),
+          avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', 'test'),
+          email: Random.email('qq.com'),
+          profession: '',
+          birthday: Random.datetime(),
+          gender: 1,
+          address: Random.province(),
+          city: Random.province(),
+          signature: Random.paragraph(5, 30),
+          qq: Random.natural(1000000000, 3000000000),
+          weibo: Random.word(5, 15)
+        });
+      }
+    } else if (type === 1) {
+      if (user && user.isActive) {
+        return res.json({
+          username,
+          nickname: Random.natural(0, 1000000) % 2 ? Random.cword(2, 4) : Random.word(4, 8),
+          avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', 'test'),
+          registration_time: Random.datetime(),
+          email: Random.email('qq.com'),
+          recommend_count: Random.natural(0, 1000),
+          dynamic_count: Random.natural(0, 1000),
+          like_count: Random.natural(0, 1000),
+          fans_count: Random.natural(0, 1000)
+        });
+      }
     } else return res.status(410).json({ error: 'User name error' });
   });
 }
