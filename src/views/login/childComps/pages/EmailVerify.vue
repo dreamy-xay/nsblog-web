@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-28 23:10:42
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-03 17:33:27
+ * @LastEditTime: 2021-08-04 10:24:02
 -->
 <template>
   <div class="email-verify">
@@ -208,23 +208,34 @@ export default defineComponent({
 
     .iconfont {
       font-size: 100px;
+      display: inline-block;
+      height: 60px;
       line-height: 60px;
       color: $green-1;
     }
 
     .main-content {
+      display: inline-block;
+      height: 27.2px;
+      line-height: 27.2px;
       margin-top: 24px;
       font-size: 24px;
       color: $green-1;
     }
 
     .sub-content {
+      display: inline-block;
+      height: 16px;
+      line-height: 16px;
       margin-top: 20px;
       font-size: 14px;
       color: $grey-8;
     }
 
     .email-content {
+      display: inline-block;
+      height: 16px;
+      line-height: 16px;
       margin-top: 10px;
       margin-bottom: 23px;
       font-size: 14px;

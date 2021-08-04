@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 14:36:04
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-03 23:11:51
+ * @LastEditTime: 2021-08-04 09:51:12
 -->
 
 <template>
@@ -59,7 +59,6 @@ export default defineComponent({
 .base-login-card {
   width: 480px;
   height: 520px;
-  overflow: hidden;
   padding: 80px 65px 60px;
   border-radius: $border-radius-0;
   box-shadow: $shadow-1;

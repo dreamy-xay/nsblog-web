@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 14:18:16
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-26 17:13:31
+ * @LastEditTime: 2021-08-04 10:29:16
 -->
 
 <template>
@@ -73,6 +73,9 @@ export default defineComponent({
 
   .login-copyright {
     position: absolute;
+    display: inline-block;
+    height: 16px;
+    line-height: 16px;
     font-size: 14px;
     color: $grey-0;
     bottom: 30px;

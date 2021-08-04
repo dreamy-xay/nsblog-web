@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 18:58:19
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-29 22:35:38
+ * @LastEditTime: 2021-08-04 10:33:50
 -->
 <template>
   <div class="success">
@@ -90,17 +90,25 @@ export default defineComponent({
 
     .iconfont {
       font-size: 180px;
+      display: inline-block;
+      height: 160px;
       line-height: 160px;
       color: $green-1;
     }
 
     .main-content {
+      display: inline-block;
+      height: 27.2px;
+      line-height: 27.2px;
       margin-top: 42px;
       font-size: 24px;
       color: $green-1;
     }
 
     .sub-content {
+      display: inline-block;
+      height: 18.4px;
+      line-height: 18.4px;
       margin-top: 22px;
       margin-bottom: 66px;
       font-size: 16px;
