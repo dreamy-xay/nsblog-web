@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:38:31
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-30 23:31:00
+ * @LastEditTime: 2021-08-04 15:31:25
  */
 import { post, get, del, put, RequestLifeCycle } from '@/network/request';
 import { encrypt } from '@/util/crypto';
@@ -17,7 +17,7 @@ import { encrypt } from '@/util/crypto';
  * @return {Promise<unknown>} 请求返回promise
  * @author: dreamy-xay
  */
-export function getUserInfo(username: string, type: number = 0, RLC: RequestLifeCycle = {}): Promise<unknown> {
+export function getUserInfo(username: string = '', type: number = 1, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return get({
     url: '/users',
     ...RLC,
