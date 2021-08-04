@@ -4,21 +4,22 @@
  * @Autor: Ban
  * @Date: 2021-07-19 18:32:43
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-04 15:46:30
+ * @LastEditTime: 2021-08-04 16:53:13
 -->
 <template>
   <div class="user">
     <div
       class="user-little-img"
-      @mouseenter="imgmissing"
-      @mouseleave="imgapear"
+      @mouseenter="avatarMissing"
     >
-      <div :style="{display:imgstyle}">
-        <img
-          v-if="isLogin"
-          :src="avatar"
-          alt="avatar"
-        />
+      <div v-show="avatarShow">
+        <a :href="'/users/' + username">
+          <img
+            v-if="isLogin"
+            :src="avatar"
+            alt="avatar"
+          />
+        </a>
         <div
           v-if="!isLogin"
           @click="$router.push({name: 'signIn'})"
@@ -29,17 +30,19 @@
     </div>
     <div
       v-if="isLogin"
-      class="user-toolbar"
-      :style="{display:toolbarstyle}"
-      @mouseenter="barapear"
-      @mouseleave="barmissing"
+      class="user-tool-bar"
+      :class="{'user-tool-bar-show': toolBarShow}"
+      :style="{display: toolBarDisplay}"
+      @mouseleave="barMissing"
     >
-      <div class="user-toolbar-top">
-        <a href=""><img
+      <div class="user-tool-bar-top">
+        <a :href="'/users/' + username">
+          <img
             :src="avatar"
-            alt=""
+            alt="avatar"
             class="bigImg"
-          ></a>
+          >
+        </a>
         <div
           v-text="username"
           class="name"
@@ -66,7 +69,7 @@
             </a></div>
         </div>
       </div>
-      <div class="user-toolbar-mid">
+      <div class="user-tool-bar-mid">
         <a
           href=""
           class="mid-left"
@@ -89,7 +92,7 @@
           <div> {{ dynamic_count ? dynamic_count : '--' }} </div>
         </a>
       </div>
-      <div class="user-toolbar-bottom">
+      <div class="user-tool-bar-bottom">
         <ul>
           <li
             v-for="(bottom, index) in toolbarBottom"
@@ -102,7 +105,7 @@
           </li>
         </ul>
       </div>
-      <div class="user-toolbar-exit">
+      <div class="user-tool-bar-exit">
         <a href=""><i class="iconfont blog-exit-door"></i> 退出</a>
       </div>
     </div>
@@ -122,16 +125,16 @@ export default defineComponent({
   name: 'user',
   setup() {
     const isLogin = ref(verifyToken().status); // 是否已登录
-    let avatar = ref('/home/avatarLoading.gif'); // 初始头像
-    let username = ref('');
-    let age = ref(0);
-    let experience = reactive([0, 0]);
-    let percent = ref(0);
-    let like_count = ref(0);
-    let recommend_count = ref(0);
-    let fans_count = ref(0);
-    let dynamic_count = ref(0);
-    let toolbarBottom = [
+    const avatar = ref('/home/avatarLoading.gif'); // 初始头像
+    const username = ref('');
+    const age = ref(0);
+    const experience = reactive([0, 0]);
+    const percent = ref(0);
+    const like_count = ref(0);
+    const recommend_count = ref(0);
+    const fans_count = ref(0);
+    const dynamic_count = ref(0);
+    const toolbarBottom = [
       {
         name: '个人中心',
         url: '',
@@ -153,29 +156,27 @@ export default defineComponent({
         url: '',
       },
     ];
-    let iconfonts = ['blog-gerenziliao', 'blog-xin', 'blog-shujutongji', 'blog-wenzhang', 'blog-shezhi1'];
-    let imgstyle = ref('');
-    let toolbarstyle = ref('');
+    const iconfonts = ['blog-gerenziliao', 'blog-xin', 'blog-shujutongji', 'blog-wenzhang', 'blog-shezhi1'];
+    const avatarShow = ref(true);
+    const toolBarShow = ref('');
+    const toolBarDisplay = ref('none');
 
     //avatar显示和隐藏
-    const imgmissing = () => {
+    function avatarMissing() {
       if (!isLogin.value) return;
-      imgstyle.value = 'none';
-      toolbarstyle.value = 'flex';
-    };
-    const imgapear = () => {
-      if (!isLogin.value) return;
-      imgstyle.value = '';
-      toolbarstyle.value = '';
-    };
-    const barmissing = () => {
-      imgstyle.value = '';
-      toolbarstyle.value = '';
-    };
-    const barapear = () => {
-      imgstyle.value = 'none';
-      toolbarstyle.value = 'flex';
-    };
+      avatarShow.value = false;
+      toolBarShow.value = true;
+      toolBarDisplay.value = 'flex';
+    }
+
+    function barMissing() {
+      avatarShow.value = true;
+      toolBarShow.value = false;
+
+      setTimeout(() => {
+        toolBarDisplay.value = 'none';
+      }, 300);
+    }
 
     onMounted(() => {
       getUserInfo()
@@ -185,17 +186,17 @@ export default defineComponent({
           like_count.value = data.like_count; //更新点赞数量
           fans_count.value = data.fans_count; //更新粉丝数量
           dynamic_count.value = data.dynamic_count; //更新动态数量
-          let a = new Date();
-          let b = parseInt(data.registration_time.substring(0, 4)); //注册时间_年
-          let c = a.getFullYear(); //现在时间_年
+          const a = new Date();
+          const b = parseInt(data.registration_time.substring(0, 4)); //注册时间_年
+          const c = a.getFullYear(); //现在时间_年
           age.value = c - b; //计算学龄_年
           //判断闰年，闰年366天，平年365天
-          let isRunnian = (c % 4 == 0 && c % 100 != 0) || c % 400 == 0;
+          const isRunnian = (c % 4 == 0 && c % 100 != 0) || c % 400 == 0;
           experience[1] = isRunnian ? 366 : 365;
           //获取注册_月
-          let d = parseInt(data.registration_time.substring(5, 7));
+          const d = parseInt(data.registration_time.substring(5, 7));
           //获取注册_日
-          let e = parseInt(data.registration_time.substring(8, 10));
+          const e = parseInt(data.registration_time.substring(8, 10));
           //  计算天数
           experience[0] = (function () {
             let month,
@@ -231,12 +232,11 @@ export default defineComponent({
       dynamic_count,
       toolbarBottom,
       iconfonts,
-      imgstyle,
-      toolbarstyle,
-      imgmissing,
-      imgapear,
-      barmissing,
-      barapear,
+      avatarShow,
+      toolBarShow,
+      toolBarDisplay,
+      avatarMissing,
+      barMissing,
       setpercent,
     };
   },
@@ -248,28 +248,58 @@ $avatarlitteImg: 36px;
 $avatarbigImg: 68px;
 $toolbarWidth: 240px;
 $fontcolor: $grey-11;
+
 .user {
   width: 32px;
   position: relative;
   color: $fontcolor;
   line-height: normal;
-  .litteimg {
+
+  .user-little-img {
     width: 50px;
     height: 50px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img,
+    div {
+      width: $avatarlitteImg;
+      height: $avatarlitteImg;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+
+    div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 14px;
+      background-color: $grey-1;
+      font-weight: 600;
+      color: $green-0;
+    }
   }
 
-  .user-toolbar {
+  .user-tool-bar {
     border-radius: 8px;
     box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.16);
     position: absolute;
     right: -106px;
     top: 50px;
+    display: flex;
     width: $toolbarWidth;
-    display: none;
     flex-direction: column;
     background: $grey-0;
+    opacity: 0;
+    transition: opacity 0.3s;
 
-    .user-toolbar-top {
+    &.user-tool-bar-show {
+      opacity: 1;
+    }
+
+    .user-tool-bar-top {
       text-align: center;
       border-bottom: 1px solid $grey-4;
 
@@ -319,10 +349,10 @@ $fontcolor: $grey-11;
         font-weight: 700;
         margin: 55px 0 22px 0;
       }
+
       @keyframes bigger {
         from {
-          transform: translate(0, -20px) scale(0.3);
-          //transform: translate(0, -20px);
+          transform: translate(0, -30px) scale(0.529);
           opacity: 0;
         }
         to {
@@ -330,6 +360,7 @@ $fontcolor: $grey-11;
           opacity: 1;
         }
       }
+
       .bigImg {
         height: $avatarbigImg;
         width: $avatarbigImg;
@@ -337,8 +368,7 @@ $fontcolor: $grey-11;
         position: absolute;
         top: -30px;
         left: 36%;
-        animation-name: bigger;
-        animation-duration: 0.5s;
+        animation: bigger 0.1s ease-out;
       }
 
       .top-bottom {
@@ -348,6 +378,7 @@ $fontcolor: $grey-11;
           float: left;
           line-height: normal;
           margin: 8px 0 8px 23px;
+
           .blog-zan {
             font-size: 24px;
             color: $green-0;
@@ -382,7 +413,7 @@ $fontcolor: $grey-11;
       }
     }
 
-    .user-toolbar-mid {
+    .user-tool-bar-mid {
       line-height: 8px;
       display: flex;
       padding: 14px 30px 14px 30px;
@@ -406,12 +437,13 @@ $fontcolor: $grey-11;
       }
     }
 
-    .user-toolbar-bottom {
+    .user-tool-bar-bottom {
       border-bottom: 1px solid $grey-4;
 
       ul li {
         line-height: 44px;
         display: block;
+
         &:hover {
           background: $grey-2;
 
@@ -436,7 +468,7 @@ $fontcolor: $grey-11;
       }
     }
 
-    .user-toolbar-exit {
+    .user-tool-bar-exit {
       line-height: 44px;
 
       &:hover {
@@ -460,30 +492,6 @@ $fontcolor: $grey-11;
           color: $grey-6;
         }
       }
-    }
-  }
-
-  .user-little-img {
-    width: $avatarlitteImg;
-    height: $avatarlitteImg;
-    overflow: hidden;
-    border-radius: 50%;
-    align-items: center;
-
-    img,
-    div {
-      width: 100%;
-      height: 100%;
-    }
-
-    div {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 14px;
-      background-color: $grey-1;
-      font-weight: 600;
-      color: $green-0;
     }
   }
 }
