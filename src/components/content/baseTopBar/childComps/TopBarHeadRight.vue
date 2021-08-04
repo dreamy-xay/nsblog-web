@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-07-20 11:01:33
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-04 14:24:30
+ * @LastEditTime: 2021-08-04 20:34:07
 -->
 
 <template>
@@ -28,8 +28,6 @@
 <script>
 /**
  * @description:  The right of TopBar
- * @param {*}
- * @return {*}
  * @author: Ban
  */
 import { ref } from 'vue';
@@ -55,23 +53,28 @@ export default defineComponent({
 $green0: $green-0;
 $green1: $green-1;
 $grey0: $grey-0;
+
 .base-top-bar-right {
   display: flex;
   line-height: 56px;
+
   .base-top-bar-right-menu {
     height: 58px;
     display: inline-block;
     letter-spacing: 1px;
+
     li {
       display: inline-block;
       vertical-align: middle;
       font-size: 16px;
       padding: 0 13px;
       cursor: pointer;
+
       &:hover {
         color: $green0;
       }
     }
+
     .noteshare {
       display: inline-block;
       background: $green0;

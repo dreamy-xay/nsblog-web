@@ -4,17 +4,25 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-04 13:03:40
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-04 15:52:15
+ * @LastEditTime: 2021-08-04 19:10:09
 -->
 <template>
   <div class="history">
+    <base-background />
     <base-top-bar />
+    <div class="history-inner">
+      <history-bar class="history-inner-bar" />
+      <history-content class="history-inner-content" />
+    </div>
   </div>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
+import BaseBackground from '@/components/content/baseBackground/BaseBackground';
 import BaseTopBar from '@/components/content/baseTopBar/BaseTopBar';
+import HistoryBar from '@/views/history/childComps/HistoryBar';
+import HistoryContent from '@/views/history/childComps/HistoryContent';
 
 /**
  * @description: history页面
@@ -24,7 +32,10 @@ import BaseTopBar from '@/components/content/baseTopBar/BaseTopBar';
 export default defineComponent({
   name: 'history',
   components: {
+    BaseBackground,
     BaseTopBar,
+    HistoryBar,
+    HistoryContent,
   },
 });
 </script>
@@ -33,7 +44,22 @@ export default defineComponent({
 .history {
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  overflow: auto;
+
+  .history-inner {
+    width: 1442px;
+    overflow-y: hidden;
+    overflow-x: none;
+    margin: 0 auto;
+
+    .history-inner-bar {
+      margin-top: 16px;
+    }
+
+    .history-inner-content {
+      margin-top: 16px;
+    }
+  }
 
   .animated {
     -webkit-animation-duration: 1s;
