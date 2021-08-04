@@ -4,16 +4,17 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-04 13:03:40
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-04 13:08:00
+ * @LastEditTime: 2021-08-04 15:52:15
 -->
 <template>
   <div class="history">
-
+    <base-top-bar />
   </div>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
+import BaseTopBar from '@/components/content/baseTopBar/BaseTopBar';
 
 /**
  * @description: history页面
@@ -22,6 +23,9 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'history',
+  components: {
+    BaseTopBar,
+  },
 });
 </script>
 
