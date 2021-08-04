@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 18:56:07
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-03 17:43:02
+ * @LastEditTime: 2021-08-04 10:18:36
 -->
 
 <template>
@@ -78,8 +78,13 @@ export default defineComponent({
       if (emailReg.test(email.value)) {
         exist({ email: email.value })
           .then((data) => {
-            if (data.emailExist)
-              emailSendVCode(email.value)
+            if (data.emailExist) {
+              const loading = msg.loading('邮箱验证成功，验证码发送中', { duration: 0 });
+              emailSendVCode(email.value, {
+                afterResopnse() {
+                  loading.destroy();
+                },
+              })
                 .then(() => {
                   const eventId = 'ForgotPassword' + Math.floor(Math.random() * 1000);
                   // 路由跳转
@@ -109,7 +114,7 @@ export default defineComponent({
                   console.log(error);
                   msg.error('发送验证码失败', { duration: 3000, closable: true });
                 });
-            else msg.warning('该邮箱未注册', { duration: 3000, closable: true });
+            } else msg.warning('该邮箱未注册', { duration: 3000, closable: true });
           })
           .catch((error) => {
             console.log(error);
@@ -139,6 +144,7 @@ export default defineComponent({
 .forgot-password {
   width: 100%;
   height: 100%;
+  overflow: hidden;
 
   .forgot-password-content {
     width: 100%;
@@ -150,17 +156,25 @@ export default defineComponent({
     justify-content: center;
 
     .iconfont {
+      display: inline-block;
+      height: 168px;
       font-size: 168px;
       line-height: 168px;
       color: $green-1;
     }
 
     .main-content {
+      display: inline-block;
+      height: 27.2px;
+      line-height: 27.2px;
       font-size: 24px;
       color: $green-1;
     }
 
     .sub-content {
+      display: inline-block;
+      height: 18.4px;
+      line-height: 18.4px;
       margin-top: 10px;
       font-size: 16px;
       color: $grey-6;
@@ -168,6 +182,9 @@ export default defineComponent({
     }
 
     .en-content {
+      display: inline-block;
+      height: 13.6px;
+      line-height: 13.6px;
       font-size: 12px;
       transform: scale(0.84);
       color: $grey-6;

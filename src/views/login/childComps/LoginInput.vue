@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 22:15:27
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-03 17:41:56
+ * @LastEditTime: 2021-08-04 10:27:27
 -->
 <template>
   <div class="login-input">
@@ -196,6 +196,9 @@ $error: $red-2;
 
   .login-input-eye {
     position: absolute;
+    display: inline-block;
+    height: 20px;
+    line-height: 20px;
     right: 5px;
     bottom: calc(50% - 9px);
     font-size: 18px;
