@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 14:36:04
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-04 09:51:12
+ * @LastEditTime: 2021-08-04 10:37:31
 -->
 
 <template>
@@ -68,23 +68,23 @@ export default defineComponent({
   &.base-login-card-active {
     @keyframes fadeInout {
       0% {
-        margin-right: 0;
+        margin-bottom: 0;
         opacity: 1;
       }
       25% {
-        margin-right: -20px;
+        margin-bottom: -20px;
         opacity: 0.5;
       }
       50% {
-        margin-right: -40px;
+        margin-bottom: -40px;
         opacity: 0;
       }
       75% {
-        margin-right: -20px;
+        margin-bottom: -20px;
         opacity: 0.5;
       }
       100% {
-        margin-right: 0;
+        margin-bottom: 0;
         opacity: 1;
       }
     }
