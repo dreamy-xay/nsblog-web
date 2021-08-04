@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 14:41:12
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-03 17:43:07
+ * @LastEditTime: 2021-08-04 20:55:05
 -->
 <template>
   <div class="sign-in">
@@ -77,6 +77,11 @@ import LoginLogo from '@/views/login/childComps/LoginLogo';
 import LoginInput from '@/views/login/childComps/LoginInput';
 import LoginButton from '@/views/login/childComps/LoginButton';
 import { useMessage } from 'naive-ui';
+
+/**
+ * @description: 登录卡片页面
+ * @author: dreamy-xay
+ */
 
 export default defineComponent({
   name: 'signIn',

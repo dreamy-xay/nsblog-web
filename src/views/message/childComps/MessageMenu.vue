@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 22:48:57
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-07-31 13:40:38
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-08-04 21:18:31
 -->
 <template>
   <div class="message-left">
@@ -164,9 +164,11 @@ $green0: $green-0;
     font-weight: 700;
     color: $grey7;
     transition: all 0.4s;
+
     .message-left-title2-iconfont {
       margin-right: 6px;
     }
+
     &:hover {
       color: $green0;
       cursor: pointer;

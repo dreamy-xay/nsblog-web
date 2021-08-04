@@ -4,15 +4,15 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:38:31
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-04 15:31:25
+ * @LastEditTime: 2021-08-04 20:36:21
  */
 import { post, get, del, put, RequestLifeCycle } from '@/network/request';
 import { encrypt } from '@/util/crypto';
 
 /**
  * @description: 获取用户信息
- * @param {string} username  用户名 `必传`
- * @param {number} type 请求数据类型 `默认为0`
+ * @param {string} username  用户名 `默认为null，后台通过token获取用户名`
+ * @param {number} type 请求数据类型 `默认为1`
  * @param {RequestLifeCycle} RLC  请求生命周期 `默认值为 {}`
  * @return {Promise<unknown>} 请求返回promise
  * @author: dreamy-xay

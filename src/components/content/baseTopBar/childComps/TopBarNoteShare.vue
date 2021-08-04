@@ -1,13 +1,13 @@
 <!--
- * @Description:   TopBarNoteShare
+ * @Description: TopBarNoteShare
  * @Version:
  * @Autor: Ban
  * @Date: 2021-07-29 15:53:25
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-04 14:40:51
+ * @LastEditTime: 2021-08-04 20:32:22
 -->
-<template>
 
+<template>
   <el-popover
     placement="bottom"
     :width="288"
@@ -39,13 +39,13 @@
 </template>
 
 <script>
+import { defineComponent, ref } from 'vue';
+
 /**
  * @description:  TopBar_笔记分享
- * @param {*}
- * @return {*}
  * @author: Ban
  */
-import { defineComponent, ref } from 'vue';
+
 export default defineComponent({
   setup() {
     const noteshare = [

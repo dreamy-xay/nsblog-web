@@ -3,14 +3,14 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-07-29 16:37:09
- * @LastEditors: Ban
- * @LastEditTime: 2021-08-02 13:19:12
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-08-04 20:53:29
 -->
 <template>
   <div class="base-top-bar-left">
     <div class="base-top-bar-logo">
       <a><img
-          src="@/../public/logo.png"
+          src="/logo.png"
           alt="logo"
         ></a>
     </div>
@@ -27,13 +27,15 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue';
+
 /**
  * @description:  The left of TopBar
  * @param {*}
  * @return {*}
  * @author: Ban
  */
-import { defineComponent } from 'vue';
+
 export default defineComponent({
   name: 'home',
   setup() {

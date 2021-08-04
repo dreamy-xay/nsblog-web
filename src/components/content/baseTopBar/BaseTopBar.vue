@@ -1,7 +1,7 @@
 <!--
  * @Author: Ban
  * @Date: 2021-07-19 12:47:11
- * @LastEditTime: 2021-08-04 14:21:40
+ * @LastEditTime: 2021-08-04 20:30:37
  * @LastEditors: dreamy-xay
  * @Description: In User Settings Edit
  * @FilePath:
@@ -21,10 +21,12 @@ import { defineComponent } from 'vue';
 import TopBarHeadRight from './childComps/TopBarHeadRight.vue';
 import TopBarHeadCenter from './childComps/TopBarHeadCenter.vue';
 import TopBarHeadLeft from './childComps/TopBarHeadLeft.vue';
+
 /**
  * @description:  首页顶部导航栏
  * @author: Ban
  */
+
 export default defineComponent({
   components: {
     TopBarHeadLeft,
@@ -44,6 +46,7 @@ $shadow: $shadow-0;
   background: $background-0;
   width: 100%;
   box-shadow: $shadow;
+  position: sticky;
 }
 
 .base-top-bar {
