@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 14:18:16
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-05 10:40:02
+ * @LastEditTime: 2021-08-05 14:01:32
 -->
 
 <template>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive } from 'vue';
+import { defineComponent } from 'vue';
 import BaseLoginCard from '@/components/common/baseLoginCard/BaseLoginCard.vue';
 
 /**
@@ -31,11 +31,6 @@ export default defineComponent({
   name: 'login',
   components: {
     BaseLoginCard,
-  },
-  setup() {
-    const data = {};
-
-    return data;
   },
 });
 </script>

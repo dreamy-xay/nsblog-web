@@ -4,17 +4,21 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-04 13:03:40
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-05 11:59:31
+ * @LastEditTime: 2021-08-05 13:51:10
 -->
 <template>
-  <base-view bind-class="history">
+  <base-view
+    background
+    top-bar
+    bind-class="history"
+  >
     <history-bar class="history-inner-bar" />
     <history-content class="history-inner-content" />
   </base-view>
 </template>
 
 <script>
-import { defineComponent, onMounted, ref } from 'vue';
+import { defineComponent } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import HistoryBar from '@/views/history/childComps/HistoryBar.vue';
 import HistoryContent from '@/views/history/childComps/HistoryContent.vue';
