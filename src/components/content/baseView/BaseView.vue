@@ -4,14 +4,14 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 11:51:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-05 13:25:06
+ * @LastEditTime: 2021-08-05 14:02:45
 -->
 <template>
   <div
     class="base-view"
     :style="{height: height + 'px', width: width + 'px'}"
   >
-    <el-scrollbar :height="height + 'px'">
+    <el-scrollbar>
       <div class="base-view-container">
         <base-background v-if="background" />
         <base-top-bar
@@ -24,8 +24,10 @@
         >
           <el-scrollbar>
             <div class="inner">
-              <div :class="bindClass">
-                <slot></slot>
+              <div>
+                <div :class="bindClass">
+                  <slot></slot>
+                </div>
               </div>
             </div>
           </el-scrollbar>
@@ -42,8 +44,8 @@ import BaseTopBar from '@/components/content/baseTopBar/BaseTopBar.vue';
 
 /**
  * @description: 基本页面框架
- * @param {Boolean} background 是否启用背景颜色 `默认为true,启用`
- * @param {Boolean} topBar 是否启用topBar `默认为true,启用`
+ * @param {Boolean} background 是否启用背景颜色 `默认为false,不启用`
+ * @param {Boolean} topBar 是否启用topBar `默认为false,不启用`
  * @param {String} bindClass 绑定类 `默认为null`
  * @author: dreamy-xay
  */
@@ -53,11 +55,11 @@ export default defineComponent({
   props: {
     background: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     topBar: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     bindClass: {
       type: String,
