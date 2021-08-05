@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 11:51:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-05 19:53:57
+ * @LastEditTime: 2021-08-05 21:23:59
 -->
 <template>
   <div
@@ -115,7 +115,7 @@ export default defineComponent({
   .base-view-container {
     width: 100%;
     height: 100%;
-    min-width: 1142px;
+    min-width: 1154px;
     overflow: hidden;
 
     .base-view-inner {
@@ -130,7 +130,7 @@ export default defineComponent({
         overflow: hidden;
 
         & > div {
-          width: 1142px;
+          width: 1154px;
           display: inline-block;
         }
       }
