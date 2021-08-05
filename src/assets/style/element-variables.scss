@@ -13,3 +13,4 @@ $--font-path: "~element-plus/lib/theme-chalk/fonts";
 
 // 按需引入  部分scss文件没有用到对应的变量可以不引用
 @import "~element-plus/packages/theme-chalk/src/button";
+@import "~element-plus/packages/theme-chalk/src/scrollbar";

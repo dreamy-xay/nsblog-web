@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 16:13:51
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-19 21:35:22
+ * @LastEditTime: 2021-08-05 11:24:52
  */
 
 import { debounce, throttle } from 'lodash';
@@ -35,7 +35,6 @@ export default (app: App): void => {
   app.directive('resize', {
     beforeMount(el: any, binding: any) {
       const { value, modifiers, arg }: any = binding;
-      console.log(modifiers, arg);
       const callback = (entries: any) => {
         value(entries[0]);
       };

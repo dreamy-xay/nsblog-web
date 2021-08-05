@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 18:50:47
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-03 18:04:31
+ * @LastEditTime: 2021-08-05 10:42:03
 -->
 <template>
   <div class="sign-up">
@@ -73,9 +73,9 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import router from '@/router';
-import LoginLogo from '@/views/login/childComps/LoginLogo';
-import LoginInput from '@/views/login/childComps/LoginInput';
-import LoginButton from '@/views/login/childComps/LoginButton';
+import LoginLogo from '@/views/login/childComps/LoginLogo.vue';
+import LoginInput from '@/views/login/childComps/LoginInput.vue';
+import LoginButton from '@/views/login/childComps/LoginButton.vue';
 import { signUp, emailSendVCode, exist } from '@/network/api/user';
 import events from '@/events';
 import { useMessage } from 'naive-ui';
