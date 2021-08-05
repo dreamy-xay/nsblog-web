@@ -4,19 +4,20 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-04 18:49:08
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-05 19:49:08
+ * @LastEditTime: 2021-08-05 22:54:03
 -->
 <template>
   <div class="history-content">
     <ul class="history-content-line clearfix">
       <li
         class="animated fade-in-up"
-        v-for="index of 10"
+        v-for="(item, index) in historyList"
         :key="index"
+        :style="{'animation-delay': (index + 1) / 10 + 's'}"
       >
         <history-item
           :index="index"
-          :data="{}"
+          :data="item"
         />
       </li>
     </ul>
@@ -24,7 +25,7 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, reactive } from 'vue';
 import HistoryItem from '@/views/history/childComps/HistoryItem.vue';
 
 /**
@@ -37,6 +38,78 @@ export default defineComponent({
   components: {
     HistoryItem,
   },
+  setup() {
+    const historyList = reactive([
+      {
+        history_id: 20,
+        time: '2021-7-6 12:24:00',
+        title: '数据结构和算法：终于可以用三种语言（C，C#，JavaScript）把图的广度优先遍历讲清楚了（推荐收藏）',
+        topic_tag: ['数据结构和算法'],
+        username: '刘一哥GIS',
+        type: 1,
+      },
+      {
+        history_id: 20,
+        time: '2021-8-5 22:52:00',
+        title: '数据结构和算法：终于可以用三种语言（C，C#，JavaScript）把图的广度优先遍历讲清楚了（推荐收藏）',
+        topic_tag: ['数据结构和算法'],
+        username: '刘一哥GIS',
+        type: 2,
+      },
+      {
+        history_id: 20,
+        time: '2021-7-6 12:24:00',
+        title: '数据结构和算法：终于可以用三种语言（C，C#，JavaScript）把图的广度优先遍历讲清楚了（推荐收藏）',
+        topic_tag: ['数据结构和算法'],
+        username: '刘一哥GIS',
+        type: 1,
+      },
+      {
+        history_id: 20,
+        time: '2021-7-6 12:24:00',
+        title: '数据结构和算法：终于可以用三种语言（C，C#，JavaScript）把图的广度优先遍历讲清楚了（推荐收藏）',
+        topic_tag: ['数据结构和算法'],
+        username: '刘一哥GIS',
+        type: 1,
+      },
+      {
+        history_id: 20,
+        time: '2021-7-6 12:24:00',
+        title: '数据结构和算法：终于可以用三种语言（C，C#，JavaScript）把图的广度优先遍历讲清楚了（推荐收藏）',
+        topic_tag: ['数据结构和算法'],
+        username: '刘一哥GIS',
+        type: 2,
+      },
+      {
+        history_id: 20,
+        time: '2021-7-6 12:24:00',
+        title: '数据结构和算法：终于可以用三种语言（C，C#，JavaScript）把图的广度优先遍历讲清楚了（推荐收藏）',
+        topic_tag: ['数据结构和算法'],
+        username: '刘一哥GIS',
+        type: 1,
+      },
+      {
+        history_id: 20,
+        time: '2021-7-6 12:24:00',
+        title: '数据结构和算法：终于可以用三种语言（C，C#，JavaScript）把图的广度优先遍历讲清楚了（推荐收藏）',
+        topic_tag: ['数据结构和算法'],
+        username: '刘一哥GIS',
+        type: 1,
+      },
+      {
+        history_id: 20,
+        time: '2021-7-6 12:24:00',
+        title: '数据结构和算法：终于可以用三种语言（C，C#，JavaScript）把图的广度优先遍历讲清楚了（推荐收藏）',
+        topic_tag: ['数据结构和算法'],
+        username: '刘一哥GIS',
+        type: 2,
+      },
+    ]);
+
+    return {
+      historyList,
+    };
+  },
 });
 </script>
 
@@ -44,7 +117,7 @@ export default defineComponent({
 .history-content {
   width: 100%;
   position: relative;
-  overflow: hidden;
+  display: inline-block;
 
   .history-content-line {
     list-style: none;
@@ -52,21 +125,18 @@ export default defineComponent({
     margin: 0 auto;
     width: 100%;
     position: relative;
-    overflow: hidden;
+    display: inline-block;
     z-index: 0;
     margin-bottom: 15px;
 
     &::before {
       background: $green-1;
       content: '';
-      left: 50%;
-      top: 80px;
-      bottom: 100px;
+      left: calc(50% - 1px);
+      top: 0;
+      bottom: 0;
       position: absolute;
       width: 2px;
-      margin-left: -1px;
-      margin-top: -10px;
-      height: 999999px;
       z-index: -99;
     }
 
@@ -74,44 +144,25 @@ export default defineComponent({
       display: block;
       width: 50%;
       position: relative;
-      padding-top: 60px;
+      margin-top: 165px;
       z-index: -1;
 
       &:nth-child(odd) {
         float: left;
         clear: left;
-        padding-right: 20px;
       }
 
       &:nth-child(even) {
         float: right;
         clear: right;
-        padding-left: 20px;
-      }
-
-      &:nth-child(1),
-      &:nth-child(2) {
-        padding-top: 60px;
-      }
-
-      &:nth-child(2n) {
-        margin-top: 60px;
       }
 
       &:nth-child(1) {
-        animation-delay: 0.1s;
+        margin-top: 18px;
       }
 
       &:nth-child(2) {
-        animation-delay: 0.2s;
-      }
-
-      &:nth-child(3) {
-        animation-delay: 0.3s;
-      }
-
-      &:nth-child(4) {
-        animation-delay: 0.4s;
+        margin-top: 77px;
       }
     }
   }
