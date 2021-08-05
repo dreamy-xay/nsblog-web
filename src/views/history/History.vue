@@ -4,12 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-04 13:03:40
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-05 13:51:10
+ * @LastEditTime: 2021-08-05 18:02:21
 -->
 <template>
   <base-view
-    background
-    top-bar
+    :background="true"
+    :top-bar="true"
     bind-class="history"
   >
     <history-bar class="history-inner-bar" />
@@ -40,16 +40,13 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .history {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-
   .history-inner-bar {
     margin-top: 16px;
   }
 
   .history-inner-content {
-    margin-top: 16px;
+    margin-top: 32px;
+    margin-bottom: 32px;
   }
 }
 </style>
