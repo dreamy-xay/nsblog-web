@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 14:18:16
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-04 10:29:16
+ * @LastEditTime: 2021-08-05 10:40:02
 -->
 
 <template>
@@ -20,7 +20,7 @@
 
 <script>
 import { defineComponent, ref, reactive } from 'vue';
-import BaseLoginCard from '@/components/common/baseLoginCard/BaseLoginCard';
+import BaseLoginCard from '@/components/common/baseLoginCard/BaseLoginCard.vue';
 
 /**
  * @description: 登录页面

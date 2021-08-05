@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 14:36:04
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-04 10:37:31
+ * @LastEditTime: 2021-08-05 10:40:14
 -->
 
 <template>
@@ -27,7 +27,6 @@ import { useRoute } from 'vue-router';
 
 /**
  * @description: 登录框动画抽象
- * @param {*}
  * @author: dreamy-xay
  */
 

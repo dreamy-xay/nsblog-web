@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-28 23:10:42
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-04 10:24:02
+ * @LastEditTime: 2021-08-05 10:40:26
 -->
 <template>
   <div class="email-verify">
@@ -61,7 +61,7 @@
 <script>
 import { computed, defineComponent, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import LoginButton from '@/views/login/childComps/LoginButton';
+import LoginButton from '@/views/login/childComps/LoginButton.vue';
 import { emailSendVCode, emailValidate } from '@/network/api/user';
 import events from '@/events';
 import { useMessage } from 'naive-ui';

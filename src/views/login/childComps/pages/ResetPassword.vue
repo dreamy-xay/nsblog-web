@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-30 15:53:04
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-03 17:42:53
+ * @LastEditTime: 2021-08-05 10:40:56
 -->
 <template>
   <div class="reset-password">
@@ -59,9 +59,9 @@
 import { defineComponent, ref } from 'vue';
 import router from '@/router';
 import { useRoute } from 'vue-router';
-import LoginLogo from '@/views/login/childComps/LoginLogo';
-import LoginInput from '@/views/login/childComps/LoginInput';
-import LoginButton from '@/views/login/childComps/LoginButton';
+import LoginLogo from '@/views/login/childComps/LoginLogo.vue';
+import LoginInput from '@/views/login/childComps/LoginInput.vue';
+import LoginButton from '@/views/login/childComps/LoginButton.vue';
 import events from '@/events';
 import { forgotPasswordChange } from '@/network/api/user';
 import { useMessage } from 'naive-ui';

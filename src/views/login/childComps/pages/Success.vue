@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 18:58:19
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-04 10:33:50
+ * @LastEditTime: 2021-08-05 10:42:12
 -->
 <template>
   <div class="success">
@@ -28,7 +28,7 @@
 <script>
 import { defineComponent } from 'vue';
 import { useRoute } from 'vue-router';
-import LoginButton from '@/views/login/childComps/LoginButton';
+import LoginButton from '@/views/login/childComps/LoginButton.vue';
 import events from '@/events';
 
 /**

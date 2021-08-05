@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 14:41:12
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-04 20:55:05
+ * @LastEditTime: 2021-08-05 10:41:43
 -->
 <template>
   <div class="sign-in">
@@ -73,9 +73,9 @@ import { defineComponent, ref } from 'vue';
 import router from '@/router';
 import { authLogin } from '@/network/api/auth';
 import { setToken, clearToken } from '@/network/token';
-import LoginLogo from '@/views/login/childComps/LoginLogo';
-import LoginInput from '@/views/login/childComps/LoginInput';
-import LoginButton from '@/views/login/childComps/LoginButton';
+import LoginLogo from '@/views/login/childComps/LoginLogo.vue';
+import LoginInput from '@/views/login/childComps/LoginInput.vue';
+import LoginButton from '@/views/login/childComps/LoginButton.vue';
 import { useMessage } from 'naive-ui';
 
 /**
