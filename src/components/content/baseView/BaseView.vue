@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 11:51:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-05 21:23:59
+ * @LastEditTime: 2021-08-05 21:26:36
 -->
 <template>
   <div
@@ -130,7 +130,8 @@ export default defineComponent({
         overflow: hidden;
 
         & > div {
-          width: 1154px;
+          padding: 0 6px;
+          width: 1142px;
           display: inline-block;
         }
       }
