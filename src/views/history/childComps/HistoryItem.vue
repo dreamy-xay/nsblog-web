@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 15:56:58
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-05 23:03:10
+ * @LastEditTime: 2021-08-06 12:25:02
 -->
 <template>
   <div
@@ -20,14 +20,21 @@
       <span>({{lastTime}})</span>
     </div>
     <div class="history-item-content">
-
+      <base-tag
+        :text="data.type === 1 ? '文章' : '问答'"
+        :color="styles.pink0"
+        :hollow="true"
+        role="button"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
-import { dateFormat, dateGetText } from '@/util/util';
+import { dateFormat } from '@/util/util';
+import BaseTag from '@/components/content/baseTag/BaseTag.vue';
+import styles from '@/assets/style/define.scss';
 
 /**
  * @description: 历史记录单条内容
@@ -36,6 +43,9 @@ import { dateFormat, dateGetText } from '@/util/util';
 
 export default defineComponent({
   name: 'historyItem',
+  components: {
+    BaseTag,
+  },
   props: {
     data: {
       type: Object,
@@ -47,8 +57,28 @@ export default defineComponent({
     },
   },
   setup(props) {
+    /**
+     * @description: 形式化日期
+     * @param {Date} date 形式化日期对象 `必传参数`
+     * @return {string} 返回形式化字符串
+     * @author: dreamy-xay
+     */
+    function dateGetText(date) {
+      const current = new Date();
+      const time = parseInt((current.getTime() - date.getTime()) / 1000 + '');
+      if (time <= 86400) {
+        if (current.getDay() !== date.getDay()) return '昨天' + ' ' + dateFormat('HH:MM', date);
+        else return '今天' + ' ' + dateFormat('HH:MM', date);
+      } else if (time <= 172800) {
+        if (new Date(current.getTime() - 86400000).getDay() === date.getDay())
+          return '昨天' + ' ' + dateFormat('HH:MM', date);
+        else return dateFormat('m月d日 HH:MM', date);
+      } else return dateFormat('m月d日 HH:MM', date);
+    }
+
     return {
-      firstTime: dateGetText(new Date(props.data.time)) + ' ' + dateFormat('HH:MM', new Date(props.data.time)),
+      styles,
+      firstTime: dateGetText(new Date(props.data.time)),
       lastTime: dateFormat('YY-mm-dd', new Date(props.data.time)),
     };
   },
@@ -89,7 +119,6 @@ export default defineComponent({
   }
 
   .history-item-info {
-    // width: 198px;
     padding: 0 10px;
     height: 30px;
     background: $grey-0;
@@ -132,6 +161,8 @@ export default defineComponent({
     background: $grey-0;
     width: 553px;
     height: 71px;
+    padding: 10px;
+    box-sizing: border-box;
     box-shadow: $shadow-0;
     border-radius: $border-radius-0;
     overflow: hidden;

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-04 18:49:08
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-05 22:54:03
+ * @LastEditTime: 2021-08-06 12:11:29
 -->
 <template>
   <div class="history-content">
@@ -58,7 +58,7 @@ export default defineComponent({
       },
       {
         history_id: 20,
-        time: '2021-7-6 12:24:00',
+        time: '2020-12-18 12:24:00',
         title: '数据结构和算法：终于可以用三种语言（C，C#，JavaScript）把图的广度优先遍历讲清楚了（推荐收藏）',
         topic_tag: ['数据结构和算法'],
         username: '刘一哥GIS',
@@ -90,7 +90,7 @@ export default defineComponent({
       },
       {
         history_id: 20,
-        time: '2021-7-6 12:24:00',
+        time: '2021-8-6 01:24:00',
         title: '数据结构和算法：终于可以用三种语言（C，C#，JavaScript）把图的广度优先遍历讲清楚了（推荐收藏）',
         topic_tag: ['数据结构和算法'],
         username: '刘一哥GIS',
