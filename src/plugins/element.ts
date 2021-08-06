@@ -3,9 +3,10 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-19 21:30:24
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-05 11:40:27
+ * @LastEditors: continue-hs
+ * @LastEditTime: 2021-08-05 21:40:39
  */
+// import { App } from 'vue';
 import { App } from 'vue';
 import 'dayjs/locale/zh-cn';
 import locale from 'element-plus/lib/locale';
@@ -56,7 +57,7 @@ import {
   // ElImageViewer,
   // ElInput,
   // ElInputNumber,
-  // ElLink,
+  ElLink,
   // ElMain,
   // ElMenu,
   // ElMenuItem,
@@ -80,10 +81,10 @@ import {
   // ElSteps,
   // ElSubmenu,
   // ElSwitch,
-  // ElTabPane,
+  ElTabPane,
   // ElTable,
   // ElTableColumn,
-  // ElTabs,
+  ElTabs,
   // ElTag,
   // ElTimePicker,
   // ElTimeSelect,
@@ -154,7 +155,7 @@ const components = [
   // ElImageViewer,
   // ElInput,
   // ElInputNumber,
-  // ElLink,
+  ElLink,
   // ElMain,
   // ElMenu,
   // ElMenuItem,
@@ -171,17 +172,17 @@ const components = [
   // ElRadioGroup,
   // ElRate,
   // ElRow,
-  ElScrollbar
+  ElScrollbar,
   // ElSelect,
   // ElSlider,
   // ElStep,
   // ElSteps,
   // ElSubmenu,
   // ElSwitch,
-  // ElTabPane,
+  ElTabPane,
   // ElTable,
   // ElTableColumn,
-  // ElTabs,
+  ElTabs
   // ElTag,
   // ElTimePicker,
   // ElTimeSelect,
