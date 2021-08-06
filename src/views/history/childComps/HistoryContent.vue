@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-04 18:49:08
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-06 12:11:29
+ * @LastEditTime: 2021-08-06 23:24:43
 -->
 <template>
   <div class="history-content">
@@ -13,11 +13,12 @@
         class="animated fade-in-up"
         v-for="(item, index) in historyList"
         :key="index"
-        :style="{'animation-delay': (index + 1) / 10 + 's'}"
+        :style="{'animation-delay': (index > 6 ? 0.7 : (index + 1) / 10) + 's'}"
       >
         <history-item
           :index="index"
           :data="item"
+          @delete="deleteItem(index)"
         />
       </li>
     </ul>
@@ -27,9 +28,12 @@
 <script>
 import { defineComponent, reactive } from 'vue';
 import HistoryItem from '@/views/history/childComps/HistoryItem.vue';
+import { getHistory, deleteHistory } from '@/network/api/history';
+import events from '@/events';
 
 /**
  * @description: 历史记录主要内容
+ * @param {String} eventId 滚动到底部事件触发id
  * @author: dreamy-xay
  */
 
@@ -38,76 +42,62 @@ export default defineComponent({
   components: {
     HistoryItem,
   },
-  setup() {
-    const historyList = reactive([
-      {
-        history_id: 20,
-        time: '2021-7-6 12:24:00',
-        title: '数据结构和算法：终于可以用三种语言（C，C#，JavaScript）把图的广度优先遍历讲清楚了（推荐收藏）',
-        topic_tag: ['数据结构和算法'],
-        username: '刘一哥GIS',
-        type: 1,
-      },
-      {
-        history_id: 20,
-        time: '2021-8-5 22:52:00',
-        title: '数据结构和算法：终于可以用三种语言（C，C#，JavaScript）把图的广度优先遍历讲清楚了（推荐收藏）',
-        topic_tag: ['数据结构和算法'],
-        username: '刘一哥GIS',
-        type: 2,
-      },
-      {
-        history_id: 20,
-        time: '2020-12-18 12:24:00',
-        title: '数据结构和算法：终于可以用三种语言（C，C#，JavaScript）把图的广度优先遍历讲清楚了（推荐收藏）',
-        topic_tag: ['数据结构和算法'],
-        username: '刘一哥GIS',
-        type: 1,
-      },
-      {
-        history_id: 20,
-        time: '2021-7-6 12:24:00',
-        title: '数据结构和算法：终于可以用三种语言（C，C#，JavaScript）把图的广度优先遍历讲清楚了（推荐收藏）',
-        topic_tag: ['数据结构和算法'],
-        username: '刘一哥GIS',
-        type: 1,
-      },
-      {
-        history_id: 20,
-        time: '2021-7-6 12:24:00',
-        title: '数据结构和算法：终于可以用三种语言（C，C#，JavaScript）把图的广度优先遍历讲清楚了（推荐收藏）',
-        topic_tag: ['数据结构和算法'],
-        username: '刘一哥GIS',
-        type: 2,
-      },
-      {
-        history_id: 20,
-        time: '2021-7-6 12:24:00',
-        title: '数据结构和算法：终于可以用三种语言（C，C#，JavaScript）把图的广度优先遍历讲清楚了（推荐收藏）',
-        topic_tag: ['数据结构和算法'],
-        username: '刘一哥GIS',
-        type: 1,
-      },
-      {
-        history_id: 20,
-        time: '2021-8-6 01:24:00',
-        title: '数据结构和算法：终于可以用三种语言（C，C#，JavaScript）把图的广度优先遍历讲清楚了（推荐收藏）',
-        topic_tag: ['数据结构和算法'],
-        username: '刘一哥GIS',
-        type: 1,
-      },
-      {
-        history_id: 20,
-        time: '2021-7-6 12:24:00',
-        title: '数据结构和算法：终于可以用三种语言（C，C#，JavaScript）把图的广度优先遍历讲清楚了（推荐收藏）',
-        topic_tag: ['数据结构和算法'],
-        username: '刘一哥GIS',
-        type: 2,
-      },
-    ]);
+  props: {
+    eventId: {
+      type: String,
+      required: true,
+    },
+  },
+  setup(props) {
+    let offset = 0; // 偏移量
+    let historyList = reactive([]); // 历史记录信息列表
+
+    // 获取历史记录
+    getHistory(0, offset, 20)
+      .then((data) => {
+        offset += data.history.length;
+        historyList.splice(0, 0, ...data.history);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    /**
+     * @description: 删除历史记录
+     * @param {number} index 删除历史记录索引 `v-for索引`
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function deleteItem(index) {
+      deleteHistory(historyList[index].history_id, historyList[index].type)
+        .then(() => {
+          historyList.splice(index, 1);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    /**
+     * @description:
+     * @param {*}
+     * @return {*}
+     * @author: dreamy-xay
+     */
+    events.on(props.eventId, () => {
+      getHistory(0, offset, 20)
+        .then((data) => {
+          offset += data.history.length;
+          historyList.splice(historyList.length, 0, ...data.history);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    });
 
     return {
       historyList,
+      deleteItem,
     };
   },
 });
@@ -121,13 +111,12 @@ export default defineComponent({
 
   .history-content-line {
     list-style: none;
-    padding: 50px 0 150px;
     margin: 0 auto;
+    padding: 50px 0 50px;
     width: 100%;
     position: relative;
     display: inline-block;
     z-index: 0;
-    margin-bottom: 15px;
 
     &::before {
       background: $green-1;

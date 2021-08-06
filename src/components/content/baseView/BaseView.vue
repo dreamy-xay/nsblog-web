@@ -4,14 +4,14 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 11:51:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-05 21:26:36
+ * @LastEditTime: 2021-08-06 23:22:05
 -->
 <template>
   <div
     class="base-view"
     :style="{height: height + 'px', width: width + 'px'}"
   >
-    <el-scrollbar>
+    <el-scrollbar @scroll="scroll($event, true)">
       <div class="base-view-container">
         <base-background v-if="background" />
         <base-top-bar
@@ -22,8 +22,11 @@
           class="base-view-inner"
           :style="{height: innerHeight + 'px'}"
         >
-          <el-scrollbar>
-            <div class="inner">
+          <el-scrollbar @scroll="scroll($event, false)">
+            <div
+              class="inner"
+              ref="innerRef"
+            >
               <div>
                 <div :class="bindClass">
                   <slot></slot>
@@ -47,6 +50,9 @@ import BaseTopBar from '@/components/content/baseTopBar/BaseTopBar.vue';
  * @param {Boolean} background 是否启用背景颜色 `默认为false,不启用`
  * @param {Boolean} topBar 是否启用topBar `默认为false,不启用`
  * @param {String} bindClass 绑定类 `默认为null`
+ * @param {Number} 滚动条触发底部最长延时 `默认1000ms`
+ * @event scroll 滚动监听事件，回调参数{scrollTop, scrollLeft}
+ * @event scrollToButtom 滚动到底部触发事件，无回调参数
  * @author: dreamy-xay
  */
 
@@ -65,14 +71,19 @@ export default defineComponent({
       type: String,
       default: null,
     },
+    delay: {
+      type: Number,
+      default: 1000,
+    },
   },
   components: {
     BaseTopBar,
     BaseBackground,
   },
-  setup(props) {
+  setup(props, context) {
     const width = ref(document.body.offsetWidth); // 容器宽度设置
     const height = ref(document.body.offsetHeight); // 容器高度设置
+    const innerRef = ref(null); // inner ref
     const innerHeight = ref(height.value); // 内部容器高度设置
     const topBarRef = ref(null); // topBar的ref
     let topBarHeight = 0; // 获取topBar高度
@@ -92,11 +103,36 @@ export default defineComponent({
       innerHeight.value = height.value - topBarHeight;
     };
 
+    let scrollLeft = 0; // 滚动条位置
+    let scrollTop = 0;
+    let timer = null; // 到底触发计时器
+
+    /**
+     * @description: 滚动事件监听
+     * @param {object} e 滚动事件回调参数 `默认组件`
+     * @param {boolean} hasLeft 滚动是否 scrollLeft 生效
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function scroll(e, hasLeft) {
+      if (hasLeft) scrollLeft = (e.scrollLeft / 100) * width.value;
+      else scrollTop = (e.scrollTop / 100) * innerHeight.value;
+      context.emit('scroll', { scrollTop, scrollLeft });
+      if (!timer && scrollTop + innerHeight.value >= innerRef.value.offsetHeight - 1) {
+        context.emit('scrollToBottom');
+        timer = setTimeout(() => {
+          timer = null;
+        }, props.delay);
+      }
+    }
+
     return {
       innerHeight,
       topBarRef,
+      innerRef,
       width,
       height,
+      scroll,
     };
   },
 });

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 14:41:12
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-05 10:41:43
+ * @LastEditTime: 2021-08-06 23:12:43
 -->
 <template>
   <div class="sign-in">
@@ -154,7 +154,7 @@ export default defineComponent({
         authLogin(username.value, password.value)
           .then((data) => {
             setToken(data.token);
-            router.push({ name: 'home' });
+            router.back();
           })
           .catch((error) => {
             console.log(error);
