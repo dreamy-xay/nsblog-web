@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 10:01:23
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-03 12:50:43
+ * @LastEditTime: 2021-08-06 11:03:44
  */
 
 import { Application, Request, Response } from 'express';
@@ -31,6 +31,7 @@ export default function(baseUrl: string, app: Application) {
         while (cs--) tagList.push(Random.natural(0, 2) ? Random.cword(4, 6) : Random.word(5, 7));
         ans.push({
           history_id: Random.increment(),
+          id: Random.id(),
           time: Random.datetime(),
           title: Random.natural(0, 3) ? Random.ctitle(7, 15) : Random.title(7, 12),
           topic_tag: tagList,
@@ -38,7 +39,9 @@ export default function(baseUrl: string, app: Application) {
           ...type
         });
       }
-      return ans;
+      return ans.sort((a: Record<string, unknown>, b: Record<string, unknown>) => {
+        return new Date(b.time as string).getTime() - new Date(a.time as string).getTime();
+      });
     }
 
     if (type == 0) return res.json({ history: getRandom(Random.natural(0, parseInt(limit as string))) });
@@ -47,7 +50,15 @@ export default function(baseUrl: string, app: Application) {
     else return res.status(403).json({ error: 'error' });
   });
 
-  // 删除历史记录
+  // 删除某条历史记录
+  app.delete(baseUrl + '/history', (req: Request, res: Response) => {
+    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
+    const username: string = getToken(req.headers).username;
+    console.log(`delete all history: username ${username}   success`);
+    return res.send();
+  });
+
+  // 删除某条历史记录
   app.delete(baseUrl + '/history/:history_id', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const { history_id } = req.params;
