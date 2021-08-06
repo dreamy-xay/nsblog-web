@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 14:18:16
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-05 14:09:39
+ * @LastEditTime: 2021-08-05 14:50:51
 -->
 
 <template>
@@ -31,6 +31,11 @@ export default defineComponent({
   name: 'login',
   components: {
     BaseLoginCard,
+  },
+  setup() {
+    const data = {};
+
+    return data;
   },
 });
 </script>
