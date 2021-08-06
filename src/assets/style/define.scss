@@ -43,3 +43,51 @@ $shadow-2: 0 0 6px $green-1;
 
 $border-radius-0: 8px;
 $border-radius-1: 4px;
+
+:export {
+    /* 全局颜色 */
+    grey0: $grey-0;
+    grey1: $grey-1;
+    grey2: $grey-2;
+    grey3: $grey-3;
+    grey4: $grey-4;
+    grey5: $grey-5;
+    grey6: $grey-6;
+    grey7: $grey-7;
+    grey8: $grey-8;
+    grey9: $grey-9;
+    grey10: $grey-10;
+    grey11: $grey-11;
+
+    green0: $green-0;
+    green1: $green-1;
+    green2: $green-2;
+    green3: $green-3;
+    green4: $green-4;
+
+    orange0: $orange-0;
+    orange1: $orange-1;
+
+    pink0: $pink-0;
+
+    red0: $red-0;
+    red1: $red-1;
+    red2: $red-2;
+    red3: $red-3;
+    red4: $red-4;
+
+    blue0: $blue-0;
+    blue1: $blue-1;
+
+    purple0: $purple-0;
+    purple1: $purple-1;
+    purple2: $purple-2;
+
+    /* 全局样式 */
+    shadow0: $shadow-0;
+    shadow1: $shadow-1;
+    shadow2: $shadow-2;
+
+    borderRadius0: $border-radius-0;
+    borderRadius1: $border-radius-1;
+}

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 18:50:47
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-05 10:42:03
+ * @LastEditTime: 2021-08-05 20:47:53
 -->
 <template>
   <div class="sign-up">
