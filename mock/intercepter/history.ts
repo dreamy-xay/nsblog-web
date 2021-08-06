@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 10:01:23
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-06 11:03:44
+ * @LastEditTime: 2021-08-06 21:46:46
  */
 
 import { Application, Request, Response } from 'express';
@@ -33,7 +33,7 @@ export default function(baseUrl: string, app: Application) {
           history_id: Random.increment(),
           id: Random.id(),
           time: Random.datetime(),
-          title: Random.natural(0, 3) ? Random.ctitle(7, 15) : Random.title(7, 12),
+          title: Random.natural(0, 3) ? Random.ctitle(15, 45) : Random.title(7, 12),
           topic_tag: tagList,
           username: Random.natural(0, 1) ? Random.cname() : Random.name(),
           ...type
@@ -50,7 +50,7 @@ export default function(baseUrl: string, app: Application) {
     else return res.status(403).json({ error: 'error' });
   });
 
-  // 删除某条历史记录
+  // 删除全部历史记录
   app.delete(baseUrl + '/history', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
