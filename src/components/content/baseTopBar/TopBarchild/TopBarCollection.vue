@@ -4,11 +4,12 @@
  * @Autor: continue-hs
  * @Date: 2021-07-22 18:50:30
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-08-05 21:53:16
+ * @LastEditTime: 2021-08-06 11:32:39
 -->
 
 <template>
   <div class="top-bar-collection">
+
     <el-popover
       offset="18"
       placement="bottom"
@@ -45,18 +46,18 @@
               <div
                 class="blank"
                 v-if="item.count === 0"
-              >该收藏夹还没有收藏内容哦~</div>
+              >
+                该收藏夹还没有收藏内容哦~
+              </div>
               <div
                 v-for="(value,index) in item.collections"
                 :key=index
                 class="collection-right"
               >
-
                 <el-link
                   :underline=false
                   :href=value.link
                   target="_blank"
-                  style="text-align:left"
                 >
                   <div class="collection">
                     <i
@@ -81,9 +82,10 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref, onMounted } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { getCollections } from '@/network/api/collections';
-
+// import { verifyToken } from '@/network/token';
+// import { useRouter, useRoute } from 'vue-router';
 /**
  * @description:  收藏栏弹窗
  * @author: continue-hs
@@ -93,7 +95,8 @@ export default defineComponent({
   name: 'basetopBarCollection',
   setup() {
     const activeId = ref(0);
-    let favorites = ref();
+    const favorites = ref();
+    // const isLogin = ref(verifyToken().status); // 是否已登录
 
     /**
      * @description: 获取所有收藏夹信息
@@ -104,9 +107,15 @@ export default defineComponent({
       console.log(res);
       favorites.value = res.favorites;
     });
+
+    // function signclick() {
+    //   router.push({ name: 'signIn' });
+    // }
+
     return {
       activeId,
       favorites,
+      // isLogin,
     };
   },
 });
@@ -124,7 +133,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 @mixin font-style($size: 16px, $color: $grey-11) {
   font-size: $size;
-  font-family: Arial, Arial-Regular;
   font-weight: 400;
   color: $color;
 }
@@ -136,39 +144,44 @@ export default defineComponent({
 
 .top-bar-collection-header {
   @include font-style;
+  &:hover {
+    color: $green-0;
+  }
 }
 
-::v-deep .el-tabs__item {
-  border-width: 0;
-  padding: 0;
-  @include size(161px, 44px);
-  line-height: 44px;
-  @include font-style;
-  display: inline-block;
-  text-align: justify;
-
-  &:hover {
-    background: $grey-2;
-  }
-
-  &.is-active {
-    color: $grey-0;
-    background: $green-0;
-  }
-
-  .left {
-    position: absolute;
-    left: 15px;
+::v-deep .el-tabs {
+  &__item {
+    border-width: 0;
+    padding: 0;
+    @include size(161px, 44px);
+    line-height: 44px;
+    @include font-style;
     display: inline-block;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    width: 115px;
-  }
+    text-align: justify;
 
-  .right {
-    position: absolute;
-    right: 11px;
+    &:hover {
+      background: $grey-2;
+    }
+
+    &.is-active {
+      color: $grey-0;
+      background: $green-0;
+    }
+
+    .left {
+      position: absolute;
+      left: 15px;
+      display: inline-block;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      width: 115px;
+    }
+
+    .right {
+      position: absolute;
+      right: 11px;
+    }
   }
 }
 
@@ -210,12 +223,14 @@ export default defineComponent({
   display: inline-block;
   white-space: nowrap;
   text-overflow: ellipsis;
-  // word-wrap: keep-all;
 }
 
-::v-deep .el-tabs__header.is-left {
-  margin-right: 0;
-}
+// ::v-deep .el-tabs__header.is-left {
+//   margin-right: 0;
+//   height: 401px;
+//   overflow: hidden;
+//   padding: 0;
+// }
 
 .collection-right {
   @include font-style;

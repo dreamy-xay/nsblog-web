@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-07-20 11:01:33
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-04 20:34:07
+ * @LastEditors: continue-hs
+ * @LastEditTime: 2021-08-06 09:29:38
 -->
 
 <template>
@@ -13,9 +13,13 @@
       <li>
         <top-bar-avatar />
       </li>
-      <li>消息</li>
+      <li>
+        <top-bar-message />
+      </li>
       <li>动态</li>
-      <li>收藏</li>
+      <li>
+        <top-bar-collection />
+      </li>
       <li>历史</li>
       <li>创作中心</li>
       <li>
@@ -33,12 +37,16 @@
 import { ref } from 'vue';
 import { defineComponent } from '@vue/runtime-core';
 import TopBarAvatar from './TopBarAvatar.vue';
-import TopBarNoteShare from './TopBarNoteShare';
+import TopBarNoteShare from './TopBarNoteShare.vue';
+import TopBarCollection from '@/components/content/baseTopBar/TopBarchild/TopBarCollection.vue';
+import TopBarMessage from '@/components/content/baseTopBar/TopBarchild/TopBarMessage.vue';
 export default defineComponent({
   name: 'TopBarHeadRight',
   components: {
     TopBarAvatar,
     TopBarNoteShare,
+    TopBarMessage,
+    TopBarCollection,
   },
   setup() {
     let isNoteshare = ref(true);

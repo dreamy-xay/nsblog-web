@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-05 21:23:32
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-08-05 22:00:58
+ * @LastEditTime: 2021-08-06 09:24:58
 -->
 
 <template>
@@ -20,7 +20,10 @@
     >
 
       <template #reference>
-        <div class="top-bar-message-header">
+        <div
+          class="top-bar-message-header"
+          @click="$router.push({name: 'signIn'})"
+        >
           消息
         </div>
       </template>
@@ -45,7 +48,7 @@
 </template>
 
 <script>
-import { defineComponent, reactive } from 'vue';
+import { defineComponent } from 'vue';
 
 /**
  * @description:  消息栏弹窗
@@ -102,7 +105,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 @mixin font-style($size: 16px, $color: $grey-11) {
   font-size: $size;
-  font-family: Arial, Arial-Regular;
   font-weight: 400;
   text-align: center;
   color: $color;
@@ -115,6 +117,9 @@ export default defineComponent({
 
 .top-bar-message-header {
   @include font-style;
+  &:hover {
+    color: $green-0;
+  }
 }
 
 .top-bar-message-contents {
