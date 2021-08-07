@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-19 21:30:24
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-05 11:40:27
+ * @LastEditTime: 2021-08-07 11:18:11
  */
 import { App } from 'vue';
 import 'dayjs/locale/zh-cn';
@@ -209,6 +209,11 @@ const plugins = [
   // ElNotification,
   ElPopover
 ];
+
+const directives = [
+  // { key: 'infinite-scroll', value: ElInfiniteScroll }
+];
+
 import '@/assets/style/element-variables.scss';
 
 export default (app: App) => {
@@ -222,5 +227,9 @@ export default (app: App) => {
 
   plugins.forEach(plugin => {
     app.use(plugin);
+  });
+
+  directives.forEach(directive => {
+    app.directive(directive.key, directive.value);
   });
 };

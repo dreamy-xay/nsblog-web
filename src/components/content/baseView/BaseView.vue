@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 11:51:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-06 23:22:05
+ * @LastEditTime: 2021-08-07 11:17:27
 -->
 <template>
   <div
@@ -50,7 +50,9 @@ import BaseTopBar from '@/components/content/baseTopBar/BaseTopBar.vue';
  * @param {Boolean} background 是否启用背景颜色 `默认为false,不启用`
  * @param {Boolean} topBar 是否启用topBar `默认为false,不启用`
  * @param {String} bindClass 绑定类 `默认为null`
- * @param {Number} 滚动条触发底部最长延时 `默认1000ms`
+ * @param {Number} scrollDelay 滚动条触发底部最长延时 `默认200ms`
+ * @param {Number} scrollDistance 触发加载的距离阈值，单位为px `默认0.8px`
+ * @param {Boolean} scrollDisabled 是否禁用滚动底部触发 `默认不禁用`
  * @event scroll 滚动监听事件，回调参数{scrollTop, scrollLeft}
  * @event scrollToButtom 滚动到底部触发事件，无回调参数
  * @author: dreamy-xay
@@ -71,9 +73,17 @@ export default defineComponent({
       type: String,
       default: null,
     },
-    delay: {
+    scrollDelay: {
       type: Number,
-      default: 1000,
+      default: 200,
+    },
+    scrollDistance: {
+      type: Number,
+      default: 0.8,
+    },
+    scrollDisabled: {
+      type: Boolean,
+      default: false,
     },
   },
   components: {
@@ -118,11 +128,15 @@ export default defineComponent({
       if (hasLeft) scrollLeft = (e.scrollLeft / 100) * width.value;
       else scrollTop = (e.scrollTop / 100) * innerHeight.value;
       context.emit('scroll', { scrollTop, scrollLeft });
-      if (!timer && scrollTop + innerHeight.value >= innerRef.value.offsetHeight - 1) {
+      if (
+        !props.scrollDisabled &&
+        !timer &&
+        scrollTop + innerHeight.value >= innerRef.value.offsetHeight - props.scrollDistance
+      ) {
         context.emit('scrollToBottom');
         timer = setTimeout(() => {
           timer = null;
-        }, props.delay);
+        }, props.scrollDelay);
       }
     }
 
