@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 10:01:23
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-06 21:46:46
+ * @LastEditTime: 2021-08-07 12:44:06
  */
 
 import { Application, Request, Response } from 'express';
@@ -44,9 +44,32 @@ export default function(baseUrl: string, app: Application) {
       });
     }
 
-    if (type == 0) return res.json({ history: getRandom(Random.natural(0, parseInt(limit as string))) });
-    else if (type == 1) return res.json({ history: getRandom(Random.natural(0, parseInt(limit as string)), false) });
-    else if (type == 2) return res.json({ history: getRandom(Random.natural(0, parseInt(limit as string)), false) });
+    if (type == 0)
+      return res.json({
+        history: getRandom(
+          parseInt(offset as string) >= 89
+            ? 0
+            : Math.min(parseInt(limit as string), 89 - parseInt(offset as string) + 1)
+        )
+      });
+    else if (type == 1)
+      return res.json({
+        history: getRandom(
+          parseInt(offset as string) >= 83
+            ? 0
+            : Math.min(parseInt(limit as string), 83 - parseInt(offset as string) + 1),
+          false
+        )
+      });
+    else if (type == 2)
+      return res.json({
+        history: getRandom(
+          parseInt(offset as string) >= 83
+            ? 0
+            : Math.min(parseInt(limit as string), 83 - parseInt(offset as string) + 1),
+          false
+        )
+      });
     else return res.status(403).json({ error: 'error' });
   });
 

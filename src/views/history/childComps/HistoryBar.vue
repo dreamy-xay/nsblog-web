@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-04 18:45:12
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-05 15:54:44
+ * @LastEditTime: 2021-08-07 13:07:56
 -->
 
 <template>
@@ -55,6 +55,8 @@
 
 <script>
 import { defineComponent, ref } from 'vue';
+import events from '@/events';
+import { modifySetting } from '@/network/api/setting';
 
 /**
  * @description: 历史记录顶部栏
@@ -92,7 +94,11 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function stopHistory() {
-      console.log('stopHistory');
+      modifySetting({
+        history_record: false,
+      }).catch((error) => {
+        console.log(error);
+      });
     }
     /**
      * @description: 清空全部历史记录
@@ -100,7 +106,7 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function clearHistory() {
-      console.log('clearHistory');
+      events.emit('HistoryBar-clearAllHistory');
     }
 
     return {
