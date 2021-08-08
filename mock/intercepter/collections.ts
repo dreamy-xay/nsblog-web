@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 11:59:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-03 13:47:36
+ * @LastEditTime: 2021-08-08 10:23:24
  */
 
 import { Application, Request, Response } from 'express';
@@ -21,6 +21,7 @@ export default function(baseUrl: string, app: Application) {
       const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
       for (let i: number = 0; i < limit; ++i)
         ans.push({
+          id: Random.id(),
           title: Random.natural(0, 3) ? Random.ctitle(7, 15) : Random.title(7, 12),
           type: Random.natural(1, 2)
         });

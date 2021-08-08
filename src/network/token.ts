@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-28 16:37:01
+ * @LastEditTime: 2021-08-07 20:14:01
  */
 
 import store from 'storejs';
@@ -14,7 +14,7 @@ import { decrypt, encrypt } from '@/util/crypto';
 export default store;
 
 /**
- * @description:
+ * @description: 验证token
  * @param {string} originToken  源token，即从浏览器获取的token(被JSON.stringify化的对象) `默认自动从浏览器获取`
  * @return {{ status: boolean; token: string }} 返回一个对象 内置 status,token 属性，status为token是否有效状态，token为获取的最初由后台发送过来的token
  * @author: dreamy-xay
