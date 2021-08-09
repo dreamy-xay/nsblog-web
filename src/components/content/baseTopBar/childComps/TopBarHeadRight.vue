@@ -3,94 +3,85 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-07-20 11:01:33
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-04 20:34:07
+ * @LastEditors: Ban
+ * @LastEditTime: 2021-08-06 13:35:08
 -->
 
 <template>
-  <div class="base-top-bar-right">
-    <ul class="base-top-bar-right-menu">
-      <li>
+  <div class="top-bar-head-right">
+    <div class="top-bar-head-right-menu">
+      <div>
         <top-bar-avatar />
-      </li>
-      <li>消息</li>
-      <li>动态</li>
-      <li>收藏</li>
-      <li>历史</li>
-      <li>创作中心</li>
-      <li>
+      </div>
+      <div @click="routeToMessage">消息</div>
+      <div>动态</div>
+      <div>收藏</div>
+      <div>历史</div>
+      <div>创作中心</div>
+      <div>
         <top-bar-note-share />
-      </li>
-    </ul>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-/**
- * @description:  The right of TopBar
- * @author: Ban
- */
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { defineComponent } from '@vue/runtime-core';
 import TopBarAvatar from './TopBarAvatar.vue';
 import TopBarNoteShare from './TopBarNoteShare';
+
+/**
+ * @description:  首页顶部之右边部分组件
+ * @author: Ban
+ */
+
 export default defineComponent({
   name: 'TopBarHeadRight',
   components: {
     TopBarAvatar,
     TopBarNoteShare,
   },
+
   setup() {
     let isNoteshare = ref(true);
+    const router = useRouter();
+    /**
+     * @description: 路由跳转到Message页面
+     * @author: Ban
+     */
+    function routeToMessage() {
+      router.push('/message');
+    }
     return {
       isNoteshare,
+      routeToMessage,
     };
   },
 });
 </script>
 
 <style lang="scss" scoped>
-$green0: $green-0;
-$green1: $green-1;
-$grey0: $grey-0;
-
-.base-top-bar-right {
+.top-bar-head-right {
   display: flex;
   line-height: 56px;
 
-  .base-top-bar-right-menu {
+  .top-bar-head-right-menu {
     height: 58px;
     display: inline-block;
     letter-spacing: 1px;
 
-    li {
+    div {
       display: inline-block;
       vertical-align: middle;
       font-size: 16px;
       padding: 0 13px;
       cursor: pointer;
+      transition: all 0.1s linear;
 
       &:hover {
-        color: $green0;
-      }
-    }
-
-    .noteshare {
-      display: inline-block;
-      background: $green0;
-      text-align: center;
-      height: 36px;
-      width: 96px;
-      line-height: 36px;
-      border-radius: 3px;
-      color: $grey0;
-      cursor: pointer;
-      position: relative;
-      &:hover {
-        background: $green1;
-      }
-      li {
-        color: $grey0;
+        color: $green-0;
       }
     }
   }
