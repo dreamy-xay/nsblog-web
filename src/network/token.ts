@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-07 20:14:01
+ * @LastEditTime: 2021-08-10 14:53:44
  */
 
 import store from 'storejs';
@@ -14,22 +14,33 @@ import { decrypt, encrypt } from '@/util/crypto';
 export default store;
 
 /**
- * @description: 验证token
- * @param {string} originToken  源token，即从浏览器获取的token(被JSON.stringify化的对象) `默认自动从浏览器获取`
- * @return {{ status: boolean; token: string }} 返回一个对象 内置 status,token 属性，status为token是否有效状态，token为获取的最初由后台发送过来的token
+ * @description: verifyToken 返回值接口
  * @author: dreamy-xay
  */
-export function verifyToken(originToken: string = store.get('token')): { status: boolean; token: string } {
+export interface TokenInfo {
+  status: boolean;
+  token?: string;
+  username?: string;
+}
+
+/**
+ * @description: 验证token
+ * @param {string} originToken  源token，即从浏览器获取的token(被JSON.stringify化的对象) `默认自动从浏览器获取`
+ * @return {TokenInfo} 返回一个对象 内置 status,token,username(后两者仅status为true时才有属性) 属性，status为token是否有效状态，token为获取的最初由后台发送过来的token,username为登录用户名
+ * @author: dreamy-xay
+ */
+export function verifyToken(originToken: string = store.get('token')): TokenInfo {
   if (originToken) {
-    const { token, code, startTime, expires } = JSON.parse(originToken);
-    if (token !== null && code !== null && startTime !== null && expires !== null)
-      if (startTime + expires * 1000 >= new Date().getTime()) return { status: token === decrypt(code), token };
+    const { token, code, data, startTime, expires } = JSON.parse(originToken);
+    if (token !== null && code !== null && data !== null && startTime !== null && expires !== null)
+      if (startTime + expires * 1000 >= new Date().getTime())
+        return { status: token === decrypt(code), token, username: decrypt(data) };
       else {
         store.remove('token');
-        return { status: false, token: '' };
+        return { status: false };
       }
-    else return { status: false, token: '' };
-  } else return { status: false, token: '' };
+    else return { status: false };
+  } else return { status: false };
 }
 
 /**
@@ -45,15 +56,17 @@ export function getToken(): string {
 
 /**
  * @description: 设置token值
- * @param {string} token 后台返回的token
+ * @param {string} token 后台返回的token `必传参数`
+ * @param {string} username 后台返回用户名 `必传参数`
  * @param {number} expires  token从现在起有效期限(以秒记) `默认为172800(2天)`
  * @param {string} tokenKey token存入本地浏览器 localStorage 中的键值 `默认为'token'`
  * @return {void}
  * @author: dreamy-xay
  */
-export function setToken(token: string, expires = 172800, tokenKey = 'token'): void {
+export function setToken(token: string, username: string, expires = 172800, tokenKey = 'token'): void {
   const options: unknown = {
     token,
+    data: encrypt(username),
     code: encrypt(token),
     startTime: new Date().getTime(),
     expires

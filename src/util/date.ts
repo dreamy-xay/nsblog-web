@@ -1,10 +1,10 @@
 /*
- * @Description: 工具函数
+ * @Description: 日期处理工具函数
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 22:17:07
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-06 10:40:12
+ * @LastEditTime: 2021-08-10 16:35:59
  */
 
 /**
