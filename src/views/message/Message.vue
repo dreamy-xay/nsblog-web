@@ -4,32 +4,50 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-28 13:11:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-07-30 23:26:26
+ * @LastEditTime: 2021-08-09 22:04:27
 -->
 <template>
 
-  <div :class="'message'">
-    <div class='message-center'>
+  <base-view
+    :background="true"
+    :top-bar="true"
+    bind-class="message"
+  >
+
+    <div class="message-center">
+
       <div class="message-center-left">
-        <!-- 由MessageLeft组件传输数据到父组件 -->
-        <message-menu @sendMsg="sendMsg"></message-menu>
+        <message-menu
+          :menus="menus"
+          :menu="menu"
+          :messagetag="messagetag"
+          :changeColor="changeColor"
+        ></message-menu>
       </div>
+
       <div class="message-center-right">
-        <!-- 由MessageLeft组件传输数据到父组件，再将该数据传输到MessageTop子组件 -->
-        <message-top :messagetag="messagetag"> -->
+        <message-top :messagetag="messagetag">
         </message-top>
-        <div>
-          <router-view />
+
+        <div class="message-center-right-route">
+          <el-scrollbar max-height="636px">
+            <router-view />
+          </el-scrollbar>
         </div>
+
       </div>
+
     </div>
-  </div>
+
+  </base-view>
 </template>
 
 <script>
 import { defineComponent, ref } from 'vue';
-import MessageMenu from '@/views/message/childComps/MessageMenu';
-import MessageTop from '@/views/message/childComps/MessageTop';
+import { useRouter, useRoute } from 'vue-router';
+import BaseView from '@/components/content/baseView/BaseView.vue';
+import MessageMenu from '@/views/message/childComps/MessageMenu.vue';
+import MessageTop from '@/views/message/childComps/MessageTop.vue';
 
 /**
  * @description: 消息页面
@@ -42,21 +60,53 @@ export default defineComponent({
   components: {
     MessageMenu,
     MessageTop,
+    BaseView,
   },
+
   setup(props, context) {
+    const router = useRouter(),
+      route = useRoute();
+
+    const menus = [
+      { iconfont: 'iconfont blog-huifu1', id: 'reply', key: '回复我的' },
+      { iconfont: 'iconfont blog-dianzan1', id: 'like', key: '收到的赞' },
+      { iconfont: 'iconfont blog-xin', id: 'attention', key: '关注我的' },
+      { iconfont: 'iconfont blog-tongzhi', id: 'system', key: '系统通知' },
+      { iconfont: 'iconfont blog-xiaoxi', id: 'my', key: '我的消息' },
+    ];
+
+    const menu = { iconfont: 'iconfont blog-shezhi', id: 'setting', key: '消息设置' };
+
+    const redirect = route.path;
+    const array = redirect.split('/'); //获取路由
+
     const messagetag = ref('');
+
+    if (array[array.length - 1] === menu.id) {
+      //得到路由相对应的key值
+      messagetag.value = menu.key;
+    } else {
+      for (let i = 0; i < 5; i++) {
+        if (menus[i].id === array[array.length - 1]) messagetag.value = menus[i].key;
+      }
+    }
     /**
-     * @description: 绑定子组件，将子组件的数据传输到父组件
-     * @param {value} 得到该页面名称
-     * @return {*}
+     * @description:改变路由，传递数据（页面名称）到父组件
+     * @param {menu} 路由名称（menu.id）和页面名称（menu.key）
+     * @return {void}
      * @author: Z_Y_C
      */
-    const sendMsg = (value) => {
-      messagetag.value = value;
-    };
+
+    function changeColor(menu) {
+      router.push(`/message/${menu.id}`); //改变路由
+      messagetag.value = menu.key;
+    }
+
     return {
       messagetag,
-      sendMsg,
+      menus,
+      menu,
+      changeColor,
     };
   },
 });
@@ -64,24 +114,24 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .message {
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-
   .message-center {
-    width: 1154px;
+    width: 1152px;
+    height: 100%;
     margin: 0 auto;
     display: flex;
-    overflow: hidden;
 
     .message-center-left {
-      width: 146px;
+      width: 140px;
       background-color: transparent;
     }
 
     .message-center-right {
-      width: 1008px;
+      width: 1012px;
       background-color: transparent;
+
+      .message-center-right-route {
+        background-color: transparent;
+      }
     }
   }
 }

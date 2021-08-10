@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-30 00:58:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-07-31 17:58:39
+ * @LastEditTime: 2021-08-09 16:35:51
 -->
 <template >
   <div class="message-top">
@@ -45,8 +45,8 @@ $grey7: $grey-7;
   background-color: $grey0;
   border-radius: $border-radius0;
   box-shadow: $shadow0;
-  padding: 0 16px 0 16px;
-  margin: 10px 6px 10px 10px;
+  padding: 0 16px;
+  margin: 10px 10px 0 10px;
   display: flex;
 
   .message-top-title {
