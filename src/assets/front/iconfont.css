@@ -1,9 +1,9 @@
 @font-face {
     font-family: "iconfont";
     /* Project id 2675107 */
-    src: url('//at.alicdn.com/t/font_2675107_tizpnlimfvg.woff2?t=1628596781433') format('woff2'),
-        url('//at.alicdn.com/t/font_2675107_tizpnlimfvg.woff?t=1628596781433') format('woff'),
-        url('//at.alicdn.com/t/font_2675107_tizpnlimfvg.ttf?t=1628596781433') format('truetype');
+    src: url('//at.alicdn.com/t/font_2675107_3mhvje1y6mm.woff2?t=1628246354217') format('woff2'),
+        url('//at.alicdn.com/t/font_2675107_3mhvje1y6mm.woff?t=1628246354217') format('woff'),
+        url('//at.alicdn.com/t/font_2675107_3mhvje1y6mm.ttf?t=1628246354217') format('truetype');
 }
 
 .iconfont {
@@ -12,10 +12,6 @@
     font-style: normal;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-}
-
-.blog-liaotian:before {
-    content: "\e826";
 }
 
 .blog-delete:before {
@@ -32,6 +28,10 @@
 
 .blog-lishijilu-copy:before {
     content: "\e62a";
+}
+
+.blog-qipao-:before {
+    content: "\e6ba";
 }
 
 .blog-shanchu:before {

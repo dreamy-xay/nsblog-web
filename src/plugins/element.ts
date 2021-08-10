@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-19 21:30:24
- * @LastEditors: Ban
- * @LastEditTime: 2021-08-09 18:22:34
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-08-06 00:27:31
  */
 import { App } from 'vue';
 import 'dayjs/locale/zh-cn';
@@ -16,7 +16,7 @@ import {
   // ElAlert,
   // ElAside,
   // ElAutocomplete,
-  // ElAvatar,
+  ElAvatar,
   // ElBacktop,
   // ElBadge,
   // ElBreadcrumb,
@@ -68,9 +68,9 @@ import {
   // ElPopconfirm,
   // ElPopper,
   // ElProgress,
-  // ElRadio,
+  ElRadio,
   // ElRadioButton,
-  // ElRadioGroup,
+  ElRadioGroup,
   // ElRate,
   // ElRow,
   ElScrollbar,
@@ -114,7 +114,7 @@ const components = [
   // ElAlert,
   // ElAside,
   // ElAutocomplete,
-  // ElAvatar,
+  ElAvatar,
   // ElBacktop,
   // ElBadge,
   // ElBreadcrumb,
@@ -166,9 +166,9 @@ const components = [
   // ElPopconfirm,
   // ElPopper,
   // ElProgress,
-  // ElRadio,
+  ElRadio,
   // ElRadioButton,
-  // ElRadioGroup,
+  ElRadioGroup,
   // ElRate,
   // ElRow,
   ElScrollbar
@@ -209,11 +209,6 @@ const plugins = [
   // ElNotification,
   ElPopover
 ];
-
-const directives = [
-  // { key: 'infinite-scroll', value: ElInfiniteScroll }
-];
-
 import '@/assets/style/element-variables.scss';
 
 export default (app: App) => {
@@ -227,9 +222,5 @@ export default (app: App) => {
 
   plugins.forEach(plugin => {
     app.use(plugin);
-  });
-
-  directives.forEach(directive => {
-    app.directive(directive.key, directive.value);
   });
 };
