@@ -117,6 +117,7 @@
 import { defineComponent, ref, onMounted, reactive, computed } from 'vue';
 import { getUserInfo } from '@/network/api/user';
 import { verifyToken } from '@/network/token';
+
 /**
  * @description:  顶部头像组件
  * @author: Ban

@@ -1,13 +1,13 @@
 {
-	"users": [
-		{
-			"username": "dreamy",
-			"password": "Abcd1234",
-			"email": "123@qq.com",
-			"token": "063a458d46872f4860ac469c021b281fbd88624851e757c4fac4835c54492b88b27fd74af5d639a26a00e6c7b95f17189a51baad6f1647b4dc7d1b1a6fc3d464",
-			"isActive": true,
-			"isSuper": true
-		}
-	],
-	"codes": []
+  "users": [
+    {
+      "username": "dreamy",
+      "password": "Abcd1234",
+      "email": "123@qq.com",
+      "token": "acedc8ad5d98c35a4aba5c70120f3b5c14befcd11de91a06fbf281263c450962f16d53202314759630e51d3a510c8a098d7b0be7c6980ee37839d77d9331c0ed",
+      "isActive": true,
+      "isSuper": true
+    }
+  ],
+  "codes": []
 }

@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-19 21:30:24
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-07 11:18:11
+ * @LastEditors: Ban
+ * @LastEditTime: 2021-08-09 18:22:34
  */
 import { App } from 'vue';
 import 'dayjs/locale/zh-cn';
