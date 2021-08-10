@@ -1,0 +1,10 @@
+@url=http://localhost:3000/v1
+
+@json=Content-Type: application/json
+
+### 获取关注信息
+get {{url}}/attentions?username=dreamy&limit=10&offset=0
+
+
+### 获取粉丝信息
+get {{url}}/attentions/fans?username=dreamy&limit=10&offset=0

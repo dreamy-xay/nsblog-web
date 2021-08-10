@@ -4,12 +4,16 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:15:05
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-04 15:33:23
+ * @LastEditTime: 2021-08-10 17:03:29
  */
 import { Random } from 'better-mock';
 import { Application, Request, Response } from 'express';
 import select, { DataBaseOperator } from '../data/index';
 import { clearToken, decrypt, getToken, verifyToken } from './util';
+
+function int(value: unknown): number {
+  return parseInt(value as string);
+}
 
 export default function(baseUrl: string, app: Application) {
   // 注册新用户
@@ -37,7 +41,7 @@ export default function(baseUrl: string, app: Application) {
   app.get(baseUrl + '/users/email/validation', (req: Request, res: Response) => {
     const { code, email, type } = req.query;
     if (select('codes').findOne({ code, email })) {
-      if (parseInt(type as string) === 1) {
+      if (int(type) === 1) {
         const user: Record<string, unknown> = select('users').findOne({ email });
         return res.json({ username: user.username, data: user.password });
       }
@@ -73,19 +77,15 @@ export default function(baseUrl: string, app: Application) {
 
   // 获取用户信息
   app.get(baseUrl + '/users', (req: Request, res: Response) => {
-    let username: string = req.query.username as string;
-    if (username === '') {
-      if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
-      username = getToken(req.headers).username;
-    }
-    const type = parseInt(req.query.type as string);
+    const username: string = req.query.username as string;
+    const type = int(req.query.type);
     const user = select('users').findOne({ username });
     if (type === 0) {
       if (user && user.isActive) {
         return res.json({
           username,
           nickname: Random.natural(0, 1000000) % 2 ? Random.cword(2, 4) : Random.word(4, 8),
-          avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', 'test'),
+          avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', Random.word(2, 4)),
           email: Random.email('qq.com'),
           profession: '',
           birthday: Random.datetime(),
@@ -102,7 +102,7 @@ export default function(baseUrl: string, app: Application) {
         return res.json({
           username,
           nickname: Random.natural(0, 1000000) % 2 ? Random.cword(2, 4) : Random.word(4, 8),
-          avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', 'test'),
+          avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', Random.word(2, 4)),
           registration_time: Random.datetime(),
           email: Random.email('qq.com'),
           recommend_count: Random.natural(0, 1000),
