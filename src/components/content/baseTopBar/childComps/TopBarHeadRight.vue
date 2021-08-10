@@ -4,21 +4,27 @@
  * @Autor: Ban
  * @Date: 2021-07-20 11:01:33
  * @LastEditors: Ban
- * @LastEditTime: 2021-08-06 13:35:08
+ * @LastEditTime: 2021-08-09 18:25:56
 -->
 
 <template>
   <div class="top-bar-head-right">
     <div class="top-bar-head-right-menu">
-      <div>
+      <div class="top-bar-head-right-menu-div">
         <top-bar-avatar />
       </div>
-      <div @click="routeToMessage">消息</div>
-      <div>动态</div>
-      <div>收藏</div>
-      <div>历史</div>
-      <div>创作中心</div>
-      <div>
+      <div
+        @click="routeToMessage"
+        class="top-bar-head-right-menu-div"
+      >消息</div>
+      <div class="top-bar-head-right-menu-div">
+        <top-bar-not-login-in title="动态">动态
+        </top-bar-not-login-in>
+      </div>
+      <div class="top-bar-head-right-menu-div">收藏</div>
+      <div class="top-bar-head-right-menu-div">历史</div>
+      <div class="top-bar-head-right-menu-div">创作中心</div>
+      <div class="top-bar-head-right-menu-div">
         <top-bar-note-share />
       </div>
     </div>
@@ -30,7 +36,8 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { defineComponent } from '@vue/runtime-core';
 import TopBarAvatar from './TopBarAvatar.vue';
-import TopBarNoteShare from './TopBarNoteShare';
+import TopBarNoteShare from './TopBarNoteShare.vue';
+import TopBarNotLoginIn from '@/components/content/baseTopBar/childComps/TopBarNotLoginIn.vue';
 
 /**
  * @description:  首页顶部之右边部分组件
@@ -42,6 +49,7 @@ export default defineComponent({
   components: {
     TopBarAvatar,
     TopBarNoteShare,
+    TopBarNotLoginIn,
   },
 
   setup() {
@@ -72,7 +80,7 @@ export default defineComponent({
     display: inline-block;
     letter-spacing: 1px;
 
-    div {
+    .top-bar-head-right-menu-div {
       display: inline-block;
       vertical-align: middle;
       font-size: 16px;

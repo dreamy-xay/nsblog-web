@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-07-29 15:53:25
  * @LastEditors: Ban
- * @LastEditTime: 2021-08-09 11:54:34
+ * @LastEditTime: 2021-08-10 19:58:17
 -->
 
 <template>
@@ -42,15 +42,25 @@
   <!-- 未登录时加载 -->
   <el-button
     @click="visible = true"
-    class="top-bar-note-share-share"
     v-if="!isLogin"
-  >笔记分享
+    class="top-bar-note-share-not-login"
+  >
+    <top-bar-not-login-in
+      title="笔记分享"
+      :offset="8"
+    >
+      <div class="top-bar-note-share-not-login-content">
+        笔记分享
+      </div>
+    </top-bar-not-login-in>
   </el-button>
+
 </template>
 
 <script>
 import { defineComponent, ref } from 'vue';
 import { verifyToken } from '@/network/token';
+import TopBarNotLoginIn from '@/components/content/baseTopBar/childComps/TopBarNotLoginIn.vue';
 
 /**
  * @description:  TopBar_笔记分享
@@ -58,6 +68,10 @@ import { verifyToken } from '@/network/token';
  */
 
 export default defineComponent({
+  name: 'TopBarNoteShare',
+  components: {
+    TopBarNotLoginIn,
+  },
   setup() {
     const noteshare = [
       {
@@ -128,9 +142,27 @@ export default defineComponent({
   color: $grey-0;
   font-size: 16px;
   border: 0;
+  padding: 0 20px;
 
   &:hover {
     background: $green-1;
+  }
+}
+.top-bar-note-share-not-login {
+  background: $green-0;
+  color: $grey-0;
+  font-size: 16px;
+  border: 0;
+  padding: 0;
+
+  &:hover {
+    background: $green-1;
+  }
+
+  .top-bar-note-share-not-login-content {
+    display: inline-block;
+    line-height: 40px;
+    padding: 0 20px;
   }
 }
 </style>
