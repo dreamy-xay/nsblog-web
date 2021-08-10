@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 23:12:21
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-08 10:24:16
+ * @LastEditTime: 2021-08-10 20:25:49
  */
 
 import { Application, Request, Response } from 'express';
@@ -20,7 +20,7 @@ export default function(baseUrl: string, app: Application) {
       comment_message_prompt: Random.natural(0, 1),
       attention_message_prompt: Random.natural(0, 1),
       like_message_prompt: Random.natural(0, 1),
-      chat_message_prompt: Random.natural(0, 1)
+      chat_message_prompt: Random.natural(1, 3)
     };
     return res.json(setting);
   });

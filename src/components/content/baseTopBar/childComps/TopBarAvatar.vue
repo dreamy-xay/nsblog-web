@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-07-19 18:32:43
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-04 16:53:13
+ * @LastEditTime: 2021-08-10 15:03:14
 -->
 <template>
   <div class="user">
@@ -180,41 +180,43 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      getUserInfo()
-        .then((data) => {
-          username.value = data.username; //更新昵称
-          recommend_count.value = data.recommend_count; //更新关注数量
-          like_count.value = data.like_count; //更新点赞数量
-          fans_count.value = data.fans_count; //更新粉丝数量
-          dynamic_count.value = data.dynamic_count; //更新动态数量
-          const a = new Date();
-          const b = parseInt(data.registration_time.substring(0, 4)); //注册时间_年
-          const c = a.getFullYear(); //现在时间_年
-          age.value = c - b; //计算学龄_年
-          //判断闰年，闰年366天，平年365天
-          const isRunnian = (c % 4 == 0 && c % 100 != 0) || c % 400 == 0;
-          experience[1] = isRunnian ? 366 : 365;
-          //获取注册_月
-          const d = parseInt(data.registration_time.substring(5, 7));
-          //获取注册_日
-          const e = parseInt(data.registration_time.substring(8, 10));
-          //  计算天数
-          experience[0] = (function () {
-            let month,
-              monthDay = 0;
-            if (isRunnian) month = [0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-            else month = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-            for (let i = 1; i < d; i++) {
-              monthDay += month[i];
-            }
-            return monthDay + e;
-          })();
-          avatar.value = data.avatar;
-        })
-        .catch((error) => {
-          console.log(error);
-          isLogin.value = false;
-        });
+      const tokenInfo = verifyToken();
+      if ((isLogin.value = tokenInfo.status))
+        getUserInfo(tokenInfo.username)
+          .then((data) => {
+            username.value = data.username; //更新昵称
+            recommend_count.value = data.recommend_count; //更新关注数量
+            like_count.value = data.like_count; //更新点赞数量
+            fans_count.value = data.fans_count; //更新粉丝数量
+            dynamic_count.value = data.dynamic_count; //更新动态数量
+            const a = new Date();
+            const b = parseInt(data.registration_time.substring(0, 4)); //注册时间_年
+            const c = a.getFullYear(); //现在时间_年
+            age.value = c - b; //计算学龄_年
+            //判断闰年，闰年366天，平年365天
+            const isRunnian = (c % 4 == 0 && c % 100 != 0) || c % 400 == 0;
+            experience[1] = isRunnian ? 366 : 365;
+            //获取注册_月
+            const d = parseInt(data.registration_time.substring(5, 7));
+            //获取注册_日
+            const e = parseInt(data.registration_time.substring(8, 10));
+            //  计算天数
+            experience[0] = (function () {
+              let month,
+                monthDay = 0;
+              if (isRunnian) month = [0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+              else month = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+              for (let i = 1; i < d; i++) {
+                monthDay += month[i];
+              }
+              return monthDay + e;
+            })();
+            avatar.value = data.avatar;
+          })
+          .catch((error) => {
+            console.log(error);
+            isLogin.value = false;
+          });
     });
 
     const setpercent = computed(() => {

@@ -4,19 +4,23 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 10:01:23
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-07 12:44:06
+ * @LastEditTime: 2021-08-10 16:30:24
  */
 
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
 import { verifyToken, getToken } from './util';
 
+function int(value: unknown): number {
+  return parseInt(value as string);
+}
+
 export default function(baseUrl: string, app: Application) {
   // 获取历史记录
   app.get(baseUrl + '/history', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
-    const { limit, offset } = req.query;
-    const type: number = parseInt(req.query.type as string);
+    const { limit, offset, keyword } = req.query;
+    const type: number = int(req.query.type);
 
     function getRandom(limit: number, hasType: boolean = true): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
@@ -33,7 +37,7 @@ export default function(baseUrl: string, app: Application) {
           history_id: Random.increment(),
           id: Random.id(),
           time: Random.datetime(),
-          title: Random.natural(0, 3) ? Random.ctitle(15, 45) : Random.title(7, 12),
+          title: keyword + (Random.natural(0, 3) ? Random.ctitle(15, 45) : Random.title(7, 12)),
           topic_tag: tagList,
           username: Random.natural(0, 1) ? Random.cname() : Random.name(),
           ...type
@@ -46,29 +50,15 @@ export default function(baseUrl: string, app: Application) {
 
     if (type == 0)
       return res.json({
-        history: getRandom(
-          parseInt(offset as string) >= 89
-            ? 0
-            : Math.min(parseInt(limit as string), 89 - parseInt(offset as string) + 1)
-        )
+        history: getRandom(int(offset) >= 89 ? 0 : Math.min(int(limit), 89 - int(offset) + 1))
       });
     else if (type == 1)
       return res.json({
-        history: getRandom(
-          parseInt(offset as string) >= 83
-            ? 0
-            : Math.min(parseInt(limit as string), 83 - parseInt(offset as string) + 1),
-          false
-        )
+        history: getRandom(int(offset) >= 83 ? 0 : Math.min(int(limit), 83 - int(offset) + 1), false)
       });
     else if (type == 2)
       return res.json({
-        history: getRandom(
-          parseInt(offset as string) >= 83
-            ? 0
-            : Math.min(parseInt(limit as string), 83 - parseInt(offset as string) + 1),
-          false
-        )
+        history: getRandom(int(offset) >= 83 ? 0 : Math.min(int(limit), 83 - int(offset) + 1), false)
       });
     else return res.status(403).json({ error: 'error' });
   });

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-04 18:49:08
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-07 17:25:38
+ * @LastEditTime: 2021-08-10 17:11:33
 -->
 <template>
   <div class="history-content">
@@ -50,6 +50,7 @@ import { defineComponent, reactive, ref } from 'vue';
 import HistoryItem from '@/views/history/childComps/HistoryItem.vue';
 import BaseSvg from '@/components/content/baseSvg/BaseSvg';
 import { getHistory, deleteHistory } from '@/network/api/history';
+import { verifyToken } from '@/network/token';
 import styles from '@/assets/style/define.scss';
 import events from '@/events';
 
@@ -78,14 +79,15 @@ export default defineComponent({
     const end = ref(false);
 
     // 获取历史记录
-    getHistory(0, offset, 20)
-      .then((data) => {
-        offset += data.history.length;
-        historyList.splice(0, 0, ...data.history);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (verifyToken().status)
+      getHistory(0, offset, 20)
+        .then((data) => {
+          offset += data.history.length;
+          historyList.splice(0, 0, ...data.history);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
 
     /**
      * @description: 删除历史记录
@@ -103,20 +105,29 @@ export default defineComponent({
         });
     }
 
-    // 触底事件监听
-    events.on(props.eventId, () => {
-      getHistory(0, offset, 20)
+    function getHistoryList(clear = false, keyword = '') {
+      getHistory(0, offset, keyword, 20)
         .then((data) => {
           if (data.history.length < 20) {
             context.emit('toBottom');
             end.value = true;
           }
           offset += data.history.length;
-          historyList.splice(historyList.length, 0, ...data.history);
+          historyList.splice(clear ? 0 : historyList.length, clear ? historyList.length : 0, ...data.history);
         })
         .catch((error) => {
           console.log(error);
         });
+    }
+
+    // 触底事件监听
+    events.on(props.eventId, () => {
+      getHistoryList();
+    });
+
+    events.on('HistoryBar-getHistory', (keyword) => {
+      offset = 0;
+      getHistoryList(true, keyword);
     });
 
     // 清空历史记录事件监听
