@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-04 18:45:12
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-07 19:41:54
+ * @LastEditTime: 2021-08-10 16:52:48
 -->
 
 <template>
@@ -87,6 +87,8 @@ import { verifyToken } from '@/network/token';
 
 /**
  * @description: 历史记录顶部栏
+ * @emits HistoryBar-getHistory 按关键词获取历史记录，传递关键词参数
+ * @emits HistoryBar-clearAllHistory 清除全部历史记录
  * @author: dreamy-xay
  */
 
@@ -108,9 +110,7 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function search() {
-      if (searchValue.value !== '') {
-        console.log(searchValue.value);
-      }
+      if (searchValue.value !== '') events.emit('HistoryBar-getHistory', searchValue.value);
     }
 
     /**

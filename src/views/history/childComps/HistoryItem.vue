@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 15:56:58
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-07 12:33:52
+ * @LastEditTime: 2021-08-10 16:58:43
 -->
 <template>
   <div
@@ -67,7 +67,7 @@
 
 <script>
 import { defineComponent, reactive } from 'vue';
-import { dateFormat } from '@/util/util';
+import { dateFormat } from '@/util/date';
 import BaseTag from '@/components/content/baseTag/BaseTag.vue';
 import styles from '@/assets/style/define.scss';
 
