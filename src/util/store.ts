@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-11 11:55:09
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-11 12:23:47
+ * @LastEditTime: 2021-08-11 17:39:16
  */
 import { computed } from 'vue';
 import { Store, Computed, useStore, createNamespacedHelpers } from 'vuex';
@@ -16,18 +16,18 @@ import { Store, Computed, useStore, createNamespacedHelpers } from 'vuex';
  * @return {Record<string, unknown>} 返回一个包含store map映射的对象
  * @author: dreamy-xay
  */
-function useMapper(mapper: unknown, mapFn: Function): Record<string, unknown> {
+function useMapper(mapper: unknown, mapFn: any, isFunc: boolean = false): Record<string, unknown> {
   // 拿到store独享
   const store: Store<any> = useStore();
 
   // 获取到对应的对象的functions: {name: function, age: function}
-  const storeStateFns: Record<string, Computed> = mapFn(mapper);
+  const storeStateFns: any = mapFn(mapper);
 
   // 对数据进行转换
   const storeState: Record<string, unknown> = {};
   Object.keys(storeStateFns).forEach(fnKey => {
     const fn = storeStateFns[fnKey].bind({ $store: store });
-    storeState[fnKey] = computed(fn);
+    storeState[fnKey] = isFunc ? fn : computed(fn);
   });
 
   return storeState;
@@ -63,7 +63,7 @@ export function mapGetters(moduleName: string, mapper: unknown): Record<string, 
  * @author: dreamy-xay
  */
 export function mapMutations(moduleName: string, mapper: unknown): Record<string, unknown> {
-  return useMapper(mapper, createNamespacedHelpers(moduleName).mapMutations);
+  return useMapper(mapper, createNamespacedHelpers(moduleName).mapMutations, true);
 }
 
 /**
@@ -74,5 +74,5 @@ export function mapMutations(moduleName: string, mapper: unknown): Record<string
  * @author: dreamy-xay
  */
 export function mapActions(moduleName: string, mapper: unknown): Record<string, unknown> {
-  return useMapper(mapper, createNamespacedHelpers(moduleName).mapActions);
+  return useMapper(mapper, createNamespacedHelpers(moduleName).mapActions, true);
 }
