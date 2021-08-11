@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-10 19:45:44
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-11 16:01:06
+ * @LastEditTime: 2021-08-11 18:12:57
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -20,20 +20,57 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const { type, offset, limit } = req.query;
     const username: string = getToken(req.headers).username;
+    if (int(type) < 0 && int(type) > 4) return res.status(403).json({ error: 'error' });
+
     console.log(`get messages: type ${type}   username ${username}   success`);
 
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
-      for (let i: number = 0; i < limit; ++i)
+      for (let i: number = 0; i < limit; ++i) {
+        let content: unknown;
+        if (int(type) === 1) content = Random.integer(0, 1) ? Random.cparagraph(1, 10) : Random.paragraph(1, 10);
+        else if (int(type) === 2)
+          content = {
+            username: Random.word(4, 8),
+            nickname: Random.natural(0, 1000000) % 2 ? Random.cword(2, 4) : Random.word(4, 8),
+            avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', Random.word(2, 4)),
+            content: Random.integer(0, 1) ? Random.cparagraph(1, 10) : Random.paragraph(1, 10),
+            type: Random.natural(1, 2),
+            reply_username: Random.word(4, 8),
+            reply_content: Random.integer(0, 1) ? Random.cparagraph(1, 10) : Random.paragraph(1, 10)
+          };
+        else if (int(type) === 3)
+          content = {
+            username: Random.word(4, 8),
+            nickname: Random.natural(0, 1000000) % 2 ? Random.cword(2, 4) : Random.word(4, 8),
+            avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', Random.word(2, 4)),
+            type: Random.natural(1, 2),
+            id: Random.id()
+          };
+        else
+          content = {
+            username: Random.word(4, 8),
+            nickname: Random.natural(0, 1000000) % 2 ? Random.cword(2, 4) : Random.word(4, 8),
+            avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', Random.word(2, 4)),
+            attention: Random.natural(0, 1) ? true : false
+          };
+
         ans.push({
           message_id: Random.increment(Random.integer(0, 10)),
-          content: Random.integer(0, 1) ? Random.cparagraph(1, 10) : Random.paragraph(1, 10),
+          content,
           status: Random.integer(0, 1),
           time: Random.datetime()
         });
+      }
       return ans;
     }
-    return res.json({ messages: getRandom(int(offset) >= 19 ? 0 : Math.min(int(limit), 19 - int(offset) + 1)) });
+    if (int(type))
+      return res.json({ messages: getRandom(int(offset) >= 19 ? 0 : Math.min(int(limit), 19 - int(offset) + 1)) });
+    else {
+      const count: number[] = [];
+      for (let i: number = 1; i <= 5; ++i) count.push(Random.natural(0, 2) ? Random.integer(1, 120) : 0);
+      return res.json({ count });
+    }
   });
 
   // 删除消息
