@@ -4,10 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-11 21:28:05
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-24 14:59:07
+ * @LastEditTime: 2021-08-10 22:17:24
  */
 import { Application } from 'express';
+import { Server } from 'http';
 import intercepter from './app';
+import socket from './socket';
 import * as bodyParser from 'body-parser';
 
 export default function sever(app: Application) {
@@ -21,7 +23,7 @@ export default function sever(app: Application) {
     );
 
     // 跨域
-    app.use(function(req, res, next) {
+    app.use((req, res, next) => {
       res.header('Access-Control-Allow-Origin', '*');
       res.header('Access-Control-Allow-Headers', '*');
       res.header('Access-Control-Allow-Methods', '*');
@@ -39,6 +41,9 @@ export default function sever(app: Application) {
     intercepter(app);
 
     // 监听api端口
-    app.listen(process.env.VUE_APP_APIPORT);
+    const server: Server = app.listen(process.env.VUE_APP_APIPORT);
+
+    // websocket
+    socket(server);
   }
 }

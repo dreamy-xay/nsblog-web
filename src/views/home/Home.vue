@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-03 16:23:57
+ * @LastEditTime: 2021-08-11 14:15:24
 -->
 
 <template>
@@ -16,6 +16,7 @@
 <script>
 import { defineComponent } from 'vue';
 import BaseTopBar from '@/components/content/baseTopBar/BaseTopBar';
+import socket from '@/socket';
 
 /**
  * @description: 博客主页
@@ -26,6 +27,11 @@ export default defineComponent({
   name: 'Home',
   components: {
     BaseTopBar,
+  },
+  mounted() {
+    setTimeout(() => {
+      socket.emit('online', 'dreamy');
+    }, 3000);
   },
 });
 </script>
