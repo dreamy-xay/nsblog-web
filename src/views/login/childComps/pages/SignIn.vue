@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 14:41:12
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-05 10:41:43
+ * @LastEditors: continue-hs
+ * @LastEditTime: 2021-08-12 10:44:36
 -->
 <template>
   <div class="sign-in">
@@ -153,8 +153,8 @@ export default defineComponent({
       if ((usernameReg.test(username.value) || emailReg.test(username.value)) && passwordReg.test(password.value)) {
         authLogin(username.value, password.value)
           .then((data) => {
-            setToken(data.token);
-            router.push({ name: 'home' });
+            setToken(data.token, data.username);
+            router.back();
           })
           .catch((error) => {
             console.log(error);

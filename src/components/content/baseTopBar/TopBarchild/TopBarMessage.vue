@@ -4,14 +4,13 @@
  * @Autor: continue-hs
  * @Date: 2021-08-05 21:23:32
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-08-06 09:24:58
+ * @LastEditTime: 2021-08-10 20:14:26
 -->
 
 <template>
   <div class=top-bar-message>
 
     <el-popover
-      offset="18"
       placement="bottom"
       trigger="hover"
       hide-after="100"
@@ -22,7 +21,7 @@
       <template #reference>
         <div
           class="top-bar-message-header"
-          @click="$router.push({name: 'signIn'})"
+          @click="messageclick"
         >
           消息
         </div>
@@ -36,7 +35,6 @@
           :underline=false
           :href="item.url"
           :class="content"
-          target="_blank"
         >
           <i :class="item.icon"></i>
           <span class="contents">{{item.title}}</span>
@@ -49,7 +47,7 @@
 
 <script>
 import { defineComponent } from 'vue';
-
+import { useRouter } from 'vue-router';
 /**
  * @description:  消息栏弹窗
  * @author: continue-hs
@@ -58,39 +56,51 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'topBarMessage',
   setup() {
+    const router = useRouter();
     const menuList = [
       {
         title: '回复我的',
         icon: 'iconfont blog-huifu',
-        url: '#',
+        url: '/message/reply',
       },
       {
         title: '收到的赞',
         icon: 'iconfont blog-dianzan1',
-        url: '#',
+        url: '/message/like',
       },
       {
         title: '关注我的',
         icon: 'iconfont blog-guanzhu',
-        url: '#',
+        url: '/message/attention',
       },
       {
         title: '系统通知',
         icon: 'iconfont blog-tongzhi',
-        url: '#',
+        url: '/message/system',
       },
       {
         title: '我的消息',
         icon: 'iconfont blog-xiaoxi',
-        url: '#',
+        url: '/message/my',
       },
       {
         title: '消息设置',
         icon: 'iconfont blog-shezhi',
-        url: '#',
+        url: '/message/setting',
       },
     ];
+
+    /**
+     * @description: 跳转至消息路由
+     * @return {void}
+     * @author: continue-hs
+     */
+    function messageclick() {
+      router.push('/message');
+    }
+
     return {
+      messageclick,
       menuList,
     };
   },
@@ -116,7 +126,6 @@ export default defineComponent({
 }
 
 .top-bar-message-header {
-  @include font-style;
   &:hover {
     color: $green-0;
   }
@@ -136,7 +145,7 @@ export default defineComponent({
     color: $grey-11;
     @include size(172px, 35px);
     i {
-      font-size: 20px;
+      font-size: 19px;
     }
     &:hover {
       background: $grey-2;

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-08-05 21:15:41
+ * @LastEditTime: 2021-08-12 10:44:21
 -->
 
 <template>
@@ -16,6 +16,8 @@
 <script>
 import { defineComponent } from 'vue';
 import BaseTopBar from '@/components/content/baseTopBar/BaseTopBar';
+import { mapActions } from '@/util/store';
+import socket from '@/socket';
 
 /**
  * @description: 博客主页
@@ -26,6 +28,48 @@ export default defineComponent({
   name: 'Home',
   components: {
     BaseTopBar,
+  },
+  mounted() {
+    const { online, receiveMessage } = mapActions('message', ['receiveMessage', 'online']);
+
+    // 用户上线了
+    setTimeout(() => {
+      online('dreamy');
+    }, 3000);
+
+    // 收到消息
+    // 类型1
+    receiveMessage({
+      type: 1,
+      callback(data) {
+        console.log('message type: 1');
+        console.log(data);
+      },
+    });
+    // 类型1
+    receiveMessage({
+      type: 2,
+      callback(data) {
+        console.log('message type: 2');
+        console.log(data);
+      },
+    });
+    // 类型1
+    receiveMessage({
+      type: 3,
+      callback(data) {
+        console.log('message type: 3');
+        console.log(data);
+      },
+    });
+    // 类型1
+    receiveMessage({
+      type: 4,
+      callback(data) {
+        console.log('message type: 4');
+        console.log(data);
+      },
+    });
   },
 });
 </script>

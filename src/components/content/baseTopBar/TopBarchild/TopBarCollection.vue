@@ -2,16 +2,15 @@
  * @Description:basetopbarcollection
  * @Version:
  * @Autor: continue-hs
- * @Date: 2021-07-22 18:50:30
+ * @Date: 2021-08-05 18:50:30
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-08-06 11:32:39
+ * @LastEditTime: 2021-08-10 20:49:14
 -->
 
 <template>
   <div class="top-bar-collection">
 
     <el-popover
-      offset="18"
       placement="bottom"
       trigger="hover"
       hide-after="100"
@@ -20,61 +19,72 @@
     >
 
       <template #reference>
-        <div class="top-bar-collection-header">
+        <div
+          class="top-bar-collection-header"
+          @click="onclick"
+        >
           收藏
         </div>
       </template>
 
-      <div class="collections">
-        <el-tabs
-          type="card"
-          :width="161"
-          v-model="activeId"
-          tab-position="left"
-        >
-          <el-tab-pane
-            v-for="(item,index) in favorites"
-            :key="index"
-            :name="index"
-            :class="collection-left"
-          >
-            <template #label>
-              <span class="left">{{item.name}}</span>
-              <span class="right">{{item.count}}</span>
-            </template>
+      <div class="top-bar-collection-content">
+        <div class="top-bar-collection-content-left">
+          <div class="content-menu">
             <el-scrollbar height="401px">
-              <div
-                class="blank"
-                v-if="item.count === 0"
-              >
-                该收藏夹还没有收藏内容哦~
-              </div>
-              <div
-                v-for="(value,index) in item.collections"
+              <ul>
+                <li
+                  class="menu-content"
+                  v-for="(item,index) in favorites"
+                  :key="index"
+                  :class="{active: index === isActive}"
+                  @click="chooseClick(index)"
+                  role="button"
+                >
+                  <div class="collections-menu">
+                    <span class="left">{{item.name}}</span>
+                    <span class="right">{{item.count}}</span>
+                  </div>
+                </li>
+              </ul>
+            </el-scrollbar>
+          </div>
+        </div>
+
+        <div class="top-bar-collection-content-right">
+          <el-scrollbar height="401px">
+            <div
+              class="blank"
+              v-if="List !== undefined && List.length === 0"
+            >
+              该收藏夹还没有收藏内容哦~
+            </div>
+            <ul>
+              <li
+                v-for="(value,index) in List"
                 :key=index
-                class="collection-right"
               >
-                <el-link
-                  :underline=false
-                  :href=value.link
+                <a
+                  href="(value.type === 1 ? '/article/' : '/question/') + value.id "
                   target="_blank"
                 >
-                  <div class="collection">
-                    <i
-                      class="tag"
-                      v-if="value.type === 1"
-                    >问答</i>
-                    <i
-                      class="tag"
-                      v-if="value.type === 2"
-                    >文章</i>
-                    <span class="collectioncontent"> {{value.title}}</span>
+                  <div class="collections-content">
+                    <base-tag
+                      :text="value.type === 1 ? '问答' : '文章'"
+                      :color="styles.pink0"
+                      :hollow="true"
+                      role="button"
+                    />
+                    <span
+                      class="collectioncontent"
+                      role="button"
+                    > {{value.title}}</span>
                   </div>
-                </el-link>
-              </div>
-            </el-scrollbar>
-          </el-tab-pane>
-        </el-tabs>
+                </a>
+              </li>
+            </ul>
+          </el-scrollbar>
+        </div>
+
       </div>
 
     </el-popover>
@@ -84,49 +94,84 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import { getCollections } from '@/network/api/collections';
-// import { verifyToken } from '@/network/token';
-// import { useRouter, useRoute } from 'vue-router';
+import { getUserInfo } from '@/network/api/user';
+import BaseTag from '../../baseTag/BaseTag.vue';
+import styles from '@/assets/style/define.scss';
+import { verifyToken } from '@/network/token';
+import { useRouter } from 'vue-router';
+
 /**
  * @description:  收藏栏弹窗
  * @author: continue-hs
  */
 
 export default defineComponent({
-  name: 'basetopBarCollection',
+  name: 'topBarCollection',
+  components: { BaseTag },
   setup() {
-    const activeId = ref(0);
-    const favorites = ref();
-    // const isLogin = ref(verifyToken().status); // 是否已登录
+    const isActive = ref(0);
+    let favorites = ref();
+    let List = ref();
+    const router = useRouter();
+    const isLogin = ref(verifyToken().status);
+    const username = ref();
 
     /**
-     * @description: 获取所有收藏夹信息
+     * @description: 获取指定用户所有收藏夹信息
      * @return {void}
      * @author: continue-hs
      */
-    getCollections().then((res) => {
-      console.log(res);
-      favorites.value = res.favorites;
-    });
+    if (isLogin.value) {
+      getUserInfo().then((data) => {
+        username.value = data.username;
+      });
+      getCollections(username).then((res) => {
+        console.log(res);
+        favorites.value = res.favorites;
+        List.value = res.favorites[0].collections;
+      });
+    }
 
-    // function signclick() {
-    //   router.push({ name: 'signIn' });
-    // }
+    /**
+     * @description: 点击跳转路由(已登录跳至消息页面，否则跳登录页面)
+     * @return {void}
+     * @author: continue-hs
+     */
+    function onclick() {
+      if (!isLogin.value) router.push('/login/Signin');
+      else router.push('/collections');
+    }
+
+    /**
+     * @description: 改变右侧收藏夹内容
+     * @return {void}
+     * @author: continue-hs
+     */
+    function chooseClick(index) {
+      List.value = [];
+      this.isActive = index;
+      List.value = this.favorites[index].collections;
+    }
 
     return {
-      activeId,
+      onclick,
+      chooseClick,
+      styles,
+      isActive,
+      List,
+      isLogin,
       favorites,
-      // isLogin,
     };
   },
 });
 </script>
 
-<style >
-.el-popover.NaN.el-popper.is-light {
-  border: 0;
-  padding: 0;
-  background: #e5e5e5;
-  text-align: left;
+<style lang="scss">
+.top-bar-collection {
+  .el-popover.NaN.el-popper.is-light {
+    border: 0;
+    padding: 0;
+  }
 }
 </style>
 
@@ -143,118 +188,114 @@ export default defineComponent({
 }
 
 .top-bar-collection-header {
-  @include font-style;
   &:hover {
     color: $green-0;
   }
 }
 
-::v-deep .el-tabs {
-  &__item {
-    border-width: 0;
-    padding: 0;
-    @include size(161px, 44px);
-    line-height: 44px;
-    @include font-style;
-    display: inline-block;
-    text-align: justify;
+.top-bar-collection-content {
+  display: flex;
 
-    &:hover {
-      background: $grey-2;
+  .top-bar-collection-content-left {
+    @include size(161px, 401px);
+
+    ul li {
+      @include size(161px, 44px);
+      @include font-style();
+
+      &.active {
+        background: #85e8c7;
+        color: $grey-0;
+        transition: all 200;
+
+        .left {
+          color: $grey-0;
+        }
+
+        .right {
+          color: $grey-0;
+        }
+      }
+
+      .collections-menu {
+        display: inline-block;
+        position: relative;
+        @include size(161px, 44px);
+        @include font-style();
+        height: 21px;
+        line-height: 21px;
+
+        .left {
+          top: 12px;
+          position: absolute;
+          left: 15px;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          width: 121px;
+        }
+
+        .right {
+          top: 12px;
+          position: absolute;
+          right: 12px;
+        }
+      }
     }
+  }
 
-    &.is-active {
-      color: $grey-0;
-      background: $green-0;
-    }
+  .top-bar-collection-content-right {
+    @include size(337px, 401px);
 
-    .left {
-      position: absolute;
-      left: 15px;
+    .blank {
+      @include font-style();
       display: inline-block;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      width: 115px;
-    }
-
-    .right {
       position: absolute;
-      right: 11px;
-    }
-  }
-}
-
-::v-deep .el-link {
-  @include font-style;
-
-  &--inner {
-    text-align: left;
-  }
-
-  &.el-link--default {
-    @include size(337px, 44px);
-    line-height: 44px;
-
-    &:hover {
-      background: $grey-2;
+      top: 45%;
+      left: 25%;
+      line-height: 44px;
+      font-family: Arial, Arial-Regular;
       color: $grey-11;
     }
+
+    ul li {
+      @include size(337px, 44px);
+      @include font-style();
+
+      .base-tag {
+        top: 12px;
+        left: 20px;
+        position: relative;
+      }
+
+      .collections-content {
+        display: inline-block;
+        position: relative;
+        @include size(337px, 44px);
+        @include font-style();
+        line-height: 21px;
+
+        .collectioncontent {
+          position: absolute;
+          top: 12px;
+          left: 67px;
+          height: 21px;
+          line-height: 21px;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          width: 248px;
+        }
+      }
+    }
   }
 }
 
-.blank {
-  display: inline-block;
-  position: absolute;
-  top: 45%;
-  left: 25%;
-  line-height: 44px;
-  font-family: Arial, Arial-Regular;
-  color: $grey-11;
-}
-
-.collectioncontent {
-  padding: 11px 22px 12px 13px;
-  overflow-wrap: normal;
-  @include font-style;
-  text-align: left;
-  @include size(248px, 21px);
-  line-height: 21px;
-  display: inline-block;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-// ::v-deep .el-tabs__header.is-left {
-//   margin-right: 0;
-//   height: 401px;
-//   overflow: hidden;
-//   padding: 0;
-// }
-
-.collection-right {
-  @include font-style;
-  text-align: left;
-  @include size(337px, 44px);
-  line-height: 44px;
-
-  .tag {
-    display: inline-block;
-    display: inline-block;
-    padding: 3px 5px 3px 5px;
-    border-radius: 5px;
-    border: 1px solid $pink-0;
-    @include font-style(12px, $pink-0);
-    text-align: left;
-    @include size(24px, 16px);
-    line-height: 16px;
+.menu-content {
+  @include size(161px, 44px);
+  &:hover {
+    background: $grey-2;
   }
-}
-
-.collecion {
-  text-align: left;
-  @include size(337px, 44px);
-  line-height: 44px;
 }
 </style>
 

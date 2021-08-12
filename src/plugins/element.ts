@@ -4,9 +4,8 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-19 21:30:24
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-08-05 21:40:39
+ * @LastEditTime: 2021-08-12 10:39:45
  */
-// import { App } from 'vue';
 import { App } from 'vue';
 import 'dayjs/locale/zh-cn';
 import locale from 'element-plus/lib/locale';
@@ -17,7 +16,7 @@ import {
   // ElAlert,
   // ElAside,
   // ElAutocomplete,
-  // ElAvatar,
+  ElAvatar,
   // ElBacktop,
   // ElBadge,
   // ElBreadcrumb,
@@ -69,11 +68,11 @@ import {
   // ElPopconfirm,
   // ElPopper,
   // ElProgress,
-  // ElRadio,
+  ElRadio,
   // ElRadioButton,
-  // ElRadioGroup,
+  ElRadioGroup,
   // ElRate,
-  // ElRow,
+  ElRow,
   ElScrollbar,
   // ElSelect,
   // ElSlider,
@@ -81,10 +80,10 @@ import {
   // ElSteps,
   // ElSubmenu,
   // ElSwitch,
-  ElTabPane,
+  // ElTabPane,
   // ElTable,
   // ElTableColumn,
-  ElTabs,
+  // ElTabs,
   // ElTag,
   // ElTimePicker,
   // ElTimeSelect,
@@ -115,7 +114,7 @@ const components = [
   // ElAlert,
   // ElAside,
   // ElAutocomplete,
-  // ElAvatar,
+  ElAvatar,
   // ElBacktop,
   // ElBadge,
   // ElBreadcrumb,
@@ -167,22 +166,22 @@ const components = [
   // ElPopconfirm,
   // ElPopper,
   // ElProgress,
-  // ElRadio,
+  ElRadio,
   // ElRadioButton,
-  // ElRadioGroup,
+  ElRadioGroup,
   // ElRate,
   // ElRow,
-  ElScrollbar,
+  ElScrollbar
   // ElSelect,
   // ElSlider,
   // ElStep,
   // ElSteps,
   // ElSubmenu,
   // ElSwitch,
-  ElTabPane,
+  // ElTabPane,
   // ElTable,
   // ElTableColumn,
-  ElTabs
+  // ElTabs,
   // ElTag,
   // ElTimePicker,
   // ElTimeSelect,
@@ -210,6 +209,11 @@ const plugins = [
   // ElNotification,
   ElPopover
 ];
+
+const directives = [
+  // { key: 'infinite-scroll', value: ElInfiniteScroll }
+];
+
 import '@/assets/style/element-variables.scss';
 
 export default (app: App) => {
@@ -223,5 +227,9 @@ export default (app: App) => {
 
   plugins.forEach(plugin => {
     app.use(plugin);
+  });
+
+  directives.forEach(directive => {
+    app.directive(directive.key, directive.value);
   });
 };
