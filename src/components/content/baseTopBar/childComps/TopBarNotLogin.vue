@@ -4,16 +4,16 @@
  * @Autor: Ban
  * @Date: 2021-08-09 12:14:46
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-12 21:18:30
+ * @LastEditTime: 2021-08-12 22:23:30
 -->
 
 <template>
   <div class="top-bar-not-login">
-    <div class="top-bar-not-login-title">
-      登录即可查看{{ title }}
+    <div class="top-bar-not-login-content">
+      {{ content }}
     </div>
     <a
-      href="/login/signIn"
+      :href="isLogin ? '/admin' :'/login/signIn'"
       class="top-bar-not-login-link"
     >
       <div>
@@ -28,14 +28,13 @@ import { defineComponent } from 'vue';
 
 /**
  * @description: 未登录时提示
- * @param {String} title 登录既可查看title `必传参数`
- * @param {Number} offset 出现位置的偏移量 `默认为0`
+ * @param {String} content 登录既可查看title `必传参数`
  * @author: Ban
  */
 export default defineComponent({
   name: 'TopBarNotLogin',
   props: {
-    title: {
+    content: {
       type: String,
       required: true,
     },
@@ -50,7 +49,7 @@ export default defineComponent({
   box-sizing: border-box;
   overflow: hidden;
 
-  .top-bar-not-login-title {
+  .top-bar-not-login-content {
     text-align: center;
     height: 40px;
     line-height: 40px;

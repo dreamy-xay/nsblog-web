@@ -4,112 +4,114 @@
  * @Autor: Ban
  * @Date: 2021-07-19 18:32:43
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-12 21:50:25
+ * @LastEditTime: 2021-08-12 23:04:45
 -->
 <template>
-  <div class="user">
-    <div
-      class="user-little-img"
-      @mouseenter="avatarMissing"
+  <div class="top-bar-avatar">
+    <a
+      href="/login/signIn"
+      v-if="!isLogin"
     >
-      <div v-show="avatarShow">
-        <a :href="'/users/' + username">
-          <img
-            v-if="isLogin"
-            :src="avatar"
-            alt="avatar"
-          />
-        </a>
-        <div
-          v-if="!isLogin"
-          @click="$router.push({name: 'signIn'})"
-        >
-          登录
-        </div>
+      <div class="top-bar-avatar-not-login">
+        登录
       </div>
-    </div>
-    <div
-      v-if="isLogin"
-      class="user-tool-bar"
-      :class="{'user-tool-bar-show': toolBarShow}"
-      :style="{display: toolBarDisplay}"
-      @mouseleave="barMissing"
+    </a>
+    <el-popover
+      placement="bottom"
+      popper-class="top-bar-avatar-inner"
+      :width="240"
+      :show-arrow="false"
+      trigger="hover"
+      :show-after="200"
+      :offset="10"
     >
-      <div class="user-tool-bar-top">
-        <a :href="'/users/' + username">
-          <img
-            :src="avatar"
-            alt="avatar"
-            class="bigImg"
-          >
-        </a>
-        <div
-          v-text="username"
-          class="name"
-        ></div>
-        <div class="age">
-          <div class="age-left">
-            <span>学龄 </span> <span> {{ age }}年 </span>
-          </div>
-          <div class="age-right">
-            <span> {{experience[0]}} </span>/<span> {{experience[1]}} </span>
-          </div>
-          <div class="age-line"></div>
+      <div class="user-info">
+        <div class="user-info-top">
+          <a :href="'/users/' + username">
+            <img
+              :src="avatar"
+              alt="avatar"
+              class="bigImg"
+            >
+          </a>
           <div
-            class="age-percent"
-            :style="{width: setpercent + 'px'}"
+            v-text="username"
+            class="name"
           ></div>
-        </div>
-        <div class="top-bottom">
-          <div class="bottom-left"><a href=""><i class="iconfont blog-zan"></i></a>
-            <div class="like"> {{ like_count }} </div>
+          <div class="age">
+            <div class="age-left">
+              <span>学龄 </span> <span> {{ age }}年 </span>
+            </div>
+            <div class="age-right">
+              <span> {{experience[0]}} </span>/<span> {{experience[1]}} </span>
+            </div>
+            <div class="age-line"></div>
+            <div
+              class="age-percent"
+              :style="{width: setpercent + 'px'}"
+            ></div>
           </div>
-          <div class="bottom-right"><a href="">
-              <div class="zanborder"><i class="iconfont blog-youxiang"></i></div>
-            </a></div>
+          <div class="top-bottom">
+            <div class="bottom-left"><a href=""><i class="iconfont blog-zan"></i></a>
+              <div class="like"> {{ like_count }} </div>
+            </div>
+            <div class="bottom-right"><a href="">
+                <div class="zanborder"><i class="iconfont blog-youxiang"></i></div>
+              </a></div>
+          </div>
+        </div>
+        <div class="user-info-mid">
+          <a
+            href=""
+            class="mid-left"
+          >
+            <span>关注</span>
+            <div> {{ recommend_count ? recommend_count : '--' }} </div>
+          </a>
+          <a
+            href=""
+            class="mid-mid"
+          >
+            <span>粉丝</span>
+            <div> {{ fans_count ? fans_count:'--'}} </div>
+          </a>
+          <a
+            href=""
+            class="mid-right"
+          >
+            <span>动态</span>
+            <div> {{ dynamic_count ? dynamic_count : '--' }} </div>
+          </a>
+        </div>
+        <div class="user-info-bottom">
+          <ul>
+            <li
+              v-for="(bottom, index) in toolbarBottom"
+              :key="bottom.name"
+            >
+              <a :href="bottom.url"><i
+                  class="iconfont"
+                  :class="iconfonts[index]"
+                ></i> {{ bottom.name }} </a>
+            </li>
+          </ul>
+        </div>
+        <div class="user-info-exit">
+          <a href=""><i class="iconfont blog-exit-door"></i> 退出</a>
         </div>
       </div>
-      <div class="user-tool-bar-mid">
-        <a
-          href=""
-          class="mid-left"
-        >
-          <span>关注</span>
-          <div> {{ recommend_count ? recommend_count : '--' }} </div>
-        </a>
-        <a
-          href=""
-          class="mid-mid"
-        >
-          <span>粉丝</span>
-          <div> {{ fans_count ? fans_count:'--'}} </div>
-        </a>
-        <a
-          href=""
-          class="mid-right"
-        >
-          <span>动态</span>
-          <div> {{ dynamic_count ? dynamic_count : '--' }} </div>
-        </a>
-      </div>
-      <div class="user-tool-bar-bottom">
-        <ul>
-          <li
-            v-for="(bottom, index) in toolbarBottom"
-            :key="bottom.name"
-          >
-            <a :href="bottom.url"><i
-                class="iconfont"
-                :class="iconfonts[index]"
-              ></i> {{ bottom.name }} </a>
-          </li>
-        </ul>
-      </div>
-      <div class="user-tool-bar-exit">
-        <a href=""><i class="iconfont blog-exit-door"></i> 退出</a>
-      </div>
-    </div>
-
+      <template #reference>
+        <div class="top-bar-avatar-login">
+          <a :href="'/users/' + username">
+            <img
+              v-if="isLogin"
+              :src="avatar"
+              alt="avatar"
+            />
+          </a>
+        </div>
+      </template>
+    </el-popover>
   </div>
 </template>
 
@@ -122,7 +124,7 @@ import { verifyToken } from '@/network/token';
  * @author: Ban
  */
 export default defineComponent({
-  name: 'user',
+  name: 'topBarAvatar',
   setup() {
     const isLogin = ref(verifyToken().status); // 是否已登录
     const avatar = ref('/home/avatarLoading.gif'); // 初始头像
@@ -246,67 +248,56 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-$avatarlitteImg: 36px;
-$avatarbigImg: 68px;
-$toolbarWidth: 240px;
-$fontcolor: $grey-11;
+.top-bar-avatar {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
 
-.user {
-  width: 32px;
-  position: relative;
-  color: $fontcolor;
-  line-height: normal;
-
-  .user-little-img {
-    width: 50px;
-    height: 50px;
+  .top-bar-avatar-not-login {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
     overflow: hidden;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    background-color: $grey-1;
+    font-weight: 600;
+    color: $green-0;
+    transition: 0.25s;
 
-    img,
-    div {
-      width: $avatarlitteImg;
-      height: $avatarlitteImg;
-      border-radius: 50%;
-      overflow: hidden;
-    }
-
-    div {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 14px;
-      background-color: $grey-1;
-      font-weight: 600;
-      color: $green-0;
+    &:hover {
+      color: $green-1;
+      background-color: $grey-2;
     }
   }
 
-  .user-tool-bar {
-    border-radius: 8px;
-    box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.16);
-    position: absolute;
-    right: -106px;
-    top: 50px;
-    display: flex;
-    width: $toolbarWidth;
-    flex-direction: column;
-    background: $grey-0;
-    opacity: 0;
-    transition: opacity 0.3s;
+  .top-bar-avatar-login {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    overflow: hidden;
 
-    &.user-tool-bar-show {
-      opacity: 1;
+    img {
+      width: 100%;
+      height: 100%;
     }
+  }
+}
 
-    .user-tool-bar-top {
+.top-bar-avatar-inner {
+  .user-info {
+    position: relative;
+    width: 100%;
+    display: inline-block;
+
+    .user-info-top {
       text-align: center;
       border-bottom: 1px solid $grey-4;
 
       .age {
-        //line-height: 12px;
         position: relative;
         width: 100%;
         padding-bottom: 21px;
@@ -364,8 +355,8 @@ $fontcolor: $grey-11;
       }
 
       .bigImg {
-        height: $avatarbigImg;
-        width: $avatarbigImg;
+        height: 68px;
+        width: 68px;
         border-radius: 50%;
         position: absolute;
         top: -30px;
@@ -415,7 +406,7 @@ $fontcolor: $grey-11;
       }
     }
 
-    .user-tool-bar-mid {
+    .user-info-mid {
       line-height: 8px;
       display: flex;
       padding: 14px 30px 14px 30px;
@@ -439,7 +430,7 @@ $fontcolor: $grey-11;
       }
     }
 
-    .user-tool-bar-bottom {
+    .user-info-bottom {
       border-bottom: 1px solid $grey-4;
 
       ul li {
@@ -470,7 +461,7 @@ $fontcolor: $grey-11;
       }
     }
 
-    .user-tool-bar-exit {
+    .user-info-exit {
       line-height: 44px;
 
       &:hover {
