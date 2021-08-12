@@ -8,7 +8,7 @@
  */
 import io, { Socket } from 'socket.io-client';
 
-const socket: Socket = io(`${process.env.VUE_APP_APIHOST}:${process.env.VUE_APP_APIPORT}`, {
+const socket: Socket = io(`${process.env.VUE_APP_APIHOST}:${process.env.VUE_APP_APIPORT}/`, {
   path: `${process.env.VUE_APP_APIROUTER}/socket/messages`
 });
 
