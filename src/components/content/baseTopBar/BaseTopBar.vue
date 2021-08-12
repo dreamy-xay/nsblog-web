@@ -1,7 +1,7 @@
 <!--
  * @Author: Ban
  * @Date: 2021-07-19 12:47:11
- * @LastEditTime: 2021-08-12 15:42:26
+ * @LastEditTime: 2021-08-12 17:08:01
  * @LastEditors: dreamy-xay
  * @Description: In User Settings Edit
  * @FilePath:
@@ -9,18 +9,18 @@
 <template>
   <div class="base-top-bar">
     <div class="base-top-bar-to-center">
-      <top-bar-head-left />
-      <top-bar-head-center />
-      <top-bar-head-right />
+      <top-bar-left />
+      <top-bar-center />
+      <top-bar-right />
     </div>
   </div>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
-import TopBarHeadRight from './childComps/TopBarHeadRight.vue';
-import TopBarHeadCenter from './childComps/TopBarHeadCenter.vue';
-import TopBarHeadLeft from './childComps/TopBarHeadLeft.vue';
+import TopBarRight from '@/components/content/baseTopBar/childComps/TopBarRight.vue';
+import TopBarCenter from '@/components/content/baseTopBar/childComps/TopBarCenter.vue';
+import TopBarLeft from '@/components/content/baseTopBar/childComps/TopBarLeft.vue';
 
 /**
  * @description:  首页顶部导航栏
@@ -30,9 +30,9 @@ import TopBarHeadLeft from './childComps/TopBarHeadLeft.vue';
 export default defineComponent({
   name: 'baseTopBar',
   components: {
-    TopBarHeadLeft,
-    TopBarHeadRight,
-    TopBarHeadCenter,
+    TopBarLeft,
+    TopBarRight,
+    TopBarCenter,
   },
 });
 </script>

@@ -3,43 +3,44 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-07-22 17:52:26
- * @LastEditors: Ban
- * @LastEditTime: 2021-08-10 23:11:07
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-08-12 21:51:53
 -->
 <template>
-  <div class="base-top-bar-center">
-    <div class="center-middle">
+  <div class="top-bar-center">
+    <div class="top-bar-center-middle">
       <input type="text">
-      <button class="base-top-bar-center-button">
+      <button class="top-bar-center-button">
         <i class="iconfont blog-sousuo"></i>
       </button>
     </div>
-
   </div>
 </template>
 
 <script>
+import { defineComponent } from 'vue';
+
 /**
  * @description: 首页顶部之中间部分组件
  * @author: Ban
  */
-import { defineComponent } from 'vue';
+
 export default defineComponent({
-  name: 'TopBarHeadCenter',
+  name: 'topBarCenter',
 });
 </script>
 
 
 <style lang="scss" scoped>
-.base-top-bar-center {
+.top-bar-center {
   box-sizing: border-box;
   flex: 1;
   padding-right: 13px;
   width: 373px;
-  //text-align: center;
 
-  .center-middle {
+  .top-bar-center-middle {
     transform: translate(0, 10px);
+
     input {
       height: 36px;
       width: calc(100% - 48px);
@@ -52,7 +53,7 @@ export default defineComponent({
       outline: 0;
     }
 
-    .base-top-bar-center-button {
+    .top-bar-center-button {
       width: 48px;
       height: 36px;
       display: inline-block;

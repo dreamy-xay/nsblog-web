@@ -3,104 +3,71 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2021-08-05 18:50:30
- * @LastEditors: continue-hs
- * @LastEditTime: 2021-08-12 16:01:58
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-08-12 20:30:04
 -->
 
 <template>
-
-  <div v-if="!isLogin">
-    <top-bar-not-login-in
-      :title="title"
-      :offset="10"
-    >
-      收藏
-    </top-bar-not-login-in>
-  </div>
-
-  <div
-    class="top-bar-collection"
-    v-if="isLogin"
-  >
-
-    <el-popover
-      placement="bottom"
-      trigger="hover"
-      hide-after="100"
-      :width=498
-      :popper-class="top-bar-collections"
-    >
-
-      <template #reference>
-        <div
-          class="top-bar-collection-header"
-          @click="onclick"
-        >
-          收藏
-        </div>
-      </template>
-
-      <div class="top-bar-collection-content">
-        <div class="top-bar-collection-content-left">
-          <div class="content-menu">
-            <el-scrollbar height="401px">
-              <ul>
-                <li
-                  class="menu-content"
-                  v-for="(item,index) in favorites"
-                  :key="index"
-                  :class="{active: index === isActive}"
-                  @click="chooseClick(index)"
-                  role="button"
-                >
-                  <div class="collections-menu">
-                    <span class="left">{{item.name}}</span>
-                    <span class="right">{{item.count}}</span>
-                  </div>
-                </li>
-              </ul>
-            </el-scrollbar>
-          </div>
-        </div>
-
-        <div class="top-bar-collection-content-right">
+  <div class="top-bar-collection">
+    <div class="top-bar-collection-content">
+      <div class="top-bar-collection-content-left">
+        <div class="content-menu">
           <el-scrollbar height="401px">
-            <div
-              class="blank"
-              v-if="List !== undefined && List.length === 0"
-            >
-              该收藏夹还没有收藏内容哦~
-            </div>
             <ul>
               <li
-                v-for="(value,index) in List"
-                :key=index
+                class="menu-content"
+                v-for="(item,index) in favorites"
+                :key="index"
+                :class="{active: index === isActive}"
+                @click="chooseClick(index)"
+                role="button"
               >
-                <a
-                  href="(value.type === 1 ? '/article/' : '/question/') + value.id "
-                  target="_blank"
-                >
-                  <div class="collections-content">
-                    <base-tag
-                      :text="value.type === 1 ? '问答' : '文章'"
-                      :color="styles.pink0"
-                      :hollow="true"
-                      role="button"
-                    />
-                    <span
-                      class="collectioncontent"
-                      role="button"
-                    > {{value.title}}</span>
-                  </div>
-                </a>
+                <div class="collections-menu">
+                  <span class="left">{{item.name}}</span>
+                  <span class="right">{{item.count}}</span>
+                </div>
               </li>
             </ul>
           </el-scrollbar>
         </div>
-
       </div>
 
-    </el-popover>
+      <div class="top-bar-collection-content-right">
+        <el-scrollbar height="401px">
+          <div
+            class="blank"
+            v-if="List !== undefined && List.length === 0"
+          >
+            该收藏夹还没有收藏内容哦~
+          </div>
+          <ul>
+            <li
+              v-for="(value,index) in List"
+              :key=index
+            >
+              <a
+                :href="(value.type === 1 ? '/article' : '/question') + value.id"
+                target="_blank"
+              >
+                <div class="collections-content">
+                  <base-tag
+                    :text="value.type === 1 ? '问答' : '文章'"
+                    :color="styles.pink0"
+                    :hollow="true"
+                    role="button"
+                  />
+                  <span
+                    class="collectioncontent"
+                    role="button"
+                  > {{value.title}}</span>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </el-scrollbar>
+      </div>
+
+    </div>
   </div>
 </template>
 
@@ -111,7 +78,6 @@ import BaseTag from '../../baseTag/BaseTag.vue';
 import styles from '@/assets/style/define.scss';
 import { verifyToken } from '@/network/token';
 import { useRouter } from 'vue-router';
-import TopBarNotLoginIn from '@/components/content/baseTopBar/childComps/TopBarNotLoginIn.vue';
 
 /**
  * @description:  收藏栏弹窗
@@ -120,7 +86,7 @@ import TopBarNotLoginIn from '@/components/content/baseTopBar/childComps/TopBarN
 
 export default defineComponent({
   name: 'topBarCollection',
-  components: { BaseTag, TopBarNotLoginIn },
+  components: { BaseTag },
   setup() {
     const title = ref('收藏');
     const isActive = ref(0);
@@ -178,15 +144,6 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss">
-.top-bar-collection {
-  .el-popover.NaN.el-popper.is-light {
-    border: 0;
-    padding: 0;
-  }
-}
-</style>
 
 <style lang="scss" scoped>
 @mixin font-style($size: 16px, $color: $grey-11) {
