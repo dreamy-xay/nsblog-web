@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-19 21:30:24
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-12 18:09:35
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-08-12 23:35:46
  */
 import { App } from 'vue';
 import 'dayjs/locale/zh-cn';
@@ -101,7 +101,7 @@ import {
   // ElDescriptionsItem,
   // ElResult,
   // ElSelectV2,
-  // ElInfiniteScroll,
+  ElInfiniteScroll,
   // ElLoading,
   // ElMessage
   // ElMessageBox,
@@ -202,7 +202,7 @@ const components = [
 ];
 
 const plugins = [
-  // ElInfiniteScroll,
+  ElInfiniteScroll,
   // ElLoading,
   // ElMessage
   // ElMessageBox,

@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-28 13:02:11
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-10 20:32:50
+ * @LastEditTime: 2021-08-12 21:54:44
 -->
 <template>
   <div
@@ -126,7 +126,7 @@ $green0: $green-0;
 $green1: $green-1;
 $shadow2: $shadow-2;
 
-::v-deep(.el-radio) {
+:deep(.el-radio) {
   color: $grey7;
 
   .el-radio__inner {
