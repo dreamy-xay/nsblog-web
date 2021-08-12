@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-09 17:58:32
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-03 23:14:20
+ * @LastEditors: continue-hs
+ * @LastEditTime: 2021-08-12 10:34:00
  */
 
 import { Application } from 'express';
@@ -14,6 +14,8 @@ import userApi from './intercepter/user';
 import historyApi from './intercepter/history';
 import collectionsApi from './intercepter/collections';
 import settingApi from './intercepter/setting';
+import attentionsApi from './intercepter/attentions';
+import messagesApi from './intercepter/messages';
 
 // 拦截请求api
 const BASE_URL: string =
@@ -26,11 +28,13 @@ const BASE_URL: string =
  * @return {void}
  * @author: dreamy-xay
  */
-export default function intercepter(app: Application) {
+export default function intercepter(app: Application): void {
   authApi(BASE_URL, app);
   adminApi(BASE_URL, app);
   userApi(BASE_URL, app);
   historyApi(BASE_URL, app);
   collectionsApi(BASE_URL, app);
   settingApi(BASE_URL, app);
+  attentionsApi(BASE_URL, app);
+  messagesApi(BASE_URL, app);
 }

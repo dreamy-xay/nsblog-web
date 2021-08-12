@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-04 18:45:12
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-05 15:54:44
+ * @LastEditors: continue-hs
+ * @LastEditTime: 2021-08-12 10:43:49
 -->
 
 <template>
@@ -13,7 +13,10 @@
       <i class="iconfont blog-lishijilu-copy"></i>
       <div>历史记录</div>
     </div>
-    <div class="history-bar-right">
+    <div
+      class="history-bar-right"
+      v-if="isLogin"
+    >
       <div
         class="search"
         :class="{active: searchValue !== ''}"
@@ -41,6 +44,17 @@
         @click="stopHistory"
       >
         暂停历史记录
+        <n-modal
+          display-directive="show"
+          :show="stopModalShow"
+        >
+          <history-modal
+            content="啊叻？你要暂停历史记录功能吗？"
+            confirmeText="确定暂停"
+            @confirm="stopConfirm"
+            @cancel="stopCancel"
+          />
+        </n-modal>
       </div>
       <div
         class="button"
@@ -48,6 +62,17 @@
         @click="clearHistory"
       >
         清空历史
+        <n-modal
+          display-directive="show"
+          :show="clearModalShow"
+        >
+          <history-modal
+            content="清空之后就什么都没有了哦~"
+            confirmeText="确定清空"
+            @confirm="clearConfirm"
+            @cancel="clearCancel"
+          />
+        </n-modal>
       </div>
     </div>
   </div>
@@ -55,16 +80,29 @@
 
 <script>
 import { defineComponent, ref } from 'vue';
+import HistoryModal from '@/views/history/childComps/HistoryModal.vue';
+import events from '@/events';
+import { modifySetting } from '@/network/api/setting';
+import { verifyToken } from '@/network/token';
 
 /**
  * @description: 历史记录顶部栏
+ * @emits HistoryBar-getHistory 按关键词获取历史记录，传递关键词参数
+ * @emits HistoryBar-clearAllHistory 清除全部历史记录
  * @author: dreamy-xay
  */
 
 export default defineComponent({
   name: 'historyBar',
+  components: {
+    HistoryModal,
+  },
   setup() {
     const searchValue = ref(''); // 搜索输入框内容
+    const stopModalShow = ref(false); // 暂停历史记录设置模态框显示
+    const clearModalShow = ref(false); // 清空历史记录设置模态框显示
+
+    const isLogin = verifyToken().status; // 是否已经登录
 
     /**
      * @description: 开始搜索
@@ -72,9 +110,7 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function search() {
-      if (searchValue.value !== '') {
-        console.log(searchValue.value);
-      }
+      if (searchValue.value !== '') events.emit('HistoryBar-getHistory', searchValue.value);
     }
 
     /**
@@ -92,23 +128,73 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function stopHistory() {
-      console.log('stopHistory');
+      stopModalShow.value = true;
     }
+
+    /**
+     * @description: 暂停历史记录确认
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function stopConfirm() {
+      stopModalShow.value = false;
+      modifySetting({
+        history_record: false,
+      }).catch((error) => {
+        console.log(error);
+      });
+    }
+
+    /**
+     * @description: 暂停历史记录取消
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function stopCancel() {
+      stopModalShow.value = false;
+    }
+
     /**
      * @description: 清空全部历史记录
      * @return {void}
      * @author: dreamy-xay
      */
     function clearHistory() {
-      console.log('clearHistory');
+      clearModalShow.value = true;
+    }
+
+    /**
+     * @description: 清空历史记录确认
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function clearConfirm() {
+      clearModalShow.value = false;
+      events.emit('HistoryBar-clearAllHistory');
+    }
+
+    /**
+     * @description: 清空历史记录取消
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function clearCancel() {
+      clearModalShow.value = false;
     }
 
     return {
       searchValue,
       search,
       clear,
+      isLogin,
       stopHistory,
       clearHistory,
+      stopModalShow,
+      clearModalShow,
+      stopConfirm,
+      clearConfirm,
+      stopCancel,
+      clearCancel,
     };
   },
 });
@@ -157,6 +243,8 @@ export default defineComponent({
     & > div {
       margin-left: 30px;
       height: 28px;
+      display: flex;
+      align-items: center;
     }
 
     .search {

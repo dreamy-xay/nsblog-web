@@ -3,17 +3,28 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-07-29 15:53:25
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-04 20:32:22
+ * @LastEditors: continue-hs
+ * @LastEditTime: 2021-08-12 10:38:42
 -->
 
 <template>
+
+  <div
+    class="top-bar-collection-content"
+    v-if="!isLogin"
+  >
+    <top-bar-not-login-in :title="title">
+      <el-button class="noteShare">笔记分享</el-button>
+    </top-bar-not-login-in>
+  </div>
+
   <el-popover
     placement="bottom"
     :width="288"
     trigger="hover"
     popper-class="el-noteshare"
     style="padding : 0"
+    v-if="isLogin"
   >
     <a
       href=""
@@ -40,14 +51,19 @@
 
 <script>
 import { defineComponent, ref } from 'vue';
-
+import TopBarNotLoginIn from '@/components/content/baseTopBar/childComps/TopBarNotLoginIn.vue';
+import { verifyToken } from '@/network/token';
 /**
  * @description:  TopBar_笔记分享
  * @author: Ban
  */
 
 export default defineComponent({
+  name: 'TopBarNoteShare',
+  components: { TopBarNotLoginIn },
   setup() {
+    const title = ref('笔记分享');
+    const isLogin = ref(verifyToken().status);
     const noteshare = [
       {
         name: '写笔记',
@@ -67,7 +83,9 @@ export default defineComponent({
       },
     ];
     return {
+      title,
       noteshare,
+      isLogin,
     };
   },
 });

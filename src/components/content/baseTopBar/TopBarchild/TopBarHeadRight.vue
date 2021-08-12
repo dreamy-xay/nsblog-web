@@ -4,26 +4,26 @@
  * @Autor: Ban
  * @Date: 2021-07-20 11:01:33
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-08-05 22:01:46
+ * @LastEditTime: 2021-08-11 15:57:26
 -->
 
 <template>
   <div class="base-top-bar-right">
     <ul class="base-top-bar-right-menu">
       <li>
-        <TopBarAvatar />
+        <!-- <TopBarAvatar /> -->
       </li>
       <li>
-        <TopBarMessage />
+        <!-- <TopBarMessage /> -->
       </li>
       <li>动态</li>
       <li>
-        <TopBarCollection />
+        <!-- <TopBarCollection /> -->
       </li>
       <li>历史</li>
       <li>创作中心</li>
       <li>
-        <TopBarNoteShare />
+        <!-- <TopBarNoteShare /> -->
       </li>
     </ul>
   </div>
@@ -46,10 +46,10 @@ import TopBarCollection from '@/components/content/baseTopBar/TopBarchild/TopBar
 export default defineComponent({
   name: 'TopBarHeadRight',
   components: {
-    TopBarAvatar,
-    TopBarNoteShare,
-    TopBarMessage,
-    TopBarCollection,
+    // TopBarAvatar,
+    // TopBarNoteShare,
+    // TopBarMessage,
+    // TopBarCollection,
   },
   setup() {
     let isNoteshare = ref(true);
