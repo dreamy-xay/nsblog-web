@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:02:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-04 13:09:00
+ * @LastEditTime: 2021-08-12 16:32:14
  */
 import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 import loginRouter from './modules/login';
@@ -15,6 +15,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/',
     name: 'home',
     component: () => import('@/views/home/Home.vue')
+  },
+  {
+    path: '/question',
+    name: 'question',
+    component: () => import('@/views/question/Question.vue')
   },
   loginRouter,
   messageRouter,
