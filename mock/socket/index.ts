@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-10 21:44:12
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-11 18:59:03
+ * @LastEditTime: 2021-08-12 11:06:45
  */
 import { Random } from 'better-mock';
 import { Server } from 'http';
@@ -12,7 +12,7 @@ import * as socketIo from 'socket.io';
 
 export default (server: Server) => {
   const io = new socketIo.Server(server, {
-    path: `${process.env.VUE_APP_APIROUTER}/messages`,
+    path: `${process.env.VUE_APP_APIROUTER}/socket/messages`,
     cors: {
       origin: '*'
     }
@@ -31,9 +31,10 @@ export default (server: Server) => {
     socket.on('online', userId => {
       if (!Object.prototype.hasOwnProperty.call(onlineUsers, userId)) {
         onlineUsers[userId] = socket.id;
-        onlineCount++;
-        currentUser = userId;
+        ++onlineCount;
       }
+
+      currentUser = userId;
 
       //建立连接后 用户点击不同通讯录都是建立同样的socket对象
       console.log('在线人数：', onlineCount);
