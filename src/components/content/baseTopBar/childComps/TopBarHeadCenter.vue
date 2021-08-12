@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-07-22 17:52:26
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-04 14:25:38
+ * @LastEditors: Ban
+ * @LastEditTime: 2021-08-10 23:11:07
 -->
 <template>
   <div class="base-top-bar-center">
@@ -20,7 +20,7 @@
 
 <script>
 /**
- * @description: The center of TopBar
+ * @description: 首页顶部之中间部分组件
  * @author: Ban
  */
 import { defineComponent } from 'vue';
@@ -44,7 +44,7 @@ export default defineComponent({
       height: 36px;
       width: calc(100% - 48px);
       max-width: 325px;
-      border: 1px solid #e5e5e5;
+      border: 1px solid $grey-4;
       border-radius: 3px 0 0 3px;
       background: $grey-2;
       text-indent: 16px;

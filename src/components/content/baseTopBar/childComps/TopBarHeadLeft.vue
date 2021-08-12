@@ -1,10 +1,10 @@
 <!--
- * @Description:首页顶部之左边部分组件
+ * @Description: 首页顶部之左边部分组件
  * @Version:
  * @Autor: Ban
  * @Date: 2021-07-29 16:37:09
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-04 20:53:29
+ * @LastEditors: Ban
+ * @LastEditTime: 2021-08-10 23:11:16
 -->
 <template>
   <div class="base-top-bar-left">
@@ -30,7 +30,7 @@
 import { defineComponent } from 'vue';
 
 /**
- * @description:  The left of TopBar
+ * @description:  首页顶部之左边部分组件
  * @param {*}
  * @return {*}
  * @author: Ban

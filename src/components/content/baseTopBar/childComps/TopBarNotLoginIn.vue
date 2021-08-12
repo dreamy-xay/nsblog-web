@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-09 12:14:46
  * @LastEditors: Ban
- * @LastEditTime: 2021-08-10 16:50:09
+ * @LastEditTime: 2021-08-12 14:10:52
 -->
 
 <template>
@@ -17,9 +17,12 @@
       width="334px"
     >
       <template #reference>
-        <div>
+        <a
+          :href="href"
+          :style="{'color' : color}"
+        >
           <slot></slot>
-        </div>
+        </a>
       </template>
       <div class="popover-title">
         登录即可查看{{ title }}
@@ -53,6 +56,14 @@ export default defineComponent({
     offset: {
       type: Number,
       default: 0,
+    },
+    href: {
+      type: String,
+      default: '/',
+    },
+    color: {
+      type: String,
+      default: '#000',
     },
   },
 });

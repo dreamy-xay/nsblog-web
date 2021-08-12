@@ -3,25 +3,25 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-07-20 11:01:33
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-04 20:34:07
+ * @LastEditors: Ban
+ * @LastEditTime: 2021-08-12 12:32:24
 -->
 
 <template>
   <div class="base-top-bar-right">
-    <ul class="base-top-bar-right-menu">
-      <li>
+    <div class="base-top-bar-right-menu">
+      <div class="menu-child">
         <top-bar-avatar />
-      </li>
-      <li>消息</li>
-      <li>动态</li>
-      <li>收藏</li>
-      <li>历史</li>
-      <li>创作中心</li>
-      <li>
+      </div>
+      <div class="menu-child">消息</div>
+      <div class="menu-child">动态</div>
+      <div class="menu-child">收藏</div>
+      <div class="menu-child">历史</div>
+      <div class="menu-child">创作中心</div>
+      <div class="menu-child">
         <top-bar-note-share />
-      </li>
-    </ul>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -63,7 +63,7 @@ $grey0: $grey-0;
     display: inline-block;
     letter-spacing: 1px;
 
-    li {
+    .menu-child {
       display: inline-block;
       vertical-align: middle;
       font-size: 16px;
@@ -72,25 +72,6 @@ $grey0: $grey-0;
 
       &:hover {
         color: $green0;
-      }
-    }
-
-    .noteshare {
-      display: inline-block;
-      background: $green0;
-      text-align: center;
-      height: 36px;
-      width: 96px;
-      line-height: 36px;
-      border-radius: 3px;
-      color: $grey0;
-      cursor: pointer;
-      position: relative;
-      &:hover {
-        background: $green1;
-      }
-      li {
-        color: $grey0;
       }
     }
   }
