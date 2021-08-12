@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-05 21:23:32
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-08-12 16:00:55
+ * @LastEditTime: 2021-08-12 16:08:10
 -->
 
 <template>
@@ -14,7 +14,12 @@
       :title="title"
       :offset="10"
     >
-      消息
+      <div
+        class="top-bar-message-header"
+        @click="messageclick"
+      >
+        消息
+      </div>
     </top-bar-not-login-in>
   </div>
 
