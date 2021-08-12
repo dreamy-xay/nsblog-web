@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-28 13:11:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-09 22:04:27
+ * @LastEditTime: 2021-08-12 23:21:00
 -->
 <template>
 
@@ -20,6 +20,7 @@
         <message-menu
           :menus="menus"
           :menu="menu"
+          :menuData="menuData"
           :messagetag="messagetag"
           :changeColor="changeColor"
         ></message-menu>
@@ -30,24 +31,28 @@
         </message-top>
 
         <div class="message-center-right-route">
-          <el-scrollbar max-height="636px">
-            <router-view />
-          </el-scrollbar>
+          <!-- <el-scrollbar
+            ref="innerRef"
+            max-height="636px"
+            @scroll="scroll"
+          > -->
+          <router-view />
+          <!-- </el-scrollbar> -->
         </div>
-
       </div>
-
     </div>
 
   </base-view>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, reactive } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import MessageMenu from '@/views/message/childComps/MessageMenu.vue';
 import MessageTop from '@/views/message/childComps/MessageTop.vue';
+import { getMessages } from '@/network/api/messages.ts';
+import events from '@/events';
 
 /**
  * @description: 消息页面
@@ -66,6 +71,7 @@ export default defineComponent({
   setup(props, context) {
     const router = useRouter(),
       route = useRoute();
+    const menuData = reactive([]);
 
     const menus = [
       { iconfont: 'iconfont blog-huifu1', id: 'reply', key: '回复我的' },
@@ -91,21 +97,62 @@ export default defineComponent({
       }
     }
     /**
+     * @description: 得到未读消息
+     * @param {*}
+     * @return {*}
+     * @author: Z_Y_C
+     */
+    getMessages()
+      .then((data) => {
+        menuData.splice(0, 0, ...data.count);
+        menuData[0] = 0;
+      })
+      .catch((error) => console.log(error));
+
+    /**
      * @description:改变路由，传递数据（页面名称）到父组件
      * @param {menu} 路由名称（menu.id）和页面名称（menu.key）
      * @return {void}
      * @author: Z_Y_C
      */
 
-    function changeColor(menu) {
-      router.push(`/message/${menu.id}`); //改变路由
-      messagetag.value = menu.key;
+    function changeColor(item, index) {
+      router.push(`/message/${item.id}`); //改变路由
+      messagetag.value = item.key;
+      menuData[index] = 0;
+    }
+
+    /**
+     * @description: 判断是否到了底部，到了底部加载数据
+     * @param {*}
+     * @return {*}
+     * @author: Z_Y_C
+     */
+
+    const innerRef = ref(null); // inner ref
+    let timer = 0; // 到底触发计时器
+
+    function scroll() {
+      if (
+        (1 - parseFloat(innerRef.value.sizeHeight) / 100) * innerRef.value.wrap.scrollHeight <
+          innerRef.value.wrap.scrollTop &&
+        timer === 0
+      ) {
+        timer = 1;
+        setTimeout(() => {
+          timer = 0;
+        }, 300);
+        events.emit('Message-GetDataTag');
+      }
     }
 
     return {
+      innerRef,
       messagetag,
       menus,
       menu,
+      menuData,
+      scroll,
       changeColor,
     };
   },

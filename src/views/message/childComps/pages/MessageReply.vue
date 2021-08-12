@@ -4,18 +4,23 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:25:27
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-10 20:32:44
+ * @LastEditTime: 2021-08-11 23:45:51
 -->
 
 <template>
   <div
     class="message-reply"
     role="button"
+    v-for="item in replyData"
+    :key="item.message_id"
   >
 
     <div class="message-reply-avator">
-      <a href="/message/setting">
-        <el-avatar :size='46'>
+      <a :href="'/auth'+item.content.username">
+        <el-avatar
+          :size='46'
+          :src="item.content.avatar"
+        >
           user
         </el-avatar>
       </a>
@@ -68,12 +73,14 @@
 
   </div>
 
-  <message-empty v-if="data=== undefined ||data === null || data.length <= 0 " />
+  <message-empty v-if="replyData=== undefined ||replyData === null || replyData.length <= 0 " />
 
 </template>
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, reactive } from 'vue';
 import MessageEmpty from '@/views/message/childComps/MessageEmpty.vue';
+import { getMessages } from '@/network/api/messages.ts';
+
 /**
  * @description: 回复我的页面
  * @param {*}
@@ -87,12 +94,16 @@ export default defineComponent({
     MessageEmpty,
   },
   setup() {
-    const data = [
-      { message_id: '12233', type: 1, send_id: 'ZZ', recive_id: 'my', content: '加油', time: '2021年8月5日' },
-    ];
-
-    // function ClickLike() {}
-    return { data };
+    const replyData = reactive([]);
+    console.log(replyData);
+    getMessages(2)
+      .then((data) => {
+        replyData.splice(0, 0, ...data.messages);
+        console.log(data);
+        console.log(replyData);
+      })
+      .catch((error) => console.log(error));
+    return { replyData };
   },
 });
 </script>

@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 22:48:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-10 14:29:45
+ * @LastEditTime: 2021-08-12 21:55:00
 -->
 <template>
   <div class="message-left">
@@ -18,11 +18,11 @@
     </div>
 
     <div
-      v-for="item in menus"
+      v-for="item,index in menus"
       :key="item.id"
       class="message-left-title2"
       :class="messagetag===item.key? 'message-left-title-color':''"
-      @click="changeColor(item)"
+      @click="changeColor(item,index)"
       role="button"
     >
       <i
@@ -32,10 +32,11 @@
       <span class="message-left-title2-text">{{item.key}}</span>
 
       <n-badge
-        :value="990"
+        :value="menuData[index]"
         :max="99"
-        v-if="true"
+        v-if="menuData[index]>0 ? true:false"
       />
+
     </div>
 
     <div class='message-left-line'></div>
@@ -57,7 +58,7 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, reactive } from 'vue';
 
 /**
  * @description: Message的子组件MessageLeft
@@ -72,6 +73,7 @@ export default defineComponent({
     menu: Object,
     messagetag: String,
     changeColor: Function,
+    menuData: Array,
   },
   setup(props, context) {
     return {};
@@ -88,10 +90,9 @@ $grey7: $grey-7;
 $grey4: $grey-4;
 $green0: $green-0;
 
-::v-deep(.n-badge) {
+:deep(.n-badge) {
   .n-badge-sup {
     background-color: pink;
-    // padding: 0 4px;
   }
 }
 
