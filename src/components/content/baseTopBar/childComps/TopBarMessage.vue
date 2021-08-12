@@ -3,63 +3,25 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2021-08-05 21:23:32
- * @LastEditors: continue-hs
- * @LastEditTime: 2021-08-12 16:08:10
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-08-12 19:47:12
 -->
 
 <template>
-
-  <div v-if="!isLogin">
-    <top-bar-not-login-in
-      :title="title"
-      :offset="10"
+  <div class=top-bar-message>
+    <div
+      v-for="(item,index) in menuList"
+      :key="index"
     >
-      <div
-        class="top-bar-message-header"
-        @click="messageclick"
+      <el-link
+        :underline=false
+        :href="item.url"
+        :class="content"
       >
-        消息
-      </div>
-    </top-bar-not-login-in>
-  </div>
-
-  <div
-    class=top-bar-message
-    v-if="isLogin"
-  >
-
-    <el-popover
-      placement="bottom"
-      trigger="hover"
-      hide-after="100"
-      :popper-class="topbarmessage"
-      :width=172
-    >
-
-      <template #reference>
-        <div
-          class="top-bar-message-header"
-          @click="messageclick"
-        >
-          消息
-        </div>
-      </template>
-
-      <div
-        v-for="(item,index) in menuList"
-        :key="index"
-      >
-        <el-link
-          :underline=false
-          :href="item.url"
-          :class="content"
-        >
-          <i :class="item.icon"></i>
-          <span class="contents">{{item.title}}</span>
-        </el-link>
-      </div>
-
-    </el-popover>
+        <i :class="item.icon"></i>
+        <span class="contents">{{item.title}}</span>
+      </el-link>
+    </div>
   </div>
 </template>
 
@@ -67,14 +29,13 @@
 import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { verifyToken } from '@/network/token';
-import TopBarNotLoginIn from '@/components/content/baseTopBar/childComps/TopBarNotLoginIn.vue';
+
 /**
  * @description:  消息栏弹窗
  * @author: continue-hs
  */
 
 export default defineComponent({
-  components: { TopBarNotLoginIn },
   name: 'topBarMessage',
   setup() {
     const title = ref('消息');
@@ -132,12 +93,7 @@ export default defineComponent({
   },
 });
 </script>
-<style lang="scss">
-.el-popover.el-popper.is-light {
-  border: 0;
-  padding: 0;
-}
-</style>
+
 <style lang="scss" scoped>
 @mixin font-style($size: 16px, $color: $grey-11) {
   font-size: $size;
@@ -164,7 +120,7 @@ export default defineComponent({
   @include font-style;
 }
 
-::v-deep .el-link {
+:deep(.el-link) {
   font-weight: 400;
   padding-bottom: 2px;
   &.el-link--default {
@@ -183,7 +139,7 @@ export default defineComponent({
   }
 }
 
-::v-deep .iconfont {
+:deep(.iconfont) {
   font-size: 20px;
 }
 

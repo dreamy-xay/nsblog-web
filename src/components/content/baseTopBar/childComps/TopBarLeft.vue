@@ -4,11 +4,11 @@
  * @Autor: Ban
  * @Date: 2021-07-29 16:37:09
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-12 16:39:39
+ * @LastEditTime: 2021-08-12 16:58:15
 -->
 <template>
-  <div class="base-top-bar-left">
-    <div class="base-top-bar-left-logo">
+  <div class="top-bar-left">
+    <div class="top-bar-left-logo">
       <a href="/">
         <img
           src="/logo.png"
@@ -16,14 +16,17 @@
         >
       </a>
     </div>
-    <div class="base-top-bar-left-menu">
+    <div class="top-bar-left-menu">
       <a
         v-for="(item, index) in menu"
         :href="item.url"
         :key="index"
         :class="{active: activeIndex === index}"
       >
-        <div class="text">
+        <div
+          class="text"
+          role="button"
+        >
           {{ item.name }}
         </div>
       </a>
@@ -37,12 +40,12 @@ import { verifyToken } from '@/network/token';
 import { useRoute } from 'vue-router';
 
 /**
- * @description:  首页顶部之左边部分组件
+ * @description: 首页顶部之左边部分组件
  * @author: Ban
  */
 
 export default defineComponent({
-  name: 'home',
+  name: 'topBarLeft',
   setup() {
     const token = verifyToken(); // 拿到token验证信息
     // 左侧菜单按钮
@@ -92,11 +95,11 @@ $topBarHeight: 56px;
 $a-black: $grey-11;
 $green0: $green-0;
 
-.base-top-bar-left {
+.top-bar-left {
   height: 100%;
   display: flex;
 
-  .base-top-bar-left-logo {
+  .top-bar-left-logo {
     position: relative;
     display: inline-block;
     height: 100%;
@@ -107,7 +110,7 @@ $green0: $green-0;
     }
   }
 
-  .base-top-bar-left-menu {
+  .top-bar-left-menu {
     letter-spacing: 1px;
     height: 100%;
     overflow: hidden;
@@ -118,11 +121,13 @@ $green0: $green-0;
     align-items: center;
 
     a {
-      display: inline-block;
+      display: flex;
       height: 100%;
       overflow: hidden;
       transition: 0.25s;
+      align-items: center;
       box-sizing: border-box;
+      cursor: default;
 
       &.active {
         border-top: 3px solid $green0;
@@ -133,7 +138,7 @@ $green0: $green-0;
       }
 
       .text {
-        height: 100%;
+        height: 30px;
         position: relative;
         display: flex;
         align-items: center;

@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-07-29 15:53:25
- * @LastEditors: Ban
- * @LastEditTime: 2021-08-12 14:18:52
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-08-12 21:51:10
 -->
 
 <template>
@@ -15,8 +15,7 @@
       :width="288"
       trigger="hover"
       popper-class="top-bar-note-share-noteshare"
-      style="padding : 0"
-      v-if="isLogin"
+      :offset="10"
     >
       <a
         href=""
@@ -29,7 +28,7 @@
           :class="item.iconfont"
         ></i>
         <div>
-          {{  item.name  }}
+          {{ item.name }}
         </div>
       </a>
       <template #reference>
@@ -40,30 +39,13 @@
         </el-button>
       </template>
     </el-popover>
-    <!-- 未登录时加载 -->
-    <el-button
-      type="primary"
-      v-if="!isLogin"
-      class="top-bar-note-share-not-in"
-    >
-      <top-bar-not-login-in
-        title="笔记分享"
-        href="/login"
-        color="#fff"
-        offset="10"
-      >
-        <div class="not-login-in">
-          笔记分享
-        </div>
-      </top-bar-not-login-in>
-    </el-button>
   </div>
 
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
-import TopBarNotLoginIn from '@/components/content/baseTopBar/childComps/TopBarNotLoginIn.vue';
+import { defineComponent } from 'vue';
+// import TopBarNotLogin from '@/components/content/baseTopBar/childComps/TopBarNotLogin.vue';
 import { verifyToken } from '@/network/token';
 /**
  * @description:  TopBar_笔记分享
@@ -72,7 +54,7 @@ import { verifyToken } from '@/network/token';
 
 export default defineComponent({
   components: {
-    TopBarNotLoginIn,
+    // TopBarNotLogin,
   },
   setup() {
     const isLogin = verifyToken().status;
@@ -152,10 +134,5 @@ export default defineComponent({
     line-height: 30px;
     margin: 0 20px;
   }
-}
-</style>
-<style>
-.top-bar-note-share-noteshare {
-  padding: 0px !important;
 }
 </style>
