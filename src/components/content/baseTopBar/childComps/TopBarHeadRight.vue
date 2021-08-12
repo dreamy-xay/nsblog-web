@@ -4,25 +4,25 @@
  * @Autor: Ban
  * @Date: 2021-07-20 11:01:33
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-08-12 10:37:59
+ * @LastEditTime: 2021-08-12 14:45:42
 -->
 
 <template>
-  <div class="top-bar-head-right">
-    <div class="top-bar-head-right-menu">
-      <div>
+  <div class="base-top-bar-right">
+    <div class="base-top-bar-right-menu">
+      <div class="menu-child">
         <top-bar-avatar />
       </div>
-      <div>
+      <div class="menu-child">
         <top-bar-message />
       </div>
-      <div>动态</div>
-      <div>
+      <div class="menu-child">动态</div>
+      <div class="menu-child">
         <top-bar-collection />
       </div>
-      <div>历史</div>
-      <div>创作中心</div>
-      <div>
+      <div class="menu-child">历史</div>
+      <div class="menu-child">创作中心</div>
+      <div class="menu-child">
         <top-bar-note-share />
       </div>
     </div>
@@ -30,14 +30,16 @@
 </template>
 
 <script>
+/**
+ * @description:  The right of TopBar
+ * @author: Ban
+ */
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
 import { defineComponent } from '@vue/runtime-core';
 import TopBarAvatar from './TopBarAvatar.vue';
-import TopBarNoteShare from './TopBarNoteShare.vue';
+import TopBarNoteShare from './TopBarNoteShare';
 import TopBarCollection from './TopBarCollection.vue';
 import TopBarMessage from './TopBarMessage.vue';
-
 export default defineComponent({
   name: 'TopBarHeadRight',
   components: {
@@ -46,45 +48,38 @@ export default defineComponent({
     TopBarMessage,
     TopBarCollection,
   },
-
   setup() {
     let isNoteshare = ref(true);
-    const router = useRouter();
-    /**
-     * @description: 路由跳转到Message页面
-     * @author: Ban
-     */
-    function routeToMessage() {
-      router.push('/message');
-    }
     return {
       isNoteshare,
-      routeToMessage,
     };
   },
 });
 </script>
 
 <style lang="scss" scoped>
-.top-bar-head-right {
+$green0: $green-0;
+$green1: $green-1;
+$grey0: $grey-0;
+
+.base-top-bar-right {
   display: flex;
   line-height: 56px;
 
-  .top-bar-head-right-menu {
+  .base-top-bar-right-menu {
     height: 58px;
     display: inline-block;
     letter-spacing: 1px;
 
-    div {
+    .menu-child {
       display: inline-block;
       vertical-align: middle;
       font-size: 16px;
       padding: 0 13px;
       cursor: pointer;
-      transition: all 0.1s linear;
 
       &:hover {
-        color: $green-0;
+        color: $green0;
       }
     }
   }
