@@ -1,0 +1,9 @@
+@url=http://127.0.0.1:3000/v1
+
+@json=Content-Type: application/json
+
+### 获取消息信息
+get {{url}}/messages?type=1&limit=10&offset=0
+
+### 删除消息信息
+delete {{url}}/messages/786786
