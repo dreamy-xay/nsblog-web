@@ -4,13 +4,13 @@
  * @Autor: Ban
  * @Date: 2021-07-20 11:01:33
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-12 21:48:09
+ * @LastEditTime: 2021-08-12 22:54:18
 -->
 
 <template>
   <div class="top-bar-right">
     <div class="top-bar-right-menu-child">
-      <top-bar-avatar />
+      <top-bar-avatar :is-login="isLogin" />
     </div>
     <div
       class="top-bar-right-menu-child"
@@ -38,12 +38,23 @@
         </template>
         <component
           :is="item.component"
-          :title="item.name"
+          :content="item.content"
         />
       </el-popover>
+      <a
+        v-else
+        :href="item.url"
+      >
+        <div
+          class="button"
+          role="button"
+        >
+          {{item.name}}
+        </div>
+      </a>
     </div>
     <div class="top-bar-right-menu-child">
-      <top-bar-note-share />
+      <top-bar-note-share :is-login="isLogin" />
     </div>
   </div>
 </template>
@@ -83,35 +94,41 @@ export default defineComponent({
         url: isLogin ? '/message' : '/login',
         component: isLogin ? 'TopBarMessage' : 'TopBarNotLogin',
         width: isLogin ? null : 328,
+        content: '登录即可查看消息',
       },
       {
         name: '动态',
         url: isLogin ? '/user/' + token.username + '/dynamic' : '/login',
         component: isLogin ? '' : 'TopBarNotLogin',
         width: isLogin ? null : 328,
+        content: '登录即可查看动态',
       },
       {
         name: '收藏',
         url: isLogin ? '/userCenter/collection' : '/login',
         component: isLogin ? 'TopBarCollection' : 'TopBarNotLogin',
         width: isLogin ? null : 328,
+        content: '登录即可查看收藏',
       },
       {
         name: '历史',
         url: isLogin ? '/history' : '/login',
         component: isLogin ? 'TopBarHistory' : 'TopBarNotLogin',
         width: isLogin ? null : 328,
+        content: '登录即可查看历史',
       },
       {
         name: '创作中心',
         url: isLogin ? '/admin' : '/login',
         component: isLogin ? '' : 'TopBarNotLogin',
         width: isLogin ? null : 328,
+        content: '登录即可进入创作中心',
       },
     ];
 
     return {
       menu,
+      isLogin,
     };
   },
 });
