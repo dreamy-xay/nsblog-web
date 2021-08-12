@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-11 19:03:08
+ * @LastEditTime: 2021-08-12 16:30:56
 -->
 
 <template>
@@ -15,7 +15,7 @@
 
 <script>
 import { defineComponent } from 'vue';
-import BaseTopBar from '@/components/content/baseTopBar/BaseTopBar';
+import BaseTopBar from '@/components/content/baseTopBar/BaseTopBar.vue';
 import { mapActions } from '@/util/store';
 
 /**

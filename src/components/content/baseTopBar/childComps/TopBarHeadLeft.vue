@@ -3,66 +3,85 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-07-29 16:37:09
- * @LastEditors: Ban
- * @LastEditTime: 2021-08-10 23:11:16
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-08-12 16:39:39
 -->
 <template>
   <div class="base-top-bar-left">
-    <div class="base-top-bar-logo">
-      <a><img
+    <div class="base-top-bar-left-logo">
+      <a href="/">
+        <img
           src="/logo.png"
           alt="logo"
-        ></a>
+        >
+      </a>
     </div>
-    <ul>
-      <li
-        class="base-top-bar-menu"
-        v-for="item in headerL"
-        :key="item"
+    <div class="base-top-bar-left-menu">
+      <a
+        v-for="(item, index) in menu"
+        :href="item.url"
+        :key="index"
+        :class="{active: activeIndex === index}"
       >
-        <a v-bind:href="item.url"> {{ item.name }} </a>
-      </li>
-    </ul>
+        <div class="text">
+          {{ item.name }}
+        </div>
+      </a>
+    </div>
   </div>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
+import { verifyToken } from '@/network/token';
+import { useRoute } from 'vue-router';
 
 /**
  * @description:  首页顶部之左边部分组件
- * @param {*}
- * @return {*}
  * @author: Ban
  */
 
 export default defineComponent({
   name: 'home',
   setup() {
-    const headerL = [
+    const token = verifyToken(); // 拿到token验证信息
+    // 左侧菜单按钮
+    const menu = [
       {
         name: '首页',
-        url: '',
+        url: '/',
       },
       {
         name: '博客',
-        url: '',
+        url: token.status ? '/' + token.username : '/login',
       },
       {
         name: '问答',
-        url: '',
-      },
-      {
-        name: '学习小组',
-        url: '',
+        url: '/question',
       },
       {
         name: '资源',
-        url: '',
+        url: '/resource',
+      },
+      {
+        name: '学习小组',
+        url: '/group',
       },
     ];
+
+    const route = useRoute().path.split('/')[1]; // 当前路由
+
+    let activeIndex = -1; // 激活索引
+    // 更新激活索引
+    for (let i = 0; i < menu.length; ++i)
+      if (menu[i].url.split('/')[1] === route) {
+        activeIndex = i;
+        break;
+      }
+
     return {
-      headerL,
+      menu,
+      activeIndex,
     };
   },
 });
@@ -77,38 +96,54 @@ $green0: $green-0;
   height: 100%;
   display: flex;
 
-  .base-top-bar-logo {
+  .base-top-bar-left-logo {
     position: relative;
     display: inline-block;
     height: 100%;
 
-    a img {
+    img {
       width: 182px;
       height: 52px;
     }
   }
 
-  ul {
+  .base-top-bar-left-menu {
     letter-spacing: 1px;
-    display: inline-block;
     height: 100%;
+    overflow: hidden;
     font-size: 16px;
-    line-height: $topBarHeight;
-    margin-left: 13px;
-    margin-right: 13px;
-  }
-
-  .base-top-bar-menu {
-    display: inline-block;
-    height: 100%;
+    margin: 0 13px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     a {
-      color: $a-black;
-      padding-left: 13px;
-      padding-right: 13px;
+      display: inline-block;
+      height: 100%;
+      overflow: hidden;
+      transition: 0.25s;
+      box-sizing: border-box;
 
-      &:hover {
-        color: $green0;
+      &.active {
+        border-top: 3px solid $green0;
+
+        .text {
+          top: -1.5px;
+        }
+      }
+
+      .text {
+        height: 100%;
+        position: relative;
+        display: flex;
+        align-items: center;
+        margin: 0 13px;
+        color: $a-black;
+        transition: 0.25s;
+
+        &:hover {
+          color: $green0;
+        }
       }
     }
   }

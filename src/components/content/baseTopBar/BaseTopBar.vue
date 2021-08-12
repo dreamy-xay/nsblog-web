@@ -1,18 +1,18 @@
 <!--
  * @Author: Ban
  * @Date: 2021-07-19 12:47:11
- * @LastEditTime: 2021-08-04 20:30:37
+ * @LastEditTime: 2021-08-12 15:42:26
  * @LastEditors: dreamy-xay
  * @Description: In User Settings Edit
  * @FilePath:
 -->
 <template>
-  <div class="base-top-bar-to-center">
-    <header class="base-top-bar">
+  <div class="base-top-bar">
+    <div class="base-top-bar-to-center">
       <top-bar-head-left />
       <top-bar-head-center />
       <top-bar-head-right />
-    </header>
+    </div>
   </div>
 </template>
 
@@ -28,6 +28,7 @@ import TopBarHeadLeft from './childComps/TopBarHeadLeft.vue';
  */
 
 export default defineComponent({
+  name: 'baseTopBar',
   components: {
     TopBarHeadLeft,
     TopBarHeadRight,
@@ -41,22 +42,21 @@ $topBarHeight: 56px;
 $background-0: $grey-0;
 $shadow: $shadow-0;
 
-.base-top-bar-to-center {
-  position: fixed;
+.base-top-bar {
   background: $background-0;
   width: 100%;
   box-shadow: $shadow;
   position: sticky;
-}
 
-.base-top-bar {
-  display: flex;
-  margin: auto;
-  width: 1440px;
-  box-sizing: border-box;
-  height: $topBarHeight;
-  background: $background-0;
-  padding-left: 8px;
-  padding-right: 24px;
+  .base-top-bar-to-center {
+    display: flex;
+    margin: 0 auto;
+    width: 1440px;
+    box-sizing: border-box;
+    height: $topBarHeight;
+    background: $background-0;
+    padding-left: 8px;
+    padding-right: 24px;
+  }
 }
 </style>
