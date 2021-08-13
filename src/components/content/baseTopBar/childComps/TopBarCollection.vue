@@ -3,34 +3,35 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2021-08-05 18:50:30
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-13 17:20:55
+ * @LastEditors: continue-hs
+ * @LastEditTime: 2021-08-13 18:39:07
 -->
 
 <template>
   <div class="top-bar-collection">
+
     <div class="top-bar-collection-content">
       <div class="top-bar-collection-content-left">
         <div class="content-menu">
           <el-scrollbar height="401px">
-            <ul>
-              <li
-                class="menu-content"
-                v-for="(item,index) in favorites"
-                :key="index"
-                :class="{active: index === isActive}"
-                @click="chooseClick(index)"
-                role="button"
-              >
-                <div class="collections-menu">
-                  <span class="left">{{item.name}}</span>
-                  <span class="right">{{item.count}}</span>
-                </div>
-              </li>
-            </ul>
+            <div
+              class="menu-content"
+              v-for="(item,index) in favorites"
+              :key="index"
+              :class="{active: index === isActive}"
+              @click="chooseClick(index)"
+              role="button"
+            >
+              <div class="collections-menu">
+                <div class="left">{{item.name}}</div>
+                <div class="right">{{item.count}}</div>
+              </div>
+            </div>
           </el-scrollbar>
         </div>
       </div>
+
+      <div class="line"></div>
 
       <div class="top-bar-collection-content-right">
         <el-scrollbar height="401px">
@@ -40,30 +41,29 @@
           >
             该收藏夹还没有收藏内容哦~
           </div>
-          <ul>
-            <li
-              v-for="(value,index) in List"
-              :key=index
+          <div
+            class="content"
+            v-for="(value,index) in List"
+            :key=index
+          >
+            <a
+              :href="(value.type === 1 ? '/article' : '/question') + value.id"
+              target="_blank"
             >
-              <a
-                :href="(value.type === 1 ? '/article' : '/question') + value.id"
-                target="_blank"
-              >
-                <div class="collections-content">
-                  <base-tag
-                    :text="value.type === 1 ? '问答' : '文章'"
-                    :color="styles.pink0"
-                    :hollow="true"
-                    role="button"
-                  />
-                  <span
-                    class="collectioncontent"
-                    role="button"
-                  > {{value.title}}</span>
-                </div>
-              </a>
-            </li>
-          </ul>
+              <div class="collections-content">
+                <base-tag
+                  :text="value.type === 1 ? '问答' : '文章'"
+                  :color="styles.pink0"
+                  :hollow="true"
+                  role="button"
+                />
+                <div
+                  class="collectioncontent"
+                  role="button"
+                > {{value.title}}</div>
+              </div>
+            </a>
+          </div>
         </el-scrollbar>
       </div>
 
@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, reactive } from 'vue';
 import { getCollections } from '@/network/api/collections';
 import BaseTag from '../../baseTag/BaseTag.vue';
 import styles from '@/assets/style/define.scss';
@@ -90,22 +90,18 @@ export default defineComponent({
   },
   setup() {
     const isActive = ref(0);
-    let favorites = ref();
-    let List = ref();
-    const token = verifyToken(); // 拿到token验证信息
-    const isLogin = token.status; // 是否登录
+    let favorites = reactive([]);
+    let List = reactive([]);
+    const username = verifyToken().username;
     /**
      * @description: 获取指定用户所有收藏夹信息
      * @return {void}
      * @author: continue-hs
      */
-    if (isLogin) {
-      const username = token.username;
-      getCollections(username).then((res) => {
-        favorites.value = res.favorites;
-        List.value = res.favorites[0].collections;
-      });
-    }
+    getCollections(username, 100000).then((res) => {
+      favorites.splice(0, 0, ...res.favorites);
+      List.splice(0, 0, ...res.favorites[0].collections);
+    });
 
     /**
      * @description: 改变右侧收藏夹内容
@@ -113,9 +109,9 @@ export default defineComponent({
      * @author: continue-hs
      */
     function chooseClick(index) {
-      List.value = [];
+      List.splice(0, 100000);
       this.isActive = index;
-      List.value = this.favorites[index].collections;
+      List.splice(0, 0, ...this.favorites[index].collections);
     }
 
     return {
@@ -123,7 +119,6 @@ export default defineComponent({
       styles,
       isActive,
       List,
-      isLogin,
       favorites,
     };
   },
@@ -151,12 +146,16 @@ export default defineComponent({
     .top-bar-collection-content-left {
       @include size(161px, 401px);
 
-      ul li {
+      .menu-content {
         @include size(161px, 44px);
         @include font-style();
 
+        &:hover {
+          background: $grey-2;
+        }
+
         &.active {
-          background: #85e8c7;
+          background: $green-0;
           color: $grey-0;
           transition: all 200;
 
@@ -196,6 +195,13 @@ export default defineComponent({
       }
     }
 
+    .line {
+      display: inline-block;
+      height: 401px;
+      width: 1px;
+      background: #e7e7e7;
+    }
+
     .top-bar-collection-content-right {
       @include size(337px, 401px);
 
@@ -210,9 +216,13 @@ export default defineComponent({
         color: $grey-11;
       }
 
-      ul li {
+      .content {
         @include size(337px, 44px);
         @include font-style();
+
+        &:hover {
+          background: $grey-2;
+        }
 
         .base-tag {
           top: 12px;
@@ -240,13 +250,6 @@ export default defineComponent({
           }
         }
       }
-    }
-  }
-
-  .menu-content {
-    @include size(161px, 44px);
-    &:hover {
-      background: $grey-2;
     }
   }
 }
