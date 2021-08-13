@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-05 21:23:32
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-12 19:47:12
+ * @LastEditTime: 2021-08-13 13:51:42
 -->
 
 <template>
@@ -16,7 +16,7 @@
       <el-link
         :underline=false
         :href="item.url"
-        :class="content"
+        class="content"
       >
         <i :class="item.icon"></i>
         <span class="contents">{{item.title}}</span>

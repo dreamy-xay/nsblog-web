@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 22:17:07
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-10 16:35:59
+ * @LastEditTime: 2021-08-13 13:08:52
  */
 
 /**
@@ -53,4 +53,15 @@ export function dateGetText(date: Date): string {
   else if (timeDiff < 15552000) return parseInt(timeDiff / 2592000 + '') + '月前';
   else if (timeDiff < 31104000) return '半年前';
   else return parseInt(timeDiff / 31104000 + '') + '年前';
+}
+
+/**
+ * @description: 获取日期与当今时间相差的天数
+ * @param {Date} date 需计算差日期对象 `必传参数`
+ * @return {number} 返回相差天数
+ * @author: dreamy-xay
+ */
+export function getCurrentDiffirence(date: Date): number {
+  const diff: number = new Date().getTime() - date.getTime();
+  return Math.floor(diff / 86400000);
 }
