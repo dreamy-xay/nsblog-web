@@ -3,33 +3,32 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2021-08-05 21:23:32
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-13 13:51:42
+ * @LastEditors: continue-hs
+ * @LastEditTime: 2021-08-13 15:32:04
 -->
 
 <template>
   <div class=top-bar-message>
     <div
+      class=top-bar-message-menu
       v-for="(item,index) in menuList"
       :key="index"
     >
-      <el-link
+      <a
         :underline=false
         :href="item.url"
-        class="content"
+        :class="content"
+        target="_blank"
       >
         <i :class="item.icon"></i>
         <span class="contents">{{item.title}}</span>
-      </el-link>
+      </a>
     </div>
   </div>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { verifyToken } from '@/network/token';
-
+import { defineComponent } from 'vue';
 /**
  * @description:  消息栏弹窗
  * @author: continue-hs
@@ -38,9 +37,6 @@ import { verifyToken } from '@/network/token';
 export default defineComponent({
   name: 'topBarMessage',
   setup() {
-    const title = ref('消息');
-    const isLogin = ref(verifyToken().status);
-    const router = useRouter();
     const menuList = [
       {
         title: '回复我的',
@@ -73,21 +69,7 @@ export default defineComponent({
         url: '/message/setting',
       },
     ];
-
-    /**
-     * @description: 跳转至消息路由
-     * @return {void}
-     * @author: continue-hs
-     */
-    function messageclick() {
-      if (isLogin.value) router.push('/message');
-      else router.push('/login/Signin');
-    }
-
     return {
-      title,
-      isLogin,
-      messageclick,
       menuList,
     };
   },
@@ -107,45 +89,32 @@ export default defineComponent({
   height: $height;
 }
 
-.top-bar-message-header {
-  &:hover {
-    color: $green-0;
-  }
-}
-
-.top-bar-message-contents {
-  line-height: 35px;
-  border: 0;
-  @include size(172px, 35px);
-  @include font-style;
-}
-
-:deep(.el-link) {
-  font-weight: 400;
-  padding-bottom: 2px;
-  &.el-link--default {
-    color: $grey-11;
+.top-bar-message {
+  .top-bar-message-menu {
     @include size(172px, 35px);
-    i {
-      font-size: 19px;
-    }
+    text-align: center;
+  }
+
+  a {
+    color: #000000;
+    text-align: center;
     &:hover {
-      background: $grey-2;
       color: $green-0;
+
       .contents {
         color: $green-0;
       }
     }
   }
+
+  .contents {
+    margin-left: 12px;
+    @include font-style;
+    @include size(64px, 35px);
+  }
 }
 
 :deep(.iconfont) {
   font-size: 20px;
-}
-
-.contents {
-  margin-left: 12px;
-  @include font-style;
-  @include size(64px, 35px);
 }
 </style>
