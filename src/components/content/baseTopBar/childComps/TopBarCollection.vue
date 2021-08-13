@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2021-08-05 18:50:30
- * @LastEditors: continue-hs
- * @LastEditTime: 2021-08-13 15:45:03
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-08-13 17:20:55
 -->
 
 <template>
@@ -85,7 +85,9 @@ import { verifyToken } from '@/network/token';
 
 export default defineComponent({
   name: 'topBarCollection',
-  components: { BaseTag },
+  components: {
+    BaseTag,
+  },
   setup() {
     const isActive = ref(0);
     let favorites = ref();
@@ -100,7 +102,6 @@ export default defineComponent({
     if (isLogin) {
       const username = token.username;
       getCollections(username).then((res) => {
-        console.log(res);
         favorites.value = res.favorites;
         List.value = res.favorites[0].collections;
       });
@@ -141,114 +142,112 @@ export default defineComponent({
   height: $height;
 }
 
-.top-bar-collection-header {
-  &:hover {
-    color: $green-0;
-  }
-}
+.top-bar-collection {
+  padding: 7px 0;
 
-.top-bar-collection-content {
-  display: flex;
+  .top-bar-collection-content {
+    display: flex;
 
-  .top-bar-collection-content-left {
-    @include size(161px, 401px);
+    .top-bar-collection-content-left {
+      @include size(161px, 401px);
 
-    ul li {
-      @include size(161px, 44px);
-      @include font-style();
-
-      &.active {
-        background: #85e8c7;
-        color: $grey-0;
-        transition: all 200;
-
-        .left {
-          color: $grey-0;
-        }
-
-        .right {
-          color: $grey-0;
-        }
-      }
-
-      .collections-menu {
-        display: inline-block;
-        position: relative;
+      ul li {
         @include size(161px, 44px);
         @include font-style();
-        height: 21px;
-        line-height: 21px;
 
-        .left {
-          top: 12px;
-          position: absolute;
-          left: 15px;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          overflow: hidden;
-          width: 121px;
+        &.active {
+          background: #85e8c7;
+          color: $grey-0;
+          transition: all 200;
+
+          .left {
+            color: $grey-0;
+          }
+
+          .right {
+            color: $grey-0;
+          }
         }
 
-        .right {
-          top: 12px;
-          position: absolute;
-          right: 12px;
-        }
-      }
-    }
-  }
-
-  .top-bar-collection-content-right {
-    @include size(337px, 401px);
-
-    .blank {
-      @include font-style();
-      display: inline-block;
-      position: absolute;
-      top: 45%;
-      left: 25%;
-      line-height: 44px;
-      font-family: Arial, Arial-Regular;
-      color: $grey-11;
-    }
-
-    ul li {
-      @include size(337px, 44px);
-      @include font-style();
-
-      .base-tag {
-        top: 12px;
-        left: 20px;
-        position: relative;
-      }
-
-      .collections-content {
-        display: inline-block;
-        position: relative;
-        @include size(337px, 44px);
-        @include font-style();
-        line-height: 21px;
-
-        .collectioncontent {
-          position: absolute;
-          top: 12px;
-          left: 67px;
+        .collections-menu {
+          display: inline-block;
+          position: relative;
+          @include size(161px, 44px);
+          @include font-style();
           height: 21px;
           line-height: 21px;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          overflow: hidden;
-          width: 248px;
+
+          .left {
+            top: 12px;
+            position: absolute;
+            left: 15px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            width: 121px;
+          }
+
+          .right {
+            top: 12px;
+            position: absolute;
+            right: 12px;
+          }
+        }
+      }
+    }
+
+    .top-bar-collection-content-right {
+      @include size(337px, 401px);
+
+      .blank {
+        @include font-style();
+        display: inline-block;
+        position: absolute;
+        top: 45%;
+        left: 25%;
+        line-height: 44px;
+        font-family: Arial, Arial-Regular;
+        color: $grey-11;
+      }
+
+      ul li {
+        @include size(337px, 44px);
+        @include font-style();
+
+        .base-tag {
+          top: 12px;
+          left: 20px;
+          position: relative;
+        }
+
+        .collections-content {
+          display: inline-block;
+          position: relative;
+          @include size(337px, 44px);
+          @include font-style();
+          line-height: 21px;
+
+          .collectioncontent {
+            position: absolute;
+            top: 12px;
+            left: 67px;
+            height: 21px;
+            line-height: 21px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            width: 248px;
+          }
         }
       }
     }
   }
-}
 
-.menu-content {
-  @include size(161px, 44px);
-  &:hover {
-    background: $grey-2;
+  .menu-content {
+    @include size(161px, 44px);
+    &:hover {
+      background: $grey-2;
+    }
   }
 }
 </style>

@@ -3,13 +3,13 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-08-10 19:39:04
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-12 10:31:11
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-08-13 17:04:27
  */
 import { get, del, RequestLifeCycle } from '@/network/request';
 
 /**
- * @description:得到未读通知数量
+ * @description: 得到未读通知数量
  * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
  * @return {Promise<unknown>} 请求返回promise
  * @author: Z_Y_C
