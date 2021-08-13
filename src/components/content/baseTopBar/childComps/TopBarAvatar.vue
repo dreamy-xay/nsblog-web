@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-19 18:32:43
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-13 13:49:37
+ * @LastEditTime: 2021-08-13 16:59:20
 -->
 <template>
   <div class="top-bar-avatar">
@@ -23,7 +23,7 @@
       v-else
       placement="bottom"
       popper-class="top-bar-avatar-inner"
-      :width="240"
+      :width="null"
       :show-arrow="false"
       trigger="hover"
       :show-after="200"
@@ -325,7 +325,7 @@ export default defineComponent({
 .top-bar-avatar-inner {
   .user-info {
     position: relative;
-    width: 100%;
+    width: 240px;
     display: inline-block;
 
     .user-info-top {
@@ -339,7 +339,7 @@ export default defineComponent({
         width: 36px;
         border-radius: 50%;
         left: calc(50% - 18px);
-        transition: 0.1s linear;
+        transition: 0.09s linear;
 
         img {
           width: 100%;
@@ -528,6 +528,7 @@ export default defineComponent({
           color: $grey-11;
           font-size: 16px;
           transition: 0.25s;
+          letter-spacing: 1px;
 
           div {
             width: 20px;
@@ -548,14 +549,15 @@ export default defineComponent({
 
     .user-info-exit {
       height: 44px;
-      width: calc(100% - 20px);
+      width: calc(100% - 21px);
       margin: 7px 0;
-      padding-left: 20px;
+      padding-left: 21px;
       font-size: 16px;
       display: flex;
       align-items: center;
       transition: 0.25s;
       color: $grey-11;
+      letter-spacing: 1px;
 
       &:hover {
         background: $grey-2;
