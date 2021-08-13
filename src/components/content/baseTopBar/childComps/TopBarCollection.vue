@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2021-08-05 18:50:30
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-12 20:30:04
+ * @LastEditors: continue-hs
+ * @LastEditTime: 2021-08-13 15:45:03
 -->
 
 <template>
@@ -77,7 +77,6 @@ import { getCollections } from '@/network/api/collections';
 import BaseTag from '../../baseTag/BaseTag.vue';
 import styles from '@/assets/style/define.scss';
 import { verifyToken } from '@/network/token';
-import { useRouter } from 'vue-router';
 
 /**
  * @description:  收藏栏弹窗
@@ -88,35 +87,23 @@ export default defineComponent({
   name: 'topBarCollection',
   components: { BaseTag },
   setup() {
-    const title = ref('收藏');
     const isActive = ref(0);
     let favorites = ref();
     let List = ref();
-    const router = useRouter();
-    const isLogin = ref(verifyToken().status);
-    const username = ref(verifyToken().username);
-
+    const token = verifyToken(); // 拿到token验证信息
+    const isLogin = token.status; // 是否登录
     /**
      * @description: 获取指定用户所有收藏夹信息
      * @return {void}
      * @author: continue-hs
      */
-    if (isLogin.value) {
-      getCollections(username.value).then((res) => {
+    if (isLogin) {
+      const username = token.username;
+      getCollections(username).then((res) => {
         console.log(res);
         favorites.value = res.favorites;
         List.value = res.favorites[0].collections;
       });
-    }
-
-    /**
-     * @description: 点击跳转路由(已登录跳至消息页面，否则跳登录页面)
-     * @return {void}
-     * @author: continue-hs
-     */
-    function onclick() {
-      if (!isLogin.value) router.push('/login/Signin');
-      else router.push('/collections');
     }
 
     /**
@@ -131,9 +118,6 @@ export default defineComponent({
     }
 
     return {
-      username,
-      title,
-      onclick,
       chooseClick,
       styles,
       isActive,
