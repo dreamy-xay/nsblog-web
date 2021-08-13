@@ -61,10 +61,10 @@ input {
 /* element-plus */
 // 修改 el-popover 框内大小
 .el-popover {
-  border: 0 !important;
+  // border: 0 !important;
   padding: 0 !important;
-  box-shadow: $shadow-0;
-  border-radius: $border-radius-0;
+  box-shadow: $shadow-0 !important;
+  border-radius: $border-radius-0 !important;
 }
 
 // 修改箭头样式

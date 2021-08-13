@@ -4,13 +4,16 @@
  * @Autor: Ban
  * @Date: 2021-07-20 11:01:33
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-13 10:23:27
+ * @LastEditTime: 2021-08-13 12:41:53
 -->
 
 <template>
   <div class="top-bar-right">
     <div class="top-bar-right-menu-child">
-      <top-bar-avatar :is-login="isLogin" />
+      <top-bar-avatar
+        :token="token.token"
+        @loginout="loginout"
+      />
     </div>
     <div
       class="top-bar-right-menu-child"
@@ -54,13 +57,13 @@
       </a>
     </div>
     <div class="top-bar-right-menu-child">
-      <top-bar-note-share :is-login="isLogin" />
+      <top-bar-note-share :is-login="token.token.status" />
     </div>
   </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, reactive, computed } from 'vue';
 import TopBarAvatar from '@/components/content/baseTopBar/childComps/TopBarAvatar.vue';
 import TopBarMessage from '@/components/content/baseTopBar/childComps/TopBarMessage.vue';
 import TopBarCollection from '@/components/content/baseTopBar/childComps/TopBarCollection.vue';
@@ -85,45 +88,56 @@ export default defineComponent({
     TopBarNotLogin,
   },
   setup() {
-    const token = verifyToken(); // 拿到token验证信息
-    const isLogin = token.status; // 是否登录
+    let token = reactive({ token: verifyToken() }); // 拿到token验证信息
     // 左侧菜单按钮
-    const menu = [
-      {
-        name: '消息',
-        url: isLogin ? '/message' : '/login',
-        component: isLogin ? 'TopBarMessage' : 'TopBarNotLogin',
-        content: '登录即可查看消息',
-      },
-      {
-        name: '动态',
-        url: isLogin ? '/user/' + token.username + '/dynamic' : '/login',
-        component: isLogin ? '' : 'TopBarNotLogin',
-        content: '登录即可查看动态',
-      },
-      {
-        name: '收藏',
-        url: isLogin ? '/userCenter/collection' : '/login',
-        component: isLogin ? 'TopBarCollection' : 'TopBarNotLogin',
-        content: '登录即可查看收藏',
-      },
-      {
-        name: '历史',
-        url: isLogin ? '/history' : '/login',
-        component: isLogin ? 'TopBarHistory' : 'TopBarNotLogin',
-        content: '登录即可查看历史',
-      },
-      {
-        name: '创作中心',
-        url: isLogin ? '/admin' : '/login',
-        component: isLogin ? '' : 'TopBarNotLogin',
-        content: '登录即可进入创作中心',
-      },
-    ];
+    const menu = computed(() => {
+      return [
+        {
+          name: '消息',
+          url: token.token.status ? '/message' : '/login',
+          component: token.token.status ? 'TopBarMessage' : 'TopBarNotLogin',
+          content: '登录即可查看消息',
+        },
+        {
+          name: '动态',
+          url: token.token.status ? '/user/' + token.username + '/dynamic' : '/login',
+          component: token.token.status ? '' : 'TopBarNotLogin',
+          content: '登录即可查看动态',
+        },
+        {
+          name: '收藏',
+          url: token.token.status ? '/userCenter/collection' : '/login',
+          component: token.token.status ? 'TopBarCollection' : 'TopBarNotLogin',
+          content: '登录即可查看收藏',
+        },
+        {
+          name: '历史',
+          url: token.token.status ? '/history' : '/login',
+          component: token.token.status ? 'TopBarHistory' : 'TopBarNotLogin',
+          content: '登录即可查看历史',
+        },
+        {
+          name: '创作中心',
+          url: token.token.status ? '/admin' : '/login',
+          component: token.token.status ? '' : 'TopBarNotLogin',
+          content: '登录即可进入创作中心',
+        },
+      ];
+    });
+
+    /**
+     * @description: 获取信息失败或登出修改登录状态
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function loginout() {
+      token.token = { status: false };
+    }
 
     return {
       menu,
-      isLogin,
+      token,
+      loginout,
     };
   },
 });
