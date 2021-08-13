@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-09 12:14:46
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-12 22:23:30
+ * @LastEditTime: 2021-08-13 10:26:46
 -->
 
 <template>
@@ -13,7 +13,7 @@
       {{ content }}
     </div>
     <a
-      :href="isLogin ? '/admin' :'/login/signIn'"
+      href="login/signIn"
       class="top-bar-not-login-link"
     >
       <div>

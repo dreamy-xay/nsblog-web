@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-07-19 18:32:43
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-12 23:04:45
+ * @LastEditTime: 2021-08-13 10:28:14
 -->
 <template>
   <div class="top-bar-avatar">
@@ -17,6 +17,7 @@
       </div>
     </a>
     <el-popover
+      v-if="isLogin"
       placement="bottom"
       popper-class="top-bar-avatar-inner"
       :width="240"
@@ -104,7 +105,6 @@
         <div class="top-bar-avatar-login">
           <a :href="'/users/' + username">
             <img
-              v-if="isLogin"
               :src="avatar"
               alt="avatar"
             />
