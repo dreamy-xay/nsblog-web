@@ -3,32 +3,46 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2021-08-05 21:23:32
- * @LastEditors: continue-hs
- * @LastEditTime: 2021-08-13 15:32:04
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-08-13 16:57:54
 -->
 
 <template>
   <div class=top-bar-message>
     <div
       class=top-bar-message-menu
-      v-for="(item,index) in menuList"
+      v-for="(item, index) in menuList"
       :key="index"
     >
       <a
-        :underline=false
         :href="item.url"
-        :class="content"
-        target="_blank"
+        class="content"
+        role="button"
       >
-        <i :class="item.icon"></i>
-        <span class="contents">{{item.title}}</span>
+        <div>
+          <div>
+            <i :class="item.icon"></i>
+          </div>
+          {{item.title}}
+        </div>
+        <div class="badge">
+          <n-badge
+            :value="countList[index]"
+            :max="99"
+            :color="styles.pink0"
+            v-if="countList[index] > 0"
+          />
+        </div>
       </a>
     </div>
   </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, reactive } from 'vue';
+import styles from '@/assets/style/define.scss';
+import { getMessages } from '@/network/api/messages';
+
 /**
  * @description:  消息栏弹窗
  * @author: continue-hs
@@ -37,6 +51,7 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'topBarMessage',
   setup() {
+    // 菜单
     const menuList = [
       {
         title: '回复我的',
@@ -69,52 +84,87 @@ export default defineComponent({
         url: '/message/setting',
       },
     ];
+
+    // 消息记录数量统计
+    const countList = reactive([0, 0, 0, 0, 0, 0]);
+    // 获取数量信息
+    getMessages()
+      .then((data) => {
+        countList.splice(0, 5, data.count[0]);
+        countList.splice(0, 0, ...data.count.slice(1, 4));
+        countList.splice(4, 0, data.count[4]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
     return {
+      styles,
       menuList,
+      countList,
     };
   },
 });
 </script>
 
 <style lang="scss" scoped>
-@mixin font-style($size: 16px, $color: $grey-11) {
-  font-size: $size;
-  font-weight: 400;
-  text-align: center;
-  color: $color;
-}
-
 @mixin size($width, $height) {
   width: $width;
   height: $height;
 }
 
+@mixin flex() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .top-bar-message {
+  @include size(172px, 234px);
+  padding: 7px 0;
+  @include flex();
+  flex-direction: column;
+
   .top-bar-message-menu {
-    @include size(172px, 35px);
-    text-align: center;
-  }
+    @include size(100%, 40px);
 
-  a {
-    color: #000000;
-    text-align: center;
-    &:hover {
-      color: $green-0;
+    .content {
+      @include size(calc(100% - 40px), 100%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      color: $grey-11;
+      transition: 0.25s;
+      letter-spacing: 1px;
 
-      .contents {
+      & > div {
+        height: 100%;
+        @include flex();
+
+        div {
+          height: 20px;
+          width: 20px;
+          @include flex();
+
+          .iconfont {
+            font-size: 20px;
+            color: $grey-11;
+            margin-right: 12px;
+            transition: 0.25s;
+          }
+        }
+      }
+
+      &:hover {
         color: $green-0;
+        background-color: $grey-2;
+
+        .iconfont {
+          color: $green-0;
+        }
       }
     }
   }
-
-  .contents {
-    margin-left: 12px;
-    @include font-style;
-    @include size(64px, 35px);
-  }
-}
-
-:deep(.iconfont) {
-  font-size: 20px;
 }
 </style>

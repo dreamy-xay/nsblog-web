@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-07-20 11:01:33
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-13 12:41:53
+ * @LastEditTime: 2021-08-13 16:50:05
 -->
 
 <template>
@@ -173,11 +173,5 @@ $grey0: $grey-0;
       }
     }
   }
-}
-</style>
-
-<style>
-.top-bar-right-inner {
-  margin-top: 10px;
 }
 </style>
