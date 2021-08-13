@@ -4,14 +4,14 @@
  * @Autor: Ban
  * @Date: 2021-07-29 15:53:25
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-12 22:21:18
+ * @LastEditTime: 2021-08-13 10:20:55
 -->
 
 <template>
   <div class="top-bar-note-share">
     <el-popover
       placement="bottom"
-      :width="288"
+      :width="null"
       trigger="hover"
       popper-class="top-bar-note-share-inner"
       :offset="10"
