@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 15:56:58
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-10 16:58:43
+ * @LastEditTime: 2021-08-14 12:47:54
 -->
 <template>
   <div
@@ -52,7 +52,7 @@
         <div class="other-right">
           <a :href="'/user/' + data.username">
             <i class="iconfont blog-personal"></i>
-            <span>{{data.username}}</span>
+            <span>{{data.nickname ? data.nickname : data.username}}</span>
           </a>
           <i
             class="iconfont blog-delete"
@@ -254,7 +254,6 @@ export default defineComponent({
       }
 
       .content-right {
-        overflow: hidden;
         width: 491px;
         color: $grey-10;
         font-size: 14px;

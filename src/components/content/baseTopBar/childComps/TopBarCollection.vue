@@ -3,70 +3,64 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2021-08-05 18:50:30
- * @LastEditors: continue-hs
- * @LastEditTime: 2021-08-13 18:39:07
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-08-14 12:46:04
 -->
 
 <template>
   <div class="top-bar-collection">
-
-    <div class="top-bar-collection-content">
-      <div class="top-bar-collection-content-left">
-        <div class="content-menu">
-          <el-scrollbar height="401px">
-            <div
-              class="menu-content"
-              v-for="(item,index) in favorites"
-              :key="index"
-              :class="{active: index === isActive}"
-              @click="chooseClick(index)"
-              role="button"
-            >
-              <div class="collections-menu">
-                <div class="left">{{item.name}}</div>
-                <div class="right">{{item.count}}</div>
-              </div>
-            </div>
-          </el-scrollbar>
-        </div>
-      </div>
-
-      <div class="line"></div>
-
-      <div class="top-bar-collection-content-right">
+    <div class="top-bar-collection-left">
+      <div class="content-menu">
         <el-scrollbar height="401px">
           <div
-            class="blank"
-            v-if="List !== undefined && List.length === 0"
+            class="menu-content"
+            v-for="(item,index) in favorites"
+            :key="index"
+            :class="{active: index === isActive}"
+            @click="chooseClick(index)"
+            role="button"
           >
-            该收藏夹还没有收藏内容哦~
-          </div>
-          <div
-            class="content"
-            v-for="(value,index) in List"
-            :key=index
-          >
-            <a
-              :href="(value.type === 1 ? '/article' : '/question') + value.id"
-              target="_blank"
-            >
-              <div class="collections-content">
-                <base-tag
-                  :text="value.type === 1 ? '问答' : '文章'"
-                  :color="styles.pink0"
-                  :hollow="true"
-                  role="button"
-                />
-                <div
-                  class="collectioncontent"
-                  role="button"
-                > {{value.title}}</div>
-              </div>
-            </a>
+            <div class="collections-menu">
+              <div class="left">{{item.name}}</div>
+              <div class="right">{{item.count}}</div>
+            </div>
           </div>
         </el-scrollbar>
       </div>
-
+    </div>
+    <div class="top-bar-collection-line"></div>
+    <div class="top-bar-collection-right">
+      <el-scrollbar height="401px">
+        <div
+          class="blank"
+          v-if="List !== undefined && List.length === 0"
+        >
+          该收藏夹还没有收藏内容哦~
+        </div>
+        <div
+          class="content"
+          v-for="(value, index) in List"
+          :key=index
+        >
+          <a
+            :href="(value.type === 1 ? '/article' : '/question') + value.id"
+            target="_blank"
+          >
+            <div class="collections-content">
+              <base-tag
+                :text="value.type === 1 ? '问答' : '文章'"
+                :color="styles.pink0"
+                :hollow="true"
+                role="button"
+              />
+              <div
+                class="collectioncontent"
+                role="button"
+              > {{value.title}}</div>
+            </div>
+          </a>
+        </div>
+      </el-scrollbar>
     </div>
   </div>
 </template>
@@ -126,7 +120,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@mixin font-style($size: 16px, $color: $grey-11) {
+@mixin font-style($size: 16px, $color: $grey-10) {
   font-size: $size;
   font-weight: 400;
   color: $color;
@@ -139,115 +133,110 @@ export default defineComponent({
 
 .top-bar-collection {
   padding: 7px 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  .top-bar-collection-content {
-    display: flex;
+  .top-bar-collection-left {
+    @include size(161px, 401px);
+    margin-right: 1px;
 
-    .top-bar-collection-content-left {
-      @include size(161px, 401px);
+    .menu-content {
+      @include size(161px, 44px);
+      @include font-style();
+      transition: 0.25s;
 
-      .menu-content {
-        @include size(161px, 44px);
+      &:hover {
+        background: $grey-2;
+      }
+
+      .collections-menu {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        @include size(134px, 44px);
         @include font-style();
+        padding: 0 12px 0 15px;
 
-        &:hover {
-          background: $grey-2;
+        .left {
+          width: 100px;
+          @include ellipsis(1);
         }
 
-        &.active {
-          background: $green-0;
+        .right {
+          color: $grey-7;
+        }
+      }
+
+      &.active {
+        background: $green-0;
+        color: $grey-0;
+        transition: all 200;
+
+        .left {
           color: $grey-0;
-          transition: all 200;
-
-          .left {
-            color: $grey-0;
-          }
-
-          .right {
-            color: $grey-0;
-          }
         }
 
-        .collections-menu {
-          display: inline-block;
-          position: relative;
-          @include size(161px, 44px);
-          @include font-style();
-          height: 21px;
-          line-height: 21px;
-
-          .left {
-            top: 12px;
-            position: absolute;
-            left: 15px;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            width: 121px;
-          }
-
-          .right {
-            top: 12px;
-            position: absolute;
-            right: 12px;
-          }
+        .right {
+          color: $grey-0;
         }
       }
     }
+  }
 
-    .line {
+  .top-bar-collection-line {
+    height: 415px;
+    top: 0;
+    left: 161px;
+    position: absolute;
+    width: 1px;
+    background: $grey-4;
+  }
+
+  .top-bar-collection-right {
+    @include size(337px, 401px);
+
+    .blank {
+      @include font-style();
       display: inline-block;
-      height: 401px;
-      width: 1px;
-      background: #e7e7e7;
+      position: absolute;
+      top: 45%;
+      left: 25%;
+      line-height: 44px;
+      color: $grey-11;
     }
 
-    .top-bar-collection-content-right {
-      @include size(337px, 401px);
+    .content {
+      @include size(337px, 44px);
+      @include font-style();
+      transition: 0.25s;
 
-      .blank {
-        @include font-style();
-        display: inline-block;
-        position: absolute;
-        top: 45%;
-        left: 25%;
-        line-height: 44px;
-        font-family: Arial, Arial-Regular;
-        color: $grey-11;
+      &:hover {
+        background: $grey-2;
       }
 
-      .content {
+      .base-tag {
+        top: 12px;
+        left: 20px;
+        position: relative;
+      }
+
+      .collections-content {
+        display: inline-block;
+        position: relative;
         @include size(337px, 44px);
         @include font-style();
+        line-height: 21px;
 
-        &:hover {
-          background: $grey-2;
-        }
-
-        .base-tag {
+        .collectioncontent {
+          position: absolute;
           top: 12px;
-          left: 20px;
-          position: relative;
-        }
-
-        .collections-content {
-          display: inline-block;
-          position: relative;
-          @include size(337px, 44px);
-          @include font-style();
+          left: 67px;
+          height: 21px;
           line-height: 21px;
-
-          .collectioncontent {
-            position: absolute;
-            top: 12px;
-            left: 67px;
-            height: 21px;
-            line-height: 21px;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            width: 248px;
-          }
+          @include ellipsis(1);
+          width: 248px;
         }
       }
     }

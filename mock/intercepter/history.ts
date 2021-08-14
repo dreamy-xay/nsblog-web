@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 10:01:23
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-10 16:30:24
+ * @LastEditTime: 2021-08-14 12:24:58
  */
 
 import { Application, Request, Response } from 'express';
@@ -40,11 +40,12 @@ export default function(baseUrl: string, app: Application) {
           title: keyword + (Random.natural(0, 3) ? Random.ctitle(15, 45) : Random.title(7, 12)),
           topic_tag: tagList,
           username: Random.natural(0, 1) ? Random.cname() : Random.name(),
+          nickname: Random.name(),
           ...type
         });
       }
       return ans.sort((a: Record<string, unknown>, b: Record<string, unknown>) => {
-        return new Date(b.time as string).getTime() - new Date(a.time as string).getTime();
+        return <string>a.time < <string>b.time ? 1 : -1;
       });
     }
 
