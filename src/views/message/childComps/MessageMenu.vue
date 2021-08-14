@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 22:48:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-12 21:55:00
+ * @LastEditTime: 2021-08-13 22:02:06
 -->
 <template>
   <div class="message-left">
@@ -18,10 +18,10 @@
     </div>
 
     <div
-      v-for="item,index in menus"
+      v-for="(item,index) in menus"
       :key="item.id"
       class="message-left-title2"
-      :class="messagetag===item.key? 'message-left-title-color':''"
+      :class="messagetag === item.key ? 'message-left-title-color' : ''"
       @click="changeColor(item,index)"
       role="button"
     >
@@ -34,7 +34,8 @@
       <n-badge
         :value="menuData[index]"
         :max="99"
-        v-if="menuData[index]>0 ? true:false"
+        v-if="menuData[index]>0"
+        :color="styles.pink0"
       />
 
     </div>
@@ -43,7 +44,7 @@
 
     <div
       class="message-left-title3"
-      :class="messagetag===menu.key ? 'message-left-title-color':''"
+      :class="messagetag === menu.key ? 'message-left-title-color' : ''"
       @click="changeColor(menu)"
       role="button"
     >
@@ -58,25 +59,45 @@
 </template>
 
 <script>
-import { defineComponent, reactive } from 'vue';
+import { defineComponent } from 'vue';
+import styles from '@/assets/style/define.scss';
 
 /**
  * @description: Message的子组件MessageLeft
- * @param {*}
- * @return {*}
+ * @param {Array} menus 左侧菜单目录 `默认为[]`
+ * @param {Object} menu 左侧菜单目录 `默认为{}`
+ * @param {String} messagetag 当前页面名称 `默认为''`
+ * @param {Function} changeColor 改变当前选中页面目录颜色 `默认为null`
+ * @param {Array} menuData 菜单目录未读消息 `默认为[]`
  * @author: Z_Y_C
  */
+
 export default defineComponent({
   name: 'MessageMenu',
   props: {
-    menus: Array,
-    menu: Object,
-    messagetag: String,
-    changeColor: Function,
-    menuData: Array,
+    menus: {
+      type: Array,
+      default: () => [],
+    },
+    menu: {
+      type: Object,
+      default: () => ({}),
+    },
+    messagetag: {
+      type: String,
+      default: '',
+    },
+    changeColor: {
+      type: Function,
+      default: null,
+    },
+    menuData: {
+      type: Array,
+      default: () => [],
+    },
   },
   setup(props, context) {
-    return {};
+    return { styles };
   },
 });
 </script>
@@ -89,12 +110,6 @@ $grey11: $grey-11;
 $grey7: $grey-7;
 $grey4: $grey-4;
 $green0: $green-0;
-
-:deep(.n-badge) {
-  .n-badge-sup {
-    background-color: pink;
-  }
-}
 
 .message-left {
   width: 120px;
@@ -128,6 +143,7 @@ $green0: $green-0;
     line-height: 18px;
     font-weight: 700;
     color: $grey7;
+    transition: all 0.4s;
     .message-left-title2-iconfont {
       margin-right: 6px;
     }
@@ -135,18 +151,6 @@ $green0: $green-0;
     .message-left-title2-text {
       margin-right: 4px;
     }
-
-    .message-left-title2-tag {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 25px;
-      height: 15px;
-      background-color: pink;
-      color: $grey0;
-      border-radius: 10px;
-    }
-
     &:hover {
       color: $green0;
     }
@@ -162,6 +166,7 @@ $green0: $green-0;
   .message-left-title3 {
     padding-top: 5px;
     color: $grey-7;
+    transition: all 0.4s;
 
     .message-left-title3-iconfont {
       margin-right: 6px;

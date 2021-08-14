@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-30 00:58:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-09 16:35:51
+ * @LastEditTime: 2021-08-13 18:52:55
 -->
 <template >
   <div class="message-top">
@@ -18,14 +18,16 @@
 import { defineComponent } from 'vue';
 /**
  * @description: Message的子组件MessageTop
- * @param {*}
- * @return {*}
+ * @param {String} messagetag 父组件传递的页面名称数据 `默认为''`
  * @author: Z_Y_C
  */
 export default defineComponent({
   name: 'messageTop',
   props: {
-    messagetag: String, //父组件传递的页面名称数据
+    messagetag: {
+      type: String,
+      default: '',
+    },
   },
   setup(props, context) {
     return {};

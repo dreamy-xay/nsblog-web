@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-19 21:30:24
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-12 23:35:46
+ * @LastEditTime: 2021-08-14 13:39:44
  */
 import { App } from 'vue';
 import 'dayjs/locale/zh-cn';
@@ -204,7 +204,7 @@ const components = [
 const plugins = [
   ElInfiniteScroll,
   // ElLoading,
-  // ElMessage
+  // ElMessage,
   // ElMessageBox,
   // ElNotification,
   ElPopover
