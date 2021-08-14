@@ -91,3 +91,18 @@ $border-radius-1: 4px;
     borderRadius0: $border-radius-0;
     borderRadius1: $border-radius-1;
 }
+
+/* mixin */
+@mixin ellipsis($line-clamp: 2) {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: $line-clamp;
+    -webkit-box-orient: vertical;
+}
+
+@mixin flex($align-items: initial, $justify-content: initial, $flex-direction: initial) {
+    display: flex;
+    justify-content: $justify-content;
+    align-items: $align-items;
+    flex-direction: $flex-direction;
+}
