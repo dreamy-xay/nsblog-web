@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-10 19:45:44
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-12 11:03:58
+ * @LastEditTime: 2021-08-14 12:28:39
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -65,7 +65,7 @@ export default function(baseUrl: string, app: Application) {
       return ans;
     }
     if (int(type))
-      return res.json({ messages: getRandom(int(offset) >= 19 ? 0 : Math.min(int(limit), 19 - int(offset) + 1)) });
+      return res.json({ messages: getRandom(int(offset) >= 19 ? 0 : Math.min(int(limit), 19 - int(offset))) });
     else {
       const count: number[] = [];
       for (let i: number = 1; i <= 5; ++i) count.push(Random.natural(0, 2) ? Random.integer(1, 120) : 0);

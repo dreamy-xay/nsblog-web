@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-07-22 17:52:26
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-12 21:51:53
+ * @LastEditTime: 2021-08-13 17:17:47
 -->
 <template>
   <div class="top-bar-center">
@@ -29,7 +29,6 @@ export default defineComponent({
   name: 'topBarCenter',
 });
 </script>
-
 
 <style lang="scss" scoped>
 .top-bar-center {

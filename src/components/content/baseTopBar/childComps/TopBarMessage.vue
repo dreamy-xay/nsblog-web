@@ -4,31 +4,44 @@
  * @Autor: continue-hs
  * @Date: 2021-08-05 21:23:32
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-12 19:47:12
+ * @LastEditTime: 2021-08-13 16:57:54
 -->
 
 <template>
   <div class=top-bar-message>
     <div
-      v-for="(item,index) in menuList"
+      class=top-bar-message-menu
+      v-for="(item, index) in menuList"
       :key="index"
     >
-      <el-link
-        :underline=false
+      <a
         :href="item.url"
-        :class="content"
+        class="content"
+        role="button"
       >
-        <i :class="item.icon"></i>
-        <span class="contents">{{item.title}}</span>
-      </el-link>
+        <div>
+          <div>
+            <i :class="item.icon"></i>
+          </div>
+          {{item.title}}
+        </div>
+        <div class="badge">
+          <n-badge
+            :value="countList[index]"
+            :max="99"
+            :color="styles.pink0"
+            v-if="countList[index] > 0"
+          />
+        </div>
+      </a>
     </div>
   </div>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { verifyToken } from '@/network/token';
+import { defineComponent, reactive } from 'vue';
+import styles from '@/assets/style/define.scss';
+import { getMessages } from '@/network/api/messages';
 
 /**
  * @description:  消息栏弹窗
@@ -38,9 +51,7 @@ import { verifyToken } from '@/network/token';
 export default defineComponent({
   name: 'topBarMessage',
   setup() {
-    const title = ref('消息');
-    const isLogin = ref(verifyToken().status);
-    const router = useRouter();
+    // 菜单
     const menuList = [
       {
         title: '回复我的',
@@ -74,78 +85,86 @@ export default defineComponent({
       },
     ];
 
-    /**
-     * @description: 跳转至消息路由
-     * @return {void}
-     * @author: continue-hs
-     */
-    function messageclick() {
-      if (isLogin.value) router.push('/message');
-      else router.push('/login/Signin');
-    }
+    // 消息记录数量统计
+    const countList = reactive([0, 0, 0, 0, 0, 0]);
+    // 获取数量信息
+    getMessages()
+      .then((data) => {
+        countList.splice(0, 5, data.count[0]);
+        countList.splice(0, 0, ...data.count.slice(1, 4));
+        countList.splice(4, 0, data.count[4]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
     return {
-      title,
-      isLogin,
-      messageclick,
+      styles,
       menuList,
+      countList,
     };
   },
 });
 </script>
 
 <style lang="scss" scoped>
-@mixin font-style($size: 16px, $color: $grey-11) {
-  font-size: $size;
-  font-weight: 400;
-  text-align: center;
-  color: $color;
-}
-
 @mixin size($width, $height) {
   width: $width;
   height: $height;
 }
 
-.top-bar-message-header {
-  &:hover {
-    color: $green-0;
-  }
+@mixin flex() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.top-bar-message-contents {
-  line-height: 35px;
-  border: 0;
-  @include size(172px, 35px);
-  @include font-style;
-}
+.top-bar-message {
+  @include size(172px, 234px);
+  padding: 7px 0;
+  @include flex();
+  flex-direction: column;
 
-:deep(.el-link) {
-  font-weight: 400;
-  padding-bottom: 2px;
-  &.el-link--default {
-    color: $grey-11;
-    @include size(172px, 35px);
-    i {
-      font-size: 19px;
-    }
-    &:hover {
-      background: $grey-2;
-      color: $green-0;
-      .contents {
+  .top-bar-message-menu {
+    @include size(100%, 40px);
+
+    .content {
+      @include size(calc(100% - 40px), 100%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      color: $grey-11;
+      transition: 0.25s;
+      letter-spacing: 1px;
+
+      & > div {
+        height: 100%;
+        @include flex();
+
+        div {
+          height: 20px;
+          width: 20px;
+          @include flex();
+
+          .iconfont {
+            font-size: 20px;
+            color: $grey-11;
+            margin-right: 12px;
+            transition: 0.25s;
+          }
+        }
+      }
+
+      &:hover {
         color: $green-0;
+        background-color: $grey-2;
+
+        .iconfont {
+          color: $green-0;
+        }
       }
     }
   }
-}
-
-:deep(.iconfont) {
-  font-size: 20px;
-}
-
-.contents {
-  margin-left: 12px;
-  @include font-style;
-  @include size(64px, 35px);
 }
 </style>

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 11:59:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-10 15:50:41
+ * @LastEditTime: 2021-08-14 12:34:18
  */
 
 import { Application, Request, Response } from 'express';
@@ -36,14 +36,14 @@ export default function(baseUrl: string, app: Application) {
       return ans;
     }
 
-    if (favorites)
-      res.json({ collections: getRandom(int(offset) >= 29 ? 0 : Math.min(int(limit), 29 - int(offset) + 1)) });
+    if (favorites) res.json({ collections: getRandom(int(offset) >= 29 ? 0 : Math.min(int(limit), 29 - int(offset))) });
     else {
       const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
       const cs: number = Random.natural(0, 15);
       for (let i: number = 0; i < cs; ++i) {
+        const sum: number = Random.integer(1, 38);
         const collections: Record<string, unknown>[] = getRandom(
-          int(offset) >= 29 ? 0 : Math.min(int(limit), 29 - int(offset) + 1)
+          int(offset) >= sum ? 0 : Math.min(int(limit), sum - int(offset))
         );
         ans.push({
           id: Random.id(),
