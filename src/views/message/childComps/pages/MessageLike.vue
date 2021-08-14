@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:31:44
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-14 19:25:58
+ * @LastEditTime: 2021-08-14 22:19:51
 -->
 <template>
   <el-scrollbar max-height="636px">
@@ -17,7 +17,7 @@
         class="message-like"
         v-for="(item , index) in likeData"
         :key="item.messages_id"
-        @click="ChangePages('/'+item.content.id)"
+        @click="ChangePages('/article/'+item.content.id)"
       >
 
         <div class="message-like-avator">
