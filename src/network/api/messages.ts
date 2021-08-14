@@ -4,16 +4,20 @@
  * @Autor: Z_Y_C
  * @Date: 2021-08-10 19:39:04
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-12 10:31:11
+ * @LastEditTime: 2021-08-14 21:12:42
  */
 import { get, del, RequestLifeCycle } from '@/network/request';
 
 /**
- * @description:得到未读通知数量
+ * @description: 获取浏览消息记录信息
+ * @param {number} type 历史记录类型，0为未读通知数量；1为系统通知；2为回复我的；3为收到的赞；4为关注我的 `默认为0`
+ * @param {number} offset 数据库历史记录偏移量 `默认为0`
+ * @param {number} limit 返回history的最大数量 `默认位10`
  * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
  * @return {Promise<unknown>} 请求返回promise
  * @author: Z_Y_C
  */
+
 export function getMessages(
   type: number = 0,
   offset: number = 0,
@@ -30,6 +34,14 @@ export function getMessages(
     }
   });
 }
+
+/**
+ * @description: 删除消息
+ * @param {number} id 删除消息的id
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: Z_Y_C
+ */
 
 export function deleteMessages(id: number | string, RLC: RequestLifeCycle = {}) {
   return del({

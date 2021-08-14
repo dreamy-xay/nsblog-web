@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-10 14:25:47
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-10 17:03:37
+ * @LastEditTime: 2021-08-14 12:28:16
  */
 
 import { Application, Request, Response } from 'express';
@@ -35,7 +35,7 @@ export default function(baseUrl: string, app: Application) {
         });
       return ans;
     }
-    return res.json({ attentions: getRandom(int(offset) >= 69 ? 0 : Math.min(int(limit), 69 - int(offset) + 1)) });
+    return res.json({ attentions: getRandom(int(offset) >= 69 ? 0 : Math.min(int(limit), 69 - int(offset))) });
   });
 
   // 添加关注
@@ -73,6 +73,6 @@ export default function(baseUrl: string, app: Application) {
         });
       return ans;
     }
-    return res.json({ attentions: getRandom(int(offset) >= 69 ? 0 : Math.min(int(limit), 69 - int(offset) + 1)) });
+    return res.json({ attentions: getRandom(int(offset) >= 69 ? 0 : Math.min(int(limit), 69 - int(offset))) });
   });
 }
