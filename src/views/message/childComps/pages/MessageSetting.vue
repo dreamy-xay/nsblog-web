@@ -4,12 +4,12 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-28 13:02:11
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-12 21:54:44
+ * @LastEditTime: 2021-08-13 22:04:02
 -->
 <template>
   <div
     class="message-setting"
-    v-for="item,index in textmenu"
+    v-for="(item,index) in textmenu"
     :key="item.text1"
   >
 
@@ -20,7 +20,7 @@
 
     <div class="message-setting-radio">
       <el-radio-group
-        v-model="messageData[index].value"
+        v-model="settingData[index].value"
         @change="changeSetting(index)"
       >
         <el-radio
@@ -36,18 +36,18 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, reactive } from 'vue';
 import { getMessageSetting, modifySetting } from '@/network/api/setting.ts';
+
 /**
  * @description: 消息设置页面
- * @param {*}
- * @return {*}
  * @author: Z_Y_C
  */
 
 export default defineComponent({
   name: 'messageSeting',
   setup() {
+    //设置功能
     const textmenu = [
       { text1: '消息提醒', text2: '（关闭后，所有消息将不再提醒）' },
       { text1: '评论消息提醒', text2: '（关闭后，将不再接收别人对我的评论提醒）' },
@@ -56,7 +56,8 @@ export default defineComponent({
       { text1: '我的消息提醒', text2: '（接收谁发给我的消息提醒）' },
     ];
 
-    const messageData = reactive([
+    //设置数据
+    const settingData = reactive([
       { key: 'message_prompt', value: 1 },
       { key: 'comment_message_prompt', value: 1 },
       { key: 'attention_message_prompt', value: 1 },
@@ -64,6 +65,7 @@ export default defineComponent({
       { key: 'chat_message_prompt', value: 1 },
     ]);
 
+    //设置按钮
     const radiomenu = [
       [
         { lable: '开启', value: 1 },
@@ -88,28 +90,33 @@ export default defineComponent({
       ],
     ];
 
+    //得到设置数据
     getMessageSetting()
       .then((data) => {
-        messageData[0].value = data.message_prompt;
-        messageData[1].value = data.comment_message_prompt;
-        messageData[2].value = data.attention_message_prompt;
-        messageData[3].value = data.like_message_prompt;
-        messageData[4].value = data.chat_message_prompt;
+        settingData[0].value = data.message_prompt;
+        settingData[1].value = data.comment_message_prompt;
+        settingData[2].value = data.attention_message_prompt;
+        settingData[3].value = data.like_message_prompt;
+        settingData[4].value = data.chat_message_prompt;
       })
       .catch((error) => {
         console.log(error);
       });
 
+    /**
+     * @description: 更改设置
+     * @param {Number} index 得到设置项
+     * @return {void}
+     * @author: Z_Y_C
+     */
     function changeSetting(index) {
-      // console.log(index);
-      // console.log(messageData[index].value);
-      modifySetting(messageData[index].key);
+      modifySetting(settingData[index].key);
     }
 
     return {
       textmenu,
       radiomenu,
-      messageData,
+      settingData,
       changeSetting,
     };
   },

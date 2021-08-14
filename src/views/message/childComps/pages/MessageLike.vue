@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:31:44
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-12 23:24:20
+ * @LastEditTime: 2021-08-14 19:25:58
 -->
 <template>
   <el-scrollbar max-height="636px">
@@ -15,15 +15,13 @@
       <div
         role="button"
         class="message-like"
-        v-for="item,index in likeData"
+        v-for="(item , index) in likeData"
         :key="item.messages_id"
-        @click="ChangePages(item.content.id)"
+        @click="ChangePages('/'+item.content.id)"
       >
-        <div
-          class="message-like-avator"
-          role="button"
-        >
-          <a :href="'/'+item.content.username">
+
+        <div class="message-like-avator">
+          <a :href="'/user/' + item.content.username">
             <el-avatar
               :size='46'
               :src="item.content.avatar"
@@ -36,11 +34,14 @@
 
           <div class="message-like-right-text">
 
-            <span class="message-like-right-text-name">
-              <a :href="'/'+item.content.username">{{item.content.nickname}}</a>
-            </span>
-            <span v-if="item.content.type===1">赞了我的文章</span>
-            <span v-if="item.content.type===2">赞了我的评论</span>
+            <a
+              class="message-like-right-text-name"
+              :href="'/user/' + item.content.username"
+            >{{item.content.nickname}}</a>
+            <span v-if="item.content.type === 1">赞了我的文章</span>
+            <span v-if="item.content.type === 2">赞了我的问答</span>
+            <span v-if="item.content.type === 3">赞了我的文章评论</span>
+            <span v-if="item.content.type === 4">赞了我的问答评论</span>
           </div>
 
           <div class="message-like-right-bottom">
@@ -61,7 +62,7 @@
     </div>
   </el-scrollbar>
 
-  <message-empty v-if="likeData=== undefined ||likeData === null || likeData.length <= 0 " />
+  <message-empty v-if="likeData.length <= 0" />
 
 </template>
 <script>
@@ -69,39 +70,34 @@ import { defineComponent, reactive, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import MessageEmpty from '@/views/message/childComps/MessageEmpty.vue';
 import { getMessages, deleteMessages } from '@/network/api/messages.ts';
-import { dateFormat } from '@/util/date';
+import { dateFormat } from '@/util/date.ts';
 
 /**
  * @description: 收到的赞页面
- * @param {*}
- * @return {*}
  * @author: Z_Y_C
  */
 
 export default defineComponent({
-  name: 'messagelike',
+  name: 'messageLike',
   components: {
     MessageEmpty,
   },
   setup() {
     let offset = 0; // 偏移量
-    const deleteTag = ref(true);
+
+    const deleteTag = ref(true); // 判断数据是否全部加载的标志
+
     const router = useRouter(),
       route = useRoute();
+
     const likeData = reactive([]);
+
     /**
-     * @description: 初步获取数据
-     * @param {*}
-     * @return {*}
+     * @description: 改变日期格式
+     * @param {String} date 日期
+     * @return {String} 返回日期格式 `Y年m月d日 HH:MM`
      * @author: Z_Y_C
      */
-
-    // getMessages(3, offset, 10)
-    //   .then((data) => {
-    //     offset += data.messages.length;
-    //     likeData.splice(0, 0, ...data.messages);
-    //   })
-    //   .catch((error) => console.log(error));
 
     function getDate(date) {
       date = new Date(date);
@@ -109,11 +105,11 @@ export default defineComponent({
     }
 
     /**
-     * @description: 当滚动条到底部时进一步获取数据
-     * @param {*}
-     * @return {*}
+     * @description: element-ui无限滚动自动获取数据
+     * @return {void}
      * @author: Z_Y_C
      */
+
     function getMessagesList() {
       getMessages(3, offset, 10)
         .then((data) => {
@@ -122,34 +118,29 @@ export default defineComponent({
           }
           offset += data.messages.length;
           likeData.splice(likeData.length, 0, ...data.messages);
+          console.log(likeData);
         })
         .catch((error) => console.log(error));
     }
 
     /**
-     * @description: 监测滚动条是否到了底部，到了就进一步获取数据
-     * @param {*}
-     * @return {*}
-     * @author: Z_Y_C
-     */
-    // events.on('Message-GetDataTag', () => {
-    //   getMessagesList();
-    // });
-
-    /**
      * @description: 跳转界面
-     * @param {*} path 路由
+     * @param {String} path 路由id
+     * @return {void}
      * @author: Z_Y_C
      */
+
     function ChangePages(path) {
       router.push(path);
     }
 
     /**
-     * @description: 得到删除1消息索引
-     * @param {*} index 该消息索引
+     * @description: 得到删除消息索引
+     * @param {Number} index 该消息索引
+     * @return {void}
      * @author: Z_Y_C
      */
+
     function deleteItem(index) {
       deleteMessages(likeData[index].message_id)
         .then(() => {
@@ -190,11 +181,12 @@ $pink0: $pink-0;
   border-radius: $border-radius0;
   box-shadow: $shadow0;
   color: $grey0;
-  transition: all 0.4s;
+  transition: all 0.25s;
 
   .message-like-avator {
-    width: 60px;
+    width: 46px;
     height: 46px;
+    padding-right: 14px;
   }
 
   .message-like-right {
@@ -215,11 +207,10 @@ $pink0: $pink-0;
         font-size: 17px;
         font-weight: 700;
         margin-right: 20px;
-        a {
-          color: $grey10;
-          &:hover {
-            color: $green0;
-          }
+        transition: all 0.25s;
+
+        &:hover {
+          color: $green0;
         }
       }
     }
@@ -236,6 +227,8 @@ $pink0: $pink-0;
       }
 
       .message-like-right-bottom-delete {
+        transition: all 0.25s;
+
         .message-like-right-bottom-delete-iconfont {
           margin-right: 5px;
         }

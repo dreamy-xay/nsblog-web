@@ -4,106 +4,167 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:25:27
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-11 23:45:51
+ * @LastEditTime: 2021-08-14 19:26:10
 -->
 
 <template>
-  <div
-    class="message-reply"
-    role="button"
-    v-for="item in replyData"
-    :key="item.message_id"
-  >
-
-    <div class="message-reply-avator">
-      <a :href="'/auth'+item.content.username">
-        <el-avatar
-          :size='46'
-          :src="item.content.avatar"
-        >
-          user
-        </el-avatar>
-      </a>
-
-    </div>
-
-    <div class="message-reply-right">
-
-      <div class="message-reply-right-top">
-        <span class="message-reply-right-top-name">ZZ</span>
-        <span class="message-reply-right-top-type">回复我的评论</span>
-      </div>
-
-      <div class="message-reply-right-text">加油</div>
-
+  <el-scrollbar max-height="636px">
+    <div
+      v-infinite-scroll="getMessagesList"
+      infinite-scroll-delay="300"
+    >
       <div
-        class="message-reply-right-center"
-        v-if="true"
+        class="message-reply"
+        role="button"
+        v-for="(item , index) in replyData"
+        :key="item.message_id"
       >
-        <span>XX：</span>
-        <span>加油</span>
+
+        <div class="message-reply-avator">
+          <a :href="'/user/'+item.content.username">
+            <el-avatar
+              :size='46'
+              :src="item.content.avatar"
+            />
+          </a>
+
+        </div>
+
+        <div class="message-reply-right">
+
+          <div class="message-reply-right-top">
+            <a class="message-reply-right-top-name">{{item.content.nickname}}</a>
+            <span v-if="item.content.type===1">回复我的文章</span>
+            <span v-if="item.content.type===2">回复我的问答</span>
+            <span v-if="item.content.type===3">赞了我的文章评论</span>
+            <span v-if="item.content.type===4">赞了我的问答评论</span>
+          </div>
+
+          <div class="message-reply-right-text">{{item.content.content}}</div>
+
+          <div
+            class="message-reply-right-center"
+            v-if="item.content.reply_username!==''"
+          >
+            <span>{{item.content.reply_username}}：</span>
+            <span>{{item.content.reply_content}}</span>
+          </div>
+
+          <div class="message-reply-right-bottom">
+            <span class="message-reply-right-bottom-time">{{getDate(item.time)}}</span>
+
+            <div class="message-reply-right-bottom-reply">
+              <i class="iconfont blog-huifu1 message-reply-right-bottom-reply-iconfont"></i>
+              <span>回复</span>
+            </div>
+
+            <div class="message-reply-right-bottom-reply">
+              <i class="iconfont blog-dianzan1 message-reply-right-bottom-reply-iconfont"></i>
+              <span>点赞</span>
+            </div>
+
+            <div class="message-reply-right-bottom-reply">
+              <i class="iconfont blog-dianzan1 message-reply-right-bottom-reply-iconfont"></i>
+              <span>反对</span>
+            </div>
+
+            <div
+              class="message-reply-right-bottom-delete"
+              @click="deleteItem(index)"
+            >
+              <i class="iconfont blog-shanchu message-reply-right-bottom-delete-iconfont"></i>
+              <span>删除该通知</span>
+            </div>
+
+          </div>
+
+        </div>
+
       </div>
-
-      <div class="message-reply-right-bottom">
-        <span class="message-reply-right-bottom-time">2021年8月5日 16:34</span>
-
-        <div class="message-reply-right-bottom-reply">
-          <i class="iconfont blog-huifu1 message-reply-right-bottom-reply-iconfont"></i>
-          <span>回复</span>
-        </div>
-
-        <div class="message-reply-right-bottom-reply">
-          <i class="iconfont blog-dianzan1 message-reply-right-bottom-reply-iconfont"></i>
-          <span>点赞</span>
-        </div>
-
-        <div class="message-reply-right-bottom-reply">
-          <i class="iconfont blog-dianzan1 message-reply-right-bottom-reply-iconfont"></i>
-          <span>反对</span>
-        </div>
-
-        <div class="message-reply-right-bottom-delete">
-          <i class="iconfont blog-shanchu message-reply-right-bottom-delete-iconfont"></i>
-          <span>删除该通知</span>
-        </div>
-
-      </div>
-
     </div>
+  </el-scrollbar>
 
-  </div>
-
-  <message-empty v-if="replyData=== undefined ||replyData === null || replyData.length <= 0 " />
+  <message-empty v-if="replyData.length <= 0 " />
 
 </template>
 <script>
-import { defineComponent, reactive } from 'vue';
+import { defineComponent, reactive, ref } from 'vue';
 import MessageEmpty from '@/views/message/childComps/MessageEmpty.vue';
-import { getMessages } from '@/network/api/messages.ts';
+import { getMessages, deleteMessages } from '@/network/api/messages.ts';
+import { dateFormat } from '@/util/date.ts';
 
 /**
  * @description: 回复我的页面
- * @param {*}
- * @return {*}
  * @author: Z_Y_C
  */
 
 export default defineComponent({
-  name: 'messagereply',
+  name: 'messageReply',
   components: {
     MessageEmpty,
   },
   setup() {
+    let offset = 0; // 偏移量
+
+    const deleteTag = ref(true); // 判断数据是否全部加载的标志
+
     const replyData = reactive([]);
-    console.log(replyData);
-    getMessages(2)
-      .then((data) => {
-        replyData.splice(0, 0, ...data.messages);
-        console.log(data);
-        console.log(replyData);
-      })
-      .catch((error) => console.log(error));
-    return { replyData };
+
+    /**
+     * @description: 改变日期格式
+     * @param {String} date 日期
+     * @return {String} 返回日期格式 `Y年m月d日 HH:MM`
+     * @author: Z_Y_C
+     */
+
+    function getDate(date) {
+      date = new Date(date);
+      return dateFormat('Y年m月d日 HH:MM', date);
+    }
+
+    /**
+     * @description: element-ui无限滚动自动获取数据
+     * @return {void}
+     * @author: Z_Y_C
+     */
+
+    function getMessagesList() {
+      getMessages(2, offset, 10)
+        .then((data) => {
+          if (data.messages.length < 10) {
+            deleteTag.value = false;
+          }
+          offset += data.messages.length;
+          replyData.splice(replyData.length, 0, ...data.messages);
+          console.log(replyData);
+        })
+        .catch((error) => console.log(error));
+    }
+
+    /**
+     * @description: 得到删除消息索引
+     * @param {Number} index 该消息索引
+     * @return {void}
+     * @author: Z_Y_C
+     */
+
+    function deleteItem(index) {
+      deleteMessages(replyData[index].message_id)
+        .then(() => {
+          replyData.splice(index, 1);
+          if (deleteTag.value && replyData.length === 6) {
+            getMessagesList();
+          }
+        })
+        .catch((error) => console.log(error));
+    }
+
+    return {
+      replyData,
+      getMessagesList,
+      deleteItem,
+      getDate,
+    };
   },
 });
 </script>
@@ -130,9 +191,11 @@ $grey9: $grey-9;
   transition: all 0.4s;
 
   .message-reply-avator {
-    width: 60px;
+    width: 46px;
     height: 46px;
+    padding-right: 14px;
   }
+
   .message-reply-right {
     .message-reply-right-top {
       display: flex;
@@ -140,12 +203,17 @@ $grey9: $grey-9;
       color: $grey7;
       font-size: 16px;
       margin-bottom: 5px;
+      line-height: 21px;
 
       .message-reply-right-top-name {
         font-weight: 700;
         font-size: 17px;
         margin-right: 20px;
         color: $grey10;
+
+        &:hover {
+          color: $green0;
+        }
       }
     }
 
@@ -159,7 +227,6 @@ $grey9: $grey-9;
 
     .message-reply-right-center {
       display: flex;
-      align-items: center;
       border-left: 1px solid $grey7;
       padding-left: 15px;
       font-size: 14px;
@@ -171,6 +238,7 @@ $grey9: $grey-9;
       display: flex;
       align-items: center;
       font-size: 14px;
+      line-height: 19px;
 
       .message-reply-right-bottom-time {
         margin-right: 20px;

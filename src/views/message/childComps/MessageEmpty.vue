@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-08-09 11:39:28
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-10 16:39:24
+ * @LastEditTime: 2021-08-13 23:07:28
 -->
 <template>
   <div class="message-empty">
@@ -22,13 +22,11 @@ import styles from '@/assets/style/define.scss';
 
 /**
  * @description: 消息为空时显示的界面
- * @param {*}
- * @return {*}
  * @author: Z_Y_C
  */
 
 export default defineComponent({
-  name: 'messageempty',
+  name: 'messageEmpty',
   components: {
     BaseSvg,
   },
@@ -44,6 +42,7 @@ export default defineComponent({
 $border-radius0: $border-radius-0;
 $shadow0: $shadow-0;
 $grey0: $grey-0;
+
 .message-empty {
   width: 920px;
   height: 271px;
