@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-07-29 16:37:09
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-12 16:58:15
+ * @LastEditTime: 2021-08-16 17:19:36
 -->
 <template>
   <div class="top-bar-left">
@@ -36,7 +36,7 @@
 
 <script>
 import { defineComponent } from 'vue';
-import { verifyToken } from '@/network/token';
+import { mapState } from '@/util/store';
 import { useRoute } from 'vue-router';
 
 /**
@@ -47,7 +47,7 @@ import { useRoute } from 'vue-router';
 export default defineComponent({
   name: 'topBarLeft',
   setup() {
-    const token = verifyToken(); // 拿到token验证信息
+    const { tokenInfo } = mapState('global', ['tokenInfo']); // 拿到token验证信息
     // 左侧菜单按钮
     const menu = [
       {
@@ -56,7 +56,7 @@ export default defineComponent({
       },
       {
         name: '博客',
-        url: token.status ? '/' + token.username : '/login',
+        url: tokenInfo.value.status ? '/' + tokenInfo.value.username : '/login',
       },
       {
         name: '问答',

@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-07-29 15:53:25
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-13 10:20:55
+ * @LastEditTime: 2021-08-16 17:25:42
 -->
 
 <template>
@@ -47,47 +47,47 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, computed } from 'vue';
+import { mapGetters } from '@/util/store';
 
 /**
  * @description:  TopBar_笔记分享
- * @param {Boolean} isLogin 是否已经登录 `必传参数`
  * @author: Ban
  */
 
 export default defineComponent({
   name: 'topBarNoteShare',
-  props: {
-    isLogin: {
-      tyep: Boolean,
-      required: true,
-    },
-  },
-  setup(props) {
-    const menu = [
-      {
-        name: '写笔记',
-        iconfont: 'blog-edit-article',
-        url: props.isLogin ? '#' : '/login/signIn',
-      },
-      {
-        name: '提问题',
-        iconfont: 'blog-wenti',
-        url: props.isLogin ? '#' : '/login/signIn',
-      },
-      {
-        name: '享资源',
-        iconfont: 'blog-shangchuan',
-        url: props.isLogin ? '#' : '/login/signIn',
-      },
-      {
-        name: '传图片',
-        iconfont: 'blog-icons01',
-        url: props.isLogin ? '#' : '/login/signIn',
-      },
-    ];
+  setup() {
+    const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
+    // 菜单
+    const menu = computed(() => {
+      return [
+        {
+          name: '写笔记',
+          iconfont: 'blog-edit-article',
+          url: isLogin.value ? '#' : '/login/signIn',
+        },
+        {
+          name: '提问题',
+          iconfont: 'blog-wenti',
+          url: isLogin.value ? '#' : '/login/signIn',
+        },
+        {
+          name: '享资源',
+          iconfont: 'blog-shangchuan',
+          url: isLogin.value ? '#' : '/login/signIn',
+        },
+        {
+          name: '传图片',
+          iconfont: 'blog-icons01',
+          url: isLogin.value ? '#' : '/login/signIn',
+        },
+      ];
+    });
+
     return {
       menu,
+      isLogin,
     };
   },
 });

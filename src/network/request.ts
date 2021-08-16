@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-03 17:51:52
+ * @LastEditTime: 2021-08-16 18:01:20
  */
 
 import axios, { AxiosRequestConfig } from 'axios';
@@ -23,7 +23,9 @@ export interface RequestLifeCycle {
  * @description: 请求配置接口
  * @author: dreamy-xay
  */
-export interface RequestConfig extends AxiosRequestConfig, RequestLifeCycle {}
+export interface RequestConfig extends AxiosRequestConfig, RequestLifeCycle {
+  all?: boolean;
+}
 
 /**
  * @description: request请求
@@ -32,7 +34,7 @@ export interface RequestConfig extends AxiosRequestConfig, RequestLifeCycle {}
  * @author: dreamy-xay
  */
 export function request(options: RequestConfig): Promise<unknown> {
-  return new Promise((resolve: (...value: unknown[]) => void, reject: (reason: unknown) => void) => {
+  return new Promise((resolve: (...value: unknown[]) => void, reject: (...reason: unknown[]) => void) => {
     // 1.创建axios的实例
     const instance = axios.create({
       baseURL: `${process.env.VUE_APP_APIHOST}:${process.env.VUE_APP_APIPORT}${process.env.VUE_APP_APIROUTER}`,
@@ -80,14 +82,14 @@ export function request(options: RequestConfig): Promise<unknown> {
     instance(options)
       .then(res => {
         if (process.env.VUE_APP_MOCK !== 'false' && process.env.VUE_APP_MOCK_SEVER !== 'false') {
-          if (res.data.status >= 200 && res.data.status < 300) resolve(res.data.data, res.data.status);
+          if (res.data.status >= 200 && res.data.status < 300) resolve(options.all ? res.data : res.data.data);
           else {
             console.error(
               `Failed to load resource: the server responded with a status of ${res.data.status} (${res.data.statusText})`
             );
-            reject(new Error(res.data.statusText));
+            reject(axios.isAxiosError(res.data));
           }
-        } else resolve(res.data, res.status);
+        } else resolve(options.all ? res : res.data);
       })
       .catch(err => {
         reject(err);

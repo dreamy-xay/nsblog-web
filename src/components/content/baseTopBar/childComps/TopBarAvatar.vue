@@ -4,13 +4,13 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-19 18:32:43
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-13 16:59:20
+ * @LastEditTime: 2021-08-16 17:23:15
 -->
 <template>
   <div class="top-bar-avatar">
     <a
       href="/login/signIn"
-      v-if="!token.status"
+      v-if="!tokenInfo.status"
     >
       <div
         class="top-bar-avatar-not-login"
@@ -136,23 +136,18 @@ import { defineComponent, ref, computed } from 'vue';
 import { getUserInfo } from '@/network/api/user';
 import { clearToken } from '@/network/token';
 import { getCurrentDiffirence } from '@/util/date';
+import { mapState, mapMutations } from '@/util/store';
 
 /**
  * @description:  顶部头像组件
- * @param {Object} token 登录后获取的token信息 `必传参数`
- * @event loginout 获取用户信息失败，即登录错误，登出
  * @author: dreamy-xay
  */
 
 export default defineComponent({
   name: 'topBarAvatar',
-  props: {
-    token: {
-      type: Object,
-      required: true,
-    },
-  },
-  setup(props, context) {
+  setup() {
+    const { updateTokenInfo } = mapMutations('global', ['updateTokenInfo']); // 更新tokenInfo
+    const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
     const avatar = ref('/home/avatarLoading.gif'); // 初始头像
     const username = ref(''); // 用户名
     const age = ref(0); // 学龄
@@ -191,8 +186,8 @@ export default defineComponent({
     ];
 
     // 获取用户信息
-    if (props.token.status) {
-      getUserInfo(props.token.username)
+    if (tokenInfo.value.status) {
+      getUserInfo(tokenInfo.value.username)
         .then((data) => {
           username.value = data.username; //更新昵称
           recommendCount.value = data.recommend_count; //更新关注数量
@@ -207,7 +202,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.log(error);
-          context.emit('loginout');
+          updateTokenInfo({ status: false });
         });
     }
 
@@ -245,7 +240,7 @@ export default defineComponent({
      */
     function exit() {
       clearToken();
-      context.emit('loginout');
+      updateTokenInfo({ status: false });
     }
 
     const active = ref(false); // 是否激活显示菜单
@@ -265,6 +260,7 @@ export default defineComponent({
     }
 
     return {
+      tokenInfo,
       avatar,
       username,
       age,

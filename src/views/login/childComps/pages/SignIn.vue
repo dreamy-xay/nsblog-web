@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 14:41:12
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-10 15:10:10
+ * @LastEditTime: 2021-08-16 18:06:42
 -->
 <template>
   <div class="sign-in">
@@ -77,6 +77,7 @@ import LoginLogo from '@/views/login/childComps/LoginLogo.vue';
 import LoginInput from '@/views/login/childComps/LoginInput.vue';
 import LoginButton from '@/views/login/childComps/LoginButton.vue';
 import { useMessage } from 'naive-ui';
+import { mapMutations } from '@/util/store';
 
 /**
  * @description: 登录卡片页面
@@ -91,7 +92,7 @@ export default defineComponent({
     LoginInput,
   },
   setup() {
-    const msg = useMessage(); // naive-ui mssage
+    const msg = useMessage(); // naive-ui message
     const username = ref(''); // 用户名
     const password = ref(''); // 密码
     const passwordInput = ref(null); // 密码输入框dom
@@ -146,6 +147,7 @@ export default defineComponent({
      * @return {void}
      * @author: dreamy-xay
      */
+    const { updateTokenInfo } = mapMutations('global', ['updateTokenInfo']); // 更新登陆状态函数获取
     function submit() {
       const usernameReg = /^[a-zA-Z]([-_a-zA-Z0-9]{0,30})$/;
       const passwordReg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,}$/;
@@ -154,6 +156,7 @@ export default defineComponent({
         authLogin(username.value, password.value)
           .then((data) => {
             setToken(data.token, data.username);
+            updateTokenInfo();
             router.back();
           })
           .catch((error) => {
