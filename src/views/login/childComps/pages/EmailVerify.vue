@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-28 23:10:42
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-05 10:40:26
+ * @LastEditTime: 2021-08-16 18:22:34
 -->
 <template>
   <div class="email-verify">
@@ -170,9 +170,10 @@ export default defineComponent({
               else events.emit(info.eventId);
             }
           })
-          .catch((error, status) => {
+          .catch((error) => {
             console.log(error);
-            if (status === 403) msg.error('验证码错误，验证失败', { duration: 3000, closable: true });
+            if (error.response && error.response.status === 403)
+              msg.error('验证码错误，验证失败', { duration: 3000, closable: true });
             else msg.error('服务器错误，验证失败', { duration: 3000, closable: true });
           });
     }

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-04 18:49:08
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-10 17:11:33
+ * @LastEditTime: 2021-08-16 18:21:17
 -->
 <template>
   <div class="history-content">
@@ -50,9 +50,10 @@ import { defineComponent, reactive, ref } from 'vue';
 import HistoryItem from '@/views/history/childComps/HistoryItem.vue';
 import BaseSvg from '@/components/content/baseSvg/BaseSvg';
 import { getHistory, deleteHistory } from '@/network/api/history';
-import { verifyToken } from '@/network/token';
+import { mapGetters } from '@/util/store';
 import styles from '@/assets/style/define.scss';
 import events from '@/events';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description: 历史记录主要内容
@@ -74,20 +75,11 @@ export default defineComponent({
     },
   },
   setup(props, context) {
+    const msg = useMessage(); //  // naive-ui message
     let offset = 0; // 偏移量
     let historyList = reactive([]); // 历史记录信息列表
     const end = ref(false);
-
-    // 获取历史记录
-    if (verifyToken().status)
-      getHistory(0, offset, 20)
-        .then((data) => {
-          offset += data.history.length;
-          historyList.splice(0, 0, ...data.history);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    const { isLogin } = mapGetters('global', ['isLogin']);
 
     /**
      * @description: 删除历史记录
@@ -105,24 +97,36 @@ export default defineComponent({
         });
     }
 
+    /**
+     * @description:
+     * @param {boolean} clear 是否清空原有内容 `默认不清空`
+     * @param {string} keyword 搜索关键词 `默认为 ''`
+     * @return {void}
+     * @author: dreamy-xay
+     */
     function getHistoryList(clear = false, keyword = '') {
-      getHistory(0, offset, keyword, 20)
-        .then((data) => {
-          if (data.history.length < 20) {
-            context.emit('toBottom');
-            end.value = true;
-          }
-          offset += data.history.length;
-          historyList.splice(clear ? 0 : historyList.length, clear ? historyList.length : 0, ...data.history);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      if (isLogin.value)
+        getHistory(0, offset, keyword, 20)
+          .then((data) => {
+            if (data.history.length < 20) {
+              context.emit('toBottom');
+              end.value = true;
+            }
+            offset += data.history.length;
+            historyList.splice(clear ? 0 : historyList.length, clear ? historyList.length : 0, ...data.history);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      else msg.error('请先登录再查看历史记录', { duration: 2000, closable: true });
     }
 
+    // 获取历史记录
+    getHistoryList();
+
     // 触底事件监听
-    events.on(props.eventId, () => {
-      getHistoryList();
+    events.on(props.eventId, (keyword) => {
+      getHistoryList(false, keyword);
     });
 
     events.on('HistoryBar-getHistory', (keyword) => {

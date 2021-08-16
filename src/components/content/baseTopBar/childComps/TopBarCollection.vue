@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-05 18:50:30
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-14 12:46:04
+ * @LastEditTime: 2021-08-16 17:19:42
 -->
 
 <template>
@@ -70,7 +70,7 @@ import { defineComponent, ref, reactive } from 'vue';
 import { getCollections } from '@/network/api/collections';
 import BaseTag from '../../baseTag/BaseTag.vue';
 import styles from '@/assets/style/define.scss';
-import { verifyToken } from '@/network/token';
+import { mapState } from '@/util/store';
 
 /**
  * @description:  收藏栏弹窗
@@ -86,16 +86,18 @@ export default defineComponent({
     const isActive = ref(0);
     let favorites = reactive([]);
     let List = reactive([]);
-    const username = verifyToken().username;
+    const { tokenInfo } = mapState('global', ['tokenInfo']);
+
     /**
      * @description: 获取指定用户所有收藏夹信息
      * @return {void}
      * @author: continue-hs
      */
-    getCollections(username, 100000).then((res) => {
-      favorites.splice(0, 0, ...res.favorites);
-      List.splice(0, 0, ...res.favorites[0].collections);
-    });
+    if (tokenInfo.value.status)
+      getCollections(tokenInfo.value.username, 100000).then((res) => {
+        favorites.splice(0, 0, ...res.favorites);
+        List.splice(0, 0, ...res.favorites[0].collections);
+      });
 
     /**
      * @description: 改变右侧收藏夹内容
