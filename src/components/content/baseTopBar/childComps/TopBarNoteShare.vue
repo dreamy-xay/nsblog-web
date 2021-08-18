@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-07-29 15:53:25
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-16 17:25:42
+ * @LastEditTime: 2021-08-18 15:40:15
 -->
 
 <template>
@@ -32,7 +32,7 @@
         </div>
       </a>
       <template #reference>
-        <a href="/admin">
+        <a :href="isLogin ? '/admin' : '/login/signIn'">
           <div
             class="button"
             role="button"

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 11:51:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-07 20:30:32
+ * @LastEditTime: 2021-08-18 17:13:36
 -->
 <template>
   <div
@@ -154,8 +154,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .base-view {
-  width: 100%;
-  height: 100%;
   overflow: hidden;
 
   ::v-deep(.el-scrollbar__thumb) {

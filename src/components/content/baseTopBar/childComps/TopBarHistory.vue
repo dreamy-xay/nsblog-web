@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-12 17:09:45
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-18 15:36:45
+ * @LastEditTime: 2021-08-18 21:10:55
 -->
 <template>
   <div class="top-bar-history">
@@ -106,7 +106,6 @@ export default defineComponent({
     function getArticle() {
       getHistory(1, 0, '', 20)
         .then((data) => {
-          console.log(data);
           if (articleList.length !== 0) articleList.splice(0, articleList.length);
           articleList.splice(0, 0, ...data.history);
         })
