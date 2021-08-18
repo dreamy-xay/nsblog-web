@@ -3,22 +3,22 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-12 17:09:45
- * @LastEditors: Ban
- * @LastEditTime: 2021-08-17 22:15:27
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-08-18 15:36:45
 -->
 <template>
   <div class="top-bar-history">
     <div class="top-bar-history-header">
       <div
         role="button"
-        :class="{'header-left' : true,   'styleIsPitch' : isPitch === 1}"
+        :class="{'header-left': true, 'pitch': isPitch === 1}"
         @click="changePitch(1)"
         v-text="isPitch === 1 ? '文章历史' : '文章'"
       >
       </div>
       <div
         role="button"
-        :class="{'header-left' : true,   'styleIsPitch' : isPitch === 2}"
+        :class="{'header-left': true, 'pitch': isPitch === 2}"
         @click="changePitch(2)"
         v-text="isPitch === 2 ? '问答历史' : '问答'"
       >
@@ -32,7 +32,7 @@
     </div>
     <el-scrollbar
       class="top-bar-history-bottom"
-      height="360px"
+      :height="360"
     >
       <div
         v-if="isEmpty(isPitch)"
@@ -41,11 +41,9 @@
         暂时没有历史记录哦~
       </div>
       <div
-        v-for="(item, index) in isPitch === 1 ? articleList : qaList"
+        v-for="(item, index) in list"
         :key="index"
         class="bottom-item"
-        role="button"
-        @click="openArticle(item.id)"
       >
 
         <div class="bottom-item-content">
@@ -53,15 +51,22 @@
             :text="item.topic_tag[0]"
             :color="styles.orange0"
             :hollow="true"
+            role="button"
+            @click="tagClick(item.topic_tag[0])"
           ></base-tag>
-
-          <div class="bottom-item-text">
+          <div
+            class="bottom-item-text"
+            @click="openLink(item.id)"
+            role="button"
+          >
             {{ item.title }}
           </div>
         </div>
         <div class="bottom-item-other">
-          <div style="margin-right : 12px">{{ dateGetText(new Date(item.time)) }}</div>
-          <div>{{ item.nickname }}</div>
+          <a :href="'/user/' + item.username">
+            <div>{{ item.nickname }}</div>
+          </a>
+          <div>{{ dateGetText(new Date(item.time)) }}</div>
         </div>
       </div>
     </el-scrollbar>
@@ -69,7 +74,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive } from 'vue';
+import { defineComponent, ref, reactive, computed } from 'vue';
 import { getHistory } from '@/network/api/history';
 import BaseTag from '@/components/content/baseTag/BaseTag.vue';
 import styles from '@/assets/style/define.scss';
@@ -93,39 +98,38 @@ export default defineComponent({
     //改变选中
     function changePitch(num) {
       isPitch.value = num;
-      if (num === 1) {
-        getArticle();
-      } else if (num === 2) {
-        getQuestion();
-      }
+      if (num === 2) getQuestion();
     }
+
     //获取数据
     //获取最新文章数据
     function getArticle() {
-      getHistory(1, 0, '', 0)
+      getHistory(1, 0, '', 20)
         .then((data) => {
+          console.log(data);
           if (articleList.length !== 0) articleList.splice(0, articleList.length);
           articleList.splice(0, 0, ...data.history);
-          console.log(articleList);
         })
         .catch((error) => {
           console.log(error);
         });
     }
     getArticle();
+
     //获取最新问答数据
+    let isGetting = false; // 是否已获得问答历史
     function getQuestion() {
+      if (isGetting) return;
+      isGetting = true;
       getHistory(2, 0, '', 20)
         .then((data) => {
           if (qaList.length !== 0) qaList.splice(0, qaList.length);
           qaList.splice(0, 0, ...data.history);
-          console.log(qaList);
         })
         .catch((error) => {
           console.log(error);
         });
     }
-    getQuestion();
 
     /**
      * @description: 形式化日期
@@ -142,26 +146,39 @@ export default defineComponent({
       } else if (time <= 172800) {
         if (new Date(current.getTime() - 86400000).getDay() === date.getDay())
           return '昨天' + ' ' + dateFormat('HH:MM', date);
-        else return dateFormat('m月d日 HH:MM', date);
-      } else return dateFormat('m月d日 HH:MM', date);
+        else return dateFormat('Y年m月d日 HH:MM', date);
+      } else return dateFormat('Y年m月d日 HH:MM', date);
     }
     //判断数组为空
     function isEmpty(num) {
-      if (num === 1) {
-        return articleList.length === 0;
-      } else if (num === 2) {
-        return qaList === 0;
-      }
+      if (num === 1) return articleList.length === 0;
+      else if (num === 2) return qaList === 0;
     }
 
     //打开文章
-    function openArticle(id) {
+    function openLink(id) {
       if (isPitch.value === 1) {
         window.open(`/article/${id}`);
       } else if (isPitch.value === 2) {
         window.open(`/question/${id}`);
       }
     }
+
+    // 计算显示列表
+    const list = computed(() => {
+      return isPitch.value === 1 ? articleList : qaList;
+    });
+
+    /**
+     * @description: 专题标签点击
+     * @param {string} name 标签名 `必传参数`
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function tagClick(name) {
+      console.log(`click ${name}`);
+    }
+
     return {
       isPitch,
       changePitch,
@@ -170,7 +187,9 @@ export default defineComponent({
       styles,
       dateGetText,
       isEmpty,
-      openArticle,
+      openLink,
+      list,
+      tagClick,
     };
   },
 });
@@ -182,6 +201,7 @@ export default defineComponent({
 
   .top-bar-history-header {
     height: 40px;
+    overflow: hidden;
     border-bottom: 1px solid $grey-2;
 
     .header-left {
@@ -193,7 +213,7 @@ export default defineComponent({
       color: $grey-11;
       top: 14px;
       font-size: 11px;
-      transition: 0.25s ease;
+      transition: 0.25s;
 
       .header-left-active {
         display: inline-block;
@@ -208,7 +228,7 @@ export default defineComponent({
       }
     }
 
-    .styleIsPitch {
+    .pitch {
       padding: 1px 7px;
       background: $green-0;
       color: $grey-0;
@@ -231,13 +251,17 @@ export default defineComponent({
   }
 
   .top-bar-history-bottom {
-    margin: 10px 0;
+    padding: 7px 0;
+    overflow: hidden;
+    width: 323px;
 
     .bottom-item {
+      width: 100%;
+      overflow: hidden;
       font-size: 16px;
       color: $grey-11;
       box-sizing: border-box;
-      padding: 6px 21px 6px 16px;
+      padding: 6px 16px;
       transition: 0.25s;
 
       &:hover {
@@ -245,24 +269,43 @@ export default defineComponent({
       }
 
       .bottom-item-content {
+        width: 291px;
         height: 21px;
         display: flex;
         align-items: center;
 
         .bottom-item-text {
+          flex: 1;
           margin-left: 7px;
+          color: $grey-11;
           @include ellipsis(1);
+          transition: 0.25s;
+
+          &:hover {
+            color: $grey-9;
+          }
         }
       }
 
       .bottom-item-other {
-        text-align: right;
-        font-size: 12px;
-        color: $grey-7;
+        width: 100%;
+        overflow: hidden;
         margin-top: 2px;
 
         div {
-          display: inline-block;
+          float: right;
+          font-size: 12px;
+          color: $grey-7;
+          transition: 0.25s;
+        }
+
+        & > div {
+          cursor: default;
+          margin-right: 12px;
+        }
+
+        a div:hover {
+          color: $grey-10;
         }
       }
     }
