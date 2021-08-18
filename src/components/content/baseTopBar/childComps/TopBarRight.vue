@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-07-20 11:01:33
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-16 17:07:14
+ * @LastEditTime: 2021-08-18 20:58:55
 -->
 
 <template>
@@ -67,7 +67,7 @@ import TopBarCollection from '@/components/content/baseTopBar/childComps/TopBarC
 import TopBarHistory from '@/components/content/baseTopBar/childComps/TopBarHistory.vue';
 import TopBarNoteShare from '@/components/content/baseTopBar/childComps/TopBarNoteShare.vue';
 import TopBarNotLogin from '@/components/content/baseTopBar/childComps/TopBarNotLogin.vue';
-import { mapState, mapMutations } from '@/util/store';
+import { mapState } from '@/util/store';
 
 /**
  * @description: 首页顶部之右边部分组件
@@ -86,7 +86,7 @@ export default defineComponent({
   },
   setup() {
     const { tokenInfo } = mapState('global', ['tokenInfo']); // 拿到token验证信息
-    const { updateTokenInfo } = mapMutations('global', ['updateTokenInfo']); // 获得更新token函数
+
     // 左侧菜单按钮
     const menu = computed(() => {
       return [

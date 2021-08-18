@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 16:13:51
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-05 11:24:52
+ * @LastEditTime: 2021-08-18 20:33:27
  */
 
 import { debounce, throttle } from 'lodash';
@@ -14,14 +14,12 @@ import ResizeObserver from 'resize-observer-polyfill';
 export default (app: App): void => {
   // 点击元素之外隐藏该元素
   app.directive('clickOutside', {
-    beforeMount(el: any, binding: any) {
+    mounted(el: any, binding: any) {
       el.__vueClickOutside__ = function documentHandle(e: any) {
         if (el.contains(e.target)) {
           return false;
         }
-        if (binding.expression) {
-          binding.value(e);
-        }
+        binding.value(e);
       };
       document.addEventListener('click', el.__vueClickOutside__, true);
     },
@@ -30,7 +28,6 @@ export default (app: App): void => {
       delete el.__vueClickOutside__;
     }
   });
-
   // 监听元素大小变化
   app.directive('resize', {
     beforeMount(el: any, binding: any) {

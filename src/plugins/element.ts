@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-19 21:30:24
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-14 13:39:44
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-08-18 20:01:23
  */
 import { App } from 'vue';
 import 'dayjs/locale/zh-cn';
@@ -219,7 +219,7 @@ export default (app: App) => {
   components.forEach(component => {
     app.component(component.name, component);
   });
-
+  // 插件
   plugins.forEach(plugin => {
     app.use(plugin);
   });
