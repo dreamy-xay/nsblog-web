@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 17:21:17
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-19 12:14:21
+ * @LastEditTime: 2021-08-19 15:06:19
 -->
 <template>
   <div class="message-my-friend">
@@ -27,6 +27,7 @@
               :src="item.avatar"
               :alt="item.username"
               :size="42"
+              href="/"
             />
             <div class="info">
               <div class="username">
