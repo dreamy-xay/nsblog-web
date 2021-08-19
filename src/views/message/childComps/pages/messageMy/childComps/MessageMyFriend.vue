@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 17:21:17
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-19 16:04:43
+ * @LastEditTime: 2021-08-19 20:50:55
 -->
 <template>
   <div class="message-my-friend">
@@ -50,7 +50,7 @@
     </div>
     <div
       class="message-my-friend-menu"
-      v-clickOutside="menuClickOutside"
+      v-click-outside="menuClickOutside"
       v-show="menuShow"
       :style="menuStyle"
     >
