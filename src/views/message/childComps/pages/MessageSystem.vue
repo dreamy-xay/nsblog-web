@@ -4,10 +4,10 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:34:31
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-14 19:26:29
+ * @LastEditTime: 2021-08-19 21:17:01
 -->
 <template>
-  <el-scrollbar max-height="636px">
+  <el-scrollbar max-height="calc(100vh - 108px)">
     <div
       v-infinite-scroll="getMessagesList"
       infinite-scroll-delay="300"
@@ -18,19 +18,10 @@
         :key="item.message_id"
       >
 
-        <div class="message-system-title">
-          <span v-if="gettext(item) !==false">
-            {{title[0][0]}}【
-            <a
-              :href="item.link"
-              class="message-system-title-link"
-            >{{title[0][1]}}</a>
-            】{{title[0][2]}}
-          </span>
-
-          <span v-else>
-            {{item.content}}
-          </span>
+        <div
+          class="message-system-title"
+          v-html="item.content"
+        >
         </div>
 
         <div class="message-system-bottom">
@@ -48,10 +39,11 @@
 
 </template>
 <script>
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, ref } from 'vue';
 import MessageEmpty from '@/views/message/childComps/MessageEmpty.vue';
 import { getMessages, deleteMessages } from '@/network/api/messages.ts';
 import { dateFormat } from '@/util/date';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description: 系统通知页面
@@ -63,14 +55,31 @@ export default defineComponent({
   components: {
     MessageEmpty,
   },
-  setup() {
+  emits: ['add-data', 'delete-data', 'change-atteneion'],
+  props: {
+    replyData: {
+      type: Array,
+      default: () => [],
+    },
+    attentionData: {
+      type: Array,
+      default: () => [],
+    },
+    likeData: {
+      type: Array,
+      default: () => [],
+    },
+    systemData: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  setup(props, context) {
+    const msg = useMessage(); // naive-ui mssage
+
     let offset = 0; // 偏移量
 
     const deleteTag = ref(true); // 判断数据是否全部加载的标志
-
-    const systemData = reactive([]);
-
-    const title = reactive([]);
 
     /**
      * @description: element-ui无限滚动自动获取数据
@@ -85,10 +94,11 @@ export default defineComponent({
             deleteTag.value = false;
           }
           offset += data.messages.length;
-          systemData.splice(systemData.length, 0, ...data.messages);
-          console.log(systemData);
+          context.emit('add-data', data);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error), msg.error('获取消息失败，请重试', { duration: 2000, closable: true });
+        });
     }
 
     /**
@@ -111,26 +121,19 @@ export default defineComponent({
      */
 
     function deleteItem(index) {
-      deleteMessages(systemData[index].message_id)
+      deleteMessages(props.systemData[index].message_id)
         .then(() => {
-          systemData.splice(index, 1);
-          if (deleteTag.value && systemData.length === 6) {
+          context.emit('delete-data', index);
+          if (deleteTag.value && props.systemData.length === 6) {
             getMessagesList();
           }
         })
-        .catch((error) => console.log(error));
-    }
-
-    function gettext(item) {
-      return false;
-      // if (item.link === '') return false;
-      // title.push(item.text.split(/[【 】]/));
+        .catch((error) => {
+          console.log(error), msg.error('删除消息失败，请重试', { duration: 2000, closable: true });
+        });
     }
 
     return {
-      systemData,
-      title,
-      gettext,
       getMessagesList,
       getDate,
       deleteItem,

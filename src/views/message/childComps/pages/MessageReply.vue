@@ -4,11 +4,11 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:25:27
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-14 19:26:10
+ * @LastEditTime: 2021-08-19 21:18:02
 -->
 
 <template>
-  <el-scrollbar max-height="636px">
+  <el-scrollbar max-height="calc(100vh - 108px)">
     <div
       v-infinite-scroll="getMessagesList"
       infinite-scroll-delay="300"
@@ -18,36 +18,42 @@
         role="button"
         v-for="(item , index) in replyData"
         :key="item.message_id"
+        @click="changePages('/article/'+item.content.id)"
       >
 
         <div class="message-reply-avator">
-          <a :href="'/user/'+item.content.username">
-            <el-avatar
-              :size='46'
-              :src="item.content.avatar"
-            />
-          </a>
-
+          <base-avatar
+            :size='46'
+            :src="item.content.avatar"
+            :href="'/user/'+item.content.username"
+            :target="'/user/'+item.content.username"
+          ></base-avatar>
         </div>
 
         <div class="message-reply-right">
 
           <div class="message-reply-right-top">
-            <a class="message-reply-right-top-name">{{item.content.nickname}}</a>
+            <span
+              class="message-reply-right-top-name"
+              @click.stop="changePages('/user/' + item.content.username)"
+            >{{item.content.nickname}}</span>
             <span v-if="item.content.type===1">回复我的文章</span>
-            <span v-if="item.content.type===2">回复我的问答</span>
-            <span v-if="item.content.type===3">赞了我的文章评论</span>
-            <span v-if="item.content.type===4">赞了我的问答评论</span>
+            <span v-else-if="item.content.type===2">回复我的问答</span>
+            <span v-else-if="item.content.type===3">回复我的文章评论</span>
+            <span v-else>回复我的问答评论</span>
           </div>
 
-          <div class="message-reply-right-text">{{item.content.content}}</div>
+          <div
+            class="message-reply-right-text"
+            v-html="item.content.content"
+          ></div>
 
           <div
             class="message-reply-right-center"
             v-if="item.content.reply_username!==''"
           >
             <span>{{item.content.reply_username}}：</span>
-            <span>{{item.content.reply_content}}</span>
+            <span v-html="item.content.reply_content"></span>
           </div>
 
           <div class="message-reply-right-bottom">
@@ -70,7 +76,7 @@
 
             <div
               class="message-reply-right-bottom-delete"
-              @click="deleteItem(index)"
+              @click.stop="deleteItem(index)"
             >
               <i class="iconfont blog-shanchu message-reply-right-bottom-delete-iconfont"></i>
               <span>删除该通知</span>
@@ -88,10 +94,12 @@
 
 </template>
 <script>
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, ref } from 'vue';
 import MessageEmpty from '@/views/message/childComps/MessageEmpty.vue';
+import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import { getMessages, deleteMessages } from '@/network/api/messages.ts';
 import { dateFormat } from '@/util/date.ts';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description: 回复我的页面
@@ -102,13 +110,34 @@ export default defineComponent({
   name: 'messageReply',
   components: {
     MessageEmpty,
+    BaseAvatar,
   },
-  setup() {
+  emits: ['add-data', 'delete-data', 'change-atteneion'],
+
+  props: {
+    replyData: {
+      type: Array,
+      default: () => [],
+    },
+    attentionData: {
+      type: Array,
+      default: () => [],
+    },
+    likeData: {
+      type: Array,
+      default: () => [],
+    },
+    systemData: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  setup(props, context) {
+    const msg = useMessage(); // naive-ui mssage
+
     let offset = 0; // 偏移量
 
     const deleteTag = ref(true); // 判断数据是否全部加载的标志
-
-    const replyData = reactive([]);
 
     /**
      * @description: 改变日期格式
@@ -135,10 +164,11 @@ export default defineComponent({
             deleteTag.value = false;
           }
           offset += data.messages.length;
-          replyData.splice(replyData.length, 0, ...data.messages);
-          console.log(replyData);
+          context.emit('add-data', data);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error), msg.error('获取消息失败，请重试', { duration: 2000, closable: true });
+        });
     }
 
     /**
@@ -149,21 +179,34 @@ export default defineComponent({
      */
 
     function deleteItem(index) {
-      deleteMessages(replyData[index].message_id)
+      deleteMessages(props.replyData[index].message_id)
         .then(() => {
-          replyData.splice(index, 1);
-          if (deleteTag.value && replyData.length === 6) {
+          context.emit('delete-data', index);
+          if (deleteTag.value && props.replyData.length === 6) {
             getMessagesList();
           }
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error), msg.error('删除消息失败，请重试', { duration: 2000, closable: true });
+        });
+    }
+
+    /**
+     * @description: 跳转界面
+     * @param {String} path 路由id
+     * @return {void}
+     * @author: Z_Y_C
+     */
+
+    function changePages(path) {
+      window.open(path, path);
     }
 
     return {
-      replyData,
       getMessagesList,
       deleteItem,
       getDate,
+      changePages,
     };
   },
 });

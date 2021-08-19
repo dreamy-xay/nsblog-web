@@ -4,11 +4,11 @@
  * @Autor: Ban
  * @Date: 2021-08-05 10:41:38
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-14 21:05:05
+ * @LastEditTime: 2021-08-19 21:16:56
 -->
 
 <template>
-  <el-scrollbar max-height="636px">
+  <el-scrollbar max-height="calc(100vh - 108px)">
     <div
       v-infinite-scroll="getMessagesList"
       infinite-scroll-delay="300"
@@ -17,26 +17,22 @@
         class="message-attention"
         v-for="(item , index) in attentionData"
         :key="item.message_id"
+        @click="changePages('/user/'+item.content.username)"
         role="button"
       >
         <div class="message-attention-avatar">
-          <a :href="'/user/' + item.content.username">
-            <el-avatar
-              :size="46"
-              :src="item.content.avatar"
-            />
-          </a>
+          <base-avatar
+            :size='46'
+            :src="item.content.avatar"
+          ></base-avatar>
         </div>
 
         <div class="message-attention-right">
 
           <div class="message-attention-right-name">
-            <a
-              :href="'/user/' + item.content.username"
-              class="message-attention-right-name-text"
-            >
+            <span class="message-attention-right-name-text">
               {{ item.content.nickname}}
-            </a>
+            </span>
           </div>
 
           <div class="message-attention-right-bottom ">
@@ -50,7 +46,7 @@
 
             <div
               class="message-attention-right-bottom-iconfont2"
-              @click="deleteItem(index)"
+              @click.stop="deleteItem(index)"
             >
               <i class="iconfont blog-shanchu message-attention-right-bottom-iconfont2-delete"></i>
               <span>删除该通知</span>
@@ -74,39 +70,24 @@
   </el-scrollbar>
 
   <!-- 确认取消关注 -->
-  <n-modal
-    display-directive="show"
+  <base-modal
     :show="modalShow"
-  >
-    <div class="message-modal">
-      <div class="message-modal-centent">取消后可就伤感情了哦~</div>
-      <div class="message-modal-button">
-        <div
-          class="message-modal-button-OK"
-          role="button"
-          @click="sureCancelAttention"
-        >
-          确定
-        </div>
-        <div
-          class="message-modal-button-cancel"
-          role="button"
-          @click="modalShow=!modalShow"
-        >
-          取消
-        </div>
-      </div>
-    </div>
-  </n-modal>
+    content="取消后可就伤感情了哦~"
+    @confirm="sureCancelAttention"
+    @cancel="modalShow=!modalShow"
+  ></base-modal>
 
   <message-empty v-if="attentionData.length <= 0 " />
 
 </template>
 <script>
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, ref } from 'vue';
 import MessageEmpty from '@/views/message/childComps/MessageEmpty.vue';
+import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import { getMessages, deleteMessages } from '@/network/api/messages.ts';
 import { dateFormat } from '@/util/date.ts';
+import BaseModal from '@/components/content/baseModal/BaseModal.vue';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description: message页面——关注我的
@@ -117,13 +98,34 @@ export default defineComponent({
   name: 'messageAttention',
   components: {
     MessageEmpty,
+    BaseModal,
+    BaseAvatar,
   },
-  setup() {
+  emits: ['add-data', 'delete-data', 'change-atteneion'],
+  props: {
+    attentionData: {
+      type: Array,
+      default: () => [],
+    },
+    replyData: {
+      type: Array,
+      default: () => [],
+    },
+    likeData: {
+      type: Array,
+      default: () => [],
+    },
+    systemData: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  setup(props, context) {
+    const msg = useMessage(); // naive-ui mssage
+
     let offset = 0; // 偏移量
 
     const deleteTag = ref(true); // 判断数据是否全部加载的标志
-
-    const attentionData = reactive([]);
 
     const modalShow = ref(false); // 是否显示n-modal
 
@@ -153,10 +155,11 @@ export default defineComponent({
             deleteTag.value = false;
           }
           offset += data.messages.length;
-          attentionData.splice(attentionData.length, 0, ...data.messages);
-          console.log(attentionData);
+          context.emit('add-data', data);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error), msg.error('获取消息失败，请重试', { duration: 2000, closable: true });
+        });
     }
 
     /**
@@ -167,15 +170,27 @@ export default defineComponent({
      */
 
     function deleteItem(index) {
-      deleteMessages(attentionData[index].message_id)
+      deleteMessages(props.attentionData[index].message_id)
         .then(() => {
-          attentionData.splice(index, 1);
-          if (deleteTag.value && attentionData.length === 6) {
+          context.emit('delete-data', index);
+          if (deleteTag.value && props.attentionData.length === 6) {
             getMessagesList();
-            console.log(attentionData);
           }
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error), msg.error('删除消息失败，请重试', { duration: 2000, closable: true });
+        });
+    }
+
+    /**
+     * @description: 跳转界面
+     * @param {String} path 路由id
+     * @return {void}
+     * @author: Z_Y_C
+     */
+
+    function changePages(path) {
+      window.open(path, path);
     }
 
     /**
@@ -186,8 +201,8 @@ export default defineComponent({
      */
 
     function cancelAttention(index) {
-      if (attentionData[index].content.attention === false) {
-        attentionData[index].content.attention = true;
+      if (props.attentionData[index].content.attention === false) {
+        context.emit('change-atteneion', index);
       } else {
         modalShow.value = !modalShow.value;
         sureCancel.value = index;
@@ -202,16 +217,15 @@ export default defineComponent({
 
     function sureCancelAttention() {
       modalShow.value = !modalShow.value;
-      attentionData[sureCancel.value].content.attention = false;
+      context.emit('change-atteneion', sureCancel.value);
     }
 
     return {
-      attentionData,
       modalShow,
-      sureCancel,
       getMessagesList,
       deleteItem,
       getDate,
+      changePages,
       cancelAttention,
       sureCancelAttention,
     };
@@ -362,68 +376,6 @@ $grey9: $grey-9;
 
   &:hover {
     color: $grey7;
-  }
-}
-
-.message-modal {
-  width: 310px;
-  height: 190px;
-  background-color: $grey0;
-  border-radius: $border-radius0;
-  border: 1px solid $grey4;
-
-  .message-modal-centent {
-    height: 132px;
-    width: 100%;
-    font-size: 14px;
-    color: $grey10;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .message-modal-button {
-    width: 220px;
-    margin: 0 auto;
-    overflow: hidden;
-
-    .message-modal-button-OK {
-      width: 100px;
-      height: 32px;
-      font-size: 14px;
-      border-radius: 4px;
-      text-align: center;
-      line-height: 32px;
-      cursor: pointer;
-      float: left;
-      transition: 0.4s;
-      background-color: $green0;
-      color: $grey-0;
-      margin-right: 20px;
-
-      &:hover {
-        background-color: $green1;
-      }
-    }
-    .message-modal-button-cancel {
-      width: 100px;
-      height: 32px;
-      font-size: 14px;
-      border-radius: 4px;
-      text-align: center;
-      line-height: 32px;
-      cursor: pointer;
-      float: left;
-      transition: 0.4s;
-      border: 1px solid $grey6;
-      color: $grey-9;
-      width: 98px;
-      height: 30px;
-      &:hover {
-        border: 1px solid $green1;
-        color: $green1;
-      }
-    }
   }
 }
 </style>

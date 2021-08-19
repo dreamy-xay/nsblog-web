@@ -4,10 +4,10 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:31:44
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-14 22:19:51
+ * @LastEditTime: 2021-08-19 21:17:50
 -->
 <template>
-  <el-scrollbar max-height="636px">
+  <el-scrollbar max-height="calc(100vh - 108px)">
     <div
       v-infinite-scroll="getMessagesList"
       infinite-scroll-delay="300"
@@ -17,31 +17,29 @@
         class="message-like"
         v-for="(item , index) in likeData"
         :key="item.messages_id"
-        @click="ChangePages('/article/'+item.content.id)"
+        @click="changePages('/article/'+item.content.id)"
       >
-
         <div class="message-like-avator">
-          <a :href="'/user/' + item.content.username">
-            <el-avatar
-              :size='46'
-              :src="item.content.avatar"
-            />
-          </a>
-
+          <base-avatar
+            :size='46'
+            :src="item.content.avatar"
+            :href="'/user/'+item.content.username"
+            :target="'/user/'+item.content.username"
+          ></base-avatar>
         </div>
 
         <div class="message-like-right">
 
           <div class="message-like-right-text">
 
-            <a
+            <span
               class="message-like-right-text-name"
-              :href="'/user/' + item.content.username"
-            >{{item.content.nickname}}</a>
+              @click.stop="changePages('/user/' + item.content.username)"
+            >{{item.content.nickname}}</span>
             <span v-if="item.content.type === 1">赞了我的文章</span>
-            <span v-if="item.content.type === 2">赞了我的问答</span>
-            <span v-if="item.content.type === 3">赞了我的文章评论</span>
-            <span v-if="item.content.type === 4">赞了我的问答评论</span>
+            <span v-else-if="item.content.type === 2">赞了我的问答</span>
+            <span v-else-if="item.content.type === 3">赞了我的文章评论</span>
+            <span v-else>赞了我的问答评论</span>
           </div>
 
           <div class="message-like-right-bottom">
@@ -66,11 +64,12 @@
 
 </template>
 <script>
-import { defineComponent, reactive, ref } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { defineComponent, ref } from 'vue';
 import MessageEmpty from '@/views/message/childComps/MessageEmpty.vue';
+import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import { getMessages, deleteMessages } from '@/network/api/messages.ts';
 import { dateFormat } from '@/util/date.ts';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description: 收到的赞页面
@@ -81,16 +80,33 @@ export default defineComponent({
   name: 'messageLike',
   components: {
     MessageEmpty,
+    BaseAvatar,
   },
-  setup() {
+  emits: ['add-data', 'delete-data', 'change-atteneion'],
+  props: {
+    replyData: {
+      type: Array,
+      default: () => [],
+    },
+    attentionData: {
+      type: Array,
+      default: () => [],
+    },
+    likeData: {
+      type: Array,
+      default: () => [],
+    },
+    systemData: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  setup(props, context) {
+    const msg = useMessage(); // naive-ui mssage
+
     let offset = 0; // 偏移量
 
     const deleteTag = ref(true); // 判断数据是否全部加载的标志
-
-    const router = useRouter(),
-      route = useRoute();
-
-    const likeData = reactive([]);
 
     /**
      * @description: 改变日期格式
@@ -117,10 +133,11 @@ export default defineComponent({
             deleteTag.value = false;
           }
           offset += data.messages.length;
-          likeData.splice(likeData.length, 0, ...data.messages);
-          console.log(likeData);
+          context.emit('add-data', data);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error), msg.error('获取消息失败，请重试', { duration: 2000, closable: true });
+        });
     }
 
     /**
@@ -130,8 +147,8 @@ export default defineComponent({
      * @author: Z_Y_C
      */
 
-    function ChangePages(path) {
-      router.push(path);
+    function changePages(path) {
+      window.open(path, path);
     }
 
     /**
@@ -142,19 +159,20 @@ export default defineComponent({
      */
 
     function deleteItem(index) {
-      deleteMessages(likeData[index].message_id)
+      deleteMessages(props.likeData[index].message_id)
         .then(() => {
-          likeData.splice(index, 1);
-          if (deleteTag.value && likeData.length === 6) {
+          context.emit('delete-data', index);
+          if (deleteTag.value && props.likeData.length === 6) {
             getMessagesList();
           }
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error), msg.error('删除消息失败，请重试', { duration: 2000, closable: true });
+        });
     }
 
     return {
-      likeData,
-      ChangePages,
+      changePages,
       deleteItem,
       getDate,
       getMessagesList,
