@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-19 11:26:49
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-19 12:16:55
+ * @LastEditTime: 2021-08-19 13:09:03
 -->
 <template>
   <div
@@ -34,7 +34,7 @@ import { defineComponent, computed, ref } from 'vue';
  * @param {String} shape 设置头像的形状 [circle / square] `默认为'circle'`
  * @param {String} href 点击后跳转的链接，同a标签 `默认为null，不跳转`
  * @param {String} target 跳转连接时目标，同a标签 `默认为_blank`
- * @param {Number} size 设置头像的大小，单位为px `默认为50`
+ * @param {Number | String} size 设置头像的大小，类型为Number时单位为px `默认为50`
  * @param {Boolean} slot 是否启用内置插槽，将不再显示图片 `默认为false`
  * @param {Object} style 头像风格样式 `默认为null`
  * @event load 图片加载完成触发 (e) => {}
@@ -70,7 +70,7 @@ export default defineComponent({
       default: '_blank',
     },
     size: {
-      type: Number,
+      type: [Number, String],
       default: 50,
     },
     slot: {
@@ -86,13 +86,14 @@ export default defineComponent({
     const avatar = ref(props.slot ? 'none' : '/home/avatarLoading.gif'); // 真正显示头像路径
     // 计算样式
     const avatarStyle = computed(() => {
+      const size = typeof (props.size + 0) === 'number' ? props.size + 'px' : props.size;
       return {
-        width: props.size + 'px',
-        height: props.size + 'px',
-        borderRadius: props.shape === 'circle' ? '50%' : 0,
+        width: size,
+        height: size,
+        borderRadius: props.shape === 'circle' ? '50%' : 'none',
         backgroundImage: `url(${avatar.value})`,
         backgroundSize: props.fit,
-        cursor: props.href ? 'pointer' : 'default',
+        cursor: props.href ? 'pointer' : 'inherit',
         ...props.style,
       };
     });
@@ -115,7 +116,7 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function error(e) {
-      avatar.value = '/home/loadError.png';
+      avatar.value = '/home/avatarLoadError.png';
       context.emit('error', e);
     }
 

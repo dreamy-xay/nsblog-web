@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-19 18:32:43
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-16 17:23:15
+ * @LastEditTime: 2021-08-19 13:13:16
 -->
 <template>
   <div class="top-bar-avatar">
@@ -38,10 +38,11 @@
             class="avatar"
             :class="{active: active}"
           >
-            <img
+            <base-avatar
+              size="100%"
               :src="avatar"
               alt="avatar"
-            >
+            />
           </a>
           <div class="name">
             {{username}}
@@ -118,13 +119,14 @@
           role="button"
           :class="{active: active}"
         >
-          <a :href="'/users/' + username">
-            <img
-              v-show="showAvatar"
-              :src="avatar"
-              alt="avatar"
-            />
-          </a>
+          <base-avatar
+            size="100%"
+            v-show="showAvatar"
+            :src="avatar"
+            alt="avatar"
+            :href="'/users/' + username"
+            target="_self"
+          />
         </div>
       </template>
     </el-popover>
@@ -133,6 +135,7 @@
 
 <script>
 import { defineComponent, ref, computed } from 'vue';
+import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import { getUserInfo } from '@/network/api/user';
 import { clearToken } from '@/network/token';
 import { getCurrentDiffirence } from '@/util/date';
@@ -145,6 +148,9 @@ import { mapState, mapMutations } from '@/util/store';
 
 export default defineComponent({
   name: 'topBarAvatar',
+  components: {
+    BaseAvatar,
+  },
   setup() {
     const { updateTokenInfo } = mapMutations('global', ['updateTokenInfo']); // 更新tokenInfo
     const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
@@ -308,13 +314,6 @@ export default defineComponent({
   .top-bar-avatar-login {
     width: 36px;
     height: 36px;
-    border-radius: 50%;
-    overflow: hidden;
-
-    img {
-      width: 100%;
-      height: 100%;
-    }
   }
 }
 
@@ -336,11 +335,6 @@ export default defineComponent({
         border-radius: 50%;
         left: calc(50% - 18px);
         transition: 0.09s linear;
-
-        img {
-          width: 100%;
-          width: 100%;
-        }
 
         &.active {
           height: 68px;
