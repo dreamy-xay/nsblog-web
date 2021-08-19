@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-05 18:50:30
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-16 17:19:42
+ * @LastEditTime: 2021-08-19 20:57:30
 -->
 
 <template>
@@ -48,7 +48,7 @@
           >
             <div class="collections-content">
               <base-tag
-                :text="value.type === 1 ? '问答' : '文章'"
+                :text="value.type === 1 ? '文章' : (value.type === 2 ? '问答' : '资源')"
                 :color="styles.pink0"
                 :hollow="true"
                 role="button"

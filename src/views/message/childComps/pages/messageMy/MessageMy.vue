@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 12:49:53
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-19 11:19:24
+ * @LastEditTime: 2021-08-19 20:24:07
 -->
 
 <template>
@@ -17,10 +17,7 @@
       @clickItem="clickItem"
       @deleteItem="deleteItem"
     />
-    <message-my-content
-      :name="activeDialogueNickname"
-      :data="activeDialogueRecords"
-    />
+    <message-my-content :data="activeDialogueData" />
     <base-modal
       content="删除就没有咯(⊙o⊙)"
       confirmeText="确认删除"
@@ -74,8 +71,13 @@ export default defineComponent({
       return ans;
     });
 
-    const activeDialogueNickname = ref(''); // 激活对话用户名
-    const activeDialogueRecords = reactive([]); // 激活对话消息
+    // 激活对话消息
+    const activeDialogueData = reactive({
+      avatar: '',
+      friendAvatar: '',
+      friendNickname: '',
+      records: [],
+    });
     const modalShow = ref(false); // 是否显示模态框
     let deleteItemCallback = null; // 当前删除操作索引
 
@@ -84,6 +86,7 @@ export default defineComponent({
       getDialogue()
         .then((data) => {
           dialogues.splice(0, 0, ...data.dialogues);
+          activeDialogueData.avatar = data.avatar;
         })
         .catch((error) => {
           console.log(error);
@@ -97,8 +100,9 @@ export default defineComponent({
      */
     function clickItem(index) {
       dialogues[index].count = 0;
-      activeDialogueNickname.value = dialogues[index].nickname;
-      activeDialogueRecords.splice(0, activeDialogueRecords.length, dialogues[index].records);
+      activeDialogueData.friendNickname = dialogues[index].nickname;
+      activeDialogueData.friendAvatar = dialogues[index].avatar;
+      activeDialogueData.records.splice(0, activeDialogueData.records.length, dialogues[index].records);
     }
 
     /**
@@ -115,8 +119,8 @@ export default defineComponent({
           .then(() => {
             next((isEqual) => {
               if (isEqual) {
-                activeDialogueNickname.value = '';
-                activeDialogueRecords.splice(0, activeDialogueRecords.length);
+                activeDialogueData.friendNickname = '';
+                activeDialogueData.records.splice(0, activeDialogueData.records.length);
               }
             });
             dialogues.splice(index, 1);
@@ -145,8 +149,7 @@ export default defineComponent({
       friendList,
       clickItem,
       deleteItem,
-      activeDialogueNickname,
-      activeDialogueRecords,
+      activeDialogueData,
       modalShow,
       modalClick,
     };

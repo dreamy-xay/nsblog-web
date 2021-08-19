@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 11:59:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-14 12:34:18
+ * @LastEditTime: 2021-08-19 20:57:54
  */
 
 import { Application, Request, Response } from 'express';
@@ -31,7 +31,7 @@ export default function(baseUrl: string, app: Application) {
         ans.push({
           id: Random.id(),
           title: Random.natural(0, 3) ? Random.ctitle(7, 15) : Random.title(7, 12),
-          type: Random.natural(1, 2)
+          type: Random.natural(1, 3)
         });
       return ans;
     }
@@ -49,6 +49,7 @@ export default function(baseUrl: string, app: Application) {
           id: Random.id(),
           name: Random.natural(0, 2) ? Random.cword(1, 8) : Random.word(2, 15),
           count: collections.length,
+          is_private: Random.integer(0, 1) ? true : false,
           collections
         });
       }

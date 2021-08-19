@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:15:05
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-10 17:03:29
+ * @LastEditTime: 2021-08-19 19:51:16
  */
 import { Random } from 'better-mock';
 import { Application, Request, Response } from 'express';
@@ -85,7 +85,7 @@ export default function(baseUrl: string, app: Application) {
         return res.json({
           username,
           nickname: Random.natural(0, 1000000) % 2 ? Random.cword(2, 4) : Random.word(4, 8),
-          avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', Random.word(2, 4)),
+          avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', username.slice(0, 4)),
           email: Random.email('qq.com'),
           profession: '',
           birthday: Random.datetime(),
@@ -102,7 +102,7 @@ export default function(baseUrl: string, app: Application) {
         return res.json({
           username,
           nickname: Random.natural(0, 1000000) % 2 ? Random.cword(2, 4) : Random.word(4, 8),
-          avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', Random.word(2, 4)),
+          avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', username.slice(0, 4)),
           registration_time: Random.datetime(),
           email: Random.email('qq.com'),
           recommend_count: Random.natural(0, 1000),

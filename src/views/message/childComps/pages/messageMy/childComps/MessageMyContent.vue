@@ -4,24 +4,30 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 17:21:32
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-19 16:06:19
+ * @LastEditTime: 2021-08-19 19:48:19
 -->
 <template>
   <div class="message-my-content">
     <div
       class="message-my-content-head"
-      v-if="data.length"
+      v-if="name"
     >
       {{name}}
     </div>
     <div
       class="message-my-content-body"
-      v-if="data.length"
+      v-if="name"
     >
+      <div class="record">
+        <dialogue-record :data="data" />
+      </div>
+      <div class="edit">
+        <dialogue-edit />
+      </div>
     </div>
     <div
       class="message-my-content-no-message"
-      v-if="data.length === 0"
+      v-else
     >
       <base-svg
         svg="no-message"
@@ -35,7 +41,9 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
+import DialogueEdit from '@/views/message/childComps/pages/messageMy/childComps/DialogueEdit.vue';
+import DialogueRecord from '@/views/message/childComps/pages/messageMy/childComps/DialogueRecord.vue';
 import BaseSvg from '@/components/content/baseSvg/BaseSvg.vue';
 import styles from '@/assets/style/define.scss';
 
@@ -47,21 +55,25 @@ import styles from '@/assets/style/define.scss';
 export default defineComponent({
   name: 'messageMyContent',
   components: {
+    DialogueEdit,
+    DialogueRecord,
     BaseSvg,
   },
   props: {
-    name: {
-      type: String,
-      required: true,
-    },
     data: {
-      type: Array,
+      type: Object,
       required: true,
     },
   },
   setup(props, context) {
+    // 好友昵称计算
+    const name = computed(() => {
+      return props.data.friendNickname;
+    });
+
     return {
       styles,
+      name,
     };
   },
 });
@@ -87,7 +99,19 @@ export default defineComponent({
     width: 100%;
     height: calc(100% - 37px);
     background-color: $grey-1;
-    @include flex(center, center);
+
+    .edit {
+      width: 100%;
+      height: 192px;
+      border-top: 1px solid $grey-4;
+      overflow: hidden;
+    }
+
+    .record {
+      width: 100%;
+      height: calc(100% - 193px);
+      overflow: hidden;
+    }
   }
 
   .message-my-content-no-message {

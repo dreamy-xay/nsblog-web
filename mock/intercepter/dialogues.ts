@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-017 11:59:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-18 21:49:46
+ * @LastEditTime: 2021-08-19 20:55:30
  */
 
 import { Application, Request, Response } from 'express';
@@ -31,6 +31,7 @@ export default function(baseUrl: string, app: Application) {
         ans.push({
           content: Random.natural(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
           status: 0,
+          is_me: Random.integer(0, 1) ? true : false,
           time: Random.datetime()
         });
       }
@@ -58,7 +59,10 @@ export default function(baseUrl: string, app: Application) {
           records
         });
       }
-      return res.json({ dialogues: ans });
+      return res.json({
+        dialogues: ans,
+        avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', username.slice(0, 4))
+      });
     }
   });
 

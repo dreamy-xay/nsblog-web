@@ -4,12 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-19 11:04:40
+ * @LastEditTime: 2021-08-19 16:45:18
  */
 
 import axios, { AxiosRequestConfig } from 'axios';
 import { getToken, clearToken } from './token';
-import { mapMutations } from '@/util/store';
+import store from '@/store';
 
 export interface RequestLifeCycle {
   beforeRequest?(): void;
@@ -73,9 +73,8 @@ export function request(options: RequestConfig): Promise<unknown> {
       },
       err => {
         if (err && err.response && err.response.status === 401) {
-          const { updateTokenInfo } = mapMutations('global', ['updateTokenInfo']);
           clearToken();
-          (updateTokenInfo as any)({ status: false });
+          store.commit('global/updateTokenInfo', { status: false });
         }
         if (options.failAfterResopnse) options.failAfterResopnse();
         if (options.afterResopnse) options.afterResopnse();
