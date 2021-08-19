@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 11:51:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-18 17:13:36
+ * @LastEditTime: 2021-08-19 10:55:49
 -->
 <template>
   <div
@@ -156,7 +156,7 @@ export default defineComponent({
 .base-view {
   overflow: hidden;
 
-  ::v-deep(.el-scrollbar__thumb) {
+  :deep(.el-scrollbar__thumb) {
     background-color: $grey-10;
   }
 

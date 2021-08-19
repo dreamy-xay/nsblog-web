@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 17:21:17
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-18 22:00:59
+ * @LastEditTime: 2021-08-19 12:14:21
 -->
 <template>
   <div class="message-my-friend">
@@ -23,12 +23,11 @@
           :key="index"
         >
           <div class="friend-left">
-            <div class="avatar">
-              <img
-                :src="item.avatar"
-                :alt="item.username"
-              >
-            </div>
+            <base-avatar
+              :src="item.avatar"
+              :alt="item.username"
+              :size="42"
+            />
             <div class="info">
               <div class="username">
                 {{item.nickname}}
@@ -69,18 +68,22 @@
 
 <script>
 import { defineComponent, reactive, ref } from 'vue';
+import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import styles from '@/assets/style/define.scss';
 
 /**
  * @description: 我的消息好友列表
  * @param {Array} friendList 消息队列好友列表信息 `必传参数`
  * @event clickItem 点击好友项触发事件，回调索引值 (index) => void
- * @event deleteItem 删除好友聊天记录触发事件，回调索引值 (index) => void
+ * @event deleteItem 删除好友聊天记录触发事件，回调索引值以及下一步操作函数 (index, next) => void
  * @author: dreamy-xay
  */
 
 export default defineComponent({
   name: 'messageMyFriend',
+  components: {
+    BaseAvatar,
+  },
   props: {
     friendList: {
       type: Array,
@@ -138,9 +141,11 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function deleteDialogue() {
+      const isEqual = currentMenuIndex === activeIndex.value;
       if (currentMenuIndex >= 0 && currentMenuIndex < props.friendList.length)
-        context.emit('deleteItem', currentMenuIndex, () => {
-          if (currentMenuIndex === activeIndex.value) activeIndex.value = -1;
+        context.emit('deleteItem', currentMenuIndex, (callback) => {
+          if (isEqual) activeIndex.value = -1;
+          callback && callback(isEqual);
           currentMenuIndex = -1;
           menuShow.value = false;
         });
@@ -193,6 +198,10 @@ export default defineComponent({
     height: calc(100% - 37px);
     overflow: hidden;
 
+    :deep(.el-scrollbar__thumb) {
+      background-color: $grey-8;
+    }
+
     .friend {
       height: 80px;
       width: 100%;
@@ -225,20 +234,8 @@ export default defineComponent({
       .friend-left {
         margin-left: 24px;
 
-        .avatar {
-          width: 42px;
-          height: 42px;
-          border-radius: 50%;
-          margin-right: 14px;
-          overflow: hidden;
-
-          img {
-            width: 100%;
-            height: 100%;
-          }
-        }
-
         .info {
+          margin-left: 14px;
           height: 42px;
           width: 150px;
 
@@ -274,6 +271,7 @@ export default defineComponent({
     overflow: hidden;
     border-radius: $border-radius-0;
     box-shadow: $shadow-0;
+    z-index: 1002;
 
     div {
       width: 100%;

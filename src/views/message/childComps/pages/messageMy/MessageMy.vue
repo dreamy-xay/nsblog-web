@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 12:49:53
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-18 22:00:29
+ * @LastEditTime: 2021-08-19 11:19:24
 -->
 
 <template>
@@ -21,6 +21,13 @@
       :name="activeDialogueNickname"
       :data="activeDialogueRecords"
     />
+    <base-modal
+      content="删除就没有咯(⊙o⊙)"
+      confirmeText="确认删除"
+      :show="modalShow"
+      @confirm="modalClick(true)"
+      @cancel="modalClick(false)"
+    />
   </div>
   <message-empty v-else />
 </template>
@@ -29,6 +36,7 @@ import { defineComponent, ref, reactive, computed } from 'vue';
 import MessageMyFriend from '@/views/message/childComps/pages/messageMy/childComps/MessageMyFriend.vue';
 import MessageMyContent from '@/views/message/childComps/pages/messageMy/childComps/MessageMyContent.vue';
 import MessageEmpty from '@/views/message/childComps/MessageEmpty.vue';
+import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 import { getDialogue, deleteDialogue } from '@/network/api/dialogues';
 import { mapGetters } from '@/util/store';
 import { useMessage } from 'naive-ui';
@@ -44,6 +52,7 @@ export default defineComponent({
     MessageMyFriend,
     MessageMyContent,
     MessageEmpty,
+    BaseModal,
   },
   setup() {
     const msg = useMessage(); // naivue-ui message
@@ -66,7 +75,9 @@ export default defineComponent({
     });
 
     const activeDialogueNickname = ref(''); // 激活对话用户名
-    const activeDialogueRecords = reactive(); // 激活对话消息
+    const activeDialogueRecords = reactive([]); // 激活对话消息
+    const modalShow = ref(false); // 是否显示模态框
+    let deleteItemCallback = null; // 当前删除操作索引
 
     // 如果已登录则获取消息
     if (isLogin.value)
@@ -85,6 +96,7 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function clickItem(index) {
+      dialogues[index].count = 0;
       activeDialogueNickname.value = dialogues[index].nickname;
       activeDialogueRecords.splice(0, activeDialogueRecords.length, dialogues[index].records);
     }
@@ -97,15 +109,35 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function deleteItem(index, next) {
-      deleteDialogue(dialogues[index].username)
-        .then(() => {
-          dialogues.splice(index, 1);
-          next();
-        })
-        .catch((error) => {
-          console.log(error);
-          msg.error('删除对话失败，请重试', { duration: 2000, closable: true });
-        });
+      modalShow.value = true;
+      deleteItemCallback = () => {
+        deleteDialogue(dialogues[index].username)
+          .then(() => {
+            next((isEqual) => {
+              if (isEqual) {
+                activeDialogueNickname.value = '';
+                activeDialogueRecords.splice(0, activeDialogueRecords.length);
+              }
+            });
+            dialogues.splice(index, 1);
+          })
+          .catch((error) => {
+            console.log(error);
+            msg.error('删除对话失败，请重试', { duration: 2000, closable: true });
+          });
+        deleteItemCallback = null;
+      };
+    }
+
+    /**
+     * @description: 点击弹出框按钮后触发
+     * @param {boolean} isConfirm 是否确认删除 `必传参数`
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function modalClick(isConfirm) {
+      modalShow.value = false;
+      if (isConfirm) deleteItemCallback && deleteItemCallback();
     }
 
     return {
@@ -115,6 +147,8 @@ export default defineComponent({
       deleteItem,
       activeDialogueNickname,
       activeDialogueRecords,
+      modalShow,
+      modalClick,
     };
   },
 });
