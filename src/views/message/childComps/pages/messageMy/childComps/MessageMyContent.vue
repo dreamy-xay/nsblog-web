@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 17:21:32
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-19 10:53:19
+ * @LastEditTime: 2021-08-19 13:00:11
 -->
 <template>
   <div class="message-my-content">
@@ -12,13 +12,19 @@
       {{name}}
     </div>
     <div class="message-my-content-body">
-
+      <base-svg
+        svg="message-empty"
+        :color="styles.green1"
+        v-if="data.length === 0"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
+import BaseSvg from '@/components/content/baseSvg/BaseSvg.vue';
+import styles from '@/assets/style/define.scss';
 
 /**
  * @description: 我的消息内容
@@ -27,6 +33,9 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'messageMyContent',
+  components: {
+    BaseSvg,
+  },
   props: {
     name: {
       type: String,
@@ -38,7 +47,9 @@ export default defineComponent({
     },
   },
   setup(props, context) {
-    return {};
+    return {
+      styles,
+    };
   },
 });
 </script>
@@ -65,6 +76,7 @@ export default defineComponent({
     width: 100%;
     height: calc(100% - 37px);
     background-color: $grey-1;
+    @include flex(center, center);
   }
 }
 </style>
