@@ -4,19 +4,32 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 17:21:32
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-19 13:00:11
+ * @LastEditTime: 2021-08-19 16:06:19
 -->
 <template>
   <div class="message-my-content">
-    <div class="message-my-content-head">
+    <div
+      class="message-my-content-head"
+      v-if="data.length"
+    >
       {{name}}
     </div>
-    <div class="message-my-content-body">
+    <div
+      class="message-my-content-body"
+      v-if="data.length"
+    >
+    </div>
+    <div
+      class="message-my-content-no-message"
+      v-if="data.length === 0"
+    >
       <base-svg
-        svg="message-empty"
+        svg="no-message"
         :color="styles.green1"
-        v-if="data.length === 0"
       />
+      <div>
+        没有新的未读消息呢，快找小伙伴聊天吧
+      </div>
     </div>
   </div>
 </template>
@@ -59,8 +72,6 @@ export default defineComponent({
   width: 706px;
   height: 100%;
   overflow: hidden;
-  border-left: 1px solid $grey-5;
-  box-sizing: border-box;
 
   .message-my-content-head {
     width: 100%;
@@ -69,7 +80,7 @@ export default defineComponent({
     font-size: 14px;
     font-weight: 600;
     color: $grey-10;
-    border-bottom: 1px solid $grey-5;
+    border-bottom: 1px solid $grey-4;
   }
 
   .message-my-content-body {
@@ -77,6 +88,18 @@ export default defineComponent({
     height: calc(100% - 37px);
     background-color: $grey-1;
     @include flex(center, center);
+  }
+
+  .message-my-content-no-message {
+    width: 100%;
+    height: 100%;
+    @include flex(center, center, column);
+    background-color: $grey-0;
+
+    div {
+      color: $green-2;
+      opacity: 0.6;
+    }
   }
 }
 </style>

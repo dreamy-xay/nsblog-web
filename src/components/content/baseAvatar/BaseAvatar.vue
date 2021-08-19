@@ -4,13 +4,13 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-19 11:26:49
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-19 15:07:41
+ * @LastEditTime: 2021-08-19 15:47:17
 -->
 <template>
   <div
     class="base-avatar"
     :style="avatarStyle"
-    @click="click"
+    @click.stop="click"
   >
     <slot v-if="slot"></slot>
     <img
@@ -27,7 +27,7 @@
 import { defineComponent, computed, ref } from 'vue';
 
 /**
- * @description:
+ * @description: 基础头像
  * @param {String} src 图片头像的资源地址 `必传参数`
  * @param {String} alt 描述图像的替换文本 `默认为null`
  * @param {String} fit 当展示类型为图片的时候，设置图片如何适应容器框 [contain / cover / none] `默认为 'cover'`
@@ -86,7 +86,7 @@ export default defineComponent({
     const avatar = ref(props.slot ? 'none' : '/home/avatarLoading.gif'); // 真正显示头像路径
     // 计算样式
     const avatarStyle = computed(() => {
-      const size = typeof (props.size + 0) === 'number' ? props.size + 'px' : props.size;
+      const size = typeof props.size === 'number' ? props.size + 'px' : props.size;
       return {
         width: size,
         height: size,

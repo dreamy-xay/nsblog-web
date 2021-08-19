@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 17:21:17
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-19 15:06:19
+ * @LastEditTime: 2021-08-19 16:04:43
 -->
 <template>
   <div class="message-my-friend">
@@ -27,7 +27,6 @@
               :src="item.avatar"
               :alt="item.username"
               :size="42"
-              href="/"
             />
             <div class="info">
               <div class="username">
@@ -182,7 +181,7 @@ export default defineComponent({
   width: 286px;
   height: 100%;
   overflow: hidden;
-  border-right: 1px solid $grey-5;
+  border-right: 1px solid $grey-4;
   box-sizing: border-box;
 
   .message-my-friend-head {
@@ -191,7 +190,7 @@ export default defineComponent({
     padding-left: 24px;
     @include flex(center);
     color: $grey-7;
-    border-bottom: 1px solid $grey-5;
+    border-bottom: 1px solid $grey-4;
   }
 
   .message-my-friend-body {
