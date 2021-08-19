@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-08-09 11:39:28
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-13 23:07:28
+ * @LastEditTime: 2021-08-19 20:51:41
 -->
 <template>
   <div class="message-empty">
@@ -49,6 +49,7 @@ $grey0: $grey-0;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   margin: 10px;
   padding: 24px 36px;
   background-color: $grey0;

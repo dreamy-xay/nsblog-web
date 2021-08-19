@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-07-28 13:11:57
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-19 20:53:52
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-08-19 23:58:34
 -->
 <template>
 
@@ -31,7 +31,15 @@
         </message-top>
 
         <div class="message-center-right-route">
-          <router-view />
+          <router-view
+            :replyData="replyData"
+            :attentionData="attentionData"
+            :likeData="likeData"
+            :systemData="systemData"
+            @add-data="addData"
+            @delete-data="deleteData"
+            @change-atteneion="changeAtteneion"
+          />
         </div>
       </div>
     </div>
@@ -40,12 +48,14 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { defineComponent, ref, reactive, watch, computed } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import MessageMenu from '@/views/message/childComps/MessageMenu.vue';
 import MessageTop from '@/views/message/childComps/MessageTop.vue';
 import { getMessages } from '@/network/api/messages.ts';
+import { mapGetters, mapState, mapActions } from '@/util/store';
+import { useMessage } from 'naive-ui';
+import router from '@/router';
 
 /**
  * @description: 消息页面
@@ -59,22 +69,61 @@ export default defineComponent({
     MessageTop,
     BaseView,
   },
+  // beforeRouteEnter(to, from, next) {
+  //   console.log(router.currentRoute.value.path);
+  //   console.log(to);
+  //   console.log(from);
+  //   // if(from.path)
+  //   next();
+  // },
   setup(props, context) {
-    const router = useRouter(),
-      route = useRoute();
-    const menuData = reactive([]);
+    const msg = useMessage(); // naive-ui mssage
+
+    const menuData = reactive([]); // 目录未读消息
+
+    const replyData = reactive([]); // 回复我的界面数据
+
+    const attentionData = reactive([]); // 关注我的界面数据
+
+    const likeData = reactive([]); // 收到的赞界面数据
+
+    const systemData = reactive([]); //系统通知界面数据
+
+    const { online, receiveMessage } = mapActions('message', ['receiveMessage', 'online']);
+    const { isLogin } = mapGetters('global', ['isLogin']);
+    const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
+    console.log(tokenInfo);
+
+    // 用户上线了
+    if (isLogin.value)
+      setTimeout(() => {
+        online(tokenInfo.value.username);
+      }, 3000);
+    else router.push('/');
+
+    //监听在线状态
+    watch(
+      () => isLogin.value,
+      () => {
+        if (!isLogin.value) router.push('/');
+      }
+    );
 
     //路由信息
-    const menus = [
-      { iconfont: 'iconfont blog-huifu1', id: 'reply', key: '回复我的' },
-      { iconfont: 'iconfont blog-dianzan1', id: 'like', key: '收到的赞' },
-      { iconfont: 'iconfont blog-xin', id: 'attention', key: '关注我的' },
-      { iconfont: 'iconfont blog-tongzhi', id: 'system', key: '系统通知' },
-      { iconfont: 'iconfont blog-xiaoxi', id: 'my', key: '我的消息' },
-    ];
+    const menus = computed(() => {
+      return [
+        { iconfont: 'iconfont blog-huifu1', id: 'reply', key: '回复我的' },
+        { iconfont: 'iconfont blog-dianzan1', id: 'like', key: '收到的赞' },
+        { iconfont: 'iconfont blog-xin', id: 'attention', key: '关注我的' },
+        { iconfont: 'iconfont blog-tongzhi', id: 'system', key: '系统通知' },
+        { iconfont: 'iconfont blog-xiaoxi', id: 'my', key: '我的消息' },
+      ];
+    });
 
     //路由信息
-    const menu = { iconfont: 'iconfont blog-shezhi', id: 'setting', key: '消息设置' };
+    const menu = computed(() => {
+      return { iconfont: 'iconfont blog-shezhi', id: 'setting', key: '消息设置' };
+    });
 
     const messagetag = ref(''); // 路由界面名称 `menus[i].key`
 
@@ -83,29 +132,33 @@ export default defineComponent({
      * @return {void}
      * @author: Z_Y_C
      */
-    getMessages()
-      .then((data) => {
-        menuData.splice(0, 0, ...data.count);
 
-        const redirect = route.path;
-        const array = redirect.split('/'); //获取路由
+    if (isLogin.value)
+      getMessages()
+        .then((data) => {
+          menuData.splice(0, 0, ...data.count);
 
-        if (array[array.length - 1] === menu.id) {
-          //得到路由相对应的key值
-          messagetag.value = menu.key;
-        } else {
-          for (let i = 0; i < 5; i++) {
-            if (menus[i].id === array[array.length - 1]) {
-              messagetag.value = menus[i].key;
-              setTimeout(() => {
-                // 延迟1s消失
-                menuData[i] = 0;
-              }, 1000);
+          const redirect = router.currentRoute.value.path; // 当前界面路由
+          const array = redirect.split('/'); //获取路由
+
+          if (array[array.length - 1] === menu.value.id) {
+            //得到路由相对应的key值
+            messagetag.value = menu.value.key;
+          } else {
+            for (let i = 0; i < 5; i++) {
+              if (menus.value[i].id === array[array.length - 1]) {
+                messagetag.value = menus.value[i].key;
+                setTimeout(() => {
+                  // 延迟1s消失
+                  menuData[i] = 0;
+                }, 1000);
+              }
             }
           }
-        }
-      })
-      .catch((error) => console.log(error));
+        })
+        .catch((error) => {
+          console.log(error), msg.error('获取未读消息条数，请重试', { duration: 2000, closable: true });
+        });
 
     /**
      * @description:改变路由，传递数据（页面名称）到父组件
@@ -121,6 +174,98 @@ export default defineComponent({
       if (index !== 6) menuData[index] = 0;
     }
 
+    /**
+     * @description:改变关注
+     * @param {Number} index 数据下标
+     * @return {void}
+     * @author: Z_Y_C
+     */
+
+    function changeAtteneion(index) {
+      attentionData[index].content.attention = !attentionData[index].content.attention;
+    }
+
+    /**
+     * @description: 根据页面名称增加数据
+     * @param {Array} data 要增加的数据
+     * @return {void}
+     * @author: Z_Y_C
+     */
+
+    function addData(data) {
+      if (messagetag.value === menus.value[0].key) replyData.splice(replyData.length, 0, ...data.messages);
+      else if (messagetag.value === menus.value[2].key) attentionData.splice(attentionData.length, 0, ...data.messages);
+      else if (messagetag.value === menus.value[1].key) likeData.splice(likeData.length, 0, ...data.messages);
+      else if (messagetag.value === menus.value[3].key) systemData.splice(systemData.length, 0, ...data.messages);
+    }
+
+    /**
+     * @description: 根据页面名称删除数据
+     * @param {Number} index 要删除数据的下表
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function deleteData(index) {
+      if (messagetag.value === menus.value[0].key) replyData.splice(index, 1);
+      else if (messagetag.value === menus.value[2].key) attentionData.splice(index, 1);
+      else if (messagetag.value === menus.value[1].key) likeData.splice(index, 1);
+      else if (messagetag.value === menus.value[3].key) systemData.splice(index, 1);
+    }
+
+    /**
+     * @description: 接收消息显示未读条数
+     * @param {Number} index 下标来判断页面名称
+     * @return {void}
+     * @author: Z_Y_C
+     */
+
+    function addMenu(index) {
+      if (messagetag.value === menus.value[index].key) {
+        // 如果在该页面，延迟一秒消失
+        menuData[index]++;
+        setTimeout(() => {
+          // 延迟1s消失
+          menuData[index] = 0;
+        }, 1000);
+      } else menuData[index]++;
+    }
+
+    receiveMessage({
+      type: 1,
+      callback(data) {
+        console.log('message type: 11');
+        systemData.splice(0, 0, data);
+        addMenu(3);
+      },
+    });
+
+    receiveMessage({
+      type: 2,
+      callback(data) {
+        console.log('message type: 22');
+        replyData.splice(0, 0, data);
+        addMenu(0);
+      },
+    });
+
+    receiveMessage({
+      type: 3,
+      callback(data) {
+        console.log('message type: 33');
+        likeData.splice(0, 0, data);
+        addMenu(1);
+      },
+    });
+
+    receiveMessage({
+      type: 4,
+      callback(data) {
+        console.log('message type: 44');
+        attentionData.splice(0, 0, data);
+        addMenu(2);
+      },
+    });
+
     return {
       messagetag,
       menus,
@@ -128,6 +273,13 @@ export default defineComponent({
       menuData,
       scroll,
       changeColor,
+      addData,
+      deleteData,
+      changeAtteneion,
+      replyData,
+      attentionData,
+      likeData,
+      systemData,
     };
   },
 });
@@ -137,7 +289,6 @@ export default defineComponent({
 .message {
   .message-center {
     width: 1152px;
-    height: 100%;
     margin: 0 auto;
     display: flex;
 

@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-28 13:02:11
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-13 22:04:02
+ * @LastEditTime: 2021-08-19 21:33:07
 -->
 <template>
   <div
@@ -36,8 +36,9 @@
 </template>
 
 <script>
-import { defineComponent, reactive } from 'vue';
+import { computed, defineComponent, reactive } from 'vue';
 import { getMessageSetting, modifySetting } from '@/network/api/setting.ts';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description: 消息设置页面
@@ -46,15 +47,38 @@ import { getMessageSetting, modifySetting } from '@/network/api/setting.ts';
 
 export default defineComponent({
   name: 'messageSeting',
+  emits: ['add-data', 'delete-data', 'change-atteneion'],
+  props: {
+    replyData: {
+      type: Array,
+      default: () => [],
+    },
+    attentionData: {
+      type: Array,
+      default: () => [],
+    },
+    likeData: {
+      type: Array,
+      default: () => [],
+    },
+    systemData: {
+      type: Array,
+      default: () => [],
+    },
+  },
   setup() {
+    const msg = useMessage(); // naive-ui mssage
+
     //设置功能
-    const textmenu = [
-      { text1: '消息提醒', text2: '（关闭后，所有消息将不再提醒）' },
-      { text1: '评论消息提醒', text2: '（关闭后，将不再接收别人对我的评论提醒）' },
-      { text1: '关注消息提醒', text2: '（关闭后，将不再接收别人对我的关注提醒）' },
-      { text1: '点赞消息提醒', text2: '（关闭后，将不再接收别人对我的点赞提醒）' },
-      { text1: '我的消息提醒', text2: '（接收谁发给我的消息提醒）' },
-    ];
+    const textmenu = computed(() => {
+      return [
+        { text1: '消息提醒', text2: '（关闭后，所有消息将不再提醒）' },
+        { text1: '评论消息提醒', text2: '（关闭后，将不再接收别人对我的评论提醒）' },
+        { text1: '关注消息提醒', text2: '（关闭后，将不再接收别人对我的关注提醒）' },
+        { text1: '点赞消息提醒', text2: '（关闭后，将不再接收别人对我的点赞提醒）' },
+        { text1: '我的消息提醒', text2: '（接收谁发给我的消息提醒）' },
+      ];
+    });
 
     //设置数据
     const settingData = reactive([
@@ -66,29 +90,31 @@ export default defineComponent({
     ]);
 
     //设置按钮
-    const radiomenu = [
-      [
-        { lable: '开启', value: 1 },
-        { lable: '关闭', value: 0 },
-      ],
-      [
-        { lable: '开启', value: 1 },
-        { lable: '关闭', value: 0 },
-      ],
-      [
-        { lable: '开启', value: 1 },
-        { lable: '关闭', value: 0 },
-      ],
-      [
-        { lable: '开启', value: 1 },
-        { lable: '关闭', value: 0 },
-      ],
-      [
-        { lable: '所有人', value: 1 },
-        { lable: '关注的人', value: 2 },
-        { lable: '不接收任何消息', value: 3 },
-      ],
-    ];
+    const radiomenu = computed(() => {
+      return [
+        [
+          { lable: '开启', value: 1 },
+          { lable: '关闭', value: 0 },
+        ],
+        [
+          { lable: '开启', value: 1 },
+          { lable: '关闭', value: 0 },
+        ],
+        [
+          { lable: '开启', value: 1 },
+          { lable: '关闭', value: 0 },
+        ],
+        [
+          { lable: '开启', value: 1 },
+          { lable: '关闭', value: 0 },
+        ],
+        [
+          { lable: '所有人', value: 1 },
+          { lable: '关注的人', value: 2 },
+          { lable: '不接收任何消息', value: 3 },
+        ],
+      ];
+    });
 
     //得到设置数据
     getMessageSetting()
@@ -100,7 +126,7 @@ export default defineComponent({
         settingData[4].value = data.chat_message_prompt;
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error), msg.error('获取设置失败，请重试', { duration: 2000, closable: true });
       });
 
     /**
@@ -110,7 +136,9 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function changeSetting(index) {
-      modifySetting(settingData[index].key);
+      modifySetting(settingData[index].key).catch((error) => {
+        console.log(error), msg.error('修改设置失败，请重试', { duration: 2000, closable: true });
+      });
     }
 
     return {
