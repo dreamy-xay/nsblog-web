@@ -3,12 +3,13 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:02:59
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-12 16:32:14
+ * @LastEditors: Ban
+ * @LastEditTime: 2021-08-19 22:25:32
  */
 import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 import loginRouter from './modules/login';
 import messageRouter from './modules/message';
+import usercenterRouter from './modules/userCenter';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -23,6 +24,7 @@ const routes: Array<RouteRecordRaw> = [
   },
   loginRouter,
   messageRouter,
+  usercenterRouter,
   {
     path: '/history',
     name: 'history',
