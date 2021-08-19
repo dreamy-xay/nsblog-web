@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-19 11:26:49
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-19 13:09:03
+ * @LastEditTime: 2021-08-19 15:07:41
 -->
 <template>
   <div
@@ -126,7 +126,7 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function click() {
-      if (props.link) window.open(props.href, props.target);
+      if (props.href) window.open(props.href, props.target);
     }
 
     return {
