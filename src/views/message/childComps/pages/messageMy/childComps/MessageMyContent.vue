@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 17:21:32
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-20 16:41:54
+ * @LastEditTime: 2021-08-20 22:32:34
 -->
 <template>
   <div class="message-my-content">
@@ -19,7 +19,10 @@
       v-if="name"
     >
       <div class="record">
-        <dialogue-record :data="data" />
+        <dialogue-record
+          :data="data"
+          @toTop="recordToTop"
+        />
       </div>
       <div class="edit">
         <dialogue-edit />
@@ -71,9 +74,19 @@ export default defineComponent({
       return props.data.friendNickname;
     });
 
+    /**
+     * @description: 对话记录滚动到最顶部
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function recordToTop() {
+      context.emit('recordToTop');
+    }
+
     return {
       styles,
       name,
+      recordToTop,
     };
   },
 });
@@ -102,14 +115,14 @@ export default defineComponent({
 
     .edit {
       width: 100%;
-      height: 192px;
+      height: 162px;
       border-top: 1px solid $grey-4;
       overflow: hidden;
     }
 
     .record {
       width: 100%;
-      height: calc(100% - 193px);
+      height: calc(100% - 163px);
       overflow: hidden;
     }
   }

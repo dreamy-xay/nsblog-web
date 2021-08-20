@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 12:55:44
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-10 20:03:18
+ * @LastEditTime: 2021-08-20 22:50:06
  */
 
 import { get, RequestLifeCycle } from '@/network/request';
@@ -21,7 +21,7 @@ import { get, RequestLifeCycle } from '@/network/request';
  */
 export function getCollections(
   username: string,
-  limit: number = 10,
+  limit: number = 15,
   offset: number = 0,
   favorites: number | string = '',
   RLC: RequestLifeCycle = {}
