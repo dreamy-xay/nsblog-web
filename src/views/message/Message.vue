@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-07-28 13:11:57
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-19 23:58:34
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-08-20 16:55:18
 -->
 <template>
 
@@ -53,9 +53,10 @@ import BaseView from '@/components/content/baseView/BaseView.vue';
 import MessageMenu from '@/views/message/childComps/MessageMenu.vue';
 import MessageTop from '@/views/message/childComps/MessageTop.vue';
 import { getMessages } from '@/network/api/messages.ts';
-import { mapGetters, mapState, mapActions } from '@/util/store';
+import { mapGetters, mapState, mapActions, mapMutations } from '@/util/store';
 import { useMessage } from 'naive-ui';
 import router from '@/router';
+import store from '@/store';
 
 /**
  * @description: 消息页面
@@ -69,13 +70,10 @@ export default defineComponent({
     MessageTop,
     BaseView,
   },
-  // beforeRouteEnter(to, from, next) {
-  //   console.log(router.currentRoute.value.path);
-  //   console.log(to);
-  //   console.log(from);
-  //   // if(from.path)
-  //   next();
-  // },
+  beforeRouteEnter(_, __, next) {
+    if (store.getters['global/isLogin']) next();
+    else next({ name: 'signIn' });
+  },
   setup(props, context) {
     const msg = useMessage(); // naive-ui mssage
 
@@ -89,9 +87,10 @@ export default defineComponent({
 
     const systemData = reactive([]); //系统通知界面数据
 
-    const { online, receiveMessage } = mapActions('message', ['receiveMessage', 'online']);
+    const { online, notice } = mapActions('message', ['notice', 'online']);
     const { isLogin } = mapGetters('global', ['isLogin']);
     const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
+    const { updateMessageCount } = mapMutations('message', ['updateMessageCount']);
     console.log(tokenInfo);
 
     // 用户上线了
@@ -230,41 +229,45 @@ export default defineComponent({
       } else menuData[index]++;
     }
 
-    receiveMessage({
-      type: 1,
-      callback(data) {
-        console.log('message type: 11');
-        systemData.splice(0, 0, data);
-        addMenu(3);
-      },
+    notice((type) => {
+      updateMessageCount(type);
     });
 
-    receiveMessage({
-      type: 2,
-      callback(data) {
-        console.log('message type: 22');
-        replyData.splice(0, 0, data);
-        addMenu(0);
-      },
-    });
+    // receiveMessage({
+    //   type: 1,
+    //   callback(data) {
+    //     console.log('message type: 11');
+    //     systemData.splice(0, 0, data);
+    //     addMenu(3);
+    //   },
+    // });
 
-    receiveMessage({
-      type: 3,
-      callback(data) {
-        console.log('message type: 33');
-        likeData.splice(0, 0, data);
-        addMenu(1);
-      },
-    });
+    // receiveMessage({
+    //   type: 2,
+    //   callback(data) {
+    //     console.log('message type: 22');
+    //     replyData.splice(0, 0, data);
+    //     addMenu(0);
+    //   },
+    // });
 
-    receiveMessage({
-      type: 4,
-      callback(data) {
-        console.log('message type: 44');
-        attentionData.splice(0, 0, data);
-        addMenu(2);
-      },
-    });
+    // receiveMessage({
+    //   type: 3,
+    //   callback(data) {
+    //     console.log('message type: 33');
+    //     likeData.splice(0, 0, data);
+    //     addMenu(1);
+    //   },
+    // });
+
+    // receiveMessage({
+    //   type: 4,
+    //   callback(data) {
+    //     console.log('message type: 44');
+    //     attentionData.splice(0, 0, data);
+    //     addMenu(2);
+    //   },
+    // });
 
     return {
       messagetag,
