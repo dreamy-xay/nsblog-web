@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-017 11:59:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-19 20:55:30
+ * @LastEditTime: 2021-08-20 15:33:51
  */
 
 import { Application, Request, Response } from 'express';
@@ -23,7 +23,7 @@ export default function(baseUrl: string, app: Application) {
     const { limit, offset, friend_id } = req.query;
     const username: string = getToken(req.headers).username;
 
-    console.log(`${username} getDialogues...`);
+    console.log(`--------${username} getDialogues...`);
 
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
@@ -36,7 +36,7 @@ export default function(baseUrl: string, app: Application) {
         });
       }
       return ans.sort((a: Record<string, unknown>, b: Record<string, unknown>) => {
-        return <string>a.time < <string>b.time ? 1 : -1;
+        return <string>a.time < <string>b.time ? -1 : 1;
       });
     }
 
@@ -71,7 +71,7 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const { friend_id } = req.params;
     const username: string = getToken(req.headers).username;
-    console.log(`delete dialogue: friend_id ${friend_id}   username ${username}   success`);
+    console.log(`--------delete dialogue: friend_id ${friend_id}   username ${username}   success`);
     return res.send();
   });
 }

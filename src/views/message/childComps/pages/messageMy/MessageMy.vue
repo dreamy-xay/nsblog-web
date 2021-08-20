@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 12:49:53
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-19 20:24:07
+ * @LastEditTime: 2021-08-19 22:14:31
 -->
 
 <template>
@@ -102,7 +102,7 @@ export default defineComponent({
       dialogues[index].count = 0;
       activeDialogueData.friendNickname = dialogues[index].nickname;
       activeDialogueData.friendAvatar = dialogues[index].avatar;
-      activeDialogueData.records.splice(0, activeDialogueData.records.length, dialogues[index].records);
+      activeDialogueData.records.splice(0, activeDialogueData.records.length, ...dialogues[index].records);
     }
 
     /**

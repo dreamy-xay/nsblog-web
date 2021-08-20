@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-10 19:45:44
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-14 12:28:39
+ * @LastEditTime: 2021-08-20 15:34:27
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -22,7 +22,7 @@ export default function(baseUrl: string, app: Application) {
     const username: string = getToken(req.headers).username;
     if (int(type) < 0 && int(type) > 4) return res.status(403).json({ error: 'error' });
 
-    console.log(`get messages: type ${type}   username ${username}   success`);
+    console.log(`--------get messages: type ${type}   username ${username}   success`);
 
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
@@ -78,7 +78,7 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
 
-    console.log(`delete messages: username ${username}   message_id ${req.params.message_id} success`);
+    console.log(`--------delete messages: username ${username}   message_id ${req.params.message_id} success`);
     return res.send();
   });
 }

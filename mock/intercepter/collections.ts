@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 11:59:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-19 20:57:54
+ * @LastEditTime: 2021-08-20 15:33:26
  */
 
 import { Application, Request, Response } from 'express';
@@ -23,7 +23,7 @@ export default function(baseUrl: string, app: Application) {
     const { username, limit, offset, favorites } = req.query;
     if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
 
-    console.log(`${username} getCollections...`);
+    console.log(`--------${username} getCollections...`);
 
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-28 00:28:11
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-03 13:47:22
+ * @LastEditTime: 2021-08-19 22:45:30
  */
 
 import { Base64 } from 'js-base64';
@@ -72,7 +72,7 @@ export function verifyToken(
     user &&
     user.isActive &&
     decrypt(user.token as string) === token &&
-    (verifyTime ? new Date().getTime() - time <= 172800 : true)
+    (verifyTime ? new Date().getTime() - time <= 172800000 : true)
   )
     return true;
   if (user && verifyTime) users.modifyOne({ username }, { token: null });

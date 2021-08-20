@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-16 17:02:13
+ * @LastEditTime: 2021-08-20 16:02:23
 -->
 
 <template>
@@ -29,7 +29,7 @@ export default defineComponent({
     BaseTopBar,
   },
   mounted() {
-    const { online, receiveMessage } = mapActions('message', ['receiveMessage', 'online']);
+    const { online, notice } = mapActions('message', ['notice', 'online']);
 
     // 用户上线了
     setTimeout(() => {
@@ -38,36 +38,8 @@ export default defineComponent({
 
     // 收到消息
     // 类型1
-    receiveMessage({
-      type: 1,
-      callback(data) {
-        console.log('message type: 1');
-        console.log(data);
-      },
-    });
-    // 类型1
-    receiveMessage({
-      type: 2,
-      callback(data) {
-        console.log('message type: 2');
-        console.log(data);
-      },
-    });
-    // 类型1
-    receiveMessage({
-      type: 3,
-      callback(data) {
-        console.log('message type: 3');
-        console.log(data);
-      },
-    });
-    // 类型1
-    receiveMessage({
-      type: 4,
-      callback(data) {
-        console.log('message type: 4');
-        console.log(data);
-      },
+    notice((type) => {
+      console.log(`message type: ${type}`);
     });
   },
 });
