@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-017 11:59:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-20 15:33:51
+ * @LastEditTime: 2021-08-20 22:52:37
  */
 
 import { Application, Request, Response } from 'express';
@@ -30,7 +30,6 @@ export default function(baseUrl: string, app: Application) {
       for (let i: number = 0; i < limit; ++i) {
         ans.push({
           content: Random.natural(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
-          status: 0,
           is_me: Random.integer(0, 1) ? true : false,
           time: Random.datetime()
         });
@@ -47,7 +46,7 @@ export default function(baseUrl: string, app: Application) {
       const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
       const cs: number = Random.natural(0, 30);
       for (let i: number = 0; i < cs; ++i) {
-        const sum: number = Random.integer(1, 38);
+        const sum: number = Random.integer(1, 27);
         const records: Record<string, unknown>[] = getRandom(
           int(offset) >= sum ? 0 : Math.min(int(limit), sum - int(offset))
         );

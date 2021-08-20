@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 12:49:53
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-20 16:49:14
+ * @LastEditTime: 2021-08-20 22:42:36
 -->
 
 <template>
@@ -13,11 +13,15 @@
     v-if="isLogin"
   >
     <message-my-friend
+      ref="firendListRef"
       :friend-list="friendList"
       @clickItem="clickItem"
       @deleteItem="deleteItem"
     />
-    <message-my-content :data="activeDialogueData" />
+    <message-my-content
+      :data="activeDialogueData"
+      @recordToTop="recordToTop"
+    />
     <base-modal
       content="删除就没有咯(⊙o⊙)"
       confirmeText="确认删除"
@@ -37,6 +41,7 @@ import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 import { getDialogue, deleteDialogue } from '@/network/api/dialogues';
 import { mapGetters } from '@/util/store';
 import { useMessage } from 'naive-ui';
+import events from '@/events';
 
 /**
  * @description: 我的消息页面
@@ -81,6 +86,8 @@ export default defineComponent({
     const modalShow = ref(false); // 是否显示模态框
     let deleteItemCallback = null; // 当前删除操作索引
 
+    let offset = 0; // 对话获取偏移量
+
     // 如果已登录则获取消息
     if (isLogin.value)
       getDialogue()
@@ -103,6 +110,8 @@ export default defineComponent({
       activeDialogueData.friendNickname = dialogues[index].nickname;
       activeDialogueData.friendAvatar = dialogues[index].avatar;
       activeDialogueData.records.splice(0, activeDialogueData.records.length, ...dialogues[index].records);
+      // 滚动到最底部
+      events.emit('DialogueRecord-scrollToBottom');
     }
 
     /**
@@ -144,6 +153,17 @@ export default defineComponent({
       if (isConfirm) deleteItemCallback && deleteItemCallback();
     }
 
+    const firendListRef = ref(null);
+    /**
+     * @description: 对话记录滚动到最顶部
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function recordToTop() {
+      const index = firendListRef.value.activeIndex;
+      console.log(index);
+    }
+
     return {
       isLogin,
       friendList,
@@ -152,6 +172,8 @@ export default defineComponent({
       activeDialogueData,
       modalShow,
       modalClick,
+      recordToTop,
+      firendListRef,
     };
   },
 });

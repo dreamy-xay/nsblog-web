@@ -4,25 +4,28 @@
  * @Autor: continue-hs
  * @Date: 2021-08-05 18:50:30
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-19 20:57:30
+ * @LastEditTime: 2021-08-20 23:27:11
 -->
 
 <template>
   <div class="top-bar-collection">
     <div class="top-bar-collection-left">
       <div class="content-menu">
-        <el-scrollbar height="401px">
+        <el-scrollbar
+          height="401px"
+          ref="scrollbarRef"
+        >
           <div
             class="menu-content"
-            v-for="(item,index) in favorites"
+            v-for="(item, index) in favorites"
             :key="index"
-            :class="{active: index === isActive}"
+            :class="{active: index === activeIndex}"
             @click="chooseClick(index)"
             role="button"
           >
             <div class="collections-menu">
               <div class="left">{{item.name}}</div>
-              <div class="right">{{item.count}}</div>
+              <div class="right">{{item.count > 99 ? '99+' : item.count}}</div>
             </div>
           </div>
         </el-scrollbar>
@@ -40,11 +43,11 @@
         <div
           class="content"
           v-for="(value, index) in List"
-          :key=index
+          :key="index"
         >
           <a
             :href="(value.type === 1 ? '/article' : '/question') + value.id"
-            target="_blank"
+            :target="(value.type === 1 ? '/article' : '/question') + value.id"
           >
             <div class="collections-content">
               <base-tag
@@ -60,13 +63,20 @@
             </div>
           </a>
         </div>
+        <div
+          class="bottom"
+          role="button"
+          v-show="favorites.length && List.length !== favorites[activeIndex].count"
+        >
+          <a href="/userCenter/collection">查看全部</a>
+        </div>
       </el-scrollbar>
     </div>
   </div>
 </template>
 
 <script>
-import { defineComponent, ref, reactive } from 'vue';
+import { defineComponent, ref, reactive, computed } from 'vue';
 import { getCollections } from '@/network/api/collections';
 import BaseTag from '../../baseTag/BaseTag.vue';
 import styles from '@/assets/style/define.scss';
@@ -83,9 +93,13 @@ export default defineComponent({
     BaseTag,
   },
   setup() {
-    const isActive = ref(0);
+    const scrollbarRef = ref(null); // scrollbar ref
+    const activeIndex = ref(0);
     let favorites = reactive([]);
-    let List = reactive([]);
+    let List = computed(() => {
+      if (favorites.length) return favorites[activeIndex.value].collections;
+      else return [];
+    });
     const { tokenInfo } = mapState('global', ['tokenInfo']);
 
     /**
@@ -96,7 +110,6 @@ export default defineComponent({
     if (tokenInfo.value.status)
       getCollections(tokenInfo.value.username, 100000).then((res) => {
         favorites.splice(0, 0, ...res.favorites);
-        List.splice(0, 0, ...res.favorites[0].collections);
       });
 
     /**
@@ -105,17 +118,17 @@ export default defineComponent({
      * @author: continue-hs
      */
     function chooseClick(index) {
-      List.splice(0, 100000);
-      this.isActive = index;
-      List.splice(0, 0, ...this.favorites[index].collections);
+      activeIndex.value = index;
+      scrollbarRef.value.setScrollTop(1); // 滚动条重新置位
     }
 
     return {
       chooseClick,
       styles,
-      isActive,
+      activeIndex,
       List,
       favorites,
+      scrollbarRef,
     };
   },
 });
@@ -239,6 +252,29 @@ export default defineComponent({
           line-height: 21px;
           @include ellipsis(1);
           width: 248px;
+        }
+      }
+    }
+
+    .bottom {
+      width: 100%;
+      height: 30px;
+      margin-top: 7px;
+      @include flex(center, center);
+
+      a {
+        @include flex(center, center);
+        height: 100%;
+        width: 50%;
+        border-radius: $border-radius-1;
+        background-color: $grey-3;
+        color: $grey-9;
+        font-size: 14px;
+        transition: 0.25s;
+
+        &:hover {
+          background-color: $grey-4;
+          color: $grey-11;
         }
       }
     }
