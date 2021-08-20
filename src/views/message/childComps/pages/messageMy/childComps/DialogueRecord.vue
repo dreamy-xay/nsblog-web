@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-19 16:18:23
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-19 23:14:13
+ * @LastEditTime: 2021-08-20 16:42:03
 -->
 <template>
   <div class="dialogue-record">
@@ -129,7 +129,7 @@ export default defineComponent({
           margin: 0 8px;
           max-width: calc(90% - 76px);
           background-color: $grey-0;
-          // box-shadow: $shadow-1;
+          // box-shadow: $shadow-0;
           box-sizing: border-box;
           padding: 6px 16px;
         }

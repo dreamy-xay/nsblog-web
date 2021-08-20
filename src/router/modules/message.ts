@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-28 13:09:20
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-18 17:19:44
+ * @LastEditTime: 2021-08-20 16:53:52
  */
 import { RouteRecordRaw } from 'vue-router';
 
@@ -19,7 +19,7 @@ const messageRouter: RouteRecordRaw = {
   },
   children: [
     {
-      path: '/message/reply',
+      path: 'reply',
       name: 'messageReply',
       meta: {
         title: '回复我的'
@@ -35,7 +35,7 @@ const messageRouter: RouteRecordRaw = {
       component: () => import('@/views/message/childComps/pages/MessageLike.vue')
     },
     {
-      path: '/message/attention',
+      path: 'attention',
       name: 'messageAttention',
       meta: {
         title: '关注我的'
@@ -43,7 +43,7 @@ const messageRouter: RouteRecordRaw = {
       component: () => import('@/views/message/childComps/pages/MessageAttention.vue')
     },
     {
-      path: '/message/system',
+      path: 'system',
       name: 'messageSystem',
       meta: {
         title: '系统通知'
@@ -51,7 +51,7 @@ const messageRouter: RouteRecordRaw = {
       component: () => import('@/views/message/childComps/pages/MessageSystem.vue')
     },
     {
-      path: '/message/my',
+      path: 'my',
       name: 'messageMy',
       meta: {
         title: '我的消息'
@@ -59,7 +59,7 @@ const messageRouter: RouteRecordRaw = {
       component: () => import('@/views/message/childComps/pages/messageMy/MessageMy.vue')
     },
     {
-      path: '/message/setting',
+      path: 'setting',
       name: 'messageSeting',
       meta: {
         title: '消息设置'
