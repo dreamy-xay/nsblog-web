@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-10 14:25:47
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-14 12:28:16
+ * @LastEditTime: 2021-08-20 15:33:08
  */
 
 import { Application, Request, Response } from 'express';
@@ -42,7 +42,7 @@ export default function(baseUrl: string, app: Application) {
   app.post(baseUrl + '/attentions', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const { username } = req.body;
-    console.log(`${getToken(req.headers).username} succeeded in adding attention ${username}`);
+    console.log(`--------${getToken(req.headers).username} succeeded in adding attention ${username}`);
     return res.send();
   });
 
@@ -50,7 +50,7 @@ export default function(baseUrl: string, app: Application) {
   app.delete(baseUrl + '/attentions', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const { username } = req.body;
-    console.log(`${getToken(req.headers).username} successfully canceled attention ${username}`);
+    console.log(`---------${getToken(req.headers).username} successfully canceled attention ${username}`);
     return res.send();
   });
 
@@ -60,7 +60,7 @@ export default function(baseUrl: string, app: Application) {
 
     if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
 
-    console.log(`${username} getFans...`);
+    console.log(`--------${username} getFans...`);
 
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();

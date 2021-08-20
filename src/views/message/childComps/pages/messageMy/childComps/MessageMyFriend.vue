@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 17:21:17
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-19 20:50:55
+ * @LastEditTime: 2021-08-19 22:15:17
 -->
 <template>
   <div class="message-my-friend">
@@ -199,7 +199,7 @@ export default defineComponent({
     overflow: hidden;
 
     :deep(.el-scrollbar__thumb) {
-      background-color: $grey-8;
+      background-color: $grey-7;
     }
 
     .friend {

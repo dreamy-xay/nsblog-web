@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 10:01:23
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-14 12:24:58
+ * @LastEditTime: 2021-08-20 15:34:09
  */
 
 import { Application, Request, Response } from 'express';
@@ -68,7 +68,7 @@ export default function(baseUrl: string, app: Application) {
   app.delete(baseUrl + '/history', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
-    console.log(`delete all history: username ${username}   success`);
+    console.log(`--------delete all history: username ${username}   success`);
     return res.send();
   });
 
@@ -78,7 +78,7 @@ export default function(baseUrl: string, app: Application) {
     const { history_id } = req.params;
     const type: string = req.query.type as string;
     const username: string = getToken(req.headers).username;
-    console.log(`delete history: history_id ${history_id}  type: ${type}  username ${username}   success`);
+    console.log(`--------delete history: history_id ${history_id}  type: ${type}  username ${username}   success`);
     return res.send();
   });
 }
