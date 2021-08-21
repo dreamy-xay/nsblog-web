@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-28 00:28:11
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-19 22:45:30
+ * @LastEditTime: 2021-08-21 16:58:56
  */
 
 import { Base64 } from 'js-base64';
@@ -127,4 +127,39 @@ export function decrypt(word: string): string {
   });
   const decryptedStr = decrypt.toString(CryptoJS.enc.Utf8);
   return decryptedStr.toString();
+}
+
+/**
+ * @description: 随机用户
+ * @param {string} username 传入忽略用户名 `默认不忽略为null`
+ * @return {{ random: Function }} 返回一个对象，可随机用户
+ * @author: dreamy-xay
+ */
+export function randomUsers(username: string = null): { random: () => RandomUser } {
+  const users: Record<string, unknown>[] = select('users').findAll({ isActive: true }); // 获取所有用户
+  if (username) {
+    // 删除指定名字
+    for (let i: number = 0; i < users.length; ++i)
+      if (users[i].username === username) {
+        users.splice(i, 1);
+        break;
+      }
+  }
+  return {
+    random(): RandomUser {
+      const index: number = Random.integer(0, users.length - 1);
+      const ans: Record<string, unknown> = users[index];
+      users.splice(index, 1);
+      return ans as any;
+    }
+  };
+}
+
+/* 随机用户接口 */
+export interface RandomUser {
+  username: string;
+  nickname: string;
+  password: string;
+  email: string;
+  token: string;
 }

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 12:49:53
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-20 22:42:36
+ * @LastEditTime: 2021-08-21 17:32:43
 -->
 
 <template>
@@ -38,8 +38,8 @@ import MessageMyFriend from '@/views/message/childComps/pages/messageMy/childCom
 import MessageMyContent from '@/views/message/childComps/pages/messageMy/childComps/MessageMyContent.vue';
 import MessageEmpty from '@/views/message/childComps/MessageEmpty.vue';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
-import { getDialogue, deleteDialogue } from '@/network/api/dialogues';
-import { mapGetters } from '@/util/store';
+import { getDialogue, deleteDialogue, clearDialogue } from '@/network/api/dialogues';
+import { mapGetters, mapActions } from '@/util/store';
 import { useMessage } from 'naive-ui';
 import events from '@/events';
 
@@ -82,18 +82,25 @@ export default defineComponent({
       friendAvatar: '',
       friendNickname: '',
       records: [],
+      all: false,
     });
     const modalShow = ref(false); // 是否显示模态框
     let deleteItemCallback = null; // 当前删除操作索引
 
-    let offset = 0; // 对话获取偏移量
-
+    const offset = new Map(); // 对应消息偏移量
+    const limit = 20; // 每次获取对话数量
     // 如果已登录则获取消息
     if (isLogin.value)
-      getDialogue()
+      getDialogue(0, limit)
         .then((data) => {
           dialogues.splice(0, 0, ...data.dialogues);
-          activeDialogueData.avatar = data.avatar;
+          activeDialogueData.avatar = data.avatar; // 当前聊天对象头像
+
+          // 设置偏移量
+          for (let item of data.dialogues) {
+            offset.set(item.username, item.records.length);
+            if (item.records.length < limit) item['all'] = true;
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -106,9 +113,18 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function clickItem(index) {
+      // 清除未读消息数量
+      clearDialogue(dialogues[index].username)
+        .then(() => {
+          dialogues[index].count = 0;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       dialogues[index].count = 0;
       activeDialogueData.friendNickname = dialogues[index].nickname;
       activeDialogueData.friendAvatar = dialogues[index].avatar;
+      activeDialogueData.all = dialogues[index]['all'];
       activeDialogueData.records.splice(0, activeDialogueData.records.length, ...dialogues[index].records);
       // 滚动到最底部
       events.emit('DialogueRecord-scrollToBottom');
@@ -132,7 +148,8 @@ export default defineComponent({
                 activeDialogueData.records.splice(0, activeDialogueData.records.length);
               }
             });
-            dialogues.splice(index, 1);
+            offset.delete(dialogues[index].username); // 删除偏移量
+            dialogues.splice(index, 1); // 删除对话
           })
           .catch((error) => {
             console.log(error);
@@ -153,7 +170,7 @@ export default defineComponent({
       if (isConfirm) deleteItemCallback && deleteItemCallback();
     }
 
-    const firendListRef = ref(null);
+    const firendListRef = ref(null); // 好友列表ref
     /**
      * @description: 对话记录滚动到最顶部
      * @return {void}
@@ -161,8 +178,59 @@ export default defineComponent({
      */
     function recordToTop() {
       const index = firendListRef.value.activeIndex;
-      console.log(index);
+      const offsetNum = offset.get(dialogues[index].username);
+      getDialogue(offsetNum, limit, dialogues[index].username)
+        .then((data) => {
+          offset.set(dialogues[index].username, offsetNum + data.records.length);
+          if (data.records.length < limit) {
+            dialogues[index]['all'] = true;
+            activeDialogueData['all'] = true;
+          }
+          dialogues[index].records.splice(0, 0, ...data.records);
+          activeDialogueData.records.splice(0, activeDialogueData.records.length, ...dialogues[index].records);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
+
+    const { receiveMessage } = mapActions('message', ['receiveMessage']); // 获取接收对话消息的api
+    // socket接收消息
+    receiveMessage((data) => {
+      const { username, nickname, avatar, content, time } = data;
+      let dialogueIndex = -1;
+      for (let i = 0; i < dialogues.length; ++i)
+        if (dialogues[i].username === username) {
+          dialogueIndex = i;
+          break;
+        }
+      if (dialogueIndex >= 0) {
+        offset.set(username, offset.get(username) + 1);
+        ++dialogues[dialogueIndex].count;
+        dialogues[dialogueIndex].records.splice(dialogues[dialogueIndex].records.length, 0, {
+          content,
+          time,
+          is_me: false,
+        });
+      } else {
+        offset.set(username, 1);
+        dialogues.splice(0, 0, {
+          username,
+          nickname,
+          avatar,
+          count: 1,
+          records: [
+            {
+              content,
+              time,
+              is_me: false,
+            },
+          ],
+        });
+      }
+      // 滚动到最底部
+      events.emit('DialogueRecord-scrollToBottom');
+    });
 
     return {
       isLogin,
