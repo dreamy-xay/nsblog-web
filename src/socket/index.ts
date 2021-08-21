@@ -4,11 +4,11 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-11 12:25:53
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-12 11:04:10
+ * @LastEditTime: 2021-08-21 14:20:29
  */
 import io, { Socket } from 'socket.io-client';
 
-const socket: Socket = io(`${process.env.VUE_APP_APIHOST}:${process.env.VUE_APP_APIPORT}/`, {
+const socket: Socket = io(`${process.env.VUE_APP_APIHOST}:${process.env.VUE_APP_APIPORT}`, {
   path: `${process.env.VUE_APP_APIROUTER}/socket/messages`
 });
 
