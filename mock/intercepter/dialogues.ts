@@ -4,12 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-017 11:59:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-20 22:52:37
+ * @LastEditTime: 2021-08-21 17:28:52
  */
 
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { getToken, verifyToken } from './util';
+import { getToken, RandomUser, randomUsers, verifyToken } from './util';
 import select from '../data/index';
 
 function int(value: unknown): number {
@@ -45,24 +45,35 @@ export default function(baseUrl: string, app: Application) {
     } else {
       const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
       const cs: number = Random.natural(0, 30);
+      const RUsers = randomUsers(username);
       for (let i: number = 0; i < cs; ++i) {
         const sum: number = Random.integer(1, 27);
         const records: Record<string, unknown>[] = getRandom(
           int(offset) >= sum ? 0 : Math.min(int(limit), sum - int(offset))
         );
+        const user: RandomUser = RUsers.random();
         ans.push({
-          username: Random.name(),
-          nickname: Random.natural(0, 1000000) % 2 ? Random.cword(2, 4) : Random.word(4, 8),
-          avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', Random.word(2, 4)),
+          username: user.username,
+          nickname: user.nickname,
+          avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
           count: Random.integer(0, 88),
           records
         });
       }
       return res.json({
         dialogues: ans,
-        avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', username.slice(0, 4))
+        avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', username)
       });
     }
+  });
+
+  // 清零未读消息
+  app.put(baseUrl + '/dialogues/:friend_id', (req: Request, res: Response) => {
+    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
+    const { friend_id } = req.params;
+    const username: string = getToken(req.headers).username;
+    console.log(`--------clear dialogue: friend_id ${friend_id}   username ${username}   success`);
+    return res.send();
   });
 
   // 删除对话消息和记录

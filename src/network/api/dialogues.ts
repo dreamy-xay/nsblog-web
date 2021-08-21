@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 20:50:36
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-18 21:12:46
+ * @LastEditTime: 2021-08-21 17:29:48
  */
 
 /*
@@ -16,7 +16,7 @@
  * @LastEditTime: 2021-08-10 16:32:11
  */
 
-import { get, del, RequestLifeCycle } from '@/network/request';
+import { get, del, RequestLifeCycle, put } from '@/network/request';
 
 /**
  * @description: 获取对话记录信息
@@ -41,6 +41,20 @@ export function getDialogue(
       offset,
       friend_id: friendId
     }
+  });
+}
+
+/**
+ * @description: 清零未读对话记录数量
+ * @param {string | number} friendId 删除历史记录的id `必传参数`
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: dreamy-xay
+ */
+export function clearDialogue(friendId: string | number, RLC: RequestLifeCycle = {}) {
+  return put({
+    url: `/dialogues/${friendId}`,
+    ...RLC
   });
 }
 

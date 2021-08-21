@@ -4,11 +4,11 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-10 19:45:44
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-20 15:34:27
+ * @LastEditTime: 2021-08-21 17:04:54
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { verifyToken, getToken } from './util';
+import { verifyToken, getToken, randomUsers, RandomUser } from './util';
 
 function int(value: unknown): number {
   return parseInt(value as string);
@@ -24,34 +24,36 @@ export default function(baseUrl: string, app: Application) {
 
     console.log(`--------get messages: type ${type}   username ${username}   success`);
 
+    const RUsers = randomUsers();
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
       for (let i: number = 0; i < limit; ++i) {
         let content: unknown;
+        const user: RandomUser = RUsers.random();
         if (int(type) === 1) content = Random.integer(0, 1) ? Random.cparagraph(1, 10) : Random.paragraph(1, 10);
         else if (int(type) === 2)
           content = {
-            username: Random.word(4, 8),
-            nickname: Random.natural(0, 1000000) % 2 ? Random.cword(2, 4) : Random.word(4, 8),
-            avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', Random.word(2, 4)),
+            username: user.username,
+            nickname: user.nickname,
+            avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
             content: Random.integer(0, 1) ? Random.cparagraph(1, 10) : Random.paragraph(1, 10),
             type: Random.natural(1, 2),
-            reply_username: Random.word(4, 8),
+            reply_username: RUsers.random().username,
             reply_content: Random.integer(0, 1) ? Random.cparagraph(1, 10) : Random.paragraph(1, 10)
           };
         else if (int(type) === 3)
           content = {
-            username: Random.word(4, 8),
-            nickname: Random.natural(0, 1000000) % 2 ? Random.cword(2, 4) : Random.word(4, 8),
-            avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', Random.word(2, 4)),
+            username: user.username,
+            nickname: user.nickname,
+            avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
             type: Random.natural(1, 2),
             id: Random.id()
           };
         else
           content = {
-            username: Random.word(4, 8),
-            nickname: Random.natural(0, 1000000) % 2 ? Random.cword(2, 4) : Random.word(4, 8),
-            avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', Random.word(2, 4)),
+            username: user.username,
+            nickname: user.nickname,
+            avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
             attention: Random.natural(0, 1) ? true : false
           };
 

@@ -4,12 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 10:01:23
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-20 15:34:09
+ * @LastEditTime: 2021-08-21 17:02:52
  */
 
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { verifyToken, getToken } from './util';
+import { verifyToken, getToken, randomUsers, RandomUser } from './util';
 
 function int(value: unknown): number {
   return parseInt(value as string);
@@ -22,6 +22,7 @@ export default function(baseUrl: string, app: Application) {
     const { limit, offset, keyword } = req.query;
     const type: number = int(req.query.type);
 
+    const RUsers = randomUsers();
     function getRandom(limit: number, hasType: boolean = true): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
       for (let i: number = 0; i < limit; ++i) {
@@ -33,14 +34,15 @@ export default function(baseUrl: string, app: Application) {
         const tagList: string[] = [];
         let cs: number = Random.natural(1, 5);
         while (cs--) tagList.push(Random.natural(0, 2) ? Random.cword(4, 6) : Random.word(5, 7));
+        const user: RandomUser = RUsers.random();
         ans.push({
           history_id: Random.increment(),
           id: Random.id(),
           time: Random.datetime(),
           title: keyword + (Random.natural(0, 3) ? Random.ctitle(15, 45) : Random.title(7, 12)),
           topic_tag: tagList,
-          username: Random.natural(0, 1) ? Random.cname() : Random.name(),
-          nickname: Random.name(),
+          username: user.username,
+          nickname: user.nickname,
           ...type
         });
       }

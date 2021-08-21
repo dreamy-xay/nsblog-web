@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-19 16:18:23
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-20 22:30:02
+ * @LastEditTime: 2021-08-21 17:18:38
 -->
 <template>
   <div class="dialogue-record">
@@ -13,8 +13,19 @@
       @scroll="scroll"
     >
       <div class="dialogue-record-inner">
-        <div class="dialogue-record-none">
+        <div
+          class="dialogue-record-none"
+          v-if="data.all"
+        >
           没有更多消息了~
+        </div>
+        <div
+          class="dialogue-record-loading"
+          role="button"
+          @click="$emit('toTop')"
+          v-else
+        >
+          加载更多消息...
         </div>
         <div
           class="dialogue-record-item"
@@ -56,6 +67,9 @@ import events from '@/events';
 
 /**
  * @description: 对话框对话记录显示
+ * @param {Objdect} data 对话数据 `必传参数`
+ * @event topTop 滚动到顶部触发，点击加载新数据按钮触发
+ * @emits DialogueRecord-scrollToBottom 页面滚动到底部
  * @author: dreamy-xay
  */
 
@@ -105,7 +119,7 @@ export default defineComponent({
 
     // 滚动到顶部触发函数
     const toTop = throttle((top) => {
-      if (top === 0) context.emit('toTop');
+      if (top === 0 && !props.data.all) context.emit('toTop');
     }, 300);
 
     /**
@@ -143,12 +157,27 @@ export default defineComponent({
     @include flex(center, center, column);
 
     .dialogue-record-none,
+    .dialogue-record-loading,
     .dialogue-record-item .date {
       height: 16px;
       color: $grey-7;
       font-size: 12px;
       @include flex(center);
       margin-top: 10px;
+    }
+
+    .dialogue-record-loading {
+      padding: 0 8px;
+      background-color: $grey-4;
+      border-radius: $border-radius-0;
+      box-shadow: $shadow-0;
+      overflow: hidden;
+      transition: 0.25s;
+
+      &:hover {
+        background-color: $grey-5;
+        color: $grey-9;
+      }
     }
 
     .dialogue-record-item {
