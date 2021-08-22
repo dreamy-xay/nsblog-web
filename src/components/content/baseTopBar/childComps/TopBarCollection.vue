@@ -4,17 +4,14 @@
  * @Autor: continue-hs
  * @Date: 2021-08-05 18:50:30
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-20 23:27:11
+ * @LastEditTime: 2021-08-22 17:10:33
 -->
 
 <template>
   <div class="top-bar-collection">
     <div class="top-bar-collection-left">
       <div class="content-menu">
-        <el-scrollbar
-          height="401px"
-          ref="scrollbarRef"
-        >
+        <el-scrollbar height="401px">
           <div
             class="menu-content"
             v-for="(item, index) in favorites"
@@ -33,7 +30,7 @@
     </div>
     <div class="top-bar-collection-line"></div>
     <div class="top-bar-collection-right">
-      <el-scrollbar height="401px">
+      <el-scrollbar ref="scrollbarRef">
         <div
           class="blank"
           v-if="List !== undefined && List.length === 0"
@@ -77,7 +74,7 @@
 
 <script>
 import { defineComponent, ref, reactive, computed } from 'vue';
-import { getCollections } from '@/network/api/collections';
+import { getFavorites } from '@/network/api/favorites';
 import BaseTag from '../../baseTag/BaseTag.vue';
 import styles from '@/assets/style/define.scss';
 import { mapState } from '@/util/store';
@@ -108,9 +105,13 @@ export default defineComponent({
      * @author: continue-hs
      */
     if (tokenInfo.value.status)
-      getCollections(tokenInfo.value.username, 100000).then((res) => {
-        favorites.splice(0, 0, ...res.favorites);
-      });
+      getFavorites(tokenInfo.value.username)
+        .then((res) => {
+          favorites.splice(0, 0, ...res.favorites);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
 
     /**
      * @description: 改变右侧收藏夹内容
@@ -119,7 +120,7 @@ export default defineComponent({
      */
     function chooseClick(index) {
       activeIndex.value = index;
-      scrollbarRef.value.setScrollTop(1); // 滚动条重新置位
+      scrollbarRef.value.setScrollTop(0); // 滚动条重新置位
     }
 
     return {
