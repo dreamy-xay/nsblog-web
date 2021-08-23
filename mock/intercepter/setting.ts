@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 23:12:21
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-20 15:34:44
+ * @LastEditTime: 2021-08-23 12:36:13
  */
 
 import { Application, Request, Response } from 'express';
@@ -37,8 +37,8 @@ export default function(baseUrl: string, app: Application) {
   // 设置修改
   app.put(baseUrl + '/setting', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
-    const { setting } = req.body;
-    console.log('--------', setting);
+    const username: string = getToken(req.headers).username;
+    console.log(`--------modefify setting:  username=>${username}  setting=>${req.body}`);
     res.send();
   });
 }

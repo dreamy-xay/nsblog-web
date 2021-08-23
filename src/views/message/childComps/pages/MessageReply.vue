@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:25:27
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-21 15:18:25
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-08-23 12:29:07
 -->
 
 <template>
@@ -97,9 +97,9 @@
 import { defineComponent, ref, reactive, watch } from 'vue';
 import MessageEmpty from '@/views/message/childComps/MessageEmpty.vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
-import { getMessages, deleteMessages } from '@/network/api/messages.ts';
+import { getMessages, deleteMessages } from '@/network/api/messages';
 import { dateFormat } from '@/util/date.ts';
-import { mapMutations, mapState } from '@/util/store';
+import { mapState } from '@/util/store';
 import { useMessage } from 'naive-ui';
 import { useRoute } from 'vue-router';
 
@@ -114,19 +114,12 @@ export default defineComponent({
     MessageEmpty,
     BaseAvatar,
   },
-  setup(props, context) {
+  setup() {
     const route = useRoute();
-
     const msg = useMessage(); // naive-ui mssage
-
     let offset = 0; // 偏移量
-
     const deleteTag = ref(true); // 判断数据是否全部加载的标志
-
     const replyData = reactive([]); // 回复我的界面数据
-
-    const { updateMessageCount } = mapMutations('message', ['updateMessageCount']);
-
     const { messageCount } = mapState('message', ['messageCount']); // 获取tokenInfo
 
     /**
@@ -192,19 +185,35 @@ export default defineComponent({
       window.open(path, path);
     }
 
+    /**
+     * @description: 获取自己类型的消息
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function getSelfMessage() {
+      getMessages(2, 0, 1)
+        .then((data) => {
+          offset++;
+          replyData.splice(0, 0, data.messages[0]);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
     //监听未读消息变化，得到未读消息
     watch(
       () => messageCount.value[0],
       (value, oldValue) => {
-        if (value === oldValue + 1)
-          getMessages(2, 0, 1).then((data) => {
-            offset++;
-            replyData.splice(0, 0, data.messages[0]);
-            if (route.path === '/message/reply')
-              setTimeout(() => {
-                updateMessageCount({ type: 2, count: 0 });
-              }, 1000);
-          });
+        if (value === oldValue + 1 && new RegExp('/message/reply').test(route.path)) getSelfMessage();
+      }
+    );
+
+    // 监听路由变化更新数据
+    watch(
+      () => route.path,
+      (path) => {
+        if (messageCount.value[0] > 0 && new RegExp('/message/reply').test(path)) getSelfMessage();
       }
     );
 

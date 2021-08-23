@@ -4,17 +4,13 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 11:59:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-22 17:00:44
+ * @LastEditTime: 2021-08-23 12:34:19
  */
 
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { getToken, verifyToken } from './util';
+import { getToken, verifyToken, int } from './util';
 import select from '../data/index';
-
-function int(value: unknown): number {
-  return parseInt(value as string);
-}
 
 export default function(baseUrl: string, app: Application) {
   // 获取收藏夹或者收藏

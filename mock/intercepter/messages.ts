@@ -4,15 +4,11 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-10 19:45:44
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-21 17:04:54
+ * @LastEditTime: 2021-08-23 12:34:35
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { verifyToken, getToken, randomUsers, RandomUser } from './util';
-
-function int(value: unknown): number {
-  return parseInt(value as string);
-}
+import { verifyToken, getToken, randomUsers, RandomUser, int } from './util';
 
 export default function(baseUrl: string, app: Application) {
   // 获取消息

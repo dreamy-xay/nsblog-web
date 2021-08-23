@@ -4,17 +4,13 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-10 14:25:47
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-21 17:01:18
+ * @LastEditTime: 2021-08-23 12:33:54
  */
 
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { getToken, randomUsers, verifyToken, RandomUser } from './util';
+import { getToken, randomUsers, verifyToken, RandomUser, int } from './util';
 import select from '../data/index';
-
-function int(value: unknown): number {
-  return parseInt(value as string);
-}
 
 export default function(baseUrl: string, app: Application) {
   // 获取关注情况
