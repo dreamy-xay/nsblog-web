@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 22:48:57
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-23 12:21:30
+ * @LastEditTime: 2021-08-23 13:06:51
 -->
 <template>
   <div class="message-left">
@@ -18,11 +18,11 @@
     </div>
 
     <div
-      v-for="(item,index) in menus"
+      v-for="(item, index) in menus"
       :key="item.id"
       class="message-left-title2"
       :class="messagetag === item.key ? 'message-left-title-color' : ''"
-      @click="changeColor(item, judgeType(index))"
+      @click="changeColor(item, [2, 3, 4, 1, 5][index])"
       role="button"
     >
       <i
@@ -119,7 +119,7 @@ export default defineComponent({
           if (props.menus[i].key === props.messagetag) {
             setTimeout(() => {
               // 延迟1s消失
-              updateMessageCount({ type: judgeType(i), count: 0 });
+              updateMessageCount({ type: [2, 3, 4, 1, 5][i], count: 0 });
             }, 1000);
           }
         }
@@ -128,24 +128,9 @@ export default defineComponent({
         console.log(error), msg.error('获取未读消息条数，请重试', { duration: 2000, closable: true });
       });
 
-    /**
-     * @description: 根据页面名称判断数据类型
-     * @param {Number} index 页面名称下标
-     * @return {void}
-     * @author: Z_Y_C
-     */
-    function judgeType(index) {
-      if (index === 0) return 2;
-      else if (index === 1) return 3;
-      else if (index === 2) return 4;
-      else if (index === 3) return 1;
-      else if (index === 4) return 5;
-    }
-
     return {
       styles,
       messageCount,
-      judgeType,
     };
   },
 });

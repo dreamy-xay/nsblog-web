@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:34:31
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-23 12:30:36
+ * @LastEditTime: 2021-08-23 12:59:08
 -->
 <template>
   <el-scrollbar max-height="calc(100vh - 108px)">
@@ -43,7 +43,7 @@ import { defineComponent, ref, reactive, watch } from 'vue';
 import MessageEmpty from '@/views/message/childComps/MessageEmpty.vue';
 import { getMessages, deleteMessages } from '@/network/api/messages';
 import { dateFormat } from '@/util/date';
-import { mapState } from '@/util/store';
+import { mapMutations, mapState } from '@/util/store';
 import { useMessage } from 'naive-ui';
 import { useRoute } from 'vue-router';
 
@@ -63,6 +63,7 @@ export default defineComponent({
     let offset = 0; // 偏移量
     const deleteTag = ref(true); // 判断数据是否全部加载的标志
     const systemData = reactive([]); //系统通知界面数据
+    const { updateMessageCount } = mapMutations('message', ['updateMessageCount']);
     const { messageCount } = mapState('message', ['messageCount']); // 获取tokenInfo
 
     /**
@@ -123,6 +124,7 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function getSelfMessage() {
+      updateMessageCount({ type: 1, count: 0 });
       getMessages(1, 0, 1)
         .then((data) => {
           offset++;
