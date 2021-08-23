@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:31:44
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-23 14:08:35
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-08-23 16:42:43
 -->
 <template>
   <el-scrollbar max-height="calc(100vh - 108px)">
@@ -169,7 +169,7 @@ export default defineComponent({
       getMessages(3, 0, limit)
         .then((data) => {
           offset++;
-          likeData.splice(0, 0, data.messages[0]);
+          likeData.splice(0, 0, ...data.messages);
         })
         .catch((error) => {
           console.log(error);

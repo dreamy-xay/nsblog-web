@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-05 10:41:38
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-23 14:07:41
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-08-23 16:42:33
 -->
 
 <template>
@@ -178,7 +178,7 @@ export default defineComponent({
       getMessages(4, 0, limit)
         .then((data) => {
           offset++;
-          attentionData.splice(0, 0, data.messages[0]);
+          attentionData.splice(0, 0, ...data.messages);
         })
         .catch((error) => {
           console.log(error);
