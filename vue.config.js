@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:25:41
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-21 14:20:15
+ * @LastEditTime: 2021-08-23 14:00:21
  */
 
 const path = require('path');
@@ -40,7 +40,7 @@ module.exports = {
       '/v1': {
         target: `${process.env.VUE_APP_APIHOST}:${process.env.VUE_APP_APIPORT}`,
         ws: true,
-        changOrigin: true,
+        changeOrigin: true,
         pathRewrite: {
           '^/v1': ''
         }

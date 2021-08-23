@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-28 13:11:57
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-23 13:06:17
+ * @LastEditTime: 2021-08-23 14:05:48
 -->
 <template>
 
@@ -131,10 +131,9 @@ export default defineComponent({
      * @author: Z_Y_C
      */
 
-    function changeColor(item, type) {
+    function changeColor(item) {
       router.push(`/message/${item.id}`); //改变路由
       messagetag.value = item.key;
-      updateMessageCount({ type, count: 0 });
     }
 
     //消息类型，更新未读消息数量
