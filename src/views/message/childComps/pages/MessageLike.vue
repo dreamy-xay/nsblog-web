@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:31:44
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-23 12:57:02
+ * @LastEditTime: 2021-08-23 14:08:35
 -->
 <template>
   <el-scrollbar max-height="calc(100vh - 108px)">
@@ -93,6 +93,9 @@ export default defineComponent({
     const { updateMessageCount } = mapMutations('message', ['updateMessageCount']);
     const { messageCount } = mapState('message', ['messageCount']); // 获取tokenInfo
 
+    // 进入计数清空
+    updateMessageCount({ type: 3, count: 0 });
+
     /**
      * @description: 改变日期格式
      * @param {String} date 日期
@@ -161,9 +164,9 @@ export default defineComponent({
      * @return {void}
      * @author: dreamy-xay
      */
-    function getSelfMessage() {
+    function getSelfMessage(limit = 1) {
       updateMessageCount({ type: 3, count: 0 });
-      getMessages(3, 0, 1)
+      getMessages(3, 0, limit)
         .then((data) => {
           offset++;
           likeData.splice(0, 0, data.messages[0]);
@@ -185,7 +188,7 @@ export default defineComponent({
     watch(
       () => route.path,
       (path) => {
-        if (messageCount.value[1] > 0 && new RegExp('/message/like').test(path)) getSelfMessage();
+        if (messageCount.value[1] > 0 && new RegExp('/message/like').test(path)) getSelfMessage(messageCount.value[1]);
       }
     );
 
