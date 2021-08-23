@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:34:31
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-23 12:59:08
+ * @LastEditTime: 2021-08-23 14:10:15
 -->
 <template>
   <el-scrollbar max-height="calc(100vh - 108px)">
@@ -66,6 +66,9 @@ export default defineComponent({
     const { updateMessageCount } = mapMutations('message', ['updateMessageCount']);
     const { messageCount } = mapState('message', ['messageCount']); // 获取tokenInfo
 
+    // 进入计数清空
+    updateMessageCount({ type: 1, count: 0 });
+
     /**
      * @description: element-ui无限滚动自动获取数据
      * @return {void}
@@ -123,9 +126,9 @@ export default defineComponent({
      * @return {void}
      * @author: dreamy-xay
      */
-    function getSelfMessage() {
+    function getSelfMessage(limit = 1) {
       updateMessageCount({ type: 1, count: 0 });
-      getMessages(1, 0, 1)
+      getMessages(1, 0, limit)
         .then((data) => {
           offset++;
           systemData.splice(0, 0, data.messages[0]);
@@ -147,7 +150,7 @@ export default defineComponent({
     watch(
       () => route.path,
       (path) => {
-        if (messageCount.value[3] > 0 && new RegExp('/message/reply').test(path)) getSelfMessage();
+        if (messageCount.value[3] > 0 && new RegExp('/message/reply').test(path)) getSelfMessage(messageCount.value[3]);
       }
     );
 
