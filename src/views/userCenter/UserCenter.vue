@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-18 21:26:17
  * @LastEditors: Ban
- * @LastEditTime: 2021-08-23 13:34:45
+ * @LastEditTime: 2021-08-23 13:35:52
 -->
 <template>
   <base-view
@@ -19,7 +19,6 @@
       <div class="center-right">
         <router-view />
       </div>
-
     </div>
 
   </base-view>
