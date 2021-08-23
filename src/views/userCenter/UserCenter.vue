@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-18 21:26:17
  * @LastEditors: Ban
- * @LastEditTime: 2021-08-19 16:04:09
+ * @LastEditTime: 2021-08-23 13:34:45
 -->
 <template>
   <base-view
@@ -16,8 +16,12 @@
       <div class="center-left">
         <user-center-menu></user-center-menu>
       </div>
+      <div class="center-right">
+        <router-view />
+      </div>
+
     </div>
-    <router-view />
+
   </base-view>
 </template>
 
@@ -56,6 +60,10 @@ export default defineComponent({
     .center-left {
       width: 200px;
       //background: wheat;
+    }
+
+    .center-right {
+      margin-left: 16px;
     }
   }
 }
