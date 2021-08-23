@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-05 10:41:38
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-19 21:16:56
+ * @LastEditTime: 2021-08-21 15:17:47
 -->
 
 <template>
@@ -59,7 +59,7 @@
         <div
           :class="item.content.attention ? 'message-attention-button1' : 'message-attention-button2'"
           role="button"
-          @click="cancelAttention(index)"
+          @click.stop="cancelAttention(index)"
         >
           <div v-text="item.content.attention ? '取消关注' : '互相关注'"></div>
         </div>
@@ -81,13 +81,15 @@
 
 </template>
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, reactive, watch } from 'vue';
 import MessageEmpty from '@/views/message/childComps/MessageEmpty.vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import { getMessages, deleteMessages } from '@/network/api/messages.ts';
 import { dateFormat } from '@/util/date.ts';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
+import { mapMutations, mapState } from '@/util/store';
 import { useMessage } from 'naive-ui';
+import { useRoute } from 'vue-router';
 
 /**
  * @description: message页面——关注我的
@@ -101,26 +103,11 @@ export default defineComponent({
     BaseModal,
     BaseAvatar,
   },
-  emits: ['add-data', 'delete-data', 'change-atteneion'],
-  props: {
-    attentionData: {
-      type: Array,
-      default: () => [],
-    },
-    replyData: {
-      type: Array,
-      default: () => [],
-    },
-    likeData: {
-      type: Array,
-      default: () => [],
-    },
-    systemData: {
-      type: Array,
-      default: () => [],
-    },
-  },
   setup(props, context) {
+    const route = useRoute();
+
+    const attentionData = reactive([]); // 关注我的界面数据
+
     const msg = useMessage(); // naive-ui mssage
 
     let offset = 0; // 偏移量
@@ -130,6 +117,10 @@ export default defineComponent({
     const modalShow = ref(false); // 是否显示n-modal
 
     const sureCancel = ref(0); // 记录取消关注下标
+
+    const { updateMessageCount } = mapMutations('message', ['updateMessageCount']);
+
+    const { messageCount } = mapState('message', ['messageCount']); // 获取tokenInfo
 
     /**
      * @description: 改变日期格式
@@ -155,7 +146,7 @@ export default defineComponent({
             deleteTag.value = false;
           }
           offset += data.messages.length;
-          context.emit('add-data', data);
+          attentionData.splice(attentionData.length, 0, ...data.messages);
         })
         .catch((error) => {
           console.log(error), msg.error('获取消息失败，请重试', { duration: 2000, closable: true });
@@ -170,10 +161,10 @@ export default defineComponent({
      */
 
     function deleteItem(index) {
-      deleteMessages(props.attentionData[index].message_id)
+      deleteMessages(attentionData[index].message_id)
         .then(() => {
-          context.emit('delete-data', index);
-          if (deleteTag.value && props.attentionData.length === 6) {
+          attentionData.splice(index, 1);
+          if (deleteTag.value && attentionData.length === 6) {
             getMessagesList();
           }
         })
@@ -181,6 +172,22 @@ export default defineComponent({
           console.log(error), msg.error('删除消息失败，请重试', { duration: 2000, closable: true });
         });
     }
+
+    //监听未读消息变化，得到未读消息
+    watch(
+      () => messageCount.value[2],
+      (value, oldValue) => {
+        if (value === oldValue + 1)
+          getMessages(4, 0, 1).then((data) => {
+            offset++;
+            attentionData.splice(0, 0, data.messages[0]);
+            if (route.path === '/message/attention')
+              setTimeout(() => {
+                updateMessageCount({ type: 4, count: 0 });
+              }, 1000);
+          });
+      }
+    );
 
     /**
      * @description: 跳转界面
@@ -201,8 +208,8 @@ export default defineComponent({
      */
 
     function cancelAttention(index) {
-      if (props.attentionData[index].content.attention === false) {
-        context.emit('change-atteneion', index);
+      if (attentionData[index].content.attention === false) {
+        attentionData[index].content.attention = true;
       } else {
         modalShow.value = !modalShow.value;
         sureCancel.value = index;
@@ -217,11 +224,12 @@ export default defineComponent({
 
     function sureCancelAttention() {
       modalShow.value = !modalShow.value;
-      context.emit('change-atteneion', sureCancel.value);
+      attentionData[sureCancel.value].content.attention = false;
     }
 
     return {
       modalShow,
+      attentionData,
       getMessagesList,
       deleteItem,
       getDate,

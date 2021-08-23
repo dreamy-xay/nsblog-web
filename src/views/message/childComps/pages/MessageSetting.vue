@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-28 13:02:11
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-19 21:33:07
+ * @LastEditTime: 2021-08-21 15:18:37
 -->
 <template>
   <div
@@ -47,25 +47,6 @@ import { useMessage } from 'naive-ui';
 
 export default defineComponent({
   name: 'messageSeting',
-  emits: ['add-data', 'delete-data', 'change-atteneion'],
-  props: {
-    replyData: {
-      type: Array,
-      default: () => [],
-    },
-    attentionData: {
-      type: Array,
-      default: () => [],
-    },
-    likeData: {
-      type: Array,
-      default: () => [],
-    },
-    systemData: {
-      type: Array,
-      default: () => [],
-    },
-  },
   setup() {
     const msg = useMessage(); // naive-ui mssage
 
@@ -136,7 +117,7 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function changeSetting(index) {
-      modifySetting(settingData[index].key).catch((error) => {
+      modifySetting({ name: settingData[index].key, value: settingData[index].value }).catch((error) => {
         console.log(error), msg.error('修改设置失败，请重试', { duration: 2000, closable: true });
       });
     }
@@ -178,6 +159,10 @@ $shadow2: $shadow-2;
       background-color: $green1;
       width: 10px;
       height: 10px;
+    }
+
+    &:hover {
+      border: 2px solid $green1;
     }
   }
 
