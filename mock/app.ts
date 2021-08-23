@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-09 17:58:32
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-22 17:01:10
+ * @LastEditTime: 2021-08-23 12:48:41
  */
 
 import { Application } from 'express';
@@ -17,6 +17,7 @@ import settingApi from './intercepter/setting';
 import attentionsApi from './intercepter/attentions';
 import messagesApi from './intercepter/messages';
 import dialoguesApi from './intercepter/dialogues';
+import topicsApi from './intercepter/topics';
 
 // 拦截请求api
 const BASE_URL: string =
@@ -39,4 +40,5 @@ export default function intercepter(app: Application): void {
   attentionsApi(BASE_URL, app);
   messagesApi(BASE_URL, app);
   dialoguesApi(BASE_URL, app);
+  topicsApi(BASE_URL, app);
 }

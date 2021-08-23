@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-07-28 13:11:57
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-21 15:35:10
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-08-23 12:24:55
 -->
 <template>
 
@@ -49,7 +49,7 @@ import { defineComponent, ref, watch, computed } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import MessageMenu from '@/views/message/childComps/MessageMenu.vue';
 import MessageTop from '@/views/message/childComps/MessageTop.vue';
-import { mapGetters, mapState, mapActions, mapMutations } from '@/util/store';
+import { mapState, mapActions, mapMutations } from '@/util/store';
 import store from '@/store';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -69,26 +69,25 @@ export default defineComponent({
     if (store.getters['global/isLogin']) next();
     else next({ name: 'signIn' });
   },
-  setup(props, context) {
+  setup() {
     const router = useRouter();
     const route = useRoute();
-    const { online, notice } = mapActions('message', ['notice', 'online']);
-    const { isLogin } = mapGetters('global', ['isLogin']);
+    const { online, offline, notice } = mapActions('message', ['notice', 'online', 'offline']);
     const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
+    const username = tokenInfo.value.username; // 登录用户名
     const { updateMessageCount } = mapMutations('message', ['updateMessageCount']);
 
     // 用户上线了
-    if (isLogin.value)
-      setTimeout(() => {
-        online(tokenInfo.value.username);
-      }, 3000);
-    else router.push('/');
+    online(username);
 
     //监听在线状态
     watch(
-      () => isLogin.value,
-      () => {
-        if (!isLogin.value) router.push('/');
+      () => tokenInfo.value.status,
+      (value) => {
+        if (!value) {
+          offline('username'); // 下线
+          router.push('/');
+        }
       }
     );
 
@@ -127,20 +126,20 @@ export default defineComponent({
     /**
      * @description:改变路由，传递数据（页面名称）到父组件
      * @param {Object} item 路由名称（item.id）和页面名称（item.key）
-     * @param {Nmber} index 未读消息条数（只有5个）`默认为6`
+     * @param {Nmber} index 未读消息条数（只有5个）`必传参数`
      * @return {void}
      * @author: Z_Y_C
      */
 
-    function changeColor(item, type = 6) {
+    function changeColor(item, type) {
       router.push(`/message/${item.id}`); //改变路由
       messagetag.value = item.key;
-      updateMessageCount({ type: type, count: 0 });
+      updateMessageCount({ type, count: 0 });
     }
 
     //消息类型，更新未读消息数量
     notice((type) => {
-      updateMessageCount({ type: type });
+      updateMessageCount({ type });
     });
 
     return {

@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-05 10:41:38
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-21 15:17:47
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-08-23 12:27:23
 -->
 
 <template>
@@ -84,10 +84,10 @@
 import { defineComponent, ref, reactive, watch } from 'vue';
 import MessageEmpty from '@/views/message/childComps/MessageEmpty.vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
-import { getMessages, deleteMessages } from '@/network/api/messages.ts';
+import { getMessages, deleteMessages } from '@/network/api/messages';
 import { dateFormat } from '@/util/date.ts';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
-import { mapMutations, mapState } from '@/util/store';
+import { mapState } from '@/util/store';
 import { useMessage } from 'naive-ui';
 import { useRoute } from 'vue-router';
 
@@ -103,23 +103,14 @@ export default defineComponent({
     BaseModal,
     BaseAvatar,
   },
-  setup(props, context) {
+  setup() {
     const route = useRoute();
-
     const attentionData = reactive([]); // 关注我的界面数据
-
     const msg = useMessage(); // naive-ui mssage
-
     let offset = 0; // 偏移量
-
     const deleteTag = ref(true); // 判断数据是否全部加载的标志
-
     const modalShow = ref(false); // 是否显示n-modal
-
     const sureCancel = ref(0); // 记录取消关注下标
-
-    const { updateMessageCount } = mapMutations('message', ['updateMessageCount']);
-
     const { messageCount } = mapState('message', ['messageCount']); // 获取tokenInfo
 
     /**
@@ -173,19 +164,35 @@ export default defineComponent({
         });
     }
 
+    /**
+     * @description: 获取自己类型的消息
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function getSelfMessage() {
+      getMessages(4, 0, 1)
+        .then((data) => {
+          offset++;
+          attentionData.splice(0, 0, data.messages[0]);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
     //监听未读消息变化，得到未读消息
     watch(
       () => messageCount.value[2],
       (value, oldValue) => {
-        if (value === oldValue + 1)
-          getMessages(4, 0, 1).then((data) => {
-            offset++;
-            attentionData.splice(0, 0, data.messages[0]);
-            if (route.path === '/message/attention')
-              setTimeout(() => {
-                updateMessageCount({ type: 4, count: 0 });
-              }, 1000);
-          });
+        if (value === oldValue + 1 && new RegExp('/message/attention').test(route.path)) getSelfMessage();
+      }
+    );
+
+    // 监听路由变化更新数据
+    watch(
+      () => route.path,
+      (path) => {
+        if (messageCount.value[2] > 0 && new RegExp('/message/attention').test(path)) getSelfMessage();
       }
     );
 

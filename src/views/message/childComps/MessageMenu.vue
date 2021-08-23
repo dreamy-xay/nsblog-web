@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 22:48:57
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-21 15:20:05
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-08-23 12:21:30
 -->
 <template>
   <div class="message-left">
@@ -22,7 +22,7 @@
       :key="item.id"
       class="message-left-title2"
       :class="messagetag === item.key ? 'message-left-title-color' : ''"
-      @click="changeColor(item,judgeType(index))"
+      @click="changeColor(item, judgeType(index))"
       role="button"
     >
       <i
@@ -60,7 +60,7 @@
 
 <script>
 import { defineComponent } from 'vue';
-import { getMessages } from '@/network/api/messages.ts';
+import { getMessages } from '@/network/api/messages';
 import { useMessage } from 'naive-ui';
 import { mapState, mapMutations } from '@/util/store';
 import styles from '@/assets/style/define.scss';
@@ -131,7 +131,7 @@ export default defineComponent({
     /**
      * @description: 根据页面名称判断数据类型
      * @param {Number} index 页面名称下标
-     * @return {*}
+     * @return {void}
      * @author: Z_Y_C
      */
     function judgeType(index) {

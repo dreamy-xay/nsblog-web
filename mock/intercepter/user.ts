@@ -4,16 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:15:05
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-21 17:10:23
+ * @LastEditTime: 2021-08-23 12:37:07
  */
 import { Random } from 'better-mock';
 import { Application, Request, Response } from 'express';
 import select, { DataBaseOperator } from '../data/index';
-import { clearToken, decrypt, getToken, verifyToken } from './util';
-
-function int(value: unknown): number {
-  return parseInt(value as string);
-}
+import { clearToken, int } from './util';
 
 export default function(baseUrl: string, app: Application) {
   // 注册新用户

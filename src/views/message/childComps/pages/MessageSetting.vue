@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-07-28 13:02:11
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-21 15:18:37
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-08-23 12:20:03
 -->
 <template>
   <div
@@ -37,7 +37,7 @@
 
 <script>
 import { computed, defineComponent, reactive } from 'vue';
-import { getMessageSetting, modifySetting } from '@/network/api/setting.ts';
+import { getMessageSetting, modifySetting } from '@/network/api/setting';
 import { useMessage } from 'naive-ui';
 
 /**

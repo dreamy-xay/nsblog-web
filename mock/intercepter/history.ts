@@ -4,16 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 10:01:23
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-21 17:02:52
+ * @LastEditTime: 2021-08-23 12:34:28
  */
 
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { verifyToken, getToken, randomUsers, RandomUser } from './util';
-
-function int(value: unknown): number {
-  return parseInt(value as string);
-}
+import { verifyToken, getToken, randomUsers, RandomUser, int } from './util';
 
 export default function(baseUrl: string, app: Application) {
   // 获取历史记录

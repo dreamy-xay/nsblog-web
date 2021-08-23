@@ -4,17 +4,13 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-017 11:59:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-21 17:28:52
+ * @LastEditTime: 2021-08-23 12:34:09
  */
 
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { getToken, RandomUser, randomUsers, verifyToken } from './util';
+import { getToken, RandomUser, randomUsers, verifyToken, int } from './util';
 import select from '../data/index';
-
-function int(value: unknown): number {
-  return parseInt(value as string);
-}
 
 export default function(baseUrl: string, app: Application) {
   // 获取对话消息和记录

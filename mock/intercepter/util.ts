@@ -4,13 +4,23 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-28 00:28:11
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-21 16:58:56
+ * @LastEditTime: 2021-08-23 12:33:35
  */
 
 import { Base64 } from 'js-base64';
 import { Random } from 'better-mock';
 import select, { DataBaseOperator } from '../data/index';
 import * as CryptoJS from 'crypto-js';
+
+/**
+ * @description: 强转成number类型
+ * @param {unknown} value 强转值 `必传参数`
+ * @return {number} 返回number
+ * @author: dreamy-xay
+ */
+export function int(value: unknown): number {
+  return parseInt(value as string);
+}
 
 /**
  * @description: 获取headers token，以及token的信息
