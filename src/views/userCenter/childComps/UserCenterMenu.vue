@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-19 11:55:18
  * @LastEditors: Ban
- * @LastEditTime: 2021-08-23 13:31:48
+ * @LastEditTime: 2021-08-23 13:59:57
 -->
 <template>
   <div class="user-center-menu">
@@ -57,12 +57,12 @@
         v-for="item in text3"
         :key="item.title"
         :href="item.url"
+        :style="item.title === '内容管理' ?{'margin' : '0'} : ''"
       >
         <div class="icon">
           <i
             :class="item.iconfont"
             class="iconfont"
-            :style="item.iconfont === 'blog-shoucang' ?{'font-size' : '12px'} : ''"
           ></i>
         </div>
         <div class="text">{{ item.title }} </div>
@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, computed } from 'vue';
 import { useRoute } from 'vue-router';
 
 /**
@@ -85,52 +85,58 @@ import { useRoute } from 'vue-router';
 export default defineComponent({
   name: 'userCenterMenu',
   setup() {
-    const text1 = [
-      {
-        iconfont: 'blog-shoucang',
-        title: '我的收藏',
-        url: '/usercenter/collection',
-      },
-      {
-        iconfont: 'blog-index-0-copy',
-        title: '个人首页',
-        url: '/user',
-      },
-      {
-        iconfont: 'blog-lishijilu',
-        title: '历史记录',
-        url: '/history',
-      },
-    ];
-    const text2 = [
-      {
-        iconfont: 'blog-gerenziliao',
-        title: '个人资料',
-        url: '/usercenter/profile',
-      },
-      {
-        iconfont: 'blog-yinsishezhi',
-        title: '隐私设置',
-        url: '/usercenter/setting',
-      },
-      {
-        iconfont: 'blog-zhanghaoanquan1',
-        title: '帐号安全',
-        url: '/usercenter/account',
-      },
-    ];
-    const text3 = [
-      {
-        iconfont: 'blog-wenzhang',
-        title: '博客主页',
-        url: '',
-      },
-      {
-        iconfont: 'blog-neirongguanli',
-        title: '内容管理',
-        url: '',
-      },
-    ];
+    const text1 = computed(() => {
+      return [
+        {
+          iconfont: 'blog-shoucang',
+          title: '我的收藏',
+          url: '/usercenter/collection',
+        },
+        {
+          iconfont: 'blog-index-0-copy',
+          title: '个人首页',
+          url: '/user',
+        },
+        {
+          iconfont: 'blog-lishijilu',
+          title: '历史记录',
+          url: '/history',
+        },
+      ];
+    });
+    const text2 = computed(() => {
+      return [
+        {
+          iconfont: 'blog-gerenziliao',
+          title: '个人资料',
+          url: '/usercenter/profile',
+        },
+        {
+          iconfont: 'blog-yinsishezhi',
+          title: '隐私设置',
+          url: '/usercenter/setting',
+        },
+        {
+          iconfont: 'blog-zhanghaoanquan1',
+          title: '帐号安全',
+          url: '/usercenter/account',
+        },
+      ];
+    });
+    const text3 = computed(() => {
+      return [
+        {
+          iconfont: 'blog-wenzhang',
+          title: '博客主页',
+          url: '',
+        },
+        {
+          iconfont: 'blog-neirongguanli',
+          title: '内容管理',
+          url: '',
+        },
+      ];
+    });
     const route = useRoute().path.split('/'); //当前路径
     const routeLenght = route.length;
     //匹配路径
