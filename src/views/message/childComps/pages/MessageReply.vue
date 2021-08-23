@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:25:27
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-23 12:29:07
+ * @LastEditTime: 2021-08-23 12:58:27
 -->
 
 <template>
@@ -99,7 +99,7 @@ import MessageEmpty from '@/views/message/childComps/MessageEmpty.vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import { getMessages, deleteMessages } from '@/network/api/messages';
 import { dateFormat } from '@/util/date.ts';
-import { mapState } from '@/util/store';
+import { mapMutations, mapState } from '@/util/store';
 import { useMessage } from 'naive-ui';
 import { useRoute } from 'vue-router';
 
@@ -120,6 +120,7 @@ export default defineComponent({
     let offset = 0; // 偏移量
     const deleteTag = ref(true); // 判断数据是否全部加载的标志
     const replyData = reactive([]); // 回复我的界面数据
+    const { updateMessageCount } = mapMutations('message', ['updateMessageCount']);
     const { messageCount } = mapState('message', ['messageCount']); // 获取tokenInfo
 
     /**
@@ -191,6 +192,7 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function getSelfMessage() {
+      updateMessageCount({ type: 2, count: 0 });
       getMessages(2, 0, 1)
         .then((data) => {
           offset++;

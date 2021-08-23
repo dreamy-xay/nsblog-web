@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:31:44
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-23 12:27:34
+ * @LastEditTime: 2021-08-23 12:57:02
 -->
 <template>
   <el-scrollbar max-height="calc(100vh - 108px)">
@@ -69,7 +69,7 @@ import MessageEmpty from '@/views/message/childComps/MessageEmpty.vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import { getMessages, deleteMessages } from '@/network/api/messages';
 import { dateFormat } from '@/util/date.ts';
-import { mapState } from '@/util/store';
+import { mapMutations, mapState } from '@/util/store';
 import { useMessage } from 'naive-ui';
 import { useRoute } from 'vue-router';
 
@@ -90,6 +90,7 @@ export default defineComponent({
     let offset = 0; // 偏移量
     const deleteTag = ref(true); // 判断数据是否全部加载的标志
     const likeData = reactive([]); // 收到的赞界面数据
+    const { updateMessageCount } = mapMutations('message', ['updateMessageCount']);
     const { messageCount } = mapState('message', ['messageCount']); // 获取tokenInfo
 
     /**
@@ -161,6 +162,7 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function getSelfMessage() {
+      updateMessageCount({ type: 3, count: 0 });
       getMessages(3, 0, 1)
         .then((data) => {
           offset++;

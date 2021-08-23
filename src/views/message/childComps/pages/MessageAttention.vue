@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-05 10:41:38
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-23 12:27:23
+ * @LastEditTime: 2021-08-23 12:54:59
 -->
 
 <template>
@@ -87,7 +87,7 @@ import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import { getMessages, deleteMessages } from '@/network/api/messages';
 import { dateFormat } from '@/util/date.ts';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
-import { mapState } from '@/util/store';
+import { mapMutations, mapState } from '@/util/store';
 import { useMessage } from 'naive-ui';
 import { useRoute } from 'vue-router';
 
@@ -111,6 +111,7 @@ export default defineComponent({
     const deleteTag = ref(true); // 判断数据是否全部加载的标志
     const modalShow = ref(false); // 是否显示n-modal
     const sureCancel = ref(0); // 记录取消关注下标
+    const { updateMessageCount } = mapMutations('message', ['updateMessageCount']);
     const { messageCount } = mapState('message', ['messageCount']); // 获取tokenInfo
 
     /**
@@ -170,6 +171,7 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function getSelfMessage() {
+      updateMessageCount({ type: 4, count: 0 });
       getMessages(4, 0, 1)
         .then((data) => {
           offset++;
