@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 22:48:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-17 21:16:25
+ * @LastEditTime: 2021-08-21 15:20:05
 -->
 <template>
   <div class="message-left">
@@ -22,7 +22,7 @@
       :key="item.id"
       class="message-left-title2"
       :class="messagetag === item.key ? 'message-left-title-color' : ''"
-      @click="changeColor(item,index)"
+      @click="changeColor(item,judgeType(index))"
       role="button"
     >
       <i
@@ -32,9 +32,9 @@
       <span class="message-left-title2-text">{{item.key}}</span>
 
       <n-badge
-        :value="menuData[index]"
+        :value="messageCount[index]"
         :max="99"
-        v-if="menuData[index]>0"
+        v-if="messageCount[index]>0"
         :color="styles.pink0"
       />
 
@@ -60,6 +60,9 @@
 
 <script>
 import { defineComponent } from 'vue';
+import { getMessages } from '@/network/api/messages.ts';
+import { useMessage } from 'naive-ui';
+import { mapState, mapMutations } from '@/util/store';
 import styles from '@/assets/style/define.scss';
 
 /**
@@ -91,13 +94,59 @@ export default defineComponent({
       type: Function,
       default: null,
     },
-    menuData: {
-      type: Array,
-      default: () => [],
-    },
   },
   setup(props, context) {
-    return { styles };
+    const msg = useMessage(); // naive-ui mssage
+
+    const { messageCount } = mapState('message', ['messageCount']); // 获取tokenInfo
+
+    const { updateMessageCount } = mapMutations('message', ['updateMessageCount']);
+    /**
+     * @description: 得到未读消息之后查看路由，所在路由界面消息置为0
+     * @return {void}
+     * @author: Z_Y_C
+     */
+
+    getMessages()
+      .then((data) => {
+        updateMessageCount({ type: 2, count: data.count[0] });
+        updateMessageCount({ type: 3, count: data.count[1] });
+        updateMessageCount({ type: 4, count: data.count[2] });
+        updateMessageCount({ type: 1, count: data.count[3] });
+        updateMessageCount({ type: 5, count: data.count[4] });
+
+        for (let i = 0; i < 5; i++) {
+          if (props.menus[i].key === props.messagetag) {
+            setTimeout(() => {
+              // 延迟1s消失
+              updateMessageCount({ type: judgeType(i), count: 0 });
+            }, 1000);
+          }
+        }
+      })
+      .catch((error) => {
+        console.log(error), msg.error('获取未读消息条数，请重试', { duration: 2000, closable: true });
+      });
+
+    /**
+     * @description: 根据页面名称判断数据类型
+     * @param {Number} index 页面名称下标
+     * @return {*}
+     * @author: Z_Y_C
+     */
+    function judgeType(index) {
+      if (index === 0) return 2;
+      else if (index === 1) return 3;
+      else if (index === 2) return 4;
+      else if (index === 3) return 1;
+      else if (index === 4) return 5;
+    }
+
+    return {
+      styles,
+      messageCount,
+      judgeType,
+    };
   },
 });
 </script>

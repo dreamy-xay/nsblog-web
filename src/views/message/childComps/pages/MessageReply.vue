@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:25:27
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-19 21:18:02
+ * @LastEditTime: 2021-08-21 15:18:25
 -->
 
 <template>
@@ -94,12 +94,14 @@
 
 </template>
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, reactive, watch } from 'vue';
 import MessageEmpty from '@/views/message/childComps/MessageEmpty.vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import { getMessages, deleteMessages } from '@/network/api/messages.ts';
 import { dateFormat } from '@/util/date.ts';
+import { mapMutations, mapState } from '@/util/store';
 import { useMessage } from 'naive-ui';
+import { useRoute } from 'vue-router';
 
 /**
  * @description: 回复我的页面
@@ -112,32 +114,20 @@ export default defineComponent({
     MessageEmpty,
     BaseAvatar,
   },
-  emits: ['add-data', 'delete-data', 'change-atteneion'],
-
-  props: {
-    replyData: {
-      type: Array,
-      default: () => [],
-    },
-    attentionData: {
-      type: Array,
-      default: () => [],
-    },
-    likeData: {
-      type: Array,
-      default: () => [],
-    },
-    systemData: {
-      type: Array,
-      default: () => [],
-    },
-  },
   setup(props, context) {
+    const route = useRoute();
+
     const msg = useMessage(); // naive-ui mssage
 
     let offset = 0; // 偏移量
 
     const deleteTag = ref(true); // 判断数据是否全部加载的标志
+
+    const replyData = reactive([]); // 回复我的界面数据
+
+    const { updateMessageCount } = mapMutations('message', ['updateMessageCount']);
+
+    const { messageCount } = mapState('message', ['messageCount']); // 获取tokenInfo
 
     /**
      * @description: 改变日期格式
@@ -164,7 +154,7 @@ export default defineComponent({
             deleteTag.value = false;
           }
           offset += data.messages.length;
-          context.emit('add-data', data);
+          replyData.splice(replyData.length, 0, ...data.messages);
         })
         .catch((error) => {
           console.log(error), msg.error('获取消息失败，请重试', { duration: 2000, closable: true });
@@ -179,10 +169,10 @@ export default defineComponent({
      */
 
     function deleteItem(index) {
-      deleteMessages(props.replyData[index].message_id)
+      deleteMessages(replyData[index].message_id)
         .then(() => {
-          context.emit('delete-data', index);
-          if (deleteTag.value && props.replyData.length === 6) {
+          replyData.splice(index, 1);
+          if (deleteTag.value && replyData.length === 6) {
             getMessagesList();
           }
         })
@@ -202,7 +192,24 @@ export default defineComponent({
       window.open(path, path);
     }
 
+    //监听未读消息变化，得到未读消息
+    watch(
+      () => messageCount.value[0],
+      (value, oldValue) => {
+        if (value === oldValue + 1)
+          getMessages(2, 0, 1).then((data) => {
+            offset++;
+            replyData.splice(0, 0, data.messages[0]);
+            if (route.path === '/message/reply')
+              setTimeout(() => {
+                updateMessageCount({ type: 2, count: 0 });
+              }, 1000);
+          });
+      }
+    );
+
     return {
+      replyData,
       getMessagesList,
       deleteItem,
       getDate,
