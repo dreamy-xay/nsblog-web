@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:25:27
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-23 14:09:04
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-08-23 16:42:10
 -->
 
 <template>
@@ -199,7 +199,7 @@ export default defineComponent({
       getMessages(2, 0, limit)
         .then((data) => {
           offset++;
-          replyData.splice(0, 0, data.messages[0]);
+          replyData.splice(0, 0, ...data.messages);
         })
         .catch((error) => {
           console.log(error);
