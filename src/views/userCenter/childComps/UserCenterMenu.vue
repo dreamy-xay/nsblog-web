@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-19 11:55:18
  * @LastEditors: Ban
- * @LastEditTime: 2021-08-19 20:41:37
+ * @LastEditTime: 2021-08-23 13:31:48
 -->
 <template>
   <div class="user-center-menu">
@@ -89,7 +89,7 @@ export default defineComponent({
       {
         iconfont: 'blog-shoucang',
         title: '我的收藏',
-        url: '/user/collection',
+        url: '/usercenter/collection',
       },
       {
         iconfont: 'blog-index-0-copy',
@@ -106,17 +106,17 @@ export default defineComponent({
       {
         iconfont: 'blog-gerenziliao',
         title: '个人资料',
-        url: '/user/profile',
+        url: '/usercenter/profile',
       },
       {
         iconfont: 'blog-yinsishezhi',
         title: '隐私设置',
-        url: '/user/setting',
+        url: '/usercenter/setting',
       },
       {
         iconfont: 'blog-zhanghaoanquan1',
         title: '帐号安全',
-        url: '/user/account',
+        url: '/usercenter/account',
       },
     ];
     const text3 = [
