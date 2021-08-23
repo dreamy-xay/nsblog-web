@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-10 21:44:12
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-21 14:24:44
+ * @LastEditTime: 2021-08-23 13:55:50
  */
 import { Random } from 'better-mock';
 import { Server } from 'http';
@@ -62,9 +62,7 @@ export default (server: Server) => {
   const io = new socketIo.Server(server, {
     path: `${process.env.VUE_APP_APIROUTER}/socket/messages`,
     cors: {
-      origin: '*',
-      allowedHeaders: '*',
-      methods: '*'
+      origin: '*'
     }
   });
 

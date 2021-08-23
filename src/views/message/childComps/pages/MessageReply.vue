@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:25:27
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-23 12:58:27
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-08-23 16:42:10
 -->
 
 <template>
@@ -123,6 +123,9 @@ export default defineComponent({
     const { updateMessageCount } = mapMutations('message', ['updateMessageCount']);
     const { messageCount } = mapState('message', ['messageCount']); // 获取tokenInfo
 
+    // 进入计数清空
+    updateMessageCount({ type: 2, count: 0 });
+
     /**
      * @description: 改变日期格式
      * @param {String} date 日期
@@ -191,12 +194,12 @@ export default defineComponent({
      * @return {void}
      * @author: dreamy-xay
      */
-    function getSelfMessage() {
+    function getSelfMessage(limit = 1) {
       updateMessageCount({ type: 2, count: 0 });
-      getMessages(2, 0, 1)
+      getMessages(2, 0, limit)
         .then((data) => {
           offset++;
-          replyData.splice(0, 0, data.messages[0]);
+          replyData.splice(0, 0, ...data.messages);
         })
         .catch((error) => {
           console.log(error);
@@ -215,7 +218,7 @@ export default defineComponent({
     watch(
       () => route.path,
       (path) => {
-        if (messageCount.value[0] > 0 && new RegExp('/message/reply').test(path)) getSelfMessage();
+        if (messageCount.value[0] > 0 && new RegExp('/message/reply').test(path)) getSelfMessage(messageCount.value[0]);
       }
     );
 
