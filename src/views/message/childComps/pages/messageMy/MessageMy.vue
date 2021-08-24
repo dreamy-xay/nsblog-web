@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 12:49:53
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-24 20:21:38
+ * @LastEditTime: 2021-08-24 22:51:56
 -->
 
 <template>
@@ -213,11 +213,15 @@ export default defineComponent({
       if (dialogueIndex >= 0) {
         offset.set(username, offset.get(username) + 1);
         ++dialogues[dialogueIndex].count;
-        dialogues[dialogueIndex].records.splice(dialogues[dialogueIndex].records.length, 0, {
+        const data = {
           content,
           time,
           is_me: false,
-        });
+        };
+        dialogues[dialogueIndex].records.splice(dialogues[dialogueIndex].records.length, 0, data);
+        // 如果当前索引是已经激活索引，需更新激活数据
+        if (dialogueIndex === firendListRef.value.activeIndex)
+          activeDialogueData.records.splice(activeDialogueData.records.length, 0, data);
       } else {
         offset.set(username, 1);
         dialogues.splice(0, 0, {

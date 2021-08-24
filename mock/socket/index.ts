@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-10 21:44:12
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-23 13:55:50
+ * @LastEditTime: 2021-08-24 23:14:01
  */
 import { Random } from 'better-mock';
 import { Server } from 'http';
@@ -62,7 +62,8 @@ export default (server: Server) => {
   const io = new socketIo.Server(server, {
     path: `${process.env.VUE_APP_APIROUTER}/socket/messages`,
     cors: {
-      origin: '*'
+      origin: '*',
+      allowedHeaders: '*'
     }
   });
 
@@ -77,15 +78,17 @@ export default (server: Server) => {
       console.log('--------在线人数：', onlineUsers.count());
       console.log('--------', onlineUsers.getUsers());
 
-      socket.on('sendMessage', (content: string, to: string, from: string) => {
-        if (from === username && from !== to && onlineUsers.hasUser(to))
+      socket.on('sendMessage', (content: string, to: string, time: string, from: string) => {
+        if (from === username && from !== to && onlineUsers.hasUser(to)) {
+          console.log(typeof content, typeof 'sss');
           onlineUsers.emit(to, 'receiveMessage', {
             username: from,
             nickname: Random.natural(0, 1000000) % 2 ? Random.cword(2, 4) : Random.word(4, 8),
             avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', from.slice(0, 4)),
             content,
-            time: Random.now()
+            time
           });
+        }
       });
 
       function offline() {
