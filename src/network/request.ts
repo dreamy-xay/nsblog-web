@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-19 16:45:18
+ * @LastEditTime: 2021-08-24 11:50:15
  */
 
 import axios, { AxiosRequestConfig } from 'axios';
@@ -154,5 +154,23 @@ export function put(options: RequestConfig): Promise<unknown> {
   return request({
     ...options,
     method: 'PUT'
+  });
+}
+
+/**
+ * @description: 上传文件 upload 请求
+ * @param {RequestConfig} options axios参数(请参考AxiosRequestConfig，附加参数参考RequestConfig)，携带文件时采用，请传入data参数
+ * @return {Promise<unknown>} 返回请求后的Promise
+ * @author: dreamy-xay
+ */
+export function upload(options: RequestConfig): Promise<unknown> {
+  const data: FormData = new FormData();
+  if (options.data) for (const key in options.data) data.append(key, options.data[key]);
+  options.data = data;
+
+  if (options['headers']) delete options['headers'];
+  return post({
+    ...options,
+    headers: { 'Content-Type': 'multipart/form-data' }
   });
 }
