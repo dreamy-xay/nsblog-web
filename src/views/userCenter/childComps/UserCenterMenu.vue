@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-19 11:55:18
  * @LastEditors: Ban
- * @LastEditTime: 2021-08-23 13:59:57
+ * @LastEditTime: 2021-08-24 21:13:21
 -->
 <template>
   <div class="user-center-menu">
@@ -30,7 +30,7 @@
         <div class="text">{{ item.title }} </div>
         <i
           class="iconfont blog-fenxiang1"
-          v-if="item.url !== '/user/collection'"
+          v-if="item.url !== '/usercenter/collection'"
         ></i>
       </a>
     </div>
@@ -137,6 +137,7 @@ export default defineComponent({
         },
       ];
     });
+
     const route = useRoute().path.split('/'); //当前路径
     const routeLenght = route.length;
     //匹配路径
@@ -163,6 +164,7 @@ export default defineComponent({
   background: $grey-0;
   box-shadow: $shadow-0;
   border-radius: $border-radius-0;
+  font-size: 16px;
 
   .user-center-menu-head {
     margin-bottom: 40px;
@@ -182,7 +184,7 @@ export default defineComponent({
     display: block;
     margin: 30px 0;
     color: $grey-7;
-    transition: 0.25s;
+    // transition: 0.25s;
 
     &:hover {
       color: $green-0;
