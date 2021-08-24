@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-19 16:18:23
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-21 17:18:38
+ * @LastEditTime: 2021-08-24 20:23:42
 -->
 <template>
   <div class="dialogue-record">
@@ -195,7 +195,7 @@ export default defineComponent({
 
         .inner-content {
           margin: 0 14px;
-          max-width: calc(90% - 76px);
+          max-width: calc(80% - 76px);
           background-color: $grey-0;
           box-shadow: 0 0 4px rgba(0, 0, 0, 0.16);
           box-sizing: border-box;
@@ -205,6 +205,7 @@ export default defineComponent({
           position: relative;
           border-radius: 6px;
           float: left;
+          @include word-break;
 
           &::before {
             content: '';
@@ -231,5 +232,16 @@ export default defineComponent({
       }
     }
   }
+}
+</style>
+
+<style lang="scss">
+.dialogue-record .dialogue-record-inner .dialogue-record-item .inner-content img {
+  width: auto;
+  height: auto;
+  max-width: 300px;
+  max-height: 100%;
+  display: block;
+  margin: 0 -10px;
 }
 </style>

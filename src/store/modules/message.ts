@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-11 11:45:25
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-21 15:07:42
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-08-24 20:09:51
  */
 
 import { StoreOptions, ActionContext } from 'vuex';
@@ -32,9 +32,8 @@ const messageStore: StoreOptions<unknown> = {
   },
   actions: {
     // 对话发消息
-    sendMessage(context: ActionContext<unknown, unknown>, options: { to: string; content: string }) {
-      console.log(context.rootState);
-      socket.emit('sendMessage', options.content, options.to, (context.rootState as any)['global/tokenInfo'].username);
+    sendMessage(context: ActionContext<unknown, unknown>, options: { to: string; content: string; time: string }) {
+      socket.emit('sendMessage', options.content, options.to, (context.rootState as any).global.tokenInfo.username);
     },
     // 对话接收消息
     receiveMessage(

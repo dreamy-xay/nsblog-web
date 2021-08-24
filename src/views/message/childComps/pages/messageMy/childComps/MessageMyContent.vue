@@ -4,19 +4,19 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 17:21:32
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-20 22:32:34
+ * @LastEditTime: 2021-08-24 18:56:17
 -->
 <template>
   <div class="message-my-content">
     <div
       class="message-my-content-head"
-      v-if="name"
+      v-show="name"
     >
       {{name}}
     </div>
     <div
       class="message-my-content-body"
-      v-if="name"
+      v-show="name"
     >
       <div class="record">
         <dialogue-record
@@ -25,12 +25,12 @@
         />
       </div>
       <div class="edit">
-        <dialogue-edit />
+        <dialogue-edit @submit="editSubmit" />
       </div>
     </div>
     <div
       class="message-my-content-no-message"
-      v-else
+      v-show="!name"
     >
       <base-svg
         svg="no-message"
@@ -52,6 +52,9 @@ import styles from '@/assets/style/define.scss';
 
 /**
  * @description: 我的消息内容
+ * @param {Object} data 传递的消息数据 `必传参数`
+ * @event recordToTop 对话记录滚动到最顶部加载数据 () => {}
+ * @event editSubmit 输入内容发送递交 (data) => {}
  * @author: dreamy-xay
  */
 
@@ -83,10 +86,22 @@ export default defineComponent({
       context.emit('recordToTop');
     }
 
+    /**
+     * @description: 输入内容发送递交
+     * @param {any} data 递交的数据 `必传参数`
+     * @param {boolean} hasImage 是否上传图片 `必传参数`
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function editSubmit(data, hasImage) {
+      context.emit('editSubmit', data, hasImage);
+    }
+
     return {
       styles,
       name,
       recordToTop,
+      editSubmit,
     };
   },
 });
