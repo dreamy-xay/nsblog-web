@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 16:13:51
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-18 20:33:27
+ * @LastEditTime: 2021-08-24 17:08:51
  */
 
 import { debounce, throttle } from 'lodash';
@@ -19,6 +19,7 @@ export default (app: App): void => {
         if (el.contains(e.target)) {
           return false;
         }
+
         binding.value(e);
       };
       document.addEventListener('click', el.__vueClickOutside__, true);

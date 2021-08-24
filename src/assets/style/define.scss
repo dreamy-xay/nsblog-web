@@ -106,3 +106,8 @@ $border-radius-1: 4px;
     align-items: $align-items;
     flex-direction: $flex-direction;
 }
+
+@mixin word-break {
+    word-break: break-all;
+    word-wrap: break-word;
+}

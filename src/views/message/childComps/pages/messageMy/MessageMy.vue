@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 12:49:53
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-21 17:32:43
+ * @LastEditTime: 2021-08-24 20:21:38
 -->
 
 <template>
@@ -21,6 +21,7 @@
     <message-my-content
       :data="activeDialogueData"
       @recordToTop="recordToTop"
+      @editSubmit="editSubmit"
     />
     <base-modal
       content="删除就没有咯(⊙o⊙)"
@@ -39,9 +40,10 @@ import MessageMyContent from '@/views/message/childComps/pages/messageMy/childCo
 import MessageEmpty from '@/views/message/childComps/MessageEmpty.vue';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 import { getDialogue, deleteDialogue, clearDialogue } from '@/network/api/dialogues';
-import { mapGetters, mapActions } from '@/util/store';
+import { mapGetters, mapActions, mapMutations } from '@/util/store';
 import { useMessage } from 'naive-ui';
 import events from '@/events';
+import { dateFormat } from '@/util/date';
 
 /**
  * @description: 我的消息页面
@@ -60,6 +62,10 @@ export default defineComponent({
     const msg = useMessage(); // naivue-ui message
     const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
     const dialogues = reactive([]); // 所有对话记录
+    const { updateMessageCount } = mapMutations('message', ['updateMessageCount']); // 更新消息数量
+
+    // 进入初始化消息数量
+    updateMessageCount({ type: 5, count: 0 });
 
     // 我的消息列表
     const friendList = computed(() => {
@@ -194,7 +200,7 @@ export default defineComponent({
         });
     }
 
-    const { receiveMessage } = mapActions('message', ['receiveMessage']); // 获取接收对话消息的api
+    const { receiveMessage, sendMessage } = mapActions('message', ['receiveMessage', 'sendMessage']); // 获取接收对话消息的api
     // socket接收消息
     receiveMessage((data) => {
       const { username, nickname, avatar, content, time } = data;
@@ -232,6 +238,48 @@ export default defineComponent({
       events.emit('DialogueRecord-scrollToBottom');
     });
 
+    /**
+     * @description: 发送消息触发事件
+     * @param {any} content 发送消息的内容
+     * @param {boolean} hasImage 是否上传图片 `必传参数`
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function editSubmit(content, hasImage) {
+      const index = firendListRef.value.activeIndex; // 聊天好友索引
+      const time = dateFormat('YY-mm-dd HH:MM:SS', new Date()); // 获取当前时间
+      sendMessage({
+        to: dialogues[index].username,
+        content,
+        time,
+      });
+      if (hasImage) {
+        const reads = new FileReader();
+        reads.readAsDataURL(content);
+        reads.onload = function (e) {
+          const data = {
+            content: `<img src="${e.target.result}" alt="image">`,
+            time,
+            is_me: true,
+          };
+          dialogues[index].records.splice(dialogues[index].records.length, 0, data);
+          activeDialogueData.records.splice(activeDialogueData.records.length, 0, data);
+          // 滚动到最底部
+          events.emit('DialogueRecord-scrollToBottom');
+        };
+      } else {
+        const data = {
+          content,
+          time,
+          is_me: true,
+        };
+        dialogues[index].records.splice(dialogues[index].records.length, 0, data);
+        activeDialogueData.records.splice(activeDialogueData.records.length, 0, data);
+        // 滚动到最底部
+        events.emit('DialogueRecord-scrollToBottom');
+      }
+    }
+
     return {
       isLogin,
       friendList,
@@ -242,6 +290,7 @@ export default defineComponent({
       modalClick,
       recordToTop,
       firendListRef,
+      editSubmit,
     };
   },
 });
