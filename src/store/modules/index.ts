@@ -8,11 +8,13 @@
  */
 import global from './global';
 import message from './message';
+import globalStore from './globalStore';
 
 /* 所有模块 */
 const modules: Record<string, unknown> = {
   global,
-  message
+  message,
+  globalStore
 };
 
 const persistedstatePath: string[] = []; // 持久化模块
