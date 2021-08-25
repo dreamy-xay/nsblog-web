@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 20:50:36
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-21 17:29:48
+ * @LastEditTime: 2021-08-25 18:16:28
  */
 
 /*
@@ -16,7 +16,7 @@
  * @LastEditTime: 2021-08-10 16:32:11
  */
 
-import { get, del, RequestLifeCycle, put } from '@/network/request';
+import { get, del, RequestLifeCycle, put, upload } from '@/network/request';
 
 /**
  * @description: 获取对话记录信息

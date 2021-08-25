@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-19 16:19:04
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-24 20:19:27
+ * @LastEditTime: 2021-08-25 18:51:54
 -->
 <template>
   <div class="dialogue-edit">
@@ -14,6 +14,7 @@
         type="file"
         @change="fileChange"
         ref="uploadRef"
+        accept=".jpg,.png,.gif,.tif,.tiff,.ico,.bmp,.webp,.jepg"
       >
       <i
         class="iconfont blog-image"
@@ -68,6 +69,7 @@
 <script>
 import { computed, defineComponent, ref, watch } from 'vue';
 import BaseEmoji from '@/components/content/baseEmoji/BaseEmoji.vue';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description: 对话框编辑器
@@ -81,6 +83,7 @@ export default defineComponent({
     BaseEmoji,
   },
   setup(_, context) {
+    const msg = useMessage(); // naive-ui message
     const content = ref(''); // 对话框内容
     const textareaRef = ref(null); // 输入框ref
     const uploadRef = ref(null); // 上传文件标签ref
@@ -140,7 +143,16 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function fileChange(e) {
-      submit(_, e.target.files[0]);
+      const file = e.target.files[0];
+      if (file.type.substr(0, 5) !== 'image') msg.warning('发送图片失败', { duration: 2000, closable: true });
+      else if (file.size > 1024 * 1024) msg.warning('发送图片大小不得超过1M', { duration: 2000, closable: true });
+      else {
+        const reads = new FileReader();
+        reads.readAsDataURL(file);
+        reads.onload = (event) => {
+          submit(e, `<img src="${event.target.result}" alt="image">`);
+        };
+      }
     }
 
     /**

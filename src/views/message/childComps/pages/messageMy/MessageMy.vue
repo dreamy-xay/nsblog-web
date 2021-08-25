@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 12:49:53
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-24 22:51:56
+ * @LastEditTime: 2021-08-25 18:33:58
 -->
 
 <template>
@@ -212,7 +212,6 @@ export default defineComponent({
         }
       if (dialogueIndex >= 0) {
         offset.set(username, offset.get(username) + 1);
-        ++dialogues[dialogueIndex].count;
         const data = {
           content,
           time,
@@ -220,8 +219,13 @@ export default defineComponent({
         };
         dialogues[dialogueIndex].records.splice(dialogues[dialogueIndex].records.length, 0, data);
         // 如果当前索引是已经激活索引，需更新激活数据
-        if (dialogueIndex === firendListRef.value.activeIndex)
+        if (dialogueIndex === firendListRef.value.activeIndex) {
+          // 清除未读消息数量
+          clearDialogue(dialogues[dialogueIndex].username).catch((error) => {
+            console.log(error);
+          });
           activeDialogueData.records.splice(activeDialogueData.records.length, 0, data);
+        } else ++dialogues[dialogueIndex].count;
       } else {
         offset.set(username, 1);
         dialogues.splice(0, 0, {
@@ -257,31 +261,16 @@ export default defineComponent({
         content,
         time,
       });
-      if (hasImage) {
-        const reads = new FileReader();
-        reads.readAsDataURL(content);
-        reads.onload = function (e) {
-          const data = {
-            content: `<img src="${e.target.result}" alt="image">`,
-            time,
-            is_me: true,
-          };
-          dialogues[index].records.splice(dialogues[index].records.length, 0, data);
-          activeDialogueData.records.splice(activeDialogueData.records.length, 0, data);
-          // 滚动到最底部
-          events.emit('DialogueRecord-scrollToBottom');
-        };
-      } else {
-        const data = {
-          content,
-          time,
-          is_me: true,
-        };
-        dialogues[index].records.splice(dialogues[index].records.length, 0, data);
-        activeDialogueData.records.splice(activeDialogueData.records.length, 0, data);
-        // 滚动到最底部
-        events.emit('DialogueRecord-scrollToBottom');
-      }
+      console.log(content.length);
+      const data = {
+        content,
+        time,
+        is_me: true,
+      };
+      dialogues[index].records.splice(dialogues[index].records.length, 0, data);
+      activeDialogueData.records.splice(activeDialogueData.records.length, 0, data);
+      // 滚动到最底部
+      events.emit('DialogueRecord-scrollToBottom');
     }
 
     return {

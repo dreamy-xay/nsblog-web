@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-24 11:50:15
+ * @LastEditTime: 2021-08-25 18:06:02
  */
 
 import axios, { AxiosRequestConfig } from 'axios';
@@ -50,7 +50,8 @@ export function request(options: RequestConfig): Promise<unknown> {
         if (options.beforeRequest) options.beforeRequest();
 
         // 2.某些请求要求用户必须登录, 判断用户是否有token, 如果没有token跳转到login页面
-        params.headers['Authorization'] = getToken();
+        if (!Object.prototype.hasOwnProperty.call(params.headers, 'Authorization') || !params.headers['Authorization'])
+          params.headers['Authorization'] = getToken();
 
         // 3.对请求的参数进行序列化(看服务器是否需要序列化)
 
@@ -165,12 +166,17 @@ export function put(options: RequestConfig): Promise<unknown> {
  */
 export function upload(options: RequestConfig): Promise<unknown> {
   const data: FormData = new FormData();
-  if (options.data) for (const key in options.data) data.append(key, options.data[key]);
+  if (options['data']) for (const key in options.data) data.append(key, options.data[key]);
   options.data = data;
+  let headers: Record<string, unknown>;
+  if (options['headers']) {
+    headers = options['headers'];
+    headers['Content-Type'] = 'multipart/form-data';
+    delete options['headers'];
+  } else headers = { 'Content-Type': 'multipart/form-data' };
 
-  if (options['headers']) delete options['headers'];
   return post({
     ...options,
-    headers: { 'Content-Type': 'multipart/form-data' }
+    headers
   });
 }
