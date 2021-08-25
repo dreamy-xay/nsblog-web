@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-19 16:19:04
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-25 18:51:54
+ * @LastEditTime: 2021-08-25 23:32:41
 -->
 <template>
   <div class="dialogue-edit">
@@ -41,12 +41,13 @@
       </el-popover>
     </div>
     <div class="dialogue-edit-text">
-      <el-scrollbar>
+      <el-scrollbar ref="scrollbarRef">
         <textarea
           ref="textareaRef"
           v-model="content"
           :maxlength="500"
-          :rows="inputRows"
+          :style="{height: inputHeight}"
+          placeholder="ctrl+enter send..."
           @keydown.ctrl.enter="submit"
         ></textarea>
       </el-scrollbar>
@@ -67,7 +68,7 @@
 </template>
 
 <script>
-import { computed, defineComponent, ref, watch } from 'vue';
+import { computed, defineComponent, nextTick, ref, watch } from 'vue';
 import BaseEmoji from '@/components/content/baseEmoji/BaseEmoji.vue';
 import { useMessage } from 'naive-ui';
 
@@ -88,15 +89,23 @@ export default defineComponent({
     const textareaRef = ref(null); // 输入框ref
     const uploadRef = ref(null); // 上传文件标签ref
     const showEmoji = ref(false); // 是否显示表情弹框
-    const inputRows = ref('3'); // 输入内容高度
+    const inputHeight = ref('60px'); // 输入框高度
+    const scrollbarRef = ref(null); // scrollbar ref
 
     // 监听输入框高度自适应
     watch(
       () => content.value,
-      (value) => {
-        let count = 0;
-        for (let i = 0; i < value.length; ++i) if (value[i] === '\n') ++count;
-        inputRows.value = count > 3 ? count : 3;
+      (value, oldValue) => {
+        if (value.length >= oldValue.length) inputHeight.value = textareaRef.value.scrollHeight + 'px';
+        else {
+          inputHeight.value = textareaRef.value.scrollHeight - 20 + 'px';
+          nextTick(() => {
+            inputHeight.value = textareaRef.value.scrollHeight + 'px';
+            nextTick(() => {
+              scrollbarRef.value.setScrollTop(scrollbarRef.value.wrap.scrollHeight);
+            });
+          });
+        }
       }
     );
 
@@ -132,8 +141,11 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function submit(e, image = null) {
-      context.emit('submit', image ? image : content.value, image ? true : false);
-      if (!image) content.value = '';
+      if (image) context.emit('submit', image, true);
+      else if (content.value) {
+        context.emit('submit', content.value, false);
+        content.value = '';
+      }
     }
 
     /**
@@ -169,12 +181,13 @@ export default defineComponent({
       selectEmoji,
       textareaRef,
       uploadRef,
-      inputRows,
+      inputHeight,
       showEmoji,
       textCount,
       submit,
       uploadImage,
       fileChange,
+      scrollbarRef,
     };
   },
 });

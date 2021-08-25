@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 12:49:53
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-25 18:33:58
+ * @LastEditTime: 2021-08-25 22:39:23
 -->
 
 <template>
@@ -179,10 +179,11 @@ export default defineComponent({
     const firendListRef = ref(null); // 好友列表ref
     /**
      * @description: 对话记录滚动到最顶部
+     * @param {Function} next 下一步滚动条测准操作 `必传参数`
      * @return {void}
      * @author: dreamy-xay
      */
-    function recordToTop() {
+    function recordToTop(next) {
       const index = firendListRef.value.activeIndex;
       const offsetNum = offset.get(dialogues[index].username);
       getDialogue(offsetNum, limit, dialogues[index].username)
@@ -194,6 +195,7 @@ export default defineComponent({
           }
           dialogues[index].records.splice(0, 0, ...data.records);
           activeDialogueData.records.splice(0, activeDialogueData.records.length, ...dialogues[index].records);
+          next();
         })
         .catch((error) => {
           console.log(error);
@@ -261,7 +263,6 @@ export default defineComponent({
         content,
         time,
       });
-      console.log(content.length);
       const data = {
         content,
         time,
