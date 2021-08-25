@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 17:21:32
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-24 18:56:17
+ * @LastEditTime: 2021-08-25 22:38:25
 -->
 <template>
   <div class="message-my-content">
@@ -53,8 +53,8 @@ import styles from '@/assets/style/define.scss';
 /**
  * @description: 我的消息内容
  * @param {Object} data 传递的消息数据 `必传参数`
- * @event recordToTop 对话记录滚动到最顶部加载数据 () => {}
- * @event editSubmit 输入内容发送递交 (data) => {}
+ * @event recordToTop 对话记录滚动到最顶部加载数据 (next) => void
+ * @event editSubmit 输入内容发送递交 (data) => void
  * @author: dreamy-xay
  */
 
@@ -79,11 +79,12 @@ export default defineComponent({
 
     /**
      * @description: 对话记录滚动到最顶部
+     * @param {Function} next 下一步滚动条测准操作 `必传参数`
      * @return {void}
      * @author: dreamy-xay
      */
-    function recordToTop() {
-      context.emit('recordToTop');
+    function recordToTop(next) {
+      context.emit('recordToTop', next);
     }
 
     /**

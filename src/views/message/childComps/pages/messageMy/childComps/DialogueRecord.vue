@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-19 16:18:23
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-24 20:23:42
+ * @LastEditTime: 2021-08-25 22:46:26
 -->
 <template>
   <div class="dialogue-record">
@@ -21,8 +21,6 @@
         </div>
         <div
           class="dialogue-record-loading"
-          role="button"
-          @click="$emit('toTop')"
           v-else
         >
           加载更多消息...
@@ -48,7 +46,7 @@
             <div
               class="inner-content"
               :class="{right: item.is_me}"
-              v-html="item.content"
+              v-html="item.content.replace(/\n/g, '<br>')"
             >
             </div>
           </div>
@@ -68,8 +66,8 @@ import events from '@/events';
 /**
  * @description: 对话框对话记录显示
  * @param {Objdect} data 对话数据 `必传参数`
- * @event topTop 滚动到顶部触发，点击加载新数据按钮触发
- * @emits DialogueRecord-scrollToBottom 页面滚动到底部
+ * @event topTop 滚动到顶部触发，点击加载新数据按钮触发 (next) => void
+ * @emits DialogueRecord-scrollToBottom 页面滚动到底部 () => void
  * @author: dreamy-xay
  */
 
@@ -119,7 +117,14 @@ export default defineComponent({
 
     // 滚动到顶部触发函数
     const toTop = throttle((top) => {
-      if (top === 0 && !props.data.all) context.emit('toTop');
+      if (top === 0 && !props.data.all) {
+        const scrollBottom = scrollbarRef.value.wrap.scrollHeight;
+        context.emit('toTop', () => {
+          nextTick(() => {
+            scrollbarRef.value.setScrollTop(scrollbarRef.value.wrap.scrollHeight - scrollBottom);
+          });
+        });
+      }
     }, 300);
 
     /**
@@ -164,20 +169,6 @@ export default defineComponent({
       font-size: 12px;
       @include flex(center);
       margin-top: 10px;
-    }
-
-    .dialogue-record-loading {
-      padding: 0 8px;
-      background-color: $grey-4;
-      border-radius: $border-radius-0;
-      box-shadow: $shadow-0;
-      overflow: hidden;
-      transition: 0.25s;
-
-      &:hover {
-        background-color: $grey-5;
-        color: $grey-9;
-      }
     }
 
     .dialogue-record-item {
