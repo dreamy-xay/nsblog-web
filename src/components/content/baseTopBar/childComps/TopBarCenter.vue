@@ -5,7 +5,7 @@
  * @Autor: continue-hs
  * @Date: 2021-07-22 17:52:26
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-26 11:42:50
+ * @LastEditTime: 2021-08-26 16:03:39
 -->
 <template>
   <div
@@ -18,6 +18,7 @@
         type="text"
         v-model="inputText"
         @keyup.enter="search(inputText)"
+        maxlength="50"
       />
       <i
         v-show="inputText !== ''"
