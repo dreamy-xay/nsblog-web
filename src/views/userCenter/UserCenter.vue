@@ -3,21 +3,23 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-18 21:26:17
- * @LastEditors: Ban
- * @LastEditTime: 2021-08-24 21:30:28
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-08-25 23:49:04
+
 -->
 <template>
   <base-view
     :background="true"
     :top-bar="true"
     bind-class="user-center"
+    @scroll="getScroll"
   >
     <div class="user-center-center">
       <div class="center-left">
         <user-center-menu></user-center-menu>
       </div>
       <div class="center-right">
-        <router-view />
+        <router-view :scrollTop="scrollTop"> </router-view>
       </div>
     </div>
   </base-view>
@@ -42,7 +44,15 @@ export default defineComponent({
     UserCenterMenu,
   },
   setup() {
-    return {};
+    const scrollTop = ref(0);
+    function getScroll(e) {
+      scrollTop.value = e.scrollTop;
+    }
+
+    return {
+      scrollTop,
+      getScroll,
+    };
   },
 });
 </script>

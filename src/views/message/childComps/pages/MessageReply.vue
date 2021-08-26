@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:25:27
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-23 16:42:10
+ * @LastEditTime: 2021-08-26 10:39:00
 -->
 
 <template>
@@ -287,6 +287,7 @@ $grey9: $grey-9;
       font-size: 16px;
       color: $grey9;
       margin-bottom: 5px;
+      @include word-break;
     }
 
     .message-reply-right-center {
@@ -296,6 +297,7 @@ $grey9: $grey-9;
       font-size: 14px;
       color: $grey7;
       margin-bottom: 5px;
+      @include word-break;
     }
 
     .message-reply-right-bottom {
