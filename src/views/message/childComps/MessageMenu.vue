@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 22:48:57
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-23 13:06:51
+ * @LastEditTime: 2021-08-26 21:00:19
 -->
 <template>
   <div class="message-left">
@@ -95,7 +95,7 @@ export default defineComponent({
       default: null,
     },
   },
-  setup(props, context) {
+  setup(props) {
     const msg = useMessage(); // naive-ui mssage
 
     const { messageCount } = mapState('message', ['messageCount']); // 获取tokenInfo

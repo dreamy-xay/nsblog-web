@@ -5,7 +5,7 @@
  * @Autor: continue-hs
  * @Date: 2021-07-22 17:52:26
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-26 16:03:39
+ * @LastEditTime: 2021-08-26 20:57:58
 -->
 <template>
   <div
@@ -164,6 +164,7 @@ export default defineComponent({
   width: 373px;
   @include flex(center);
   position: relative;
+  z-index: 1;
 
   .top-bar-center-middle {
     width: 100%;
@@ -258,6 +259,7 @@ export default defineComponent({
     max-height: 160px;
     overflow: hidden;
     background-color: $grey-0;
+    z-index: 10001;
 
     .history-content {
       @include size(347px, 32px);
