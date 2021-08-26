@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:31
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-26 20:22:09
+ * @LastEditTime: 2021-08-26 21:45:12
 -->
 <template>
   <div class="user-center-profie-job">
@@ -12,10 +12,9 @@
     <div class="user-center-profie-job-describe1">
       <div class="user-center-profie-job-describe1-text">职业</div>
       <base-select
-        :swidth="150"
+        :swidth="70"
         :sdata="professionData"
         :selectTag="profession"
-        :scrollTop="scrollTop"
         @changeItem="chandeProfession"
       ></base-select>
     </div>
@@ -28,7 +27,6 @@
           :swidth="150"
           :sdata="adressDataG"
           :selectTag="adressG"
-          :scrollTop="scrollTop"
           @changeItem="chandeadressG"
           showText="国家"
         ></base-select>
@@ -39,7 +37,6 @@
           :swidth="150"
           :sdata="adressDataS"
           :selectTag="adressS"
-          :scrollTop="scrollTop"
           @changeItem="chandeadressS"
           showText="省份/地区"
           :disabled="adressG==='' ? true : false"
@@ -50,7 +47,6 @@
         :swidth="150"
         :sdata="adressDataC"
         :selectTag="adressC"
-        :scrollTop="scrollTop"
         @changeItem="chandeadressC"
         showText="城市"
         :disabled="adressS==='' ? true : false"
@@ -74,12 +70,6 @@ export default defineComponent({
   name: 'UserCenterProfileEdit',
   components: {
     BaseSelect,
-  },
-  props: {
-    scrollTop: {
-      type: Number,
-      default: 0,
-    },
   },
   setup(props, context) {
     const professionData = computed(() => {
@@ -230,8 +220,10 @@ export default defineComponent({
 
 <style lang='scss' scoped>
 .user-center-profie-job {
+  // height: 2000px;
   display: flex;
   flex-direction: column;
+  // align-items: center;
   width: 926px;
   background-color: $grey-0;
   border-radius: $border-radius-0;

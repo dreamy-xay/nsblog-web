@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-18 21:26:17
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-25 23:49:04
+ * @LastEditTime: 2021-08-26 21:45:48
 
 -->
 <template>
@@ -12,22 +12,20 @@
     :background="true"
     :top-bar="true"
     bind-class="user-center"
-    @scroll="getScroll"
   >
     <div class="user-center-center">
       <div class="center-left">
         <user-center-menu></user-center-menu>
       </div>
       <div class="center-right">
-        <router-view :scrollTop="scrollTop"> </router-view>
+        <router-view> </router-view>
       </div>
     </div>
   </base-view>
 </template>
 
 <script>
-import { defineComponent, ref, reactive } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { defineComponent } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import UserCenterMenu from '@/views/userCenter/childComps/UserCenterMenu';
 
@@ -44,15 +42,7 @@ export default defineComponent({
     UserCenterMenu,
   },
   setup() {
-    const scrollTop = ref(0);
-    function getScroll(e) {
-      scrollTop.value = e.scrollTop;
-    }
-
-    return {
-      scrollTop,
-      getScroll,
-    };
+    return {};
   },
 });
 </script>
