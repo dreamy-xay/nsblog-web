@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 12:49:53
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-25 22:39:23
+ * @LastEditTime: 2021-08-26 21:05:32
 -->
 
 <template>
@@ -34,16 +34,17 @@
   <message-empty v-else />
 </template>
 <script>
-import { defineComponent, ref, reactive, computed } from 'vue';
+import { defineComponent, ref, reactive, computed, watch } from 'vue';
 import MessageMyFriend from '@/views/message/childComps/pages/messageMy/childComps/MessageMyFriend.vue';
 import MessageMyContent from '@/views/message/childComps/pages/messageMy/childComps/MessageMyContent.vue';
 import MessageEmpty from '@/views/message/childComps/MessageEmpty.vue';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 import { getDialogue, deleteDialogue, clearDialogue } from '@/network/api/dialogues';
-import { mapGetters, mapActions, mapMutations } from '@/util/store';
+import { mapState, mapGetters, mapActions, mapMutations } from '@/util/store';
 import { useMessage } from 'naive-ui';
 import events from '@/events';
 import { dateFormat } from '@/util/date';
+import { useRoute } from 'vue-router';
 
 /**
  * @description: 我的消息页面
@@ -60,6 +61,7 @@ export default defineComponent({
   },
   setup() {
     const msg = useMessage(); // naivue-ui message
+    const route = useRoute(); // route
     const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
     const dialogues = reactive([]); // 所有对话记录
     const { updateMessageCount } = mapMutations('message', ['updateMessageCount']); // 更新消息数量
@@ -273,6 +275,15 @@ export default defineComponent({
       // 滚动到最底部
       events.emit('DialogueRecord-scrollToBottom');
     }
+
+    // 监听路由变化更新数据
+    const { messageCount } = mapState('message', ['messageCount']); // 获取message count
+    watch(
+      () => messageCount.value[4],
+      () => {
+        if (new RegExp('/message/my').test(route.path)) updateMessageCount({ type: 5, count: 0 });
+      }
+    );
 
     return {
       isLogin,

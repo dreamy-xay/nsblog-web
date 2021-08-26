@@ -46,7 +46,6 @@ $shadow: $shadow-0;
   background: $background-0;
   width: 100%;
   box-shadow: $shadow;
-  z-index: 1001;
 
   .base-top-bar-to-center {
     display: flex;

@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-07-30 00:58:57
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-13 18:52:55
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-08-26 21:00:08
 -->
 <template >
   <div class="message-top">
@@ -28,9 +28,6 @@ export default defineComponent({
       type: String,
       default: '',
     },
-  },
-  setup(props, context) {
-    return {};
   },
 });
 </script>
