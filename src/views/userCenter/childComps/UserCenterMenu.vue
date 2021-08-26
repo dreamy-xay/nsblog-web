@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-19 11:55:18
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-26 22:17:21
+ * @LastEditTime: 2021-08-26 22:31:13
 -->
 <template>
   <div class="user-center-menu">
@@ -20,7 +20,7 @@
         v-for="item in text1"
         :key="item.title"
         :href="item.url"
-        :class="{active : compareRoute(item.url)}"
+        :class="{active: compareRoute(item.url)}"
       >
         <div class="icon">
           <i
@@ -82,12 +82,20 @@ import { useRoute } from 'vue-router';
 
 /**
  * @description: 个人中心之左侧菜单
+ * @param {String} username 用户名 `必传参数`
  * @author: Ban
  */
 
 export default defineComponent({
   name: 'userCenterMenu',
-  setup() {
+  props: {
+    username: {
+      type: String,
+      required: true,
+    },
+  },
+  setup(props) {
+    const route = useRoute(); // route
     // 菜单1
     const text1 = [
       {
@@ -129,21 +137,18 @@ export default defineComponent({
       {
         icon: 'blog-wenzhang',
         title: '博客主页',
-        url: '',
+        url: `/blog/${props.username}`,
       },
       {
         icon: 'blog-neirongguanli',
         title: '内容管理',
-        url: '',
+        url: '/admin',
       },
     ];
 
-    const route = useRoute().path.split('/'); //当前路径
-    const routeLenght = route.length;
     //匹配路径
     function compareRoute(url) {
-      if (url === `/${route[routeLenght - 2]}/${route[routeLenght - 1]}`) return true;
-      else return false;
+      return RegExp(url).test(route.path);
     }
 
     return {
@@ -202,6 +207,10 @@ export default defineComponent({
 
   .user-center-menu-text2 {
     border-bottom: 1px solid $grey-4;
+  }
+
+  .user-center-menu-text3 .text-content:last-child {
+    margin-bottom: 0;
   }
 
   .user-center-menu-text1,

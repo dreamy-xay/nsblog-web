@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-18 21:26:17
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-26 21:54:41
+ * @LastEditTime: 2021-08-26 22:31:44
 
 -->
 <template>
@@ -15,7 +15,7 @@
     @scroll="getScroll"
   >
     <div class="user-center-left">
-      <user-center-menu></user-center-menu>
+      <user-center-menu :username="tokenInfo.username"></user-center-menu>
     </div>
     <div class="user-center-right">
       <router-view :scrollTop="scrollTop" />
@@ -69,6 +69,7 @@ export default defineComponent({
     );
 
     return {
+      tokenInfo,
       scrollTop,
       getScroll,
     };
