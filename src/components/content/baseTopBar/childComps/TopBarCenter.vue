@@ -4,65 +4,68 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2021-07-22 17:52:26
- * @LastEditors: continue-hs
- * @LastEditTime: 2021-08-24 14:50:08
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-08-26 11:42:50
 -->
 <template>
   <div
     class="top-bar-center"
-    v-click-outside="showClickOutSide"
+    v-click-outside="closeHistory"
   >
     <div class="top-bar-center-middle">
       <input
-        focus="change(true)"
+        @focus="showHistory"
         type="text"
         v-model="inputText"
-        @click.prevent="change(true)"
-      >
+        @keyup.enter="search(inputText)"
+      />
       <i
         v-show="inputText !== ''"
         role="button"
-        class="iconfont blog-cha"
-        @click="change(true);elimiante()"
+        class="iconfont blog-close-circle"
+        @click="clearInputText"
       ></i>
-      <button
+      <div
         class="top-bar-center-button"
-        @click="change(false);set(this.inputText);elimiante()"
+        role="button"
+        @click="search(inputText)"
       >
         <i class="iconfont blog-sousuo"></i>
-      </button>
+      </div>
     </div>
 
     <div
       class="search-history"
-      v-show="visible"
+      v-show="visible && List.length"
     >
-      <div class="historytop">
-        <div class="searchtext">搜索历史</div>
+      <div class="history-top">
+        <div class="search-text">搜索历史</div>
         <div
           class="delect"
           role="button"
-          @click="del(-1)"
+          @click="del()"
         >清空</div>
       </div>
-      <div class="historyline"></div>
-      <div class="historybottom">
-        <el-scrollbar>
+      <div class="history-line"></div>
+      <div class="history-bottom">
+        <el-scrollbar :max-height="160">
           <div
-            class="historycontent"
-            v-for="(item,index) in List"
+            class="history-content"
+            v-for="(item, index) in List"
             :key="index"
           >
             <div
               class="content"
               role="button"
-              @click="goSearch"
+              @click="search(item)"
             >
-              {{item}}
+              <div>
+                {{item}}
+              </div>
               <i
                 role="button"
-                class="iconfont blog-cha"
-                @click="del(index)"
+                class="iconfont blog-close"
+                @click.stop="del(index)"
               ></i>
             </div>
           </div>
@@ -88,42 +91,46 @@ export default defineComponent({
     const visible = ref(false);
     const inputText = ref('');
     const { List } = mapState('globalStore', { List: 'searchHistory' });
-    const { set } = mapMutations('globalStore', { set: 'setSearchHistory' });
-    const { del } = mapMutations('globalStore', { del: 'deleteSearchHistory' });
+    const { set, del } = mapMutations('globalStore', { set: 'setSearchHistory', del: 'deleteSearchHistory' });
 
     /**
-     * @description: 清空输入
+     * @description: 显示历史记录框
      * @return {void}
      * @author: continue-hs
      */
-    function elimiante() {
-      inputText.value = '';
+    function showHistory() {
       visible.value = true;
     }
 
     /**
-     * @description: 点击区域外弹出框隐藏
+     * @description: 关闭历史记录框
      * @return {void}
      * @author: continue-hs
      */
-    function showClickOutSide() {
+    function closeHistory() {
       visible.value = false;
     }
 
     /**
-     * @description: 弹出框的显示
+     * @description: 清空输入内容
      * @return {void}
-     * @author: continue-hs
+     * @author: dreamy-xay
      */
-    function change(isShow) {
-      if (isShow) {
-        setTimeout(() => {
-          visible.value = true;
-        }, 0);
-      } else {
-        setTimeout(() => {
-          visible.value = false;
-        }, 90);
+    function clearInputText() {
+      inputText.value = '';
+    }
+
+    /**
+     * @description: 搜索
+     * @param {string} value 搜索的内容 `必传参数`
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function search(value) {
+      if (value) {
+        visible.value = false;
+        set(value);
+        console.log(`search: ${value}`);
       }
     }
 
@@ -131,13 +138,13 @@ export default defineComponent({
       visible,
       inputText,
       List,
-
       del,
-      showClickOutSide,
+      showHistory,
+      closeHistory,
       focus,
-      elimiante,
       set,
-      change,
+      search,
+      clearInputText,
     };
   },
 });
@@ -154,38 +161,47 @@ export default defineComponent({
   flex: 1;
   padding-right: 13px;
   width: 373px;
+  @include flex(center);
+  position: relative;
 
   .top-bar-center-middle {
-    transform: translate(0, 10px);
+    width: 100%;
+    height: 36px;
+    border-radius: $border-radius-1;
+    overflow: hidden;
+    position: relative;
+    @include flex(center, center);
 
-    .blog-cha {
+    .blog-close-circle {
       position: absolute;
       top: 7px;
-      right: 60px;
+      right: 54px;
       color: $grey-7;
     }
 
     input {
-      height: 36px;
+      height: 100%;
+      padding: 0 24px 0 10px;
       width: calc(100% - 48px);
-      max-width: 325px;
+      background-color: $grey-2;
       border: 1px solid $grey-4;
-      border-radius: 3px 0 0 3px;
-      background: $grey-2;
-      text-indent: 16px;
-      vertical-align: top;
+      border-right: 0;
+      border-radius: $border-radius-1 0 0 $border-radius-1;
+      box-sizing: border-box;
       outline: 0;
+      letter-spacing: 0.5px;
+
+      &:focus {
+        border-color: $green-1;
+      }
     }
 
     .top-bar-center-button {
       width: 48px;
       height: 36px;
-      display: inline-block;
-      vertical-align: top;
-      border-radius: 0 3px 3px 0;
-      border: 0;
-      cursor: pointer;
+      @include flex(center, center);
       background: $green-0;
+      transition: 0.25s;
 
       &:hover {
         background: $green-1;
@@ -193,60 +209,80 @@ export default defineComponent({
 
       .blog-sousuo {
         font-size: 24px;
-        text-align: center;
         color: $grey-0;
       }
     }
   }
 
   .search-history {
-    @include size(347px, 230px);
-    background-color: #ffffff;
+    width: 347px;
+    overflow: hidden;
+    background-color: $grey-0;
     opacity: 1;
     border-radius: 4px;
-    box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.16);
-    position: relative;
-    top: 20px;
-    z-index: 999;
+    box-shadow: $shadow-0;
+    position: absolute;
+    top: 57px;
 
-    .historytop {
+    .history-top {
       @include size(314px, 24px);
       padding-top: 14px;
       margin-bottom: 9px;
       margin-left: 16px;
 
-      .searchtext {
+      .search-text {
         float: left;
       }
 
       .delect {
         float: right;
-        color: #85e8c7;
+        color: $green-0;
+        transition: 0.25s;
+
+        &:hover {
+          color: $green-1;
+        }
       }
     }
 
-    .historyline {
+    .history-line {
       @include size(347px, 1px);
-      background: #f0f0f0;
+      background: $grey-3;
     }
   }
 
-  .historybottom {
-    margin: 10px 0 16px;
-    @include size(347px, 186px);
+  .history-bottom {
+    margin: 10px 0;
+    width: 100%;
+    max-height: 160px;
+    overflow: hidden;
+    background-color: $grey-0;
 
-    .historycontent {
+    .history-content {
       @include size(347px, 32px);
 
       .content {
-        padding-top: 7px;
-        margin-left: 16px;
-        color: #595959;
+        padding: 0 16px;
+        width: calc(100% - 32px);
+        @include flex(center, space-between);
+        background-color: $grey-0;
+        transition: 0.25s;
 
-        i {
-          float: right;
-          margin-right: 16px;
-          color: #8c8c8c;
+        &:hover {
+          background-color: $grey-2;
+        }
+
+        div {
+          @include ellipsis(1);
+          width: calc(100% - 20px);
+          height: 32px;
+          line-height: 32px;
+          color: $grey-9;
+        }
+
+        .iconfont {
+          color: $grey-7;
+          font-size: 12px;
         }
       }
     }
