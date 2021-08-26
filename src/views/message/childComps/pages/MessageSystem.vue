@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:34:31
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-23 16:42:19
+ * @LastEditTime: 2021-08-26 10:40:14
 -->
 <template>
   <el-scrollbar max-height="calc(100vh - 108px)">
@@ -189,6 +189,7 @@ $pink0: $pink-0;
     font-size: 16px;
     margin-bottom: 10px;
     transition: all 0.4s;
+    @include word-break;
 
     .message-system-title-link {
       color: $pink0;
