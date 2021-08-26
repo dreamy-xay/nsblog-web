@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-19 16:19:04
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-25 23:32:41
+ * @LastEditTime: 2021-08-26 09:24:55
 -->
 <template>
   <div class="dialogue-edit">
@@ -122,9 +122,9 @@ export default defineComponent({
         content.value =
           textareaRef.value.value.substring(0, startPos) + emoji.data + textareaRef.value.value.substring(endPos);
         textareaRef.value.focus();
-        setTimeout(() => {
-          textareaRef.value.setSelectionRange(startPos + emoji.data.length, endPos + emoji.data.length);
-        }, 0);
+        nextTick(() => {
+          textareaRef.value.setSelectionRange(startPos + emoji.data.length, startPos + emoji.data.length);
+        });
       }
     }
 

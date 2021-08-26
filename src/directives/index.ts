@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 16:13:51
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-24 17:08:51
+ * @LastEditTime: 2021-08-26 11:41:52
  */
 
 import { debounce, throttle } from 'lodash';
@@ -19,7 +19,6 @@ export default (app: App): void => {
         if (el.contains(e.target)) {
           return false;
         }
-
         binding.value(e);
       };
       document.addEventListener('click', el.__vueClickOutside__, true);
@@ -29,6 +28,7 @@ export default (app: App): void => {
       delete el.__vueClickOutside__;
     }
   });
+
   // 监听元素大小变化
   app.directive('resize', {
     beforeMount(el: any, binding: any) {

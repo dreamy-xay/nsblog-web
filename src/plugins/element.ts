@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-19 21:30:24
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-18 20:01:23
+ * @LastEditTime: 2021-08-26 11:37:58
  */
 import { App } from 'vue';
 import 'dayjs/locale/zh-cn';
@@ -211,6 +211,37 @@ const plugins = [
 ];
 import '@/assets/style/element-variables.scss';
 
+// import {
+//   ClickOutside,
+//   Resize
+//   RepeatClick,
+//   TrapFocus,
+//   Mousewheel
+// } from 'element-plus/packages/directives';
+
+// const directives = [
+//   {
+//     name: 'click-outside',
+//     directive: ClickOutside
+//   },
+//   {
+//     name: 'resize',
+//     directive: Resize
+//   }
+//   {
+//     name: 'repeat-click',
+//     directive: RepeatClick
+//   },
+//   {
+//     name: 'trap-focus',
+//     directive: TrapFocus
+//   },
+//   {
+//     name: 'mousewheel',
+//     directive: Mousewheel
+//   }
+// ];
+
 export default (app: App) => {
   // app.config.globalProperties.$ELEMENT = { locale };
 
@@ -223,4 +254,8 @@ export default (app: App) => {
   plugins.forEach(plugin => {
     app.use(plugin);
   });
+  // 指令
+  // directives.forEach(item => {
+  //   app.directive(item.name, item.directive);
+  // });
 };

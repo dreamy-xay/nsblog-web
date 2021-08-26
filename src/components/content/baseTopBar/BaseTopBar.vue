@@ -1,7 +1,7 @@
 <!--
  * @Author: Ban
  * @Date: 2021-07-19 12:47:11
- * @LastEditTime: 2021-08-12 17:08:01
+ * @LastEditTime: 2021-08-26 11:42:15
  * @LastEditors: dreamy-xay
  * @Description: In User Settings Edit
  * @FilePath:
@@ -46,7 +46,7 @@ $shadow: $shadow-0;
   background: $background-0;
   width: 100%;
   box-shadow: $shadow;
-  position: sticky;
+  z-index: 1001;
 
   .base-top-bar-to-center {
     display: flex;
