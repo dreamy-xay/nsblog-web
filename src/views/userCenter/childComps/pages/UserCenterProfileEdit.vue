@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:31
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-26 21:45:12
+ * @LastEditTime: 2021-08-27 15:02:41
 -->
 <template>
   <div class="user-center-profie-job">
@@ -12,7 +12,7 @@
     <div class="user-center-profie-job-describe1">
       <div class="user-center-profie-job-describe1-text">职业</div>
       <base-select
-        :swidth="70"
+        :swidth="150"
         :sdata="professionData"
         :selectTag="profession"
         @changeItem="chandeProfession"
@@ -220,10 +220,8 @@ export default defineComponent({
 
 <style lang='scss' scoped>
 .user-center-profie-job {
-  // height: 2000px;
   display: flex;
   flex-direction: column;
-  // align-items: center;
   width: 926px;
   background-color: $grey-0;
   border-radius: $border-radius-0;
