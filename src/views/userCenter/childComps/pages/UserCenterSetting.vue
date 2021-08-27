@@ -3,24 +3,24 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:55
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-20 14:55:22
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-08-26 22:32:36
 -->
 <template>
-  <div class="usercenter-setting">
-    <div class="usercenter-setting-title">隐私设置</div>
+  <div class="user-center-setting">
+    <div class="user-center-setting-title">隐私设置</div>
 
     <div
-      class="usercenter-setting-menu"
+      class="user-center-setting-menu"
       v-for="(item,index) in textmenus"
       :key="index"
     >
-      <div class="usercenter-setting-menu-text">
+      <div class="user-center-setting-menu-text">
         <span>{{item.text1}}</span>
-        <span class="usercenter-setting-menu-text-font">{{item.text2}}</span>
+        <span class="user-center-setting-menu-text-font">{{item.text2}}</span>
       </div>
 
-      <div class="usercenter-setting-menu-radio">
+      <div class="user-center-setting-menu-radio">
         <el-radio-group
           v-model="settingData[index].value"
           @change="changeSetting(index)"
@@ -41,7 +41,7 @@
 <script>
 import { computed, defineComponent, reactive } from 'vue';
 export default defineComponent({
-  name: 'UserCenterSettting',
+  name: 'user-centerSettting',
   setup() {
     const textmenus = computed(() => {
       return [
@@ -141,12 +141,12 @@ $shadow2: $shadow-2;
   }
 }
 
-.usercenter-setting {
+.user-center-setting {
   display: flex;
   background-color: transparent;
   flex-direction: column;
 
-  .usercenter-setting-title {
+  .user-center-setting-title {
     display: flex;
     align-items: center;
     padding-left: 16px;
@@ -161,7 +161,7 @@ $shadow2: $shadow-2;
     line-height: 22px;
   }
 
-  .usercenter-setting-menu {
+  .user-center-setting-menu {
     width: 878px;
     display: flex;
     flex-direction: column;
@@ -172,17 +172,17 @@ $shadow2: $shadow-2;
     box-shadow: $shadow-0;
     height: 50px;
 
-    .usercenter-setting-menu-text {
+    .user-center-setting-menu-text {
       font-size: 16px;
       line-height: 21px;
       margin-bottom: 10px;
       color: $grey-10;
 
-      .usercenter-setting-menu-text-font {
+      .user-center-setting-menu-text-font {
         color: $grey-7;
       }
     }
-    .usercenter-setting-menu-radio {
+    .user-center-setting-menu-radio {
       font-size: 14px;
       line-height: 19px;
       color: $grey10;
