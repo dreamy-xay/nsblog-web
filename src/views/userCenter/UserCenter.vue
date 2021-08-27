@@ -3,14 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-18 21:26:17
-<<<<<<< HEAD
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-26 21:45:48
-=======
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-26 22:31:44
->>>>>>> f38c6ba96db5c518d13ee462c04782c6f20b97e9
-
+ * @LastEditTime: 2021-08-27 14:49:54
 -->
 <template>
   <base-view
@@ -18,31 +12,17 @@
     :top-bar="true"
     bind-class="user-center"
   >
-<<<<<<< HEAD
-    <div class="user-center-center">
-      <div class="center-left">
-        <user-center-menu></user-center-menu>
-      </div>
-      <div class="center-right">
-        <router-view> </router-view>
-      </div>
-=======
     <div class="user-center-left">
       <user-center-menu :username="tokenInfo.username"></user-center-menu>
     </div>
     <div class="user-center-right">
       <router-view :scrollTop="scrollTop" />
->>>>>>> f38c6ba96db5c518d13ee462c04782c6f20b97e9
     </div>
   </base-view>
 </template>
 
 <script>
-<<<<<<< HEAD
-import { defineComponent } from 'vue';
-=======
 import { defineComponent, ref, watch } from 'vue';
->>>>>>> f38c6ba96db5c518d13ee462c04782c6f20b97e9
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import UserCenterMenu from '@/views/userCenter/childComps/UserCenterMenu.vue';
 import router from '@/router';
@@ -65,9 +45,6 @@ export default defineComponent({
     UserCenterMenu,
   },
   setup() {
-<<<<<<< HEAD
-    return {};
-=======
     const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
     const scrollTop = ref(0); // 垂直滚动
 
@@ -94,7 +71,6 @@ export default defineComponent({
       scrollTop,
       getScroll,
     };
->>>>>>> f38c6ba96db5c518d13ee462c04782c6f20b97e9
   },
 });
 </script>
