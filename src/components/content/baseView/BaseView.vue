@@ -4,14 +4,17 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 11:51:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-19 10:55:49
+ * @LastEditTime: 2021-08-27 12:54:34
 -->
 <template>
   <div
     class="base-view"
     :style="{height: height + 'px', width: width + 'px'}"
   >
-    <el-scrollbar @scroll="scroll($event, true)">
+    <el-scrollbar
+      @scroll="scroll($event, true)"
+      class="base-view-scrollbar"
+    >
       <div class="base-view-container">
         <base-background v-if="background" />
         <base-top-bar
@@ -22,7 +25,10 @@
           class="base-view-inner"
           :style="{height: innerHeight + 'px'}"
         >
-          <el-scrollbar @scroll="scroll($event, false)">
+          <el-scrollbar
+            @scroll="scroll($event, false)"
+            class="base-view-scrollbar"
+          >
             <div
               class="inner"
               ref="innerRef"
@@ -156,7 +162,7 @@ export default defineComponent({
 .base-view {
   overflow: hidden;
 
-  :deep(.el-scrollbar__thumb) {
+  :deep(.base-view-scrollbar > div > div.el-scrollbar__thumb) {
     background-color: $grey-10;
   }
 
