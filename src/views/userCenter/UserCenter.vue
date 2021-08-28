@@ -3,16 +3,14 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-18 21:26:17
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-26 22:31:44
-
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-08-27 14:49:54
 -->
 <template>
   <base-view
     :background="true"
     :top-bar="true"
     bind-class="user-center"
-    @scroll="getScroll"
   >
     <div class="user-center-left">
       <user-center-menu :username="tokenInfo.username"></user-center-menu>
