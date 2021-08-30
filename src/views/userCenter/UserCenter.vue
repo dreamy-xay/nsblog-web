@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-18 21:26:17
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-27 14:49:54
+ * @LastEditTime: 2021-08-28 23:26:59
 -->
 <template>
   <base-view
@@ -16,13 +16,13 @@
       <user-center-menu :username="tokenInfo.username"></user-center-menu>
     </div>
     <div class="user-center-right">
-      <router-view :scrollTop="scrollTop" />
+      <router-view />
     </div>
   </base-view>
 </template>
 
 <script>
-import { defineComponent, ref, watch } from 'vue';
+import { defineComponent, watch } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import UserCenterMenu from '@/views/userCenter/childComps/UserCenterMenu.vue';
 import router from '@/router';
@@ -46,17 +46,6 @@ export default defineComponent({
   },
   setup() {
     const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
-    const scrollTop = ref(0); // 垂直滚动
-
-    /**
-     * @description: 滚动监听
-     * @param {any} e 滚动事件参数 `必传参数`
-     * @return {void}
-     * @author: dreamy-xay
-     */
-    function getScroll(e) {
-      scrollTop.value = e.scrollTop;
-    }
 
     //监听登录状态
     watch(
@@ -68,8 +57,6 @@ export default defineComponent({
 
     return {
       tokenInfo,
-      scrollTop,
-      getScroll,
     };
   },
 });

@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-08-23 19:01:15
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-26 21:44:19
+ * @LastEditTime: 2021-08-27 23:04:31
 -->
 <template>
   <n-popover
@@ -167,6 +167,8 @@ export default defineComponent({
   border-radius: $border-radius-1;
   height: 20px;
   transition: all 0.25s;
+  font-size: 14px;
+  color: $grey-10;
 
   &:hover {
     background-color: $green-0;
@@ -186,6 +188,7 @@ export default defineComponent({
   background-color: $grey-0;
   border-radius: $border-radius-1;
   box-shadow: $shadow-0;
+  font-size: 14px;
   color: $grey-7;
   transition: all 0.25s;
   user-select: none;
@@ -216,6 +219,8 @@ export default defineComponent({
   background-color: $grey-0;
   border-radius: $border-radius-1;
   box-shadow: $shadow-0;
+  font-size: 14px;
+  color: $grey-10;
   transition: all 0.25s;
   user-select: none;
 
