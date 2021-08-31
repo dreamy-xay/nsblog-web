@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 11:51:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-27 12:54:34
+ * @LastEditTime: 2021-08-31 11:04:52
 -->
 <template>
   <div
@@ -23,7 +23,7 @@
         />
         <div
           class="base-view-inner"
-          :style="{height: innerHeight + 'px'}"
+          :style="{height: innerHeight + 'px', marginTop: topBarHeight + 'px'}"
         >
           <el-scrollbar
             @scroll="scroll($event, false)"
@@ -102,13 +102,13 @@ export default defineComponent({
     const innerRef = ref(null); // inner ref
     const innerHeight = ref(height.value); // 内部容器高度设置
     const topBarRef = ref(null); // topBar的ref
-    let topBarHeight = 0; // 获取topBar高度
+    const topBarHeight = ref(0); // 获取topBar高度
 
     // dom加载完毕后执行
     onMounted(() => {
       if (props.topBar) {
-        topBarHeight = topBarRef.value.$el.offsetHeight;
-        innerHeight.value -= topBarHeight;
+        topBarHeight.value = topBarRef.value.$el.offsetHeight;
+        innerHeight.value -= topBarHeight.value;
       }
     });
 
@@ -116,7 +116,7 @@ export default defineComponent({
     window.onresize = function () {
       width.value = document.body.offsetWidth;
       height.value = document.body.offsetHeight;
-      innerHeight.value = height.value - topBarHeight;
+      innerHeight.value = height.value - topBarHeight.value;
     };
 
     let scrollLeft = 0; // 滚动条位置
@@ -153,6 +153,7 @@ export default defineComponent({
       width,
       height,
       scroll,
+      topBarHeight,
     };
   },
 });
@@ -186,7 +187,7 @@ export default defineComponent({
         & > div {
           padding: 0 6px;
           width: 1142px;
-          display: inline-block;
+          overflow: hidden;
         }
       }
     }

@@ -5,7 +5,7 @@
  * @Autor: continue-hs
  * @Date: 2021-07-22 17:52:26
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-26 20:57:58
+ * @LastEditTime: 2021-08-31 10:43:48
 -->
 <template>
   <div
@@ -164,7 +164,6 @@ export default defineComponent({
   width: 373px;
   @include flex(center);
   position: relative;
-  z-index: 1;
 
   .top-bar-center-middle {
     width: 100%;

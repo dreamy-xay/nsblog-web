@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-18 21:26:17
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-28 23:26:59
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-08-31 10:59:06
 -->
 <template>
   <base-view
@@ -36,13 +36,13 @@ import { mapState } from '@/util/store';
 
 export default defineComponent({
   name: 'UserCenter',
-  beforeRouteEnter(_, __, next) {
-    if (store.getters['global/isLogin']) next();
-    else next({ name: 'signIn' });
-  },
   components: {
     BaseView,
     UserCenterMenu,
+  },
+  beforeRouteEnter(_, __, next) {
+    if (store.getters['global/isLogin']) next();
+    else next({ name: 'signIn' });
   },
   setup() {
     const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
@@ -67,15 +67,15 @@ export default defineComponent({
   @include flex(initial, space-between);
 
   & > div {
-    display: inline-block; // 触发bfc
+    display: inline-block;
     margin-top: 16px;
   }
 
-  .center-left {
+  .user-center-left {
     width: 200px;
   }
 
-  .center-right {
+  .user-center-right {
     width: 926px;
   }
 }

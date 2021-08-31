@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-28 13:09:20
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-20 16:53:52
+ * @LastEditTime: 2021-08-30 12:32:16
  */
 import { RouteRecordRaw } from 'vue-router';
 
@@ -27,7 +27,7 @@ const messageRouter: RouteRecordRaw = {
       component: () => import('@/views/message/childComps/pages/MessageReply.vue')
     },
     {
-      path: '/message/like',
+      path: 'like',
       name: 'messageLike',
       meta: {
         title: '收到的赞'

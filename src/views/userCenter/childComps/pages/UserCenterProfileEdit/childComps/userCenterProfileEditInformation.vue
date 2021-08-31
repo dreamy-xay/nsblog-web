@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-08-28 23:20:26
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-28 23:24:23
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-08-31 11:10:55
 -->
 <template>
   <div class="user-center-profile-information">
@@ -101,7 +101,7 @@ import BaseSelect from '@/components/content/baseSelect/BaseSelect.vue';
  */
 
 export default defineComponent({
-  name: 'UserCenterProfileEdit',
+  name: 'userCenterProfileEdit',
   components: {
     BaseSelect,
   },
@@ -359,6 +359,7 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   width: 926px;
+  margin-top: 16px;
   background-color: $grey-0;
   border-radius: $border-radius-0;
   box-shadow: $shadow-0;

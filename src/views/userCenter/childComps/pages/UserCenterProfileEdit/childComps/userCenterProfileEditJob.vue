@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-08-19 11:57:31
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-28 23:25:04
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-08-31 10:26:29
 -->
 <template>
   <div class="user-center-profile-job-edit">
@@ -59,7 +59,7 @@ import BaseSelect from '@/components/content/baseSelect/BaseSelect.vue';
  */
 
 export default defineComponent({
-  name: 'UserCenterProfileEdit',
+  name: 'userCenterProfileEdit',
   components: {
     BaseSelect,
   },
