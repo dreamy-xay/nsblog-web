@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-19 12:47:57
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-28 20:38:49
+ * @LastEditors: Ban
+ * @LastEditTime: 2021-08-31 13:58:14
  */
 import { RouteRecordRaw } from 'vue-router';
 
@@ -40,7 +40,7 @@ const messageRouter: RouteRecordRaw = {
       meta: {
         title: '帐号安全'
       },
-      component: () => import('@/views/userCenter/childComps/pages/UserCenterAccount.vue')
+      component: () => import('@/views/userCenter/childComps/pages/UserCenterAccount/UserCenterAccount.vue')
     },
     {
       path: 'setting',

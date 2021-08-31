@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { defineComponent, watch } from 'vue';
+import { defineComponent, watch, ref } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import UserCenterMenu from '@/views/userCenter/childComps/UserCenterMenu.vue';
 import router from '@/router';
@@ -46,7 +46,7 @@ export default defineComponent({
   },
   setup() {
     const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
-
+    const scrollTop = ref(0); // 垂直滚动
     //监听登录状态
     watch(
       () => tokenInfo.value.status,
@@ -54,9 +54,20 @@ export default defineComponent({
         if (!value) router.push('/');
       }
     );
+    /**
+     * @description: 滚动监听
+     * @param {any} e 滚动事件参数 `必传参数`
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function getScroll(e) {
+      scrollTop.value = e.scrollTop;
+    }
 
     return {
       tokenInfo,
+      scrollTop,
+      getScroll,
     };
   },
 });
