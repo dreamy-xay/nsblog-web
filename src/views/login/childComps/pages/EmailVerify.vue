@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-28 23:10:42
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-16 18:22:34
+ * @LastEditTime: 2021-08-31 21:56:08
 -->
 <template>
   <div class="email-verify">
@@ -162,20 +162,20 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function submit() {
-      if (code.value.length === 6)
-        emailValidate(email, code.value, info['type'])
-          .then((data) => {
-            if (info['eventId']) {
-              if (data) events.emit(info.eventId, data);
-              else events.emit(info.eventId);
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-            if (error.response && error.response.status === 403)
-              msg.error('验证码错误，验证失败', { duration: 3000, closable: true });
-            else msg.error('服务器错误，验证失败', { duration: 3000, closable: true });
-          });
+      if (code.value.length === 6) {
+        if (info['type'])
+          emailValidate(email, code.value)
+            .then((data) => {
+              if (info['eventId']) events.emit(info.eventId, data);
+            })
+            .catch((error) => {
+              console.log(error);
+              if (error.response && error.response.status === 403)
+                msg.error('验证码错误，验证失败', { duration: 3000, closable: true });
+              else msg.error('服务器错误，验证失败', { duration: 3000, closable: true });
+            });
+        else if (info['eventId']) events.emit(info.eventId, code.value);
+      }
     }
 
     return {

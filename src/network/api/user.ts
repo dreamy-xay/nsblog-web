@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:38:31
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-10 14:55:19
+ * @LastEditTime: 2021-08-31 21:56:02
  */
 import { post, get, del, put, RequestLifeCycle } from '@/network/request';
 import { encrypt } from '@/util/crypto';
@@ -48,6 +48,7 @@ export function exist(query: { username?: string; email?: string }, RLC: Request
  * @param {string} username 用户名 `必传参数`
  * @param {string} password 密码 `必传参数`
  * @param {string} email 邮箱 `必传参数`
+ * @param {string} code 验证码 `必传参数`
  * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
  * @return {Promise<unknown>} 请求返回promise
  * @author: dreamy-xay
@@ -56,6 +57,7 @@ export function signUp(
   username: string,
   password: string,
   email: string,
+  code: string,
   RLC: RequestLifeCycle = {}
 ): Promise<unknown> {
   return post({
@@ -64,7 +66,8 @@ export function signUp(
     data: {
       username,
       password,
-      email
+      email,
+      code
     }
   });
 }
@@ -141,19 +144,17 @@ export async function emailSendVCode(email: string, RLC: RequestLifeCycle = {}):
  * @description: 邮箱验证码校验
  * @param {string} email 邮箱号 `必传参数`
  * @param {string} code 验证码 `必传参数`
- * @param {number} type 请求验证码类型，0是注册，1是忘记密码验证 `必传参数`
  * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
  * @return {Promise<unknown>} 请求返回promise
  * @author: dreamy-xay
  */
-export function emailValidate(email: string, code: string, type: number, RLC: RequestLifeCycle = {}): Promise<unknown> {
+export function emailValidate(email: string, code: string, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return get({
     url: '/users/email/validation',
     ...RLC,
     params: {
       email,
-      code,
-      type
+      code
     }
   });
 }
