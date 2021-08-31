@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 18:50:47
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-05 20:47:53
+ * @LastEditTime: 2021-08-31 21:56:24
 -->
 <template>
   <div class="sign-up">
@@ -207,8 +207,8 @@ export default defineComponent({
                   });
 
                   // 一次性事件绑定
-                  events.on(eventId, () => {
-                    signUp(username.value, password.value, email.value)
+                  events.on(eventId, (code) => {
+                    signUp(username.value, password.value, email.value, code)
                       .then((data) => {
                         events.off(eventId);
                         const eventId = 'backSignIn' + Math.floor(Math.random() * 1000);

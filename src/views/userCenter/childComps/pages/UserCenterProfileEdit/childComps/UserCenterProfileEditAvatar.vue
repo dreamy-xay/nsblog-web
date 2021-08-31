@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-31 10:28:07
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-31 18:17:32
+ * @LastEditTime: 2021-08-31 20:00:08
 -->
 <template>
   <div class="user-center-profile-edit-avatar">
@@ -41,15 +41,26 @@
         <div
           class="signature"
           role="button"
+          v-show="!isEditSignature"
+          @click="editSignature"
         >
           {{data.signature}}
         </div>
       </el-tooltip>
       <user-center-input
-        v-show="false"
+        v-show="isEditSignature"
         type="text"
         v-model="inputValue"
+        @blur="updateSignature(false, true)"
         show-close
+        ref="signatureInput"
+      />
+      <base-modal
+        :show="confirmModalShow"
+        @confirm="updateSignature(true, false)"
+        @cancel="updateSignature(false, false)"
+        content="确认修改个性签名~ o(*￣▽￣*)o"
+        confirmeText="确认修改"
       />
     </div>
   </div>
@@ -59,6 +70,7 @@
 import { defineComponent, ref } from 'vue';
 import BaseAvatarCropper from '@/components/content/baseAvatarCropper/BaseAvatarCropper.vue';
 import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput.vue';
+import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 
 /**
  * @description: 修改头像和用户签名
@@ -70,6 +82,7 @@ export default defineComponent({
   components: {
     // BaseAvatarCropper,
     UserCenterInput,
+    BaseModal,
   },
   props: {
     data: {
@@ -84,15 +97,54 @@ export default defineComponent({
   setup(props) {
     const inuptValue = ref(props.signature); // 输入内容
     const showAvatarCropper = ref(false); // 显示头像修改剪贴框
+    const isEditSignature = ref(false); // 编辑个性签名
+    const confirmModalShow = ref(false); // 编辑个性签名确认框
+    const signatureInput = ref(null); // signature input ref
 
+    /**
+     * @description: 裁剪头像获取裁剪信息
+     * @param {any} e 裁剪参数 `必传参数`
+     * @return {void}
+     * @author: dreamy-xay
+     */
     function avatarCropperHandler(e) {
       console.log(e);
+    }
+
+    /**
+     * @description: 编辑个性签名
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function editSignature() {
+      isEditSignature.value = true;
+      signatureInput.value.userCenterInput.value.focus();
+    }
+
+    /**
+     * @description: 更新个性签名
+     * @param {boolean} isConfirm 是否处于确认状态 `必传参数`
+     * @param {boolean} confirmModalShow 确认框是否显示 `默认为false`
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function updateSignature(isConfirm, confirmModalShow = false) {
+      if (isConfirm) {
+        console.log('submit');
+      }
+      confirmModalShow.value = confirmModalShow;
+      isEditSignature.value = false;
     }
 
     return {
       inuptValue,
       showAvatarCropper,
       avatarCropperHandler,
+      editSignature,
+      isEditSignature,
+      updateSignature,
+      confirmModalShow,
+      signatureInput,
     };
   },
 });

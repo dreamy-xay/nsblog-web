@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-31 16:34:22
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-31 18:18:12
+ * @LastEditTime: 2021-08-31 19:37:49
 -->
 <template>
   <div class="user-center-input">
@@ -16,6 +16,7 @@
       :placeholder="placeholder"
       @input="input"
       @focus="focus"
+      @blur="$emit('blur')"
       @keyup.enter="inputEnter"
       :style="{paddingRight: showPassword && showClose ? '45px' : (showPassowrd || showClose ? '25px' : '5px'), letterSpacing: inputType ? '3.9px' : '1.2px', ...style}"
     >
@@ -53,6 +54,8 @@ import { useMessage } from 'naive-ui';
  * @param {Number} maxlength 输入内容最大长度 `默认为null`
  * @param {Object} style 输入框样式，可以修改宽高等等 `默认为{}`
  * @event enter 键盘按下回车时出发事件
+ * @event blur 输入框失焦
+ * @event focus 输入框聚焦
  * @event toggleType 当输入框类型发生改变时触发事件，携带一个参数type['password', 'text']
  * @method check 最终检查校验，message选项，无效时触发，返回是否有效，{message:'',type:'', duration}
  * @var {HtmlElement} userCenterInput 输入框dom节点
@@ -136,6 +139,7 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function focus() {
+      context.emit('focus');
       error.value = false;
     }
 

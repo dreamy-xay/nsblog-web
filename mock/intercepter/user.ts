@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:15:05
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-26 16:02:58
+ * @LastEditTime: 2021-08-31 21:59:53
  */
 import { Random } from 'better-mock';
 import { Application, Request, Response } from 'express';
@@ -53,10 +53,14 @@ export default function(baseUrl: string, app: Application) {
 
   // 注册新用户
   app.post(baseUrl + '/users', (req: Request, res: Response) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, code } = req.body;
     const users: DataBaseOperator = select('users');
-    users.insertOne({ username, password, email, token: null, isActive: true, isSuper: false });
-    return res.status(201).json({ username });
+    const codes: DataBaseOperator = select('codes');
+    if (codes.findOne({ code, email })) {
+      codes.removeOne({ code, email });
+      users.insertOne({ username, password, email, token: null, isActive: true, isSuper: false });
+      return res.status(201).json({ username });
+    } else return res.status(403).json({ error: 'code error' });
   });
 
   // 修改用户信息
@@ -92,13 +96,12 @@ export default function(baseUrl: string, app: Application) {
 
   // 验证验证码
   app.get(baseUrl + '/users/email/validation', (req: Request, res: Response) => {
-    const { code, email, type } = req.query;
-    if (select('codes').findOne({ code, email })) {
-      if (int(type) === 1) {
-        const user: Record<string, unknown> = select('users').findOne({ email });
-        return res.json({ username: user.username, data: user.password });
-      }
-      return res.send();
+    const { code, email } = req.query;
+    const codes: DataBaseOperator = select('codes');
+    if (codes.findOne({ code, email })) {
+      codes.removeOne({ code, email });
+      const user: Record<string, unknown> = select('users').findOne({ email });
+      return res.json({ username: user.username, data: user.password });
     } else return res.status(403).json({ error: 'code error' });
   });
 
