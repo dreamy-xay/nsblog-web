@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-19 21:30:24
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-26 11:37:58
+ * @LastEditTime: 2021-08-31 11:52:02
  */
 import { App } from 'vue';
 import 'dayjs/locale/zh-cn';
@@ -89,7 +89,7 @@ import {
   // ElTimeSelect,
   // ElTimeline,
   // ElTimelineItem,
-  // ElTooltip,
+  ElTooltip,
   // ElTransfer,
   // ElTree,
   // ElUpload,
@@ -171,7 +171,7 @@ const components = [
   ElRadioGroup,
   // ElRate,
   // ElRow,
-  ElScrollbar
+  ElScrollbar,
   // ElSelect,
   // ElSlider,
   // ElStep,
@@ -187,7 +187,7 @@ const components = [
   // ElTimeSelect,
   // ElTimeline,
   // ElTimelineItem,
-  // ElTooltip,
+  ElTooltip
   // ElTransfer,
   // ElTree,
   // ElUpload,

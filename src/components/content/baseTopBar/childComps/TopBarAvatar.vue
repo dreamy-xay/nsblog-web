@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-19 18:32:43
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-19 13:13:16
+ * @LastEditTime: 2021-08-30 12:36:50
 -->
 <template>
   <div class="top-bar-avatar">
@@ -186,7 +186,7 @@ export default defineComponent({
       },
       {
         name: '个人设置',
-        url: '#',
+        url: '/userCenter/profile',
         icon: 'blog-shezhi1',
       },
     ];

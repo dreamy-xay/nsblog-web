@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-19 11:55:18
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-26 22:31:13
+ * @LastEditTime: 2021-08-31 11:33:29
 -->
 <template>
   <div class="user-center-menu">
@@ -17,6 +17,7 @@
     <div class="user-center-menu-text1">
       <a
         class="text-content"
+        role="button"
         v-for="item in text1"
         :key="item.title"
         :href="item.url"
@@ -40,6 +41,7 @@
     <div class="user-center-menu-text2">
       <a
         class="text-content"
+        role="button"
         v-for="item in text2"
         :key="item.title"
         :href="item.url"
@@ -57,6 +59,7 @@
     <div class="user-center-menu-text3">
       <a
         class="text-content"
+        role="button"
         v-for="item in text3"
         :key="item.title"
         :href="item.url"
@@ -119,17 +122,17 @@ export default defineComponent({
       {
         icon: 'blog-gerenziliao',
         title: '个人资料',
-        url: '/usercenter/profile',
+        url: '/userCenter/profile',
       },
       {
         icon: 'blog-yinsishezhi',
         title: '隐私设置',
-        url: '/usercenter/setting',
+        url: '/userCenter/setting',
       },
       {
         icon: 'blog-zhanghaoanquan1',
         title: '帐号安全',
-        url: '/usercenter/account',
+        url: '/userCenter/account',
       },
     ];
     // 菜单3
@@ -148,7 +151,7 @@ export default defineComponent({
 
     //匹配路径
     function compareRoute(url) {
-      return RegExp(url).test(route.path);
+      return new RegExp(url + '(/|$|\\?)').test(route.path);
     }
 
     return {
@@ -170,6 +173,7 @@ export default defineComponent({
   border-radius: $border-radius-0;
   font-size: 16px;
   @include flex(initial, center, column);
+  position: fixed;
 
   .icon {
     height: 100%;
