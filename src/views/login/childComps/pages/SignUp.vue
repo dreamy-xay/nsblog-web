@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 18:50:47
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-31 21:56:24
+ * @LastEditTime: 2021-08-31 22:32:28
 -->
 <template>
   <div class="sign-up">
@@ -229,6 +229,9 @@ export default defineComponent({
                       })
                       .catch((error) => {
                         console.log(error);
+                        if (error.response && error.response.status === 403)
+                          msg.error('验证码错误，验证失败', { duration: 3000, closable: true });
+                        else msg.error('服务器错误，验证失败', { duration: 3000, closable: true });
                       });
                   });
                 })

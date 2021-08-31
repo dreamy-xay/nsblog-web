@@ -4,10 +4,13 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-31 16:34:22
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-31 19:37:49
+ * @LastEditTime: 2021-08-31 22:42:35
 -->
 <template>
-  <div class="user-center-input">
+  <div
+    class="user-center-input"
+    :style="{width: style.width, height: style.height}"
+  >
     <input
       :type="inputType ? 'password' : 'text'"
       ref="userCenterInput"
@@ -18,7 +21,7 @@
       @focus="focus"
       @blur="$emit('blur')"
       @keyup.enter="inputEnter"
-      :style="{paddingRight: showPassword && showClose ? '45px' : (showPassowrd || showClose ? '25px' : '5px'), letterSpacing: inputType ? '3.9px' : '1.2px', ...style}"
+      :style="{paddingRight: showPassword && showClose ? '45px' : (showPassword || showClose ? '25px' : '5px'), letterSpacing: inputType ? '3.9px' : '1.2px', ...style}"
     >
     <i
       v-if="showPassword"
@@ -239,6 +242,7 @@ $error-shadow: 0 0 6px $error;
 
 .user-center-input {
   @include flex();
+  width: 100%;
   position: relative;
 
   .iconfont {

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-28 23:10:42
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-31 21:56:08
+ * @LastEditTime: 2021-08-31 22:28:34
 -->
 <template>
   <div class="email-verify">
@@ -163,7 +163,7 @@ export default defineComponent({
      */
     function submit() {
       if (code.value.length === 6) {
-        if (info['type'])
+        if (parseInt(info['type']))
           emailValidate(email, code.value)
             .then((data) => {
               if (info['eventId']) events.emit(info.eventId, data);

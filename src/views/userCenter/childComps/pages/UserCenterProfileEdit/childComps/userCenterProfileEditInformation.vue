@@ -4,14 +4,17 @@
  * @Autor: Z_Y_C
  * @Date: 2021-08-28 23:20:26
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-31 18:17:26
+ * @LastEditTime: 2021-08-31 22:41:58
 -->
 <template>
   <div class="user-center-profile-information">
     <div class="user-center-profile-information-title">基本信息</div>
     <div class="user-center-profile-information-nickname">
       <div class="user-center-profile-information-nickname-text">昵称</div>
-      <user-center-input v-model="nickName" />
+      <user-center-input
+        v-model="nickName"
+        :style="{width: '200px'}"
+      />
     </div>
 
     <div class="user-center-profile-information-gender">

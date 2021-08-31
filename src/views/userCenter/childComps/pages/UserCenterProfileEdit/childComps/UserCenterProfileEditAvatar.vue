@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-31 10:28:07
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-31 20:00:08
+ * @LastEditTime: 2021-08-31 23:03:55
 -->
 <template>
   <div class="user-center-profile-edit-avatar">
@@ -34,26 +34,25 @@
     <div class="user-center-profile-edit-avatar-right">
       <el-tooltip
         placement="top"
-        trigger="hover"
         content="修改个性签名"
         popper-class="user-center-profile-edit-avatar-right-signature"
       >
         <div
           class="signature"
           role="button"
-          v-show="!isEditSignature"
           @click="editSignature"
+          v-show="!isEditSignature"
         >
           {{data.signature}}
         </div>
       </el-tooltip>
       <user-center-input
         v-show="isEditSignature"
+        ref="signatureInput"
         type="text"
         v-model="inputValue"
         @blur="updateSignature(false, true)"
         show-close
-        ref="signatureInput"
       />
       <base-modal
         :show="confirmModalShow"
@@ -67,7 +66,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, nextTick, ref } from 'vue';
 import BaseAvatarCropper from '@/components/content/baseAvatarCropper/BaseAvatarCropper.vue';
 import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput.vue';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
@@ -95,7 +94,7 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const inuptValue = ref(props.signature); // 输入内容
+    const inputValue = ref(props.signature); // 输入内容
     const showAvatarCropper = ref(false); // 显示头像修改剪贴框
     const isEditSignature = ref(false); // 编辑个性签名
     const confirmModalShow = ref(false); // 编辑个性签名确认框
@@ -118,7 +117,9 @@ export default defineComponent({
      */
     function editSignature() {
       isEditSignature.value = true;
-      signatureInput.value.userCenterInput.value.focus();
+      nextTick(() => {
+        signatureInput.value.userCenterInput.focus();
+      });
     }
 
     /**
@@ -137,7 +138,7 @@ export default defineComponent({
     }
 
     return {
-      inuptValue,
+      inputValue,
       showAvatarCropper,
       avatarCropperHandler,
       editSignature,
