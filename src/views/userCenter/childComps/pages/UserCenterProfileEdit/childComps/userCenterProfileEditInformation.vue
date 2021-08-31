@@ -4,21 +4,14 @@
  * @Autor: Z_Y_C
  * @Date: 2021-08-28 23:20:26
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-31 11:10:55
+ * @LastEditTime: 2021-08-31 18:17:26
 -->
 <template>
   <div class="user-center-profile-information">
     <div class="user-center-profile-information-title">基本信息</div>
     <div class="user-center-profile-information-nickname">
       <div class="user-center-profile-information-nickname-text">昵称</div>
-
-      <input
-        class="user-center-profile-information-nickname-input"
-        type="text"
-        :value="nickName"
-        @input="input"
-      >
-
+      <user-center-input v-model="nickName" />
     </div>
 
     <div class="user-center-profile-information-gender">
@@ -95,6 +88,8 @@
 <script>
 import { computed, defineComponent, ref, reactive } from 'vue';
 import BaseSelect from '@/components/content/baseSelect/BaseSelect.vue';
+import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput.vue';
+
 /**
  * @description: 基本信息模块
  * @author: Z_Y_C
@@ -104,6 +99,7 @@ export default defineComponent({
   name: 'userCenterProfileEdit',
   components: {
     BaseSelect,
+    UserCenterInput,
   },
   setup(props, context) {
     const nickName = ref('1233');
@@ -117,10 +113,6 @@ export default defineComponent({
         { lable: '保密', value: 3 },
       ];
     });
-
-    function input(e) {
-      nickName.value = e.target.value;
-    }
 
     function changeGender() {
       console.log(genderData.value);
@@ -298,7 +290,6 @@ export default defineComponent({
 
     return {
       nickName,
-      input,
       genderData,
       radiomenus,
       changeGender,

@@ -5,7 +5,7 @@
  * @Autor: continue-hs
  * @Date: 2021-07-22 17:52:26
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-31 10:43:48
+ * @LastEditTime: 2021-08-31 17:43:29
 -->
 <template>
   <div
@@ -175,7 +175,8 @@ export default defineComponent({
 
     .blog-close-circle {
       position: absolute;
-      top: 7px;
+      line-height: 36px;
+      top: 0;
       right: 54px;
       color: $grey-7;
     }
