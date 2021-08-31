@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-18 21:26:17
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-31 10:59:06
+ * @LastEditTime: 2021-08-31 16:24:17
 -->
 <template>
   <base-view
@@ -88,6 +88,7 @@ export default defineComponent({
 
   .user-center-right {
     width: 926px;
+    margin-bottom: 16px;
   }
 }
 </style>

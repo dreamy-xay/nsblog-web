@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-31 10:28:07
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-31 11:56:37
+ * @LastEditTime: 2021-08-31 18:17:32
 -->
 <template>
   <div class="user-center-profile-edit-avatar">
@@ -45,6 +45,12 @@
           {{data.signature}}
         </div>
       </el-tooltip>
+      <user-center-input
+        v-show="false"
+        type="text"
+        v-model="inputValue"
+        show-close
+      />
     </div>
   </div>
 </template>
@@ -52,6 +58,7 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import BaseAvatarCropper from '@/components/content/baseAvatarCropper/BaseAvatarCropper.vue';
+import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput.vue';
 
 /**
  * @description: 修改头像和用户签名
@@ -60,6 +67,10 @@ import BaseAvatarCropper from '@/components/content/baseAvatarCropper/BaseAvatar
 
 export default defineComponent({
   name: 'userCenterProfileEditAvatar',
+  components: {
+    // BaseAvatarCropper,
+    UserCenterInput,
+  },
   props: {
     data: {
       type: Object,
@@ -70,10 +81,8 @@ export default defineComponent({
       }),
     },
   },
-  components: {
-    // BaseAvatarCropper,
-  },
-  setup() {
+  setup(props) {
+    const inuptValue = ref(props.signature); // 输入内容
     const showAvatarCropper = ref(false); // 显示头像修改剪贴框
 
     function avatarCropperHandler(e) {
@@ -81,6 +90,7 @@ export default defineComponent({
     }
 
     return {
+      inuptValue,
       showAvatarCropper,
       avatarCropperHandler,
     };
@@ -154,7 +164,6 @@ export default defineComponent({
 
   .user-center-profile-edit-avatar-right {
     width: 420px;
-    overflow: hidden;
     @include flex(center);
 
     .signature {
