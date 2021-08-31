@@ -4,18 +4,25 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-30 12:26:59
+ * @LastEditTime: 2021-08-31 12:15:42
 -->
 
 <template>
-  <div class="home">
-    <base-top-bar />
-  </div>
+  <base-view
+    :background="true"
+    :top-bar="true"
+    bind-class="message"
+  >
+    <v-md-editor
+      v-model="text"
+      height="400px"
+    ></v-md-editor>
+  </base-view>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
-import BaseTopBar from '@/components/content/baseTopBar/BaseTopBar.vue';
+import { defineComponent, ref } from 'vue';
+import BaseView from '@/components/content/baseView/BaseView.vue';
 
 /**
  * @description: 博客主页
@@ -25,7 +32,14 @@ import BaseTopBar from '@/components/content/baseTopBar/BaseTopBar.vue';
 export default defineComponent({
   name: 'Home',
   components: {
-    BaseTopBar,
+    BaseView,
+  },
+  setup() {
+    const text = ref('');
+
+    return {
+      text,
+    };
   },
 });
 </script>
