@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:42
  * @LastEditors: Ban
- * @LastEditTime: 2021-08-24 21:24:59
+ * @LastEditTime: 2021-08-28 20:22:41
 -->
 <template>
   <div class="user-center-account">
@@ -22,12 +22,27 @@
       <div class="body-center">
         {{ item.center }}
       </div>
-      <a
+      <div
         class="body-right"
         role="button"
       >
-        {{ item.right }}
-      </a>
+        <div
+          v-if="item.left === '登录记录' || item.left === '帐号注销'"
+          style="text-align: right;"
+        >
+          {{ item.right }}
+        </div>
+        <div
+          v-else-if="item.right === '解除绑定'"
+          style="text-align: right;"
+        >
+          {{ item.right }}
+        </div>
+        <div v-else>
+          <user-center-account-change :title="item.right"></user-center-account-change>
+        </div>
+
+      </div>
     </div>
   </div>
 </template>
@@ -36,6 +51,7 @@
 import { defineComponent, computed, ref } from 'vue';
 import { getUserInfo, getPasswordStatus } from '@/network/api/user';
 import { mapState } from '@/util/store';
+import UserCenterAccountChange from '@/views/userCenter/childComps/pages/UserCenterAccount/childComps/UserCenterAccountChange';
 
 /**
  * @description:
@@ -45,10 +61,14 @@ import { mapState } from '@/util/store';
  */
 export default defineComponent({
   name: 'UserCenterAccount',
+  components: {
+    UserCenterAccountChange,
+  },
   setup() {
-    let email = ref('');
-    let weibo = ref('');
-    let qq = ref('');
+    const email = ref('');
+    const weibo = ref('');
+    const qq = ref('');
+    const dialogVisible = ref(false);
     const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
     //获取数据
     if (tokenInfo.value.status) {
@@ -100,8 +120,19 @@ export default defineComponent({
         },
       ];
     });
+    // function dialogBeforeClose(done) {
+    //   this.$confirm('确认关闭？')
+    //     .then((_) => {
+    //       done();
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // }
     return {
       list,
+      dialogVisible,
+      // dialogBeforeClose,
     };
   },
 });
@@ -110,40 +141,43 @@ export default defineComponent({
 <style lang="scss" scoped>
 .user-center-account {
   width: 926px;
+  display: flex;
+  flex-direction: column;
 
+  .flex {
+    display: flex;
+    flex-direction: column-reverse;
+  }
   .user-center-account-header {
     height: 42px;
     line-height: 42px;
     color: $grey-7;
     user-select: none;
     font-size: 17px;
+    margin-bottom: 8px;
   }
 
   .user-center-account-body {
     height: 53px;
     display: flex;
-    margin: 16px 0;
+    flex-direction: row;
+    margin: 8px 0;
     font-size: 16px;
 
     .body-left {
+      @include flex(center);
       width: 100px;
-      box-sizing: border-box;
-      padding: 14px 0;
     }
 
     .body-center {
+      @include flex(center, center);
       flex: 1;
-      text-align: center;
-      box-sizing: border-box;
-      padding: 14px 0;
       color: $grey-7;
     }
 
     .body-right {
+      @include flex(center, flex-end);
       width: 100px;
-      box-sizing: border-box;
-      margin: 14px 0;
-      text-align: right;
       color: $green-0;
       transition: 0.25s;
 

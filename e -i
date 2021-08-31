@@ -1,0 +1,270 @@
+[33mcommit 5d15087c09de79504e87dfabbc08bb0b4584e13b[m[33m ([m[1;36mHEAD -> [m[1;32mdevelop[m[33m)[m
+Merge: 5bad382 f5ee646
+Author: Ban <1040316946@qq.com>
+Date:   Tue Aug 24 21:34:12 2021 +0800
+
+    Merge branch 'develop' of https://git.weixin.qq.com/beautiful-blog/web into develop
+
+[33mcommit 5bad3826689957f69bdcab842fca7c4eefa1d8e9[m
+Author: Ban <1040316946@qq.com>
+Date:   Tue Aug 24 21:33:41 2021 +0800
+
+    add UserCenterAccount
+
+[33mcommit f5ee646a3aa64b12321b34fbc48456edddc61ee0[m[33m ([m[1;31morigin/feature/dreamy[m[33m, [m[1;31morigin/develop[m[33m)[m
+Author: dreamy <oncwnuIOlHWqO06a56xvgf48L99E@git.weixin.qq.com>
+Date:   Tue Aug 24 20:26:04 2021 +0800
+
+    complete messageMy.vue
+
+[33mcommit 55c3b65b2c4f3406130a1c8b34b36013dfefe19f[m
+Merge: cb3d114 d80ccc8
+Author: Ban <1040316946@qq.com>
+Date:   Mon Aug 23 16:46:45 2021 +0800
+
+    Merge branch 'develop' of https://git.weixin.qq.com/beautiful-blog/web into develop
+
+[33mcommit cb3d11461ab0b822e950819949075b32fc2b04c9[m
+Author: Ban <1040316946@qq.com>
+Date:   Mon Aug 23 16:45:38 2021 +0800
+
+    fix usercenter
+
+[33mcommit d80ccc82b23f28539f702bf17c7b43bc91041ea0[m
+Author: Z_Y_C <2918765917@qq.com>
+Date:   Mon Aug 23 16:44:09 2021 +0800
+
+    '修复一些问题'
+
+[33mcommit 3590e41c363bf44a360213dbd776b75ae772ee67[m
+Author: dreamy <oncwnuIOlHWqO06a56xvgf48L99E@git.weixin.qq.com>
+Date:   Mon Aug 23 14:11:31 2021 +0800
+
+    fix some bugs
+
+[33mcommit 629e3d5b65bda37a4f60d8f28d4b7f021184ac32[m
+Author: Ban <1040316946@qq.com>
+Date:   Mon Aug 23 13:35:24 2021 +0800
+
+    fix usercenter
+
+[33mcommit b62bee48707e2c41815109e68223817a02841ab8[m
+Author: dreamy <oncwnuIOlHWqO06a56xvgf48L99E@git.weixin.qq.com>
+Date:   Mon Aug 23 13:08:42 2021 +0800
+
+    fix some bugs
+
+[33mcommit 7efac6b1f31e630a78e5c4aec399e4867af1d623[m
+Author: dreamy <oncwnuIOlHWqO06a56xvgf48L99E@git.weixin.qq.com>
+Date:   Mon Aug 23 12:50:35 2021 +0800
+
+    add topics api，fix some bugs, modify message page
+
+[33mcommit e4416aac809743bc272dcb571f57b6ea93f68825[m
+Author: Z_Y_C <2918765917@qq.com>
+Date:   Mon Aug 23 10:46:35 2021 +0800
+
+    '更新消息界面'
+
+[33mcommit 8dd2eb51f64ff2c3324233772757e9324886f847[m
+Author: dreamy <oncwnuIOlHWqO06a56xvgf48L99E@git.weixin.qq.com>
+Date:   Sun Aug 22 17:11:19 2021 +0800
+
+    add favorites api，fix some bugs
+
+[33mcommit fb00d6fc4e5c4b9c40692cea93cab24ed958c006[m
+Author: dreamy <oncwnuIOlHWqO06a56xvgf48L99E@git.weixin.qq.com>
+Date:   Sat Aug 21 17:33:29 2021 +0800
+
+    add users，fix some bugs
+
+[33mcommit 9ff0c271ade30cb70c4b27c0440327be98eb45d8[m
+Author: dreamy <oncwnuIOlHWqO06a56xvgf48L99E@git.weixin.qq.com>
+Date:   Sat Aug 21 14:32:57 2021 +0800
+
+    fix some files，fix some bugs
+
+[33mcommit 264edcc52532d1a597ba19d7c51ff132ee3a1b5e[m
+Author: dreamy <oncwnuIOlHWqO06a56xvgf48L99E@git.weixin.qq.com>
+Date:   Fri Aug 20 23:27:56 2021 +0800
+
+    fix some files，fix some bugs
+
+[33mcommit c014faea3eefd210bb8a416329846bc4deb2e693[m
+Author: dreamy <oncwnuIOlHWqO06a56xvgf48L99E@git.weixin.qq.com>
+Date:   Fri Aug 20 16:58:20 2021 +0800
+
+    fix some files
+
+[33mcommit 211dd35906019f47db0b7be5d2da44b8b7590c11[m
+Author: dreamy <oncwnuIOlHWqO06a56xvgf48L99E@git.weixin.qq.com>
+Date:   Fri Aug 20 16:04:49 2021 +0800
+
+    fix some files
+
+[33mcommit 8e70509b5e18a442f89b251f3dfd928b767f1589[m
+Author: continue-hs <oncwnuOWBk2k_4m3iO91HPiaj4fM@git.weixin.qq.com>
+Date:   Fri Aug 20 02:31:43 2021 +0000
+
+    add searchhistory
+
+[33mcommit 6503d4a9fcddc2a0d245c016bbf572734f945e43[m
+Author: Z_Y_C <2918765917@qq.com>
+Date:   Fri Aug 20 00:00:12 2021 +0800
+
+    '更新了message页面'
+
+[33mcommit 8773efa85d1b551f6c9a6d483ace6c014ceb0bc2[m
+Author: Ban <1040316946@qq.com>
+Date:   Thu Aug 19 22:30:03 2021 +0800
+
+    add userCenter
+
+[33mcommit e6bf0a314cef97a0d4c9630b6d91775e5165f973[m
+Author: dreamy <oncwnuIOlHWqO06a56xvgf48L99E@git.weixin.qq.com>
+Date:   Thu Aug 19 20:58:14 2021 +0800
+
+    fix some files
+
+[33mcommit 79143229e3a24f43dd040cb67332dd657f9868bb[m
+Author: dreamy <oncwnuIOlHWqO06a56xvgf48L99E@git.weixin.qq.com>
+Date:   Thu Aug 19 16:07:43 2021 +0800
+
+    fix svg
+
+[33mcommit f059b33be11ac3a327562cacab966c6bf01139d9[m
+Author: dreamy <oncwnuIOlHWqO06a56xvgf48L99E@git.weixin.qq.com>
+Date:   Thu Aug 19 15:08:43 2021 +0800
+
+    fix some bugs
+
+[33mcommit 2bee6fdd88af439fad9977fa0646878d45c4d018[m
+Author: dreamy <oncwnuIOlHWqO06a56xvgf48L99E@git.weixin.qq.com>
+Date:   Thu Aug 19 13:16:13 2021 +0800
+
+    fix some bugs
+
+[33mcommit f1756fdaf2f6ad9dba5c2f276f89e72f138c6f1c[m
+Author: dreamy <oncwnuIOlHWqO06a56xvgf48L99E@git.weixin.qq.com>
+Date:   Thu Aug 19 12:17:57 2021 +0800
+
+    add BaseAvatar.vue, fix some bugs
+
+[33mcommit 38eb368bdfd10772d98d86ca6cca5fb598a2507e[m
+Author: dreamy <oncwnuIOlHWqO06a56xvgf48L99E@git.weixin.qq.com>
+Date:   Wed Aug 18 22:03:26 2021 +0800
+
+    add MessageMy
+
+[33mcommit 915d7409143ee83ebd1a86d434ef287c978f1eaf[m
+Author: dreamy <oncwnuIOlHWqO06a56xvgf48L99E@git.weixin.qq.com>
+Date:   Wed Aug 18 15:38:25 2021 +0800
+
+    update TopBarHistory.vue
+
+[33mcommit 6144346d977037414d5853c1a9badf9f4c66f8cb[m
+Author: Ban <1040316946@qq.com>
+Date:   Tue Aug 17 22:22:30 2021 +0800
+
+    'add'
+
+[33mcommit 94c3c2ccfdc2d51e0fe04c6ebb08d036300ea706[m
+Author: dreamy <oncwnuIOlHWqO06a56xvgf48L99E@git.weixin.qq.com>
+Date:   Tue Aug 17 13:54:47 2021 +0800
+
+    add dialogues api
+
+[33mcommit 43c179b17aa6013fce189d5dbf5193beb7a7adbe[m
+Author: dreamy <oncwnuIOlHWqO06a56xvgf48L99E@git.weixin.qq.com>
+Date:   Mon Aug 16 18:23:59 2021 +0800
+
+    fix some bugs，add BaseModal.vue
+
+[33mcommit fa62a1de8fc8b91ec9d8c18a8108d647e619ada2[m
+Author: Z_Y_C <2918765917@qq.com>
+Date:   Sat Aug 14 22:20:51 2021 +0800
+
+    '修复一些问题'
+
+[33mcommit 4975a54d6212f89e97e9a4655f0b8c90cc1a17d8[m
+Author: Z_Y_C <2918765917@qq.com>
+Date:   Sat Aug 14 21:22:47 2021 +0800
+
+    '修复了一些问题'
+
+[33mcommit 38102390b0947618b9cf8d15b0cd88563831b808[m
+Merge: a12030f 2c7552f
+Author: Z_Y_C <2918765917@qq.com>
+Date:   Sat Aug 14 21:13:36 2021 +0800
+
+    '更新了一些消息页面'
+
+[33mcommit a12030f620d6bc08dcd7b9e54eb69bb2a5166176[m
+Author: Z_Y_C <2918765917@qq.com>
+Date:   Sat Aug 14 21:08:22 2021 +0800
+
+    '更新了一些消息页面'
+
+[33mcommit 2c7552f8b03063c813798ba403ed68cf12c46dd0[m
+Author: dreamy <oncwnuIOlHWqO06a56xvgf48L99E@git.weixin.qq.com>
+Date:   Sat Aug 14 12:58:43 2021 +0800
+
+    fix some bugs
+
+[33mcommit ae6c07af28a9e810538bdc49becd114954a69fa3[m
+Author: continue-hs <oncwnuOWBk2k_4m3iO91HPiaj4fM@git.weixin.qq.com>
+Date:   Fri Aug 13 10:46:24 2021 +0000
+
+    fix some bugs
+
+[33mcommit cb1b19fbb2a7e1055ab2567c71028ae82b837c84[m
+Author: dreamy <oncwnuIOlHWqO06a56xvgf48L99E@git.weixin.qq.com>
+Date:   Fri Aug 13 17:21:52 2021 +0800
+
+    none
+
+[33mcommit a7239f82c4a406f87862ed192323126f6bd0ebfb[m
+Author: dreamy <oncwnuIOlHWqO06a56xvgf48L99E@git.weixin.qq.com>
+Date:   Fri Aug 13 17:01:15 2021 +0800
+
+    modify TopBarMessage.vue
+
+[33mcommit 4ff751fd6571f28e3db026914fb28078718488cf[m
+Author: continue-hs <oncwnuOWBk2k_4m3iO91HPiaj4fM@git.weixin.qq.com>
+Date:   Fri Aug 13 07:46:11 2021 +0000
+
+    remove redundant code
+
+[33mcommit 7632898863d31091a6877b5887d57ba733bbe77c[m
+Author: continue-hs <oncwnuOWBk2k_4m3iO91HPiaj4fM@git.weixin.qq.com>
+Date:   Fri Aug 13 07:34:28 2021 +0000
+
+    remove redundant code
+
+[33mcommit 11a2d41bd947030325c76254ca1d4757e19065a6[m
+Author: dreamy <oncwnuIOlHWqO06a56xvgf48L99E@git.weixin.qq.com>
+Date:   Fri Aug 13 13:52:53 2021 +0800
+
+    rewrite some components
+
+[33mcommit 60b10c74a7ec26956475a1a125bcbfc156f9caa6[m
+Author: dreamy <oncwnuIOlHWqO06a56xvgf48L99E@git.weixin.qq.com>
+Date:   Fri Aug 13 10:29:09 2021 +0800
+
+    fix some bugs
+
+[33mcommit 86645d0842dc1200acc20d65546099872ba403fb[m
+Author: Z_Y_C <2918765917@qq.com>
+Date:   Thu Aug 12 23:44:44 2021 +0800
+
+    '消息页面数据模拟'
+
+[33mcommit 24e1ab01df004092a5555820f32e109b144be741[m
+Author: dreamy <oncwnuIOlHWqO06a56xvgf48L99E@git.weixin.qq.com>
+Date:   Thu Aug 12 23:06:50 2021 +0800
+
+    fix some bugs
+
+[33mcommit d348196bb9ef5e068542c4b88cae6ce14a25d116[m
+Author: dreamy <oncwnuIOlHWqO06a56xvgf48L99E@git.weixin.qq.com>
+Date: 
