@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 22:15:27
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-04 10:27:27
+ * @LastEditTime: 2021-09-01 21:02:14
 -->
 <template>
   <div class="login-input">
@@ -13,6 +13,7 @@
       ref="loginInput"
       :class="inputClass"
       :maxlength="maxlength"
+      :value="modelValue"
       :placeholder="placeholder"
       @input="input"
       @focus="focus"
@@ -31,7 +32,7 @@
 </template>
 
 <script>
-import { computed, defineComponent, ref, watch } from 'vue';
+import { computed, defineComponent, onMounted, ref, watch } from 'vue';
 import { useMessage } from 'naive-ui';
 
 /**
@@ -97,6 +98,18 @@ export default defineComponent({
         inputType.value = newValue !== 'text';
       }
     );
+
+    // dom 渲染完成
+    onMounted(() => {
+      // 点击显示密码按钮不失去焦点
+      document.addEventListener(
+        'mousedown',
+        (e) => {
+          if (e.target.getAttribute('class').includes('login-input-eye')) e.preventDefault();
+        },
+        false
+      );
+    });
 
     // 计算属性
     const inputClass = computed(() => {

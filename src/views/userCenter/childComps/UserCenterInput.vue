@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-31 16:34:22
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-31 22:42:35
+ * @LastEditTime: 2021-09-01 21:06:01
 -->
 <template>
   <div
@@ -17,9 +17,10 @@
       :class="inputClass"
       :maxlength="maxlength"
       :placeholder="placeholder"
+      :value="modelValue"
       @input="input"
       @focus="focus"
-      @blur="$emit('blur')"
+      @blur="blur"
       @keyup.enter="inputEnter"
       :style="{paddingRight: showPassword && showClose ? '45px' : (showPassword || showClose ? '25px' : '5px'), letterSpacing: inputType ? '3.9px' : '1.2px', ...style}"
     >
@@ -32,7 +33,7 @@
     ></i>
     <i
       v-if="showClose"
-      v-show="showCloseShow"
+      v-show="modelValue !== ''"
       role="button"
       class="iconfont blog-close-circle user-center-input-close"
       :class="{'right-has': showPassword}"
@@ -42,7 +43,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, watch, computed, onMounted } from 'vue';
+import { defineComponent, ref, watch, computed, onMounted, nextTick } from 'vue';
 import { useMessage } from 'naive-ui';
 
 /**
@@ -110,7 +111,6 @@ export default defineComponent({
     const msg = useMessage(); // naive-ui mssage
     const inputType = ref(props.type !== 'text'); // 输入框类型
     const userCenterInput = ref(null); // 输入框dom节点
-    const showCloseShow = ref(false); // 是否显示关闭按钮
     const efficient = ref(props.verify === null || props.verify('')); // 是否有效
     const error = ref(false);
 
@@ -124,7 +124,19 @@ export default defineComponent({
 
     // dom渲染完成
     onMounted(() => {
-      showCloseShow.value = userCenterInput.value.value !== '';
+      // 点击关闭按钮和显示密码按钮不失去焦点
+      document.addEventListener(
+        'mousedown',
+        (e) => {
+          if (
+            e.target.getAttribute('class').includes('user-center-input-close') ||
+            e.target.getAttribute('class').includes('user-center-input-eye')
+          ) {
+            e.preventDefault();
+          }
+        },
+        false
+      );
     });
 
     // 计算属性
@@ -137,13 +149,22 @@ export default defineComponent({
     });
 
     /**
-     * @description: 输入框失焦触发
+     * @description: 输入框聚焦触发
      * @return {void}
      * @author: dreamy-xay
      */
     function focus() {
       context.emit('focus');
       error.value = false;
+    }
+
+    /**
+     * @description: 输入框失焦触发
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function blur() {
+      context.emit('blur');
     }
 
     /**
@@ -170,8 +191,6 @@ export default defineComponent({
 
       // 输入验证
       efficient.value = props.verify === null || props.verify(value);
-
-      if (props.showClose) showCloseShow.value = value !== '';
     }
 
     /**
@@ -210,12 +229,11 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function clearInputValue() {
-      userCenterInput.value.value = '';
+      context.emit('update:modelValue', '');
     }
 
     return {
       userCenterInput,
-      showCloseShow,
       efficient,
       input,
       inputClass,
@@ -223,6 +241,7 @@ export default defineComponent({
       inputType,
       toggleType,
       focus,
+      blur,
       check,
       clearInputValue,
     };
