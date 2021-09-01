@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-31 10:28:07
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-31 23:03:55
+ * @LastEditTime: 2021-09-01 21:07:57
 -->
 <template>
   <div class="user-center-profile-edit-avatar">
@@ -56,8 +56,8 @@
       />
       <base-modal
         :show="confirmModalShow"
-        @confirm="updateSignature(true, false)"
-        @cancel="updateSignature(false, false)"
+        @confirm="updateSignature(true)"
+        @cancel="updateSignature(false)"
         content="确认修改个性签名~ o(*￣▽￣*)o"
         confirmeText="确认修改"
       />
@@ -94,7 +94,7 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const inputValue = ref(props.signature); // 输入内容
+    const inputValue = ref(props.data.signature); // 输入内容
     const showAvatarCropper = ref(false); // 显示头像修改剪贴框
     const isEditSignature = ref(false); // 编辑个性签名
     const confirmModalShow = ref(false); // 编辑个性签名确认框
@@ -125,16 +125,16 @@ export default defineComponent({
     /**
      * @description: 更新个性签名
      * @param {boolean} isConfirm 是否处于确认状态 `必传参数`
-     * @param {boolean} confirmModalShow 确认框是否显示 `默认为false`
+     * @param {boolean} isConfirmModalShow 确认框是否显示 `默认为false`
      * @return {void}
      * @author: dreamy-xay
      */
-    function updateSignature(isConfirm, confirmModalShow = false) {
+    function updateSignature(isConfirm, isConfirmModalShow = false) {
       if (isConfirm) {
         console.log('submit');
       }
-      confirmModalShow.value = confirmModalShow;
-      isEditSignature.value = false;
+      confirmModalShow.value = isConfirmModalShow;
+      if (!isConfirmModalShow) isEditSignature.value = false;
     }
 
     return {
