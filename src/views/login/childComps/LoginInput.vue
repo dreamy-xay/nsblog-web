@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 22:15:27
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-01 21:02:14
+ * @LastEditTime: 2021-09-02 11:33:06
 -->
 <template>
   <div class="login-input">
@@ -105,7 +105,8 @@ export default defineComponent({
       document.addEventListener(
         'mousedown',
         (e) => {
-          if (e.target.getAttribute('class').includes('login-input-eye')) e.preventDefault();
+          const domClass = e.target.getAttribute('class');
+          if (domClass && domClass.includes('login-input-eye')) e.preventDefault();
         },
         false
       );

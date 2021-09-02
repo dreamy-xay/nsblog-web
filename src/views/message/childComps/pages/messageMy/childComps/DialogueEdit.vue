@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-19 16:19:04
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-26 09:24:55
+ * @LastEditTime: 2021-09-02 15:55:54
 -->
 <template>
   <div class="dialogue-edit">
@@ -155,15 +155,16 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function fileChange(e) {
+      if (!e.target.files || !e.target.files[0]) return;
       const file = e.target.files[0];
       if (file.type.substr(0, 5) !== 'image') msg.warning('发送图片失败', { duration: 2000, closable: true });
       else if (file.size > 1024 * 1024) msg.warning('发送图片大小不得超过1M', { duration: 2000, closable: true });
       else {
-        const reads = new FileReader();
-        reads.readAsDataURL(file);
-        reads.onload = (event) => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
           submit(e, `<img src="${event.target.result}" alt="image">`);
         };
+        reader.readAsDataURL(file);
       }
     }
 

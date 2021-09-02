@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-31 10:28:07
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-01 21:07:57
+ * @LastEditTime: 2021-09-02 17:10:00
 -->
 <template>
   <div class="user-center-profile-edit-avatar">
@@ -22,14 +22,16 @@
         <div
           class="button"
           role="button"
+          @click="showAvatarModal = true"
         >
           更换头像
         </div>
+        <avatar-cropper
+          v-model="showAvatarModal"
+          :url="data.avatar"
+          @upload="uploadAvatar"
+        />
       </div>
-      <!-- <base-avatar-cropper
-        v-model="showAvatarCropper"
-        :uploadHandler="avatarCropperHandler"
-      /> -->
     </div>
     <div class="user-center-profile-edit-avatar-right">
       <el-tooltip
@@ -48,9 +50,9 @@
       </el-tooltip>
       <user-center-input
         v-show="isEditSignature"
-        ref="signatureInput"
         type="text"
         v-model="inputValue"
+        ref="signatureInput"
         @blur="updateSignature(false, true)"
         show-close
       />
@@ -66,22 +68,26 @@
 </template>
 
 <script>
-import { defineComponent, nextTick, ref } from 'vue';
-import BaseAvatarCropper from '@/components/content/baseAvatarCropper/BaseAvatarCropper.vue';
+import { defineComponent, ref, watch, nextTick } from 'vue';
+
 import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput.vue';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
+import AvatarCropper from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/AvatarCropper.vue';
 
 /**
  * @description: 修改头像和用户签名
+ * @param {Object} data 组件数据 `必传参数`
+ * @event uploadAvatar 头像上传触发事件 (file: File, success: () => void) => void
+ * @event updateSignature 更新个性签名 (signature: string, error: () => void) => void
  * @author: dreamy-xay
  */
 
 export default defineComponent({
   name: 'userCenterProfileEditAvatar',
   components: {
-    // BaseAvatarCropper,
     UserCenterInput,
     BaseModal,
+    AvatarCropper,
   },
   props: {
     data: {
@@ -93,22 +99,20 @@ export default defineComponent({
       }),
     },
   },
-  setup(props) {
+  setup(props, context) {
     const inputValue = ref(props.data.signature); // 输入内容
-    const showAvatarCropper = ref(false); // 显示头像修改剪贴框
+    const showAvatarModal = ref(false); // 显示修改头像模态框
     const isEditSignature = ref(false); // 编辑个性签名
     const confirmModalShow = ref(false); // 编辑个性签名确认框
-    const signatureInput = ref(null); // signature input ref
+    const signatureInput = ref(null); // signatureInput ref
 
-    /**
-     * @description: 裁剪头像获取裁剪信息
-     * @param {any} e 裁剪参数 `必传参数`
-     * @return {void}
-     * @author: dreamy-xay
-     */
-    function avatarCropperHandler(e) {
-      console.log(e);
-    }
+    // watch 个性签名
+    watch(
+      () => props.data.signature,
+      (value) => {
+        inputValue.value = value;
+      }
+    );
 
     /**
      * @description: 编辑个性签名
@@ -130,22 +134,37 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function updateSignature(isConfirm, isConfirmModalShow = false) {
-      if (isConfirm) {
-        console.log('submit');
-      }
+      if (isConfirm)
+        context.emit('updateSignature', inputValue.value, () => {
+          inputValue.value = props.data.signature;
+        });
       confirmModalShow.value = isConfirmModalShow;
-      if (!isConfirmModalShow) isEditSignature.value = false;
+      if (!isConfirmModalShow) {
+        isEditSignature.value = false;
+        if (!isConfirm) inputValue.value = props.data.signature;
+      }
+    }
+
+    /**
+     * @description: 头像上传
+     * @param {File} file 头像文件数据 `必传参数`
+     * @param {() => void} next 下一步函数操作 `必传参数`
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function uploadAvatar(file, next) {
+      context.emit('uploadAvatar', file, next);
     }
 
     return {
       inputValue,
-      showAvatarCropper,
-      avatarCropperHandler,
+      showAvatarModal,
       editSignature,
       isEditSignature,
       updateSignature,
       confirmModalShow,
       signatureInput,
+      uploadAvatar,
     };
   },
 });
