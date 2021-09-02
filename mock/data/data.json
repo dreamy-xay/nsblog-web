@@ -5,7 +5,11 @@
 			"nickname": "往事如烟",
 			"password": "Abcd1234",
 			"email": "dreamy@qq.com",
+<<<<<<< HEAD
 			"token": "0f990512fabbf87f8778128ee40a6de7956d78a99767288b574aefd80143b40b7656f3b56711ce053347aa036c9068228735b35ec7e76762613ea7d249223dc3",
+=======
+			"token": "f1e02d65f6a2699b66fa73144714a9006da95d2f9abf54a545c8dbe4a94576d6723ffb61aaf206712f54a8f927a535250d948d900e55e5da2d195a5514a002c2",
+>>>>>>> 08e5017147cdd37509452aaab4faed9e93e360fc
 			"isActive": true,
 			"isSuper": true
 		},

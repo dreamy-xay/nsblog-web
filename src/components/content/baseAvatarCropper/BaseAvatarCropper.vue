@@ -4,30 +4,27 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-28 11:21:46
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-30 12:26:03
+ * @LastEditTime: 2021-09-02 20:05:11
 -->
 <template>
   <div class="base-avatar-cropper">
     <div
-      class="base-avatar-cropper-container"
-      v-show="dataUrl"
+      class="base-avatar-cropper-image-container"
+      v-show="show"
     >
-      <div class="base-avatar-cropper-image-container">
-        <img
-          ref="img"
-          :src="dataUrl"
-          alt="image"
-          @load.stop="createCropper"
-          @error="onImgElementError"
-        />
-      </div>
+      <img
+        ref="img"
+        :src="imageUrl"
+        alt="image"
+        @load.stop="createCropper"
+        @error="onImgElementError"
+      />
     </div>
     <input
-      v-if="!file"
       :accept="cleanedMimes"
       :capture="capture"
       class="base-avatar-cropper-img-input"
-      ref="input"
+      ref="fileInputRef"
       type="file"
       @change="onFileInputChange"
     />
@@ -35,74 +32,33 @@
 </template>
 
 <script>
-import { defineComponent, ref, watch, onMounted, computed } from 'vue';
+import { defineComponent, ref, watch, computed } from 'vue';
 import 'cropperjs/dist/cropper.css';
 import Cropper from 'cropperjs';
 
 /**
  * @description: 头像裁剪组件
- * @param {Boolean} modelValue v-modal控制显示  `默认为false`
- * @param {File} file 文件的使用，而不是提示用户上传一个 `默认为null`
- * @param {Function} uploadHandler 来替换默认的上传处理程序，参数是cropperJS实例 `默认为null`
- * @param {String} uploadUrl 上传文件的URL `默认为null`
- * @param {Object} requestOptions 传递给 Request() 构造函数的 init 参数的选项，使用它来设置方法、标题等 `默认值：{ method: 'POST' }`
- * @param {String} uploadFileField 用于文件的 FormData 字段 `默认值：'文件'`
- * @param {FormData} uploadFormData 附加表单数据 `默认值：new FormData()`
- * @param {Object} cropperOptions 传递给cropperJS 实例的选项 `默认为： {aspectRatio: 1, autoCropArea: 1, viewMode: 1, movable: false, zoomable: false}`
+ * @param {String} url 图片文件的路径 `默认为null`
+ * @param {Object} cropperOptions 传递给cropperJS 实例的选项 `默认为： {aspectRatio: 1, autoCropArea: 1, viewMode: 3, minContainerWidth: 276, minContainerHeight: 276}`
  * @param {Object} outputOptions 传递给cropper.getCroppedCanvas() 方法的选 `默认： {} 推荐的用例是指定输出大小，例如：{ width: 512, height: 512 }`
  * @param {String} outputMime 生成的头像图像 mime 类型 `默认值：null`
- * @param {Number} outputQuality 生成的头像图像质量 [0 - 1] `默认值：0.9（如果 output-mime 属性是 'image/jpeg' 或 'image/webp'）`
+ * @param {Number} outputQuality 生成的头像图像质量 [0 - 1] `默认值：1（如果 output-mime 属性是 'image/jpeg' 或 'image/webp'）`
  * @param {String} mimes 允许的图像格式 `默认：'image/png, image/gif, image/jpeg, image/bmp, image/x-icon'`
  * @param {String} capture 文件输入的捕获属性 `默认：null 强制移动用户使用后置（使用值'environment'）或前置（使用值'user'）相机拍摄新照片`
- * @method submit 裁剪结束提交
- * @method cancel 取消裁剪
- * @event changed 用户选择一个文件是触发 ({file: File，reader: FileReader}) => void
- * @event uploading 在提交上传请求之前
- *                  form object, FormData instance.
- *                  request object, Request instance.
- *                  response object, Promise which resolves to a Response instance.
- * @event uploaded 请求成功后 参数同上
- * @event completed 请求完成后 参数同上
+ * @method pickImage 挑选图片
+ * @event fileChange 用户选择一个文件是触发 ({file: File，reader: FileReader}) => void
+ * @event changed 裁剪图片数据发送改变 (base64Img) => void
  * @event error 发生了一些错误 ({message: string, type: 'load'|'upload'|'user', context: string}) => void
+ * @var imageUrl 裁剪图片路由变量
  * @author: dreamy-xay
  */
 
 export default defineComponent({
   name: 'baseAvatarCropper',
   props: {
-    modelValue: {
-      type: Boolean,
-      default: false,
-    },
-    file: {
-      type: File,
-      default: null,
-    },
-    uploadHandler: {
-      type: Function,
-      default: null,
-    },
-    uploadUrl: {
+    url: {
       type: String,
       default: null,
-    },
-    requestOptions: {
-      type: Object,
-      default() {
-        return {
-          method: 'POST',
-        };
-      },
-    },
-    uploadFileField: {
-      type: String,
-      default: 'file',
-    },
-    uploadFormData: {
-      type: FormData,
-      default() {
-        return new FormData();
-      },
     },
     cropperOptions: {
       type: Object,
@@ -110,9 +66,9 @@ export default defineComponent({
         return {
           aspectRatio: 1,
           autoCropArea: 1,
-          viewMode: 1,
-          movable: false,
-          zoomable: false,
+          viewMode: 3,
+          minContainerWidth: 276,
+          minContainerHeight: 276,
         };
       },
     },
@@ -122,15 +78,15 @@ export default defineComponent({
     },
     outputMime: {
       type: String,
-      default: null,
+      default: 'image/jpeg',
     },
     outputQuality: {
       type: Number,
-      default: 0.9,
+      default: 1,
     },
     mimes: {
       type: String,
-      default: 'image/png, image/gif, image/jpeg, image/bmp, image/x-icon',
+      default: 'image/*',
     },
     capture: {
       type: String,
@@ -138,57 +94,31 @@ export default defineComponent({
     },
   },
   setup(props, context) {
-    let cropper = undefined;
-    let filename = undefined;
-    const dataUrl = ref(undefined);
-
-    // computed
-    const cleanedMimes = computed(() => {
-      if (!props.mimes) throw new Error('vue-base-avatar-cropper: mimes prop cannot be empty');
-      return props.mimes.trim().toLowerCase();
-    });
+    let cropper = null; // 裁剪工具
+    const imageUrl = ref(props.url); // 显示图片路径
+    const show = ref(false); // 是否显示
 
     // watch
     watch(
-      () => props.modelValue,
+      () => props.url,
       (value) => {
-        if (!value) return;
-        if (props.file) onFileChange(props.file);
-        else pickImage();
-        context.emit('update:modelValue', false);
+        if (value) imageUrl.value = value;
       }
     );
 
-    // mounted
-    onMounted(() => {
-      context.emit('update:modelValue', false);
+    // computed
+    const cleanedMimes = computed(() => {
+      if (!props.mimes) throw new Error('base-avatar-cropper: mimes prop cannot be empty');
+      return props.mimes.trim().toLowerCase();
     });
 
     // ref
-    const input = ref(null);
-    const img = ref(null);
+    const fileInputRef = ref(null);
 
     // methods
     function destroy() {
       if (cropper) cropper.destroy();
-      if (input.value) input.value.value = '';
-      dataUrl.value = undefined;
-    }
-
-    function submit() {
-      if (props.uploadUrl) uploadImage();
-      else if (props.uploadHandler) props.uploadHandler(cropper);
-      else
-        context.emit('error', {
-          type: 'user',
-          message: 'No upload handler found',
-        });
-
-      destroy();
-    }
-
-    function cancel() {
-      destroy();
+      show.value = false;
     }
 
     function onImgElementError() {
@@ -200,7 +130,7 @@ export default defineComponent({
     }
 
     function pickImage() {
-      if (input.value) input.value.click();
+      if (fileInputRef.value) fileInputRef.value.click();
     }
 
     function onFileChange(file) {
@@ -225,13 +155,11 @@ export default defineComponent({
 
       const reader = new FileReader();
       reader.onload = (e) => {
-        dataUrl.value = e.target.result;
+        imageUrl.value = e.target.result;
       };
-
       reader.readAsDataURL(file);
 
-      filename = file.name || 'unknown';
-      context.emit('changed', {
+      context.emit('fileChange', {
         file,
         reader,
       });
@@ -242,81 +170,35 @@ export default defineComponent({
       onFileChange(e.target.files[0]);
     }
 
-    function createCropper() {
-      cropper = new Cropper(img.value, props.cropperOptions);
-    }
-
-    function uploadImage() {
-      cropper.getCroppedCanvas(props.outputOptions).toBlob(
-        async (blob) => {
-          const form = new FormData();
-
-          for (const [key, value] in props.uploadFormData.entries()) {
-            form.append(key, value);
-          }
-
-          form.append(props.uploadFileField, blob, filename);
-
-          const requestOptions = Object.assign(
-            {
-              body: form,
-            },
-            props.requestOptions
+    function createCropper(e) {
+      if (cropper) destroy();
+      cropper = new Cropper(e.target, {
+        ...props.cropperOptions,
+        ready(_) {
+          show.value = true;
+          context.emit(
+            'changed',
+            cropper.getCroppedCanvas(props.outputOptions).toDataURL(props.outputMime, props.outputQuality)
           );
-
-          const request = new Request(props.uploadUrl, requestOptions);
-
-          const reqPromise = fetch(request);
-
-          context.emit('uploading', {
-            form,
-            request,
-            response: reqPromise,
-          });
-
-          const response = await reqPromise;
-
-          context.emit('completed', {
-            form,
-            request,
-            response,
-          });
-
-          if (response.ok) {
-            context.emit('uploaded', {
-              form,
-              request,
-              response,
-            });
-          } else {
-            context.emit('error', {
-              type: 'upload',
-              message: 'Image upload fail',
-              context: {
-                request,
-                response,
-              },
-            });
-          }
         },
-        props.outputMime,
-        props.outputQuality
-      );
+        crop(_) {
+          context.emit(
+            'changed',
+            cropper.getCroppedCanvas(props.outputOptions).toDataURL(props.outputMime, props.outputQuality)
+          );
+        },
+      });
     }
 
     return {
-      dataUrl,
+      imageUrl,
       cleanedMimes,
-      input,
-      img,
-      submit,
-      cancel,
+      fileInputRef,
       onImgElementError,
       pickImage,
-      onFileChange,
       onFileInputChange,
       createCropper,
-      uploadImage,
+      show,
     };
   },
 });
@@ -328,17 +210,11 @@ export default defineComponent({
   height: 100%;
   overflow: hidden;
 
-  .base-avatar-cropper-container {
+  .base-avatar-cropper-image-container {
     background-color: $grey-0;
     width: 100%;
     height: 100%;
     overflow: hidden;
-
-    .base-avatar-cropper-image-container {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
 
     img {
       width: auto;
