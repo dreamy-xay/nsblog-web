@@ -3,9 +3,10 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-08-28 23:20:26
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-31 22:41:58
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-02 13:30:45
 -->
+
 <template>
   <div class="user-center-profile-information">
     <div class="user-center-profile-information-title">基本信息</div>
@@ -76,6 +77,15 @@
     <div class="user-center-profile-information-personal">
       <div class="user-center-profile-information-personal-text">个人介绍</div>
       <!-- markdown -->
+      <div class="user-center-profile-information-personal-markdown">
+        <v-md-editor
+          v-model="text"
+          mode="edit"
+          left-toolbar="undo redo clear| bold link code quote"
+          @fullscreen-change="sss"
+          height="244px"
+        />
+      </div>
     </div>
 
     <div
@@ -92,6 +102,7 @@
 import { computed, defineComponent, ref, reactive } from 'vue';
 import BaseSelect from '@/components/content/baseSelect/BaseSelect.vue';
 import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput.vue';
+import location from '@/util/json/location';
 
 /**
  * @description: 基本信息模块
@@ -105,7 +116,7 @@ export default defineComponent({
     UserCenterInput,
   },
   setup(props, context) {
-    const nickName = ref('1233');
+    const nickName = ref('12345');
 
     const genderData = reactive({ key: 'message_prompt', value: 3 });
 
@@ -121,174 +132,95 @@ export default defineComponent({
       console.log(genderData.value);
     }
 
-    const cityData = computed(() => {
-      return [
-        [
-          '学生1',
-          '打工仔1',
-          '老板1',
-          '学生2',
-          '打工仔2',
-          '老板2',
-          '学生3',
-          '打工仔3',
-          '老板3',
-          '学生4',
-          '打工仔4',
-          '老板4',
-          '学生5',
-          '打工仔5',
-          '老板5',
-          '学生6',
-          '打工仔6',
-          '老板6',
-          '学生7',
-          '打工仔7',
-          '老板7',
-        ],
-        [
-          '学生1',
-          '打工仔1',
-          '老板1',
-          '学生2',
-          '打工仔2',
-          '老板2',
-          '学生3',
-          '打工仔3',
-          '老板3',
-          '学生4',
-          '打工仔4',
-          '老板4',
-          '学生5',
-          '打工仔5',
-          '老板5',
-          '学生6',
-          '打工仔6',
-          '老板6',
-          '学生7',
-          '打工仔7',
-          '老板7',
-        ],
-        [
-          '学生1',
-          '打工仔1',
-          '老板1',
-          '学生2',
-          '打工仔2',
-          '老板2',
-          '学生3',
-          '打工仔3',
-          '老板3',
-          '学生4',
-          '打工仔4',
-          '老板4',
-          '学生5',
-          '打工仔5',
-          '老板5',
-          '学生6',
-          '打工仔6',
-          '老板6',
-          '学生7',
-          '打工仔7',
-          '老板7',
-        ],
-      ];
-    });
+    const cityData = reactive([[], [], []]);
 
     const city = reactive(['', '', '']);
+
+    for (let i = 0; i < location.Location.length; i++) {
+      cityData[0].push(location.Location[i].CountryRegion);
+    }
 
     const showCityText = ['国家', '省份/地区', '城市'];
 
     const cityDisabled = reactive([false, true, true]);
+    let countryIndex = 0;
+    let stateIndex = 0;
     function changeCity($event, index) {
-      city[index] = $event;
-      if (cityDisabled[1] && index === 0) cityDisabled[1] = false;
-      if (cityDisabled[2] && index === 1) cityDisabled[2] = false;
+      if (index === 0) {
+        countryIndex = $event;
+        city[1] = '省份/地区';
+        city[2] = '城市';
+        city[0] = location.Location[$event].CountryRegion;
+        cityData[1] = [];
+        for (let i = 0; i < location.Location[$event].State.length; i++) {
+          cityData[1].push(location.Location[$event].State[i].StateName);
+        }
+        if (cityData[1].length === 0) cityDisabled[1] = true;
+        else cityDisabled[1] = false;
+        cityDisabled[2] = true;
+      } else if (index === 1) {
+        stateIndex = $event;
+        city[1] = location.Location[countryIndex].State[$event].StateName;
+        city[2] = '城市';
+        cityData[2] = [];
+        for (let i = 0; i < location.Location[countryIndex].State[$event].City.length; i++) {
+          cityData[2].push(location.Location[countryIndex].State[$event].City[i].CityName);
+        }
+        if (cityData[2].length === 0) cityDisabled[2] = true;
+        else cityDisabled[2] = false;
+      } else {
+        city[2] = location.Location[countryIndex].State[stateIndex].City[$event].CityName;
+      }
     }
 
-    const birthdayData = computed(() => {
-      return [
-        [
-          '学生1',
-          '打工仔1',
-          '老板1',
-          '学生2',
-          '打工仔2',
-          '老板2',
-          '学生3',
-          '打工仔3',
-          '老板3',
-          '学生4',
-          '打工仔4',
-          '老板4',
-          '学生5',
-          '打工仔5',
-          '老板5',
-          '学生6',
-          '打工仔6',
-          '老板6',
-          '学生7',
-          '打工仔7',
-          '老板7',
-        ],
-        [
-          '学生1',
-          '打工仔1',
-          '老板1',
-          '学生2',
-          '打工仔2',
-          '老板2',
-          '学生3',
-          '打工仔3',
-          '老板3',
-          '学生4',
-          '打工仔4',
-          '老板4',
-          '学生5',
-          '打工仔5',
-          '老板5',
-          '学生6',
-          '打工仔6',
-          '老板6',
-          '学生7',
-          '打工仔7',
-          '老板7',
-        ],
-        [
-          '学生1',
-          '打工仔1',
-          '老板1',
-          '学生2',
-          '打工仔2',
-          '老板2',
-          '学生3',
-          '打工仔3',
-          '老板3',
-          '学生4',
-          '打工仔4',
-          '老板4',
-          '学生5',
-          '打工仔5',
-          '老板5',
-          '学生6',
-          '打工仔6',
-          '老板6',
-          '学生7',
-          '打工仔7',
-          '老板7',
-        ],
-      ];
-    });
+    const birthdayData = reactive([[], [], []]);
 
     const birthday = reactive(['', '', '']);
 
     const showBirthdayText = ['年', '月', '日'];
 
+    const MonHead = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+    const y = new Date().getFullYear();
+    for (let i = y; i >= 1900; i--) birthdayData[0].push(i + '');
+    for (let i = 1; i <= 12; i++) birthdayData[1].push(i + '');
     const birthdayDisabled = reactive([false, true, true]);
     function changeBirthday($event, index) {
-      birthday[index] = $event;
-      if (birthdayDisabled[1] && index === 0) birthdayDisabled[1] = false;
-      if (birthdayDisabled[2] && index === 1) birthdayDisabled[2] = false;
+      if (index === 0) {
+        birthday[0] = birthdayData[0][$event];
+        if (birthday[1] === '') {
+          birthday[1] = '1';
+          birthday[2] = '1';
+        }
+
+        birthdayDisabled[1] = false;
+        birthdayDisabled[2] = false;
+      } else if (index === 1) {
+        birthday[1] = birthdayData[1][$event];
+      } else {
+        birthday[2] = birthdayData[2][$event];
+      }
+      birthdayData[2] = [];
+      for (let i = 1; i <= MonHead[parseInt(birthday[1] - 1)]; i++) {
+        birthdayData[2].push(i + '');
+      }
+      if (
+        0 === parseInt(birthday[0]) % 4 &&
+        (parseInt(birthday[0]) % 100 !== 0 || parseInt(birthday[0]) % 400 === 0) &&
+        birthday[1] === '2'
+      )
+        birthdayData[2].push(29 + '');
+
+      if (birthday[2] > birthdayData[2][birthdayData[2].length - 1]) {
+        birthday[2] = birthdayData[2][birthdayData[2].length - 1];
+      }
+    }
+
+    const text = ref('123123');
+
+    function sss(event, isFullscreen) {
+      console.log(event);
+      console.log(isFullscreen);
     }
 
     return {
@@ -308,6 +240,9 @@ export default defineComponent({
       showBirthdayText,
       changeBirthday,
       birthdayDisabled,
+
+      text,
+      sss,
     };
   },
 });
@@ -377,28 +312,6 @@ export default defineComponent({
       margin-right: 52px;
       color: $grey-7;
     }
-
-    .user-center-profile-information-nickname-input {
-      width: 200px;
-      height: 32px;
-      padding: 6px 8px;
-      outline-style: none;
-      border: 0px;
-      background-color: $grey-0;
-      border-radius: $border-radius-1;
-      box-shadow: $shadow-0;
-      font-size: 14px;
-      color: $grey-10;
-      &:hover {
-        box-shadow: $shadow-2;
-        color: $green-1;
-      }
-
-      &:focus {
-        box-shadow: $shadow-2;
-        color: $green-1;
-      }
-    }
   }
 
   .user-center-profile-information-gender {
@@ -447,7 +360,6 @@ export default defineComponent({
   }
   .user-center-profile-information-personal {
     display: flex;
-    align-items: center;
     padding: 0 24px 24px 24px;
 
     .user-center-profile-information-personal-text {
@@ -455,6 +367,9 @@ export default defineComponent({
       line-height: 19px;
       margin-right: 24px;
       color: $grey-7;
+    }
+    .user-center-profile-information-personal-markdown {
+      width: 798px;
     }
   }
 
