@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:38:31
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-31 21:56:02
+ * @LastEditors: Ban
+ * @LastEditTime: 2021-09-02 17:19:39
  */
 import { post, get, del, put, RequestLifeCycle } from '@/network/request';
 import { encrypt } from '@/util/crypto';
@@ -181,6 +181,39 @@ export function forgotPasswordChange(
       username,
       password,
       data
+    }
+  });
+}
+
+/**
+ * @description: 获取兴趣标签
+ * @param {string} 用户名 `必传参数`
+ * @return {array} 兴趣标签
+ * @author: Ban
+ */
+export function getTag(username: string, RLC: RequestLifeCycle = {}): Promise<unknown> {
+  return get({
+    url: '/users/tag',
+    ...RLC,
+    params: {
+      username
+    }
+  });
+}
+
+/**
+ * @description: 新建兴趣标签
+ * @param {string} tag_name 标签名 `必传参数`
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: dreamy-xay
+ */
+export function addUserTag(tagname: string, RLC: RequestLifeCycle = {}): Promise<unknown> {
+  return post({
+    url: '/users/tag',
+    ...RLC,
+    data: {
+      tagname
     }
   });
 }
