@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-31 10:28:07
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-02 19:48:11
+ * @LastEditTime: 2021-09-02 20:31:44
 -->
 <template>
   <div class="user-center-profile-edit-avatar">
@@ -134,10 +134,12 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function updateSignature(isConfirm, isConfirmModalShow = false) {
-      if (isConfirm)
-        context.emit('updateSignature', inputValue.value, () => {
-          inputValue.value = props.data.signature;
-        });
+      if (isConfirm) {
+        if (inputValue.value !== props.data.signature)
+          context.emit('updateSignature', inputValue.value, () => {
+            inputValue.value = props.data.signature;
+          });
+      }
       confirmModalShow.value = isConfirmModalShow;
       if (!isConfirmModalShow) {
         isEditSignature.value = false;
