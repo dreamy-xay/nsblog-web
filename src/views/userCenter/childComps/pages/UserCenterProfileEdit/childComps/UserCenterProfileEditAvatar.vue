@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-31 10:28:07
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-02 17:10:00
+ * @LastEditTime: 2021-09-02 19:48:11
 -->
 <template>
   <div class="user-center-profile-edit-avatar">
@@ -22,7 +22,7 @@
         <div
           class="button"
           role="button"
-          @click="showAvatarModal = true"
+          @click="avatarModalShow"
         >
           更换头像
         </div>
@@ -77,7 +77,7 @@ import AvatarCropper from '@/views/userCenter/childComps/pages/UserCenterProfile
 /**
  * @description: 修改头像和用户签名
  * @param {Object} data 组件数据 `必传参数`
- * @event uploadAvatar 头像上传触发事件 (file: File, success: () => void) => void
+ * @event uploadAvatar 头像上传触发事件 (image: Base64, success: () => void) => void
  * @event updateSignature 更新个性签名 (signature: string, error: () => void) => void
  * @author: dreamy-xay
  */
@@ -147,13 +147,22 @@ export default defineComponent({
 
     /**
      * @description: 头像上传
-     * @param {File} file 头像文件数据 `必传参数`
+     * @param {string} image 头像文件数据 `必传参数`
      * @param {() => void} next 下一步函数操作 `必传参数`
      * @return {void}
      * @author: dreamy-xay
      */
-    function uploadAvatar(file, next) {
-      context.emit('uploadAvatar', file, next);
+    function uploadAvatar(image, next) {
+      context.emit('uploadAvatar', image, next);
+    }
+
+    /**
+     * @description: 裁剪图片显示
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function avatarModalShow() {
+      showAvatarModal.value = true;
     }
 
     return {
@@ -165,6 +174,7 @@ export default defineComponent({
       confirmModalShow,
       signatureInput,
       uploadAvatar,
+      avatarModalShow,
     };
   },
 });

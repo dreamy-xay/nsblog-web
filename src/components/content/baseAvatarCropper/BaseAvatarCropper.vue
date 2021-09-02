@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-28 11:21:46
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-02 17:04:30
+ * @LastEditTime: 2021-09-02 20:05:11
 -->
 <template>
   <div class="base-avatar-cropper">
