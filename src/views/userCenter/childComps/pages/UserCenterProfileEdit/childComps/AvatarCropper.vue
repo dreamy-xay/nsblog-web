@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-02 15:01:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-02 17:02:47
+ * @LastEditTime: 2021-09-02 19:44:16
 -->
 <template>
   <n-modal
@@ -62,13 +62,12 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import BaseAvatarCropper from '@/components/content/baseAvatarCropper/BaseAvatarCropper.vue';
-import { base64ToFile } from '@/util/util';
 
 /**
  * @description: 头像裁剪模态框
  * @param {Boolean} modelValue 模态框显示绑定值，使用v-model指令即可 `默认为false`
  * @param {String} url 首次加载图片路由 `默认为null`
- * @event upload 头像上传触发事件 (file: File, next: () => void) => void
+ * @event upload 头像上传触发事件 (image: Base64, next: () => void) => void
  * @author: dreamy-xay
  */
 
@@ -121,7 +120,7 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function submit() {
-      context.emit('upload', base64ToFile(avatarCropperImageSrc.value, 'avatar'), () => {
+      context.emit('upload', avatarCropperImageSrc.value, () => {
         context.emit('update:modelValue', false);
       });
     }
