@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-31 16:34:22
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-01 21:06:01
+ * @LastEditTime: 2021-09-02 11:32:26
 -->
 <template>
   <div
@@ -128,9 +128,10 @@ export default defineComponent({
       document.addEventListener(
         'mousedown',
         (e) => {
+          const domClass = e.target.getAttribute('class');
           if (
-            e.target.getAttribute('class').includes('user-center-input-close') ||
-            e.target.getAttribute('class').includes('user-center-input-eye')
+            domClass &&
+            (domClass.includes('user-center-input-close') || domClass.includes('user-center-input-eye'))
           ) {
             e.preventDefault();
           }
