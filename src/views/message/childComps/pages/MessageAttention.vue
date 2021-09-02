@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-05 10:41:38
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-23 16:42:33
+ * @LastEditTime: 2021-09-01 17:24:26
 -->
 
 <template>
@@ -85,6 +85,7 @@ import { defineComponent, ref, reactive, watch } from 'vue';
 import MessageEmpty from '@/views/message/childComps/MessageEmpty.vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import { getMessages, deleteMessages } from '@/network/api/messages';
+import { postAttentions, deleteAttentions } from '@/network/api/attentions';
 import { dateFormat } from '@/util/date.ts';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 import { mapMutations, mapState } from '@/util/store';
@@ -222,7 +223,13 @@ export default defineComponent({
 
     function cancelAttention(index) {
       if (attentionData[index].content.attention === false) {
-        attentionData[index].content.attention = true;
+        postAttentions(attentionData[index].content.username)
+          .then(() => {
+            attentionData[index].content.attention = true;
+          })
+          .catch((error) => {
+            console.log(error), msg.error('关注失败，请重试', { duration: 2000, closable: true });
+          });
       } else {
         modalShow.value = !modalShow.value;
         sureCancel.value = index;
@@ -237,7 +244,13 @@ export default defineComponent({
 
     function sureCancelAttention() {
       modalShow.value = !modalShow.value;
-      attentionData[sureCancel.value].content.attention = false;
+      deleteAttentions(attentionData[sureCancel.value].content.username)
+        .then(() => {
+          attentionData[sureCancel.value].content.attention = false;
+        })
+        .catch((error) => {
+          console.log(error), msg.error('取消关注失败，请重试', { duration: 2000, closable: true });
+        });
     }
 
     return {

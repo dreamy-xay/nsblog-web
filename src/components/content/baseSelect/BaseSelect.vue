@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-08-23 19:01:15
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-27 23:04:31
+ * @LastEditTime: 2021-08-31 22:35:34
 -->
 <template>
   <n-popover
@@ -146,7 +146,7 @@ export default defineComponent({
      */
 
     function changeSelect(index) {
-      context.emit('changeItem', props.sdata[index]);
+      context.emit('changeItem', index);
     }
 
     return {
@@ -198,6 +198,8 @@ export default defineComponent({
   }
 
   .base-select-button-text {
+    display: flex;
+    align-items: center;
     width: calc(100% - 23px);
     height: 20px;
   }
@@ -205,7 +207,6 @@ export default defineComponent({
   .base-select-button-iconfont {
     display: flex;
     align-items: center;
-    justify-content: center;
     margin-left: 5px;
     width: 18px;
     height: 20px;
@@ -230,6 +231,8 @@ export default defineComponent({
   }
 
   .base-select-button-text {
+    display: flex;
+    align-items: center;
     width: calc(100% - 23px);
     height: 20px;
   }
