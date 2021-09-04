@@ -24,7 +24,7 @@ const messageRouter: RouteRecordRaw = {
       meta: {
         title: '我的收藏'
       },
-      component: () => import('@/views/userCenter/childComps/pages/UserCenterCollection.vue')
+      component: () => import('@/views/userCenter/childComps/pages/UserCenterCollection/UserCenterCollection.vue')
     },
     {
       path: 'profile',
