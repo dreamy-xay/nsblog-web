@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:31
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-04 21:35:18
+ * @LastEditTime: 2021-09-06 11:42:23
 -->
 <template>
   <div class="user-center-profile-edit">
@@ -41,6 +41,7 @@ export default defineComponent({
   setup() {
     const msg = useMessage();
     const userData = reactive({
+      //个人信息
       username: null,
       nickname: null,
       avatar: null,
