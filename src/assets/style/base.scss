@@ -73,3 +73,8 @@ input {
     border: 0 !important;
     box-shadow: -2px -2px 4px rgb(0, 0, 0, 0.06);
 }
+
+// naive-ui modal
+.n-modal-container {
+    z-index: 10000 !important;
+}
