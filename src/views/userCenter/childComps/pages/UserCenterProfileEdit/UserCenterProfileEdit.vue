@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:31
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-04 21:35:18
+ * @LastEditors: continue-hs
+ * @LastEditTime: 2021-09-06 11:16:06
 -->
 <template>
   <div class="user-center-profile-edit">
@@ -22,8 +22,8 @@
 <script>
 import { defineComponent, reactive, computed } from 'vue';
 import UserCenterProfileEditAvatar from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/UserCenterProfileEditAvatar.vue';
-import UserCenterProfileEditInformation from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/UserCenterProfileEditInformation.vue';
-import UserCenterProfileEditJob from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/UserCenterProfileEditJob.vue';
+// import UserCenterProfileEditInformation from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/UserCenterProfileEditInformation.vue';
+// import UserCenterProfileEditJob from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/UserCenterProfileEditJob.vue';
 import UserCenterProfileEditInterest from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/UserCenterProfileEditInterest.vue';
 import { base64ToFile } from '@/util/util';
 import { getUserInfo } from '@/network/api/user';
@@ -34,8 +34,8 @@ export default defineComponent({
   name: 'UserCenterProfileEdit',
   components: {
     UserCenterProfileEditAvatar,
-    UserCenterProfileEditJob,
-    UserCenterProfileEditInformation,
+    // UserCenterProfileEditJob,
+    // UserCenterProfileEditInformation,
     UserCenterProfileEditInterest,
   },
   setup() {
