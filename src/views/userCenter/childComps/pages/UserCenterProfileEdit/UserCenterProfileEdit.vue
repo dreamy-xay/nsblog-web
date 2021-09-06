@@ -22,8 +22,8 @@
 <script>
 import { defineComponent, reactive, computed } from 'vue';
 import UserCenterProfileEditAvatar from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/UserCenterProfileEditAvatar.vue';
-// import UserCenterProfileEditInformation from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/UserCenterProfileEditInformation.vue';
-// import UserCenterProfileEditJob from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/UserCenterProfileEditJob.vue';
+import UserCenterProfileEditInformation from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/UserCenterProfileEditInformation.vue';
+import UserCenterProfileEditJob from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/UserCenterProfileEditJob.vue';
 import UserCenterProfileEditInterest from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/UserCenterProfileEditInterest.vue';
 import { base64ToFile } from '@/util/util';
 import { getUserInfo } from '@/network/api/user';
@@ -34,8 +34,8 @@ export default defineComponent({
   name: 'UserCenterProfileEdit',
   components: {
     UserCenterProfileEditAvatar,
-    // UserCenterProfileEditJob,
-    // UserCenterProfileEditInformation,
+     UserCenterProfileEditJob,
+     UserCenterProfileEditInformation,
     UserCenterProfileEditInterest,
   },
   setup() {
