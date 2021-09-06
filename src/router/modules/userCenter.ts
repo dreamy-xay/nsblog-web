@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-19 12:47:57
- * @LastEditors: Ban
- * @LastEditTime: 2021-08-31 13:58:14
+ * @LastEditors: continue-hs
+ * @LastEditTime: 2021-09-01 17:38:02
  */
 import { RouteRecordRaw } from 'vue-router';
 
@@ -24,7 +24,7 @@ const messageRouter: RouteRecordRaw = {
       meta: {
         title: '我的收藏'
       },
-      component: () => import('@/views/userCenter/childComps/pages/UserCenterCollection.vue')
+      component: () => import('@/views/userCenter/childComps/pages/UserCenterCollection/UserCenterCollection.vue')
     },
     {
       path: 'profile',

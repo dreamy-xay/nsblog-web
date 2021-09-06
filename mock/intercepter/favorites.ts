@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 11:59:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-23 12:34:19
+ * @LastEditTime: 2021-09-06 12:03:31
  */
 
 import { Application, Request, Response } from 'express';
@@ -16,30 +16,36 @@ export default function(baseUrl: string, app: Application) {
   // 获取收藏夹或者收藏
   app.get(baseUrl + '/favorites', (req: Request, res: Response) => {
     // if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
-    const { username, limit, offset, favorites, is_all } = req.query;
+    const { username, limit, offset, favorite_id, is_all, type } = req.query;
     if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
 
     console.log(`--------${username} getCollections...`);
 
-    function getRandom(limit: number): Record<string, unknown>[] {
+    function getRandom(limit: number, hasType: boolean = true): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
-      for (let i: number = 0; i < limit; ++i)
+      for (let i: number = 0; i < limit; ++i) {
+        const type: Record<string, unknown> = hasType ? { type: Random.natural(1, 3) } : {};
         ans.push({
           id: Random.id(),
           title: Random.natural(0, 3) ? Random.ctitle(7, 15) : Random.title(7, 12),
-          type: Random.natural(1, 3)
+          ...type
         });
+      }
       return ans;
     }
 
-    if (favorites) res.json({ collections: getRandom(int(offset) >= 29 ? 0 : Math.min(int(limit), 29 - int(offset))) });
+    if (favorite_id)
+      res.json({
+        collections: getRandom(int(offset) >= 29 ? 0 : Math.min(int(limit), 29 - int(offset)), int(type) === 0)
+      });
     else {
       const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
       const cs: number = Random.natural(0, 15);
       for (let i: number = 0; i < cs; ++i) {
         const sum: number = Random.integer(1, 27);
         const collections: Record<string, unknown>[] = getRandom(
-          int(offset) >= sum ? 0 : Math.min(int(limit), sum - int(offset))
+          int(offset) >= sum ? 0 : Math.min(int(limit), sum - int(offset)),
+          int(type) === 0
         );
         const remark: Record<string, unknown> = int(is_all)
           ? { remark: Random.integer(0, 1) ? Random.paragraph(1, 1) : Random.cparagraph(1, 2) }
