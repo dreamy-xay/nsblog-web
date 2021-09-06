@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 14:18:34
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-31 20:08:53
+ * @LastEditTime: 2021-09-06 22:13:32
  */
 
 // json import
@@ -15,3 +15,5 @@ declare module '*.json' {
 
 // @kangc/v-md-editor
 declare module '@kangc/v-md-editor';
+declare module '@kangc/v-md-editor/lib/theme/vuepress.js';
+declare module 'prismjs';

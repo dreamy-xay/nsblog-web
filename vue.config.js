@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:25:41
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-06 22:01:59
+ * @LastEditTime: 2021-09-06 22:17:46
  */
 
 const path = require('path');
@@ -67,5 +67,20 @@ module.exports = {
   chainWebpack: config => {
     // 配置路径别名
     config.resolve.alias.set('@', resolve('src'));
+  },
+
+  // 插件配置
+  pluginOptions: {
+    'style-resources-loader': {
+      preProcessor: 'scss',
+      patterns: [path.resolve(__dirname, 'src/assets/style/define.scss')]
+    },
+  },
+  css: {
+    loaderOptions: {
+      sass: {
+        prependData: `@import '@/assets/style/define';` //引入全局变量
+      }
+    }
   }
 };
