@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:25:41
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-26 11:37:07
+ * @LastEditTime: 2021-09-06 22:01:59
  */
 
 const path = require('path');
@@ -21,7 +21,16 @@ module.exports = {
   // outputDir: 'dist',
 
   // 设置放置打包生成的静态资源 (js、css、img、fonts) 的目录
-  // assetsDir: '',
+  assetsDir: 'static',
+
+  // 是否开启eslint保存检测
+  lintOnSave: true,
+
+  // 是否使用包含运行时编译器的 Vue 构建版本
+  runtimeCompiler: true,
+
+  // 生产环境的 source map
+  productionSourceMap: false,
 
   // 环境配置
   devServer: {
@@ -58,20 +67,5 @@ module.exports = {
   chainWebpack: config => {
     // 配置路径别名
     config.resolve.alias.set('@', resolve('src'));
-  },
-
-  // 插件配置
-  pluginOptions: {
-    'style-resources-loader': {
-      preProcessor: 'scss',
-      patterns: [path.resolve(__dirname, 'src/assets/style/define.scss')]
-    },
-  },
-  css: {
-    loaderOptions: {
-      sass: {
-        prependData: `@import '@/assets/style/define';` //引入全局变量
-      }
-    }
   }
 };

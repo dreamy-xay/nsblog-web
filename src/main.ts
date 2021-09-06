@@ -4,9 +4,10 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:02:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-31 12:06:45
+ * @LastEditTime: 2021-09-06 22:02:18
  */
 import { createApp } from 'vue';
+import '@/assets/style/base.scss';
 import App from './App.vue';
 import router from './router';
 import store from './store';
