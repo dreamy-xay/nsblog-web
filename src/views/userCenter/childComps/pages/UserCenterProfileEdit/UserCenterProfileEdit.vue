@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:31
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-06 11:42:23
+ * @LastEditTime: 2021-09-06 12:22:50
 -->
 <template>
   <div class="user-center-profile-edit">
@@ -69,6 +69,7 @@ export default defineComponent({
         userData.address = data.address;
         userData.city = data.city;
         userData.signature = data.signature;
+        userData.profile = data.profile;
       })
       .catch((error) => {
         console.log(error), msg.error('获取消息失败，请重试', { duration: 2000, closable: true });

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-31 10:28:07
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-02 20:31:44
+ * @LastEditTime: 2021-09-06 11:20:44
 -->
 <template>
   <div class="user-center-profile-edit-avatar">
@@ -53,6 +53,7 @@
         type="text"
         v-model="inputValue"
         ref="signatureInput"
+        :maxlength="255"
         @blur="updateSignature(false, true)"
         show-close
       />
