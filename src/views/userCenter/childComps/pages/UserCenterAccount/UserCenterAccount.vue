@@ -1,0 +1,198 @@
+<!--
+ * @Description:
+ * @Version:
+ * @Autor: Ban
+ * @Date: 2021-08-19 11:57:42
+ * @LastEditors: Ban
+ * @LastEditTime: 2021-08-28 20:22:41
+-->
+<template>
+  <div class="user-center-account">
+    <div class="user-center-account-header text">
+      账号安全
+    </div>
+    <div
+      class="user-center-account-body text"
+      v-for="(item, index) in list"
+      :key="index"
+    >
+      <div class="body-left">
+        {{ item.left }}
+      </div>
+      <div class="body-center">
+        {{ item.center }}
+      </div>
+      <div
+        class="body-right"
+        role="button"
+      >
+        <div
+          v-if="item.left === '登录记录' || item.left === '帐号注销'"
+          style="text-align: right;"
+        >
+          {{ item.right }}
+        </div>
+        <div
+          v-else-if="item.right === '解除绑定'"
+          style="text-align: right;"
+        >
+          {{ item.right }}
+        </div>
+        <div v-else>
+          <user-center-account-change :title="item.right"></user-center-account-change>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { defineComponent, computed, ref } from 'vue';
+import { getUserInfo, getPasswordStatus } from '@/network/api/user';
+import { mapState } from '@/util/store';
+import UserCenterAccountChange from '@/views/userCenter/childComps/pages/UserCenterAccount/childComps/UserCenterAccountChange';
+
+/**
+ * @description:
+ * @param {*}
+ * @return {*}
+ * @author: Ban
+ */
+export default defineComponent({
+  name: 'UserCenterAccount',
+  components: {
+    UserCenterAccountChange,
+  },
+  setup() {
+    const email = ref('');
+    const weibo = ref('');
+    const qq = ref('');
+    const dialogVisible = ref(false);
+    const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
+    //获取数据
+    if (tokenInfo.value.status) {
+      getUserInfo(tokenInfo.value.username, 0)
+        .then((data) => {
+          if (0 !== data.email.length) email.value = data.email;
+
+          if (0 !== data.weibo.length) weibo.value = '已授权绑定微博';
+
+          if (0 !== data.qq.length) qq.value = '已授权绑定QQ';
+
+          console.log(data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    const list = computed(() => {
+      return [
+        {
+          left: '密码',
+          center: '',
+          right: '修改密码',
+        },
+        {
+          left: '绑定邮箱',
+          center: email.value == '' ? '未绑定' : email.value,
+          right: email.value === '' ? '绑定邮箱' : '换绑邮箱',
+        },
+        {
+          left: '绑定微博',
+          center: weibo.value == '' ? '未绑定' : weibo.value,
+          right: weibo.value === '' ? '绑定微博' : '解除绑定',
+        },
+        {
+          left: '绑定QQ帐号',
+          center: qq.value == '' ? '未绑定' : qq.value,
+          right: qq.value === '' ? '绑定QQ' : '解除绑定',
+        },
+        {
+          left: '登录记录',
+          center: '',
+          right: '查看记录',
+        },
+        {
+          left: '帐号注销',
+          center: '',
+          right: '立即注销',
+        },
+      ];
+    });
+    // function dialogBeforeClose(done) {
+    //   this.$confirm('确认关闭？')
+    //     .then((_) => {
+    //       done();
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // }
+    return {
+      list,
+      dialogVisible,
+      // dialogBeforeClose,
+    };
+  },
+});
+</script>
+
+<style lang="scss" scoped>
+.user-center-account {
+  width: 926px;
+  display: flex;
+  flex-direction: column;
+
+  .flex {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .user-center-account-header {
+    height: 42px;
+    line-height: 42px;
+    color: $grey-7;
+    user-select: none;
+    font-size: 17px;
+    margin-bottom: 8px;
+  }
+
+  .user-center-account-body {
+    height: 53px;
+    display: flex;
+    flex-direction: row;
+    margin: 8px 0;
+    font-size: 16px;
+
+    .body-left {
+      @include flex(center);
+      width: 100px;
+    }
+
+    .body-center {
+      @include flex(center, center);
+      flex: 1;
+      color: $grey-7;
+    }
+
+    .body-right {
+      @include flex(center, flex-end);
+      width: 100px;
+      color: $green-0;
+      transition: 0.25s;
+
+      &:hover {
+        color: $green-1;
+      }
+    }
+  }
+
+  .text {
+    background: $grey-0;
+    border-radius: $border-radius-0;
+    box-sizing: border-box;
+    padding: 0 16px;
+    box-shadow: $shadow-0;
+  }
+}
+</style>
