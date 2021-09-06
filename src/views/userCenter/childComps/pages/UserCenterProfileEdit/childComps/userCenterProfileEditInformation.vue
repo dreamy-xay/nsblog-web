@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-08-28 23:20:26
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-06 15:41:41
+ * @LastEditTime: 2021-09-06 19:40:25
 -->
 
 <template>
@@ -223,6 +223,11 @@ export default defineComponent({
       getDate();
     }
 
+    /**
+     * @description: 得到该月的天数
+     * @author: Z_Y_C
+     */
+
     function getDate() {
       birthdayData[2] = [];
       for (let i = 1; i <= MonHead[parseInt(birthday[1] - 1)]; i++) {
@@ -235,7 +240,7 @@ export default defineComponent({
       )
         birthdayData[2].push('29');
 
-      if (birthday[2] > birthdayData[2][birthdayData[2].length - 1]) {
+      if (parseInt(birthday[2]) > parseInt(birthdayData[2][birthdayData[2].length - 1])) {
         birthday[2] = birthdayData[2][birthdayData[2].length - 1];
       }
     }
@@ -271,11 +276,17 @@ export default defineComponent({
           }
         }
 
+        console.log(props.data.birthday);
+
         const brit = new Date(props.data.birthday);
 
         birthday[0] = brit.getFullYear() + '';
-        birthday[1] = brit.getMonth() + '';
+        birthday[1] = brit.getMonth() + 1 + '';
         birthday[2] = brit.getDate() + '';
+        console.log(birthday[0]);
+        console.log(birthday[1]);
+        console.log(birthday[2]);
+
         birthdayDisabled[1] = false;
         birthdayDisabled[2] = false;
         getDate();
@@ -302,14 +313,30 @@ export default defineComponent({
 
         let saveBirthday = props.data.birthday; //处理生日数据
         if (birthday[0] !== '') saveBirthday = birthday[0] + ',' + birthday[1] + ',' + birthday[2];
-        context.emit('changeInformation', {
-          type: 0,
-          nickname: nickName.value,
-          gender: genderData.value,
-          city: saveCity,
-          birthday: saveBirthday,
-          profile: text.value,
-        });
+
+        const brits = new Date(props.data.birthday); //处理生日
+        console.log(props.data.birthday);
+        const times = brits.getFullYear() + ',' + (brits.getMonth() + 1) + ',' + brits.getDate();
+
+        let saveGender = genderData.value;
+        if (saveGender === 2) saveGender = null;
+        if (
+          props.data.nickname !== nickName.value ||
+          props.data.gender !== saveGender ||
+          props.data.city !== saveCity ||
+          times !== saveBirthday ||
+          props.data.profile !== text.value ||
+          (props.data.profile === null && text.value === '')
+        ) {
+          context.emit('changeInformation', {
+            type: 0,
+            nickname: nickName.value,
+            gender: genderData.value,
+            city: saveCity,
+            birthday: saveBirthday,
+            profile: text.value,
+          });
+        }
       }
     }
 
@@ -467,6 +494,10 @@ export default defineComponent({
     }
     .user-center-profile-information-personal-markdown {
       width: 798px;
+
+      :deep(.v-md-editor) {
+        z-index: 9999999999;
+      }
     }
   }
 

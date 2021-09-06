@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:55
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-26 22:32:36
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-06 18:35:47
 -->
 <template>
   <div class="user-center-setting">
@@ -150,7 +150,7 @@ $shadow2: $shadow-2;
     display: flex;
     align-items: center;
     padding-left: 16px;
-    margin: 16px 0;
+    margin-bottom: 16px;
     width: 910px;
     height: 42px;
     background-color: $grey-0;

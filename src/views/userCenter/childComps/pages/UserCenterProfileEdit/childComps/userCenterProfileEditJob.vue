@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-08-19 11:57:31
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-06 15:17:39
+ * @LastEditTime: 2021-09-06 19:46:55
 -->
 <template>
   <div class="user-center-profile-job-edit">
@@ -193,12 +193,16 @@ export default defineComponent({
           if (address[2] !== '' && address[2] !== '城市') saveAddress += ',' + address[2];
         }
       }
-      //传递数据
-      context.emit('changeJob', {
-        type: 1,
-        profession: profession.value,
-        address: saveAddress,
-      });
+
+      let saveProfession = profession.value;
+      if (profession.value === '') saveProfession = null;
+      if (saveAddress !== props.data.address || saveProfession !== props.data.profession)
+        //传递数据
+        context.emit('changeJob', {
+          type: 1,
+          profession: profession.value,
+          address: saveAddress,
+        });
     }
 
     return {
