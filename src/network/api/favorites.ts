@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 12:55:44
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-09-01 16:45:04
+ * @LastEditTime: 2021-09-06 11:12:10
  */
 
 import { get, RequestLifeCycle, del, put, post } from '@/network/request';
@@ -83,7 +83,8 @@ export function newFavorites(
 export function deleteFavorites(id: number | string, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return del({
     url: `/favorites/${id}`,
-    ...RLC
+    ...RLC,
+    params: id
   });
 }
 
@@ -99,7 +100,8 @@ export function deleteFavorites(id: number | string, RLC: RequestLifeCycle = {})
 export function cancelCollections(id: number | string = '', type: number = 0, RLC: RequestLifeCycle = {}) {
   return del({
     url: `/favorites/collections`,
-    ...RLC
+    ...RLC,
+    data: id
   });
 }
 
