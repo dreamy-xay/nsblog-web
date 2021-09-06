@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-08-19 11:57:31
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-06 11:09:28
+ * @LastEditTime: 2021-09-06 12:11:09
 -->
 <template>
   <div class="user-center-profile-job-edit">
@@ -97,14 +97,14 @@ export default defineComponent({
       ];
     });
 
-    const profession = ref('');
+    const profession = ref(''); //职业
 
     function changeProfession(data) {
       profession.value = professionData.value[data];
     }
 
     const addressData = computed(() => {
-      return [([], [], [])];
+      return [[], [], []];
     });
 
     const address = reactive(['', '', '']);
@@ -148,21 +148,24 @@ export default defineComponent({
     watch(
       () => props.data.username,
       () => {
-        profession.value = props.data.profession;
+        if (props.data.profession !== null) profession.value = props.data.profession;
 
-        address.splice(0, props.data.address.split(',').length, ...props.data.address.split(','));
-        if (props.data.address.split(',').length === 1) addressDisabled[1] = false;
-        if (props.data.address.split(',').length > 1) {
-          addressDisabled[1] = false;
-          addressDisabled[2] = false;
-        }
-        for (let i = 0; i < addressData.value[0].length; i++) {
-          if (address[0] === addressData.value[0][i]) {
-            for (let j = 0; j < location.Location[i].State.length; j++) {
-              addressData.value[1].push(location.Location[i].State[j].StateName);
-              if (location.Location[i].State[j].StateName === address[1]) {
-                for (let k = 0; k < location.Location[i].State[j].City.length; k++) {
-                  addressData.value[2].push(location.Location[i].State[j].City[k].CityName);
+        if (props.data.address !== null) {
+          address.splice(0, props.data.address.split(',').length, ...props.data.address.split(','));
+          if (props.data.address.split(',').length === 1) addressDisabled[1] = false;
+          if (props.data.address.split(',').length > 1) {
+            addressDisabled[1] = false;
+            addressDisabled[2] = false;
+          }
+          for (let i = 0; i < addressData.value[0].length; i++) {
+            if (address[0] === addressData.value[0][i]) {
+              for (let j = 0; j < location.Country[i].State.length; j++) {
+                addressData.value[1].push(location.Country[i].State[j].StateName);
+
+                if (location.Country[i].State[j].StateName === address[1]) {
+                  for (let k = 0; k < location.Country[i].State[j].City.length; k++) {
+                    addressData.value[2].push(location.Country[i].State[j].City[k].CityName);
+                  }
                 }
               }
             }

@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-08-28 23:20:26
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-06 11:07:28
+ * @LastEditTime: 2021-09-06 12:05:11
 -->
 
 <template>
@@ -128,9 +128,9 @@ export default defineComponent({
 
     const radiomenus = computed(() => {
       return [
-        { lable: '男', value: 1 },
-        { lable: '女', value: 2 },
-        { lable: '保密', value: 3 },
+        { lable: '男', value: 0 },
+        { lable: '女', value: 1 },
+        { lable: '保密', value: 2 },
       ];
     });
 
@@ -243,21 +243,24 @@ export default defineComponent({
       () => props.data.username,
       () => {
         nickName.value = props.data.nickname;
-        genderData.value = props.data.gender;
+        if (props.data.gender === null) genderData.value = 2;
+        else genderData.value = props.data.gender;
 
-        city.splice(0, props.data.city.split(',').length, ...props.data.city.split(','));
-        if (props.data.city.split(',').length === 1) cityDisabled[1] = false;
-        if (props.data.city.split(',').length > 1) {
-          cityDisabled[1] = false;
-          cityDisabled[2] = false;
-        }
-        for (let i = 0; i < cityData.value[0].length; i++) {
-          if (city[0] === cityData.value[0][i]) {
-            for (let j = 0; j < location.Location[i].State.length; j++) {
-              cityData.value[1].push(location.Location[i].State[j].StateName);
-              if (location.Location[i].State[j].StateName === city[1]) {
-                for (let k = 0; k < location.Location[i].State[j].City.length; k++) {
-                  cityData.value[2].push(location.Location[i].State[j].City[k].CityName);
+        if (props.data.city !== null) {
+          city.splice(0, props.data.city.split(',').length, ...props.data.city.split(','));
+          if (props.data.city.split(',').length === 1) cityDisabled[1] = false;
+          if (props.data.city.split(',').length > 1) {
+            cityDisabled[1] = false;
+            cityDisabled[2] = false;
+          }
+          for (let i = 0; i < cityData.value[0].length; i++) {
+            if (city[0] === cityData.value[0][i]) {
+              for (let j = 0; j < location.Country[i].State.length; j++) {
+                cityData.value[1].push(location.Country[i].State[j].StateName);
+                if (location.Country[i].State[j].StateName === city[1]) {
+                  for (let k = 0; k < location.Country[i].State[j].City.length; k++) {
+                    cityData.value[2].push(location.Country[i].State[j].City[k].CityName);
+                  }
                 }
               }
             }
@@ -271,9 +274,8 @@ export default defineComponent({
         birthdayDisabled[2] = false;
         getDate();
 
-        // text.value=props.data.profile
-
-        // console.log(props.data.profile);
+        if (props.data.profile === null) text.value = '';
+        else text.value = props.data.profile;
       }
     );
 
