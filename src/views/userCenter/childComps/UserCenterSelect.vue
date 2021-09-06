@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-08-23 19:01:15
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-31 22:35:34
+ * @LastEditTime: 2021-09-03 17:12:33
 -->
 <template>
   <n-popover
@@ -60,7 +60,6 @@ import { computed, defineComponent, ref } from 'vue';
  * @param {Arrey} sdata 可供选择的数据 `默认为[]`
  * @param {Boolean} disabled 是否禁用 `默认为false`
  * @event changeItem 改变选择数据
- * @return {*}
  * @author: Z_Y_C
  */
 
