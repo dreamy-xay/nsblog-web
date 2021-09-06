@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-08-28 23:20:26
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-02 13:30:45
+ * @LastEditTime: 2021-09-06 11:07:28
 -->
 
 <template>
@@ -22,7 +22,7 @@
       <div class="user-center-profile-information-gender-text">性别</div>
       <div class="user-center-profile-information-gender-radio">
         <el-radio-group
-          v-model="genderData.value"
+          v-model="genderData"
           @change="changeGender()"
         >
           <el-radio
@@ -43,7 +43,7 @@
         :key="index"
         :class="index !==cityData.length-1 ? 'user-center-profile-information-city-select' : ''"
       >
-        <base-select
+        <user-center-select
           :sdata="item"
           :selectTag="city[index]"
           :showText="showCityText[index]"
@@ -51,7 +51,7 @@
           :disabled="cityDisabled[index]"
           @changeItem="changeCity($event,index)"
         >
-        </base-select>
+        </user-center-select>
       </div>
     </div>
 
@@ -62,7 +62,7 @@
         :key="index"
         :class="index !==birthdayData.length-1 ? 'user-center-profile-information-birthday-select' : ''"
       >
-        <base-select
+        <user-center-select
           :sdata="item"
           :selectTag="birthday[index]"
           :showText="showBirthdayText[index]"
@@ -70,7 +70,7 @@
           :disabled="birthdayDisabled[index]"
           @changeItem="changeBirthday($event,index)"
         >
-        </base-select>
+        </user-center-select>
       </div>
     </div>
 
@@ -99,8 +99,8 @@
 </template>
 
 <script>
-import { computed, defineComponent, ref, reactive } from 'vue';
-import BaseSelect from '@/components/content/baseSelect/BaseSelect.vue';
+import { computed, defineComponent, ref, reactive, watch } from 'vue';
+import UserCenterSelect from '@/views/userCenter/childComps/UserCenterSelect.vue';
 import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput.vue';
 import location from '@/util/json/location';
 
@@ -112,13 +112,19 @@ import location from '@/util/json/location';
 export default defineComponent({
   name: 'userCenterProfileEdit',
   components: {
-    BaseSelect,
+    UserCenterSelect,
     UserCenterInput,
   },
+  props: {
+    data: {
+      type: Object,
+      required: true,
+    },
+  },
   setup(props, context) {
-    const nickName = ref('12345');
+    const nickName = ref(props.data.nickname);
 
-    const genderData = reactive({ key: 'message_prompt', value: 3 });
+    const genderData = ref(props.data.gender);
 
     const radiomenus = computed(() => {
       return [
@@ -130,19 +136,23 @@ export default defineComponent({
 
     function changeGender() {
       console.log(genderData.value);
+      console.log();
     }
 
-    const cityData = reactive([[], [], []]);
+    const cityData = computed(() => {
+      return [[], [], []];
+    });
 
     const city = reactive(['', '', '']);
 
-    for (let i = 0; i < location.Location.length; i++) {
-      cityData[0].push(location.Location[i].CountryRegion);
+    for (let i = 0; i < location.Country.length; i++) {
+      cityData.value[0].push(location.Country[i].CountryName);
     }
 
     const showCityText = ['国家', '省份/地区', '城市'];
 
     const cityDisabled = reactive([false, true, true]);
+
     let countryIndex = 0;
     let stateIndex = 0;
     function changeCity($event, index) {
@@ -150,26 +160,26 @@ export default defineComponent({
         countryIndex = $event;
         city[1] = '省份/地区';
         city[2] = '城市';
-        city[0] = location.Location[$event].CountryRegion;
-        cityData[1] = [];
-        for (let i = 0; i < location.Location[$event].State.length; i++) {
-          cityData[1].push(location.Location[$event].State[i].StateName);
+        city[0] = location.Country[$event].CountryName;
+        cityData.value[1] = [];
+        for (let i = 0; i < location.Country[$event].State.length; i++) {
+          cityData.value[1].push(location.Country[$event].State[i].StateName);
         }
-        if (cityData[1].length === 0) cityDisabled[1] = true;
+        if (cityData.value[1].length === 0) cityDisabled[1] = true;
         else cityDisabled[1] = false;
         cityDisabled[2] = true;
       } else if (index === 1) {
         stateIndex = $event;
-        city[1] = location.Location[countryIndex].State[$event].StateName;
+        city[1] = location.Country[countryIndex].State[$event].StateName;
         city[2] = '城市';
-        cityData[2] = [];
-        for (let i = 0; i < location.Location[countryIndex].State[$event].City.length; i++) {
-          cityData[2].push(location.Location[countryIndex].State[$event].City[i].CityName);
+        cityData.value[2] = [];
+        for (let i = 0; i < location.Country[countryIndex].State[$event].City.length; i++) {
+          cityData.value[2].push(location.Country[countryIndex].State[$event].City[i].CityName);
         }
-        if (cityData[2].length === 0) cityDisabled[2] = true;
+        if (cityData.value[2].length === 0) cityDisabled[2] = true;
         else cityDisabled[2] = false;
       } else {
-        city[2] = location.Location[countryIndex].State[stateIndex].City[$event].CityName;
+        city[2] = location.Country[countryIndex].State[stateIndex].City[$event].CityName;
       }
     }
 
@@ -184,7 +194,9 @@ export default defineComponent({
     const y = new Date().getFullYear();
     for (let i = y; i >= 1900; i--) birthdayData[0].push(i + '');
     for (let i = 1; i <= 12; i++) birthdayData[1].push(i + '');
+
     const birthdayDisabled = reactive([false, true, true]);
+
     function changeBirthday($event, index) {
       if (index === 0) {
         birthday[0] = birthdayData[0][$event];
@@ -200,6 +212,10 @@ export default defineComponent({
       } else {
         birthday[2] = birthdayData[2][$event];
       }
+      getDate();
+    }
+
+    function getDate() {
       birthdayData[2] = [];
       for (let i = 1; i <= MonHead[parseInt(birthday[1] - 1)]; i++) {
         birthdayData[2].push(i + '');
@@ -209,19 +225,57 @@ export default defineComponent({
         (parseInt(birthday[0]) % 100 !== 0 || parseInt(birthday[0]) % 400 === 0) &&
         birthday[1] === '2'
       )
-        birthdayData[2].push(29 + '');
+        birthdayData[2].push('29');
 
       if (birthday[2] > birthdayData[2][birthdayData[2].length - 1]) {
         birthday[2] = birthdayData[2][birthdayData[2].length - 1];
       }
     }
 
-    const text = ref('123123');
+    const text = ref('');
 
     function sss(event, isFullscreen) {
       console.log(event);
       console.log(isFullscreen);
     }
+
+    watch(
+      () => props.data.username,
+      () => {
+        nickName.value = props.data.nickname;
+        genderData.value = props.data.gender;
+
+        city.splice(0, props.data.city.split(',').length, ...props.data.city.split(','));
+        if (props.data.city.split(',').length === 1) cityDisabled[1] = false;
+        if (props.data.city.split(',').length > 1) {
+          cityDisabled[1] = false;
+          cityDisabled[2] = false;
+        }
+        for (let i = 0; i < cityData.value[0].length; i++) {
+          if (city[0] === cityData.value[0][i]) {
+            for (let j = 0; j < location.Location[i].State.length; j++) {
+              cityData.value[1].push(location.Location[i].State[j].StateName);
+              if (location.Location[i].State[j].StateName === city[1]) {
+                for (let k = 0; k < location.Location[i].State[j].City.length; k++) {
+                  cityData.value[2].push(location.Location[i].State[j].City[k].CityName);
+                }
+              }
+            }
+          }
+        }
+
+        birthday[0] = new Date(props.data.birthday).getFullYear() + '';
+        birthday[1] = new Date(props.data.birthday).getMonth() + '';
+        birthday[2] = new Date(props.data.birthday).getDate() + '';
+        birthdayDisabled[1] = false;
+        birthdayDisabled[2] = false;
+        getDate();
+
+        // text.value=props.data.profile
+
+        // console.log(props.data.profile);
+      }
+    );
 
     return {
       nickName,
