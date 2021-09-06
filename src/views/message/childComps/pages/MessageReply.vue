@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:25:27
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-26 10:39:00
+ * @LastEditTime: 2021-09-06 09:40:31
 -->
 
 <template>
@@ -53,7 +53,10 @@
             v-if="item.content.reply_username!==''"
           >
             <span>{{item.content.reply_username}}：</span>
-            <span v-html="item.content.reply_content"></span>
+            <span
+              class="message-reply-right-center-content"
+              v-html="item.content.reply_content"
+            ></span>
           </div>
 
           <div class="message-reply-right-bottom">
@@ -297,7 +300,10 @@ $grey9: $grey-9;
       font-size: 14px;
       color: $grey7;
       margin-bottom: 5px;
-      @include word-break;
+
+      .message-reply-right-center-content {
+        @include word-break;
+      }
     }
 
     .message-reply-right-bottom {
