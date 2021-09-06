@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:38:31
- * @LastEditors: Ban
- * @LastEditTime: 2021-09-02 17:19:39
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-06 14:54:58
  */
 import { post, get, del, put, RequestLifeCycle } from '@/network/request';
 import { encrypt } from '@/util/crypto';
@@ -25,6 +25,22 @@ export function getUserInfo(username: string, type: number = 1, RLC: RequestLife
       username,
       type
     }
+  });
+}
+
+/**
+ * @description: 修改用户信息
+ * @param {Object} data 请求数据类型和数据 `必传参数`
+ * @param {RequestLifeCycle} RLC  请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: Z_Y_C
+ */
+
+export function putUserInfo(data: Record<string, unknown>, RLC: RequestLifeCycle = {}): Promise<unknown> {
+  return put({
+    url: '/users',
+    ...RLC,
+    data
   });
 }
 

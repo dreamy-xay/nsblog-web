@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-08-28 23:20:26
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-06 12:15:29
+ * @LastEditTime: 2021-09-06 15:41:41
 -->
 
 <template>
@@ -15,16 +15,15 @@
       <user-center-input
         v-model="nickName"
         :style="{width: '200px'}"
+        ref="inputRef"
+        :verify="inputVerify"
       />
     </div>
 
     <div class="user-center-profile-information-gender">
       <div class="user-center-profile-information-gender-text">性别</div>
       <div class="user-center-profile-information-gender-radio">
-        <el-radio-group
-          v-model="genderData"
-          @change="changeGender()"
-        >
+        <el-radio-group v-model="genderData">
           <el-radio
             :label="radio.value"
             v-for="radio in radiomenus"
@@ -82,7 +81,6 @@
           v-model="text"
           mode="edit"
           left-toolbar="undo redo clear| bold link code quote"
-          @fullscreen-change="sss"
           height="244px"
         />
       </div>
@@ -91,6 +89,7 @@
     <div
       class="user-center-profile-information-button"
       role="button"
+      @click="saveInformation"
     >
       保存
     </div>
@@ -122,9 +121,9 @@ export default defineComponent({
     },
   },
   setup(props, context) {
-    const nickName = ref(props.data.nickname);
+    const nickName = ref(props.data.nickname); //昵称
 
-    const genderData = ref(props.data.gender);
+    const genderData = ref(props.data.gender); //性别
 
     const radiomenus = computed(() => {
       return [
@@ -134,16 +133,11 @@ export default defineComponent({
       ];
     });
 
-    function changeGender() {
-      console.log(genderData.value);
-      console.log();
-    }
-
     const cityData = computed(() => {
       return [[], [], []];
     });
 
-    const city = reactive(['', '', '']);
+    const city = reactive(['', '', '']); //保存家乡信息
 
     for (let i = 0; i < location.Country.length; i++) {
       cityData.value[0].push(location.Country[i].CountryName);
@@ -155,6 +149,14 @@ export default defineComponent({
 
     let countryIndex = 0;
     let stateIndex = 0;
+
+    /**
+     * @description: 更改地址信息显示
+     * @param {Number} event 记录地址数据下标
+     * @param {Number} index 更改的是三个地址中的哪个
+     * @author: Z_Y_C
+     */
+
     function changeCity($event, index) {
       if (index === 0) {
         countryIndex = $event;
@@ -183,9 +185,9 @@ export default defineComponent({
       }
     }
 
-    const birthdayData = reactive([[], [], []]);
+    const birthdayData = reactive([[], [], []]); //日期数据
 
-    const birthday = reactive(['', '', '']);
+    const birthday = reactive(['', '', '']); //保存出生日期信息
 
     const showBirthdayText = ['年', '月', '日'];
 
@@ -197,6 +199,12 @@ export default defineComponent({
 
     const birthdayDisabled = reactive([false, true, true]);
 
+    /**
+     * @description: 更改出生日期信息显示
+     * @param {Number} event 记录日期下标下标
+     * @param {Number} index 更改的是三个日期中的哪个
+     * @author: Z_Y_C
+     */
     function changeBirthday($event, index) {
       if (index === 0) {
         birthday[0] = birthdayData[0][$event];
@@ -232,13 +240,9 @@ export default defineComponent({
       }
     }
 
-    const text = ref('');
+    const text = ref(''); //保存个人简介信息
 
-    function sss(event, isFullscreen) {
-      console.log(event);
-      console.log(isFullscreen);
-    }
-
+    //监听username信息变化，来改变显示的值
     watch(
       () => props.data.username,
       () => {
@@ -267,9 +271,11 @@ export default defineComponent({
           }
         }
 
-        birthday[0] = new Date(props.data.birthday).getFullYear() + '';
-        birthday[1] = new Date(props.data.birthday).getMonth() + '';
-        birthday[2] = new Date(props.data.birthday).getDate() + '';
+        const brit = new Date(props.data.birthday);
+
+        birthday[0] = brit.getFullYear() + '';
+        birthday[1] = brit.getMonth() + '';
+        birthday[2] = brit.getDate() + '';
         birthdayDisabled[1] = false;
         birthdayDisabled[2] = false;
         getDate();
@@ -279,11 +285,43 @@ export default defineComponent({
       }
     );
 
+    /**
+     * @description: 保存个人基本信息
+     * @author: Z_Y_C
+     */
+    function saveInformation() {
+      if (inputRef.value.check({ message: '昵称不为空', duration: 2000 })) {
+        let saveCity = props.data.city; //处理家乡数据
+        if (city[0] !== '') {
+          saveCity = city[0];
+          if (city[1] !== '' && city[1] !== '省份/地区') {
+            saveCity += ',' + city[1];
+            if (city[2] !== '' && city[2] !== '城市') saveCity += ',' + city[2];
+          }
+        }
+
+        let saveBirthday = props.data.birthday; //处理生日数据
+        if (birthday[0] !== '') saveBirthday = birthday[0] + ',' + birthday[1] + ',' + birthday[2];
+        context.emit('changeInformation', {
+          type: 0,
+          nickname: nickName.value,
+          gender: genderData.value,
+          city: saveCity,
+          birthday: saveBirthday,
+          profile: text.value,
+        });
+      }
+    }
+
+    const inputRef = ref(null); // input ref
+    function inputVerify(value) {
+      return value !== '';
+    }
+
     return {
       nickName,
       genderData,
       radiomenus,
-      changeGender,
 
       cityData,
       city,
@@ -298,7 +336,10 @@ export default defineComponent({
       birthdayDisabled,
 
       text,
-      sss,
+      saveInformation,
+
+      inputRef,
+      inputVerify,
     };
   },
 });

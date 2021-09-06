@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-31 16:34:22
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-02 11:32:26
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-06 15:48:34
 -->
 <template>
   <div
@@ -111,7 +111,7 @@ export default defineComponent({
     const msg = useMessage(); // naive-ui mssage
     const inputType = ref(props.type !== 'text'); // 输入框类型
     const userCenterInput = ref(null); // 输入框dom节点
-    const efficient = ref(props.verify === null || props.verify('')); // 是否有效
+    const efficient = ref(props.verify === null || props.verify(props.modelValue)); // 是否有效
     const error = ref(false);
 
     // 监听props.type更新状态
