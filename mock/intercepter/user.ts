@@ -3,13 +3,29 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:15:05
- * @LastEditors: Ban
- * @LastEditTime: 2021-09-02 17:08:19
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-06 11:54:47
  */
 import { Random } from 'better-mock';
 import { Application, Request, Response } from 'express';
 import select, { DataBaseOperator } from '../data/index';
 import { clearToken, verifyToken, getToken, int } from './util';
+import * as location from '../../src/util/json/location.json';
+
+function randomAddress(): string {
+  if (!Random.integer(0, 2)) return null;
+  let data: Record<string, unknown>[] = location.Country;
+  let ans: string = '';
+  let index: number = 0;
+  ans += data[index].CountryName;
+  data = data[index].State as Record<string, unknown>[];
+  index = Random.integer(0, data.length - 1);
+  ans += ',' + data[index].StateName;
+  data = data[index].City as Record<string, unknown>[];
+  index = Random.integer(0, data.length - 1);
+  ans += ',' + data[index].CityName;
+  return ans;
+}
 
 export default function(baseUrl: string, app: Application) {
   // 获取用户信息
@@ -19,19 +35,23 @@ export default function(baseUrl: string, app: Application) {
     const user = select('users').findOne({ username });
     if (type === 0) {
       if (user && user.isActive) {
+        const gender: number = Random.integer(0, 2);
+        const tags: string[] = [];
+        const sum: number = Random.integer(0, 20);
+        for (let i: number = 0; i < sum; ++i)
+          tags.push(Random.integer(0, 1) ? Random.word(2, 10) : Random.cword(2, 10));
         return res.json({
           username,
           nickname: user.nickname,
           avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', username),
-          email: user.email,
           profession: '',
           birthday: Random.datetime(),
-          gender: 1,
-          address: Random.province(),
-          city: Random.province(),
-          signature: Random.paragraph(5, 30),
-          qq: Random.natural(1000000000, 3000000000),
-          weibo: Random.word(5, 15)
+          gender: gender === 2 ? null : gender,
+          address: randomAddress(),
+          city: randomAddress(),
+          signature: (Random.integer(0, 1) ? Random.cparagraph(1, 2) : Random.paragraph(1, 2)).slice(0, 255),
+          profile: Random.integer(0, 1) ? Random.cparagraph(1, 8) : Random.paragraph(1, 8),
+          tags
         });
       }
     } else if (type === 1) {

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-19 18:32:43
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-30 12:36:50
+ * @LastEditTime: 2021-09-06 11:53:55
 -->
 <template>
   <div class="top-bar-avatar">
@@ -166,7 +166,7 @@ export default defineComponent({
     const menu = [
       {
         name: '个人中心',
-        url: '#',
+        url: '/userCenter/profile',
         icon: 'blog-gerenziliao',
       },
       {
@@ -185,8 +185,8 @@ export default defineComponent({
         icon: 'blog-wenzhang',
       },
       {
-        name: '个人设置',
-        url: '/userCenter/profile',
+        name: '隐私设置',
+        url: '/userCenter/setting',
         icon: 'blog-shezhi1',
       },
     ];
