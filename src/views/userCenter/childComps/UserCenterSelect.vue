@@ -3,13 +3,15 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-08-23 19:01:15
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-06 20:38:46
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-06 23:17:22
 -->
 <template>
   <n-popover
     trigger="click"
+    display-directive="show"
     :disabled="disabled"
+    :raw="true"
     :show="visible"
     :offset="10"
     placement="bottom"
@@ -22,9 +24,10 @@
         class="user-center-select-content"
         v-for="(item,index) in sdata"
         :key="index"
-        :class="item===selectTag ? 'user-center-select-content-ok' : ''"
+        :class="item === selectTag ? 'user-center-select-content-ok' : ''"
         @click="changeSelect(index)"
         :style="selectStyle"
+        role="button"
       >{{ item }}</div>
 
     </el-scrollbar>
@@ -32,12 +35,13 @@
       <div
         :class="disabled ? 'user-center-select-buttontrue' : 'user-center-select-buttonfalse'"
         :style="selectStyle"
+        role="button"
         @click="computedPages"
         v-click-outside="computedPosFalse"
       >
         <div
           class="user-center-select-button-text"
-          v-text="selectTag==='' ? showText : selectTag"
+          v-text="selectTag === '' ? showText : selectTag"
         >
         </div>
         <div
@@ -111,12 +115,12 @@ export default defineComponent({
 
     /**
      * @description: 点击select外关闭select
-     * @return {Void}
+     * @return {void}
      * @author: Z_Y_C
      */
 
     function computedPosFalse() {
-      if (visible.value === true) {
+      if (visible.value) {
         rotate.value = false;
         visible.value = false;
       }
@@ -129,13 +133,7 @@ export default defineComponent({
      */
 
     function computedPages() {
-      if (visible.value === true) {
-        rotate.value = false;
-        visible.value = false;
-      } else {
-        rotate.value = true;
-        visible.value = true;
-      }
+      rotate.value = visible.value = !visible.value;
     }
 
     /**
@@ -161,7 +159,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .user-center-select-content {
   display: flex;
   border-radius: $border-radius-1;
@@ -254,12 +252,8 @@ export default defineComponent({
 
 <style lang="scss">
 .user-center-select {
-  padding: 0 !important;
-  box-shadow: $shadow-0 !important;
-  border-radius: $border-radius-0 !important;
-}
-
-.v-binder-follower-container {
-  z-index: 1999 !important;
+  box-shadow: $shadow-0;
+  border-radius: $border-radius-0;
+  background-color: $grey-0;
 }
 </style>

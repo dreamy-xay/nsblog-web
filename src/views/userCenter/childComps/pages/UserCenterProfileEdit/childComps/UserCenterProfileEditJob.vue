@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-08-19 11:57:31
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-06 19:46:55
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-06 22:38:16
 -->
 <template>
   <div class="user-center-profile-job-edit">
@@ -75,13 +75,23 @@ export default defineComponent({
     const professionData = computed(() => {
       //职业选项
       return [
-        '系统分析师',
-        '软件测试工程师',
-        'JAVA系统开发工程师',
-        'web开发工程师',
-        'LINUX开发师',
-        '网页设计师',
-        '数据库开发工程师',
+        '金融',
+        '教育',
+        '电商',
+        '传媒',
+        '健康医疗',
+        '游戏',
+        '娱乐',
+        '社交',
+        '电子',
+        '媒体',
+        '零售',
+        '交通物流',
+        '制造',
+        '能源',
+        '旅游',
+        '政务',
+        '其他',
       ];
     });
 

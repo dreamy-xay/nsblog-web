@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-18 21:26:17
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-31 16:24:17
+ * @LastEditTime: 2021-09-06 23:05:18
 -->
 <template>
   <base-view
@@ -13,10 +13,15 @@
     bind-class="user-center"
   >
     <div class="user-center-left">
-      <user-center-menu :username="tokenInfo.username"></user-center-menu>
+      <user-center-menu :username="tokenInfo.username" />
     </div>
     <div class="user-center-right">
-      <router-view />
+      <router-view v-slot="{ Component }">
+        <!-- 将页面数据缓存 -->
+        <keep-alive>
+          <component :is="Component" />
+        </keep-alive>
+      </router-view>
     </div>
   </base-view>
 </template>
@@ -46,7 +51,6 @@ export default defineComponent({
   },
   setup() {
     const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
-    const scrollTop = ref(0); // 垂直滚动
     //监听登录状态
     watch(
       () => tokenInfo.value.status,
@@ -54,20 +58,9 @@ export default defineComponent({
         if (!value) router.push('/');
       }
     );
-    /**
-     * @description: 滚动监听
-     * @param {any} e 滚动事件参数 `必传参数`
-     * @return {void}
-     * @author: dreamy-xay
-     */
-    function getScroll(e) {
-      scrollTop.value = e.scrollTop;
-    }
 
     return {
       tokenInfo,
-      scrollTop,
-      getScroll,
     };
   },
 });
