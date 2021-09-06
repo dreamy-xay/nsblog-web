@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-08-19 11:57:31
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-06 12:11:09
+ * @LastEditTime: 2021-09-06 15:17:39
 -->
 <template>
   <div class="user-center-profile-job-edit">
@@ -12,7 +12,7 @@
     <div class="user-center-profile-job-edit-describe1">
       <div class="user-center-profile-job-edit-describe1-text">职业</div>
       <user-center-select
-        :swidth="150"
+        :swidth="200"
         :sdata="professionData"
         :selectTag="profession"
         @changeItem="changeProfession"
@@ -42,6 +42,7 @@
     <div
       class="user-center-profile-job-edit-button"
       role="button"
+      @click="saveJob"
     >
       保存
     </div>
@@ -72,41 +73,36 @@ export default defineComponent({
   },
   setup(props, context) {
     const professionData = computed(() => {
+      //职业选项
       return [
-        '学生1',
-        '打工仔1',
-        '老板1',
-        '学生2',
-        '打工仔2',
-        '老板2',
-        '学生3',
-        '打工仔3',
-        '老板3',
-        '学生4',
-        '打工仔4',
-        '老板4',
-        '学生5',
-        '打工仔5',
-        '老板5',
-        '学生6',
-        '打工仔6',
-        '老板6',
-        '学生7',
-        '打工仔7',
-        '老板7',
+        '系统分析师',
+        '软件测试工程师',
+        'JAVA系统开发工程师',
+        'web开发工程师',
+        'LINUX开发师',
+        '网页设计师',
+        '数据库开发工程师',
       ];
     });
 
-    const profession = ref(''); //职业
+    const profession = ref(props.data.profession); //职业
+
+    /**
+     * @description: 更改职业显示
+     * @param {Number} data 下标 `必传参数`
+     * @author: Z_Y_C
+     */
 
     function changeProfession(data) {
       profession.value = professionData.value[data];
     }
 
+    //全部地址信息
     const addressData = computed(() => {
       return [[], [], []];
     });
 
+    //显示地址信息
     const address = reactive(['', '', '']);
 
     for (let i = 0; i < location.Country.length; i++) {
@@ -117,6 +113,14 @@ export default defineComponent({
     const addressDisabled = reactive([false, true, true]);
     let countryIndex = 0;
     let stateIndex = 0;
+
+    /**
+     * @description: 更改地址信息显示
+     * @param {Number} event 记录地址数据下标
+     * @param {Number} index 更改的是三个地址中的哪个
+     * @author: Z_Y_C
+     */
+
     function changeAddress($event, index) {
       if (index === 0) {
         countryIndex = $event;
@@ -145,6 +149,7 @@ export default defineComponent({
       }
     }
 
+    //监听username变化，改变显示的值
     watch(
       () => props.data.username,
       () => {
@@ -174,6 +179,28 @@ export default defineComponent({
       }
     );
 
+    /**
+     * @description: 保存职业信息
+     * @author: Z_Y_C
+     */
+    function saveJob() {
+      //合并地址
+      let saveAddress = props.data.address;
+      if (address[0] !== '') {
+        saveAddress = address[0];
+        if (address[1] !== '' && address[1] !== '省份/地区') {
+          saveAddress += ',' + address[1];
+          if (address[2] !== '' && address[2] !== '城市') saveAddress += ',' + address[2];
+        }
+      }
+      //传递数据
+      context.emit('changeJob', {
+        type: 1,
+        profession: profession.value,
+        address: saveAddress,
+      });
+    }
+
     return {
       professionData,
       profession,
@@ -184,6 +211,7 @@ export default defineComponent({
       showAddressText,
       changeAddress,
       addressDisabled,
+      saveJob,
     };
   },
 });

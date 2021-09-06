@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:31
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-06 12:22:50
+ * @LastEditTime: 2021-09-06 15:11:24
 -->
 <template>
   <div class="user-center-profile-edit">
@@ -13,9 +13,15 @@
       @uploadAvatar="uploadAvatar"
       @updateSignature="updateSignature"
     />
-    <user-center-profile-edit-information :data="informationData" />
-    <user-center-profile-edit-job :data="jobData" />
-    <user-center-profile-edit-interest />
+    <user-center-profile-edit-information
+      :data="informationData"
+      @changeInformation="changeInformation"
+    />
+    <user-center-profile-edit-job
+      :data="jobData"
+      @changeJob="changeJob"
+    />
+    <user-center-profile-edit-interest :data="tagData" />
   </div>
 </template>
 
@@ -26,7 +32,7 @@ import UserCenterProfileEditInformation from '@/views/userCenter/childComps/page
 import UserCenterProfileEditJob from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/UserCenterProfileEditJob.vue';
 import UserCenterProfileEditInterest from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/UserCenterProfileEditInterest.vue';
 import { base64ToFile } from '@/util/util';
-import { getUserInfo } from '@/network/api/user';
+import { getUserInfo, putUserInfo } from '@/network/api/user';
 import { mapState } from '@/util/store';
 import { useMessage } from 'naive-ui';
 
@@ -53,6 +59,7 @@ export default defineComponent({
       city: null,
       signature: null,
       profile: null,
+      tag: null,
     });
 
     const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
@@ -70,6 +77,7 @@ export default defineComponent({
         userData.city = data.city;
         userData.signature = data.signature;
         userData.profile = data.profile;
+        userData.tag = data.tag;
       })
       .catch((error) => {
         console.log(error), msg.error('获取消息失败，请重试', { duration: 2000, closable: true });
@@ -102,6 +110,14 @@ export default defineComponent({
         username: userData.username,
         profession: userData.profession,
         address: userData.address,
+      };
+    });
+
+    //标签
+    const tagData = computed(() => {
+      return {
+        username: userData.username,
+        tag: userData.tag,
       };
     });
 
@@ -140,6 +156,26 @@ export default defineComponent({
       error();
     }
 
+    /**
+     * @description:更改基本信息
+     * @param {Object} data 修改后信息 `必传参数`
+     * @author: Z_Y_C
+     */
+
+    function changeInformation(data) {
+      putUserInfo(data);
+    }
+
+    /**
+     * @description:更改职业信息
+     * @param {Object} data 修改后信息 `必传参数`
+     * @author: Z_Y_C
+     */
+
+    function changeJob(data) {
+      putUserInfo(data);
+    }
+
     return {
       uploadAvatar,
       updateSignature,
@@ -148,6 +184,10 @@ export default defineComponent({
       informationData,
       userData,
       jobData,
+      tagData,
+
+      changeInformation,
+      changeJob,
     };
   },
 });
