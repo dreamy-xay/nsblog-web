@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-19 18:32:43
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-06 11:53:55
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-07 12:16:17
 -->
 <template>
   <div class="top-bar-avatar">
@@ -140,6 +140,7 @@ import { getUserInfo } from '@/network/api/user';
 import { clearToken } from '@/network/token';
 import { getCurrentDiffirence } from '@/util/date';
 import { mapState, mapMutations } from '@/util/store';
+import events from '@/events';
 
 /**
  * @description:  顶部头像组件
@@ -264,6 +265,11 @@ export default defineComponent({
         }, 90);
       }
     }
+
+    // 监听全局修改头像
+    events.on('gobal-updateAvatar', (image) => {
+      avatar.value = image;
+    });
 
     return {
       tokenInfo,

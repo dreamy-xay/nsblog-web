@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-31 10:28:07
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-06 11:20:44
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-07 11:56:11
 -->
 <template>
   <div class="user-center-profile-edit-avatar">
@@ -45,7 +45,7 @@
           @click="editSignature"
           v-show="!isEditSignature"
         >
-          {{data.signature}}
+          {{data.signature ? data.signature : '编辑个性签名~ o(*￣▽￣*)o'}}
         </div>
       </el-tooltip>
       <user-center-input
@@ -93,11 +93,7 @@ export default defineComponent({
   props: {
     data: {
       type: Object,
-      default: () => ({
-        username: 'dreamy',
-        signature: '花开本无岸，魂落忘川犹在川。醉里不知烟波浩，梦中依稀灯火寒。',
-        avatar: 'https://dummyimage.com/150x150/234567/FFFFFF.png?text=dreamy',
-      }),
+      required: true,
     },
   },
   setup(props, context) {

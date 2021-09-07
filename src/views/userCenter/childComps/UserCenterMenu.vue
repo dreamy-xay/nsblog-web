@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-19 11:55:18
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-31 11:33:29
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-07 11:10:49
 -->
 <template>
   <div class="user-center-menu">
@@ -173,7 +173,7 @@ export default defineComponent({
   border-radius: $border-radius-0;
   font-size: 16px;
   @include flex(initial, center, column);
-  position: fixed;
+  position: absolute;
 
   .icon {
     height: 100%;
