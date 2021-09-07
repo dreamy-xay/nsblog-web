@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:31:44
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-23 16:42:43
+ * @LastEditTime: 2021-09-07 19:05:42
 -->
 <template>
   <el-scrollbar max-height="calc(100vh - 108px)">
@@ -180,7 +180,7 @@ export default defineComponent({
     watch(
       () => messageCount.value[1],
       (value, oldValue) => {
-        if (value === oldValue + 1 && new RegExp('/message/like').test(route.path)) getSelfMessage();
+        if (value === oldValue + 1 && new RegExp('/message/like' + '(/|$|\\?)').test(route.path)) getSelfMessage();
       }
     );
 
@@ -188,7 +188,8 @@ export default defineComponent({
     watch(
       () => route.path,
       (path) => {
-        if (messageCount.value[1] > 0 && new RegExp('/message/like').test(path)) getSelfMessage(messageCount.value[1]);
+        if (messageCount.value[1] > 0 && new RegExp('/message/like' + '(/|$|\\?)').test(path))
+          getSelfMessage(messageCount.value[1]);
       }
     );
 

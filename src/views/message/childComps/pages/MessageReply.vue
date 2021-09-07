@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:25:27
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-06 09:40:31
+ * @LastEditTime: 2021-09-07 19:05:29
 -->
 
 <template>
@@ -213,7 +213,7 @@ export default defineComponent({
     watch(
       () => messageCount.value[0],
       (value, oldValue) => {
-        if (value === oldValue + 1 && new RegExp('/message/reply').test(route.path)) getSelfMessage();
+        if (value === oldValue + 1 && new RegExp('/message/reply' + '(/|$|\\?)').test(route.path)) getSelfMessage();
       }
     );
 
@@ -221,7 +221,8 @@ export default defineComponent({
     watch(
       () => route.path,
       (path) => {
-        if (messageCount.value[0] > 0 && new RegExp('/message/reply').test(path)) getSelfMessage(messageCount.value[0]);
+        if (messageCount.value[0] > 0 && new RegExp('/message/reply' + '(/|$|\\?)').test(path))
+          getSelfMessage(messageCount.value[0]);
       }
     );
 

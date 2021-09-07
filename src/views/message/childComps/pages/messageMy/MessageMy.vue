@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 12:49:53
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-26 21:05:32
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-07 19:06:22
 -->
 
 <template>
@@ -281,7 +281,7 @@ export default defineComponent({
     watch(
       () => messageCount.value[4],
       () => {
-        if (new RegExp('/message/my').test(route.path)) updateMessageCount({ type: 5, count: 0 });
+        if (new RegExp('/message/my' + '(/|$|\\?)').test(route.path)) updateMessageCount({ type: 5, count: 0 });
       }
     );
 

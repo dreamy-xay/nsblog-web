@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-07-28 13:11:57
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-23 14:05:48
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-07 18:51:37
 -->
 <template>
 
@@ -30,7 +30,6 @@
         </message-top>
 
         <div class="message-center-right-route">
-
           <router-view v-slot="{ Component }">
             <!-- 将页面数据缓存 -->
             <keep-alive>

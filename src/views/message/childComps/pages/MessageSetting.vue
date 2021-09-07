@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-07-28 13:02:11
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-23 12:20:03
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-07 18:35:09
 -->
 <template>
   <div
@@ -20,7 +20,7 @@
 
     <div class="message-setting-radio">
       <el-radio-group
-        v-model="settingData[index].value"
+        v-model="settingData[index]"
         @change="changeSetting(index)"
       >
         <el-radio
@@ -62,13 +62,7 @@ export default defineComponent({
     });
 
     //设置数据
-    const settingData = reactive([
-      { key: 'message_prompt', value: 1 },
-      { key: 'comment_message_prompt', value: 1 },
-      { key: 'attention_message_prompt', value: 1 },
-      { key: 'like_message_prompt', value: 1 },
-      { key: 'chat_message_prompt', value: 1 },
-    ]);
+    const settingData = reactive([1, 1, 1, 1, 1]);
 
     //设置按钮
     const radiomenu = computed(() => {
@@ -100,11 +94,11 @@ export default defineComponent({
     //得到设置数据
     getMessageSetting()
       .then((data) => {
-        settingData[0].value = data.message_prompt;
-        settingData[1].value = data.comment_message_prompt;
-        settingData[2].value = data.attention_message_prompt;
-        settingData[3].value = data.like_message_prompt;
-        settingData[4].value = data.chat_message_prompt;
+        settingData[0] = data.message_prompt;
+        settingData[1] = data.comment_message_prompt;
+        settingData[2] = data.attention_message_prompt;
+        settingData[3] = data.like_message_prompt;
+        settingData[4] = data.chat_message_prompt;
       })
       .catch((error) => {
         console.log(error), msg.error('获取设置失败，请重试', { duration: 2000, closable: true });
@@ -117,7 +111,14 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function changeSetting(index) {
-      modifySetting({ name: settingData[index].key, value: settingData[index].value }).catch((error) => {
+      const data = [
+        { message_prompt: settingData[index] },
+        { comment_message_prompt: settingData[index] },
+        { attention_message_prompt: settingData[index] },
+        { like_message_prompt: settingData[index] },
+        { chat_message_prompt: settingData[index] },
+      ];
+      modifySetting(data[index]).catch((error) => {
         console.log(error), msg.error('修改设置失败，请重试', { duration: 2000, closable: true });
       });
     }

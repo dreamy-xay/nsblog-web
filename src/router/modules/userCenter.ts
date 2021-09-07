@@ -3,12 +3,12 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-19 12:47:57
- * @LastEditors: continue-hs
- * @LastEditTime: 2021-09-01 17:38:02
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-07 18:48:52
  */
 import { RouteRecordRaw } from 'vue-router';
 
-const messageRouter: RouteRecordRaw = {
+const userCenterRouter: RouteRecordRaw = {
   path: '/userCenter',
   name: 'userCenter',
   //刷新显示的第一个界面
@@ -53,4 +53,4 @@ const messageRouter: RouteRecordRaw = {
   ]
 };
 
-export default messageRouter;
+export default userCenterRouter;

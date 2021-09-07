@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:34:31
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-31 10:21:53
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-07 19:05:23
 -->
 <template>
   <el-scrollbar max-height="calc(100vh - 108px)">
@@ -142,7 +142,7 @@ export default defineComponent({
     watch(
       () => messageCount.value[3],
       (value, oldValue) => {
-        if (value === oldValue + 1 && new RegExp('/message/system').test(route.path)) getSelfMessage();
+        if (value === oldValue + 1 && new RegExp('/message/system' + '(/|$|\\?)').test(route.path)) getSelfMessage();
       }
     );
 
@@ -150,7 +150,8 @@ export default defineComponent({
     watch(
       () => route.path,
       (path) => {
-        if (messageCount.value[3] > 0 && new RegExp('/message/reply').test(path)) getSelfMessage(messageCount.value[3]);
+        if (messageCount.value[3] > 0 && new RegExp('/message/reply' + '(/|$|\\?)').test(path))
+          getSelfMessage(messageCount.value[3]);
       }
     );
 

@@ -1,10 +1,10 @@
 <!--
- * @Description:
+ * @Description: 隐私设置页面
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:55
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-06 18:35:47
+ * @LastEditTime: 2021-09-07 19:22:44
 -->
 <template>
   <div class="user-center-setting">
@@ -22,7 +22,7 @@
 
       <div class="user-center-setting-menu-radio">
         <el-radio-group
-          v-model="settingData[index].value"
+          v-model="settingData[index]"
           @change="changeSetting(index)"
         >
           <el-radio
@@ -40,9 +40,18 @@
 
 <script>
 import { computed, defineComponent, reactive } from 'vue';
+import { getPrivacySetting, modifySetting } from '@/network/api/setting';
+import { useMessage } from 'naive-ui';
+
+/**
+ * @description: 隐私设置页面
+ * @author: Z_Y_C
+ */
 export default defineComponent({
-  name: 'user-centerSettting',
+  name: 'userCenterSettting',
   setup() {
+    const msg = useMessage(); // naive-ui message
+    // 隐私设置介绍
     const textmenus = computed(() => {
       return [
         { text1: '查看动态', text2: '（允许后，在个人主页展示动态）' },
@@ -51,6 +60,7 @@ export default defineComponent({
       ];
     });
 
+    // 计算隐私设置选项
     const radiomenus = computed(() => {
       return [
         [
@@ -68,11 +78,18 @@ export default defineComponent({
       ];
     });
 
-    const settingData = reactive([
-      { key: 'message_prompt', value: 1 },
-      { key: 'comment_message_prompt', value: 1 },
-      { key: 'attention_message_prompt', value: 1 },
-    ]);
+    const settingData = reactive([1, 1, 1]); // 绑定隐私设置数据
+
+    // 获取隐私设置数据
+    getPrivacySetting()
+      .then((data) => {
+        settingData[0] = data.view_dynamic;
+        settingData[1] = data.view_ask;
+        settingData[2] = data.view_profile;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
     /**
      * @description: 更改设置
@@ -81,10 +98,15 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function changeSetting(index) {
-      // modifySetting(settingData[index].key).catch((error) => {
-      //   console.log(error), msg.error('修改设置失败，请重试', { duration: 2000, closable: true });
-      // });
-      console.log({ name: settingData[index].key, value: settingData[index].value });
+      const data = [
+        { view_dynamic: settingData[index] },
+        { view_ask: settingData[index] },
+        { view_profile: settingData[index] },
+      ];
+      modifySetting(data[index]).catch((error) => {
+        console.log(error);
+        msg.error('修改设置失败，请重试', { duration: 2000, closable: true });
+      });
     }
     return {
       textmenus,
