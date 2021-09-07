@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 11:59:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-07 21:16:14
+ * @LastEditTime: 2021-09-07 21:28:51
  */
 
 import { Application, Request, Response } from 'express';
@@ -26,7 +26,8 @@ export default function(baseUrl: string, app: Application) {
       for (let i: number = 0; i < limit; ++i) {
         const type: Record<string, unknown> = hasType ? { type: Random.natural(1, 3) } : {};
         ans.push({
-          id: Random.id(),
+          collection_id: Random.id(),
+          content_id: Random.id(),
           title: Random.natural(0, 3) ? Random.ctitle(7, 15) : Random.title(7, 12),
           ...type
         });
@@ -75,12 +76,12 @@ export default function(baseUrl: string, app: Application) {
   });
 
   // 取消收藏
-  app.delete(baseUrl + '/favorites/collections', (req: Request, res: Response) => {
+  app.delete(baseUrl + '/favorites/collections/:collection_id', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
-    const { type, content_id, favorite_id } = req.body;
+    const { collection_id } = req.params;
     console.log(
-      `--------cancel favorites>collections: username=>${username}  type=>${type}  content_id=>${content_id}  favorite_id=>${favorite_id}  success`
+      `--------cancel favorites>collections: username=>${username}  collection_id=>${collection_id}  success`
     );
     return res.send();
   });
@@ -94,7 +95,7 @@ export default function(baseUrl: string, app: Application) {
   });
 
   // 删除收藏夹
-  app.delete(baseUrl + '/favorites/:favorites_id', (req: Request, res: Response) => {
+  app.delete(baseUrl + '/favorites/:favorite_id', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { favorite_id } = req.params;
