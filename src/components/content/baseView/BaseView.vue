@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 11:51:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-31 11:04:52
+ * @LastEditTime: 2021-09-07 16:21:41
 -->
 <template>
   <div
@@ -57,7 +57,7 @@ import BaseTopBar from '@/components/content/baseTopBar/BaseTopBar.vue';
  * @param {Boolean} topBar 是否启用topBar `默认为false,不启用`
  * @param {String} bindClass 绑定类 `默认为null`
  * @param {Number} scrollDelay 滚动条触发底部最长延时 `默认200ms`
- * @param {Number} scrollDistance 触发加载的距离阈值，单位为px `默认0.8px`
+ * @param {Number} scrollDistance 触发加载的距离阈值，单位为px `默认200px`
  * @param {Boolean} scrollDisabled 是否禁用滚动底部触发 `默认不禁用`
  * @event scroll 滚动监听事件，回调参数{scrollTop, scrollLeft}
  * @event scrollToBottom 滚动到底部触发事件，无回调参数
@@ -85,7 +85,7 @@ export default defineComponent({
     },
     scrollDistance: {
       type: Number,
-      default: 0.8,
+      default: 200,
     },
     scrollDisabled: {
       type: Boolean,

@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-19 18:32:43
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-07 12:16:17
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-07 16:28:55
 -->
 <template>
   <div class="top-bar-avatar">
@@ -34,7 +34,7 @@
       <div class="user-info">
         <div class="user-info-top">
           <a
-            :href="'/users/' + username"
+            :href="'/user/' + username"
             class="avatar"
             :class="{active: active}"
           >
@@ -124,7 +124,7 @@
             v-show="showAvatar"
             :src="avatar"
             alt="avatar"
-            :href="'/users/' + username"
+            :href="'/user/' + username"
             target="_self"
           />
         </div>
