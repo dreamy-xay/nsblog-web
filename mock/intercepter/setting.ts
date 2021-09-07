@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 23:12:21
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-23 12:36:13
+ * @LastEditTime: 2021-09-07 18:17:45
  */
 
 import { Application, Request, Response } from 'express';
@@ -38,7 +38,7 @@ export default function(baseUrl: string, app: Application) {
   app.put(baseUrl + '/setting', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
-    console.log(`--------modefify setting:  username=>${username}  setting=>${req.body}`);
+    console.log(`--------modefify setting:  username=>${username}  setting=>${JSON.stringify(req.body)}`);
     res.send();
   });
 }
