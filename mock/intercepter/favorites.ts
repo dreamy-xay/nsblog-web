@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 11:59:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-06 12:03:31
+ * @LastEditTime: 2021-09-07 21:16:14
  */
 
 import { Application, Request, Response } from 'express';
@@ -63,23 +63,6 @@ export default function(baseUrl: string, app: Application) {
     }
   });
 
-  // 新建收藏夹
-  app.post(baseUrl + '/favorites', (req: Request, res: Response) => {
-    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
-    const username: string = getToken(req.headers).username;
-    console.log(`--------new favorites: username=>${username}   data=>${req.body}  success`);
-    return res.send();
-  });
-
-  // 删除收藏夹
-  app.delete(baseUrl + '/favorites/:favorites_id', (req: Request, res: Response) => {
-    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
-    const username: string = getToken(req.headers).username;
-    const { favorite_id } = req.params;
-    console.log(`--------delete favorites: username=>${username}  favorite_id=>${favorite_id}  success`);
-    return res.send();
-  });
-
   // 添加收藏
   app.post(baseUrl + '/favorites/collections', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
@@ -99,6 +82,23 @@ export default function(baseUrl: string, app: Application) {
     console.log(
       `--------cancel favorites>collections: username=>${username}  type=>${type}  content_id=>${content_id}  favorite_id=>${favorite_id}  success`
     );
+    return res.send();
+  });
+
+  // 新建收藏夹
+  app.post(baseUrl + '/favorites', (req: Request, res: Response) => {
+    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
+    const username: string = getToken(req.headers).username;
+    console.log(`--------new favorites: username=>${username}   data=>${req.body}  success`);
+    return res.send();
+  });
+
+  // 删除收藏夹
+  app.delete(baseUrl + '/favorites/:favorites_id', (req: Request, res: Response) => {
+    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
+    const username: string = getToken(req.headers).username;
+    const { favorite_id } = req.params;
+    console.log(`--------delete favorites: username=>${username}  favorite_id=>${favorite_id}  success`);
     return res.send();
   });
 

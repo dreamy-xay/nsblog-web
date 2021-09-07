@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-19 11:26:49
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-19 15:47:17
+ * @LastEditTime: 2021-09-07 20:17:51
 -->
 <template>
   <div
@@ -25,6 +25,7 @@
 
 <script>
 import { defineComponent, computed, ref } from 'vue';
+import styles from '@/assets/style/define.scss';
 
 /**
  * @description: 基础头像
@@ -90,7 +91,7 @@ export default defineComponent({
       return {
         width: size,
         height: size,
-        borderRadius: props.shape === 'circle' ? '50%' : 'none',
+        borderRadius: props.shape === 'circle' ? '50%' : styles.borderRadius0,
         backgroundImage: `url(${avatar.value})`,
         backgroundSize: props.fit,
         cursor: props.href ? 'pointer' : 'inherit',
