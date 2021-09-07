@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-31 16:34:22
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-06 15:48:34
+ * @LastEditTime: 2021-09-07 11:40:05
 -->
 <template>
   <div
@@ -28,7 +28,7 @@
       v-if="showPassword"
       class="user-center-input-eye iconfont"
       role="button"
-      @click="toggleType"
+      @click.stop="toggleType"
       :class="inputType ? 'blog-eyehidden' : 'blog-eyeshow'"
     ></i>
     <i
@@ -37,7 +37,7 @@
       role="button"
       class="iconfont blog-close-circle user-center-input-close"
       :class="{'right-has': showPassword}"
-      @click="clearInputValue"
+      @click.stop="clearInputValue"
     ></i>
   </div>
 </template>
@@ -129,12 +129,8 @@ export default defineComponent({
         'mousedown',
         (e) => {
           const domClass = e.target.getAttribute('class');
-          if (
-            domClass &&
-            (domClass.includes('user-center-input-close') || domClass.includes('user-center-input-eye'))
-          ) {
+          if (domClass && (domClass.includes('user-center-input-close') || domClass.includes('user-center-input-eye')))
             e.preventDefault();
-          }
         },
         false
       );
@@ -231,6 +227,8 @@ export default defineComponent({
      */
     function clearInputValue() {
       context.emit('update:modelValue', '');
+      // 输入验证
+      efficient.value = props.verify === null || props.verify('');
     }
 
     return {

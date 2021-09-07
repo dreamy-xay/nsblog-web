@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-08-28 23:20:26
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-06 19:40:25
+ * @LastEditTime: 2021-09-07 11:57:43
 -->
 
 <template>
@@ -17,6 +17,7 @@
         :style="{width: '200px'}"
         ref="inputRef"
         :verify="inputVerify"
+        :maxlength="20"
       />
     </div>
 
@@ -275,22 +276,13 @@ export default defineComponent({
             }
           }
         }
-
-        console.log(props.data.birthday);
-
         const brit = new Date(props.data.birthday);
-
         birthday[0] = brit.getFullYear() + '';
         birthday[1] = brit.getMonth() + 1 + '';
         birthday[2] = brit.getDate() + '';
-        console.log(birthday[0]);
-        console.log(birthday[1]);
-        console.log(birthday[2]);
-
         birthdayDisabled[1] = false;
         birthdayDisabled[2] = false;
         getDate();
-
         if (props.data.profile === null) text.value = '';
         else text.value = props.data.profile;
       }

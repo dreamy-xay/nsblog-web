@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:31
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-06 22:23:07
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-07 12:14:15
 -->
 <template>
   <div class="user-center-profile-edit">
@@ -32,9 +32,10 @@ import UserCenterProfileEditInformation from '@/views/userCenter/childComps/page
 import UserCenterProfileEditJob from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/UserCenterProfileEditJob.vue';
 import UserCenterProfileEditInterest from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/UserCenterProfileEditInterest.vue';
 import { base64ToFile } from '@/util/util';
-import { getUserInfo, putUserInfo } from '@/network/api/user';
+import { getUserInfo, putUserInfo, putSignature } from '@/network/api/user';
 import { mapState } from '@/util/store';
 import { useMessage } from 'naive-ui';
+import events from '@/events';
 
 export default defineComponent({
   name: 'UserCenterProfileEdit',
@@ -45,7 +46,7 @@ export default defineComponent({
     UserCenterProfileEditInterest,
   },
   setup() {
-    const msg = useMessage();
+    const msg = useMessage(); // naive-ui message
     const userData = reactive({
       //个人信息
       username: null,
@@ -80,7 +81,8 @@ export default defineComponent({
         userData.tag = data.tag;
       })
       .catch((error) => {
-        console.log(error), msg.error('获取消息失败，请重试', { duration: 2000, closable: true });
+        console.log(error);
+        msg.error('获取消息失败，请重试', { duration: 2000, closable: true });
       });
 
     //头像和个性签名数据
@@ -132,11 +134,12 @@ export default defineComponent({
       // TODO:
       // request upload： base64ToFile(image, 'avatar');
       console.log(base64ToFile(image, 'avatar'));
-      console.log(informationData);
 
       // TODO:
       // requset success(then)： success();
       success();
+      userData.avatar = image;
+      events.emit('gobal-updateAvatar', image);
     }
 
     /**
@@ -150,10 +153,15 @@ export default defineComponent({
       // TODO:
       // request update： signature
       console.log(signature);
-
-      // TODO:
-      // requset error(catch)： error();
-      error();
+      putSignature(signature)
+        .then(() => {
+          userData.signature = signature;
+        })
+        .catch((err) => {
+          console.log(err);
+          error();
+          msg.error('修改个性签名失败', { duration: 2000, closable: true });
+        });
     }
 
     /**
@@ -163,7 +171,18 @@ export default defineComponent({
      */
 
     function changeInformation(data) {
-      putUserInfo(data);
+      putUserInfo(data)
+        .then(() => {
+          userData.nickname = data.nickname;
+          userData.gender = data.gender;
+          userData.city = data.city;
+          userData.birthday = data.birthday;
+          userData.profile = data.profile;
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('修改基本信息失败', { duration: 2000, closable: true });
+        });
     }
 
     /**
@@ -173,7 +192,15 @@ export default defineComponent({
      */
 
     function changeJob(data) {
-      putUserInfo(data);
+      putUserInfo(data)
+        .then(() => {
+          userData.profession = data.profile;
+          userData.address = data.address;
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('修改基本信息失败', { duration: 2000, closable: true });
+        });
     }
 
     return {

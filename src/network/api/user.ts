@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:38:31
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-06 14:54:58
+ * @LastEditTime: 2021-09-07 11:15:48
  */
 import { post, get, del, put, RequestLifeCycle } from '@/network/request';
 import { encrypt } from '@/util/crypto';
@@ -230,6 +230,23 @@ export function addUserTag(tagname: string, RLC: RequestLifeCycle = {}): Promise
     ...RLC,
     data: {
       tagname
+    }
+  });
+}
+
+/**
+ * @description: 修改用户个性签名
+ * @param {string} signature 请求数据类型和数据 `必传参数`
+ * @param {RequestLifeCycle} RLC  请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: Z_Y_C
+ */
+export function putSignature(signature: string, RLC: RequestLifeCycle = {}): Promise<unknown> {
+  return put({
+    url: '/users/signature',
+    ...RLC,
+    data: {
+      signature
     }
   });
 }

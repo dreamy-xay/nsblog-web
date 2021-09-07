@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-08-19 11:57:31
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-06 22:38:16
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-07 10:03:55
 -->
 <template>
   <div class="user-center-profile-job-edit">
@@ -12,7 +12,7 @@
     <div class="user-center-profile-job-edit-describe1">
       <div class="user-center-profile-job-edit-describe1-text">职业</div>
       <user-center-select
-        :swidth="200"
+        :swidth="150"
         :sdata="professionData"
         :selectTag="profession"
         @changeItem="changeProfession"
