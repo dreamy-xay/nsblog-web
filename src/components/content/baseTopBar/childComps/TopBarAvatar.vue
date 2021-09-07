@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-19 18:32:43
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-07 16:28:55
+ * @LastEditTime: 2021-09-07 22:45:23
 -->
 <template>
   <div class="top-bar-avatar">
@@ -45,7 +45,7 @@
             />
           </a>
           <div class="name">
-            {{username}}
+            {{nickname}}
           </div>
           <div class="age">
             <div class="age-left">
@@ -157,6 +157,7 @@ export default defineComponent({
     const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
     const avatar = ref('/home/avatarLoading.gif'); // 初始头像
     const username = ref(''); // 用户名
+    const nickname = ref(''); // 昵称
     const age = ref(0); // 学龄
     const remainDay = ref(0); // 多余学龄天数
     const likeCount = ref(0); // 点赞数
@@ -196,7 +197,8 @@ export default defineComponent({
     if (tokenInfo.value.status) {
       getUserInfo(tokenInfo.value.username)
         .then((data) => {
-          username.value = data.username; //更新昵称
+          username.value = data.username; //更新用户名
+          nickname.value = data.nickname; // 更新昵称
           recommendCount.value = data.recommend_count; //更新关注数量
           likeCount.value = data.like_count; //更新点赞数量
           fansCount.value = data.fans_count; //更新粉丝数量
@@ -275,6 +277,7 @@ export default defineComponent({
       tokenInfo,
       avatar,
       username,
+      nickname,
       age,
       remainDay,
       likeCount,

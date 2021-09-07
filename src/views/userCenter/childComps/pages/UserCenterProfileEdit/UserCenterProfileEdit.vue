@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:31
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-07 12:14:15
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-07 22:26:04
 -->
 <template>
   <div class="user-center-profile-edit">
@@ -82,7 +82,7 @@ export default defineComponent({
       })
       .catch((error) => {
         console.log(error);
-        msg.error('获取消息失败，请重试', { duration: 2000, closable: true });
+        msg.error('获取消息失败', { duration: 2000, closable: true });
       });
 
     //头像和个性签名数据
