@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-02 11:13:42
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-02 15:26:52
+ * @LastEditTime: 2021-09-07 23:13:44
  */
 /**
  * 通过图片url 获取图片file对象
@@ -52,4 +52,31 @@ export function base64ToFile(base64Data: string, fileName: string = 'file'): Blo
   blob.lastModifiedDate = new Date();
   blob.name = fileName;
   return blob;
+}
+
+/**
+ * @description: 获取数字的指定位数分割
+ * @param {string | number} num 传入数字 `必传参数`
+ * @param {number} count 指定分割位数 `默认为3，千位分割`
+ * @param {string} split 指定分割嵌入字符串 `默认为,`
+ * @return {string} 返回符合条件分割字符串
+ * @author: dreamy-xay
+ */
+export function getSplitNum(num: string | number, sum: number = 3, split: string = ','): string {
+  // 字符串反转
+  function reverse(str: string): string {
+    let ans: string = '';
+    for (let i: number = str.length - 1; i >= 0; --i) ans += str[i];
+    return ans;
+  }
+
+  const str: string = parseInt(num + '').toString();
+  if (str === 'NaN') return '0';
+  let ans: string = '';
+  split = reverse(split);
+  for (let i: number = str.length - 1, j: number = 1; i >= 0; --i, ++j) {
+    ans += str[i];
+    if (j % 3 === 0) ans += split;
+  }
+  return reverse(ans);
 }

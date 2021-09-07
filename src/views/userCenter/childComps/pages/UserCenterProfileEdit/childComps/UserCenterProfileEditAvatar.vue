@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-31 10:28:07
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-07 11:56:11
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-07 23:16:34
 -->
 <template>
   <div class="user-center-profile-edit-avatar">
@@ -53,7 +53,7 @@
         type="text"
         v-model="inputValue"
         ref="signatureInput"
-        :maxlength="255"
+        :maxlength="128"
         @blur="updateSignature(false, true)"
         show-close
       />
@@ -250,6 +250,7 @@ export default defineComponent({
     .signature {
       font-size: 14px;
       color: $grey-7;
+      @include word-break;
     }
   }
 }
