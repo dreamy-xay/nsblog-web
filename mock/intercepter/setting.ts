@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 23:12:21
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-07 18:17:45
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-07 18:41:41
  */
 
 import { Application, Request, Response } from 'express';
@@ -30,6 +30,17 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const setting: Record<string, unknown> = {
       history_record: Random.natural(0, 1)
+    };
+    return res.json(setting);
+  });
+
+  // 隐私设置获取
+  app.get(baseUrl + '/setting/privacy', (req: Request, res: Response) => {
+    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
+    const setting: Record<string, unknown> = {
+      view_dynamic: Random.integer(0, 1),
+      view_ask: Random.integer(0, 1),
+      view_profile: Random.integer(0, 1)
     };
     return res.json(setting);
   });

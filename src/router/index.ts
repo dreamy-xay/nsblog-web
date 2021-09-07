@@ -3,13 +3,13 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:02:59
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-07 16:10:41
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-07 18:49:07
  */
 import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 import loginRouter from './modules/login';
 import messageRouter from './modules/message';
-import usercenterRouter from './modules/userCenter';
+import userCenterRouter from './modules/userCenter';
 import user from './modules/user';
 
 const routes: Array<RouteRecordRaw> = [
@@ -30,7 +30,7 @@ const routes: Array<RouteRecordRaw> = [
   // 消息页面
   messageRouter,
   // 用户中心页面
-  usercenterRouter,
+  userCenterRouter,
   // 用户主页页面
   user,
   // 历史记录页面

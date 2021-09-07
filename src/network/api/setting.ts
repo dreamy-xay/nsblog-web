@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-06 21:49:03
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-07 20:06:48
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-07 18:51:00
  */
 import { get, put, RequestLifeCycle } from '@/network/request';
 
@@ -21,6 +21,18 @@ export function getMessageSetting(RLC: RequestLifeCycle = {}): Promise<unknown> 
   });
 }
 
+/**
+ * @description: 获取隐私设置信息
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: Z_Y_C
+ */
+export function getPrivacySetting(RLC: RequestLifeCycle = {}): Promise<unknown> {
+  return get({
+    url: '/setting/privacy',
+    ...RLC
+  });
+}
 /**
  * @description: 获取消息页面设置信息
  * @param {Record<string, unknown>} setting 需要修改的设置对象 `必传参数`

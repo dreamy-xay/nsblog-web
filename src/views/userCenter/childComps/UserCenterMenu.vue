@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-19 11:55:18
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-07 11:10:49
+ * @LastEditTime: 2021-09-07 19:21:35
 -->
 <template>
   <div class="user-center-menu">
@@ -15,12 +15,12 @@
       <div class="text">个人中心</div>
     </div>
     <div class="user-center-menu-text1">
-      <a
+      <div
         class="text-content"
         role="button"
-        v-for="item in text1"
-        :key="item.title"
-        :href="item.url"
+        v-for="(item, index) in text1"
+        :key="index"
+        @click="changePage(item.url, index !== 0)"
         :class="{active: compareRoute(item.url)}"
       >
         <div class="icon">
@@ -36,15 +36,15 @@
             v-if="item.url !== '/userCenter/collection'"
           ></i>
         </div>
-      </a>
+      </div>
     </div>
     <div class="user-center-menu-text2">
-      <a
+      <div
         class="text-content"
         role="button"
         v-for="item in text2"
         :key="item.title"
-        :href="item.url"
+        @click="changePage(item.url)"
         :class="{active : compareRoute(item.url)}"
       >
         <div class="icon">
@@ -54,15 +54,15 @@
           ></i>
         </div>
         <div class="text">{{item.title}} </div>
-      </a>
+      </div>
     </div>
     <div class="user-center-menu-text3">
-      <a
+      <div
         class="text-content"
         role="button"
         v-for="item in text3"
         :key="item.title"
-        :href="item.url"
+        @click="changePage(item.url, true)"
       >
         <div class="icon">
           <i
@@ -74,12 +74,13 @@
         <div class="icon">
           <i class="iconfont blog-fenxiang1"></i>
         </div>
-      </a>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import router from '@/router';
 import { defineComponent } from 'vue';
 import { useRoute } from 'vue-router';
 
@@ -149,9 +150,14 @@ export default defineComponent({
       },
     ];
 
-    //匹配路径
+    // 匹配路径
     function compareRoute(url) {
       return new RegExp(url + '(/|$|\\?)').test(route.path);
+    }
+
+    // 修改页面
+    function changePage(path, isBlack = false) {
+      isBlack ? window.open(path, path) : router.push({ path });
     }
 
     return {
@@ -159,6 +165,7 @@ export default defineComponent({
       text2,
       text3,
       compareRoute,
+      changePage,
     };
   },
 });
