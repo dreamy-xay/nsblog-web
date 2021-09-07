@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 11:59:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-07 21:28:51
+ * @LastEditTime: 2021-09-07 21:31:46
  */
 
 import { Application, Request, Response } from 'express';
@@ -90,7 +90,10 @@ export default function(baseUrl: string, app: Application) {
   app.post(baseUrl + '/favorites', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
-    console.log(`--------new favorites: username=>${username}   data=>${req.body}  success`);
+    const { name, is_private, remark } = req.body;
+    console.log(
+      `--------new favorites: username=>${username}   name=>${name}  is_private=>${is_private}  remark=>${remark}  success`
+    );
     return res.send();
   });
 
