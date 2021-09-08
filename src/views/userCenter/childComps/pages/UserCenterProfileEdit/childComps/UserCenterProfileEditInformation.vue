@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-08-28 23:20:26
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-08 21:26:09
+ * @LastEditTime: 2021-09-08 21:32:13
 -->
 
 <template>
@@ -241,7 +241,6 @@ export default defineComponent({
         birthday[1] === '2'
       )
         birthdayData[2].push('29');
-
       if (parseInt(birthday[2]) > parseInt(birthdayData[2][birthdayData[2].length - 1])) {
         birthday[2] = birthdayData[2][birthdayData[2].length - 1];
       }
