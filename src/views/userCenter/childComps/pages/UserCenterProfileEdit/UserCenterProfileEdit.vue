@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:31
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-07 22:26:04
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-08 21:24:44
 -->
 <template>
   <div class="user-center-profile-edit">
@@ -56,11 +56,11 @@ export default defineComponent({
       profession: null,
       birthday: null,
       gender: null,
-      address: null,
-      city: null,
+      address: ',,',
+      city: ',,',
       signature: null,
       profile: null,
-      tag: null,
+      tags: null,
     });
 
     const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
@@ -78,7 +78,7 @@ export default defineComponent({
         userData.city = data.city;
         userData.signature = data.signature;
         userData.profile = data.profile;
-        userData.tag = data.tag;
+        userData.tags = data.tags;
       })
       .catch((error) => {
         console.log(error);
@@ -119,7 +119,7 @@ export default defineComponent({
     const tagData = computed(() => {
       return {
         username: userData.username,
-        tag: userData.tag,
+        tags: userData.tag,
       };
     });
 
@@ -140,6 +140,7 @@ export default defineComponent({
       success();
       userData.avatar = image;
       events.emit('gobal-updateAvatar', image);
+      msg.error('修改成功', { duration: 2000, closable: true });
     }
 
     /**
@@ -156,6 +157,7 @@ export default defineComponent({
       putSignature(signature)
         .then(() => {
           userData.signature = signature;
+          msg.error('修改成功', { duration: 2000, closable: true });
         })
         .catch((err) => {
           console.log(err);
@@ -178,6 +180,7 @@ export default defineComponent({
           userData.city = data.city;
           userData.birthday = data.birthday;
           userData.profile = data.profile;
+          msg.error('修改成功', { duration: 2000, closable: true });
         })
         .catch((error) => {
           console.log(error);
@@ -196,6 +199,7 @@ export default defineComponent({
         .then(() => {
           userData.profession = data.profile;
           userData.address = data.address;
+          msg.error('修改成功', { duration: 2000, closable: true });
         })
         .catch((error) => {
           console.log(error);

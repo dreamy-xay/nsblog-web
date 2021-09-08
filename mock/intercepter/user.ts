@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:15:05
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-07 22:18:22
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-08 21:21:00
  */
 import { Random } from 'better-mock';
 import { Application, Request, Response } from 'express';
@@ -13,7 +13,7 @@ import { clearToken, verifyToken, getToken, int } from './util';
 import * as location from '../../src/util/json/location.json';
 
 function randomAddress(): string {
-  if (!Random.integer(0, 2)) return null;
+  if (!Random.integer(0, 2)) return ',,';
   let data: Record<string, unknown>[] = location.Country;
   let ans: string = '';
   let index: number = 0;

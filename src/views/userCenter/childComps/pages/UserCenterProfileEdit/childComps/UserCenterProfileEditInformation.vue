@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-08-28 23:20:26
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-07 11:57:43
+ * @LastEditTime: 2021-09-08 21:26:09
 -->
 
 <template>
@@ -103,6 +103,7 @@ import { computed, defineComponent, ref, reactive, watch } from 'vue';
 import UserCenterSelect from '@/views/userCenter/childComps/UserCenterSelect.vue';
 import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput.vue';
 import location from '@/util/json/location';
+import { dateFormat } from '@/util/date';
 
 /**
  * @description: 基本信息模块
@@ -256,33 +257,33 @@ export default defineComponent({
         if (props.data.gender === null) genderData.value = 2;
         else genderData.value = props.data.gender;
 
-        if (props.data.city !== null) {
-          city.splice(0, props.data.city.split(',').length, ...props.data.city.split(','));
-          if (props.data.city.split(',').length === 1) cityDisabled[1] = false;
-          if (props.data.city.split(',').length > 1) {
+        const cityArr = props.data.city.split(',');
+        city.splice(0, cityArr.length, ...cityArr);
+        for (let i = 0; i < cityData.value[0].length; i++) {
+          if (city[0] === cityData.value[0][i]) {
             cityDisabled[1] = false;
-            cityDisabled[2] = false;
-          }
-          for (let i = 0; i < cityData.value[0].length; i++) {
-            if (city[0] === cityData.value[0][i]) {
-              for (let j = 0; j < location.Country[i].State.length; j++) {
-                cityData.value[1].push(location.Country[i].State[j].StateName);
-                if (location.Country[i].State[j].StateName === city[1]) {
-                  for (let k = 0; k < location.Country[i].State[j].City.length; k++) {
-                    cityData.value[2].push(location.Country[i].State[j].City[k].CityName);
-                  }
+            for (let j = 0; j < location.Country[i].State.length; j++) {
+              cityData.value[1].push(location.Country[i].State[j].StateName);
+              if (location.Country[i].State[j].StateName === city[1]) {
+                cityDisabled[2] = false;
+                for (let k = 0; k < location.Country[i].State[j].City.length; k++) {
+                  cityData.value[2].push(location.Country[i].State[j].City[k].CityName);
                 }
               }
             }
           }
         }
-        const brit = new Date(props.data.birthday);
-        birthday[0] = brit.getFullYear() + '';
-        birthday[1] = brit.getMonth() + 1 + '';
-        birthday[2] = brit.getDate() + '';
-        birthdayDisabled[1] = false;
-        birthdayDisabled[2] = false;
-        getDate();
+
+        if (props.data.birthday !== null) {
+          const brit = new Date(props.data.birthday);
+          birthday[0] = brit.getFullYear() + '';
+          birthday[1] = brit.getMonth() + 1 + '';
+          birthday[2] = brit.getDate() + '';
+          birthdayDisabled[1] = false;
+          birthdayDisabled[2] = false;
+          getDate();
+        }
+
         if (props.data.profile === null) text.value = '';
         else text.value = props.data.profile;
       }
@@ -304,11 +305,8 @@ export default defineComponent({
         }
 
         let saveBirthday = props.data.birthday; //处理生日数据
-        if (birthday[0] !== '') saveBirthday = birthday[0] + ',' + birthday[1] + ',' + birthday[2];
-
-        const brits = new Date(props.data.birthday); //处理生日
-        console.log(props.data.birthday);
-        const times = brits.getFullYear() + ',' + (brits.getMonth() + 1) + ',' + brits.getDate();
+        if (birthday[0] !== '')
+          saveBirthday = dateFormat('YY-mm-dd HH:MM:SS', new Date(birthday[0] + '-' + birthday[1] + '-' + birthday[2]));
 
         let saveGender = genderData.value;
         if (saveGender === 2) saveGender = null;
@@ -316,7 +314,7 @@ export default defineComponent({
           props.data.nickname !== nickName.value ||
           props.data.gender !== saveGender ||
           props.data.city !== saveCity ||
-          times !== saveBirthday ||
+          saveBirthday !== props.data.birthday ||
           props.data.profile !== text.value ||
           (props.data.profile === null && text.value === '')
         ) {
@@ -489,6 +487,13 @@ export default defineComponent({
 
       :deep(.v-md-editor) {
         z-index: 9999999999;
+        box-shadow: $shadow-0;
+        border-radius: $border-radius-0;
+        transition: 0.25s;
+
+        &:focus-within {
+          box-shadow: $shadow-2;
+        }
       }
     }
   }

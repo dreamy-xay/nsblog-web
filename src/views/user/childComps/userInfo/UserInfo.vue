@@ -3,12 +3,11 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 18:09:18
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-07 18:13:01
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-07 20:18:09
 -->
 <template>
   <div class="user-info">
-
   </div>
 </template>
 
@@ -22,6 +21,9 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'userInfo',
+  setup(props, context) {
+    return {};
+  },
 });
 </script>
 
