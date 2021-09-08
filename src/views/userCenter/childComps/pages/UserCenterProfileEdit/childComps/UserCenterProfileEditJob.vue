@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-08-19 11:57:31
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-07 10:03:55
+ * @LastEditTime: 2021-09-08 21:12:30
 -->
 <template>
   <div class="user-center-profile-job-edit">
@@ -165,22 +165,18 @@ export default defineComponent({
       () => {
         if (props.data.profession !== null) profession.value = props.data.profession;
 
-        if (props.data.address !== null) {
-          address.splice(0, props.data.address.split(',').length, ...props.data.address.split(','));
-          if (props.data.address.split(',').length === 1) addressDisabled[1] = false;
-          if (props.data.address.split(',').length > 1) {
+        const addressArr = props.data.address.split(',');
+        address.splice(0, addressArr.length, ...addressArr);
+        for (let i = 0; i < addressData.value[0].length; i++) {
+          if (address[0] === addressData.value[0][i]) {
             addressDisabled[1] = false;
-            addressDisabled[2] = false;
-          }
-          for (let i = 0; i < addressData.value[0].length; i++) {
-            if (address[0] === addressData.value[0][i]) {
-              for (let j = 0; j < location.Country[i].State.length; j++) {
-                addressData.value[1].push(location.Country[i].State[j].StateName);
+            for (let j = 0; j < location.Country[i].State.length; j++) {
+              addressData.value[1].push(location.Country[i].State[j].StateName);
 
-                if (location.Country[i].State[j].StateName === address[1]) {
-                  for (let k = 0; k < location.Country[i].State[j].City.length; k++) {
-                    addressData.value[2].push(location.Country[i].State[j].City[k].CityName);
-                  }
+              if (location.Country[i].State[j].StateName === address[1]) {
+                addressDisabled[2] = false;
+                for (let k = 0; k < location.Country[i].State[j].City.length; k++) {
+                  addressData.value[2].push(location.Country[i].State[j].City[k].CityName);
                 }
               }
             }
