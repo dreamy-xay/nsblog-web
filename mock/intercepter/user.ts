@@ -4,9 +4,9 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:15:05
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-09 20:58:21
+ * @LastEditTime: 2021-09-09 21:52:58
  */
-import { Random } from 'better-mock';
+import { Random, mock } from 'better-mock';
 import { Application, Request, Response } from 'express';
 import select, { DataBaseOperator } from '../data/index';
 import { clearToken, verifyToken, getToken, int } from './util';
@@ -108,7 +108,9 @@ export default function(baseUrl: string, app: Application) {
           // 图表
           article_chart: {
             article_count: Random.natural(0, 10000),
-            data: [],
+            data: mock({
+              'list|365': ['@natural(0, 100)']
+            }).list,
             rank_total: Random.natural(0, 10000),
             rank_week: Random.natural(0, 10000),
             release_recently: Random.natural(0, 10000)
@@ -121,7 +123,9 @@ export default function(baseUrl: string, app: Application) {
           },
           resource_chart: {
             resource_count: Random.natural(0, 10000),
-            data: [],
+            data: mock({
+              'list|12': ['@natural(0, 100)']
+            }).list,
             release_recently: Random.natural(0, 10000)
           }
         });

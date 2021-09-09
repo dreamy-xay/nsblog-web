@@ -3,13 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:04:40
-<<<<<<< HEAD
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-09 21:36:20
-=======
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-09 12:09:45
->>>>>>> 4a561d9c6da55af9a76fde0e13808266e450e16d
+ * @LastEditTime: 2021-09-09 21:54:08
 -->
 <template>
   <base-view
@@ -117,6 +112,7 @@ export default defineComponent({
     // 获取用户数据
     getUserInfo(username, 2)
       .then((data) => {
+        console.log(data);
         userData.username = data.username;
         userData.nickname = data.nickname;
         userData.avatar = data.avatar;
