@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:15:05
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-08 21:21:00
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-09 20:58:21
  */
 import { Random } from 'better-mock';
 import { Application, Request, Response } from 'express';
@@ -114,10 +114,10 @@ export default function(baseUrl: string, app: Application) {
             release_recently: Random.natural(0, 10000)
           },
           FAQ_chart: {
-            FAQ_count: Random.natural(0, 10000),
+            FAQ_count: Random.natural(1000, 10000),
             question_count: Random.natural(0, 10000),
-            reply_count: Random.natural(0, 10000),
-            reply_adoption: Random.natural(0, 10000)
+            reply_count: Random.natural(1000, 10000),
+            reply_adoption: Random.natural(0, 1000)
           },
           resource_chart: {
             resource_count: Random.natural(0, 10000),

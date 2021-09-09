@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:04:40
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-07 22:40:36
+ * @LastEditTime: 2021-09-09 20:52:53
 -->
 <template>
   <base-view
@@ -20,7 +20,7 @@
     </div>
     <div class="user-body">
       <user-info />
-      <user-main />
+      <user-main :data="userData" />
     </div>
   </base-view>
 </template>

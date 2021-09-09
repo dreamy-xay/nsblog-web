@@ -4,13 +4,13 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 18:12:24
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-09 15:27:41
+ * @LastEditTime: 2021-09-09 20:54:59
 -->
 <template>
   <div class="user-main">
     <div class="user-main-info">
       <user-main-article />
-      <user-main-question />
+      <user-main-question :data="data.FAQ_chart" />
       <user-main-resource />
     </div>
     <div class="user-main-menu">
@@ -67,6 +67,12 @@ export default defineComponent({
     UserMainArticle,
     UserMainQuestion,
     UserMainResource,
+  },
+  props: {
+    data: {
+      type: Object,
+      required: true,
+    },
   },
   setup() {
     const route = useRoute(); // route
