@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 18:12:24
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-09 12:23:10
+ * @LastEditTime: 2021-09-09 15:27:41
 -->
 <template>
   <div class="user-main">
@@ -28,7 +28,13 @@
             :class="item.icon"
           ></i>
         </div>
-        {{item.name}}
+        <div v-if="item.name.slice(0,4) === 'blog'">
+          <i
+            class="iconfont"
+            :class="item.name"
+          ></i>
+        </div>
+        {{item.name.slice(0,4) !== 'blog' ? item.name : ''}}
       </div>
     </div>
     <div class="user-main-detail">
@@ -100,7 +106,7 @@ export default defineComponent({
       },
       {
         icon: 'blog-icon-test',
-        name: '',
+        name: 'blog-down',
         url: `/user/${username}/profile`,
       },
     ];
@@ -165,7 +171,7 @@ export default defineComponent({
       color: $grey-7;
       font-size: 14px;
       @include flex(center, center);
-      transition: 0.4s;
+      transition: 0.25s;
       letter-spacing: 0.5px;
 
       &:last-child {
@@ -182,9 +188,18 @@ export default defineComponent({
 
         .iconfont {
           color: $grey-7;
-          transition: 0.4s;
+          transition: 0.25s;
           font-size: 20px;
           text-align: center;
+        }
+
+        &:nth-child(2) {
+          width: 10px;
+          margin-right: 0;
+
+          .iconfont {
+            font-size: 10px;
+          }
         }
       }
 

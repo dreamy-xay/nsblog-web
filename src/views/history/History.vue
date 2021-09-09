@@ -4,12 +4,13 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-04 13:03:40
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-07 12:51:49
+ * @LastEditTime: 2021-09-09 16:07:18
 -->
 <template>
   <base-view
     :background="true"
     :top-bar="true"
+    :back-top="true"
     bind-class="history"
     @scrollToBottom="scrollToBottom"
     :scroll-disabled="scrollDisabled"
