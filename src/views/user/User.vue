@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:04:40
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-07 22:40:36
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-09 12:09:45
 -->
 <template>
   <base-view
@@ -19,7 +19,10 @@
       />
     </div>
     <div class="user-body">
-      <user-info />
+      <user-info
+        :data="userData"
+        :self="isSelf"
+      />
       <user-main />
     </div>
   </base-view>

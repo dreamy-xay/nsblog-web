@@ -4,12 +4,11 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-07 20:15:50
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-07 20:18:00
+ * @LastEditTime: 2021-09-09 18:28:38
 -->
 <template>
-  <div class="user-info-attention">
-    <div class="user-info-attention-ok">关注了</div>
-    <div class="user-info-attention-be">关注者</div>
+  <div class="user-info-achievement">
+
   </div>
 </template>
 
@@ -17,7 +16,7 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: 'useerInfoAttention',
+  name: 'useerInfoAchievement',
   setup() {
     return {};
   },
@@ -25,11 +24,4 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.user-info-attention {
-  @include flex();
-  margin: 16px 0;
-
-  .user-info-attention-ok {
-  }
-}
 </style>
