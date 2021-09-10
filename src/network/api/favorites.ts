@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 12:55:44
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-09-06 11:12:10
+ * @LastEditTime: 2021-09-10 22:58:57
  */
 
 import { get, RequestLifeCycle, del, put, post } from '@/network/request';
@@ -14,6 +14,7 @@ import { get, RequestLifeCycle, del, put, post } from '@/network/request';
  * @param {string} username 用户名 `必传参数`
  * @param {number} limit 返回collections的最大数量 `默认位15`
  * @param {number} offset 数据库收藏列表偏移量 `默认为0`
+ * @param {number} type 获取收藏列表的类型 `默认为0`
  * @param {0 | 1} is_all 是否获取全部信息，0为不获取全部信息 `默认为0`
  * @param {number} favorites 收藏夹id `默认为''，返回全部收藏夹及其内容，传入id则返回指定收藏夹id内容`
  * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
@@ -24,6 +25,7 @@ export function getFavorites(
   username: string,
   limit: number = 15,
   offset: number = 0,
+  type: number = 0,
   is_all: 0 | 1 = 0,
   favorites: number | string = '',
   RLC: RequestLifeCycle = {}
@@ -35,8 +37,9 @@ export function getFavorites(
       username,
       limit,
       offset,
+      type,
       is_all,
-      favorites
+      favorite_id: favorites
     }
   });
 }
@@ -80,11 +83,10 @@ export function newFavorites(
  * @return {Promise<unknown>} 请求返回promise
  * @author: continue-hs
  */
-export function deleteFavorites(id: number | string, RLC: RequestLifeCycle = {}): Promise<unknown> {
+export function deleteFavorites(fid: number | string, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return del({
-    url: `/favorites/${id}`,
-    ...RLC,
-    params: id
+    url: `/favorites/${fid}`,
+    ...RLC
   });
 }
 
@@ -97,11 +99,13 @@ export function deleteFavorites(id: number | string, RLC: RequestLifeCycle = {})
  * @return {Promise<unknown>} 请求返回promise
  * @author: continue-hs
  */
-export function cancelCollections(id: number | string = '', type: number = 0, RLC: RequestLifeCycle = {}) {
+export function cancelCollections(cid: number | string = '', RLC: RequestLifeCycle = {}) {
   return del({
-    url: `/favorites/collections`,
+    url: `/favorites/collections/${cid}`,
     ...RLC,
-    data: id
+    data: {
+      conllection_id: cid
+    }
   });
 }
 
@@ -114,18 +118,42 @@ export function cancelCollections(id: number | string = '', type: number = 0, RL
  * @return {Promise<unknown>} 请求返回promise
  * @author: continue-hs
  */
-export function change(
-  altering: string,
-  results: string | number,
-  favorite_id: string | number,
-  RLC: RequestLifeCycle = {}
-): Promise<unknown> {
+export function putName(name: string, fid: string | number, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return put({
-    url: `favorites/${altering}`,
+    url: `/favorites/name`,
     ...RLC,
     data: {
-      results,
-      favorite_id
+      name,
+      favorite_id: fid
+    }
+  });
+}
+
+export function putRemark(remark: string, fid: string | number, RLC: RequestLifeCycle = {}): Promise<unknown> {
+  return put({
+    url: `/favorites/remark`,
+    ...RLC,
+    data: {
+      remark,
+      favorite_id: fid
+    }
+  });
+}
+/**
+ * @description: 修改信息
+ * @param {string} is_private 需要修改的信息内容 `必传参数`
+ * @param {string | number} id 收藏夹id `必传参数`
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: continue-hs
+ */
+export function putPrivate(is_private: string, fid: string | number, RLC: RequestLifeCycle = {}): Promise<unknown> {
+  return put({
+    url: `/favorites/private`,
+    ...RLC,
+    data: {
+      is_private,
+      favorite_id: fid
     }
   });
 }
