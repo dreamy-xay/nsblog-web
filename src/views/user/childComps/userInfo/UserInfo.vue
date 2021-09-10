@@ -4,16 +4,22 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 18:09:18
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-09 18:29:09
+ * @LastEditTime: 2021-09-10 10:06:17
 -->
 <template>
   <div class="user-info">
     <div class="user-info-attention">
-      <div class="user-info-attention-ok">关注了
+      <div
+        class="user-info-attention-ok"
+        role="button"
+      >关注了
         <div class="user-info-attention-ok-number">{{data.like_count}}</div>
       </div>
       <div class="user-info-attention-line"></div>
-      <div class="user-info-attention-ok">关注者
+      <div
+        class="user-info-attention-ok"
+        role="button"
+      >关注者
         <div class="user-info-attention-ok-number">{{data.fans_count}}</div>
       </div>
 
@@ -24,13 +30,29 @@
       @click="attentionClick"
     >{{attentionText}}
     </div>
-    <user-info-achievement :self="self" />
+
+    <div class="user-info-achieve ">
+      <user-info-achievement
+        :self="self"
+        :data="achievementData"
+      />
+    </div>
+
+    <div class="user-info-achievement-line"></div>
+
+    <div class="user-info-inform">
+      <user-info-information
+        :data="informationData"
+        :self="self"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 import { computed, defineComponent } from 'vue';
 import UserInfoAchievement from '@/views/user/childComps/userInfo/childComps/UserInfoAchievement.vue';
+import UserInfoInformation from '@/views/user/childComps/userInfo/childComps/UserInfoInformation.vue';
 import router from '@/router';
 
 /**
@@ -40,15 +62,15 @@ import router from '@/router';
 
 export default defineComponent({
   name: 'userInfo',
-  components: { UserInfoAchievement },
+  components: { UserInfoAchievement, UserInfoInformation },
   props: {
     data: {
       type: Object,
-      require: true,
+      required: true,
     },
     self: {
       type: Boolean,
-      require: true,
+      required: true,
     },
   },
   setup(props, context) {
@@ -61,7 +83,36 @@ export default defineComponent({
       else if (props.data.attention) context.emit('attention', false);
       else context.emit('attention', true);
     }
-    return { attentionText, attentionClick };
+
+    // 获得成就
+    const achievementData = computed(() => {
+      return {
+        registration_time: props.data.registration_time,
+        browse_count: props.data.browse_count,
+        recommend_count: props.data.recommend_count,
+        collect_count: props.data.collect_count,
+        browse_yesterday: props.data.browse_yesterday,
+        recommend_yesterday: props.data.recommend_yesterday,
+        collect_yesterday: props.data.collect_yesterday,
+      };
+    });
+
+    const informationData = computed(() => {
+      return {
+        gender: props.data.gender,
+        tags: props.data.tags,
+        qq: props.data.qq,
+        weibo: props.data.weibo,
+        email: props.data.email,
+      };
+    });
+
+    return {
+      attentionText,
+      attentionClick,
+      achievementData,
+      informationData,
+    };
   },
 });
 </script>
@@ -92,6 +143,7 @@ export default defineComponent({
         font-size: 16px;
         color: $grey-11;
         line-height: 17px;
+        font-weight: 700;
       }
     }
     .user-info-attention-line {
@@ -113,6 +165,21 @@ export default defineComponent({
     &:hover {
       background-color: $grey-3;
     }
+  }
+
+  .user-info-achieve {
+    width: 100%;
+    padding: 24px 0;
+  }
+
+  .user-info-achievement-line {
+    width: 206px;
+    border-bottom: 1px solid $grey-3;
+  }
+
+  .user-info-inform {
+    width: 100%;
+    padding: 24px 0;
   }
 }
 </style>
