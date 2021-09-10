@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-10 14:25:47
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-23 12:33:54
+ * @LastEditTime: 2021-09-10 19:49:23
  */
 
 import { Application, Request, Response } from 'express';
@@ -29,7 +29,8 @@ export default function(baseUrl: string, app: Application) {
           username: user.username,
           nickname: user.nickname,
           avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
-          signature: Random.paragraph(5, 30)
+          signature: Random.paragraph(5, 30),
+          attention: Random.boolean()
         });
       }
       return ans;
@@ -70,7 +71,8 @@ export default function(baseUrl: string, app: Application) {
           username: user.username,
           nickname: user.nickname,
           avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
-          signature: Random.paragraph(5, 30)
+          signature: Random.paragraph(5, 30),
+          attention: Random.boolean()
         });
       }
       return ans;
