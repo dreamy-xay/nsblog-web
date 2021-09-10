@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-09 10:57:00
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-09 21:34:14
+ * @LastEditTime: 2021-09-10 21:17:11
 -->
 <template>
   <div class="user-main-question">
@@ -65,7 +65,7 @@ export default defineComponent({
           formatter: '{a} <br/>{b} : {c} ({d}%)',
           backgroundColor: styles.grey0,
           borderWidth: 0,
-          textStyle: { fontSize: 12, fontWeight: 300 },
+          textStyle: { fontSize: 13, color: styles.grey8, fontFamily: 'Arial' },
           padding: 4,
         },
         title: {
@@ -76,7 +76,7 @@ export default defineComponent({
             color: styles.grey6,
             fontFamily: 'Arial',
             fontSize: 12,
-            fontWeight: 300,
+            fontWeight: 'normal',
             align: 'center',
           },
         },

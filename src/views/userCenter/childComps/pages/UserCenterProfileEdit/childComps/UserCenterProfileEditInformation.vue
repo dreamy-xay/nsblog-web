@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-08-28 23:20:26
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-08 21:32:13
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-10 19:59:13
 -->
 
 <template>
@@ -491,6 +491,10 @@ export default defineComponent({
         transition: 0.25s;
 
         &:focus-within {
+          box-shadow: $shadow-2;
+        }
+
+        &:hover {
           box-shadow: $shadow-2;
         }
       }
