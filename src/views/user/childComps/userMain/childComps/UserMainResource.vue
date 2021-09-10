@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-09 10:57:00
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-09 22:48:46
+ * @LastEditTime: 2021-09-10 21:17:02
 -->
 <template>
   <div class="user-main-resource">
@@ -21,6 +21,13 @@
       </div>
     </div>
     <div class="user-main-resource-bottom">
+      <div class="text">
+        最近分享
+      </div>
+      <div class="count">
+        <div class="num">{{data.release_recently}}</div>
+        个资源链接
+      </div>
     </div>
   </div>
 </template>
@@ -44,20 +51,58 @@ export default defineComponent({
     },
   },
   setup(props) {
+    // 计算图表选项
     const option = computed(() => {
+      const xAxisData = [
+        'Jan.',
+        'Feb.',
+        'Mar.',
+        'Apr.',
+        'May.',
+        'Jun.',
+        'Jul.',
+        'Aug.',
+        'Sep.',
+        'Oct.',
+        'Nov.',
+        'Dec.',
+      ];
+      const cutData = xAxisData.splice(0, new Date().getMonth() + 1);
+      xAxisData.push(...cutData);
+
       return {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow',
+          },
+          padding: 4,
+          textStyle: {
+            color: styles.grey8,
+            fontFamily: 'Arial',
+            fontSize: 13,
+          },
+        },
         xAxis: {
           type: 'category',
           show: false,
+          data: xAxisData,
         },
         yAxis: {
           type: 'value',
           show: false,
         },
+        grid: {
+          left: 0,
+          right: 0,
+          bottom: 0,
+          top: 0,
+        },
         series: [
           {
             data: props.data.data,
             type: 'bar',
+            itemStyle: { color: styles.blue0 },
           },
         ],
       };
@@ -109,6 +154,34 @@ export default defineComponent({
     .chart {
       height: 82px;
       width: 100%;
+    }
+  }
+
+  .user-main-resource-bottom {
+    width: 100%;
+    height: 32px;
+    margin-top: 12px;
+
+    .text {
+      height: 17px;
+      font-size: 12px;
+      line-height: 17px;
+      font-weight: 300;
+      color: $blue-1;
+    }
+
+    .count {
+      height: 20px;
+      font-size: 14px;
+      color: $grey-11;
+
+      .num {
+        display: inline-block;
+        height: 20px;
+        line-height: 20px;
+        font-weight: 700;
+        margin-right: 2px;
+      }
     }
   }
 }
