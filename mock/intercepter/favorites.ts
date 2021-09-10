@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 11:59:59
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-07 21:31:46
+ * @LastEditors: continue-hs
+ * @LastEditTime: 2021-09-10 22:57:52
  */
 
 import { Application, Request, Response } from 'express';
@@ -107,7 +107,7 @@ export default function(baseUrl: string, app: Application) {
   });
 
   // 修改收藏夹名字
-  app.put(baseUrl + 'favorites/name', (req: Request, res: Response) => {
+  app.put(baseUrl + '/favorites/name', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { name, favorite_id } = req.body;
@@ -118,7 +118,7 @@ export default function(baseUrl: string, app: Application) {
   });
 
   // 修改收藏夹备注
-  app.put(baseUrl + 'favorites/remark', (req: Request, res: Response) => {
+  app.put(baseUrl + '/favorites/remark', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { remark, favorite_id } = req.body;
@@ -129,7 +129,7 @@ export default function(baseUrl: string, app: Application) {
   });
 
   // 修改收藏夹备注
-  app.put(baseUrl + 'favorites/private', (req: Request, res: Response) => {
+  app.put(baseUrl + '/favorites/private', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { is_private, favorite_id } = req.body;
