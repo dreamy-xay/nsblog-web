@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:04:40
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-09 21:54:08
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-10 10:09:45
 -->
 <template>
   <base-view
@@ -14,22 +14,22 @@
   >
     <div class="user-head">
       <user-header
-        :data="userData"
+        :data="userHeaderData"
         :self="isSelf"
       />
     </div>
     <div class="user-body">
       <user-info
-        :data="userData"
+        :data="userInfoData"
         :self="isSelf"
       />
-      <user-main :data="userData" />
+      <user-main :data="userMainData" />
     </div>
   </base-view>
 </template>
 
 <script>
-import { defineComponent, reactive } from 'vue';
+import { computed, defineComponent, reactive } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import UserHeader from '@/views/user/childComps/UserHeader.vue';
 import UserInfo from '@/views/user/childComps/userInfo/UserInfo.vue';
@@ -146,9 +146,75 @@ export default defineComponent({
         msg.error('获取消息失败', { duration: 2000, closable: true });
       });
 
+    const userHeaderData = computed(() => {
+      return {
+        // 头部
+        username: userData.username,
+        nickname: userData.nickname,
+        avatar: userData.avatar,
+        signature: userData.signature,
+        rank: userData.rank,
+      };
+    });
+
+    const userInfoData = computed(() => {
+      return {
+        // 关注相关
+        like_count: userData.like_count,
+        fans_count: userData.fans_count,
+        attention: userData.attention,
+        // 获得成就
+        registration_time: userData.registration_time,
+        browse_count: userData.browse_count,
+        recommend_count: userData.recommend_count,
+        collect_count: userData.collect_count,
+        browse_yesterday: userData.browse_yesterday,
+        recommend_yesterday: userData.recommend_yesterday,
+        collect_yesterday: userData.collect_yesterday,
+        // 基本信息
+        gender: userData.gender,
+        tags: userData.tags,
+        qq: userData.qq,
+        weibo: userData.weibo,
+        email: userData.email,
+        // 个人简介
+        birthday: userData.birthday,
+        profession: userData.profession,
+        address: userData.address,
+        best_topic: userData.best_topic,
+      };
+    });
+
+    const userMainData = computed(() => {
+      return {
+        // 图表
+        article_chart: {
+          article_count: userData.article_chart.article_count,
+          data: userData.article_chart.data,
+          rank_total: userData.article_chart.rank_total,
+          rank_week: userData.article_chart.rank_week,
+          release_recently: userData.article_chart.release_recently,
+        },
+        FAQ_chart: {
+          FAQ_count: userData.FAQ_chart.FAQ_count,
+          question_count: userData.FAQ_chart.question_count,
+          reply_count: userData.FAQ_chart.reply_count,
+          reply_adoption: userData.FAQ_chart.reply_adoption,
+        },
+        resource_chart: {
+          resource_count: userData.resource_chart.resource_count,
+          data: userData.resource_chart.data,
+          release_recently: userData.resource_chart.release_recently,
+        },
+      };
+    });
+
     return {
       userData,
       isSelf,
+      userInfoData,
+      userHeaderData,
+      userMainData,
     };
   },
 });
