@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 22:48:57
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-26 21:00:19
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-11 15:52:44
 -->
 <template>
   <div class="message-left">
@@ -25,10 +25,9 @@
       @click="changeColor(item, [2, 3, 4, 1, 5][index])"
       role="button"
     >
-      <i
-        :class="item.iconfont"
-        class="message-left-title2-iconfont"
-      ></i>
+      <div class="iconfont">
+        <i :class="item.iconfont"></i>
+      </div>
       <span class="message-left-title2-text">{{item.key}}</span>
 
       <n-badge
@@ -48,11 +47,10 @@
       @click="changeColor(menu)"
       role="button"
     >
-      <i
-        :class="menu.iconfont"
-        class="message-left-title3-iconfont"
-      ></i>
-      <span>{{menu.key}}</span>
+      <div class="iconfont">
+        <i :class="menu.iconfont"></i>
+      </div>
+      <div>{{menu.key}}</div>
     </div>
 
   </div>
@@ -178,8 +176,12 @@ $green0: $green-0;
     font-weight: 700;
     color: $grey7;
     transition: all 0.4s;
-    .message-left-title2-iconfont {
-      margin-right: 6px;
+
+    .iconfont {
+      width: 20px;
+      height: 20px;
+      font-size: 20px;
+      margin-right: 5px;
     }
 
     .message-left-title2-text {
@@ -198,12 +200,16 @@ $green0: $green-0;
   }
 
   .message-left-title3 {
+    @include flex(center, initial, row);
     padding-top: 5px;
     color: $grey-7;
     transition: all 0.4s;
 
-    .message-left-title3-iconfont {
-      margin-right: 6px;
+    .iconfont {
+      width: 20px;
+      height: 20px;
+      font-size: 20px;
+      margin-right: 5px;
     }
 
     &:hover {

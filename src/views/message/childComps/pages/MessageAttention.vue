@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-05 10:41:38
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-07 19:05:55
+ * @LastEditTime: 2021-09-11 15:58:33
 -->
 
 <template>
@@ -40,7 +40,7 @@
             <span class="message-attention-right-bottom-text">关注了你</span>
 
             <div class="message-attention-right-bottom-iconfont1">
-              <i class="iconfont blog-xiaoxi message-attention-right-bottom-iconfont1-xiaoxi"></i>
+              <i class="iconfont blog-c-comment message-attention-right-bottom-iconfont1-xiaoxi"></i>
               <span>私信</span>
             </div>
 
