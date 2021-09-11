@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 18:05:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-07 23:24:27
+ * @LastEditTime: 2021-09-11 12:50:02
 -->
 <template>
   <div class="user-header">
@@ -22,6 +22,7 @@
         >
           {{data.nickname}}
           <a
+            v-if="isLogin"
             href="/userCenter/profile"
             target="/userCenter/profile"
           ><i class="iconfont blog-edit"></i></a>
@@ -45,6 +46,7 @@
 import { defineComponent } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import { getSplitNum } from '@/util/util';
+import { mapGetters } from '@/util/store';
 
 /**
  * @description: 用户中心头部
@@ -62,13 +64,13 @@ export default defineComponent({
       required: true,
     },
     self: {
-      type: Boolean,
       required: true,
     },
   },
   setup() {
     return {
       getSplitNum,
+      ...mapGetters('global', ['isLogin']),
     };
   },
 });

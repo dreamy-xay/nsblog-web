@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 18:09:18
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-10 10:06:17
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-11 12:48:42
 -->
 <template>
   <div class="user-info">
@@ -69,7 +69,6 @@ export default defineComponent({
       required: true,
     },
     self: {
-      type: Boolean,
       required: true,
     },
   },

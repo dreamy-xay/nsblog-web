@@ -4,14 +4,14 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-09 10:57:00
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-10 21:17:02
+ * @LastEditTime: 2021-09-11 12:42:02
 -->
 <template>
   <div class="user-main-resource">
     <div class="user-main-resource-top">
       <div class="title">
         <div class="text">资源分享</div>
-        <div class="num">{{data.resource_count}}</div>
+        <div class="num">{{getSplitNum(data.resource_count)}}</div>
       </div>
       <div class="chart">
         <v-chart
@@ -25,7 +25,7 @@
         最近分享
       </div>
       <div class="count">
-        <div class="num">{{data.release_recently}}</div>
+        <div class="num">{{getSplitNum(data.release_recently)}}</div>
         个资源链接
       </div>
     </div>
@@ -34,6 +34,7 @@
 
 <script>
 import { defineComponent, computed } from 'vue';
+import { getSplitNum } from '@/util/util';
 import styles from '@/assets/style/define.scss';
 
 /**
@@ -109,6 +110,7 @@ export default defineComponent({
     });
 
     return {
+      getSplitNum,
       option,
     };
   },
@@ -173,7 +175,7 @@ export default defineComponent({
     .count {
       height: 20px;
       font-size: 14px;
-      color: $grey-11;
+      color: $grey-9;
 
       .num {
         display: inline-block;
@@ -181,6 +183,7 @@ export default defineComponent({
         line-height: 20px;
         font-weight: 700;
         margin-right: 2px;
+        color: $grey-8;
       }
     }
   }

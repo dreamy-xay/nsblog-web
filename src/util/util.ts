@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-02 11:13:42
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-10 00:23:16
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-11 12:19:15
  */
 /**
  * 通过图片url 获取图片file对象
@@ -62,7 +62,7 @@ export function base64ToFile(base64Data: string, fileName: string = 'file'): Blo
  * @return {string} 返回符合条件分割字符串
  * @author: dreamy-xay
  */
-export function getSplitNum(num: string | number, sum: number = 3, split: string = ','): string {
+export function getSplitNum(num: string | number, count: number = 3, split: string = ','): string {
   // 字符串反转
   function reverse(str: string): string {
     let ans: string = '';
@@ -76,7 +76,8 @@ export function getSplitNum(num: string | number, sum: number = 3, split: string
   split = reverse(split);
   for (let i: number = str.length - 1, j: number = 1; i >= 0; --i, ++j) {
     ans += str[i];
-    if (j % 3 === 0) ans += split;
+    if (j % count === 0) ans += split;
   }
+  if (str.length % count === 0) ans = ans.slice(0, ans.length - 1);
   return reverse(ans);
 }
