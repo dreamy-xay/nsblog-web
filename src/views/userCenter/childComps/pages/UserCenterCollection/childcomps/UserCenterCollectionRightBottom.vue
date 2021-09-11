@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-23 20:34:57
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-09-10 22:23:56
+ * @LastEditTime: 2021-09-11 19:52:23
 -->
 <template>
   <div class="user-center-collection-right-bottom">
@@ -136,8 +136,9 @@ export default defineComponent({
       @include size(38px, 21px);
       margin-right: 30px;
       padding-bottom: 5px;
-      transition: all 0.25s;
+      transition: 0.5s;
       float: left;
+      border-bottom: 2px solid $grey-0;
 
       &.Choice {
         border-bottom: 2px solid $green-0;
@@ -161,12 +162,12 @@ export default defineComponent({
     .collections {
       @include size(726px, 53px);
       margin: 16px 0 0 9px;
-      background: $grey-1;
+      background: $grey-0;
       border-radius: 8px;
       box-shadow: $shadow-0;
 
       &:hover {
-        background-color: $grey-2;
+        background-color: $grey-1;
       }
 
       .base-tag {
