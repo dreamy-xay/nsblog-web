@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 12:55:44
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-09-10 22:58:57
+ * @LastEditTime: 2021-09-11 17:26:38
  */
 
 import { get, RequestLifeCycle, del, put, post } from '@/network/request';
@@ -110,9 +110,8 @@ export function cancelCollections(cid: number | string = '', RLC: RequestLifeCyc
 }
 
 /**
- * @description: 修改信息
- * @param {string} altering 需要修改的信息类型 `必传参数`
- * @param {string | number} results 修改后的信息 `必传参数`
+ * @description: 修改收藏夹标题
+ * @param {string} name 需要修改的信息类型 `必传参数`
  * @param {string | number} id 收藏夹id `必传参数`
  * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
  * @return {Promise<unknown>} 请求返回promise
@@ -129,6 +128,14 @@ export function putName(name: string, fid: string | number, RLC: RequestLifeCycl
   });
 }
 
+/**
+ * @description: 修改收藏夹描述
+ * @param {string} remark 需要修改的信息内容 `必传参数`
+ * @param {string | number} id 收藏夹id `必传参数`
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: continue-hs
+ */
 export function putRemark(remark: string, fid: string | number, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return put({
     url: `/favorites/remark`,
@@ -139,15 +146,16 @@ export function putRemark(remark: string, fid: string | number, RLC: RequestLife
     }
   });
 }
+
 /**
- * @description: 修改信息
+ * @description: 修改收藏夹类型
  * @param {string} is_private 需要修改的信息内容 `必传参数`
  * @param {string | number} id 收藏夹id `必传参数`
  * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
  * @return {Promise<unknown>} 请求返回promise
  * @author: continue-hs
  */
-export function putPrivate(is_private: string, fid: string | number, RLC: RequestLifeCycle = {}): Promise<unknown> {
+export function putPrivate(is_private: number, fid: string | number, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return put({
     url: `/favorites/private`,
     ...RLC,
