@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:04:40
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-11 12:35:17
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-11 12:54:06
 -->
 <template>
   <base-view
@@ -169,6 +169,7 @@ export default defineComponent({
 
     const userInfoData = computed(() => {
       return {
+        username: userData.username,
         // 关注相关
         like_count: userData.like_count,
         fans_count: userData.fans_count,

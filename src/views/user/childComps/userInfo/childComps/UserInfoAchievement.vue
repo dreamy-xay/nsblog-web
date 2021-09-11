@@ -4,15 +4,17 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-07 20:15:50
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-10 10:04:10
+ * @LastEditTime: 2021-09-11 12:52:20
 -->
 <template>
   <div class="user-info-achievement">
     <div class="user-info-achievement-title"> 获得成就</div>
+
     <div
       class="user-info-achievement-context"
       v-for="(item , index) in menusData"
       :key="index"
+      :class="{'self': !self}"
     >
 
       <div class="user-info-achievement-context-title">
@@ -78,7 +80,6 @@ export default defineComponent({
       required: true,
     },
     self: {
-      type: Boolean,
       required: true,
     },
   },
@@ -130,6 +131,14 @@ export default defineComponent({
   .user-info-achievement-context {
     @include flex(initial, center, column);
     margin: 16px 0 0 16px;
+
+    &.self {
+      margin-top: 10px;
+
+      &:nth-child(2) {
+        margin-top: 16px;
+      }
+    }
 
     .user-info-achievement-context-title {
       @include flex(center);
