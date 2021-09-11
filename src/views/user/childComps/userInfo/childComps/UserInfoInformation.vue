@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-10 09:23:58
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-11 12:52:14
+ * @LastEditTime: 2021-09-11 15:09:51
 -->
 <template>
   <div class="user-info-information">
@@ -66,7 +66,7 @@
       <i
         v-if="data.qq"
         role="button"
-        class="iconfont blog-qq"
+        class="iconfont blog-qq-s"
       ></i>
       <a
         :href="'https://www.weibo.com/u/' + data.weibo"
@@ -202,31 +202,23 @@ export default defineComponent({
     height: 20px;
 
     .iconfont {
+      color: $grey-7;
       font-size: 20px;
+      margin-right: 16px;
 
       &:first-child {
-        color: $grey-7;
-        margin-right: 16px;
-        font-size: 18px;
-
         &:hover {
           color: $blue-1;
         }
       }
 
       &:nth-child(2) {
-        color: $grey-7;
-        margin-right: 16px;
-        font-size: 21px;
-
         &:hover {
           color: $red-3;
         }
       }
 
       &:last-child {
-        color: $grey-7;
-
         &:hover {
           color: $blue-0;
         }

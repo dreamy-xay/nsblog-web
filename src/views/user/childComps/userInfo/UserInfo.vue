@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 18:09:18
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-11 12:54:17
+ * @LastEditTime: 2021-09-11 14:57:56
 -->
 <template>
   <div class="user-info">
@@ -132,9 +132,9 @@ export default defineComponent({
       if (props.data.username) {
         const address = props.data.address.split(',');
         return [
-          props.data.birthday !== null ? dateFormat('Y-m-d', new Date(props.data.birthday)) : '保密',
+          props.data.birthday !== null ? dateFormat('Y年m月d日', new Date(props.data.birthday)) : '保密',
           props.data.profession !== null ? props.data.profession : '保密',
-          address[1] + address[2] !== '' ? address[1] + address[2] : '保密',
+          address[0] + address[1] !== '' ? address[0] + address[1] : '保密',
           props.data.best_topic !== null ? props.data.best_topic : '保密',
         ];
       }
@@ -142,10 +142,10 @@ export default defineComponent({
     });
 
     const iconsData = [
-      { icon: 'iconfont blog-wangluo', text: '出生年月' },
-      { icon: 'iconfont blog-wangluo', text: '个人职业' },
-      { icon: 'iconfont blog-wangluo', text: '现居住地' },
-      { icon: 'iconfont blog-wangluo', text: '兴趣领域' },
+      { icon: 'iconfont blog-calendar-alt', text: '出生年月' },
+      { icon: 'iconfont blog-user-tie', text: '个人职业' },
+      { icon: 'iconfont blog-chengshi', text: '现居住地' },
+      { icon: 'iconfont blog-heartbeat', text: '兴趣领域' },
     ];
 
     return {
@@ -252,7 +252,7 @@ export default defineComponent({
       }
 
       .text {
-        width: 100px;
+        width: 72px;
         font-size: 14px;
         line-height: 20px;
         height: 20px;
@@ -260,31 +260,23 @@ export default defineComponent({
       }
 
       .context {
-        width: 76px;
+        width: 104px;
         color: $grey-9;
         @include flex(center, initial, row-reverse);
         font-weight: 700;
       }
 
       &:nth-child(2) {
-        &:hover {
-          color: $orange-0;
-        }
+        color: $orange-0;
       }
       &:nth-child(3) {
-        &:hover {
-          color: $blue-1;
-        }
+        color: $blue-1;
       }
       &:nth-child(4) {
-        &:hover {
-          color: $blue-0;
-        }
+        color: $blue-0;
       }
       &:last-child {
-        &:hover {
-          color: $pink-0;
-        }
+        color: $pink-0;
       }
     }
   }

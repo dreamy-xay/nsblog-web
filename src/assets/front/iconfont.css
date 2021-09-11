@@ -1,7 +1,7 @@
 @font-face {
     font-family: "iconfont";
     /* Project id 2675107 */
-    src: url('//at.alicdn.com/t/font_2675107_a1ir5e4txqa.woff2?t=1631283652897') format('woff2'), url('//at.alicdn.com/t/font_2675107_a1ir5e4txqa.woff?t=1631283652897') format('woff'), url('//at.alicdn.com/t/font_2675107_a1ir5e4txqa.ttf?t=1631283652897') format('truetype');
+    src: url('//at.alicdn.com/t/font_2675107_z03o7lfkxm.woff2?t=1631347054344') format('woff2'), url('//at.alicdn.com/t/font_2675107_z03o7lfkxm.woff?t=1631347054344') format('woff'), url('//at.alicdn.com/t/font_2675107_z03o7lfkxm.ttf?t=1631347054344') format('truetype');
 }
 
 .iconfont {
@@ -12,12 +12,48 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-.blog-biaoqian1:before {
-    content: "\e733";
+.blog-c-comment:before {
+    content: "\e63c";
+}
+
+.blog-Ioniconsmdsettings:before {
+    content: "\ee17";
+}
+
+.blog-Ioniconsiosnotifications:before {
+    content: "\eee6";
+}
+
+.blog-message-square:before {
+    content: "\e8a5";
 }
 
 .blog-email1:before {
     content: "\e62c";
+}
+
+.blog-qq-s:before {
+    content: "\e63b";
+}
+
+.blog-chengshi:before {
+    content: "\e633";
+}
+
+.blog-heartbeat:before {
+    content: "\e637";
+}
+
+.blog-user-tie:before {
+    content: "\e90b";
+}
+
+.blog-calendar-alt:before {
+    content: "\e7dd";
+}
+
+.blog-biaoqian1:before {
+    content: "\e733";
 }
 
 .blog-tubiao73:before {
@@ -158,10 +194,6 @@
 
 .blog-weibo:before {
     content: "\e62f";
-}
-
-.blog-qq:before {
-    content: "\f216";
 }
 
 .blog-email:before {

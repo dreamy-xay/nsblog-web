@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:25:27
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-07 19:05:29
+ * @LastEditTime: 2021-09-11 16:04:09
 -->
 
 <template>
@@ -63,12 +63,12 @@
             <span class="message-reply-right-bottom-time">{{getDate(item.time)}}</span>
 
             <div class="message-reply-right-bottom-reply">
-              <i class="iconfont blog-huifu1 message-reply-right-bottom-reply-iconfont"></i>
+              <i class="iconfont blog-huifu1"></i>
               <span>回复</span>
             </div>
 
             <div class="message-reply-right-bottom-reply">
-              <i class="iconfont blog-dianzan1 message-reply-right-bottom-reply-iconfont"></i>
+              <i class="iconfont blog-dianzan1"></i>
               <span>点赞</span>
             </div>
 
@@ -81,7 +81,7 @@
               class="message-reply-right-bottom-delete"
               @click.stop="deleteItem(index)"
             >
-              <i class="iconfont blog-shanchu message-reply-right-bottom-delete-iconfont"></i>
+              <i class="iconfont blog-shanchu "></i>
               <span>删除该通知</span>
             </div>
 
@@ -324,8 +324,12 @@ $grey9: $grey-9;
         margin-right: 20px;
         color: $grey7;
 
-        .message-reply-right-bottom-reply-iconfont {
+        .iconfont {
           margin-right: 5px;
+        }
+
+        .message-reply-right-bottom-reply-iconfont {
+          transform: rotate(180deg);
         }
 
         &:hover {

@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-28 13:11:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-07 18:51:37
+ * @LastEditTime: 2021-09-11 15:53:32
 -->
 <template>
 
@@ -91,33 +91,29 @@ export default defineComponent({
     );
 
     //路由信息
-    const menus = computed(() => {
-      return [
-        { iconfont: 'iconfont blog-huifu1', id: 'reply', key: '回复我的' },
-        { iconfont: 'iconfont blog-dianzan1', id: 'like', key: '收到的赞' },
-        { iconfont: 'iconfont blog-xin', id: 'attention', key: '关注我的' },
-        { iconfont: 'iconfont blog-tongzhi', id: 'system', key: '系统通知' },
-        { iconfont: 'iconfont blog-xiaoxi', id: 'my', key: '我的消息' },
-      ];
-    });
+    const menus = [
+      { iconfont: 'iconfont blog-xinxi', id: 'reply', key: '回复我的' },
+      { iconfont: 'iconfont blog-tubiao73', id: 'like', key: '收到的赞' },
+      { iconfont: 'iconfont blog-xin', id: 'attention', key: '关注我的' },
+      { iconfont: 'iconfont blog-Ioniconsiosnotifications', id: 'system', key: '系统通知' },
+      { iconfont: 'iconfont blog-message-square', id: 'my', key: '我的消息' },
+    ];
 
     //路由信息
-    const menu = computed(() => {
-      return { iconfont: 'iconfont blog-shezhi', id: 'setting', key: '消息设置' };
-    });
+    const menu = { iconfont: 'iconfont blog-Ioniconsmdsettings', id: 'setting', key: '消息设置' };
 
     const messagetag = ref(''); // 路由界面名称 `menus[i].key`
 
     const redirect = route.path; // 当前界面路由
     const array = redirect.split('/'); //获取路由
 
-    if (array[array.length - 1] === menu.value.id) {
+    if (array[array.length - 1] === menu.id) {
       //得到路由相对应的key值
-      messagetag.value = menu.value.key;
+      messagetag.value = menu.key;
     } else {
       for (let i = 0; i < 5; i++) {
-        if (menus.value[i].id === array[array.length - 1]) {
-          messagetag.value = menus.value[i].key;
+        if (menus[i].id === array[array.length - 1]) {
+          messagetag.value = menus[i].key;
         }
       }
     }
