@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:38:31
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-07 11:15:48
+ * @LastEditTime: 2021-09-11 16:35:50
  */
 import { post, get, del, put, RequestLifeCycle } from '@/network/request';
 import { encrypt } from '@/util/crypto';
@@ -247,6 +247,24 @@ export function putSignature(signature: string, RLC: RequestLifeCycle = {}): Pro
     ...RLC,
     data: {
       signature
+    }
+  });
+}
+
+/**
+ * @description: 获取用户信息
+ * @param {string} username  用户名 `必传参数`
+ * @param {number} type 请求数据类型 `默认为1`
+ * @param {RequestLifeCycle} RLC  请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: dreamy-xay
+ */
+export function getProfile(username: string, RLC: RequestLifeCycle = {}): Promise<unknown> {
+  return get({
+    url: '/users/profile',
+    ...RLC,
+    params: {
+      username
     }
   });
 }

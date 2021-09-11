@@ -48,6 +48,7 @@
     "@vue/test-utils": "^2.0.0-0",
     "babel-plugin-component": "^1.1.1",
     "babel-plugin-dynamic-import-node": "^2.3.3",
+    "babel-plugin-prismjs": "^2.1.0",
     "better-mock": "^0.3.2",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.0.0",
