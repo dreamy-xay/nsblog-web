@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-18 15:25:00
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-09-10 22:53:15
+ * @LastEditTime: 2021-09-11 20:21:03
 -->
 <template>
   <div class="user-center-collection">
@@ -16,25 +16,21 @@
     ></user-center-collection-list>
     <div class="user-center-collection-line"></div>
     <div class="user-center-collection-right">
-      <div class="right-top">
-        <user-center-collection-right-top
-          :data="display"
-          @updateName="updateName"
-          @updateRemark="updateRemark"
-          @cancelf="deleteFav(activeIndex)"
-          @updatePrivate="changePrivate($event)"
-        >
-        </user-center-collection-right-top>
-      </div>
+      <user-center-collection-right-top
+        :data="display"
+        @updateName="changeName"
+        @updateRemark="changeRemark"
+        @cancelf="deleteFav(activeIndex)"
+        @updatePrivate="changePrivate($event)"
+      >
+      </user-center-collection-right-top>
       <div class="right-line"></div>
-      <div class="right-bottom">
-        <user-center-collection-right-bottom
-          :typeList="typeList"
-          :choiceIndex="choiceIndex"
-          @change-choice="chooseChoice($event)"
-          @cancel-col="cancelCol($event)"
-        ></user-center-collection-right-bottom>
-      </div>
+      <user-center-collection-right-bottom
+        :typeList="typeList"
+        :choiceIndex="choiceIndex"
+        @change-choice="chooseChoice($event)"
+        @cancel-col="cancelCol($event)"
+      ></user-center-collection-right-bottom>
     </div>
   </div>
 </template>
@@ -91,7 +87,7 @@ export default defineComponent({
      * @author: continue-hs
      */
     if (tokenInfo.value.status) {
-      getFavorites(tokenInfo.value.username, 1)
+      getFavorites(tokenInfo.value.username, 0, 0, 0, 1)
         .then((res) => {
           console.log(res.favorites);
           favorites.splice(0, 0, ...res.favorites);
@@ -120,7 +116,7 @@ export default defineComponent({
       activeIndex.value = index;
       choiceIndex.value = 0;
       typeList[0].List.splice(0, typeList[0].List.length);
-      getFavorites(tokenInfo.value.username, 15, offset, 0, 0, favorites[index].id)
+      getFavorites(tokenInfo.value.username, 15, offset, 0, 1, favorites[index].id)
         .then((data) => {
           typeList[0].List.splice(0, typeList[0].List.length);
           typeList[0].List.splice(0, 0, ...data.collections);
@@ -158,49 +154,46 @@ export default defineComponent({
       putPrivate(isPrivate, favorites[activeIndex.value].id)
         .then(() => {
           favorites[activeIndex.value].is_private = isPrivate;
-          this.display.is_private = isPrivate;
+          msg.success('修改收藏夹类型成功');
         })
         .catch((error) => {
           console.log(error);
-          msg.error('修改收藏夹类型失败', { duration: 2000, closable: true });
         });
     }
 
     /**
      * @description: 修改收藏夹标题
-     * @param {number} name 修改的收藏夹标题内容
+     * @param {string} name 修改的收藏夹标题内容
      * @return {void}
      * @author: continue-hs
      */
-    function updateName(name) {
-      putName(name, favorites[activeIndex].id)
+    function changeName(name, error) {
+      putName(name, favorites[activeIndex.value].id)
         .then(() => {
-          this.display.name = name;
-          favorites[activeIndex].name = name;
+          favorites[activeIndex.value].name = name;
+          msg.success('修改收藏夹标题成功');
         })
-        .catch((error) => {
-          console.log(error);
+        .catch((err) => {
+          console.log(err);
           error();
-          msg.error('修改收藏夹标题失败', { duration: 2000, closable: true });
         });
     }
 
     /**
      * @description: 修改收藏夹描述
-     * @param {number} remark 修改的收藏夹描述内容
+     * @param {string} remark 修改的收藏夹描述内容
      * @return {void}
      * @author: continue-hs
      */
-    function updateRemark(remark) {
-      putRemark(remark, favorites[activeIndex].id)
+    function changeRemark(remark, error) {
+      putRemark(remark, favorites[activeIndex.value].id)
         .then(() => {
-          this.display.remark = remark;
-          favorites[activeIndex].remark = remark;
+          msg.favorites[activeIndex.value].remark = remark;
+          msg.success('修改收藏夹描述成功');
         })
-        .catch((error) => {
-          console.log(error);
+        .catch((err) => {
+          console.log(err);
           error();
-          msg.error('修改收藏夹描述失败', { duration: 2000, closable: true });
         });
     }
     /**
@@ -216,6 +209,7 @@ export default defineComponent({
           if (!favorites.length)
             for (var i = 0; i < 4; i++) {
               typeList[i].List.splice(0, typeList[i].List.length);
+              msg.success('删除收藏夹成功');
             }
           chooseActive(activeIndex.value);
         })
@@ -234,6 +228,7 @@ export default defineComponent({
       cancelCollections(typeList[choiceIndex.value].List[index].collection_id)
         .then(() => {
           typeList[choiceIndex.value].List.splice(index, 1);
+          msg.success('取消收藏成功');
         })
         .catch((error) => {
           console.log(error);
@@ -272,8 +267,8 @@ export default defineComponent({
       chooseActive,
       chooseChoice,
       newfavorites,
-      updateName,
-      updateRemark,
+      changeName,
+      changeRemark,
     };
   },
 });
@@ -300,10 +295,6 @@ export default defineComponent({
   .user-center-collection-right {
     @include size(736px, 645px);
     margin-right: 10px;
-
-    .right-top {
-      @include size(736px, 139px);
-    }
 
     .right-line {
       @include size(747px, 1px);
