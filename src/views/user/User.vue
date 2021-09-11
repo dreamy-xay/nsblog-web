@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:04:40
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-11 12:54:06
+ * @LastEditTime: 2021-09-11 17:11:28
 -->
 <template>
   <base-view
@@ -19,11 +19,17 @@
       />
     </div>
     <div class="user-body">
-      <user-info
-        :data="userInfoData"
-        :self="isSelf"
-      />
-      <user-main :data="userMainData" />
+      <div class="user-body-info">
+        <user-info
+          :data="userInfoData"
+          :self="isSelf"
+        />
+      </div>
+
+      <div class="user-body-main">
+        <user-main :data="userMainData" />
+      </div>
+
     </div>
   </base-view>
 </template>
@@ -243,6 +249,14 @@ export default defineComponent({
     width: 100%;
     @include flex(initial, space-between);
     margin-bottom: 16px;
+
+    .user-body-info {
+      width: 238px;
+    }
+
+    .user-body-main {
+      width: 890px;
+    }
   }
 }
 </style>
