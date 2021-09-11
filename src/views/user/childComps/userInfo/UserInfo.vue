@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 18:09:18
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-11 12:48:42
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-11 12:54:17
 -->
 <template>
   <div class="user-info">
@@ -38,7 +38,7 @@
       />
     </div>
 
-    <div class="user-info-achievement-line"></div>
+    <div class="user-info-line"></div>
 
     <div class="user-info-inform">
       <user-info-information
@@ -46,6 +46,26 @@
         :self="self"
       />
     </div>
+
+    <div class="user-info-line"></div>
+
+    <div class="user-info-profile">
+      <div class="user-info-profile-title"> 个人简介</div>
+
+      <div
+        class="user-info-profile-context"
+        role="button"
+        v-for="(item , index) in iconsData"
+        :key="index"
+      >
+
+        <div class="icon"><i :class="item.icon"></i></div>
+        <div class="text">{{item.text}}</div>
+        <div class="context">{{profileData[index]}}</div>
+
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -54,6 +74,7 @@ import { computed, defineComponent } from 'vue';
 import UserInfoAchievement from '@/views/user/childComps/userInfo/childComps/UserInfoAchievement.vue';
 import UserInfoInformation from '@/views/user/childComps/userInfo/childComps/UserInfoInformation.vue';
 import router from '@/router';
+import { dateFormat } from '@/util/date';
 
 /**
  * @description: 用户中心左侧详细信息
@@ -74,6 +95,7 @@ export default defineComponent({
   },
   setup(props, context) {
     const attentionText = computed(() => {
+      if (props.self === null) return '点击关注';
       return props.data.attention !== null ? (props.data.attention ? '取消关注' : '点击关注') : '编辑个人资料';
     });
 
@@ -98,6 +120,7 @@ export default defineComponent({
 
     const informationData = computed(() => {
       return {
+        username: props.data.username,
         gender: props.data.gender,
         tags: props.data.tags,
         qq: props.data.qq,
@@ -105,12 +128,33 @@ export default defineComponent({
         email: props.data.email,
       };
     });
+    const profileData = computed(() => {
+      if (props.data.username) {
+        const address = props.data.address.split(',');
+        return [
+          props.data.birthday !== null ? dateFormat('Y-m-d', new Date(props.data.birthday)) : '保密',
+          props.data.profession !== null ? props.data.profession : '保密',
+          address[1] + address[2] !== '' ? address[1] + address[2] : '保密',
+          props.data.best_topic !== null ? props.data.best_topic : '保密',
+        ];
+      }
+      return ['', '', '', ''];
+    });
+
+    const iconsData = [
+      { icon: 'iconfont blog-wangluo', text: '出生年月' },
+      { icon: 'iconfont blog-wangluo', text: '个人职业' },
+      { icon: 'iconfont blog-wangluo', text: '现居住地' },
+      { icon: 'iconfont blog-wangluo', text: '兴趣领域' },
+    ];
 
     return {
       attentionText,
       attentionClick,
       achievementData,
       informationData,
+      profileData,
+      iconsData,
     };
   },
 });
@@ -119,7 +163,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 .user-info {
   width: 238px;
-  height: 743px;
   box-shadow: $shadow-0;
   border-radius: $border-radius-0;
   background-color: $grey-0;
@@ -162,7 +205,7 @@ export default defineComponent({
     transition: all 0.25s;
 
     &:hover {
-      background-color: $grey-3;
+      background-color: $grey-4;
     }
   }
 
@@ -171,7 +214,7 @@ export default defineComponent({
     padding: 24px 0;
   }
 
-  .user-info-achievement-line {
+  .user-info-line {
     width: 206px;
     border-bottom: 1px solid $grey-3;
   }
@@ -179,6 +222,71 @@ export default defineComponent({
   .user-info-inform {
     width: 100%;
     padding: 24px 0;
+  }
+
+  .user-info-profile {
+    width: 100%;
+    @include flex(initial, center, column);
+    padding: 16px 0;
+
+    .user-info-profile-title {
+      margin-left: 16px;
+      font-size: 16px;
+      font-weight: 700;
+      color: $grey-11;
+      line-height: 21px;
+    }
+
+    .user-info-profile-context {
+      @include flex(center, initial, row);
+      margin: 16px 16px 0 16px;
+
+      .icon {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+
+        .iconfont {
+          font-size: 20px;
+        }
+      }
+
+      .text {
+        width: 100px;
+        font-size: 14px;
+        line-height: 20px;
+        height: 20px;
+        color: $grey-8;
+      }
+
+      .context {
+        width: 76px;
+        color: $grey-9;
+        @include flex(center, initial, row-reverse);
+        font-weight: 700;
+      }
+
+      &:nth-child(2) {
+        &:hover {
+          color: $orange-0;
+        }
+      }
+      &:nth-child(3) {
+        &:hover {
+          color: $blue-1;
+        }
+      }
+      &:nth-child(4) {
+        &:hover {
+          color: $blue-0;
+        }
+      }
+      &:last-child {
+        &:hover {
+          color: $pink-0;
+        }
+      }
+    }
   }
 }
 </style>
