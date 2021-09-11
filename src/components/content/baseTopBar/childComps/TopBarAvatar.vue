@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-19 18:32:43
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-07 22:45:23
+ * @LastEditTime: 2021-09-11 11:35:47
 -->
 <template>
   <div class="top-bar-avatar">
@@ -65,7 +65,7 @@
               <i class="iconfont blog-zan"></i>
               {{likeCount}}
             </div>
-            <a :href="'/user/' ">
+            <a :href="`mailto:${username}`">
               <div
                 class="info-right"
                 role="button"

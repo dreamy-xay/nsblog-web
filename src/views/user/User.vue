@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:04:40
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-10 10:09:45
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-11 12:35:17
 -->
 <template>
   <base-view
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { computed, defineComponent, reactive } from 'vue';
+import { computed, defineComponent, reactive, watch, ref } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import UserHeader from '@/views/user/childComps/UserHeader.vue';
 import UserInfo from '@/views/user/childComps/userInfo/UserInfo.vue';
@@ -56,7 +56,17 @@ export default defineComponent({
     const msg = useMessage(); // naive-ui message
     const route = useRoute(); // route
     const username = route.params.username; // 获取路由的username
-    const isSelf = mapState('global', ['tokenInfo']).tokenInfo.value.username === username; // 判断是否是自己访问用户主页
+    const { tokenInfo } = mapState('global', ['tokenInfo']); // token信息
+    const isSelf = ref(tokenInfo.value.status ? tokenInfo.value.username === username : null); // 判断是否是自己访问用户主页
+
+    // watch 登录状态
+    watch(
+      () => tokenInfo.value,
+      (info) => {
+        isSelf.value = info.status ? info.username === username : null;
+      }
+    );
+
     // 用户数据
     const userData = reactive({
       // 头部

@@ -4,14 +4,14 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-09 10:57:00
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-10 21:17:11
+ * @LastEditTime: 2021-09-11 12:41:54
 -->
 <template>
   <div class="user-main-question">
     <div class="user-main-question-top">
       <div class="title">
         <div class="text">疑问解答</div>
-        <div class="num">{{data.FAQ_count}}</div>
+        <div class="num">{{getSplitNum(data.FAQ_count)}}</div>
       </div>
       <div class="chart">
         <div class="chart-inner">
@@ -32,7 +32,7 @@
           {{item.name}}
         </div>
         <div class="count">
-          {{item.count}}
+          {{getSplitNum(item.count)}}
         </div>
       </div>
     </div>
@@ -41,6 +41,7 @@
 
 <script>
 import { defineComponent, computed } from 'vue';
+import { getSplitNum } from '@/util/util';
 import styles from '@/assets/style/define.scss';
 
 /**
@@ -147,6 +148,7 @@ export default defineComponent({
     });
 
     return {
+      getSplitNum,
       option,
       questionInfo,
     };
@@ -224,7 +226,7 @@ export default defineComponent({
         font-size: 14px;
         height: 16px;
         line-height: 16px;
-        color: $grey-10;
+        color: $grey-8;
         font-weight: 700;
       }
 

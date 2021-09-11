@@ -4,12 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 18:12:24
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-09 22:33:23
+ * @LastEditTime: 2021-09-11 12:13:58
 -->
 <template>
   <div class="user-main">
     <div class="user-main-info">
-      <user-main-article />
+      <user-main-article :data="data.article_chart" />
       <user-main-question :data="data.FAQ_chart" />
       <user-main-resource :data="data.resource_chart" />
     </div>
