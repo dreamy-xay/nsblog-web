@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-09-01 16:41:52
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-09-10 22:51:46
+ * @LastEditTime: 2021-09-11 19:12:11
 -->
 <template>
   <div class="user-center-collection-right-top">
@@ -41,6 +41,16 @@
         class="iconfont blog-bianji1"
         role="button"
       ></i>
+      <!-- <user-center-input
+        class="user-center-collection-right-top-remarktext"
+        v-show="isEditRemark"
+        type="text"
+        v-model="inputRemark"
+        ref="remarkInput"
+        :maxlength="100"
+        @blur="updateRemark(false,true)"
+        show-close
+      /> -->
     </div>
     <user-center-input
       class="user-center-collection-right-top-remarktext"
@@ -52,17 +62,19 @@
       @blur="updateRemark(false,true)"
       show-close
     />
-    <div
-      class="button1"
-      role="button"
-      @click="deleteFav(false,true)"
-    >删除</div>
-    <div
-      class="button2"
-      role="button"
-      v-text="data.is_private? '取消私有' : '私有'"
-      @click="updateprivate(false,true)"
-    ></div>
+    <div class="user-center-collection-right-top-button">
+      <div
+        class="button1"
+        role="button"
+        v-text="data.is_private? '取消私有' : '私有'"
+        @click="updateprivate(false,true)"
+      ></div>
+      <div
+        class="button2"
+        role="button"
+        @click="deleteFav(false,true)"
+      >删除</div>
+    </div>
   </div>
   <base-modal
     :show="confirmNameModal"
@@ -102,7 +114,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, nextTick, watch, computed } from 'vue';
+import { defineComponent, ref, nextTick, watch } from 'vue';
 import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput.vue';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 
@@ -165,7 +177,10 @@ export default defineComponent({
      */
     function updateName(isConfirm, isConfirmNameModal = false) {
       if (isConfirm) {
-        if (inputName.value !== props.data.name) context.emit('updateName', inputName);
+        if (inputName.value !== props.data.name)
+          context.emit('updateName', inputName.value, () => {
+            inputName.value = props.data.name;
+          });
       }
       confirmNameModal.value = isConfirmNameModal;
       if (!isConfirmNameModal) {
@@ -193,12 +208,15 @@ export default defineComponent({
      */
     function updateRemark(isConfirm, isConfirmRemarkModal = false) {
       if (isConfirm) {
-        if (inputRemark.value !== props.data.remark) context.emit('updateRemark', inputRemark.value);
+        if (inputRemark.value !== props.data.remark)
+          context.emit('updateRemark', inputRemark.value, () => {
+            inputRemark.value = props.data.remark;
+          });
       }
       confirmRemarkModal.value = isConfirmRemarkModal;
       if (!isConfirmRemarkModal) {
         isEditRemark.value = false;
-        if (!isConfirm) inputRemark.value = props.data.Remark;
+        if (!isConfirm) inputRemark.value = props.data.remark;
       }
     }
 
@@ -217,7 +235,6 @@ export default defineComponent({
           isConfirmPrivateModal.value = isConfirmPrivate;
         }
       }
-
       if (isConfirmPrivate && !isConfirm) {
         if (props.data.is_private === true) confirmPrivateModal.value = true;
         else isConfirmPrivateModal.value = true;
@@ -266,59 +283,69 @@ export default defineComponent({
 }
 
 .user-center-collection-right-top {
+  @include size(736px, 139px);
+
   .user-center-collection-right-top-name {
     color: $grey-8;
-    margin: 17px 0 0 30px;
+    padding: 17px 0 0 30px;
+    height: 32px;
+  }
 
-    i {
-      margin-left: 14px;
-    }
+  i {
+    margin-left: 14px;
+  }
+
+  :deep(.user-center-input.user-center-collection-right-top-nametext input) {
+    margin: 17px 0 0 30px !important;
   }
 
   .user-center-collection-right-top-remark {
     color: $grey-8;
-    margin: 5px 0 0 30px;
+    padding-left: 30px;
+    height: 32px;
     display: flex;
 
     .user-center-collection-right-top-remarktext {
       width: 300px;
       @include ellipsis(1);
     }
-
-    i {
-      margin-left: 14px;
-    }
   }
 
-  .button1 {
-    @include flex(center, center);
-    @include size(70px, 30px);
-    float: right;
-    margin-right: 20px;
-    color: $grey-2;
-    background: $green-0;
-    border-radius: 15px;
-    box-shadow: $shadow-0;
-    transition: all 0.25s;
-
-    &:hover {
-      background: $green-2;
-    }
+  :deep(.user-center-input.user-center-collection-right-top-remarktext input) {
+    margin-left: 30px !important;
   }
 
-  .button2 {
-    @include flex(center, center);
-    @include size(70px, 30px);
-    color: $grey-2;
-    float: right;
-    margin-right: 30px;
-    background: $green-0;
-    border-radius: 15px;
-    box-shadow: $shadow-0;
+  .user-center-collection-right-top-button {
+    @include flex(center, flex-end);
     transition: all 0.25s;
+    margin-top: 10px;
 
-    &:hover {
-      background: $green-1;
+    .button1 {
+      @include flex(center, center);
+      @include size(70px, 30px);
+      margin-right: 20px;
+      color: $grey-2;
+      background: $green-0;
+      border-radius: 15px;
+      box-shadow: $shadow-0;
+
+      &:hover {
+        background: $green-2;
+      }
+    }
+
+    .button2 {
+      @include flex(center, center);
+      @include size(70px, 30px);
+      color: $grey-2;
+      margin-right: 30px;
+      background: $green-0;
+      border-radius: 15px;
+      box-shadow: $shadow-0;
+
+      &:hover {
+        background: $green-1;
+      }
     }
   }
 }
