@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:15:05
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-09 21:52:58
+ * @LastEditTime: 2021-09-12 23:02:49
  */
 import { Random, mock } from 'better-mock';
 import { Application, Request, Response } from 'express';
@@ -72,9 +72,20 @@ export default function(baseUrl: string, app: Application) {
       if (user && user.isActive) {
         const gender: number = Random.integer(0, 2);
         const tags: string[] = [];
-        const sum: number = Random.integer(0, 20);
+        let sum: number = Random.integer(0, 20);
         for (let i: number = 0; i < sum; ++i)
           tags.push(Random.integer(0, 1) ? Random.word(2, 10) : Random.cword(2, 10));
+
+        const articleChartData: Record<string, unknown>[] = [];
+        sum = Random.integer(0, 30);
+        let count: number = 0;
+        for (let i: number = 0; i < sum; ++i) {
+          count += Random.integer(1, 30);
+          articleChartData.push({
+            time: Random.datetime(),
+            count
+          });
+        }
         return res.json({
           // 头部
           username,
@@ -108,9 +119,7 @@ export default function(baseUrl: string, app: Application) {
           // 图表
           article_chart: {
             article_count: Random.natural(0, 10000),
-            data: mock({
-              'list|365': ['@natural(0, 100)']
-            }).list,
+            data: articleChartData,
             rank_total: Random.natural(0, 10000),
             rank_week: Random.natural(0, 10000),
             release_recently: Random.natural(0, 10000)

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-09 10:57:00
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-11 12:42:02
+ * @LastEditTime: 2021-09-12 18:54:36
 -->
 <template>
   <div class="user-main-resource">
@@ -54,6 +54,13 @@ export default defineComponent({
   setup(props) {
     // 计算图表选项
     const option = computed(() => {
+      const data = [];
+      for (let value of props.data.data) {
+        data.push({
+          value,
+          label: { show: value === 0 },
+        });
+      }
       const xAxisData = [
         'Jan.',
         'Feb.',
@@ -101,7 +108,14 @@ export default defineComponent({
         },
         series: [
           {
-            data: props.data.data,
+            data,
+            label: {
+              width: 15,
+              height: 180,
+              backgroundColor: 'rgba(90, 200, 250, 0.08)',
+              formatter: '',
+            },
+            name: '上传',
             type: 'bar',
             itemStyle: { color: styles.blue0 },
           },

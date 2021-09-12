@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-09 10:57:00
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-11 12:44:11
+ * @LastEditTime: 2021-09-12 23:04:57
 -->
 <template>
   <div class="user-main-article">
@@ -41,6 +41,7 @@
 import { defineComponent, computed } from 'vue';
 import { getSplitNum } from '@/util/util';
 import styles from '@/assets/style/define.scss';
+import { dateFormat } from '@/util/date';
 
 /**
  * @description: 用户中心文章信息
@@ -59,29 +60,16 @@ export default defineComponent({
   setup(props) {
     // 计算图表选项
     const option = computed(() => {
-      const xAxisData = [
-        'Jan.',
-        'Feb.',
-        'Mar.',
-        'Apr.',
-        'May.',
-        'Jun.',
-        'Jul.',
-        'Aug.',
-        'Sep.',
-        'Oct.',
-        'Nov.',
-        'Dec.',
-      ];
-      const cutData = xAxisData.splice(0, new Date().getMonth() + 1);
-      xAxisData.push(...cutData);
+      const xAxisData = [];
+      const data = [];
+      for (const item of props.data.data) {
+        xAxisData.push(dateFormat('YY年m月d日', new Date(item.time)));
+        data.push(item.count);
+      }
 
       return {
         tooltip: {
           trigger: 'axis',
-          axisPointer: {
-            type: 'shadow',
-          },
           padding: 4,
           textStyle: {
             color: styles.grey8,
@@ -106,9 +94,14 @@ export default defineComponent({
         },
         series: [
           {
-            data: props.data.data.slice(0, 12),
-            type: 'bar',
-            itemStyle: { color: styles.blue0 },
+            data,
+            name: '已发布',
+            showSymbol: false,
+            type: 'line',
+            itemStyle: { color: styles.orange1 },
+            emphasis: {
+              showSymbol: true,
+            },
           },
         ],
       };
@@ -149,7 +142,6 @@ export default defineComponent({
   box-shadow: $shadow-0;
   border-radius: $border-radius-0;
   background-color: $grey-0;
-  margin-left: 16px;
   user-select: none;
 
   .user-main-article-top {
@@ -179,7 +171,8 @@ export default defineComponent({
 
     .chart {
       height: 82px;
-      width: 100%;
+      width: 278px;
+      margin-left: -6px;
     }
   }
 
