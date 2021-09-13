@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:25:27
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-11 16:04:09
+ * @LastEditTime: 2021-09-13 20:03:36
 -->
 
 <template>
@@ -120,7 +120,6 @@ export default defineComponent({
   setup() {
     const route = useRoute();
     const msg = useMessage(); // naive-ui mssage
-    let offset = 0; // 偏移量
     const deleteTag = ref(true); // 判断数据是否全部加载的标志
     const replyData = reactive([]); // 回复我的界面数据
     const { updateMessageCount } = mapMutations('message', ['updateMessageCount']);
@@ -148,12 +147,11 @@ export default defineComponent({
      */
 
     function getMessagesList() {
-      getMessages(2, offset, 10)
+      getMessages(2, replyData.length, 10)
         .then((data) => {
           if (data.messages.length < 10) {
             deleteTag.value = false;
           }
-          offset += data.messages.length;
           replyData.splice(replyData.length, 0, ...data.messages);
         })
         .catch((error) => {
@@ -201,7 +199,6 @@ export default defineComponent({
       updateMessageCount({ type: 2, count: 0 });
       getMessages(2, 0, limit)
         .then((data) => {
-          offset++;
           replyData.splice(0, 0, ...data.messages);
         })
         .catch((error) => {
