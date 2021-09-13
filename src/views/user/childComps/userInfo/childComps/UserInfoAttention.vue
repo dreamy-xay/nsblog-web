@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-09 18:55:02
  * @LastEditors: clq
- * @LastEditTime: 2021-09-13 13:22:58
+ * @LastEditTime: 2021-09-13 14:02:23
 -->
 <template>
   <n-modal
@@ -199,10 +199,7 @@ export default defineComponent({
 
   .user-info-attention-header {
     height: 28px;
-    // margin-bottom: 16px;
     @include flex(center, space-between);
-    // display: flex;
-    // justify-content: space-between;
     font-family: Arial;
     line-height: 28px;
     font-size: 14px;
@@ -235,9 +232,6 @@ export default defineComponent({
     .close-icon {
       width: 28px;
       height: 28px;
-      // background-color: $grey-2;
-      // margin: 21px 12.2px 1.1px 4px;
-      // padding: 0px auto;
       border-radius: 4px;
       color: $grey-7;
       font-size: 16px;
@@ -258,7 +252,6 @@ export default defineComponent({
       }
       to {
         color: $green-0;
-        // font-size: 17px;
         transform: rotate(90deg);
       }
     }
@@ -266,11 +259,8 @@ export default defineComponent({
 
   .user-info-attention-body {
     width: 100%;
-    // height: 410px;
     margin: 0px;
     padding: 0px;
-    // overflow: scroll;
-    // background-color: #999999;
   }
 
   .user-info-attention-bottom-btn {

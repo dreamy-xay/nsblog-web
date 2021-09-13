@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-09 20:58:06
  * @LastEditors: clq
- * @LastEditTime: 2021-09-11 17:40:50
+ * @LastEditTime: 2021-09-13 14:01:31
 -->
 <template>
   <div class="user-info-attention-item">
@@ -123,14 +123,11 @@ export default defineComponent({
   .user-info-attention-item-content {
     width: 100%;
     height: 100%;
-    // padding: 0px;
-    // background-color: green;
 
     .avatar {
       display: inline-block;
       width: 50px;
       height: 50px;
-      // background-color: red;
     }
 
     .info {
@@ -161,6 +158,7 @@ export default defineComponent({
     }
 
     .btn {
+      width: 80px;
       float: right;
       position: relative;
       top: 9px;
@@ -170,6 +168,7 @@ export default defineComponent({
       background-color: $grey-3;
       font-family: Arial;
       font-size: 14px;
+      text-align: center;
       color: $grey-9;
     }
   }
