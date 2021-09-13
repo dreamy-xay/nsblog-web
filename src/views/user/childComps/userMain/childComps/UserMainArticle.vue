@@ -4,14 +4,27 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-09 10:57:00
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-12 23:04:57
+ * @LastEditTime: 2021-09-13 12:56:45
 -->
 <template>
-  <div class="user-main-article">
+  <div
+    class="user-main-article"
+    :class="{'user-main-article-extend': isExtend}"
+  >
     <div class="user-main-article-top">
       <div class="title">
-        <div class="text">发布文章</div>
-        <div class="num">{{getSplitNum(data.article_count)}}</div>
+        <div class="title-left">
+          <div class="text">发布文章</div>
+          <div class="num">{{getSplitNum(data.article_count)}}</div>
+        </div>
+        <div
+          class="title-right"
+          role="button"
+          @click="extend"
+        >
+          <i class="iconfont blog-arrow-right"></i>
+        </div>
+
       </div>
       <div class="chart">
         <v-chart
@@ -20,7 +33,10 @@
         />
       </div>
     </div>
-    <div class="user-main-article-bottom">
+    <div
+      class="user-main-article-bottom"
+      v-show="!isExtend"
+    >
       <div
         class="info"
         v-for="(item, index) in articleInfo"
@@ -38,14 +54,16 @@
 </template>
 
 <script>
-import { defineComponent, computed } from 'vue';
+import { defineComponent, computed, ref } from 'vue';
 import { getSplitNum } from '@/util/util';
 import styles from '@/assets/style/define.scss';
 import { dateFormat } from '@/util/date';
+import events from '@/events';
 
 /**
  * @description: 用户中心文章信息
  * @param {Object} data 文章数据信息 `必传参数 `
+ * @emits UserMainArticle-extend 拓展组件宽度
  * @author: dreamy-xay
  */
 
@@ -76,6 +94,15 @@ export default defineComponent({
             fontFamily: 'Arial',
             fontSize: 13,
           },
+          axisPointer: {
+            lineStyle: {
+              color: styles.orange1,
+              width: 1,
+              type: 'solid',
+              cap: 'round',
+            },
+          },
+          animation: false,
         },
         xAxis: {
           type: 'category',
@@ -89,14 +116,17 @@ export default defineComponent({
         grid: {
           left: 0,
           right: 0,
-          bottom: 0,
-          top: 0,
+          bottom: 4,
+          top: 4,
         },
         series: [
           {
             data,
+            smooth: true,
             name: '已发布',
+            symbol: 'circle',
             showSymbol: false,
+            symbolSize: 8,
             type: 'line',
             itemStyle: { color: styles.orange1 },
             emphasis: {
@@ -125,10 +155,23 @@ export default defineComponent({
       ];
     });
 
+    const isExtend = ref(false); // 是否拓展组件宽度
+    /**
+     * @description: 拓展按钮点击
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function extend() {
+      isExtend.value = !isExtend.value;
+      events.emit('UserMainArticle-extend', isExtend.value); // 发出事件
+    }
+
     return {
       getSplitNum,
       option,
       articleInfo,
+      isExtend,
+      extend,
     };
   },
 });
@@ -143,44 +186,88 @@ export default defineComponent({
   border-radius: $border-radius-0;
   background-color: $grey-0;
   user-select: none;
+  overflow: hidden;
+  transition: 0.4s;
+
+  &.user-main-article-extend {
+    width: 858px;
+
+    .user-main-article-top {
+      .title {
+        .title-right {
+          transform: rotate(180deg);
+        }
+      }
+
+      .chart {
+        width: 872px;
+        height: 110px;
+      }
+    }
+  }
 
   .user-main-article-top {
-    height: 122px;
+    height: 128px;
     width: 100%;
+    @include flex(center, center, column);
 
     .title {
       height: 40px;
       width: 100%;
-      @include flex(initial, initial, column);
+      margin-bottom: 8px;
+      @include flex(initial, space-between);
 
-      .text {
-        height: 16px;
-        line-height: 16px;
-        font-size: 12px;
-        color: $grey-7;
+      .title-left {
+        height: 40px;
+        @include flex(initial, initial, column);
+
+        .text {
+          height: 16px;
+          line-height: 16px;
+          font-size: 12px;
+          color: $grey-7;
+        }
+
+        .num {
+          height: 25px;
+          line-height: 25px;
+          font-weight: 700;
+          font-size: 22px;
+          color: $grey-10;
+        }
       }
 
-      .num {
-        height: 25px;
-        line-height: 25px;
-        font-weight: 700;
-        font-size: 22px;
-        color: $grey-10;
+      .title-right {
+        height: 24px;
+        width: 24px;
+        text-align: center;
+        line-height: 24px;
+        margin-right: 1px;
+        margin-top: 1px;
+
+        &:hover .iconfont {
+          color: $grey-7;
+        }
+
+        .iconfont {
+          font-size: 26px;
+          color: $grey-6;
+          transition: 0.25s;
+        }
       }
     }
 
     .chart {
-      height: 82px;
+      height: 80px;
       width: 278px;
-      margin-left: -6px;
     }
   }
 
   .user-main-article-bottom {
     width: 100%;
     height: 32px;
-    margin-top: 12px;
     @include flex(center, center);
+    margin-top: 6px;
 
     .info {
       width: 74px;
