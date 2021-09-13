@@ -1,5 +1,4 @@
 /* 全局颜色 */
-
 $grey-0: #ffffff;
 $grey-1: #f7f7f7;
 $grey-2: #f4f4f4;
@@ -32,7 +31,6 @@ $purple-1: #6b05b3;
 $purple-2: #3b056b;
 
 /* 全局样式 */
-
 $shadow-0: 0 0 6px rgba(0, 0, 0, 0.16);
 $shadow-1: 0 0 16px rgba(0, 0, 0, 0.1);
 $shadow-2: 0 0 6px $green-1;
@@ -78,23 +76,20 @@ $border-radius-1: 4px;
     borderRadius1: $border-radius-1;
 }
 
-
 /* mixin */
-
 @mixin ellipsis($line-clamp: 2) {
     @if $line-clamp==1 {
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
         word-break: break-all;
-    }
-    @else if $line-clamp>1 {
+    } @else if $line-clamp>1 {
         overflow: hidden;
         display: -webkit-box;
         -webkit-line-clamp: $line-clamp;
         -webkit-box-orient: vertical;
+    } @else {
     }
-    @else {}
 }
 
 @mixin flex($align-items: initial, $justify-content: initial, $flex-direction: initial) {
