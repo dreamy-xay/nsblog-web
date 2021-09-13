@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-09 10:57:00
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-13 12:56:45
+ * @LastEditTime: 2021-09-13 17:41:49
 -->
 <template>
   <div
@@ -14,8 +14,30 @@
     <div class="user-main-article-top">
       <div class="title">
         <div class="title-left">
-          <div class="text">发布文章</div>
-          <div class="num">{{getSplitNum(data.article_count)}}</div>
+          <div class="main-info">
+            <div class="text">发布文章</div>
+            <div class="num">{{getSplitNum(data.article_count)}}</div>
+          </div>
+          <div
+            class="detail"
+            :class="{'detail-show': isExtend}"
+          >
+            <div class="icon">
+              <i class="iconfont blog-jiangbei"></i>
+            </div>
+            <div
+              class="info"
+              v-for="(item, index) in articleInfo.slice(0, 2)"
+              :key="index"
+            >
+              <div class="name">
+                {{item.name}}
+              </div>
+              <div class="count">
+                {{getSplitNum(item.count)}}
+              </div>
+            </div>
+          </div>
         </div>
         <div
           class="title-right"
@@ -24,20 +46,21 @@
         >
           <i class="iconfont blog-arrow-right"></i>
         </div>
-
       </div>
       <div class="chart">
         <v-chart
           class="chart"
           :option="option"
+          ref="echartsRef"
         />
       </div>
     </div>
     <div
       class="user-main-article-bottom"
-      v-show="!isExtend"
+      :class="{'user-main-article-bottom-show': bottomDetailShow}"
     >
       <div
+        v-show="bottomDetailShow"
         class="info"
         v-for="(item, index) in articleInfo"
         :key="index"
@@ -145,17 +168,18 @@ export default defineComponent({
           count: props.data.rank_total,
         },
         {
-          name: '总周排行',
+          name: '周排行',
           count: props.data.rank_week,
         },
         {
-          name: '总最近发布',
+          name: '最近发布',
           count: props.data.release_recently,
         },
       ];
     });
 
     const isExtend = ref(false); // 是否拓展组件宽度
+    const bottomDetailShow = ref(true); // 是否显示底部详情
     /**
      * @description: 拓展按钮点击
      * @return {void}
@@ -164,7 +188,21 @@ export default defineComponent({
     function extend() {
       isExtend.value = !isExtend.value;
       events.emit('UserMainArticle-extend', isExtend.value); // 发出事件
+      if (isExtend.value) bottomDetailShow.value = false;
+      setTimeout(() => {
+        echartsRef.value.resize({
+          animation: {
+            duration: 400,
+          },
+        });
+        if (!isExtend.value)
+          setTimeout(() => {
+            bottomDetailShow.value = true;
+          }, 400);
+      }, 500);
     }
+
+    const echartsRef = ref(null);
 
     return {
       getSplitNum,
@@ -172,6 +210,8 @@ export default defineComponent({
       articleInfo,
       isExtend,
       extend,
+      echartsRef,
+      bottomDetailShow,
     };
   },
 });
@@ -187,12 +227,14 @@ export default defineComponent({
   background-color: $grey-0;
   user-select: none;
   overflow: hidden;
-  transition: 0.4s;
+  transition: 0.5s ease;
 
   &.user-main-article-extend {
     width: 858px;
 
     .user-main-article-top {
+      height: 100%;
+
       .title {
         .title-right {
           transform: rotate(180deg);
@@ -200,8 +242,9 @@ export default defineComponent({
       }
 
       .chart {
-        width: 872px;
-        height: 110px;
+        margin-left: -6px;
+        height: 114px;
+        width: 882px;
       }
     }
   }
@@ -209,31 +252,83 @@ export default defineComponent({
   .user-main-article-top {
     height: 128px;
     width: 100%;
-    @include flex(center, center, column);
+    @include flex(initial, initial, column);
 
     .title {
       height: 40px;
       width: 100%;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
       @include flex(initial, space-between);
 
       .title-left {
         height: 40px;
-        @include flex(initial, initial, column);
+        @include flex(center);
 
-        .text {
-          height: 16px;
-          line-height: 16px;
-          font-size: 12px;
-          color: $grey-7;
+        .main-info {
+          height: 100%;
+          margin-right: 16px;
+          @include flex(initial, initial, column);
+
+          .text {
+            height: 16px;
+            line-height: 16px;
+            font-size: 12px;
+            color: $grey-7;
+          }
+
+          .num {
+            height: 25px;
+            line-height: 25px;
+            font-weight: 700;
+            font-size: 22px;
+            color: $grey-10;
+          }
         }
 
-        .num {
-          height: 25px;
-          line-height: 25px;
-          font-weight: 700;
-          font-size: 22px;
-          color: $grey-10;
+        .detail {
+          height: 100%;
+          @include flex(center);
+          opacity: 0;
+          transition: 0.5s;
+
+          &.detail-show {
+            opacity: 1;
+          }
+
+          .icon {
+            height: 40px;
+            width: 40px;
+            text-align: center;
+            line-height: 40px;
+            margin-right: 10px;
+
+            .iconfont {
+              font-size: 42px;
+              color: $orange-1;
+            }
+          }
+
+          .info {
+            margin-left: 12px;
+            height: 100%;
+            @include flex(center, center, column);
+
+            .name {
+              font-size: 12px;
+              height: 16px;
+              line-height: 16px;
+              font-weight: 300;
+              color: $grey-9;
+              margin-bottom: 4px;
+            }
+
+            .count {
+              font-size: 14px;
+              height: 16px;
+              line-height: 16px;
+              color: $grey-8;
+            }
+          }
         }
       }
 
@@ -258,7 +353,8 @@ export default defineComponent({
     }
 
     .chart {
-      height: 80px;
+      margin-left: -6px;
+      height: 76px;
       width: 278px;
     }
   }
@@ -268,6 +364,12 @@ export default defineComponent({
     height: 32px;
     @include flex(center, center);
     margin-top: 6px;
+    transition: 0.4s;
+    opacity: 0;
+
+    &.user-main-article-bottom-show {
+      opacity: 1;
+    }
 
     .info {
       width: 74px;
