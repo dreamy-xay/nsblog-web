@@ -1,10 +1,10 @@
 <!--
- * @Description: 用户中心左侧关注信息
+ * @Description: 用户中心左侧获得成就
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-09-07 20:15:50
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-11 12:52:20
+ * @LastEditTime: 2021-09-13 15:19:00
 -->
 <template>
   <div class="user-info-achievement">
@@ -21,18 +21,18 @@
         <div class="icon">
           <i
             :class="item.icon"
-            :style="{'color':item.iconColor}"
+            :style="{'color': item.iconColor}"
           ></i>
         </div>
 
         <div class="text">{{item.text}}</div>
         <div
-          v-if="index===0"
+          v-if="index === 0"
           class="number1"
         >
           <i class="iconfont blog-leaf"></i>
 
-          <div class="time">{{getTime.year+'年'}}</div>
+          <div class="time">{{getTime.year + '年'}}</div>
 
         </div>
         <div
@@ -49,7 +49,7 @@
         <div
           v-if="index===0"
           class="add-text"
-        >{{'距离'+(getTime.year+1)+'年还有'+getTime.data+'天'}}</div>
+        >{{'距离' + (getTime.year + 1) + '年还有' + getTime.data + '天'}}</div>
 
         <div
           v-else
@@ -57,8 +57,8 @@
         >
           <div class="add-text-yesterday">昨日</div>
           <div
-            v-if="numberData[index-1].yesterday!==null"
-            :class="numberData[index-1].yesterday ? 'add-color':''"
+            v-if="numberData[index-1].yesterday !== null"
+            :class="numberData[index-1].yesterday ? 'add-color' : ''"
           >{{'+'+numberData[index-1].yesterday}}</div>
         </div>
       </div>
@@ -72,6 +72,12 @@ import { computed, defineComponent } from 'vue';
 import style from '@/assets/style/define.scss';
 import { getSplitNum } from '@/util/util';
 
+/**
+ * @description: 用户中心左侧获得成就
+ * @param {Object} data 用户中心左侧成就信息数据 `必传参数`
+ * @param {null | Boolean} self 用户是否是自己或在线，是自己为true 用户退出登录为null 不是自己false `必传参数`
+ * @author: Z_Y_C
+ */
 export default defineComponent({
   name: 'useerInfoAchievement',
   props: {
@@ -84,6 +90,7 @@ export default defineComponent({
     },
   },
   setup(props, context) {
+    // 目录信息加载
     const menusData = [
       { icon: 'iconfont blog-leaf', text: '当前学龄', iconColor: style.blue0 },
       { icon: 'iconfont blog-eye', text: '浏览总数', iconColor: style.blue1 },
@@ -91,6 +98,7 @@ export default defineComponent({
       { icon: 'iconfont blog-fav', text: '获得收藏', iconColor: style.orange1 },
     ];
 
+    // 计算时间
     const getTime = computed(() => {
       const Data = parseInt(
         (new Date().getTime() - new Date(props.data.registration_time).getTime()) / 1000 / 3600 / 24
@@ -102,6 +110,7 @@ export default defineComponent({
       };
     });
 
+    // 成就数据加载
     const numberData = computed(() => {
       return [
         { all: getSplitNum(props.data.browse_count), yesterday: props.data.browse_yesterday },
