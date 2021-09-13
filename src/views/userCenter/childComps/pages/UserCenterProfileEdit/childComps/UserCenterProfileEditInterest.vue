@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-28 14:54:52
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-06 22:22:43
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-13 12:58:51
 -->
 
 <template>
@@ -62,6 +62,8 @@ import { defineComponent, reactive, ref, computed, onMounted } from 'vue';
 import { getTag, addUserTag } from '@/network/api/user';
 import { mapState } from '@/util/store';
 import { getTopics, getTopicTags } from '@/network/api/topics';
+import events from '@/events';
+import { useRoute } from 'vue-router';
 /**
  * @description: 用户中心-基础资料-兴趣标签
  * @param {*}
@@ -71,6 +73,7 @@ import { getTopics, getTopicTags } from '@/network/api/topics';
 export default defineComponent({
   name: 'UserCenterProfileInterest',
   setup() {
+    const route = useRoute();
     const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
     const tags = ref([]); // 兴趣标签
     const tagsSelected = reactive([]); // 可选择标签
@@ -83,6 +86,18 @@ export default defineComponent({
       .catch((error) => {
         console.log(error);
       });
+
+    /**
+     * @description: 通知UserCenter滚动条到底部
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function toBottom() {
+      if (route.params['toBottom']) {
+        events.emit('UserCenter-toBottom');
+      }
+    }
+
     // 获取专题名
     // onMounted(() => {
     getTopics()
@@ -102,9 +117,11 @@ export default defineComponent({
           })
           .catch((error) => {
             console.log(error);
-          });
+          })
+          .finally(toBottom);
       })
       .catch((error) => {
+        toBottom();
         console.log(error);
       });
     // });

@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 11:51:03
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-09 16:06:51
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-13 12:18:21
 -->
 <template>
   <div
@@ -28,6 +28,7 @@
           <el-scrollbar
             @scroll="scroll($event, false)"
             class="base-view-scrollbar"
+            ref="scrollbarColumnRef"
           >
             <div
               class="inner"
@@ -54,7 +55,7 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, ref } from 'vue';
+import { defineComponent, onMounted, ref, nextTick } from 'vue';
 import BaseBackground from '@/components/content/baseBackground/BaseBackground.vue';
 import BaseTopBar from '@/components/content/baseTopBar/BaseTopBar.vue';
 
@@ -72,6 +73,7 @@ import BaseTopBar from '@/components/content/baseTopBar/BaseTopBar.vue';
  * @param {Number} backTopVisibilityHeight 滚动高度达到此参数值才出现 `默认为200`
  * @event scroll 滚动监听事件，回调参数{scrollTop, scrollLeft}
  * @event scrollToBottom 滚动到底部触发事件，无回调参数
+ * @method setScrollTop 设置滚动条到顶部的距离,类型为boolean时:true为滚动到顶部,false为滚动到底部;类型为number时则直接设置高度  (value: boolean | number) => void
  * @author: dreamy-xay
  */
 
@@ -173,6 +175,24 @@ export default defineComponent({
       }
     }
 
+    // const scrollbarRowRef = ref(null); // 控制左右滚动条 ref
+    const scrollbarColumnRef = ref(null); // 控制上下滚动条 ref
+    /**
+     * @description: 设置滚动条到顶部的距离
+     * @param {boolean | number} value 类型为boolean时:true为滚动到顶部,false为滚动到底部;类型为number时则直接设置高度,具体可参考element-plus `默认为false`
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function setScrollTop(value = false) {
+      nextTick(() => {
+        if (typeof value === 'boolean') {
+          if (value) value = 0;
+          else value = scrollbarColumnRef.value.wrap.scrollHeight;
+        }
+        scrollbarColumnRef.value.setScrollTop(value);
+      });
+    }
+
     return {
       innerHeight,
       topBarRef,
@@ -181,6 +201,8 @@ export default defineComponent({
       height,
       scroll,
       topBarHeight,
+      scrollbarColumnRef,
+      setScrollTop,
     };
   },
 });
