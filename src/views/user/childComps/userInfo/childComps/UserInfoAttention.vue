@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-09 18:55:02
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-13 19:36:11
+ * @LastEditTime: 2021-09-13 20:22:11
 -->
 <template>
   <n-modal
@@ -73,7 +73,7 @@
           </template>
 
           <div
-            v-show="attentionItems.length>5"
+            v-show="loadingButtonShow[Number(flag)]"
             class="user-info-attention-bottom-btn"
             role="button"
             @click="showMore"
@@ -121,9 +121,10 @@ export default defineComponent({
     const msg = useMessage(); // navie-ui
     const attentionNum = ref(11);
     const noticerNum = ref(97);
-    const itemNum = ref(6); //记录增量
+    const limit = 10; //记录增量
     const attentionItems = reactive([]); //关注了数据
     const fansItems = reactive([]); //粉丝数据
+    const loadingButtonShow = reactive([false, false]); // 加载更多按钮是否显示
 
     watch(
       () => props.username,
@@ -139,9 +140,10 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function addAttentionItems() {
-      getAttentions(props.username, 0, itemNum.value)
+      getAttentions(props.username, attentionItems.length, limit)
         .then((res) => {
           attentionItems.splice(attentionItems.length, 0, ...res.attentions);
+          loadingButtonShow[1] = res.attentions.length === limit;
         })
         .catch((err) => {
           console.log(err);
@@ -155,9 +157,10 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function addFansItems() {
-      getFans(props.username, 0, itemNum.value)
+      getFans(props.username, fansItems.length, limit)
         .then((res) => {
           fansItems.splice(fansItems.length, 0, ...res.attentions);
+          loadingButtonShow[0] = res.attentions.length === limit;
         })
         .catch((err) => {
           console.log(err);
@@ -198,11 +201,7 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function showMore() {
-      if (props.flag === true) {
-        addAttentionItems();
-      } else {
-        addFansItems();
-      }
+      (props.flag ? addAttentionItems : addFansItems)();
     }
 
     /**
@@ -212,7 +211,7 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function changePage(path) {
-      window.open(`/user/${path}/article`, `/user/${path}/article`);
+      window.open(`/user/${path}`, `/user/${path}`);
     }
 
     return {
@@ -225,6 +224,7 @@ export default defineComponent({
       close,
       showMore,
       changePage,
+      loadingButtonShow,
     };
   },
 });
@@ -307,6 +307,7 @@ export default defineComponent({
     line-height: 32px;
     text-align: center;
     color: $grey-9;
+    transition: 0.25s;
 
     &:hover {
       background-color: $grey-4;

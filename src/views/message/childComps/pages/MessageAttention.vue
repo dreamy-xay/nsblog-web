@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-05 10:41:38
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-11 15:58:33
+ * @LastEditTime: 2021-09-13 20:02:05
 -->
 
 <template>
@@ -108,7 +108,6 @@ export default defineComponent({
     const route = useRoute();
     const attentionData = reactive([]); // 关注我的界面数据
     const msg = useMessage(); // naive-ui mssage
-    let offset = 0; // 偏移量
     const deleteTag = ref(true); // 判断数据是否全部加载的标志
     const modalShow = ref(false); // 是否显示n-modal
     const sureCancel = ref(0); // 记录取消关注下标
@@ -136,12 +135,11 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function getMessagesList() {
-      getMessages(4, offset, 10)
+      getMessages(4, attentionData.length, 10)
         .then((data) => {
           if (data.messages.length < 10) {
             deleteTag.value = false;
           }
-          offset += data.messages.length;
           attentionData.splice(attentionData.length, 0, ...data.messages);
         })
         .catch((error) => {
@@ -178,7 +176,6 @@ export default defineComponent({
       updateMessageCount({ type: 4, count: 0 });
       getMessages(4, 0, limit)
         .then((data) => {
-          offset++;
           attentionData.splice(0, 0, ...data.messages);
         })
         .catch((error) => {

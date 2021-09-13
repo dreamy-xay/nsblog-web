@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-09 20:58:06
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-13 19:41:21
+ * @LastEditTime: 2021-09-13 19:58:11
 -->
 <template>
   <div class="user-info-attention-item">
@@ -14,6 +14,8 @@
           :src="avatar"
           shape="square"
           :size="50"
+          :href="`/user/${username}`"
+          :target="`/user/${username}`"
         />
       </div>
       <div class="info">
@@ -143,6 +145,12 @@ export default defineComponent({
       font-size: 14px;
       text-align: center;
       color: $grey-9;
+      transition: 0.25s;
+
+      &:hover {
+        color: $grey-10;
+        background-color: $grey-4;
+      }
     }
   }
 }

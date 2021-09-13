@@ -4,10 +4,13 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-13 15:46:53
+ * @LastEditTime: 2021-09-13 21:37:47
 -->
 <template>
-  <div class="user-dynamic">
+  <div
+    class="user-dynamic"
+    v-if="privacySetting.view_dynamic"
+  >
     <div
       v-for="(item , index) in data"
       :key="index"
@@ -17,12 +20,22 @@
     <div
       role="button"
       class="user-dynamic-button"
+      @click="add"
     >加载更多...</div>
+  </div>
+  <div v-else>
+    <base-svg
+      svg="no-permission"
+      :color="styles.green0"
+    />
   </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, reactive } from 'vue';
+import { mapState } from '@/util/store';
+import BaseSvg from '@/components/content/baseSvg/BaseSvg.vue';
+import styles from '@/assets/style/define.scss';
 
 /**
  * @description: 用户主页动态记录
@@ -31,9 +44,23 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'userDynamic',
+  components: {
+    BaseSvg,
+  },
   setup() {
-    const data = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-    return { data };
+    const data = reactive([0, 1, 2, 3, 4, 5, 6, 7, 8]);
+
+    function add() {
+      data.push(1);
+      data.push(1);
+      data.push(1);
+      data.push(1);
+      data.push(1);
+      data.push(1);
+      data.push(1);
+      data.push(1);
+    }
+    return { styles, data, ...mapState('user', ['privacySetting']), add };
   },
 });
 </script>
