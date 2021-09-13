@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-27 12:19:40
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-29 22:25:20
+ * @LastEditTime: 2021-09-13 12:32:57
  */
 
 /**
@@ -101,14 +101,6 @@ export interface EventsInterface<T> {
    * @author: dreamy-xay
    */
   count(): number;
-
-  /**
-   * @description: 判断是否一次性事件
-   * @param {T} eventId 事件名 `必传参数`
-   * @return {boolean} 返回是否一次性事件
-   * @author: dreamy-xay
-   */
-  isOnceEvent(eventId: T): boolean;
 }
 
 /**
@@ -116,7 +108,7 @@ export interface EventsInterface<T> {
  * @author: dreamy-xay
  */
 export default class Events<T extends string | number = string> implements EventsInterface<T> {
-  private events: Map<T, EventInfo>; // events hash表
+  private events: Map<T, Array<EventInfo>>; // events hash表
 
   /**
    * @description: 构造函数，可采用拷贝构造函数
@@ -124,21 +116,31 @@ export default class Events<T extends string | number = string> implements Event
    * @author: dreamy-xay
    */
   constructor(events?: Events<T>) {
-    if (events) this.events = new Map<T, EventInfo>(JSON.parse(JSON.stringify(events.events)));
-    else this.events = new Map<T, EventInfo>();
+    if (events) this.events = new Map<T, Array<EventInfo>>(JSON.parse(JSON.stringify(events.events)));
+    else this.events = new Map<T, Array<EventInfo>>();
   }
 
   public emit(eventId: T, ...args: any[]): this {
-    const eventInfo: EventInfo | undefined = this.events.get(eventId);
-    if (eventInfo) {
-      eventInfo[0](...args);
-      if (eventInfo[1]) this.off(eventId);
+    const eventInfoList: EventInfo[] | undefined = this.events.get(eventId);
+    if (eventInfoList) {
+      const offEventIndex: Set<number> = new Set<number>();
+      for (let i: number = 0; i < eventInfoList.length; ++i) {
+        eventInfoList[i][0](...args);
+        if (eventInfoList[i][1]) offEventIndex.add(i);
+      }
+
+      if (offEventIndex.size) {
+        const newEventInfoList: EventInfo[] = [];
+        for (let i: number = 0; i < eventInfoList.length; ++i)
+          if (!offEventIndex.has(i)) newEventInfoList.push(eventInfoList[i]);
+      }
     }
     return this;
   }
 
   public on(eventId: T, callback: EventCallback): this {
-    this.events.set(eventId, [callback, false]);
+    if (this.events.has(eventId)) this.events.set(eventId, [...this.events.get(eventId), [callback, false]]);
+    else this.events.set(eventId, [[callback, false]]);
     return this;
   }
 
@@ -148,7 +150,8 @@ export default class Events<T extends string | number = string> implements Event
   }
 
   public once(eventId: T, callback: EventCallback): this {
-    this.events.set(eventId, [callback, true]);
+    if (this.events.has(eventId)) this.events.set(eventId, [...this.events.get(eventId), [callback, true]]);
+    else this.events.set(eventId, [[callback, true]]);
     return this;
   }
 
@@ -176,11 +179,5 @@ export default class Events<T extends string | number = string> implements Event
 
   public count(): number {
     return this.events.size;
-  }
-
-  public isOnceEvent(eventId: T): boolean {
-    const eventInfo: EventInfo | undefined = this.events.get(eventId);
-    if (eventInfo) return eventInfo[1];
-    return false;
   }
 }

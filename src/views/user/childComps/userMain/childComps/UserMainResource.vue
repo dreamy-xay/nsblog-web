@@ -4,10 +4,13 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-09 10:57:00
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-12 18:54:36
+ * @LastEditTime: 2021-09-13 12:33:17
 -->
 <template>
-  <div class="user-main-resource">
+  <div
+    class="user-main-resource"
+    :class="{'user-main-resource-close': isClose}"
+  >
     <div class="user-main-resource-top">
       <div class="title">
         <div class="text">资源分享</div>
@@ -33,9 +36,10 @@
 </template>
 
 <script>
-import { defineComponent, computed } from 'vue';
+import { defineComponent, computed, ref } from 'vue';
 import { getSplitNum } from '@/util/util';
 import styles from '@/assets/style/define.scss';
+import events from '@/events';
 
 /**
  * @description: 用户中心问答信息
@@ -115,7 +119,6 @@ export default defineComponent({
               backgroundColor: 'rgba(90, 200, 250, 0.08)',
               formatter: '',
             },
-            name: '上传',
             type: 'bar',
             itemStyle: { color: styles.blue0 },
           },
@@ -123,9 +126,16 @@ export default defineComponent({
       };
     });
 
+    const isClose = ref(false); // 是否关闭
+    // 监听关闭事件
+    events.on('UserMainArticle-extend', (close) => {
+      isClose.value = close;
+    });
+
     return {
       getSplitNum,
       option,
+      isClose,
     };
   },
 });
@@ -141,6 +151,16 @@ export default defineComponent({
   background-color: $grey-0;
   margin-left: 16px;
   user-select: none;
+  transition: 0.4s;
+  overflow: hidden;
+  opacity: 1;
+
+  &.user-main-resource-close {
+    width: 0;
+    padding: 16px 0;
+    opacity: 0;
+    margin-left: 0;
+  }
 
   .user-main-resource-top {
     height: 122px;
