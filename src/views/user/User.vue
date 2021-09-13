@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:04:40
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-11 17:11:28
+ * @LastEditTime: 2021-09-13 14:36:47
 -->
 <template>
   <base-view
@@ -23,6 +23,7 @@
         <user-info
           :data="userInfoData"
           :self="isSelf"
+          @attention="changeAttention"
         />
       </div>
 
@@ -40,6 +41,7 @@ import BaseView from '@/components/content/baseView/BaseView.vue';
 import UserHeader from '@/views/user/childComps/UserHeader.vue';
 import UserInfo from '@/views/user/childComps/userInfo/UserInfo.vue';
 import UserMain from '@/views/user/childComps/userMain/UserMain.vue';
+import { postAttentions, deleteAttentions } from '@/network/api/attentions';
 import { mapState } from '@/util/store';
 import { useRoute } from 'vue-router';
 import { getUserInfo } from '@/network/api/user';
@@ -226,12 +228,39 @@ export default defineComponent({
       };
     });
 
+    /**
+     * @description: 改变关注状态
+     * @param {Boolean} data 关注还是取消关注
+     * @author: Z_Y_C
+     */
+    function changeAttention(data) {
+      if (data)
+        postAttentions(username)
+          .then(() => {
+            userData.attention = data;
+          })
+          .catch((error) => {
+            console.log(error);
+            msg.error('关注失败', { duration: 2000, closable: true });
+          });
+      else
+        deleteAttentions(username)
+          .then(() => {
+            userData.attention = data;
+          })
+          .catch((error) => {
+            console.log(error);
+            msg.error('取消关注失败', { duration: 2000, closable: true });
+          });
+    }
+
     return {
       userData,
       isSelf,
       userInfoData,
       userHeaderData,
       userMainData,
+      changeAttention,
     };
   },
 });

@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-10 09:23:58
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-11 15:09:51
+ * @LastEditTime: 2021-09-13 14:20:37
 -->
 <template>
   <div class="user-info-information">
@@ -18,12 +18,12 @@
       <div class="user-info-information-context-icon"><i :class="item"></i></div>
 
       <div
-        v-if="index===0"
+        v-if="index === 0"
         class="user-info-information-context-text1"
       >{{informData[index]}}</div>
 
       <a
-        v-else-if="index===1"
+        v-else-if="index === 1"
         class="user-info-information-context-text2"
         role="button"
         :href="informData[index]"
@@ -39,7 +39,7 @@
           role="button"
           v-for="(tag, index) in informData[index]"
           :key="index"
-          v-show="index < 5 || tagsShow"
+          v-show="(index < 5 || tagsShow) && tag !== ''"
         >
           {{tag}}
         </div>
@@ -48,6 +48,16 @@
           @click="tagsShow =! tagsShow"
           role="button"
         >
+          <div
+            v-show="!self && informData[2].length === 0"
+            class="lable"
+          >暂无标签</div>
+
+          <div
+            v-show="self && informData[2].length === 0"
+            class="lable"
+            @click="changeUserCenter"
+          >添加标签</div>
           <div
             v-show="!tagsShow && informData[2].length > 5"
             class="lable"
@@ -79,7 +89,7 @@
         ></i>
       </a>
 
-      <a :href="'mailto:'+data.email">
+      <a :href="'mailto:' + data.email">
         <i
           role="button"
           class="iconfont blog-email1"
@@ -90,6 +100,7 @@
 </template>
 
 <script>
+import router from '@/router';
 import { computed, defineComponent, ref } from 'vue';
 
 export default defineComponent({
@@ -114,10 +125,19 @@ export default defineComponent({
           props.data.tags,
         ];
       }
-      return ['', '', ''];
+      return ['', '', ['']];
     });
 
-    return { icon1Data, informData, tagsShow };
+    function changeUserCenter() {
+      router.push({
+        name: 'userCenterProfile',
+        params: {
+          toBottom: true,
+        },
+      });
+    }
+
+    return { icon1Data, informData, tagsShow, changeUserCenter };
   },
 });
 </script>
@@ -157,10 +177,7 @@ export default defineComponent({
     .user-info-information-context-text2 {
       font-size: 14px;
       color: $grey-8;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      word-break: break-all;
+      @include ellipsis(1);
       margin-right: 16px;
       height: 20px;
       line-height: 20px;

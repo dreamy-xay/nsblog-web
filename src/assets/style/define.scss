@@ -1,4 +1,5 @@
 /* 全局颜色 */
+
 $grey-0: #ffffff;
 $grey-1: #f7f7f7;
 $grey-2: #f4f4f4;
@@ -11,39 +12,32 @@ $grey-8: #707070;
 $grey-9: #595959;
 $grey-10: #262626;
 $grey-11: #000000;
-
 $green-0: #85e8c7;
 $green-1: #4bd8aa;
 $green-2: #37aa84;
 $green-3: #0aa007;
 $green-4: #065b02;
-
 $orange-0: #ffb792;
 $orange-1: #ffa107;
-
 $pink-0: #f98fa8;
-
 $red-0: #ffc5c5;
 $red-1: #ff7e7e;
 $red-2: #ff0000;
 $red-3: #c50003;
 $red-4: #7d0003;
-
 $blue-0: #5ac8fa;
 $blue-1: #4a9afd;
-
 $purple-0: #ebc5ff;
 $purple-1: #6b05b3;
 $purple-2: #3b056b;
 
 /* 全局样式 */
+
 $shadow-0: 0 0 6px rgba(0, 0, 0, 0.16);
 $shadow-1: 0 0 16px rgba(0, 0, 0, 0.1);
 $shadow-2: 0 0 6px $green-1;
-
 $border-radius-0: 8px;
 $border-radius-1: 4px;
-
 :export {
     /* 全局颜色 */
     grey0: $grey-0;
@@ -58,46 +52,49 @@ $border-radius-1: 4px;
     grey9: $grey-9;
     grey10: $grey-10;
     grey11: $grey-11;
-
     green0: $green-0;
     green1: $green-1;
     green2: $green-2;
     green3: $green-3;
     green4: $green-4;
-
     orange0: $orange-0;
     orange1: $orange-1;
-
     pink0: $pink-0;
-
     red0: $red-0;
     red1: $red-1;
     red2: $red-2;
     red3: $red-3;
     red4: $red-4;
-
     blue0: $blue-0;
     blue1: $blue-1;
-
     purple0: $purple-0;
     purple1: $purple-1;
     purple2: $purple-2;
-
     /* 全局样式 */
     shadow0: $shadow-0;
     shadow1: $shadow-1;
     shadow2: $shadow-2;
-
     borderRadius0: $border-radius-0;
     borderRadius1: $border-radius-1;
 }
 
+
 /* mixin */
+
 @mixin ellipsis($line-clamp: 2) {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: $line-clamp;
-    -webkit-box-orient: vertical;
+    @if $line-clamp==1 {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        word-break: break-all;
+    }
+    @else if $line-clamp>1 {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: $line-clamp;
+        -webkit-box-orient: vertical;
+    }
+    @else {}
 }
 
 @mixin flex($align-items: initial, $justify-content: initial, $flex-direction: initial) {

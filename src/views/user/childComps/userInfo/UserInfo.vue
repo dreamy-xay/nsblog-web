@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 18:09:18
- * @LastEditors: clq
- * @LastEditTime: 2021-09-11 17:00:04
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-13 14:41:49
 -->
 <template>
   <div class="user-info">
@@ -85,6 +85,9 @@ import { dateFormat } from '@/util/date';
 
 /**
  * @description: 用户中心左侧详细信息
+ * @param {Object} data 用户中心左侧详细信息数据 `必传参数`
+ * @param {null | Boolean} self 用户是否是自己或在线，是自己为true 用户退出登录为null 不是自己false `必传参数`
+ * @event attention 点击关注或取消关注触发
  * @author: dreamy-xay
  */
 
@@ -103,11 +106,18 @@ export default defineComponent({
   setup(props, context) {
     const showAttentionModel = ref(false);
     const flag = ref(true);
+
+    // 关注数据
     const attentionText = computed(() => {
       if (props.self === null) return '点击关注';
       return props.data.attention !== null ? (props.data.attention ? '取消关注' : '点击关注') : '编辑个人资料';
     });
 
+    /**
+     * @description: 点击按钮触发事件
+     * @return {void}
+     * @author: Z_Y_C
+     */
     function attentionClick() {
       if (props.data.attention === null) router.push({ name: 'userCenterProfile' });
       else if (props.data.attention) context.emit('attention', false);
@@ -139,6 +149,7 @@ export default defineComponent({
       };
     });
 
+    // 基本信息数据
     const informationData = computed(() => {
       return {
         username: props.data.username,
@@ -149,6 +160,8 @@ export default defineComponent({
         email: props.data.email,
       };
     });
+
+    // 个人简介数据
     const profileData = computed(() => {
       if (props.data.username) {
         const address = props.data.address.split(',');
@@ -162,6 +175,7 @@ export default defineComponent({
       return ['', '', '', ''];
     });
 
+    // 个人简介目录
     const iconsData = [
       { icon: 'iconfont blog-calendar-alt', text: '出生年月' },
       { icon: 'iconfont blog-user-tie', text: '个人职业' },
@@ -229,6 +243,7 @@ export default defineComponent({
     transition: all 0.25s;
 
     &:hover {
+      color: $grey-10;
       background-color: $grey-4;
     }
   }
@@ -276,7 +291,7 @@ export default defineComponent({
       }
 
       .text {
-        width: 72px;
+        width: 66px;
         font-size: 14px;
         line-height: 20px;
         height: 20px;
@@ -284,9 +299,11 @@ export default defineComponent({
       }
 
       .context {
-        width: 104px;
+        width: 110px;
         color: $grey-9;
-        @include flex(center, initial, row-reverse);
+        @include ellipsis(1);
+        text-align: right;
+        line-height: 20px;
         font-weight: 700;
       }
 
