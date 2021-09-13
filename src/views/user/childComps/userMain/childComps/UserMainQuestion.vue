@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-09 10:57:00
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-13 12:33:22
+ * @LastEditTime: 2021-09-13 16:15:00
 -->
 <template>
   <div
@@ -177,7 +177,7 @@ export default defineComponent({
   background-color: $grey-0;
   margin-left: 16px;
   user-select: none;
-  transition: 0.4s;
+  transition: 0.5s ease;
   overflow: hidden;
   opacity: 1;
 

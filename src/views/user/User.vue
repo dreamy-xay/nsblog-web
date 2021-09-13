@@ -3,13 +3,14 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:04:40
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-13 14:36:47
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-13 15:13:00
 -->
 <template>
   <base-view
     :top-bar="true"
     :background="true"
+    :back-top="true"
     bind-class="user"
   >
     <div class="user-head">
