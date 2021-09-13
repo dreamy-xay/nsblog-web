@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 18:09:18
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-13 14:41:49
+ * @LastEditTime: 2021-09-13 19:20:43
 -->
 <template>
   <div class="user-info">
@@ -56,7 +56,6 @@
 
       <div
         class="user-info-profile-context"
-        role="button"
         v-for="(item , index) in iconsData"
         :key="index"
       >
@@ -70,7 +69,7 @@
     <user-info-attention
       v-model="showAttentionModel"
       v-model:flag="flag"
-      username="us1"
+      :username="data.username"
     />
   </div>
 </template>
@@ -133,7 +132,6 @@ export default defineComponent({
     function showModel(modelFlag) {
       flag.value = modelFlag;
       showAttentionModel.value = true;
-      // console.log('flag:' + flag.value);
     }
 
     // 获得成就
@@ -244,7 +242,7 @@ export default defineComponent({
 
     &:hover {
       color: $grey-10;
-      background-color: $grey-4;
+      background-color: $grey-3;
     }
   }
 

@@ -1,10 +1,10 @@
 <!--
- * @Description:
+ * @Description: 用户中心左侧基本信息
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-09-10 09:23:58
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-13 14:20:37
+ * @LastEditTime: 2021-09-13 19:47:06
 -->
 <template>
   <div class="user-info-information">
@@ -76,7 +76,7 @@
       <i
         v-if="data.qq"
         role="button"
-        class="iconfont blog-qq-s"
+        class="iconfont blog-qq-s iconfontqq"
       ></i>
       <a
         :href="'https://www.weibo.com/u/' + data.weibo"
@@ -85,14 +85,14 @@
         <i
           v-if="data.weibo"
           role="button"
-          class="iconfont blog-weibo"
+          class="iconfont blog-weibo  iconfontweibo"
         ></i>
       </a>
 
       <a :href="'mailto:' + data.email">
         <i
           role="button"
-          class="iconfont blog-email1"
+          class="iconfont blog-email1 iconfontemail"
         ></i>
       </a>
     </div>
@@ -100,9 +100,15 @@
 </template>
 
 <script>
-import router from '@/router';
 import { computed, defineComponent, ref } from 'vue';
+import router from '@/router';
 
+/**
+ * @description:用户中心左侧基本信息
+ * @param {Object} data 用户中心左侧基本信息数据 `必传参数`
+ * @param {null | Boolean} self 用户是否是自己或在线，是自己为true 用户退出登录为null 不是自己false `必传参数`
+ * @author: Z_Y_C
+ */
 export default defineComponent({
   name: 'userInfoInformation',
   props: {
@@ -115,8 +121,10 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const tagsShow = ref(false);
-    const icon1Data = ['iconfont blog-xingbie', 'iconfont blog-wangluo', 'iconfont blog-biaoqian1'];
+    const tagsShow = ref(false); // 显示全部或者收起
+    const icon1Data = ['iconfont blog-xingbie', 'iconfont blog-wangluo', 'iconfont blog-biaoqian1']; // 图标
+
+    //  处理基本信息数据
     const informData = computed(() => {
       if (props.data.username) {
         return [
@@ -128,6 +136,11 @@ export default defineComponent({
       return ['', '', ['']];
     });
 
+    /**
+     * @description: 点击添加标签跳转路由
+     * @return {void}
+     * @author: Z_Y_C
+     */
     function changeUserCenter() {
       router.push({
         name: 'userCenterProfile',
@@ -222,23 +235,23 @@ export default defineComponent({
       color: $grey-7;
       font-size: 20px;
       margin-right: 16px;
+    }
 
-      &:first-child {
-        &:hover {
-          color: $blue-1;
-        }
+    .iconfontqq {
+      &:hover {
+        color: $blue-1;
       }
+    }
 
-      &:nth-child(2) {
-        &:hover {
-          color: $red-3;
-        }
+    .iconfontweibo {
+      &:hover {
+        color: $red-3;
       }
+    }
 
-      &:last-child {
-        &:hover {
-          color: $blue-0;
-        }
+    .iconfontemail {
+      &:hover {
+        color: $blue-0;
       }
     }
   }
