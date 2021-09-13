@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 18:09:18
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-11 14:57:56
+ * @LastEditors: clq
+ * @LastEditTime: 2021-09-11 17:00:04
 -->
 <template>
   <div class="user-info">
@@ -12,6 +12,7 @@
       <div
         class="user-info-attention-ok"
         role="button"
+        @click="showModel(true)"
       >关注了
         <div class="user-info-attention-ok-number">{{data.like_count}}</div>
       </div>
@@ -19,6 +20,7 @@
       <div
         class="user-info-attention-ok"
         role="button"
+        @click="showModel(false)"
       >关注者
         <div class="user-info-attention-ok-number">{{data.fans_count}}</div>
       </div>
@@ -65,14 +67,19 @@
 
       </div>
     </div>
-
+    <user-info-attention
+      v-model="showAttentionModel"
+      v-model:flag="flag"
+      username="us1"
+    />
   </div>
 </template>
 
 <script>
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import UserInfoAchievement from '@/views/user/childComps/userInfo/childComps/UserInfoAchievement.vue';
 import UserInfoInformation from '@/views/user/childComps/userInfo/childComps/UserInfoInformation.vue';
+import UserInfoAttention from '@/views/user/childComps/userInfo/childComps/UserInfoAttention.vue';
 import router from '@/router';
 import { dateFormat } from '@/util/date';
 
@@ -83,7 +90,7 @@ import { dateFormat } from '@/util/date';
 
 export default defineComponent({
   name: 'userInfo',
-  components: { UserInfoAchievement, UserInfoInformation },
+  components: { UserInfoAchievement, UserInfoInformation, UserInfoAttention },
   props: {
     data: {
       type: Object,
@@ -94,6 +101,8 @@ export default defineComponent({
     },
   },
   setup(props, context) {
+    const showAttentionModel = ref(false);
+    const flag = ref(true);
     const attentionText = computed(() => {
       if (props.self === null) return '点击关注';
       return props.data.attention !== null ? (props.data.attention ? '取消关注' : '点击关注') : '编辑个人资料';
@@ -103,6 +112,18 @@ export default defineComponent({
       if (props.data.attention === null) router.push({ name: 'userCenterProfile' });
       else if (props.data.attention) context.emit('attention', false);
       else context.emit('attention', true);
+    }
+
+    /**
+     * @description: 显示模态框
+     * @param {Boolean} modelFlag true:显示关注了 false:显示关注者
+     * @return {*}
+     * @author: clq
+     */
+    function showModel(modelFlag) {
+      flag.value = modelFlag;
+      showAttentionModel.value = true;
+      // console.log('flag:' + flag.value);
     }
 
     // 获得成就
@@ -149,8 +170,11 @@ export default defineComponent({
     ];
 
     return {
+      showAttentionModel,
+      flag,
       attentionText,
       attentionClick,
+      showModel,
       achievementData,
       informationData,
       profileData,

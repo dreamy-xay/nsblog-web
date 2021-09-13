@@ -14,7 +14,11 @@
 			"nickname": "幻墨如烟",
 			"password": "Abcd1234",
 			"email": "1@qq.com",
+<<<<<<< HEAD
 			"token": null,
+=======
+			"token": "9339744ab2e89670586e93226de361133b0d21092b11479d87dfb6ae165c2c6e5d0ff16fc7e8e3959f64d8f26fd6667db23c92889bad24a8499286ff2153d72d",
+>>>>>>> feature/clqdev
 			"isActive": true,
 			"isSuper": false
 		},
