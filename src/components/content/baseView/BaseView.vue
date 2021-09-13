@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 11:51:03
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-13 12:18:21
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-13 20:28:46
 -->
 <template>
   <div
@@ -236,7 +236,6 @@ export default defineComponent({
         & > div {
           padding: 0 6px;
           width: 1142px;
-          overflow: hidden;
         }
       }
     }

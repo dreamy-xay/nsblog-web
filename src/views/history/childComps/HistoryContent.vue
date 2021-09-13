@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-04 18:49:08
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-16 18:21:17
+ * @LastEditTime: 2021-09-13 20:03:51
 -->
 <template>
   <div class="history-content">
@@ -90,6 +90,7 @@ export default defineComponent({
     function deleteItem(index) {
       deleteHistory(historyList[index].history_id, historyList[index].type)
         .then(() => {
+          --offset;
           historyList.splice(index, 1);
         })
         .catch((error) => {

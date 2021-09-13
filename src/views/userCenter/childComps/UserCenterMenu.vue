@@ -173,6 +173,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .user-center-menu {
+  width: 130px;
   padding: 24px 35px;
   margin-bottom: 6px;
   background: $grey-0;
