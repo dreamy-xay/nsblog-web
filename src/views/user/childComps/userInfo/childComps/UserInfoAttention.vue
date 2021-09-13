@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-09-09 18:55:02
- * @LastEditors: clq
- * @LastEditTime: 2021-09-13 14:02:23
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-13 19:36:11
 -->
 <template>
   <n-modal
@@ -39,36 +39,58 @@
           @click="close"
         ></span>
       </div>
+
       <div class="user-info-attention-body">
-        <el-scrollbar :height="492">
-          <user-info-attention-item
-            v-for="item in attentionItems"
-            :key="item"
-            :avatar="item.avatar"
-            :nickname="item.nickname"
-            :username="item.username"
-            :signature="item.signature"
-            v-model:attention="item.attention"
+        <el-scrollbar :height="530">
+
+          <template v-if="flag === true">
+            <user-info-attention-item
+              v-for="item in attentionItems"
+              :key="item"
+              :avatar="item.avatar"
+              :nickname="item.nickname"
+              :username="item.username"
+              :signature="item.signature"
+              v-model:attention="item.attention"
+              role="button"
+              @click="changePage(item.username)"
+            >
+            </user-info-attention-item>
+          </template>
+          <template v-else>
+            <user-info-attention-item
+              v-for="item in fansItems"
+              :key="item"
+              :avatar="item.avatar"
+              :nickname="item.nickname"
+              :username="item.username"
+              :signature="item.signature"
+              v-model:attention="item.attention"
+              role="button"
+              @click="changePage(item.username)"
+            >
+            </user-info-attention-item>
+          </template>
+
+          <div
+            v-show="attentionItems.length>5"
+            class="user-info-attention-bottom-btn"
+            role="button"
+            @click="showMore"
           >
-          </user-info-attention-item>
+            加载更多...
+          </div>
         </el-scrollbar>
-      </div>
-      <div
-        v-show="attentionItems.length>5"
-        class="user-info-attention-bottom-btn"
-        role="button"
-        @click="showMore"
-      >
-        加载更多...
       </div>
     </div>
   </n-modal>
 </template>
 
 <script>
-import { defineComponent, ref, reactive, onMounted, watch, nextTick } from 'vue';
+import { defineComponent, ref, reactive, watch } from 'vue';
 import UserInfoAttentionItem from '@/views/user/childComps/userInfo/childComps/UserInfoAttentionItem.vue';
 import { getAttentions, getFans } from '@/network/api/attentions';
+import { useMessage } from 'naive-ui';
 /**
  * @description: 关注详情模态框
  * @param {Boolean} modelValue 模态框显示绑定值，使用v-model指令即可 `默认为false`
@@ -96,93 +118,113 @@ export default defineComponent({
     },
   },
   setup(props, context) {
-    let attentionNum = ref(11);
-    let noticerNum = ref(97);
-    let itemNum = ref(6);
-    let attentionItems = reactive([]);
-
-    onMounted(() => {
-      changeItems();
-    });
+    const msg = useMessage(); // navie-ui
+    const attentionNum = ref(11);
+    const noticerNum = ref(97);
+    const itemNum = ref(6); //记录增量
+    const attentionItems = reactive([]); //关注了数据
+    const fansItems = reactive([]); //粉丝数据
 
     watch(
-      () => props.flag,
-      (newValue, oldValue) => {
-        //console.log('oldValue:' + oldValue);
-        //console.log('newValue:' + newValue);
-        changeItems();
+      () => props.username,
+      () => {
+        addAttentionItems();
+        addFansItems();
       }
     );
 
-    //更改数据类别
-    function changeItems() {
+    /**
+     * @description: 增加关注者消息
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function addAttentionItems() {
+      getAttentions(props.username, 0, itemNum.value)
+        .then((res) => {
+          attentionItems.splice(attentionItems.length, 0, ...res.attentions);
+        })
+        .catch((err) => {
+          console.log(err);
+          msg.error('获取关注失败', { duration: 2000, closable: true });
+        });
+    }
+
+    /**
+     * @description: 增加关注者数据数据
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function addFansItems() {
+      getFans(props.username, 0, itemNum.value)
+        .then((res) => {
+          fansItems.splice(fansItems.length, 0, ...res.attentions);
+        })
+        .catch((err) => {
+          console.log(err);
+          msg.error('获取粉丝失败', { duration: 2000, closable: true });
+        });
+    }
+
+    /**
+     * @description: 显示关注了
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function showAttention() {
+      context.emit('update:flag', true);
+    }
+
+    /**
+     * @description: 显示关注者
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function showFans() {
+      context.emit('update:flag', false);
+    }
+
+    /**
+     * @description: 窗口关闭
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function close() {
+      context.emit('update:modelValue', false);
+    }
+
+    /**
+     * @description: 显示更多
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function showMore() {
       if (props.flag === true) {
-        console.log('获取关注了数据');
-        // console.log(props.username);
-        // console.log('itemNum:' + itemNum.value);
-        getAttentions(props.username, 0, itemNum.value)
-          .then((res) => {
-            attentionItems.splice(0, attentionItems.length, ...res.attentions);
-            console.log(attentionItems);
-            console.log(res);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        addAttentionItems();
       } else {
-        console.log('获取关注者数据');
-        getFans(props.username, 0, itemNum.value)
-          .then((res) => {
-            attentionItems.splice(0, attentionItems.length, ...res.attentions);
-            console.log(attentionItems);
-            console.log(res);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        addFansItems();
       }
     }
 
-    //显示关注了
-    function showAttention() {
-      context.emit('update:flag', true);
-      itemNum.value = 6;
-      nextTick(() => {
-        //console.log('props.flag:' + props.flag);
-      });
-    }
-
-    //显示关注者
-    function showFans() {
-      context.emit('update:flag', false);
-      itemNum.value = 6;
-      nextTick(() => {
-        //console.log('props.flag:' + props.flag);
-      });
-    }
-
-    //窗口关闭
-    function close() {
-      context.emit('update:modelValue', false);
-      // console.log(props.modelValue);
-    }
-
-    //显示更多
-    function showMore() {
-      itemNum.value += 6;
-      changeItems();
-      // console.log('showMore');
+    /**
+     * @description: 跳转路由
+     * @param {string} path 用户名
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function changePage(path) {
+      window.open(`/user/${path}/article`, `/user/${path}/article`);
     }
 
     return {
       attentionNum,
       noticerNum,
       attentionItems,
-      changeItems,
+      fansItems,
       showAttention,
       showFans,
       close,
       showMore,
+      changePage,
     };
   },
 });
@@ -190,11 +232,10 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .user-info-attention {
-  width: 700px;
-  height: 578px;
-  padding: 12px 16px;
+  width: 668px;
+  height: 558px;
+  padding: 12px 0 8px 16px;
   border-radius: 8px;
-  border: solid 1px $grey-8;
   background-color: $grey-0;
 
   .user-info-attention-header {
@@ -206,11 +247,11 @@ export default defineComponent({
     color: $grey-7;
 
     .trans {
-      transition: color 0.3s;
-    }
+      transition: all 0.25s;
 
-    .trans:hover {
-      color: $green-1;
+      &:hover {
+        color: $green-1;
+      }
     }
 
     .green {
@@ -232,27 +273,20 @@ export default defineComponent({
     .close-icon {
       width: 28px;
       height: 28px;
-      border-radius: 4px;
+      border-radius: $border-radius-1;
+      margin-right: 16px;
       color: $grey-7;
-      font-size: 16px;
       line-height: 28px;
       text-align: center;
-      // transition: color 0.3s, font-size 0.3s;
-    }
+      transition: all 0.25s;
 
-    .close-icon:hover {
-      // color: $green-0;
-      // font-size: 17px;
-      animation: myTest 0.5s;
-      animation-fill-mode: forwards;
-    }
-
-    @keyframes myTest {
-      from {
+      .iconfont {
+        font-size: 16px;
       }
-      to {
+
+      &:hover {
         color: $green-0;
-        transform: rotate(90deg);
+        background-color: $grey-2;
       }
     }
   }
@@ -264,17 +298,20 @@ export default defineComponent({
   }
 
   .user-info-attention-bottom-btn {
-    box-sizing: border-box;
     width: 300px;
     height: 32px;
-    margin: 16px auto;
+    margin: 8px auto 0 auto;
     border-radius: 8px;
     background-color: $grey-3;
-    font-family: Arial;
     font-size: 14px;
     line-height: 32px;
     text-align: center;
     color: $grey-9;
+
+    &:hover {
+      background-color: $grey-4;
+      color: $grey-10;
+    }
   }
 }
 </style>

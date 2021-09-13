@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-28 13:11:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-11 17:09:48
+ * @LastEditTime: 2021-09-13 14:53:16
 -->
 <template>
 
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, watch, computed } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import MessageMenu from '@/views/message/childComps/MessageMenu.vue';
 import MessageTop from '@/views/message/childComps/MessageTop.vue';

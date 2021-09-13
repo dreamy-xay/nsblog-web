@@ -3,57 +3,36 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-09-09 20:58:06
- * @LastEditors: clq
- * @LastEditTime: 2021-09-13 14:01:31
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-13 19:41:21
 -->
 <template>
   <div class="user-info-attention-item">
     <div class="user-info-attention-item-content">
-      <span class="avatar">
+      <div class="avatar">
         <base-avatar
           :src="avatar"
           shape="square"
           :size="50"
         />
-      </span>
-      <span class="info">
-        <div
-          class="nickname-font"
-          v-if="nickname.length<nicknameLimit"
-        >{{nickname}}</div>
-        <div
-          class="nickname-font"
-          v-else
-        >{{nickname.substring(0,nicknameLimit)}}...</div>
-        <div
-          class="other-font"
-          v-if="username.length<usernameLimit"
-        >{{username}}</div>
-        <div
-          class="other-font"
-          v-else
-        >{{username.substring(0,usernameLimit)}}...</div>
-        <div
-          class="other-font"
-          v-if="signature.length<signatureLimit"
-        >{{signature}}</div>
-        <div
-          class="other-font"
-          v-else
-        >{{signature.substring(0,signatureLimit)}}...</div>
-      </span>
-      <span
+      </div>
+      <div class="info">
+        <div class="nickname-font">{{nickname}}</div>
+        <div class="username-font">{{username}}</div>
+        <div class="signature-font">{{signature}}</div>
+      </div>
+      <div
         v-if="attention"
         class="btn"
         role="button"
-        @click="changeAttention"
-      >取消关注</span>
-      <span
+        @click.stop="changeAttention"
+      >取消关注</div>
+      <div
         v-else
         class="btn"
         role="button"
-        @click="changeAttention"
-      >关注</span>
+        @click.stop="changeAttention"
+      >关注</div>
     </div>
   </div>
 </template>
@@ -99,14 +78,10 @@ export default defineComponent({
     },
   },
   setup(props, context) {
-    const nicknameLimit = ref(25);
-    const usernameLimit = ref(20);
-    const signatureLimit = ref(80);
-
     function changeAttention() {
       context.emit('update:attention', !props.attention);
     }
-    return { nicknameLimit, usernameLimit, signatureLimit, changeAttention };
+    return { changeAttention };
   },
 });
 </script>
@@ -124,49 +99,47 @@ export default defineComponent({
     width: 100%;
     height: 100%;
 
+    @include flex(center, initial, row);
     .avatar {
-      display: inline-block;
       width: 50px;
       height: 50px;
     }
 
     .info {
-      display: inline-block;
       height: 100%;
       padding-left: 10px;
-      position: relative;
-      top: -7px;
       background-color: $grey-0;
+      width: 502px;
 
       .nickname-font {
-        position: relative;
-        top: -2px;
-        height: 15px;
-        font-family: Arial;
+        height: 20px;
+        line-height: 20px;
         font-size: 14px;
         color: $grey-10;
       }
 
-      .other-font {
-        position: relative;
-        top: 4px;
-        height: 15px;
-        font-family: Arial;
+      .username-font {
+        height: 14px;
+        line-height: 14px;
         font-size: 12px;
         color: $grey-7;
+      }
+
+      .signature-font {
+        height: 16px;
+        line-height: 16px;
+        font-size: 12px;
+        color: $grey-7;
+        @include ellipsis(1);
       }
     }
 
     .btn {
       width: 80px;
-      float: right;
-      position: relative;
-      top: 9px;
-      left: -16px;
-      padding: 6px 12px;
+      margin: 0 16px;
+      padding: 6px 0;
       border-radius: 5px;
       background-color: $grey-3;
-      font-family: Arial;
       font-size: 14px;
       text-align: center;
       color: $grey-9;
