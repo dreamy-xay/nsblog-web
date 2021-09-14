@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-09 20:58:06
  * @LastEditors: clq
- * @LastEditTime: 2021-09-14 11:42:46
+ * @LastEditTime: 2021-09-14 15:48:01
 -->
 <template>
   <div class="user-info-attention-item">
@@ -50,6 +50,8 @@
 import { defineComponent, nextTick, ref } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import BaseModal from '@/components/content/baseModal/BaseModal';
+import { addAttentions, deleteAttentions } from '@/network/api/attentions';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description:
@@ -94,6 +96,7 @@ export default defineComponent({
   },
   setup(props, context) {
     const modalShow = ref(false);
+    const msg = useMessage(); // naive-ui mssage
 
     /**
      * @description: 改变关注状态
@@ -104,7 +107,16 @@ export default defineComponent({
       if (props.attention === true) {
         modalShow.value = true;
       } else {
-        context.emit('update:attention', !props.attention);
+        addAttentions(props.username)
+          .then(() => {
+            context.emit('update:attention', true);
+            msg.success('关注成功', { duration: 2000, closable: true });
+            null;
+          })
+          .catch((error) => {
+            console.log(error);
+            msg.error('关注失败,请重试', { duration: 2000, closable: true });
+          });
       }
     }
 
@@ -114,15 +126,15 @@ export default defineComponent({
      * @author: clq
      */
     function sureCancelAttention() {
-      modalShow.value = !modalShow.value;
-      context.emit('update:attention', !props.attention);
-      // deleteAttentions(attentionData[sureCancel.value].content.username)
-      //   .then(() => {
-      //     attentionData[sureCancel.value].content.attention = false;
-      //   })
-      //   .catch((error) => {
-      //     console.log(error), msg.error('取消关注失败，请重试', { duration: 2000, closable: true });
-      //   });
+      deleteAttentions(props.username)
+        .then(() => {
+          msg.success('取消关注成功', { duration: 2000, closable: true });
+          context.emit('update:attention', false);
+          modalShow.value = !modalShow.value;
+        })
+        .catch((error) => {
+          console.log(error), msg.error('取消关注失败，请重试', { duration: 2000, closable: true });
+        });
     }
 
     return {
