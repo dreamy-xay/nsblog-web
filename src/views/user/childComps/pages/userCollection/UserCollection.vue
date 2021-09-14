@@ -4,11 +4,15 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-14 11:38:02
+ * @LastEditTime: 2021-09-14 12:04:42
 -->
 <template>
   <div class="user-collection">
-    <div></div>
+    <div
+      v-for="(item , index) in collectionData"
+      :key=index
+      class="usr-collection-context"
+    >123</div>
   </div>
 </template>
 
@@ -31,8 +35,9 @@ export default defineComponent({
 
     getFavorites(username, 5, 0).then((data) => {
       collectionData.splice(0, 0, ...data.favorites);
+      console.log(collectionData);
     });
-    return {};
+    return { collectionData };
   },
 });
 </script>
@@ -40,5 +45,14 @@ export default defineComponent({
 <style lang="scss" scoped>
 .user-collection {
   width: 100%;
+  @include flex(initial, center, column);
+  .usr-collection-context {
+    height: 56px;
+    box-shadow: $shadow-0;
+    border-radius: $border-radius-0;
+    background-color: $grey-0;
+    margin-bottom: 16px;
+    padding: 16px;
+  }
 }
 </style>
