@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:06:39
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-09 11:37:50
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-14 11:29:51
  */
 import { RouteRecordRaw } from 'vue-router';
 
@@ -46,7 +46,7 @@ const userRouter: RouteRecordRaw = {
     {
       path: 'collection',
       name: 'userCollection',
-      component: () => import('@/views/user/childComps/pages/UserCollection.vue'),
+      component: () => import('@/views/user/childComps/pages/userCollection/UserCollection.vue'),
       meta: {
         title: '我的收藏'
       }

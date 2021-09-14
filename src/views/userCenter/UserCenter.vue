@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-18 21:26:17
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-13 12:59:57
+ * @LastEditTime: 2021-09-14 10:01:59
 -->
 <template>
   <base-view
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { defineComponent, watch, ref, onMounted, nextTick } from 'vue';
+import { defineComponent, watch, ref } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import UserCenterMenu from '@/views/userCenter/childComps/UserCenterMenu.vue';
 import router from '@/router';
