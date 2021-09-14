@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:31
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-11 16:40:59
+ * @LastEditTime: 2021-09-14 21:28:06
 -->
 <template>
   <div class="user-center-profile-edit">
@@ -32,7 +32,7 @@ import UserCenterProfileEditInformation from '@/views/userCenter/childComps/page
 import UserCenterProfileEditJob from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/UserCenterProfileEditJob.vue';
 import UserCenterProfileEditInterest from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/UserCenterProfileEditInterest.vue';
 import { base64ToFile } from '@/util/util';
-import { getUserInfo, putUserInfo, putSignature } from '@/network/api/user';
+import { getUserInfo, putUserInfo, modifySignature } from '@/network/api/user';
 import { mapState } from '@/util/store';
 import { useMessage } from 'naive-ui';
 import events from '@/events';
@@ -119,7 +119,7 @@ export default defineComponent({
     const tagData = computed(() => {
       return {
         username: userData.username,
-        tags: userData.tag,
+        tags: userData.tags,
       };
     });
 
@@ -154,7 +154,7 @@ export default defineComponent({
       // TODO:
       // request update： signature
       console.log(signature);
-      putSignature(signature)
+      modifySignature(signature)
         .then(() => {
           userData.signature = signature;
           msg.success('修改成功', { duration: 2000, closable: true });
