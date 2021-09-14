@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-19 18:32:43
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-07 16:28:55
+ * @LastEditors: Ban
+ * @LastEditTime: 2021-09-11 09:53:05
 -->
 <template>
   <div class="top-bar-avatar">

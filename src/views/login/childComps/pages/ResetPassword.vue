@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-30 15:53:04
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-05 10:40:56
+ * @LastEditors: Ban
+ * @LastEditTime: 2021-09-11 10:58:54
 -->
 <template>
   <div class="reset-password">

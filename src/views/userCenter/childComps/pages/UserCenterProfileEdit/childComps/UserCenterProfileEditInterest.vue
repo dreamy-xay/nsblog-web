@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-28 14:54:52
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-06 22:22:43
+ * @LastEditors: Ban
+ * @LastEditTime: 2021-09-14 19:43:27
 -->
 
 <template>
@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref, computed, onMounted } from 'vue';
+import { defineComponent, reactive, ref, computed, onMounted, watch } from 'vue';
 import { getTag, addUserTag } from '@/network/api/user';
 import { mapState } from '@/util/store';
 import { getTopics, getTopicTags } from '@/network/api/topics';
@@ -70,9 +70,16 @@ import { getTopics, getTopicTags } from '@/network/api/topics';
  */
 export default defineComponent({
   name: 'UserCenterProfileInterest',
-  setup() {
+  props: {
+    data: {
+      type: Object,
+      required: true,
+    },
+  },
+  setup(props, context) {
     const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
     const tags = ref([]); // 兴趣标签
+    const tag = ref(props.data.tag);
     const tagsSelected = reactive([]); // 可选择标签
     const tagsPitch = ref(0); // 选中的标签
     // 获取已有标签
@@ -84,7 +91,6 @@ export default defineComponent({
         console.log(error);
       });
     // 获取专题名
-    // onMounted(() => {
     getTopics()
       .then((data) => {
         // console.log(data);
@@ -146,6 +152,17 @@ export default defineComponent({
           console.log(error);
         });
     }
+
+    watch(
+      () => props.data.username,
+      () => {
+        tags.value = props.data.tag;
+        console.log(props.data);
+      }
+    );
+
+    //选择标签和兴趣标签的匹配
+
     return {
       tags,
       deleteTag,
@@ -223,20 +240,23 @@ export default defineComponent({
         max-width: 671px;
 
         .select-tag1 {
-          margin-bottom: 7px;
-
           ::v-deep(.el-tag) {
             background: $grey-1;
             height: 25px;
             line-height: 25px;
             font-size: 14px;
-            margin-bottom: 4px;
+            margin-bottom: 14px;
             margin-right: 24px;
             border-radius: $border-radius-0;
             color: $grey-7;
             border: none;
             box-shadow: $shadow-0;
             transition: 0.25s;
+
+            &:hover {
+              box-shadow: $shadow-2;
+              color: $green-1;
+            }
           }
 
           .active {
@@ -247,7 +267,7 @@ export default defineComponent({
 
         .select-tag2 {
           box-sizing: border-box;
-          padding: 7px 10px 1px 10px;
+          padding: 0 10px 0 10px;
           max-width: 671px;
           border-radius: $border-radius-0;
           box-shadow: $shadow-0;
@@ -259,16 +279,24 @@ export default defineComponent({
             line-height: 25px;
             font-size: 14px;
             margin-bottom: 6px;
+            margin-top: 6px;
             margin-right: 10px;
             border-radius: 11px;
             color: $grey-8;
             border: none;
             box-shadow: $shadow-0;
+            transition: 0.25s;
+
+            &:hover {
+              background: $green-0;
+              color: $green-3;
+            }
           }
 
           .active {
             background: $green-0;
             color: $green-3;
+            box-shadow: $shadow-2;
           }
         }
       }

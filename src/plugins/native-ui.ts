@@ -3,13 +3,13 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 16:13:02
- * @LastEditors: continue-hs
- * @LastEditTime: 2021-09-01 17:49:10
+ * @LastEditors: Ban
+ * @LastEditTime: 2021-09-10 15:55:39
  */
 import { App } from 'vue';
-import { create, NMessageProvider, NModal, NBadge, NButton, NPopover, NDialog } from 'naive-ui';
+import { create, NMessageProvider, NModal, NBadge, NButton, NPopover, NDialog, NCard } from 'naive-ui';
 
-const components = [NMessageProvider, NModal, NBadge, NButton, NPopover, NDialog];
+const components = [NMessageProvider, NModal, NBadge, NButton, NPopover, NDialog, NCard];
 
 export default (app: App): void => {
   const naive = create({
