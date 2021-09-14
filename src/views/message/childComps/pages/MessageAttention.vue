@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-05 10:41:38
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-13 20:02:05
+ * @LastEditTime: 2021-09-14 11:41:49
 -->
 
 <template>
@@ -85,7 +85,7 @@ import { defineComponent, ref, reactive, watch } from 'vue';
 import MessageEmpty from '@/views/message/childComps/MessageEmpty.vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import { getMessages, deleteMessages } from '@/network/api/messages';
-import { postAttentions, deleteAttentions } from '@/network/api/attentions';
+import { addAttentions, deleteAttentions } from '@/network/api/attentions';
 import { dateFormat } from '@/util/date.ts';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 import { mapMutations, mapState } from '@/util/store';
@@ -220,7 +220,7 @@ export default defineComponent({
 
     function cancelAttention(index) {
       if (attentionData[index].content.attention === false) {
-        postAttentions(attentionData[index].content.username)
+        addAttentions(attentionData[index].content.username)
           .then(() => {
             attentionData[index].content.attention = true;
           })
