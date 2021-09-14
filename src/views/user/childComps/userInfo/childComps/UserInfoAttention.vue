@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-09 18:55:02
  * @LastEditors: clq
- * @LastEditTime: 2021-09-14 11:38:04
+ * @LastEditTime: 2021-09-14 16:04:14
 -->
 <template>
   <n-modal
@@ -99,7 +99,9 @@ import { useMessage } from 'naive-ui';
  * @description: 关注详情模态框
  * @param {Boolean} modelValue 模态框显示绑定值，使用v-model指令即可 `默认为false`
  * @param {Boolean} flag 显示类型标志 true:显示关注了 false:显示关注者
- * @param {number} username 用户名
+ * @param {String} username 用户名
+ * @param {Number} attentionNum 关注数量
+ * @param {Number} fanNum 粉丝数量
  * @author: clq
  */
 export default defineComponent({
@@ -120,11 +122,17 @@ export default defineComponent({
       type: String,
       default: 'us1',
     },
+    attentionNum: {
+      type: Number,
+      default: 12,
+    },
+    fanNum: {
+      type: Number,
+      default: 14,
+    },
   },
   setup(props, context) {
     const msg = useMessage(); // navie-ui
-    const attentionNum = ref(0);
-    const fanNum = ref(0);
     const limit = 10; //记录增量
     const attentionItems = reactive([]); //关注了数据
     const fansItems = reactive([]); //粉丝数据
@@ -134,26 +142,10 @@ export default defineComponent({
     watch(
       () => props.username,
       () => {
-        getAttentionNum();
-        getFanNum();
         addAttentionItems();
         addFansItems();
       }
     );
-
-    /**
-     * @description: 获取关注数量
-     * @param {*}
-     * @return {*}
-     * @author: clq
-     */
-    function getAttentionNum() {
-      attentionNum.value = 11;
-    }
-
-    function getFanNum() {
-      fanNum.value = 12;
-    }
 
     /**
      * @description: 增加关注者消息
@@ -180,8 +172,8 @@ export default defineComponent({
     function addFansItems() {
       getFans(props.username, fansItems.length, limit)
         .then((res) => {
-          fansItems.splice(fansItems.length, 0, ...res.attentions);
-          loadingButtonShow[0] = res.attentions.length === limit;
+          fansItems.splice(fansItems.length, 0, ...res.fans);
+          loadingButtonShow[0] = res.fans.length === limit;
         })
         .catch((err) => {
           console.log(err);
@@ -239,8 +231,6 @@ export default defineComponent({
     }
 
     return {
-      attentionNum,
-      fanNum,
       attentionItems,
       fansItems,
       loadingButtonShow,
@@ -259,7 +249,7 @@ export default defineComponent({
 .user-info-attention {
   width: 668px;
   height: 558px;
-  padding: 12px 0 8px 16px;
+  padding: 12px 0 12px 16px;
   border-radius: 8px;
   background-color: $grey-0;
 

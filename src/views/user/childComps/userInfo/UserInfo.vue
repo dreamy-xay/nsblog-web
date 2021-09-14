@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 18:09:18
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-13 19:20:43
+ * @LastEditors: clq
+ * @LastEditTime: 2021-09-14 16:02:07
 -->
 <template>
   <div class="user-info">
@@ -69,6 +69,8 @@
     <user-info-attention
       v-model="showAttentionModel"
       v-model:flag="flag"
+      v-model:attentionNum="data.like_count"
+      v-model:fanNum="data.fans_count"
       :username="data.username"
     />
   </div>
