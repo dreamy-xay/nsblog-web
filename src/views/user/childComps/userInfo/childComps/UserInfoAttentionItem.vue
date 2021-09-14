@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-09 20:58:06
  * @LastEditors: clq
- * @LastEditTime: 2021-09-14 15:48:01
+ * @LastEditTime: 2021-09-14 16:48:53
 -->
 <template>
   <div class="user-info-attention-item">
@@ -47,11 +47,12 @@
 </template>
 
 <script>
-import { defineComponent, nextTick, ref } from 'vue';
+import { defineComponent, ref } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import BaseModal from '@/components/content/baseModal/BaseModal';
 import { addAttentions, deleteAttentions } from '@/network/api/attentions';
 import { useMessage } from 'naive-ui';
+import { mapGetters } from '@/util/store';
 
 /**
  * @description:
@@ -89,34 +90,36 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    showModal: {
-      type: Boolean,
-      dafault: false,
-    },
   },
   setup(props, context) {
     const modalShow = ref(false);
     const msg = useMessage(); // naive-ui mssage
+    const { isLogin } = mapGetters('global', ['isLogin']);
 
     /**
-     * @description: 改变关注状态
+     * @description: 关注
      * @return {void}
      * @author: clq
      */
     function changeAttention() {
-      if (props.attention === true) {
-        modalShow.value = true;
+      //登录验证
+      if (isLogin.value) {
+        if (props.attention === true) {
+          modalShow.value = true;
+        } else {
+          addAttentions(props.username)
+            .then(() => {
+              context.emit('update:attention', true);
+              msg.success('关注成功', { duration: 2000, closable: true });
+              null;
+            })
+            .catch((error) => {
+              console.log(error);
+              msg.error('关注失败,请重试', { duration: 2000, closable: true });
+            });
+        }
       } else {
-        addAttentions(props.username)
-          .then(() => {
-            context.emit('update:attention', true);
-            msg.success('关注成功', { duration: 2000, closable: true });
-            null;
-          })
-          .catch((error) => {
-            console.log(error);
-            msg.error('关注失败,请重试', { duration: 2000, closable: true });
-          });
+        msg.error('请先登录', { duration: 2000, closable: true });
       }
     }
 
@@ -126,15 +129,20 @@ export default defineComponent({
      * @author: clq
      */
     function sureCancelAttention() {
-      deleteAttentions(props.username)
-        .then(() => {
-          msg.success('取消关注成功', { duration: 2000, closable: true });
-          context.emit('update:attention', false);
-          modalShow.value = !modalShow.value;
-        })
-        .catch((error) => {
-          console.log(error), msg.error('取消关注失败，请重试', { duration: 2000, closable: true });
-        });
+      //登录验证
+      if (isLogin.value) {
+        deleteAttentions(props.username)
+          .then(() => {
+            msg.success('取消关注成功', { duration: 2000, closable: true });
+            context.emit('update:attention', false);
+            modalShow.value = !modalShow.value;
+          })
+          .catch((error) => {
+            console.log(error), msg.error('取消关注失败，请重试', { duration: 2000, closable: true });
+          });
+      } else {
+        msg.error('请先登录', { duration: 2000, closable: true });
+      }
     }
 
     return {
