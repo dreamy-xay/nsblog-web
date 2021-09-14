@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-19 11:55:18
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-07 19:21:35
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-07 19:34:36
 -->
 <template>
   <div class="user-center-menu">
@@ -110,7 +110,7 @@ export default defineComponent({
       {
         icon: 'blog-index-0-copy',
         title: '个人首页',
-        url: '/user',
+        url: `/user/${props.username}`,
       },
       {
         icon: 'blog-lishijilu',
@@ -173,6 +173,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .user-center-menu {
+  width: 130px;
   padding: 24px 35px;
   margin-bottom: 6px;
   background: $grey-0;

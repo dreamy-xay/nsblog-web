@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-23 20:34:57
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-09-06 10:02:46
+ * @LastEditTime: 2021-09-11 19:52:23
 -->
 <template>
   <div class="user-center-collection-right-bottom">
@@ -13,7 +13,7 @@
         v-for="(item,index) in typeList"
         :key="index"
         :class="{'Type':true,'Choice': choiceIndex === index}"
-        @click="chooseChoice(index);this.scrollbar.setScrollTop(0);"
+        @click="chooseChoice(index)"
       >
         <div
           role="button"
@@ -24,15 +24,16 @@
       </div>
     </div>
     <div class="user-center-collection-right-bottom-collectionlist">
-      <el-scrollbar ref="scrollbar">
-        <div
+      <!-- <el-scrollbar ref="scrollbar"> -->
+      <ul>
+        <li
           class="collections"
           v-for="(item,index) in typeList[choiceIndex].List"
           :key="index"
         >
           <a
-            :href="(item.type === 1 ? '/article' : (item.type === 2 ? '/question' : '/resource') )+ item.id"
-            :target="(item.type === 1 ? '/article' : (item.type === 2 ? '/question' : '/resource') )+ item.id"
+            :href="(item.type === 1 ? '/article' : (item.type === 2 ? '/question' : '/resource') )+ item.content_id"
+            :target="(item.type === 1 ? '/article' : (item.type === 2 ? '/question' : '/resource') )+ item.content_id"
           >
             <base-tag
               :text="item.type === 1 ? '文章' : (item.type === 2 ? '问答' : '资源')"
@@ -45,19 +46,26 @@
           <i
             class="iconfont blog-fav"
             role="button"
-            @click.stop="cancelCol(index)"
+            @click.stop="cancelCol(index,true,false)"
           ></i>
-        </div>
-      </el-scrollbar>
+        </li>
+      </ul>
+      <!-- </el-scrollbar> -->
     </div>
   </div>
+  <base-modal
+    content="取消了就没有咯(⊙o⊙)"
+    confirmeText="确认取消"
+    :show="modalShow"
+    @confirm="cancelCol(sureIndex,true)"
+    @cancel="cancelCol(sureIndex,false)"
+  />
 </template>
 
 <script>
 import { defineComponent, ref } from 'vue';
 import styles from '@/assets/style/define.scss';
 import BaseTag from '@/components/content/baseTag/BaseTag.vue';
-import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 
 export default defineComponent({
   name: 'userCenterCollectionRightBottom',
@@ -74,28 +82,37 @@ export default defineComponent({
       default: 0,
     },
   },
-  setup() {
+  setup(context) {
     const modalShow = ref(false); // 是否显示n-modal
     const scrollbar = ref(null); //scrollbar
 
+    /**
+     * @description: 更新类型列表下标
+     * @param {number} index 选择的下标
+     * @return {void}
+     * @author: continue-hs
+     */
     function chooseChoice(index) {
       this.$emit('change-Choice', index);
     }
 
-    function sureCancelCollection() {
-      modalShow.value = !modalShow.value;
-      cancelCol;
-    }
-
-    function cancelCol(index) {
-      this.$emit('cancel-col', index);
+    /**
+     * @description: 更新取消收藏的下标及确认框的显示
+     * @param {number} index 选择的下标
+     * @return {void}
+     * @author: continue-hs
+     */
+    function cancelCol(index, isConfirm, isModalShow = false) {
+      if (isConfirm) {
+        context.emit('cancel-col', index);
+      }
+      modalShow.value = isModalShow;
     }
 
     return {
       styles,
       chooseChoice,
       modalShow,
-      sureCancelCollection,
       cancelCol,
       scrollbar,
     };
@@ -119,24 +136,23 @@ export default defineComponent({
       @include size(38px, 21px);
       margin-right: 30px;
       padding-bottom: 5px;
-      color: #262626;
-      transition: 0.25s;
+      transition: 0.5s;
       float: left;
+      border-bottom: 2px solid $grey-0;
+
+      &.Choice {
+        border-bottom: 2px solid $green-0;
+      }
 
       .type {
         @include size(32px, 21px);
         margin-left: 3.5px;
       }
-
-      &.Choice {
-        border-width: 36px;
-        border-bottom: 1px solid #85e8c7;
-      }
     }
   }
 
   .user-center-collection-right-bottom-collectionlist {
-    margin: 15px 0 0 9px;
+    margin-top: 15px;
     @include size(736px, 465px);
 
     :deep(.el-scrollbar__thumb) {
@@ -145,10 +161,14 @@ export default defineComponent({
 
     .collections {
       @include size(726px, 53px);
-      margin-top: 16px;
-      background: #ffffff;
+      margin: 16px 0 0 9px;
+      background: $grey-0;
       border-radius: 8px;
       box-shadow: $shadow-0;
+
+      &:hover {
+        background-color: $grey-1;
+      }
 
       .base-tag {
         margin: 16px 0 0 29px;
@@ -156,7 +176,7 @@ export default defineComponent({
       }
 
       .title {
-        color: #000000;
+        color: $grey-11;
         padding-top: 17px;
         margin-left: 78px;
         @include ellipsis(1);
@@ -166,7 +186,7 @@ export default defineComponent({
       i {
         float: right;
         margin-right: 26px;
-        color: #ffb792;
+        color: $orange-0;
         position: relative;
         bottom: 20px;
         font-size: 20px;

@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:25:27
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-07 19:05:29
+ * @LastEditTime: 2021-09-13 20:03:36
 -->
 
 <template>
@@ -63,12 +63,12 @@
             <span class="message-reply-right-bottom-time">{{getDate(item.time)}}</span>
 
             <div class="message-reply-right-bottom-reply">
-              <i class="iconfont blog-huifu1 message-reply-right-bottom-reply-iconfont"></i>
+              <i class="iconfont blog-huifu1"></i>
               <span>回复</span>
             </div>
 
             <div class="message-reply-right-bottom-reply">
-              <i class="iconfont blog-dianzan1 message-reply-right-bottom-reply-iconfont"></i>
+              <i class="iconfont blog-dianzan1"></i>
               <span>点赞</span>
             </div>
 
@@ -81,7 +81,7 @@
               class="message-reply-right-bottom-delete"
               @click.stop="deleteItem(index)"
             >
-              <i class="iconfont blog-shanchu message-reply-right-bottom-delete-iconfont"></i>
+              <i class="iconfont blog-shanchu "></i>
               <span>删除该通知</span>
             </div>
 
@@ -120,7 +120,6 @@ export default defineComponent({
   setup() {
     const route = useRoute();
     const msg = useMessage(); // naive-ui mssage
-    let offset = 0; // 偏移量
     const deleteTag = ref(true); // 判断数据是否全部加载的标志
     const replyData = reactive([]); // 回复我的界面数据
     const { updateMessageCount } = mapMutations('message', ['updateMessageCount']);
@@ -148,12 +147,11 @@ export default defineComponent({
      */
 
     function getMessagesList() {
-      getMessages(2, offset, 10)
+      getMessages(2, replyData.length, 10)
         .then((data) => {
           if (data.messages.length < 10) {
             deleteTag.value = false;
           }
-          offset += data.messages.length;
           replyData.splice(replyData.length, 0, ...data.messages);
         })
         .catch((error) => {
@@ -201,7 +199,6 @@ export default defineComponent({
       updateMessageCount({ type: 2, count: 0 });
       getMessages(2, 0, limit)
         .then((data) => {
-          offset++;
           replyData.splice(0, 0, ...data.messages);
         })
         .catch((error) => {
@@ -324,8 +321,12 @@ $grey9: $grey-9;
         margin-right: 20px;
         color: $grey7;
 
-        .message-reply-right-bottom-reply-iconfont {
+        .iconfont {
           margin-right: 5px;
+        }
+
+        .message-reply-right-bottom-reply-iconfont {
+          transform: rotate(180deg);
         }
 
         &:hover {

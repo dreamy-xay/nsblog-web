@@ -15,6 +15,7 @@
     "core-js": "^3.6.5",
     "cropperjs": "^1.5.12",
     "crypto-js": "^4.1.1",
+    "echarts": "^5.2.0",
     "element-plus": "^1.0.2-beta.67",
     "js-base64": "^3.6.1",
     "lodash": "^4.17.21",
@@ -23,6 +24,7 @@
     "storejs": "^1.1.0",
     "vue": "^3.0.0",
     "vue-class-component": "^8.0.0-0",
+    "vue-echarts": "^6.0.0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0",
     "vuex-persistedstate": "^4.0.0"
@@ -46,6 +48,7 @@
     "@vue/test-utils": "^2.0.0-0",
     "babel-plugin-component": "^1.1.1",
     "babel-plugin-dynamic-import-node": "^2.3.3",
+    "babel-plugin-prismjs": "^2.1.0",
     "better-mock": "^0.3.2",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.0.0",

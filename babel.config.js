@@ -4,8 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-18 09:48:00
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-06 21:56:10
+ * @LastEditTime: 2021-09-12 23:05:58
  */
+// prismjs 代码渲染语言包加载
+const components = require('prismjs/components');
+const allLanguages = Object.keys(components.languages).filter((item) => item !== 'meta');
+
 module.exports = {
   presets: [
     '@vue/cli-plugin-babel/preset'
@@ -17,6 +21,12 @@ module.exports = {
         libraryName: "element-plus",
         styleLibraryName: "theme-chalk"
       }
+    ],
+    [
+      'prismjs',
+      {
+        languages: allLanguages,
+      },
     ]
   ],
   env: {

@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 11:59:59
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-06 12:03:31
+ * @LastEditors: continue-hs
+ * @LastEditTime: 2021-09-10 22:57:52
  */
 
 import { Application, Request, Response } from 'express';
@@ -26,7 +26,8 @@ export default function(baseUrl: string, app: Application) {
       for (let i: number = 0; i < limit; ++i) {
         const type: Record<string, unknown> = hasType ? { type: Random.natural(1, 3) } : {};
         ans.push({
-          id: Random.id(),
+          collection_id: Random.id(),
+          content_id: Random.id(),
           title: Random.natural(0, 3) ? Random.ctitle(7, 15) : Random.title(7, 12),
           ...type
         });
@@ -63,23 +64,6 @@ export default function(baseUrl: string, app: Application) {
     }
   });
 
-  // 新建收藏夹
-  app.post(baseUrl + '/favorites', (req: Request, res: Response) => {
-    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
-    const username: string = getToken(req.headers).username;
-    console.log(`--------new favorites: username=>${username}   data=>${req.body}  success`);
-    return res.send();
-  });
-
-  // 删除收藏夹
-  app.delete(baseUrl + '/favorites/:favorites_id', (req: Request, res: Response) => {
-    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
-    const username: string = getToken(req.headers).username;
-    const { favorite_id } = req.params;
-    console.log(`--------delete favorites: username=>${username}  favorite_id=>${favorite_id}  success`);
-    return res.send();
-  });
-
   // 添加收藏
   app.post(baseUrl + '/favorites/collections', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
@@ -92,18 +76,38 @@ export default function(baseUrl: string, app: Application) {
   });
 
   // 取消收藏
-  app.delete(baseUrl + '/favorites/collections', (req: Request, res: Response) => {
+  app.delete(baseUrl + '/favorites/collections/:collection_id', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
-    const { type, content_id, favorite_id } = req.body;
+    const { collection_id } = req.params;
     console.log(
-      `--------cancel favorites>collections: username=>${username}  type=>${type}  content_id=>${content_id}  favorite_id=>${favorite_id}  success`
+      `--------cancel favorites>collections: username=>${username}  collection_id=>${collection_id}  success`
     );
     return res.send();
   });
 
+  // 新建收藏夹
+  app.post(baseUrl + '/favorites', (req: Request, res: Response) => {
+    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
+    const username: string = getToken(req.headers).username;
+    const { name, is_private, remark } = req.body;
+    console.log(
+      `--------new favorites: username=>${username}   name=>${name}  is_private=>${is_private}  remark=>${remark}  success`
+    );
+    return res.send();
+  });
+
+  // 删除收藏夹
+  app.delete(baseUrl + '/favorites/:favorite_id', (req: Request, res: Response) => {
+    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
+    const username: string = getToken(req.headers).username;
+    const { favorite_id } = req.params;
+    console.log(`--------delete favorites: username=>${username}  favorite_id=>${favorite_id}  success`);
+    return res.send();
+  });
+
   // 修改收藏夹名字
-  app.put(baseUrl + 'favorites/name', (req: Request, res: Response) => {
+  app.put(baseUrl + '/favorites/name', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { name, favorite_id } = req.body;
@@ -114,7 +118,7 @@ export default function(baseUrl: string, app: Application) {
   });
 
   // 修改收藏夹备注
-  app.put(baseUrl + 'favorites/remark', (req: Request, res: Response) => {
+  app.put(baseUrl + '/favorites/remark', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { remark, favorite_id } = req.body;
@@ -125,7 +129,7 @@ export default function(baseUrl: string, app: Application) {
   });
 
   // 修改收藏夹备注
-  app.put(baseUrl + 'favorites/private', (req: Request, res: Response) => {
+  app.put(baseUrl + '/favorites/private', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { is_private, favorite_id } = req.body;

@@ -4,13 +4,14 @@
  * @Autor: Ban
  * @Date: 2021-08-18 21:26:17
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-07 18:53:10
+ * @LastEditTime: 2021-09-14 10:01:59
 -->
 <template>
   <base-view
     :background="true"
     :top-bar="true"
     bind-class="user-center"
+    ref="baseViewRef"
   >
     <div class="user-center-left">
       <user-center-menu :username="tokenInfo.username" />
@@ -33,6 +34,7 @@ import UserCenterMenu from '@/views/userCenter/childComps/UserCenterMenu.vue';
 import router from '@/router';
 import store from '@/store';
 import { mapState } from '@/util/store';
+import events from '@/events';
 
 /**
  * @description: 个人中心页面
@@ -59,8 +61,16 @@ export default defineComponent({
       }
     );
 
+    const baseViewRef = ref(null); // baseview ref
+
+    //接收全局事件将滚动条滚到底部
+    events.on('UserCenter-toBottom', () => {
+      baseViewRef.value.setScrollTop();
+    });
+
     return {
       tokenInfo,
+      baseViewRef,
     };
   },
 });

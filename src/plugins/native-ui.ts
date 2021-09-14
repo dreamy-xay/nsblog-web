@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 16:13:02
- * @LastEditors: Ban
- * @LastEditTime: 2021-09-10 15:55:39
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-09 15:52:45
  */
 import { App } from 'vue';
 import { create, NMessageProvider, NModal, NBadge, NButton, NPopover, NDialog, NCard } from 'naive-ui';
