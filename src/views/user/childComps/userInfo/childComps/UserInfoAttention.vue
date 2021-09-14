@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-09-09 18:55:02
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-13 20:22:11
+ * @LastEditors: clq
+ * @LastEditTime: 2021-09-14 11:38:04
 -->
 <template>
   <n-modal
@@ -30,7 +30,7 @@
             role="button"
             @click="showFans"
           >
-            <span class="label">关注者</span> <span>{{noticerNum}}</span>
+            <span class="label">关注者</span> <span>{{fanNum}}</span>
           </span>
         </span>
         <span
@@ -41,7 +41,10 @@
       </div>
 
       <div class="user-info-attention-body">
-        <el-scrollbar :height="530">
+        <el-scrollbar
+          ref="myScrollbar"
+          :height="530"
+        >
 
           <template v-if="flag === true">
             <user-info-attention-item
@@ -81,6 +84,7 @@
             加载更多...
           </div>
         </el-scrollbar>
+
       </div>
     </div>
   </n-modal>
@@ -119,20 +123,37 @@ export default defineComponent({
   },
   setup(props, context) {
     const msg = useMessage(); // navie-ui
-    const attentionNum = ref(11);
-    const noticerNum = ref(97);
+    const attentionNum = ref(0);
+    const fanNum = ref(0);
     const limit = 10; //记录增量
     const attentionItems = reactive([]); //关注了数据
     const fansItems = reactive([]); //粉丝数据
     const loadingButtonShow = reactive([false, false]); // 加载更多按钮是否显示
+    const myScrollbar = ref(null); //滚动条组件引用对象
 
     watch(
       () => props.username,
       () => {
+        getAttentionNum();
+        getFanNum();
         addAttentionItems();
         addFansItems();
       }
     );
+
+    /**
+     * @description: 获取关注数量
+     * @param {*}
+     * @return {*}
+     * @author: clq
+     */
+    function getAttentionNum() {
+      attentionNum.value = 11;
+    }
+
+    function getFanNum() {
+      fanNum.value = 12;
+    }
 
     /**
      * @description: 增加关注者消息
@@ -175,6 +196,7 @@ export default defineComponent({
      */
     function showAttention() {
       context.emit('update:flag', true);
+      myScrollbar.value.setScrollTop(0);
     }
 
     /**
@@ -184,6 +206,8 @@ export default defineComponent({
      */
     function showFans() {
       context.emit('update:flag', false);
+      console.log(myScrollbar);
+      myScrollbar.value.setScrollTop(0);
     }
 
     /**
@@ -216,15 +240,16 @@ export default defineComponent({
 
     return {
       attentionNum,
-      noticerNum,
+      fanNum,
       attentionItems,
       fansItems,
+      loadingButtonShow,
+      myScrollbar,
       showAttention,
       showFans,
       close,
       showMore,
       changePage,
-      loadingButtonShow,
     };
   },
 });
@@ -240,6 +265,7 @@ export default defineComponent({
 
   .user-info-attention-header {
     height: 28px;
+    padding-bottom: 6px;
     @include flex(center, space-between);
     font-family: Arial;
     line-height: 28px;

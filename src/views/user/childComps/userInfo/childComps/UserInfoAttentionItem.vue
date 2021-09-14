@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-09-09 20:58:06
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-13 19:58:11
+ * @LastEditors: clq
+ * @LastEditTime: 2021-09-14 11:42:46
 -->
 <template>
   <div class="user-info-attention-item">
@@ -36,12 +36,20 @@
         @click.stop="changeAttention"
       >关注</div>
     </div>
+    <!-- 确认取消关注 -->
+    <base-modal
+      :show="modalShow"
+      content="取消后可就伤感情了哦~"
+      @confirm="sureCancelAttention"
+      @cancel="modalShow=!modalShow"
+    ></base-modal>
   </div>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, nextTick, ref } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
+import BaseModal from '@/components/content/baseModal/BaseModal';
 
 /**
  * @description:
@@ -56,6 +64,7 @@ export default defineComponent({
   name: 'userInfoAttentionItem',
   components: {
     BaseAvatar,
+    BaseModal,
   },
   props: {
     avatar: {
@@ -78,12 +87,49 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    showModal: {
+      type: Boolean,
+      dafault: false,
+    },
   },
   setup(props, context) {
+    const modalShow = ref(false);
+
+    /**
+     * @description: 改变关注状态
+     * @return {void}
+     * @author: clq
+     */
     function changeAttention() {
-      context.emit('update:attention', !props.attention);
+      if (props.attention === true) {
+        modalShow.value = true;
+      } else {
+        context.emit('update:attention', !props.attention);
+      }
     }
-    return { changeAttention };
+
+    /**
+     * @description: 确定取消关注
+     * @return {void}
+     * @author: clq
+     */
+    function sureCancelAttention() {
+      modalShow.value = !modalShow.value;
+      context.emit('update:attention', !props.attention);
+      // deleteAttentions(attentionData[sureCancel.value].content.username)
+      //   .then(() => {
+      //     attentionData[sureCancel.value].content.attention = false;
+      //   })
+      //   .catch((error) => {
+      //     console.log(error), msg.error('取消关注失败，请重试', { duration: 2000, closable: true });
+      //   });
+    }
+
+    return {
+      modalShow,
+      sureCancelAttention,
+      changeAttention,
+    };
   },
 });
 </script>
