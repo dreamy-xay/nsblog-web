@@ -4,12 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-13 21:29:29
+ * @LastEditTime: 2021-09-14 09:29:23
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
 import { int } from './util';
-import select from 'mock/data';
+import select from '../data/index';
 
 export default function(baseUrl: string, app: Application) {
   // 获取发布的文章
