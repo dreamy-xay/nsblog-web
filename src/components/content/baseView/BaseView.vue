@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 11:51:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-07 16:21:41
+ * @LastEditTime: 2021-09-13 20:28:46
 -->
 <template>
   <div
@@ -28,6 +28,7 @@
           <el-scrollbar
             @scroll="scroll($event, false)"
             class="base-view-scrollbar"
+            ref="scrollbarColumnRef"
           >
             <div
               class="inner"
@@ -43,11 +44,18 @@
         </div>
       </div>
     </el-scrollbar>
+    <el-backtop
+      v-if="backTop"
+      :right="backTopRight"
+      :bottom="backTopBottom"
+      :visibility-height="backTopVisibilityHeight"
+      target=".base-view-inner .el-scrollbar__wrap"
+    />
   </div>
 </template>
 
 <script>
-import { defineComponent, onMounted, ref } from 'vue';
+import { defineComponent, onMounted, ref, nextTick } from 'vue';
 import BaseBackground from '@/components/content/baseBackground/BaseBackground.vue';
 import BaseTopBar from '@/components/content/baseTopBar/BaseTopBar.vue';
 
@@ -59,8 +67,13 @@ import BaseTopBar from '@/components/content/baseTopBar/BaseTopBar.vue';
  * @param {Number} scrollDelay 滚动条触发底部最长延时 `默认200ms`
  * @param {Number} scrollDistance 触发加载的距离阈值，单位为px `默认200px`
  * @param {Boolean} scrollDisabled 是否禁用滚动底部触发 `默认不禁用`
+ * @param {Boolean} backTop 是否启用回顶部按钮 `默认不启用`
+ * @param {Number} backTopRight 启用回顶部按钮生效right位置  `默认为40`
+ * @param {Number} backTopBottom 启用回顶部按钮生效bottom位置  `默认为40`
+ * @param {Number} backTopVisibilityHeight 滚动高度达到此参数值才出现 `默认为200`
  * @event scroll 滚动监听事件，回调参数{scrollTop, scrollLeft}
  * @event scrollToBottom 滚动到底部触发事件，无回调参数
+ * @method setScrollTop 设置滚动条到顶部的距离,类型为boolean时:true为滚动到顶部,false为滚动到底部;类型为number时则直接设置高度  (value: boolean | number) => void
  * @author: dreamy-xay
  */
 
@@ -90,6 +103,22 @@ export default defineComponent({
     scrollDisabled: {
       type: Boolean,
       default: false,
+    },
+    backTop: {
+      type: Boolean,
+      default: false,
+    },
+    backTopRight: {
+      type: Number,
+      default: 40,
+    },
+    backTopBottom: {
+      type: Number,
+      default: 40,
+    },
+    backTopVisibilityHeight: {
+      type: Number,
+      default: 200,
     },
   },
   components: {
@@ -146,6 +175,24 @@ export default defineComponent({
       }
     }
 
+    // const scrollbarRowRef = ref(null); // 控制左右滚动条 ref
+    const scrollbarColumnRef = ref(null); // 控制上下滚动条 ref
+    /**
+     * @description: 设置滚动条到顶部的距离
+     * @param {boolean | number} value 类型为boolean时:true为滚动到顶部,false为滚动到底部;类型为number时则直接设置高度,具体可参考element-plus `默认为false`
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function setScrollTop(value = false) {
+      nextTick(() => {
+        if (typeof value === 'boolean') {
+          if (value) value = 0;
+          else value = scrollbarColumnRef.value.wrap.scrollHeight;
+        }
+        scrollbarColumnRef.value.setScrollTop(value);
+      });
+    }
+
     return {
       innerHeight,
       topBarRef,
@@ -154,6 +201,8 @@ export default defineComponent({
       height,
       scroll,
       topBarHeight,
+      scrollbarColumnRef,
+      setScrollTop,
     };
   },
 });
@@ -187,9 +236,19 @@ export default defineComponent({
         & > div {
           padding: 0 6px;
           width: 1142px;
-          overflow: hidden;
         }
       }
+    }
+  }
+
+  :deep(.el-backtop) {
+    background-color: $grey-0;
+    color: $green-0;
+    transition: 0.25s;
+
+    &:hover {
+      background-color: rgba($green-0, 0.05);
+      color: $green-1;
     }
   }
 }

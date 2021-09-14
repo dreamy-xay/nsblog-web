@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-05 10:41:38
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-07 19:05:55
+ * @LastEditTime: 2021-09-14 11:41:49
 -->
 
 <template>
@@ -40,7 +40,7 @@
             <span class="message-attention-right-bottom-text">关注了你</span>
 
             <div class="message-attention-right-bottom-iconfont1">
-              <i class="iconfont blog-xiaoxi message-attention-right-bottom-iconfont1-xiaoxi"></i>
+              <i class="iconfont blog-c-comment message-attention-right-bottom-iconfont1-xiaoxi"></i>
               <span>私信</span>
             </div>
 
@@ -85,7 +85,7 @@ import { defineComponent, ref, reactive, watch } from 'vue';
 import MessageEmpty from '@/views/message/childComps/MessageEmpty.vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import { getMessages, deleteMessages } from '@/network/api/messages';
-import { postAttentions, deleteAttentions } from '@/network/api/attentions';
+import { addAttentions, deleteAttentions } from '@/network/api/attentions';
 import { dateFormat } from '@/util/date.ts';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 import { mapMutations, mapState } from '@/util/store';
@@ -108,7 +108,6 @@ export default defineComponent({
     const route = useRoute();
     const attentionData = reactive([]); // 关注我的界面数据
     const msg = useMessage(); // naive-ui mssage
-    let offset = 0; // 偏移量
     const deleteTag = ref(true); // 判断数据是否全部加载的标志
     const modalShow = ref(false); // 是否显示n-modal
     const sureCancel = ref(0); // 记录取消关注下标
@@ -136,12 +135,11 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function getMessagesList() {
-      getMessages(4, offset, 10)
+      getMessages(4, attentionData.length, 10)
         .then((data) => {
           if (data.messages.length < 10) {
             deleteTag.value = false;
           }
-          offset += data.messages.length;
           attentionData.splice(attentionData.length, 0, ...data.messages);
         })
         .catch((error) => {
@@ -178,7 +176,6 @@ export default defineComponent({
       updateMessageCount({ type: 4, count: 0 });
       getMessages(4, 0, limit)
         .then((data) => {
-          offset++;
           attentionData.splice(0, 0, ...data.messages);
         })
         .catch((error) => {
@@ -223,7 +220,7 @@ export default defineComponent({
 
     function cancelAttention(index) {
       if (attentionData[index].content.attention === false) {
-        postAttentions(attentionData[index].content.username)
+        addAttentions(attentionData[index].content.username)
           .then(() => {
             attentionData[index].content.attention = true;
           })

@@ -4,16 +4,16 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:15:05
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-06 11:54:47
+ * @LastEditTime: 2021-09-13 14:22:54
  */
-import { Random } from 'better-mock';
+import { Random, mock } from 'better-mock';
 import { Application, Request, Response } from 'express';
 import select, { DataBaseOperator } from '../data/index';
 import { clearToken, verifyToken, getToken, int } from './util';
 import * as location from '../../src/util/json/location.json';
 
 function randomAddress(): string {
-  if (!Random.integer(0, 2)) return null;
+  if (!Random.integer(0, 2)) return ',,';
   let data: Record<string, unknown>[] = location.Country;
   let ans: string = '';
   let index: number = 0;
@@ -44,16 +44,16 @@ export default function(baseUrl: string, app: Application) {
           username,
           nickname: user.nickname,
           avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', username),
-          profession: '',
+          profession: '电商',
           birthday: Random.datetime(),
           gender: gender === 2 ? null : gender,
           address: randomAddress(),
           city: randomAddress(),
-          signature: (Random.integer(0, 1) ? Random.cparagraph(1, 2) : Random.paragraph(1, 2)).slice(0, 255),
+          signature: (Random.integer(0, 1) ? Random.cparagraph(1, 1) : Random.paragraph(1, 1)).slice(0, 128),
           profile: Random.integer(0, 1) ? Random.cparagraph(1, 8) : Random.paragraph(1, 8),
           tags
         });
-      }
+      } else return res.status(410).json({ error: 'User name error' });
     } else if (type === 1) {
       if (user && user.isActive) {
         return res.json({
@@ -67,8 +67,82 @@ export default function(baseUrl: string, app: Application) {
           like_count: Random.natural(0, 1000),
           fans_count: Random.natural(0, 1000)
         });
-      }
-    } else return res.status(410).json({ error: 'User name error' });
+      } else return res.status(410).json({ error: 'User name error' });
+    } else if (type === 2) {
+      if (user && user.isActive) {
+        const gender: number = Random.integer(0, 2);
+        const tags: string[] = [];
+        const sum: number = Random.integer(0, 20);
+        for (let i: number = 0; i < sum; ++i)
+          tags.push(Random.integer(0, 1) ? Random.word(2, 10) : Random.cword(2, 10));
+
+        let articleChartData: Record<string, unknown>[] = mock({
+          'list|0-40': [
+            {
+              time: '@datetime',
+              count: '@integer(1,30)'
+            }
+          ]
+        }).list;
+        articleChartData = articleChartData.sort((a: Record<string, unknown>, b: Record<string, unknown>) => {
+          return <string>a.time < <string>b.time ? -1 : 1;
+        });
+
+        return res.json({
+          // 头部
+          username,
+          nickname: user.nickname,
+          avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', username),
+          signature: (Random.integer(0, 1) ? Random.cparagraph(1, 1) : Random.paragraph(1, 1)).slice(0, 128),
+          rank: Random.natural(0, 100000),
+          // 关注相关
+          like_count: Random.natural(0, 10000),
+          fans_count: Random.natural(0, 10000),
+          attention: getToken(req.headers).username === username ? null : Random.boolean(), // null
+          // 获得成就
+          registration_time: Random.datetime(),
+          browse_count: Random.natural(0, 10000),
+          recommend_count: Random.natural(0, 10000),
+          collect_count: Random.natural(0, 10000),
+          browse_yesterday: Random.natural(0, 10000), //
+          recommend_yesterday: Random.natural(0, 10000), //
+          collect_yesterday: Random.natural(0, 10000), //
+
+          // 基本信息
+          gender: gender === 2 ? null : gender,
+          tags,
+          qq: Random.integer(0, 2) ? Random.integer(1000000, 30000000000) : null,
+          weibo: Random.integer(0, 2) ? Random.integer(1000000, 30000000000) : null,
+          email: user.email,
+          // 个人简介
+          birthday: Random.datetime(),
+          profession: Random.integer(0, 1) ? '电商' : null,
+          address: randomAddress(),
+          best_topic: tags[0],
+          // 图表
+          article_chart: {
+            article_count: Random.natural(0, 10000),
+            data: articleChartData,
+            rank_total: Random.natural(0, 10000),
+            rank_week: Random.natural(0, 10000),
+            release_recently: Random.natural(0, 10000)
+          },
+          FAQ_chart: {
+            FAQ_count: Random.natural(1000, 10000),
+            question_count: Random.natural(0, 10000),
+            reply_count: Random.natural(1000, 10000),
+            reply_adoption: Random.natural(0, 1000)
+          },
+          resource_chart: {
+            resource_count: Random.natural(0, 10000),
+            data: mock({
+              'list|12': ['@natural(0, 100)']
+            }).list,
+            release_recently: Random.natural(0, 10000)
+          }
+        });
+      } else return res.status(410).json({ error: 'User name error' });
+    } else return res.status(410).json({ error: 'Type error' });
   });
 
   // 注册新用户

@@ -4,9 +4,54 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-01 17:02:19
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-02 11:53:12
+ * @LastEditTime: 2021-09-14 11:41:18
  */
-import { del, post, RequestLifeCycle } from '@/network/request';
+import { del, get, post, RequestLifeCycle } from '@/network/request';
+
+/**
+ * @description: 获取关注人员信息
+ * @param {string} username 用户名
+ * @param {number} offset 起始位置
+ * @param {number} limit 限制条数
+ * @return {*}
+ * @author: clq
+ */
+export function getAttentions(
+  username: string,
+  offset: number,
+  limit: number,
+  RLC: RequestLifeCycle = {}
+): Promise<unknown> {
+  return get({
+    url: '/attentions',
+    ...RLC,
+    params: {
+      username,
+      offset,
+      limit
+    }
+  });
+}
+
+/**
+ * @description: 获取粉丝信息
+ * @param {string} username 用户名
+ * @param {number} offset 起始位置
+ * @param {number} limit 限制条数
+ * @return {*}
+ * @author: clq
+ */
+export function getFans(username: string, offset: number, limit: number, RLC: RequestLifeCycle = {}): Promise<unknown> {
+  return get({
+    url: '/attentions/fans',
+    ...RLC,
+    params: {
+      username,
+      offset,
+      limit
+    }
+  });
+}
 
 /**
  * @description: 添加关注
@@ -16,7 +61,7 @@ import { del, post, RequestLifeCycle } from '@/network/request';
  * @author: Z_Y_C
  */
 
-export function postAttentions(username: string, RLC: RequestLifeCycle = {}): Promise<unknown> {
+export function addAttentions(username: string, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return post({
     url: '/attentions',
     ...RLC,

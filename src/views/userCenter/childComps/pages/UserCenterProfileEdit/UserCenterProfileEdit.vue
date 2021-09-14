@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:31
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-07 12:14:15
+ * @LastEditTime: 2021-09-14 21:28:06
 -->
 <template>
   <div class="user-center-profile-edit">
@@ -32,7 +32,7 @@ import UserCenterProfileEditInformation from '@/views/userCenter/childComps/page
 import UserCenterProfileEditJob from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/UserCenterProfileEditJob.vue';
 import UserCenterProfileEditInterest from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/UserCenterProfileEditInterest.vue';
 import { base64ToFile } from '@/util/util';
-import { getUserInfo, putUserInfo, putSignature } from '@/network/api/user';
+import { getUserInfo, putUserInfo, modifySignature } from '@/network/api/user';
 import { mapState } from '@/util/store';
 import { useMessage } from 'naive-ui';
 import events from '@/events';
@@ -56,11 +56,11 @@ export default defineComponent({
       profession: null,
       birthday: null,
       gender: null,
-      address: null,
-      city: null,
+      address: ',,',
+      city: ',,',
       signature: null,
       profile: null,
-      tag: null,
+      tags: null,
     });
 
     const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
@@ -78,11 +78,11 @@ export default defineComponent({
         userData.city = data.city;
         userData.signature = data.signature;
         userData.profile = data.profile;
-        userData.tag = data.tag;
+        userData.tags = data.tags;
       })
       .catch((error) => {
         console.log(error);
-        msg.error('获取消息失败，请重试', { duration: 2000, closable: true });
+        msg.error('获取消息失败', { duration: 2000, closable: true });
       });
 
     //头像和个性签名数据
@@ -119,7 +119,7 @@ export default defineComponent({
     const tagData = computed(() => {
       return {
         username: userData.username,
-        tag: userData.tag,
+        tags: userData.tags,
       };
     });
 
@@ -140,6 +140,7 @@ export default defineComponent({
       success();
       userData.avatar = image;
       events.emit('gobal-updateAvatar', image);
+      msg.success('修改成功', { duration: 2000, closable: true });
     }
 
     /**
@@ -153,9 +154,10 @@ export default defineComponent({
       // TODO:
       // request update： signature
       console.log(signature);
-      putSignature(signature)
+      modifySignature(signature)
         .then(() => {
           userData.signature = signature;
+          msg.success('修改成功', { duration: 2000, closable: true });
         })
         .catch((err) => {
           console.log(err);
@@ -178,6 +180,7 @@ export default defineComponent({
           userData.city = data.city;
           userData.birthday = data.birthday;
           userData.profile = data.profile;
+          msg.success('修改成功', { duration: 2000, closable: true });
         })
         .catch((error) => {
           console.log(error);
@@ -196,6 +199,7 @@ export default defineComponent({
         .then(() => {
           userData.profession = data.profile;
           userData.address = data.address;
+          msg.success('修改成功', { duration: 2000, closable: true });
         })
         .catch((error) => {
           console.log(error);
