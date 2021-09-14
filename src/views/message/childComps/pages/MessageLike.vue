@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:31:44
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-07 19:05:42
+ * @LastEditTime: 2021-09-13 20:03:09
 -->
 <template>
   <el-scrollbar max-height="calc(100vh - 108px)">
@@ -87,7 +87,6 @@ export default defineComponent({
   setup() {
     const route = useRoute();
     const msg = useMessage(); // naive-ui mssage
-    let offset = 0; // 偏移量
     const deleteTag = ref(true); // 判断数据是否全部加载的标志
     const likeData = reactive([]); // 收到的赞界面数据
     const { updateMessageCount } = mapMutations('message', ['updateMessageCount']);
@@ -115,12 +114,11 @@ export default defineComponent({
      */
 
     function getMessagesList() {
-      getMessages(3, offset, 10)
+      getMessages(3, likeData.length, 10)
         .then((data) => {
           if (data.messages.length < 10) {
             deleteTag.value = false;
           }
-          offset += data.messages.length;
           likeData.splice(likeData.length, 0, ...data.messages);
         })
         .catch((error) => {
@@ -168,7 +166,6 @@ export default defineComponent({
       updateMessageCount({ type: 3, count: 0 });
       getMessages(3, 0, limit)
         .then((data) => {
-          offset++;
           likeData.splice(0, 0, ...data.messages);
         })
         .catch((error) => {

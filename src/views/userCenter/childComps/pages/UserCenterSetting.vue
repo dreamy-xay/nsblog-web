@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:55
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-07 19:22:44
+ * @LastEditTime: 2021-09-13 20:34:32
 -->
 <template>
   <div class="user-center-setting">
@@ -89,6 +89,7 @@ export default defineComponent({
       })
       .catch((error) => {
         console.log(error);
+        msg.error('获取隐私设置失败', { duration: 2000, closable: true });
       });
 
     /**
