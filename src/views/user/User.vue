@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:04:40
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-14 10:07:20
+ * @LastEditTime: 2021-09-14 11:45:12
 -->
 <template>
   <base-view
@@ -42,7 +42,7 @@ import BaseView from '@/components/content/baseView/BaseView.vue';
 import UserHeader from '@/views/user/childComps/UserHeader.vue';
 import UserInfo from '@/views/user/childComps/userInfo/UserInfo.vue';
 import UserMain from '@/views/user/childComps/userMain/UserMain.vue';
-import { postAttentions, deleteAttentions } from '@/network/api/attentions';
+import { addAttentions, deleteAttentions } from '@/network/api/attentions';
 import { mapMutations, mapState } from '@/util/store';
 import { useRoute } from 'vue-router';
 import { getUserInfo } from '@/network/api/user';
@@ -237,7 +237,7 @@ export default defineComponent({
      */
     function changeAttention(data) {
       if (data)
-        postAttentions(username)
+        addAttentions(username)
           .then(() => {
             userData.attention = data;
           })
