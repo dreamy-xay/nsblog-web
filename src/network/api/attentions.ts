@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-09-01 17:02:19
- * @LastEditors: clq
- * @LastEditTime: 2021-09-11 17:05:32
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-14 11:41:18
  */
 import { del, get, post, RequestLifeCycle } from '@/network/request';
 
@@ -61,7 +61,7 @@ export function getFans(username: string, offset: number, limit: number, RLC: Re
  * @author: Z_Y_C
  */
 
-export function postAttentions(username: string, RLC: RequestLifeCycle = {}): Promise<unknown> {
+export function addAttentions(username: string, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return post({
     url: '/attentions',
     ...RLC,

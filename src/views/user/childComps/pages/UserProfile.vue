@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-14 09:39:32
+ * @LastEditTime: 2021-09-14 10:44:31
 -->
 <template>
   <div
@@ -14,10 +14,7 @@
     <v-md-preview :text="text" />
   </div>
   <div v-else>
-    <base-svg
-      svg="no-permission"
-      :color="styles.green0"
-    />
+    <user-empty />
   </div>
 </template>
 
@@ -29,8 +26,7 @@ import { getProfile } from '@/network/api/user';
 import { useRoute } from 'vue-router';
 
 import { mapState } from '@/util/store';
-import BaseSvg from '@/components/content/baseSvg/BaseSvg.vue';
-import styles from '@/assets/style/define.scss';
+import UserEmpty from '@/views/user/childComps/UserEmpty.vue';
 
 /**
  * @description: 用户主页个人简介
@@ -40,7 +36,7 @@ import styles from '@/assets/style/define.scss';
 export default defineComponent({
   name: 'userProfile',
   components: {
-    BaseSvg,
+    UserEmpty,
   },
   setup() {
     const route = useRoute(); // route
@@ -50,7 +46,6 @@ export default defineComponent({
       text.value = data.profile;
     });
     return {
-      styles,
       ...mapState('user', ['privacySetting']),
       text,
     };

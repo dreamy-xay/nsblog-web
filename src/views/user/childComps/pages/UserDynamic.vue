@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-14 09:42:48
+ * @LastEditTime: 2021-09-14 10:43:54
 -->
 <template>
   <div
@@ -23,22 +23,15 @@
       @click="add"
     >加载更多...</div>
   </div>
-  <div
-    v-else
-    class="ss"
-  >
-    <base-svg
-      svg="no-permission"
-      :color="styles.green0"
-    />
+  <div v-else>
+    <user-empty />
   </div>
 </template>
 
 <script>
 import { defineComponent, reactive } from 'vue';
 import { mapState } from '@/util/store';
-import BaseSvg from '@/components/content/baseSvg/BaseSvg.vue';
-import styles from '@/assets/style/define.scss';
+import UserEmpty from '@/views/user/childComps/UserEmpty.vue';
 
 /**
  * @description: 用户主页动态记录
@@ -48,11 +41,10 @@ import styles from '@/assets/style/define.scss';
 export default defineComponent({
   name: 'userDynamic',
   components: {
-    BaseSvg,
+    UserEmpty,
   },
   setup() {
     const data = reactive([0, 1, 2, 3, 4, 5, 6, 7, 8]);
-
     function add() {
       data.push(1);
       data.push(1);
@@ -63,7 +55,7 @@ export default defineComponent({
       data.push(1);
       data.push(1);
     }
-    return { styles, data, ...mapState('user', ['privacySetting']), add };
+    return { data, ...mapState('user', ['privacySetting']), add };
   },
 });
 </script>
@@ -94,15 +86,8 @@ export default defineComponent({
     &:hover {
       background-color: $green-0;
       box-shadow: $shadow-2;
-
       color: $grey-0;
     }
   }
-}
-
-.ss {
-  height: 100%;
-  width: 100%;
-  margin: auto;
 }
 </style>
