@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:55
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-13 20:34:32
+ * @LastEditTime: 2021-09-14 10:06:50
 -->
 <template>
   <div class="user-center-setting">
@@ -42,6 +42,7 @@
 import { computed, defineComponent, reactive } from 'vue';
 import { getPrivacySetting, modifySetting } from '@/network/api/setting';
 import { useMessage } from 'naive-ui';
+import { mapState } from '@/util/store';
 
 /**
  * @description: 隐私设置页面
@@ -51,6 +52,8 @@ export default defineComponent({
   name: 'userCenterSettting',
   setup() {
     const msg = useMessage(); // naive-ui message
+
+    const { tokenInfo } = mapState('global', ['tokenInfo']);
     // 隐私设置介绍
     const textmenus = computed(() => {
       return [
@@ -60,28 +63,26 @@ export default defineComponent({
       ];
     });
 
-    // 计算隐私设置选项
-    const radiomenus = computed(() => {
-      return [
-        [
-          { lable: '允许', value: 1 },
-          { lable: '关闭', value: 0 },
-        ],
-        [
-          { lable: '允许', value: 1 },
-          { lable: '关闭', value: 0 },
-        ],
-        [
-          { lable: '允许', value: 1 },
-          { lable: '关闭', value: 0 },
-        ],
-      ];
-    });
+    // 隐私设置选项
+    const radiomenus = [
+      [
+        { lable: '允许', value: 1 },
+        { lable: '关闭', value: 0 },
+      ],
+      [
+        { lable: '允许', value: 1 },
+        { lable: '关闭', value: 0 },
+      ],
+      [
+        { lable: '允许', value: 1 },
+        { lable: '关闭', value: 0 },
+      ],
+    ];
 
     const settingData = reactive([1, 1, 1]); // 绑定隐私设置数据
 
     // 获取隐私设置数据
-    getPrivacySetting()
+    getPrivacySetting(tokenInfo.value.username)
       .then((data) => {
         settingData[0] = data.view_dynamic;
         settingData[1] = data.view_ask;
