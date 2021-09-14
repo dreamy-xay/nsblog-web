@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:04:40
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-13 15:13:00
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-13 21:24:12
 -->
 <template>
   <base-view
@@ -43,10 +43,11 @@ import UserHeader from '@/views/user/childComps/UserHeader.vue';
 import UserInfo from '@/views/user/childComps/userInfo/UserInfo.vue';
 import UserMain from '@/views/user/childComps/userMain/UserMain.vue';
 import { postAttentions, deleteAttentions } from '@/network/api/attentions';
-import { mapState } from '@/util/store';
+import { mapMutations, mapState } from '@/util/store';
 import { useRoute } from 'vue-router';
 import { getUserInfo } from '@/network/api/user';
 import { useMessage } from 'naive-ui';
+import { getPrivacySetting } from '@/network/api/setting';
 
 /**
  * @description: 用户详细信息页面
@@ -254,6 +255,17 @@ export default defineComponent({
             msg.error('取消关注失败', { duration: 2000, closable: true });
           });
     }
+
+    const { changePrivacySetting } = mapMutations('user', ['changePrivacySetting']); //修改隐私设置
+
+    getPrivacySetting()
+      .then((data) => {
+        changePrivacySetting(data);
+      })
+      .catch((error) => {
+        console.log(error);
+        msg.error('获取隐私设置失败', { duration: 2000, closable: true });
+      });
 
     return {
       userData,
