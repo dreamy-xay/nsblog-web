@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-14 19:40:03
+ * @LastEditTime: 2021-09-14 21:13:00
 -->
 <template>
   <div class="user-collection">
@@ -43,7 +43,7 @@
       </div>
       <div
         class="collection"
-        v-if="openFavorites[index]"
+        :class="{'collection-down': openFavorites[index]}"
       >
         <show-collection :data="item.collections" />
       </div>
@@ -211,7 +211,14 @@ export default defineComponent({
       }
     }
     .collection {
-      margin-top: 16px;
+      height: 0;
+      transition: 0.4s;
+      overflow: hidden;
+
+      &.collection-down {
+        height: 100%;
+        margin-top: 16px;
+      }
     }
   }
 }

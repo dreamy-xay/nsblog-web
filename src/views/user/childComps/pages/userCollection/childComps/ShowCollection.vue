@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-14 18:01:22
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-14 19:45:44
+ * @LastEditTime: 2021-09-14 20:58:55
 -->
 
 <template>
@@ -25,11 +25,19 @@
         <div
           class="text"
           role="button"
-        >{{item.title}}</div>
+        > <a
+            class="link"
+            :href="`/article/${item.content_id}`"
+            :target="`/article/${item.content_id}`"
+          >{{item.title}}</a> </div>
       </div>
 
       <div class="icon"><i class="iconfont blog-fav"></i></div>
     </div>
+    <div
+      role="button"
+      class="show-collection-button"
+    >点击加载</div>
   </div>
 </template>
 
@@ -55,12 +63,12 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .show-collection {
-  width: 818px;
+  width: 826px;
   background-color: $grey-1;
   box-shadow: $shadow-0;
   border-radius: $border-radius-0;
   padding: 24px 16px 16px 16px;
-  @include flex(initial, center, column);
+  @include flex(center, center, column);
 
   .show-collection-context {
     @include flex(center, initial, row);
@@ -72,16 +80,19 @@ export default defineComponent({
       width: 798px;
 
       .text {
-        @include ellipsis(1);
-        font-size: 16px;
-        height: 22px;
-        line-height: 22px;
-        color: $grey-11;
         margin-left: 12px;
-        transition: all 0.25s;
 
-        &:hover {
-          color: $pink-0;
+        .link {
+          @include ellipsis(1);
+          font-size: 16px;
+          height: 22px;
+          line-height: 22px;
+          color: $grey-11;
+          transition: all 0.25s;
+
+          &:hover {
+            color: $pink-0;
+          }
         }
       }
     }
@@ -95,6 +106,16 @@ export default defineComponent({
         font-size: 22px;
       }
     }
+  }
+  .show-collection-button {
+    @include flex(center, center);
+    height: 28px;
+    width: 100px;
+    background-color: $grey-1;
+    box-shadow: $shadow-0;
+    border-radius: $border-radius-0;
+    font-size: 14px;
+    color: $grey-9;
   }
 }
 </style>
