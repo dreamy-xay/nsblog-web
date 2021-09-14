@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:04:40
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-13 21:24:12
+ * @LastEditTime: 2021-09-14 10:07:20
 -->
 <template>
   <base-view
@@ -258,7 +258,7 @@ export default defineComponent({
 
     const { changePrivacySetting } = mapMutations('user', ['changePrivacySetting']); //修改隐私设置
 
-    getPrivacySetting()
+    getPrivacySetting(username)
       .then((data) => {
         changePrivacySetting(data);
       })
