@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-10 14:25:47
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-14 12:00:48
+ * @LastEditTime: 2021-09-14 15:50:45
  */
 
 import { Application, Request, Response } from 'express';
@@ -81,22 +81,6 @@ export default function(baseUrl: string, app: Application) {
     }
     return res.json({
       fans: getRandom(int(offset) >= 69 ? 0 : Math.min(int(limit), 69 - int(offset)))
-    });
-  });
-
-  // 获取关注和粉丝数量
-  app.get(baseUrl + '/attentions/count', (req: Request, res: Response) => {
-    const { username } = req.query;
-
-    if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
-
-    console.log(`--------${username} getAttentionsCount...`);
-
-    return res.send({
-      count: {
-        fans: Random.integer(0, 100),
-        attentions: Random.integer(0, 100)
-      }
     });
   });
 }
