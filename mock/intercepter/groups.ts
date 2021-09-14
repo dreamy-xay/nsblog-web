@@ -4,12 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-13 21:32:38
+ * @LastEditTime: 2021-09-14 09:29:33
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
 import { int } from './util';
-import select from 'mock/data';
+import select from '../data/index';
 
 export default function(baseUrl: string, app: Application) {
   // 获取学习小组

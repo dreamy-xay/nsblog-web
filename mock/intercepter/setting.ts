@@ -3,13 +3,14 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 23:12:21
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-07 18:41:41
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-14 09:36:49
  */
 
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
 import { verifyToken, getToken } from './util';
+import select from '../data/index';
 
 export default function(baseUrl: string, app: Application) {
   // 消息设置获取
@@ -36,7 +37,8 @@ export default function(baseUrl: string, app: Application) {
 
   // 隐私设置获取
   app.get(baseUrl + '/setting/privacy', (req: Request, res: Response) => {
-    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
+    const { username } = req.query;
+    if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
     const setting: Record<string, unknown> = {
       view_dynamic: Random.integer(0, 1),
       view_ask: Random.integer(0, 1),
