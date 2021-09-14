@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-13 21:37:47
+ * @LastEditTime: 2021-09-14 09:42:48
 -->
 <template>
   <div
@@ -23,7 +23,10 @@
       @click="add"
     >加载更多...</div>
   </div>
-  <div v-else>
+  <div
+    v-else
+    class="ss"
+  >
     <base-svg
       svg="no-permission"
       :color="styles.green0"
@@ -95,5 +98,11 @@ export default defineComponent({
       color: $grey-0;
     }
   }
+}
+
+.ss {
+  height: 100%;
+  width: 100%;
+  margin: auto;
 }
 </style>

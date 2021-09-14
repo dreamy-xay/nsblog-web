@@ -4,11 +4,20 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-11 19:40:37
+ * @LastEditTime: 2021-09-14 09:39:32
 -->
 <template>
-  <div class="user-profile">
+  <div
+    class="user-profile"
+    v-if="privacySetting.view_profile"
+  >
     <v-md-preview :text="text" />
+  </div>
+  <div v-else>
+    <base-svg
+      svg="no-permission"
+      :color="styles.green0"
+    />
   </div>
 </template>
 
@@ -19,6 +28,10 @@ import { getProfile } from '@/network/api/user';
 
 import { useRoute } from 'vue-router';
 
+import { mapState } from '@/util/store';
+import BaseSvg from '@/components/content/baseSvg/BaseSvg.vue';
+import styles from '@/assets/style/define.scss';
+
 /**
  * @description: 用户主页个人简介
  * @author: dreamy-xay
@@ -26,6 +39,9 @@ import { useRoute } from 'vue-router';
 
 export default defineComponent({
   name: 'userProfile',
+  components: {
+    BaseSvg,
+  },
   setup() {
     const route = useRoute(); // route
     const username = route.params.username;
@@ -34,6 +50,8 @@ export default defineComponent({
       text.value = data.profile;
     });
     return {
+      styles,
+      ...mapState('user', ['privacySetting']),
       text,
     };
   },
