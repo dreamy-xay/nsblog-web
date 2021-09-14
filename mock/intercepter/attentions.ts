@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-10 14:25:47
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-14 10:22:43
+ * @LastEditTime: 2021-09-14 15:50:45
  */
 
 import { Application, Request, Response } from 'express';
@@ -36,8 +36,7 @@ export default function(baseUrl: string, app: Application) {
       return ans;
     }
     return res.json({
-      attentions: getRandom(int(offset) >= 69 ? 0 : Math.min(int(limit), 69 - int(offset))),
-      count: Random.integer(0, 100)
+      attentions: getRandom(int(offset) >= 69 ? 0 : Math.min(int(limit), 69 - int(offset)))
     });
   });
 
@@ -81,8 +80,7 @@ export default function(baseUrl: string, app: Application) {
       return ans;
     }
     return res.json({
-      fans: getRandom(int(offset) >= 69 ? 0 : Math.min(int(limit), 69 - int(offset))),
-      count: Random.integer(0, 100)
+      fans: getRandom(int(offset) >= 69 ? 0 : Math.min(int(limit), 69 - int(offset)))
     });
   });
 }
