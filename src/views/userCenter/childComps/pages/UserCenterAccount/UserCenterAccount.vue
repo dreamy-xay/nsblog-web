@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:42
- * @LastEditors: Ban
- * @LastEditTime: 2021-09-14 19:20:11
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-15 12:30:38
 -->
 <template>
   <div class="user-center-account">
@@ -17,10 +17,10 @@
       :key="index"
     >
       <div class="body-left">
-        {{ item.left }}
+        {{item.left}}
       </div>
       <div class="body-center">
-        {{ item.center }}
+        {{item.center}}
       </div>
       <div
         class="body-right"
@@ -30,19 +30,19 @@
           v-if="item.left === '登录记录' || item.left === '帐号注销'"
           style="text-align: right;"
         >
-          {{ item.right }}
+          {{item.right}}
         </div>
         <div
           v-else-if="item.left === '绑定微博' || item.left === '绑定QQ帐号'"
           style="text-align: right;"
         >
-          {{ item.right }}
+          {{item.right}}
         </div>
         <div v-else-if="item.right === '修改密码'">
-          <user-center-account-password :title="item.right"></user-center-account-password>
+          <user-center-account-password :title="item.right" />
         </div>
         <div v-else>
-          <user-center-account-email></user-center-account-email>
+          <user-center-account-email />
         </div>
       </div>
     </div>
@@ -51,7 +51,7 @@
 
 <script>
 import { defineComponent, computed, ref } from 'vue';
-import { getUserInfo, getPasswordStatus } from '@/network/api/user';
+import { getUserInfo } from '@/network/api/user';
 import { mapState } from '@/util/store';
 import UserCenterAccountPassword from '@/views/userCenter/childComps/pages/UserCenterAccount/childComps/UserCenterAccountPassword.vue';
 import UserCenterAccountEmail from '@/views/userCenter/childComps/pages/UserCenterAccount/childComps/UserCenterAccountEmail.vue';
@@ -62,6 +62,7 @@ import UserCenterAccountEmail from '@/views/userCenter/childComps/pages/UserCent
  * @return {*}
  * @author: Ban
  */
+
 export default defineComponent({
   name: 'UserCenterAccount',
   components: {
@@ -124,19 +125,10 @@ export default defineComponent({
         },
       ];
     });
-    // function dialogBeforeClose(done) {
-    //   this.$confirm('确认关闭？')
-    //     .then((_) => {
-    //       done();
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-    // }
+
     return {
       list,
       dialogVisible,
-      // dialogBeforeClose,
     };
   },
 });
