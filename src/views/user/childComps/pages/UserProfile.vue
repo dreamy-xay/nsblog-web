@@ -4,18 +4,19 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-14 10:44:31
+ * @LastEditTime: 2021-09-15 20:41:14
 -->
 <template>
   <div
     class="user-profile"
-    v-if="privacySetting.view_profile"
+    v-if="privacySetting.view_profile && text"
   >
     <v-md-preview :text="text" />
   </div>
-  <div v-else>
-    <user-empty />
-  </div>
+  <user-null
+    v-else
+    :select="privacySetting.view_profile"
+  />
 </template>
 
 <script>
@@ -26,7 +27,7 @@ import { getProfile } from '@/network/api/user';
 import { useRoute } from 'vue-router';
 
 import { mapState } from '@/util/store';
-import UserEmpty from '@/views/user/childComps/UserEmpty.vue';
+import UserNull from '@/views/user/childComps/UserNull.vue';
 
 /**
  * @description: 用户主页个人简介
@@ -36,7 +37,7 @@ import UserEmpty from '@/views/user/childComps/UserEmpty.vue';
 export default defineComponent({
   name: 'userProfile',
   components: {
-    UserEmpty,
+    UserNull,
   },
   setup() {
     const route = useRoute(); // route
