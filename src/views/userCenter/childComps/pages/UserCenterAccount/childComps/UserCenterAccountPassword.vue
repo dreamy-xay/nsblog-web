@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-26 15:11:17
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-15 12:43:30
+ * @LastEditTime: 2021-09-15 12:50:57
 -->
 <template>
   <div class="user-center-account-change">
@@ -214,7 +214,9 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function verifyConfirmedPassword(confirmedPassword) {
-      return confirmedPassword === password.value && confirmedPassword !== '';
+      return (
+        confirmedPassword === password.value && confirmedPassword !== '' && confirmedPassword !== oldPassword.value
+      );
     }
 
     /**

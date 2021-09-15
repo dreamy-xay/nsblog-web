@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 22:15:27
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-06 15:50:53
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-15 12:48:51
 -->
 <template>
   <div class="login-input">
@@ -168,6 +168,8 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function check(messageOptions) {
+      // 输入验证
+      efficient.value = props.verify === null || props.verify(props.modelValue);
       error.value = !efficient.value;
       // 发出消息
       if (error.value && typeof messageOptions === 'object') {

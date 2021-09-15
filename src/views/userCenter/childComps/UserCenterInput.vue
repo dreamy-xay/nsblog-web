@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-31 16:34:22
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-07 11:40:05
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-15 12:48:40
 -->
 <template>
   <div
@@ -206,6 +206,8 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function check(messageOptions) {
+      // 输入验证
+      efficient.value = props.verify === null || props.verify(props.modelValue);
       error.value = !efficient.value;
       // 发出消息
       if (error.value && typeof messageOptions === 'object') {
