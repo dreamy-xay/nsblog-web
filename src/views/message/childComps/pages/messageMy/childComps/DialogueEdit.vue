@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-19 16:19:04
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-02 15:55:54
+ * @LastEditTime: 2021-09-15 22:45:12
 -->
 <template>
   <div class="dialogue-edit">
@@ -30,7 +30,7 @@
       >
         <base-emoji
           @select="selectEmoji"
-          :limit-frequently="30"
+          :limit-frequently="45"
         />
         <template #reference>
           <i

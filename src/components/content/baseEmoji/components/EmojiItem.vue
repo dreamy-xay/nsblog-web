@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-24 14:11:23
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-24 14:40:16
+ * @LastEditTime: 2021-09-15 21:13:32
 -->
 
 <template>
@@ -33,7 +33,7 @@ export default defineComponent({
       type: Boolean,
     },
   },
-  setup(props, context) {
+  setup(props) {
     const { size } = props as any;
     const styleSize = computed(() => ({
       fontSize: `${size - 5}px`,
