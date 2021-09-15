@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:25:27
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-13 20:03:36
+ * @LastEditTime: 2021-09-15 19:30:10
 -->
 
 <template>
@@ -124,6 +124,7 @@ export default defineComponent({
     const replyData = reactive([]); // 回复我的界面数据
     const { updateMessageCount } = mapMutations('message', ['updateMessageCount']);
     const { messageCount } = mapState('message', ['messageCount']); // 获取tokenInfo
+    const limit = 10; // 获取消息数量
 
     // 进入计数清空
     updateMessageCount({ type: 2, count: 0 });
@@ -147,15 +148,16 @@ export default defineComponent({
      */
 
     function getMessagesList() {
-      getMessages(2, replyData.length, 10)
+      getMessages(2, replyData.length, limit)
         .then((data) => {
-          if (data.messages.length < 10) {
+          if (data.messages.length < limit) {
             deleteTag.value = false;
           }
           replyData.splice(replyData.length, 0, ...data.messages);
         })
         .catch((error) => {
-          console.log(error), msg.error('获取消息失败，请重试', { duration: 2000, closable: true });
+          console.log(error);
+          msg.error('获取消息失败，请重试', { duration: 2000, closable: true });
         });
     }
 
@@ -175,7 +177,8 @@ export default defineComponent({
           }
         })
         .catch((error) => {
-          console.log(error), msg.error('删除消息失败，请重试', { duration: 2000, closable: true });
+          console.log(error);
+          msg.error('删除消息失败，请重试', { duration: 2000, closable: true });
         });
     }
 

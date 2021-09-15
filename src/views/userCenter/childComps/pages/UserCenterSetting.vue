@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:55
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-14 10:06:50
+ * @LastEditTime: 2021-09-15 19:31:59
 -->
 <template>
   <div class="user-center-setting">
@@ -55,13 +55,11 @@ export default defineComponent({
 
     const { tokenInfo } = mapState('global', ['tokenInfo']);
     // 隐私设置介绍
-    const textmenus = computed(() => {
-      return [
-        { text1: '查看动态', text2: '（允许后，在个人主页展示动态）' },
-        { text1: '查看问答', text2: '（允许后，在个人主页展示问答）' },
-        { text1: '查看个人介绍', text2: '（允许后，在个人主页展示个人介绍）' },
-      ];
-    });
+    const textmenus = [
+      { text1: '查看动态', text2: '（允许后，在个人主页展示动态）' },
+      { text1: '查看问答', text2: '（允许后，在个人主页展示问答）' },
+      { text1: '查看个人介绍', text2: '（允许后，在个人主页展示个人介绍）' },
+    ];
 
     // 隐私设置选项
     const radiomenus = [
@@ -107,7 +105,7 @@ export default defineComponent({
       ];
       modifySetting(data[index]).catch((error) => {
         console.log(error);
-        msg.error('修改设置失败，请重试', { duration: 2000, closable: true });
+        msg.error('修改设置失败,请重试', { duration: 2000, closable: true });
       });
     }
     return {

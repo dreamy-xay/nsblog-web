@@ -4,13 +4,16 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-14 21:13:00
+ * @LastEditTime: 2021-09-15 20:53:07
 -->
 <template>
-  <div class="user-collection">
+  <div
+    class="user-collection"
+    v-if="collectionData.length"
+  >
     <div
-      v-for="(item , index) in collectionData"
-      :key=index
+      v-for="(item, index) in collectionData"
+      :key="index"
       class="user-collection-context"
     >
       <div class="user-collection-context-top">
@@ -24,6 +27,7 @@
           <div class="text2">{{item.count+'内容'}}</div>
           <div class="line"></div>
           <div
+            v-if="item.collections.length > 0"
             class="center"
             role="button"
             @click="changeOpenFavorites(index)"
@@ -43,12 +47,21 @@
       </div>
       <div
         class="collection"
-        :class="{'collection-down': openFavorites[index]}"
+        :style="{height: openFavorites[index] ? (82 + 46 * item.collections.length - (loading[index] ? 0 : 38) + 'px') : '6px', opacity: Number(openFavorites[index])}"
       >
-        <show-collection :data="item.collections" />
+        <show-collection
+          :data="item.collections"
+          :loading="loading[index]"
+          @clickLoading="addCollections(index)"
+        />
       </div>
     </div>
   </div>
+
+  <user-null
+    v-else
+    :select="true"
+  />
 </template>
 
 <script>
@@ -58,6 +71,7 @@ import { useMessage } from 'naive-ui';
 import { defineComponent, reactive } from 'vue';
 import { useRoute } from 'vue-router';
 import ShowCollection from '@/views/user/childComps/pages/userCollection/childComps/ShowCollection.vue';
+import UserNull from '@/views/user/childComps/UserNull.vue';
 
 /**
  * @description: 用户主页收藏记录
@@ -68,33 +82,65 @@ export default defineComponent({
   name: 'userCollection',
   components: {
     ShowCollection,
+    UserNull,
   },
   setup() {
     const msg = useMessage(); // naive-ui
     const route = useRoute(); // 路由
     const collectionData = reactive([]);
+    const loading = reactive([]); // 显示加载按钮
     const username = route.params.username; // 获取路由的username
     const openFavorites = reactive([]);
+    const limit = 10; // 拿去数据条数
 
-    getFavorites(username, 5, 0)
+    // 获取数据
+    getFavorites(username, limit, 0)
       .then((data) => {
         collectionData.splice(0, 0, ...data.favorites);
         for (let i = 0; i < data.favorites.length; i++) {
-          openFavorites.push(false);
+          openFavorites.splice(openFavorites.length, 0, false);
+          loading.splice(loading.length, 0, data.favorites[i].collections.length === limit);
         }
-        console.log(openFavorites);
-        console.log(collectionData);
       })
       .catch((error) => {
         console.log(error);
-        msg.error('获取关注信息失败', { duration: 2000, closable: true });
+        msg.error('获取收藏夹信息失败', { duration: 2000, closable: true });
       });
 
+    /**
+     * @description: 展开和关闭按钮状态
+     * @param {Number} index 数据在数组中下标
+     * @author: Z_Y_C
+     */
     function changeOpenFavorites(index) {
       openFavorites[index] = !openFavorites[index];
     }
 
-    return { collectionData, dateFormat, openFavorites, changeOpenFavorites };
+    /**
+     * @description: 加载该收藏夹收藏数据
+     * @param {Number} index 收藏夹下标
+     * @author: Z_Y_C
+     */
+    function addCollections(index) {
+      getFavorites(username, limit, collectionData[index].collections.length, 0, 0, collectionData[index].id)
+        .then((data) => {
+          if (data.collections.length < 10) loading[index] = false;
+          collectionData[index].collections.splice(collectionData[index].collections.length, 0, ...data.collections);
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('获取收藏信息失败', { duration: 2000, closable: true });
+        });
+    }
+
+    return {
+      collectionData,
+      dateFormat,
+      openFavorites,
+      changeOpenFavorites,
+      loading,
+      addCollections,
+    };
   },
 });
 </script>
@@ -110,6 +156,7 @@ export default defineComponent({
     background-color: $grey-0;
     margin-bottom: 16px;
     padding: 16px;
+    padding-bottom: 0;
 
     .user-collection-context-top {
       @include flex(center, initial, row);
@@ -210,15 +257,13 @@ export default defineComponent({
         }
       }
     }
-    .collection {
-      height: 0;
-      transition: 0.4s;
-      overflow: hidden;
 
-      &.collection-down {
-        height: 100%;
-        margin-top: 16px;
-      }
+    .collection {
+      width: calc(100% + 12px);
+      margin-left: -6px;
+      transition: 0.4s;
+      margin-top: 10px;
+      overflow: hidden;
     }
   }
 }

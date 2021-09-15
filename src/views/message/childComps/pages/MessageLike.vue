@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:31:44
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-13 20:03:09
+ * @LastEditTime: 2021-09-15 19:30:24
 -->
 <template>
   <el-scrollbar max-height="calc(100vh - 108px)">
@@ -91,6 +91,7 @@ export default defineComponent({
     const likeData = reactive([]); // 收到的赞界面数据
     const { updateMessageCount } = mapMutations('message', ['updateMessageCount']);
     const { messageCount } = mapState('message', ['messageCount']); // 获取tokenInfo
+    const limit = 10; // 获取消息数量
 
     // 进入计数清空
     updateMessageCount({ type: 3, count: 0 });
@@ -114,15 +115,16 @@ export default defineComponent({
      */
 
     function getMessagesList() {
-      getMessages(3, likeData.length, 10)
+      getMessages(3, likeData.length, limit)
         .then((data) => {
-          if (data.messages.length < 10) {
+          if (data.messages.length < limit) {
             deleteTag.value = false;
           }
           likeData.splice(likeData.length, 0, ...data.messages);
         })
         .catch((error) => {
-          console.log(error), msg.error('获取消息失败，请重试', { duration: 2000, closable: true });
+          console.log(error);
+          msg.error('获取消息失败，请重试', { duration: 2000, closable: true });
         });
     }
 
@@ -153,7 +155,8 @@ export default defineComponent({
           }
         })
         .catch((error) => {
-          console.log(error), msg.error('删除消息失败，请重试', { duration: 2000, closable: true });
+          console.log(error);
+          msg.error('删除消息失败，请重试', { duration: 2000, closable: true });
         });
     }
 

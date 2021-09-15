@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-05 10:41:38
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-14 11:41:49
+ * @LastEditTime: 2021-09-15 19:30:39
 -->
 
 <template>
@@ -113,6 +113,7 @@ export default defineComponent({
     const sureCancel = ref(0); // 记录取消关注下标
     const { updateMessageCount } = mapMutations('message', ['updateMessageCount']);
     const { messageCount } = mapState('message', ['messageCount']); // 获取tokenInfo
+    const limit = 10; // 获取消息数量
 
     // 进入计数清空
     updateMessageCount({ type: 4, count: 0 });
@@ -135,15 +136,16 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function getMessagesList() {
-      getMessages(4, attentionData.length, 10)
+      getMessages(4, attentionData.length, limit)
         .then((data) => {
-          if (data.messages.length < 10) {
+          if (data.messages.length < limit) {
             deleteTag.value = false;
           }
           attentionData.splice(attentionData.length, 0, ...data.messages);
         })
         .catch((error) => {
-          console.log(error), msg.error('获取消息失败，请重试', { duration: 2000, closable: true });
+          console.log(error);
+          msg.error('获取消息失败，请重试', { duration: 2000, closable: true });
         });
     }
 
@@ -163,7 +165,8 @@ export default defineComponent({
           }
         })
         .catch((error) => {
-          console.log(error), msg.error('删除消息失败，请重试', { duration: 2000, closable: true });
+          console.log(error);
+          msg.error('删除消息失败，请重试', { duration: 2000, closable: true });
         });
     }
 
