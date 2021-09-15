@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 15:56:58
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-14 12:47:54
+ * @LastEditTime: 2021-09-15 16:11:15
 -->
 <template>
   <div
@@ -42,11 +42,9 @@
             v-for="(item, index) in data.topic_tag.slice(0, 3)"
             :key="index"
             :text="item"
-            :color="tagColor[index]"
-            :style="{borderRadius: '6px', transition: '0.25s'}"
-            role="button"
-            @click="tagClick(item)"
-            @hover="tagHover($event, index)"
+            :color="styles.orange0"
+            :hover-color="styles.orange1"
+            :style="{borderRadius: '6px'}"
           />
         </div>
         <div class="other-right">
@@ -123,37 +121,11 @@ export default defineComponent({
       context.emit('delete');
     }
 
-    const tagColor = reactive([styles.orange0, styles.orange0, styles.orange0]); // 标签颜色设置
-
-    /**
-     * @description: 点击标签跳转链接
-     * @param {string} tagName 标签名 `v-for值`
-     * @return {void}
-     * @author: dreamy-xay
-     */
-    function tagClick(tagName) {
-      console.log(tagName);
-    }
-
-    /**
-     * @description: baseTag 被hover 修改其样式
-     * @param {boolean} isEnter 是否进入元素内 `上层事件参数`
-     * @param {number} index tag索引 `v-for索引值`
-     * @return {void}
-     * @author: dreamy-xay
-     */
-    function tagHover(isEnter, index) {
-      tagColor[index] = isEnter ? styles.orange1 : styles.orange0;
-    }
-
     return {
       styles,
       firstTime: dateGetText(new Date(props.data.time)),
       lastTime: dateFormat('YY-mm-dd', new Date(props.data.time)),
       deleteItem,
-      tagColor,
-      tagClick,
-      tagHover,
     };
   },
 });
