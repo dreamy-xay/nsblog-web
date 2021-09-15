@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-05 18:50:30
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-22 17:10:33
+ * @LastEditTime: 2021-09-15 16:12:25
 -->
 
 <template>
@@ -51,7 +51,6 @@
                 :text="value.type === 1 ? '文章' : (value.type === 2 ? '问答' : '资源')"
                 :color="styles.pink0"
                 :hollow="true"
-                role="button"
               />
               <div
                 class="collectioncontent"
