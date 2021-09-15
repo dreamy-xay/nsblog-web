@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 18:50:47
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-31 22:32:28
+ * @LastEditTime: 2021-09-15 12:06:34
 -->
 <template>
   <div class="sign-up">
@@ -153,7 +153,7 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function verifyConfirmedPassword(confirmedPassword) {
-      return confirmedPassword === password.value;
+      return confirmedPassword === password.value && confirmedPassword !== '';
     }
 
     /**

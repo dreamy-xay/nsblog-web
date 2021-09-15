@@ -4,12 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:15:05
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-13 14:22:54
+ * @LastEditTime: 2021-09-15 11:57:24
  */
 import { Random, mock } from 'better-mock';
 import { Application, Request, Response } from 'express';
 import select, { DataBaseOperator } from '../data/index';
-import { clearToken, verifyToken, getToken, int } from './util';
+import { verifyToken, getToken, int } from './util';
 import * as location from '../../src/util/json/location.json';
 
 function randomAddress(): string {
@@ -149,10 +149,9 @@ export default function(baseUrl: string, app: Application) {
   app.post(baseUrl + '/users', (req: Request, res: Response) => {
     const { username, email, password, code } = req.body;
     const users: DataBaseOperator = select('users');
-    const codes: DataBaseOperator = select('codes');
-    if (codes.findOne({ code, email })) {
-      codes.removeOne({ code, email });
+    if (select('codes').findOne({ code, email })) {
       users.insertOne({ username, password, email, token: null, isActive: true, isSuper: false });
+      select('codes').removeOne({ code, email });
       return res.status(201).json({ username });
     } else return res.status(403).json({ error: 'code error' });
   });
@@ -205,7 +204,7 @@ export default function(baseUrl: string, app: Application) {
     const users: DataBaseOperator = select('users');
     if (data === users.findOne({ username }).password) {
       users.modifyOne({ username }, { password });
-      clearToken(username);
+      select('users').modifyOne({ username }, { token: null });
       return res.send();
     } else return res.status(403).json({ error: 'You have no modification' });
   });
