@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-19 16:19:04
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-15 22:45:12
+ * @LastEditTime: 2021-09-16 10:11:35
 -->
 <template>
   <div class="dialogue-edit">
@@ -14,7 +14,7 @@
         type="file"
         @change="fileChange"
         ref="uploadRef"
-        accept=".jpg,.png,.gif,.tif,.tiff,.ico,.bmp,.webp,.jepg"
+        accept="image/*"
       >
       <i
         class="iconfont blog-image"
@@ -96,7 +96,8 @@ export default defineComponent({
     watch(
       () => content.value,
       (value, oldValue) => {
-        if (value.length >= oldValue.length) inputHeight.value = textareaRef.value.scrollHeight + 'px';
+        if (value.length === 0) inputHeight.value = '60px';
+        else if (value.length >= oldValue.length) inputHeight.value = textareaRef.value.scrollHeight + 'px';
         else {
           inputHeight.value = textareaRef.value.scrollHeight - 20 + 'px';
           nextTick(() => {
@@ -116,6 +117,7 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function selectEmoji(emoji) {
+      if (emoji.data.length + content.value.length > 500) return;
       if (emoji.data) {
         const startPos = textareaRef.value.selectionStart;
         const endPos = textareaRef.value.selectionEnd;
