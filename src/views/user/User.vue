@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:04:40
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-14 11:45:12
+ * @LastEditors: clq
+ * @LastEditTime: 2021-09-16 11:23:08
 -->
 <template>
   <base-view
@@ -25,6 +25,7 @@
           :data="userInfoData"
           :self="isSelf"
           @attention="changeAttention"
+          @updateCount="updateCount"
         />
       </div>
 
@@ -267,6 +268,30 @@ export default defineComponent({
         msg.error('获取隐私设置失败', { duration: 2000, closable: true });
       });
 
+    /**
+     * @description: 修改关注或粉丝数量
+     * @param {Object} info info.flag: {true: 修改关注 ,false: 修改粉丝}  info.data: {true: 增加, false: 减少}
+     * @return {void}
+     * @author: clq
+     */
+    function updateCount(info) {
+      console.log('info.flag:' + info.flag);
+      console.log('info.data:' + info.data);
+      if (info.flag) {
+        if (info.data) {
+          userData.like_count += 1;
+        } else {
+          userData.like_count -= 1;
+        }
+      } else {
+        if (info.data) {
+          userData.fans_count += 1;
+        } else {
+          userData.fans_count -= 1;
+        }
+      }
+    }
+
     return {
       userData,
       isSelf,
@@ -274,6 +299,7 @@ export default defineComponent({
       userHeaderData,
       userMainData,
       changeAttention,
+      updateCount,
     };
   },
 });
