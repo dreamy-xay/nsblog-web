@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-16 12:17:55
+ * @LastEditTime: 2021-09-16 15:55:15
 -->
 <template>
   <div class="user-group">
@@ -14,11 +14,11 @@
       class="user-group-context"
     >
       <div class="top">{{item.name}}</div>
-      <div class="center">{{item.category}}</div>
+      <div class="center">{{item.remark}}</div>
       <div class="bottom">
         <div class="info">
           <base-tag
-            text="算法"
+            :text="item.category"
             :hollow="true"
             :size="20"
             :color="styles.orange0"
@@ -38,6 +38,15 @@
         </div>
 
       </div>
+    </div>
+
+    <div
+      class="button"
+      role="button"
+      v-if="loading"
+      @click="addGroupData"
+    >
+      加载更多...
     </div>
   </div>
 </template>
@@ -64,16 +73,24 @@ export default defineComponent({
     const route = useRoute();
     const username = route.params.username; // 获取路由的username
     const groupData = reactive([]);
-    const loading = ref(true); // 查看数据是否加载完
-    const limit = 5; // 获取数据条数
+    const loading = ref(false); // 查看数据是否加载完
+    const limit = 10; // 获取数据条数
 
     // 首次获取数据
     getGroups(username, 0, limit).then((data) => {
-      console.log(data.groups);
+      // console.log(data.groups.length === limit);
       loading.value = data.groups.length === limit;
       groupData.splice(0, 0, ...data.groups);
     });
-    return { styles, groupData, dateFormat };
+
+    function addGroupData() {
+      getGroups(username, groupData.length, limit).then((data) => {
+        loading.value = data.groups.length === limit;
+        groupData.splice(groupData.length, 0, ...data.groups);
+      });
+    }
+
+    return { styles, groupData, dateFormat, addGroupData, loading };
   },
 });
 </script>
@@ -81,8 +98,10 @@ export default defineComponent({
 <style lang="scss" scoped>
 .user-group {
   width: 100%;
+  @include flex(center, center, column);
 
   .user-group-context {
+    width: 858px;
     @include flex(initial, center, column);
     box-shadow: $shadow-0;
     border-radius: $border-radius-0;
@@ -121,12 +140,13 @@ export default defineComponent({
         .number {
           @include flex(center, initial, row);
           .icon {
-            width: 20px;
+            line-height: 20px;
             height: 20px;
             margin-left: 24px;
             margin-right: 5px;
+
             .iconfont {
-              font-size: 20px;
+              font-size: 16px;
               color: $grey-7;
             }
           }
@@ -139,15 +159,17 @@ export default defineComponent({
           }
         }
       }
+
       .time {
         @include flex(center, initial, row);
 
         .time-icon {
-          width: 20px;
+          line-height: 20px;
           height: 20px;
           margin-right: 5px;
+
           .iconfont {
-            font-size: 20px;
+            font-size: 16px;
             color: $grey-7;
           }
         }
@@ -158,6 +180,21 @@ export default defineComponent({
           color: $grey-7;
         }
       }
+    }
+  }
+  .button {
+    @include flex(center, center);
+    width: 300px;
+    height: 32px;
+    box-shadow: $shadow-0;
+    border-radius: $border-radius-0;
+    background-color: $grey-0;
+    font-size: 14px;
+    color: $grey-9;
+
+    &:hover {
+      color: $grey-10;
+      background-color: $grey-1;
     }
   }
 }

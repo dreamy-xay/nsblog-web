@@ -1,7 +1,7 @@
 @font-face {
     font-family: "iconfont";
     /* Project id 2675107 */
-    src: url('//at.alicdn.com/t/font_2675107_nutceqc6sui.woff2?t=1631612036147') format('woff2'), url('//at.alicdn.com/t/font_2675107_nutceqc6sui.woff?t=1631612036147') format('woff'), url('//at.alicdn.com/t/font_2675107_nutceqc6sui.ttf?t=1631612036147') format('truetype');
+    src: url('//at.alicdn.com/t/font_2675107_hgkbrl98x0v.woff2?t=1631785217556') format('woff2'), url('//at.alicdn.com/t/font_2675107_hgkbrl98x0v.woff?t=1631785217556') format('woff'), url('//at.alicdn.com/t/font_2675107_hgkbrl98x0v.ttf?t=1631785217556') format('truetype');
 }
 
 .iconfont {
@@ -10,6 +10,30 @@
     font-style: normal;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+.blog-fontAwesome_tags:before {
+    content: "\e84c";
+}
+
+.blog-up:before {
+    content: "\e646";
+}
+
+.blog-mulu1:before {
+    content: "\e642";
+}
+
+.blog-zhiding:before {
+    content: "\e64b";
+}
+
+.blog-homepage:before {
+    content: "\e644";
+}
+
+.blog-mulu:before {
+    content: "\e801";
 }
 
 .blog-FontAwesomechevroncircledown:before {
