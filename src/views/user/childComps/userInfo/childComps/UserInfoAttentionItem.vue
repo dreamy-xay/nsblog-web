@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-09 20:58:06
  * @LastEditors: clq
- * @LastEditTime: 2021-09-14 16:48:53
+ * @LastEditTime: 2021-09-16 10:50:00
 -->
 <template>
   <div class="user-info-attention-item">
@@ -110,6 +110,7 @@ export default defineComponent({
           addAttentions(props.username)
             .then(() => {
               context.emit('update:attention', true);
+              context.emit('updateCount', true); //增加关注或粉丝量
               msg.success('关注成功', { duration: 2000, closable: true });
               null;
             })
@@ -135,6 +136,7 @@ export default defineComponent({
           .then(() => {
             msg.success('取消关注成功', { duration: 2000, closable: true });
             context.emit('update:attention', false);
+            context.emit('updateCount', false); //减少关注或粉丝量
             modalShow.value = !modalShow.value;
           })
           .catch((error) => {

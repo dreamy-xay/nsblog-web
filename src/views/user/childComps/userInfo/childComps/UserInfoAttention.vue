@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-09 18:55:02
  * @LastEditors: clq
- * @LastEditTime: 2021-09-14 16:04:14
+ * @LastEditTime: 2021-09-16 11:15:03
 -->
 <template>
   <n-modal
@@ -57,6 +57,7 @@
               v-model:attention="item.attention"
               role="button"
               @click="changePage(item.username)"
+              @updateCount="changeCount"
             >
             </user-info-attention-item>
           </template>
@@ -71,6 +72,7 @@
               v-model:attention="item.attention"
               role="button"
               @click="changePage(item.username)"
+              @updateCount="changeCount"
             >
             </user-info-attention-item>
           </template>
@@ -230,6 +232,17 @@ export default defineComponent({
       window.open(`/user/${path}`, `/user/${path}`);
     }
 
+    /**
+     * @description: 修改关注或粉丝量
+     * @param {Boolean} data 修改标志 true:增加 false:减少
+     * @return {void}
+     * @author: clq
+     */
+    function changeCount(data) {
+      // console.log('data: ' + data);
+      context.emit('updateCount', data);
+    }
+
     return {
       attentionItems,
       fansItems,
@@ -240,6 +253,7 @@ export default defineComponent({
       close,
       showMore,
       changePage,
+      changeCount,
     };
   },
 });

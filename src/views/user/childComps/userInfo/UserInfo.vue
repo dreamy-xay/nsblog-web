@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 18:09:18
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-14 19:51:32
+ * @LastEditors: clq
+ * @LastEditTime: 2021-09-16 11:42:03
 -->
 <template>
   <div class="user-info">
@@ -72,6 +72,7 @@
       :attentionNum="data.like_count"
       :fanNum="data.fans_count"
       :username="data.username"
+      @updateCount="updateCount"
     />
   </div>
 </template>
@@ -183,6 +184,17 @@ export default defineComponent({
       { icon: 'iconfont blog-heartbeat', text: '兴趣领域' },
     ];
 
+    /**
+     * @description: 修改关注或粉丝数量
+     * @param {Boolean} data  data 修改标志 true:增加 false:减少
+     * @return {void}
+     * @author: clq
+     */
+    function updateCount(data) {
+      // console.log('UserInfoData: ' + data);
+      context.emit('updateCount', { flag: flag.value, data });
+    }
+
     return {
       showAttentionModel,
       flag,
@@ -193,6 +205,7 @@ export default defineComponent({
       informationData,
       profileData,
       iconsData,
+      updateCount,
     };
   },
 });
