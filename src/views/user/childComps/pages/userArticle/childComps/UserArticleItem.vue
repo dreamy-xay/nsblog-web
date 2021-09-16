@@ -1,10 +1,10 @@
 <!--
  * @Description: 文章详情
  * @Version:
- * @Autor: clq
+ * @Autor: clqf
  * @Date: 2021-09-14 17:32:49
  * @LastEditors: clq
- * @LastEditTime: 2021-09-14 18:12:22
+ * @LastEditTime: 2021-09-16 12:02:15
 -->
 <template>
   <div class="user-article-item">
