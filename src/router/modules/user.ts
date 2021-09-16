@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:06:39
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-14 11:29:51
+ * @LastEditors: clq
+ * @LastEditTime: 2021-09-14 17:14:58
  */
 import { RouteRecordRaw } from 'vue-router';
 
@@ -22,7 +22,7 @@ const userRouter: RouteRecordRaw = {
     {
       path: 'article',
       name: 'userArticle',
-      component: () => import('@/views/user/childComps/pages/UserArticle.vue'),
+      component: () => import('@/views/user/childComps/pages/userArticle/UserArticle.vue'),
       meta: {
         title: '发布文章'
       }
