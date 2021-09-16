@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-12 17:09:45
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-19 20:53:47
+ * @LastEditTime: 2021-09-15 16:13:53
 -->
 <template>
   <div class="top-bar-history">
@@ -50,9 +50,8 @@
           <base-tag
             :text="item.topic_tag[0]"
             :color="styles.orange0"
+            :hover-color="styles.orange1"
             :hollow="true"
-            role="button"
-            @click="tagClick(item.topic_tag[0])"
           ></base-tag>
           <div
             class="bottom-item-text"
@@ -168,16 +167,6 @@ export default defineComponent({
       return isPitch.value === 1 ? articleList : qaList;
     });
 
-    /**
-     * @description: 专题标签点击
-     * @param {string} name 标签名 `必传参数`
-     * @return {void}
-     * @author: dreamy-xay
-     */
-    function tagClick(name) {
-      console.log(`click ${name}`);
-    }
-
     return {
       isPitch,
       changePitch,
@@ -188,7 +177,6 @@ export default defineComponent({
       isEmpty,
       openLink,
       list,
-      tagClick,
     };
   },
 });
