@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-15 20:45:18
+ * @LastEditTime: 2021-09-16 15:57:31
 -->
 <template>
   <div
@@ -86,9 +86,8 @@ export default defineComponent({
     color: $grey-9;
 
     &:hover {
-      background-color: $green-0;
-      box-shadow: $shadow-2;
-      color: $grey-0;
+      color: $grey-10;
+      background-color: $grey-1;
     }
   }
 }

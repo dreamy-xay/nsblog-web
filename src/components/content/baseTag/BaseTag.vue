@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-06 11:24:26
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-15 16:14:15
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-16 11:07:20
 -->
 
 <template>
@@ -16,8 +16,9 @@
     @click="tagClick"
     :role="href ? 'button' : null"
   >
+    <slot name="text-pre"></slot>
     {{text}}
-    <slot></slot>
+    <slot name="text-after"></slot>
   </div>
 </template>
 
@@ -35,6 +36,8 @@ import { computed, defineComponent, ref } from 'vue';
  * @param {String} href 点击标签跳转链接 `默认为null 不跳转`
  * @param {String} target 点击标签跳转目标 `默认为 _blank`
  * @event hover 标签hover事件，接收一个参数isEnter，isEnter为true事鼠标进入标签内
+ * @slot text-pre 文字前置插槽
+ * @slot text-after 文字后置插槽
  * @author: dreamy-xay
  */
 
