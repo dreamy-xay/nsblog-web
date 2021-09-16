@@ -117,7 +117,7 @@ export function cancelCollections(cid: number | string = '', RLC: RequestLifeCyc
  * @return {Promise<unknown>} 请求返回promise
  * @author: continue-hs
  */
-export function putName(name: string, fid: string | number, RLC: RequestLifeCycle = {}): Promise<unknown> {
+export function modifyName(name: string, fid: string | number, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return put({
     url: `/favorites/name`,
     ...RLC,
@@ -136,7 +136,7 @@ export function putName(name: string, fid: string | number, RLC: RequestLifeCycl
  * @return {Promise<unknown>} 请求返回promise
  * @author: continue-hs
  */
-export function putRemark(remark: string, fid: string | number, RLC: RequestLifeCycle = {}): Promise<unknown> {
+export function modifyRemark(remark: string, fid: string | number, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return put({
     url: `/favorites/remark`,
     ...RLC,
@@ -155,7 +155,7 @@ export function putRemark(remark: string, fid: string | number, RLC: RequestLife
  * @return {Promise<unknown>} 请求返回promise
  * @author: continue-hs
  */
-export function putPrivate(is_private: number, fid: string | number, RLC: RequestLifeCycle = {}): Promise<unknown> {
+export function modifyPrivate(is_private: number, fid: string | number, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return put({
     url: `/favorites/private`,
     ...RLC,

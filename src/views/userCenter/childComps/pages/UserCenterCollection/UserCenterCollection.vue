@@ -42,10 +42,10 @@ import {
   getFavorites,
   deleteFavorites,
   cancelCollections,
-  putName,
-  putRemark,
+  modifyName,
+  modifyRemark,
   newFavorites,
-  putPrivate,
+  modifyPrivate,
 } from '@/network/api/favorites';
 import UserCenterCollectionList from '@/views/userCenter/childComps/pages/UserCenterCollection/childcomps/UserCenterCollectionList.vue';
 import UserCenterCollectionRightTop from '@/views/userCenter/childComps/pages/UserCenterCollection/childcomps/UserCenterCollectionRightTop.vue';
@@ -151,7 +151,7 @@ export default defineComponent({
      * @author: continue-hs
      */
     function changePrivate(isPrivate) {
-      putPrivate(isPrivate, favorites[activeIndex.value].id)
+      modifyPrivate(isPrivate, favorites[activeIndex.value].id)
         .then(() => {
           favorites[activeIndex.value].is_private = isPrivate;
           msg.success('修改收藏夹类型成功');
@@ -168,7 +168,7 @@ export default defineComponent({
      * @author: continue-hs
      */
     function changeName(name, error) {
-      putName(name, favorites[activeIndex.value].id)
+      modifyName(name, favorites[activeIndex.value].id)
         .then(() => {
           favorites[activeIndex.value].name = name;
           msg.success('修改收藏夹标题成功');
@@ -186,7 +186,7 @@ export default defineComponent({
      * @author: continue-hs
      */
     function changeRemark(remark, error) {
-      putRemark(remark, favorites[activeIndex.value].id)
+      modifyRemark(remark, favorites[activeIndex.value].id)
         .then(() => {
           msg.favorites[activeIndex.value].remark = remark;
           msg.success('修改收藏夹描述成功');
