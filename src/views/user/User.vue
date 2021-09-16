@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:04:40
  * @LastEditors: clq
- * @LastEditTime: 2021-09-16 11:23:08
+ * @LastEditTime: 2021-09-16 11:40:33
 -->
 <template>
   <base-view
@@ -275,8 +275,8 @@ export default defineComponent({
      * @author: clq
      */
     function updateCount(info) {
-      console.log('info.flag:' + info.flag);
-      console.log('info.data:' + info.data);
+      // console.log('info.flag:' + info.flag);
+      // console.log('info.data:' + info.data);
       if (info.flag) {
         if (info.data) {
           userData.like_count += 1;
