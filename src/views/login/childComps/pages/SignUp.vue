@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 18:50:47
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-15 12:06:34
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-16 10:49:03
 -->
 <template>
   <div class="sign-up">
@@ -15,7 +15,7 @@
           ref="usernameInput"
           v-model="username"
           placeholder="账户"
-          :maxlength="30"
+          :maxlength="20"
           :verify="verifyUsername"
           @enter="submit"
         />
@@ -34,7 +34,7 @@
           ref="passwordInput"
           v-model="password"
           placeholder="密码"
-          :maxlength="255"
+          :maxlength="30"
           :verify="verifyPassword"
           show-password
           @enter="submit"
@@ -45,7 +45,7 @@
           ref="confirmedPasswordInput"
           v-model="confirmedPassword"
           placeholder="重复密码"
-          :maxlength="255"
+          :maxlength="30"
           :verify="verifyConfirmedPassword"
           show-password
           @enter="submit"

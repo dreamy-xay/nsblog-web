@@ -46,7 +46,7 @@
           <i
             class="iconfont blog-fav"
             role="button"
-            @click.stop="cancelCol(index,true,false)"
+            @click.stop="cancelCol(index,false,true)"
           ></i>
         </li>
       </ul>

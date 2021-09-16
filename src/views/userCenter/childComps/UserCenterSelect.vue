@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-08-23 19:01:15
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-06 23:17:22
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-16 11:21:49
 -->
 <template>
   <n-popover
@@ -163,7 +163,6 @@ export default defineComponent({
 .user-center-select-content {
   display: flex;
   border-radius: $border-radius-1;
-  height: 20px;
   transition: all 0.25s;
   font-size: 14px;
   color: $grey-10;
@@ -196,10 +195,10 @@ export default defineComponent({
   }
 
   .user-center-select-button-text {
-    display: flex;
     align-items: center;
     width: calc(100% - 23px);
     height: 20px;
+    @include ellipsis(1);
   }
 
   .user-center-select-button-iconfont {
@@ -229,10 +228,10 @@ export default defineComponent({
   }
 
   .user-center-select-button-text {
-    display: flex;
     align-items: center;
     width: calc(100% - 23px);
     height: 20px;
+    @include ellipsis(1);
   }
 
   .user-center-select-button-iconfont {
