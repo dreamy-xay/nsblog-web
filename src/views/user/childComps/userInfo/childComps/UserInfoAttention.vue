@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-09 18:55:02
  * @LastEditors: clq
- * @LastEditTime: 2021-09-16 11:15:03
+ * @LastEditTime: 2021-09-16 14:18:43
 -->
 <template>
   <n-modal
@@ -200,7 +200,7 @@ export default defineComponent({
      */
     function showFans() {
       context.emit('update:flag', false);
-      console.log(myScrollbar);
+      // console.log(myScrollbar);
       myScrollbar.value.setScrollTop(0);
     }
 
