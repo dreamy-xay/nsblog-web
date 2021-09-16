@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-16 12:31:50
+ * @LastEditTime: 2021-09-16 19:29:37
 -->
 <template>
   <div
@@ -35,10 +35,10 @@
               @click="changeOpenFavorites(index)"
             >
               <div class="text2">{{openFavorites[index] ? '收起' : '展开'}}</div>
-              <div class="icon3"><i
-                  class="iconfont blog-FontAwesomechevroncircledown"
-                  :class="openFavorites[index] ? 'rotation' : ''"
-                ></i></div>
+              <div
+                class="icon3"
+                :class="openFavorites[index] ? 'rotation' : ''"
+              ><i class="iconfont blog-FontAwesomechevroncircledown"></i></div>
             </div>
           </div>
         </div>
@@ -225,10 +225,10 @@ export default defineComponent({
                 font-size: 16px;
                 color: $grey-7;
               }
+            }
 
-              .rotation {
-                transform: rotate(180deg);
-              }
+            .rotation {
+              transform: rotate(180deg);
             }
           }
         }

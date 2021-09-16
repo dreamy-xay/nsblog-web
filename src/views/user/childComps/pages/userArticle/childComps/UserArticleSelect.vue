@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-16 16:19:53
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-16 17:49:16
+ * @LastEditTime: 2021-09-16 20:20:26
 -->
 <template>
   <n-popover
@@ -26,7 +26,6 @@
         :key="index"
         :class="index === selectTag ? 'user-article-select-content-ok' : ''"
         @click="changeSelect(index)"
-        :style="selectStyle"
         role="button"
       >{{ item }}</div>
 
