@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:02:59
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-07 18:49:07
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-16 17:16:10
  */
 import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 import loginRouter from './modules/login';
@@ -13,6 +13,14 @@ import userCenterRouter from './modules/userCenter';
 import user from './modules/user';
 
 const routes: Array<RouteRecordRaw> = [
+  // 登录页面
+  loginRouter,
+  // 消息页面
+  messageRouter,
+  // 用户中心页面
+  userCenterRouter,
+  // 用户主页页面
+  user,
   // 主页
   {
     path: '/',
@@ -25,19 +33,17 @@ const routes: Array<RouteRecordRaw> = [
     name: 'question',
     component: () => import('@/views/question/Question.vue')
   },
-  // 登录页面
-  loginRouter,
-  // 消息页面
-  messageRouter,
-  // 用户中心页面
-  userCenterRouter,
-  // 用户主页页面
-  user,
   // 历史记录页面
   {
     path: '/history',
     name: 'history',
     component: () => import('@/views/history/History.vue')
+  },
+  // 文章页面
+  {
+    path: '/article/:id',
+    name: 'article',
+    component: () => import('@/views/article/Article.vue')
   },
   // 404 not find pages
   {
@@ -48,6 +54,7 @@ const routes: Array<RouteRecordRaw> = [
     },
     component: () => import('@/views/Error.vue')
   },
+  // 路由匹配重定向 404
   {
     path: '/:catchAll(.*)',
     redirect: '/404'
