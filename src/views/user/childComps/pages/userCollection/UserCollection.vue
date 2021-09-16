@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-16 12:14:28
+ * @LastEditTime: 2021-09-16 12:31:50
 -->
 <template>
   <div
@@ -45,7 +45,7 @@
 
         <div class="last">
           <div class="icon4"><i class="iconfont blog-lishijilu-copy"></i></div>
-          <div class="time">{{"创建于 "+dateFormat('YY-mm-dd HH:MM', new Date())}}</div>
+          <div class="time">{{"创建于 "+dateFormat('YY-mm-dd HH:MM', new Date(item.time))}}</div>
         </div>
 
       </div>
@@ -95,10 +95,10 @@ export default defineComponent({
     const loading = reactive([]); // 显示加载按钮
     const username = route.params.username; // 获取路由的username
     const openFavorites = reactive([]);
-    const limit = 10; // 拿去数据条数
+    const limit = 15; // 拿去数据条数
 
     // 获取数据
-    getFavorites(username, limit, 0)
+    getFavorites(username, limit, 0, 0, 1)
       .then((data) => {
         collectionData.splice(0, 0, ...data.favorites);
         for (let i = 0; i < data.favorites.length; i++) {
@@ -167,13 +167,12 @@ export default defineComponent({
       margin-bottom: 16px;
 
       .icon1 {
-        @include flex(center, initial);
-        width: 20px;
+        line-height: 20px;
         height: 20px;
         margin-right: 8px;
 
         .iconfont {
-          font-size: 20px;
+          font-size: 16px;
           color: $grey-9;
         }
       }
@@ -192,13 +191,12 @@ export default defineComponent({
         .first {
           @include flex(center, initial, row);
           .icon2 {
-            @include flex(center);
-            width: 20px;
+            line-height: 20px;
             height: 20px;
             margin-right: 8px;
 
             .iconfont {
-              font-size: 20px;
+              font-size: 16px;
               color: $grey-7;
             }
           }
@@ -219,13 +217,12 @@ export default defineComponent({
           .center {
             @include flex(center, initial, row);
             .icon3 {
-              @include flex(center);
-              width: 20px;
+              line-height: 20px;
               height: 20px;
               margin-left: 8px;
 
               .iconfont {
-                font-size: 19px;
+                font-size: 16px;
                 color: $grey-7;
               }
 
@@ -241,13 +238,12 @@ export default defineComponent({
         @include flex(center, initial, row);
 
         .icon4 {
-          @include flex(center);
-          width: 20px;
+          line-height: 20px;
           height: 20px;
           margin-right: 8px;
 
           .iconfont {
-            font-size: 20px;
+            font-size: 16px;
             color: $grey-7;
           }
         }
