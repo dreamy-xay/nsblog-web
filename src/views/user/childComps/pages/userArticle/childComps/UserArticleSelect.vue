@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-09-16 16:19:53
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-16 17:49:16
+ * @LastEditors: clq
+ * @LastEditTime: 2021-09-16 20:18:08
 -->
 <template>
   <n-popover
@@ -51,7 +51,7 @@
         @click="computedPages"
         v-click-outside="computedPosFalse"
       >
-        <div class="icon2"><i class="iconfont blog-fontAwesome_tags"></i></div>
+        <div class="icon2"><i class="iconfont blog-label"></i></div>
         <div class="text2">选择标签</div>
       </div>
     </template>
