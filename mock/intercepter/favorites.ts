@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 11:59:59
- * @LastEditors: continue-hs
- * @LastEditTime: 2021-09-10 22:57:52
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-16 12:10:07
  */
 
 import { Application, Request, Response } from 'express';
@@ -48,15 +48,15 @@ export default function(baseUrl: string, app: Application) {
           int(offset) >= sum ? 0 : Math.min(int(limit), sum - int(offset)),
           int(type) === 0
         );
-        const remark: Record<string, unknown> = int(is_all)
-          ? { remark: Random.integer(0, 1) ? Random.paragraph(1, 1) : Random.cparagraph(1, 2) }
+        const all: Record<string, unknown> = int(is_all)
+          ? { remark: Random.integer(0, 1) ? Random.paragraph(1, 1) : Random.cparagraph(1, 2), time: Random.datetime() }
           : {};
         ans.push({
           id: Random.id(),
           name: Random.natural(0, 2) ? Random.cword(1, 8) : Random.word(2, 15),
           count: Random.integer(1, 99),
           is_private: Random.integer(0, 1) ? true : false,
-          ...remark,
+          ...all,
           collections
         });
       }
