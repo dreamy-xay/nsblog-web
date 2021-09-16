@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-30 15:53:04
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-05 10:40:56
+ * @LastEditTime: 2021-09-15 12:09:24
 -->
 <template>
   <div class="reset-password">
@@ -19,7 +19,7 @@
           ref="passwordInput"
           v-model="password"
           placeholder="密码"
-          :maxlength="255"
+          :maxlength="30"
           :verify="verifyPassword"
           show-password
           @enter="passwordEnter"
@@ -30,7 +30,7 @@
           ref="confirmedPasswordInput"
           v-model="confirmedPassword"
           placeholder="重复密码"
-          :maxlength="255"
+          :maxlength="30"
           :verify="verifyConfirmedPassword"
           show-password
           @enter="submit"
@@ -99,7 +99,6 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function verifyPassword(password) {
-      if (password === '') return true;
       const passwordReg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,}$/;
       return passwordReg.test(password);
     }
@@ -111,8 +110,7 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function verifyConfirmedPassword(confirmedPassword) {
-      if (confirmedPassword === '') return true;
-      return confirmedPassword === password.value;
+      return confirmedPassword === password.value && confirmedPassword !== '';
     }
 
     /**
@@ -140,10 +138,8 @@ export default defineComponent({
      */
     function submit() {
       let success = true; // 所填信息是否有效
-      if (password.value === '' || !passwordInput.value.check({ message: '密码超过8位且由大小写字母数字构成' }))
-        success = false;
-      if (confirmedPassword.value === '' || !confirmedPasswordInput.value.check({ message: '密码不一致' }))
-        success = false;
+      if (!passwordInput.value.check({ message: '密码超过8位且由大小写字母数字构成' })) success = false;
+      if (!confirmedPasswordInput.value.check({ message: '密码不一致' })) success = false;
 
       // 如果验证成功
       if (success) {

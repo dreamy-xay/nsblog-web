@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 22:48:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-11 15:52:44
+ * @LastEditTime: 2021-09-15 18:09:30
 -->
 <template>
   <div class="message-left">
@@ -88,12 +88,8 @@ export default defineComponent({
       type: String,
       default: '',
     },
-    changeColor: {
-      type: Function,
-      default: null,
-    },
   },
-  setup(props) {
+  setup(props, context) {
     const msg = useMessage(); // naive-ui mssage
 
     const { messageCount } = mapState('message', ['messageCount']); // 获取tokenInfo
@@ -126,9 +122,14 @@ export default defineComponent({
         console.log(error), msg.error('获取未读消息条数，请重试', { duration: 2000, closable: true });
       });
 
+    function changeColor(menu) {
+      context.emit('changeColor', menu);
+    }
+
     return {
       styles,
       messageCount,
+      changeColor,
     };
   },
 });

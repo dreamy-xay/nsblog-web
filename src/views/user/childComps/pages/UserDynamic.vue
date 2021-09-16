@@ -4,12 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-14 10:43:54
+ * @LastEditTime: 2021-09-15 20:45:18
 -->
 <template>
   <div
     class="user-dynamic"
-    v-if="privacySetting.view_dynamic"
+    v-if="privacySetting.view_dynamic && data.length"
   >
     <div
       v-for="(item , index) in data"
@@ -23,15 +23,17 @@
       @click="add"
     >加载更多...</div>
   </div>
-  <div v-else>
-    <user-empty />
-  </div>
+  <user-null
+    v-else
+    :select="privacySetting.view_dynamic"
+  />
+
 </template>
 
 <script>
 import { defineComponent, reactive } from 'vue';
 import { mapState } from '@/util/store';
-import UserEmpty from '@/views/user/childComps/UserEmpty.vue';
+import UserNull from '@/views/user/childComps/UserNull.vue';
 
 /**
  * @description: 用户主页动态记录
@@ -41,7 +43,7 @@ import UserEmpty from '@/views/user/childComps/UserEmpty.vue';
 export default defineComponent({
   name: 'userDynamic',
   components: {
-    UserEmpty,
+    UserNull,
   },
   setup() {
     const data = reactive([0, 1, 2, 3, 4, 5, 6, 7, 8]);

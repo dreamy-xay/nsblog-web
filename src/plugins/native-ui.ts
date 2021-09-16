@@ -4,12 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 16:13:02
  * @LastEditors: clq
- * @LastEditTime: 2021-09-14 20:20:02
+ * @LastEditTime: 2021-09-16 11:32:08
  */
 import { App } from 'vue';
-import { create, NMessageProvider, NModal, NBadge, NButton, NPopover, NDialog, NDropdown } from 'naive-ui';
+import { create, NMessageProvider, NModal, NBadge, NButton, NPopover, NDialog, NCard, NDropdown } from 'naive-ui';
 
-const components = [NMessageProvider, NModal, NBadge, NButton, NPopover, NDialog, NDropdown];
+const components = [NMessageProvider, NModal, NBadge, NButton, NPopover, NDialog, NCard, NDropdown];
 
 export default (app: App): void => {
   const naive = create({

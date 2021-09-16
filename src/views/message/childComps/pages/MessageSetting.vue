@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-28 13:02:11
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-07 18:35:09
+ * @LastEditTime: 2021-09-15 19:28:16
 -->
 <template>
   <div
@@ -51,45 +51,41 @@ export default defineComponent({
     const msg = useMessage(); // naive-ui mssage
 
     //设置功能
-    const textmenu = computed(() => {
-      return [
-        { text1: '消息提醒', text2: '（关闭后，所有消息将不再提醒）' },
-        { text1: '评论消息提醒', text2: '（关闭后，将不再接收别人对我的评论提醒）' },
-        { text1: '关注消息提醒', text2: '（关闭后，将不再接收别人对我的关注提醒）' },
-        { text1: '点赞消息提醒', text2: '（关闭后，将不再接收别人对我的点赞提醒）' },
-        { text1: '我的消息提醒', text2: '（接收谁发给我的消息提醒）' },
-      ];
-    });
+    const textmenu = [
+      { text1: '消息提醒', text2: '（关闭后，所有消息将不再提醒）' },
+      { text1: '评论消息提醒', text2: '（关闭后，将不再接收别人对我的评论提醒）' },
+      { text1: '关注消息提醒', text2: '（关闭后，将不再接收别人对我的关注提醒）' },
+      { text1: '点赞消息提醒', text2: '（关闭后，将不再接收别人对我的点赞提醒）' },
+      { text1: '我的消息提醒', text2: '（接收谁发给我的消息提醒）' },
+    ];
 
     //设置数据
     const settingData = reactive([1, 1, 1, 1, 1]);
 
     //设置按钮
-    const radiomenu = computed(() => {
-      return [
-        [
-          { lable: '开启', value: 1 },
-          { lable: '关闭', value: 0 },
-        ],
-        [
-          { lable: '开启', value: 1 },
-          { lable: '关闭', value: 0 },
-        ],
-        [
-          { lable: '开启', value: 1 },
-          { lable: '关闭', value: 0 },
-        ],
-        [
-          { lable: '开启', value: 1 },
-          { lable: '关闭', value: 0 },
-        ],
-        [
-          { lable: '所有人', value: 1 },
-          { lable: '关注的人', value: 2 },
-          { lable: '不接收任何消息', value: 3 },
-        ],
-      ];
-    });
+    const radiomenu = [
+      [
+        { lable: '开启', value: 1 },
+        { lable: '关闭', value: 0 },
+      ],
+      [
+        { lable: '开启', value: 1 },
+        { lable: '关闭', value: 0 },
+      ],
+      [
+        { lable: '开启', value: 1 },
+        { lable: '关闭', value: 0 },
+      ],
+      [
+        { lable: '开启', value: 1 },
+        { lable: '关闭', value: 0 },
+      ],
+      [
+        { lable: '所有人', value: 1 },
+        { lable: '关注的人', value: 2 },
+        { lable: '不接收任何消息', value: 3 },
+      ],
+    ];
 
     //得到设置数据
     getMessageSetting()

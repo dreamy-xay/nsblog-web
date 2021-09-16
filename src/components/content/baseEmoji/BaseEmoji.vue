@@ -159,15 +159,26 @@ export default defineComponent({
       const jsonMapIndexEmojis = localStorage.getItem('frequentlyEmojis');
 
       const mapIndexEmojis = JSON.parse(jsonMapIndexEmojis as any) || [];
-      mapEmojis['Frequently'] = mapIndexEmojis.map((index: IEmoji) => customEmojis[index as any]);
+      mapEmojis['Frequently'] = mapIndexEmojis
+        .map((index: IEmoji) => customEmojis[index as any])
+        .filter((value) => {
+          return value;
+        });
     };
 
     const saveFrequentlyEmojis = async (emojis: IEmoji[]) => {
       const mapIndexEmojis = emojis.map((emoji) => {
-        return (customEmojis as any).indexOf(emoji);
+        for (let i: number = 0; i < customEmojis.length; ++i) if (customEmojis[i].data === emoji.data) return i;
+        return -1;
       });
-
-      localStorage.setItem('frequentlyEmojis', JSON.stringify(mapIndexEmojis));
+      localStorage.setItem(
+        'frequentlyEmojis',
+        JSON.stringify(
+          mapIndexEmojis.filter((value) => {
+            return value > -1;
+          })
+        )
+      );
     };
 
     const onSelectEmoji = async (emoji: IEmoji) => {

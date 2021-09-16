@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-14 10:47:18
+ * @LastEditTime: 2021-09-15 20:46:41
 -->
 <template>
   <div
@@ -14,15 +14,17 @@
 
   </div>
 
-  <div v-else>
-    <user-empty />
-  </div>
+  <user-null
+    v-else
+    :select="privacySetting.view_ask"
+  />
+
 </template>
 
 <script>
 import { defineComponent } from 'vue';
 import { mapState } from '@/util/store';
-import UserEmpty from '@/views/user/childComps/UserEmpty.vue';
+import UserNull from '@/views/user/childComps/UserNull.vue';
 
 /**
  * @description: 用户主页问答记录
@@ -32,7 +34,7 @@ import UserEmpty from '@/views/user/childComps/UserEmpty.vue';
 export default defineComponent({
   name: 'userQuestion',
   components: {
-    UserEmpty,
+    UserNull,
   },
   setup() {
     return { ...mapState('user', ['privacySetting']) };
