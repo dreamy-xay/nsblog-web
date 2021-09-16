@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 14:41:12
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-31 20:05:44
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-16 10:48:37
 -->
 <template>
   <div class="sign-in">
@@ -13,14 +13,14 @@
         <login-input
           class="username"
           v-model="username"
-          :maxlength="30"
+          :maxlength="20"
           placeholder="账号/邮箱"
           @enter="usernameEnter"
         />
         <login-input
           type="password"
           class="password"
-          :maxlength="255"
+          :maxlength="30"
           v-model="password"
           ref="passwordInput"
           placeholder="密码"

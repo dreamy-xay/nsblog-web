@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-15 20:53:07
+ * @LastEditTime: 2021-09-16 12:14:28
 -->
 <template>
   <div
@@ -22,28 +22,32 @@
       </div>
 
       <div class="user-collection-context-bottom">
-        <div class="first">
-          <div class="icon2"><i class="iconfont blog-fontAwesome_file"></i></div>
-          <div class="text2">{{item.count+'内容'}}</div>
-          <div class="line"></div>
-          <div
-            v-if="item.collections.length > 0"
-            class="center"
-            role="button"
-            @click="changeOpenFavorites(index)"
-          >
-            <div class="text2">{{openFavorites[index] ? '收起' : '展开'}}</div>
-            <div class="icon3"><i
-                class="iconfont blog-FontAwesomechevroncircledown"
-                :class="openFavorites[index] ? 'rotation' : ''"
-              ></i></div>
-          </div>
 
+        <div class="info">
+          <div class="first">
+            <div class="icon2"><i class="iconfont blog-fontAwesome_file"></i></div>
+            <div class="text2">{{item.count+'内容'}}</div>
+            <div class="line"></div>
+            <div
+              v-if="item.collections.length > 0"
+              class="center"
+              role="button"
+              @click="changeOpenFavorites(index)"
+            >
+              <div class="text2">{{openFavorites[index] ? '收起' : '展开'}}</div>
+              <div class="icon3"><i
+                  class="iconfont blog-FontAwesomechevroncircledown"
+                  :class="openFavorites[index] ? 'rotation' : ''"
+                ></i></div>
+            </div>
+          </div>
         </div>
+
         <div class="last">
           <div class="icon4"><i class="iconfont blog-lishijilu-copy"></i></div>
           <div class="time">{{"创建于 "+dateFormat('YY-mm-dd HH:MM', new Date())}}</div>
         </div>
+
       </div>
       <div
         class="collection"
@@ -183,59 +187,58 @@ export default defineComponent({
     }
 
     .user-collection-context-bottom {
-      @include flex(center, initial, row);
-
-      .first {
-        width: 658px;
-        @include flex(center, initial, row);
-        .icon2 {
-          @include flex(center);
-          width: 20px;
-          height: 20px;
-          margin-right: 8px;
-
-          .iconfont {
-            font-size: 20px;
-            color: $grey-7;
-          }
-        }
-
-        .text2 {
-          font-size: 14px;
-          height: 20px;
-          line-height: 20px;
-          color: $grey-10;
-        }
-
-        .line {
-          height: 14px;
-          border-left: 1px solid $grey-3;
-          margin: 0 16px;
-        }
-
-        .center {
+      @include flex(center, space-between, row);
+      .info {
+        .first {
           @include flex(center, initial, row);
-          .icon3 {
+          .icon2 {
             @include flex(center);
             width: 20px;
             height: 20px;
-            margin-left: 8px;
+            margin-right: 8px;
 
             .iconfont {
-              font-size: 19px;
+              font-size: 20px;
               color: $grey-7;
             }
+          }
 
-            .rotation {
-              transform: rotate(180deg);
+          .text2 {
+            font-size: 14px;
+            height: 20px;
+            line-height: 20px;
+            color: $grey-10;
+          }
+
+          .line {
+            height: 14px;
+            border-left: 1px solid $grey-3;
+            margin: 0 16px;
+          }
+
+          .center {
+            @include flex(center, initial, row);
+            .icon3 {
+              @include flex(center);
+              width: 20px;
+              height: 20px;
+              margin-left: 8px;
+
+              .iconfont {
+                font-size: 19px;
+                color: $grey-7;
+              }
+
+              .rotation {
+                transform: rotate(180deg);
+              }
             }
           }
         }
       }
 
       .last {
-        width: 200px;
-        @include flex(center, flex-end, row);
+        @include flex(center, initial, row);
 
         .icon4 {
           @include flex(center);
