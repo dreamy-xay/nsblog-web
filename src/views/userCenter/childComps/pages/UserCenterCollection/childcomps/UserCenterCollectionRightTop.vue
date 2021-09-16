@@ -41,16 +41,6 @@
         class="iconfont blog-bianji1"
         role="button"
       ></i>
-      <!-- <user-center-input
-        class="user-center-collection-right-top-remarktext"
-        v-show="isEditRemark"
-        type="text"
-        v-model="inputRemark"
-        ref="remarkInput"
-        :maxlength="100"
-        @blur="updateRemark(false,true)"
-        show-close
-      /> -->
     </div>
     <user-center-input
       class="user-center-collection-right-top-remarktext"
