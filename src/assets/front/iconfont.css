@@ -1,7 +1,7 @@
 @font-face {
     font-family: "iconfont";
     /* Project id 2675107 */
-    src: url('//at.alicdn.com/t/font_2675107_hgkbrl98x0v.woff2?t=1631785217556') format('woff2'), url('//at.alicdn.com/t/font_2675107_hgkbrl98x0v.woff?t=1631785217556') format('woff'), url('//at.alicdn.com/t/font_2675107_hgkbrl98x0v.ttf?t=1631785217556') format('truetype');
+    src: url('//at.alicdn.com/t/font_2675107_r5gu1gmz6li.woff2?t=1631789118507') format('woff2'), url('//at.alicdn.com/t/font_2675107_r5gu1gmz6li.woff?t=1631789118507') format('woff'), url('//at.alicdn.com/t/font_2675107_r5gu1gmz6li.ttf?t=1631789118507') format('truetype');
 }
 
 .iconfont {
@@ -12,7 +12,7 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-.blog-fontAwesome_tags:before {
+.blog-label:before {
     content: "\e84c";
 }
 

@@ -4,18 +4,17 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-16 16:19:53
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-16 20:20:26
+ * @LastEditTime: 2021-09-16 21:23:55
 -->
 <template>
   <n-popover
     :width="92"
-    trigger="click"
-    display-directive="show"
+    trigger="hover"
     :raw="true"
-    :show="visible"
     :offset="10"
     placement="bottom"
     class="user-article-select"
+    ref="npopoverRef"
   >
 
     <el-scrollbar max-height="160px">
@@ -32,26 +31,24 @@
     </el-scrollbar>
 
     <template #trigger>
-      <div
-        v-if="category"
-        role="button"
-        class="user-article-button1"
-        @click="computedPages"
-        v-click-outside="computedPosFalse"
-      >
-        <div class="icon1"><i class="iconfont blog-fenlei"></i></div>
-        <div class="text1">选择分类</div>
-      </div>
+      <div>
+        <div
+          v-if="category"
+          role="button"
+          class="user-article-button1"
+        >
+          <div class="icon1"><i class="iconfont blog-fenlei"></i></div>
+          <div class="text1">选择分类</div>
+        </div>
 
-      <div
-        v-else
-        role="button"
-        class="user-article-button2"
-        @click="computedPages"
-        v-click-outside="computedPosFalse"
-      >
-        <div class="icon2"><i class="iconfont blog-fontAwesome_tags"></i></div>
-        <div class="text2">选择标签</div>
+        <div
+          v-else
+          role="button"
+          class="user-article-button2"
+        >
+          <div class="icon2"><i class="iconfont blog-label"></i></div>
+          <div class="text2">选择标签</div>
+        </div>
       </div>
     </template>
   </n-popover>
@@ -80,29 +77,8 @@ export default defineComponent({
     },
   },
   setup(props, context) {
-    const visible = ref(false); // 显示
     const selectTag = ref(0);
-
-    /**
-     * @description: 点击select外关闭select
-     * @return {void}
-     * @author: Z_Y_C
-     */
-    function computedPosFalse() {
-      if (visible.value) {
-        visible.value = false;
-      }
-    }
-
-    /**
-     * @description: 点击select按钮
-     * @return {Void}
-     * @author: Z_Y_C
-     */
-
-    function computedPages() {
-      visible.value = !visible.value;
-    }
+    const npopoverRef = ref(null);
 
     /**
      * @description: 改变select选择数据
@@ -114,14 +90,13 @@ export default defineComponent({
     function changeSelect(index) {
       selectTag.value = index;
       context.emit('changeItem', props.sdata[index], index);
+      npopoverRef.value.setShow(false);
     }
 
     return {
-      visible,
       selectTag,
-      computedPosFalse,
       changeSelect,
-      computedPages,
+      npopoverRef,
     };
   },
 });
@@ -138,6 +113,7 @@ export default defineComponent({
   line-height: 30px;
   @include ellipsis(1);
   width: 72px;
+  transition: 0.25s;
 
   &:hover {
     background-color: $grey-2;
@@ -152,6 +128,7 @@ export default defineComponent({
 .user-article-button1 {
   @include flex(center, initial, row);
   width: 92px;
+  transition: 0.25s;
 
   .icon1 {
     height: 20px;
@@ -161,6 +138,7 @@ export default defineComponent({
     .iconfont {
       color: $red-0;
       font-size: 20px;
+      transition: 0.25s;
 
       &:hover {
         color: $pink-0;
@@ -189,6 +167,7 @@ export default defineComponent({
 .user-article-button2 {
   @include flex(center, initial, row);
   width: 92px;
+  transition: 0.25s;
 
   .icon2 {
     height: 20px;
@@ -198,6 +177,7 @@ export default defineComponent({
     .iconfont {
       color: $orange-0;
       font-size: 20px;
+      transition: 0.25s;
 
       &:hover {
         color: $orange-1;
@@ -207,6 +187,7 @@ export default defineComponent({
       }
     }
   }
+
   .text2 {
     font-size: 14px;
     color: $grey-7;

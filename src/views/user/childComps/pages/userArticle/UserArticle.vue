@@ -4,17 +4,17 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: clq
- * @LastEditTime: 2021-09-16 18:04:49
+ * @LastEditTime: 2021-09-16 20:03:33
 -->
 <template>
   <div class="user-article">
     <div class="user-article-header">
       <div class="left">
-        <div
+        <!-- <div
           class="iconfont blog-fenlei category-icon"
           role="button"
-        ></div>
-        <div class="category">
+        ></div> -->
+        <!-- <div class="category">
           <n-dropdown
             trigger="click"
             @select="categoryHandleSelect"
@@ -27,9 +27,22 @@
               text
             >{{categoryBtnInfo}}</n-button>
           </n-dropdown>
+        </div> -->
+        <div>
+          <user-article-select
+            :sdata="[1,2,3,4,5,6,7,8,9]"
+            :category="true"
+          ></user-article-select>
         </div>
-        <div
-          class="iconfont blog-leaf label-icon"
+        <div>
+          <user-article-select
+            :sdata="[1,2,3,4]"
+            :category="false"
+          ></user-article-select>
+        </div>
+
+        <!-- <div
+          class="iconfont blog-label label-icon"
           role="button"
         ></div>
         <div class="label">
@@ -45,37 +58,41 @@
               text
             >{{LabelBtnInfo}}</n-button>
           </n-dropdown>
-        </div>
+        </div> -->
       </div>
 
       <div class="right">
-        <!-- <div class="publishTime"> -->
         <div class="label">发布时间</div>
         <div class="btnContainer">
           <div
+            :class="{'active': sortFlag === 1}"
             class="iconfont blog-up"
             role="button"
+            @click="timeIncrease"
           ></div>
           <div
+            :class="{'active': sortFlag === 2}"
             class="iconfont blog-down"
             role="button"
+            @click="timeDecrease"
           ></div>
         </div>
-        <!-- </div> -->
 
-        <!-- <div class="visitCount"> -->
         <div class="label">访问量</div>
         <div class="btnContainer">
           <div
+            :class="{'active': sortFlag === 3}"
             class="iconfont blog-up"
             role="button"
+            @click="viewIncrease"
           ></div>
           <div
+            :class="{'active': sortFlag === 4}"
             class="iconfont blog-down"
             role="button"
+            @click="viewDecrease"
           ></div>
         </div>
-        <!-- </div> -->
       </div>
     </div>
 
@@ -100,6 +117,7 @@
 <script>
 import { defineComponent, reactive, ref } from 'vue';
 import UserArticleItem from '@/views/user/childComps/pages/userArticle/childComps/UserArticleItem.vue';
+import UserArticleSelect from '@/views/user/childComps/pages/userArticle/childComps/UserArticleSelect.vue';
 import { useMessage } from 'naive-ui';
 /**
  * @description: 用户主页发布文章记录
@@ -108,7 +126,7 @@ import { useMessage } from 'naive-ui';
 
 export default defineComponent({
   name: 'userArticle',
-  components: { UserArticleItem },
+  components: { UserArticleItem, UserArticleSelect },
   setup() {
     //文章分类
     const categoryOptions = reactive([
@@ -177,7 +195,8 @@ export default defineComponent({
       {
         title: '标题',
         url: '文章链接',
-        content: '内容',
+        content:
+          '内容11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111',
         specialColumn: '专栏',
         viewCount: 2, //浏览量
         commentCount: 6, //评论数
@@ -187,7 +206,8 @@ export default defineComponent({
       {
         title: '标题2',
         url: '文章链接2',
-        content: '内容2',
+        content:
+          '内容22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222',
         specialColumn: '专栏2',
         viewCount: 2, //浏览量
         commentCount: 6, //评论数
@@ -198,6 +218,7 @@ export default defineComponent({
     const message = useMessage(); //navi-ui message
     const categoryBtnInfo = ref('选择分类'); //分类按钮信息
     const LabelBtnInfo = ref('选择标签'); //标签按钮信息
+    const sortFlag = ref(1); //排序标志 1: 时间升序 2:时间降序 3:访问量升序 4:访问量降序
 
     /**
      * @description: 选择分类
@@ -234,6 +255,46 @@ export default defineComponent({
     }
 
     /**
+     * @description: 按发布时间升序排序
+     * @return {void}
+     * @author: clq
+     */
+    function timeIncrease() {
+      sortFlag.value = 1;
+      console.log('timeIncrease');
+    }
+
+    /**
+     * @description: 按发布时间降序排序
+     * @return {void}
+     * @author: clq
+     */
+    function timeDecrease() {
+      sortFlag.value = 2;
+      console.log('timeDecrease');
+    }
+
+    /**
+     * @description: 按访问量升序排序
+     * @return {void}
+     * @author: clq
+     */
+    function viewIncrease() {
+      sortFlag.value = 3;
+      console.log('viewIncrease');
+    }
+
+    /**
+     * @description: 按访问量降序排序
+     * @return {void}
+     * @author: clq
+     */
+    function viewDecrease() {
+      sortFlag.value = 4;
+      console.log('viewDecrease');
+    }
+
+    /**
      * @description: 加载更多文章记录
      * @return {void}
      * @author: clq
@@ -248,9 +309,14 @@ export default defineComponent({
       articles,
       categoryBtnInfo,
       LabelBtnInfo,
+      sortFlag,
       categoryHandleSelect,
       labelHandleSelect,
       loadMore,
+      timeIncrease,
+      timeDecrease,
+      viewIncrease,
+      viewDecrease,
     };
   },
 });
@@ -316,17 +382,25 @@ export default defineComponent({
       }
 
       .btnContainer {
+        box-sizing: border-box;
         height: 19.2px;
         margin-right: 8px;
+        // padding: 10px 0;
         @include flex(center, space-around, column);
+
         .iconfont {
-          height: 9.6px;
-          font-size: 1px;
+          // height: 9px;
+          font-size: 0.5px;
           color: #bfbfbf;
+          transition: all 0.25s;
 
           &:hover {
             color: $grey-7;
           }
+        }
+
+        .active {
+          color: $grey-7;
         }
       }
     }
