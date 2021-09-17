@@ -1,10 +1,10 @@
 <!--
- * @Description:
+ * @Description: 选择排序方式
  * @Version:
  * @Autor: clq
  * @Date: 2021-09-17 19:52:51
  * @LastEditors: clq
- * @LastEditTime: 2021-09-17 20:31:01
+ * @LastEditTime: 2021-09-17 20:37:45
 -->
 <template>
   <div class="user-sort">
@@ -64,7 +64,7 @@ export default defineComponent({
      */
     function timeIncrease() {
       sortFlag.value = 1;
-      console.log('timeIncrease');
+      // console.log('timeIncrease');
       context.emit('changeSort', 1);
     }
 
@@ -75,7 +75,7 @@ export default defineComponent({
      */
     function timeDecrease() {
       sortFlag.value = 2;
-      console.log('timeDecrease');
+      // console.log('timeDecrease');
       context.emit('changeSort', 2);
     }
 
@@ -86,7 +86,7 @@ export default defineComponent({
      */
     function viewIncrease() {
       sortFlag.value = 3;
-      console.log('viewIncrease');
+      // console.log('viewIncrease');
       context.emit('changeSort', 3);
     }
 
@@ -97,7 +97,7 @@ export default defineComponent({
      */
     function viewDecrease() {
       sortFlag.value = 4;
-      console.log('viewDecrease');
+      // console.log('viewDecrease');
       context.emit('changeSort', 4);
     }
 
