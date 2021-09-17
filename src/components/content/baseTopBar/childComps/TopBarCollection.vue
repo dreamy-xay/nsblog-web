@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-05 18:50:30
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-15 16:12:25
+ * @LastEditTime: 2021-09-16 17:20:53
 -->
 
 <template>
@@ -43,8 +43,8 @@
           :key="index"
         >
           <a
-            :href="(value.type === 1 ? '/article' : '/question') + value.id"
-            :target="(value.type === 1 ? '/article' : '/question') + value.id"
+            :href="(value.type === 1 ? '/article/' : '/question/') + value.content_id"
+            :target="(value.type === 1 ? '/article/' : '/question/') + value.content_id"
           >
             <div class="collections-content">
               <base-tag

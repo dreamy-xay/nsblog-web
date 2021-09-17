@@ -4,11 +4,14 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-04 18:57:55
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-04 19:04:10
+ * @LastEditTime: 2021-09-16 17:54:16
 -->
 <template>
   <div class="base-background">
-    <div class="base-background-mask"></div>
+    <div
+      class="base-background-mask"
+      v-if="mask"
+    ></div>
   </div>
 </template>
 
@@ -17,11 +20,18 @@ import { defineComponent } from 'vue';
 
 /**
  * @description: 背景墙组件
+ * @param {Boolean} mask 是否开启mask黑度蒙版 `默认开启`
  * @author: dreamy-xay
  */
 
 export default defineComponent({
   name: 'baseBackground',
+  props: {
+    mask: {
+      type: Boolean,
+      default: true,
+    },
+  },
 });
 </script>
 
