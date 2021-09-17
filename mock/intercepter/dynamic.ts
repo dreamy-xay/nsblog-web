@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 15:43:02
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-16 16:01:26
+ * @LastEditTime: 2021-09-17 20:30:43
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -12,7 +12,7 @@ import { int } from './util';
 import select from '../data/index';
 
 export default function(baseUrl: string, app: Application) {
-  // 获取学习小组
+  // 获取动态数据
   app.get(baseUrl + '/dynamic', (req: Request, res: Response) => {
     const { username, limit, offset } = req.query;
     if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
