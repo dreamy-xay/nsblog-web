@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-09 17:58:32
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-13 21:33:53
+ * @LastEditTime: 2021-09-17 11:08:40
  */
 
 import { Application } from 'express';
@@ -21,6 +21,8 @@ import topicsApi from './intercepter/topics';
 import groupsApi from './intercepter/groups';
 import articlesApi from './intercepter/articles';
 import questionsApi from './intercepter/questions';
+import dynamicApi from './intercepter/dynamic';
+import resourcesApi from './intercepter/resources';
 
 // 拦截请求api
 const BASE_URL: string =
@@ -47,4 +49,6 @@ export default function intercepter(app: Application): void {
   groupsApi(BASE_URL, app);
   articlesApi(BASE_URL, app);
   questionsApi(BASE_URL, app);
+  dynamicApi(BASE_URL, app);
+  resourcesApi(BASE_URL, app);
 }
