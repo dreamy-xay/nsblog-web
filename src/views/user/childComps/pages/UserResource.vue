@@ -4,26 +4,38 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-17 11:05:57
+ * @LastEditTime: 2021-09-17 19:35:30
 -->
 <template>
-  <div class="user-resource">
+  <div
+    class="user-resource"
+    v-if="resourceData.length"
+  >
     <div
       v-for="(item, index) in resourceData"
       :key="index"
       class="user-resource-context"
     >
-      <div class="top">{{item.name}}</div>
+
+      <div
+        class="top"
+        @click="changePages(index)"
+        role="button"
+      >{{item.name}}</div>
       <div class="center">{{item.remark}}</div>
       <div class="bottom">
-        <div class="download">
+        <div
+          class="download"
+          role="button"
+          @click="changePages(index)"
+        >
           <div class="icon"><i class="iconfont blog-xiazai"></i></div>
           <div class="text">前往下载</div>
         </div>
 
         <div class="time">
           <div class="time-icon"><i class="iconfont blog-lishijilu-copy"></i></div>
-          <div class="time-text">{{"共享于 "+dateFormat('YY-mm-dd HH:MM', new Date(item.time))}}</div>
+          <div class="time-text">{{"共享于 "+dateFormat('YY-mm-dd HH:MM', new Date(item.upload_time))}}</div>
         </div>
 
       </div>
@@ -33,19 +45,25 @@
       class="button"
       role="button"
       v-if="loading"
-      @click="addGroupData"
+      @click="addResourceData"
     >
       加载更多...
     </div>
   </div>
+  <user-null
+    v-else
+    :select="true"
+  />
 </template>
 
 <script>
 import { defineComponent, reactive, ref } from 'vue';
-import { getGroups } from '@/network/api/groups';
+import { getResources } from '@/network/api/resources';
 import { useRoute } from 'vue-router';
 import styles from '@/assets/style/define.scss';
 import { dateFormat } from '@/util/date';
+import UserNull from '@/views/user/childComps/UserNull.vue';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description: 用户主页资源记录
@@ -54,7 +72,11 @@ import { dateFormat } from '@/util/date';
 
 export default defineComponent({
   name: 'userGroup',
+  components: {
+    UserNull,
+  },
   setup() {
+    const msg = useMessage(); //naive-ui
     const route = useRoute();
     const username = route.params.username; // 获取路由的username
     const resourceData = reactive([]);
@@ -62,20 +84,34 @@ export default defineComponent({
     const limit = 10; // 获取数据条数
 
     // 首次获取数据
-    getGroups(username, 0, limit).then((data) => {
-      // console.log(data.groups.length === limit);
-      loading.value = data.groups.length === limit;
-      resourceData.splice(0, 0, ...data.groups);
-    });
-
-    function addGroupData() {
-      getGroups(username, resourceData.length, limit).then((data) => {
-        loading.value = data.groups.length === limit;
-        resourceData.splice(resourceData.length, 0, ...data.groups);
+    getResources(username, 0, limit)
+      .then((data) => {
+        console.log(data);
+        loading.value = data.resources.length === limit;
+        resourceData.splice(0, 0, ...data.resources);
+      })
+      .catch((error) => {
+        console.log(error);
+        msg.error('获取资源共享失败', { duration: 2000, closable: true });
       });
+
+    function addResourceData() {
+      getResources(username, resourceData.length, limit)
+        .then((data) => {
+          loading.value = data.resources.length === limit;
+          resourceData.splice(resourceData.length, 0, ...data.resources);
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('获取资源共享失败', { duration: 2000, closable: true });
+        });
     }
 
-    return { styles, resourceData, dateFormat, addGroupData, loading };
+    function changePages(index) {
+      window.open(`/resource/${resourceData[index].id}`, `/resource/${resourceData[index].id}`);
+    }
+
+    return { styles, resourceData, dateFormat, addResourceData, loading, changePages };
   },
 });
 </script>
@@ -98,6 +134,7 @@ export default defineComponent({
       font-size: 16px;
       color: $grey-11;
       height: 21px;
+      font-weight: 700;
       line-height: 21px;
       margin-bottom: 5px;
     }
