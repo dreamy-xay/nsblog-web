@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-16 19:52:42
+ * @LastEditTime: 2021-09-17 11:05:57
 -->
 <template>
   <div class="user-resource">
@@ -23,7 +23,7 @@
 
         <div class="time">
           <div class="time-icon"><i class="iconfont blog-lishijilu-copy"></i></div>
-          <div class="time-text">{{"创建于 "+dateFormat('YY-mm-dd HH:MM', new Date(item.time))}}</div>
+          <div class="time-text">{{"共享于 "+dateFormat('YY-mm-dd HH:MM', new Date(item.time))}}</div>
         </div>
 
       </div>
