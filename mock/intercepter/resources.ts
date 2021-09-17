@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 19:55:56
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-16 19:58:09
+ * @LastEditTime: 2021-09-17 11:07:50
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -12,7 +12,7 @@ import { int } from './util';
 import select from '../data/index';
 
 export default function(baseUrl: string, app: Application) {
-  // 获取学习小组
+  // 获取上传资源
   app.get(baseUrl + '/resources', (req: Request, res: Response) => {
     const { username, limit, offset } = req.query;
     if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
