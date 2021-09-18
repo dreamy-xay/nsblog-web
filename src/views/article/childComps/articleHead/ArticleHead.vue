@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 17:51:15
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-16 22:23:09
+ * @LastEditTime: 2021-09-18 17:28:52
 -->
 <template>
   <div class="article-head">
@@ -93,7 +93,7 @@ export default defineComponent({
      * @return {void}
      * @author: dreamy-xay
      */
-    function typingRun(value = 'Python - 面向对象编程 - 魔术方法（双下划线方法）') {
+    function typingRun(value = '比培训机构还详细的 Python 学习路线，你信吗 0^0') {
       let timer = null;
       let index = 0;
       function typing() {
@@ -182,6 +182,7 @@ export default defineComponent({
   height: 288px;
   position: relative;
   @include flex(center, center);
+  box-shadow: 0 1px 2px rgba($grey-8, 70%);
 
   .article-head-inner {
     position: relative;
