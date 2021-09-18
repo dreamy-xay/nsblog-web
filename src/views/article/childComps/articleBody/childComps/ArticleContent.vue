@@ -4,12 +4,13 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-17 15:09:41
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-18 12:57:10
+ * @LastEditTime: 2021-09-18 17:14:04
 -->
 <template>
   <div class="article-content">
     <div
       class="article-content-toc"
+      :class="{'article-content-toc-show': tocShow}"
       :style="{maxHeight: showBackTop ? 'calc(100% - 46px)' : 'calc(100% - 330px)', top: tocTop + 'px'}"
       v-if="titles.length"
     >
@@ -43,9 +44,11 @@
     <div class="article-back-top-menu">
       <n-tooltip
         v-for="(item, index) in menuList"
-        :trigger="hover"
+        trigger="hover"
+        display-directive="show"
         :key="index"
         placement="left"
+        class="article-back-top-menu-tooltip"
       >
         {{item.content}}
         <template #trigger>
@@ -67,8 +70,8 @@
 </template>
 
 <script>
-import { computed, defineComponent, onMounted, reactive, ref } from 'vue';
-import { lower_bound } from '@/util/algorithm';
+import { computed, defineComponent, nextTick, onMounted, reactive, ref } from 'vue';
+import { binary_bound } from '@/util/algorithm';
 
 /**
  * @description: 文章内容部分包括目录
@@ -126,10 +129,7 @@ export default defineComponent({
         scrollbar.value.update();
         showBackTop.value = e.target.scrollTop > 288;
         tocTop.value = Math.max(16, 304 - e.target.scrollTop);
-        activeIndex.value = Math.max(
-          0,
-          lower_bound(titles, null, (value) => value.offset >= e.target.scrollTop + 2) - 1
-        );
+        activeIndex.value = Math.max(0, binary_bound(titles, (value) => value.offset >= e.target.scrollTop + 2) - 1);
       };
     });
 
@@ -143,6 +143,7 @@ export default defineComponent({
       page.scrollTo({ top, behavior: 'smooth' });
     }
 
+    const tocShow = ref(true); // 菜单显示
     // 底部菜单
     const menuList = computed(() => {
       return [
@@ -150,7 +151,7 @@ export default defineComponent({
           content: '文章目录',
           icon: 'blog-mulu1',
           click() {
-            console.log(999);
+            tocShow.value = !tocShow.value;
           },
         },
         {
@@ -162,7 +163,7 @@ export default defineComponent({
         },
         {
           content: showBackTop.value ? '返回顶部' : '跳至底部',
-          icon: 'blog-zhiding',
+          icon: 'blog-huidingbu',
           class: showBackTop.value ? null : 'to-bottom',
           click() {
             showBackTop.value
@@ -181,6 +182,7 @@ export default defineComponent({
       showBackTop,
       activeIndex,
       anchorClick,
+      tocShow,
       menuList,
     };
   },
@@ -201,6 +203,14 @@ export default defineComponent({
     box-shadow: $shadow-0;
     border-radius: $border-radius-0;
     overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+
+    &.article-content-toc-show {
+      opacity: 1;
+      pointer-events: auto;
+    }
 
     .toc-head {
       width: 100%;
@@ -285,6 +295,59 @@ export default defineComponent({
         transform: rotateZ(180deg);
       }
 
+      &:first-child {
+        font-weight: 600;
+
+        &:hover .iconfont {
+          @keyframes scale {
+            0% {
+              transform: scale(1);
+            }
+            30% {
+              transform: scale(1.3);
+            }
+            60% {
+              transform: scale(1);
+            }
+            80% {
+              transform: scale(1.1);
+            }
+            100% {
+              transform: scale(1);
+            }
+          }
+          animation: scale 0.6s;
+        }
+
+        .iconfont {
+          font-size: 19px;
+        }
+      }
+
+      &:nth-child(2):hover .iconfont {
+        @keyframes swing {
+          0% {
+            transform: rotate(0deg);
+          }
+          27% {
+            transform: rotate(60deg);
+          }
+          54% {
+            transform: rotate(-60deg);
+          }
+          80% {
+            transform: rotate(15deg);
+          }
+          90% {
+            transform: rotate(-15deg);
+          }
+          100% {
+            transform: rotate(0deg);
+          }
+        }
+        animation: swing 0.6s;
+      }
+
       &:last-child {
         margin-bottom: 0;
 
@@ -293,21 +356,40 @@ export default defineComponent({
         }
       }
 
-      &:hover .iconfont {
-        color: $green-1;
-        text-shadow: $shadow-2;
+      &:hover {
+        box-shadow: $shadow-2;
+
+        .iconfont {
+          color: $green-1;
+        }
       }
 
       .iconfont {
         transition: 0.25s;
-        font-size: 20px;
+        font-size: 18px;
         color: $green-0;
       }
     }
   }
 
-  // :deep(.v-md-editor-preview > div) {
-  //   padding: 16px;
-  // }
+  :deep(.v-md-editor-preview > div) {
+    padding: 16px 20px;
+  }
+}
+</style>
+
+<style lang="scss">
+.article-back-top-menu-tooltip {
+  height: 20px;
+  @include flex(center);
+  padding: 4px 10px !important;
+  font-weight: 300;
+  font-size: 14px;
+  letter-spacing: 1px;
+  opacity: 0.9;
+
+  .n-popover-arrow-wrapper {
+    left: calc(100% - 0.5px) !important;
+  }
 }
 </style>
