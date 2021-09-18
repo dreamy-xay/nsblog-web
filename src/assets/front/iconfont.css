@@ -1,7 +1,9 @@
 @font-face {
     font-family: "iconfont";
     /* Project id 2675107 */
-    src: url('//at.alicdn.com/t/font_2675107_kro6y06n8yg.woff2?t=1631878245096') format('woff2'), url('//at.alicdn.com/t/font_2675107_kro6y06n8yg.woff?t=1631878245096') format('woff'), url('//at.alicdn.com/t/font_2675107_kro6y06n8yg.ttf?t=1631878245096') format('truetype');
+    src: url('//at.alicdn.com/t/font_2675107_hahi8nzllud.woff2?t=1631955074174') format('woff2'),
+        url('//at.alicdn.com/t/font_2675107_hahi8nzllud.woff?t=1631955074174') format('woff'),
+        url('//at.alicdn.com/t/font_2675107_hahi8nzllud.ttf?t=1631955074174') format('truetype');
 }
 
 .iconfont {
@@ -10,6 +12,14 @@
     font-style: normal;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+.blog-mulu1:before {
+    content: "\e6d2";
+}
+
+.blog-huidingbu:before {
+    content: "\e798";
 }
 
 .blog-comment:before {
@@ -30,14 +40,6 @@
 
 .blog-up:before {
     content: "\e646";
-}
-
-.blog-mulu1:before {
-    content: "\e642";
-}
-
-.blog-zhiding:before {
-    content: "\e64b";
 }
 
 .blog-homepage:before {
