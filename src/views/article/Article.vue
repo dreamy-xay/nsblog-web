@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 16:32:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-18 12:09:15
+ * @LastEditTime: 2021-09-18 17:23:05
 -->
 <template>
   <div class="article">
@@ -53,7 +53,11 @@ export default defineComponent({
   &::-webkit-scrollbar-thumb {
     /*滚动条里面小方块*/
     border-radius: 5px;
-    background: $green-1;
+    background: rgba($green-4, 0.7);
+
+    &:hover {
+      background-color: $green-4;
+    }
   }
 
   &::-webkit-scrollbar-track {
