@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 16:32:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-17 23:18:17
+ * @LastEditTime: 2021-09-18 12:09:15
 -->
 <template>
   <div class="article">
@@ -42,7 +42,6 @@ export default defineComponent({
   font-family: 'Open Sans', sans-serif;
   height: 100%;
   overflow: auto;
-  scroll-behavior: smooth;
 
   &::-webkit-scrollbar {
     /*滚动条整体样式*/
