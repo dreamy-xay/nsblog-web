@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-17 20:15:35
+ * @LastEditTime: 2021-09-17 20:47:47
 -->
 <template>
   <div class="user-question">
@@ -24,8 +24,11 @@
           :class="questionSwitch ? '' : 'text-click'"
         >发布的提问</div>
       </div>
+      <user-sort @changeSort="Sort" />
 
     </div>
+
+    <user-question-switch />
   </div>
 </template>
 
@@ -33,6 +36,7 @@
 import { defineComponent, reactive, ref } from 'vue';
 import { mapState } from '@/util/store';
 import { useRoute } from 'vue-router';
+import UserSort from '@/views/user/childComps/UserSort.vue';
 import UserQuestionSwitch from '@/views/user/childComps/pages/UserQuestion/childComps/UserQuestionSwitch.vue';
 
 /**
@@ -42,6 +46,7 @@ import UserQuestionSwitch from '@/views/user/childComps/pages/UserQuestion/child
 
 export default defineComponent({
   name: 'userQuestion',
+  components: { UserSort, UserQuestionSwitch },
   setup() {
     const questionSwitch = ref(true);
     const answerData = reactive([]);
@@ -54,7 +59,17 @@ export default defineComponent({
     function changeQuestionSwitch(data) {
       questionSwitch.value = data;
     }
-    return { ...mapState('user', ['privacySetting']), isSelf, questionSwitch, changeQuestionSwitch };
+
+    function Sort(index) {
+      console.log(index);
+    }
+    return {
+      ...mapState('user', ['privacySetting']),
+      isSelf,
+      questionSwitch,
+      changeQuestionSwitch,
+      Sort,
+    };
   },
 });
 </script>
@@ -70,6 +85,7 @@ export default defineComponent({
     background-color: $grey-0;
     height: 36px;
     padding: 0 16px;
+    margin-bottom: 16px;
 
     .user-question-top-left {
       @include flex(center);
