@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-17 19:35:30
+ * @LastEditTime: 2021-09-20 15:33:38
 -->
 <template>
   <div
@@ -86,7 +86,6 @@ export default defineComponent({
     // 首次获取数据
     getResources(username, 0, limit)
       .then((data) => {
-        console.log(data);
         loading.value = data.resources.length === limit;
         resourceData.splice(0, 0, ...data.resources);
       })
