@@ -4,14 +4,16 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 16:32:13
  * @LastEditors: clq
- * @LastEditTime: 2021-09-20 21:14:47
+ * @LastEditTime: 2021-09-20 21:01:45
 -->
+
 <template>
   <div
     class="article"
     ref="articlePage"
   >
     <base-background :mask="false" />
+    <base-blog-menu />
     <article-loading-bar />
     <article-head />
     <article-body />
@@ -22,6 +24,7 @@
 <script>
 import { defineComponent, provide, ref } from 'vue';
 import BaseBackground from '@/components/content/baseBackground/BaseBackground.vue';
+import BaseBlogMenu from '@/components/content/baseBlogMenu/BaseBlogMenu.vue';
 import ArticleLoadingBar from '@/views/article/childComps/ArticleLoadingBar.vue';
 import ArticleHead from '@/views/article/childComps/articleHead/ArticleHead.vue';
 import ArticleBody from '@/views/article/childComps/articleBody/ArticleBody.vue';
@@ -36,6 +39,7 @@ export default defineComponent({
   name: 'Article',
   components: {
     BaseBackground,
+    BaseBlogMenu,
     ArticleLoadingBar,
     ArticleHead,
     ArticleBody,
