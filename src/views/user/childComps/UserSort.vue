@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-09-17 19:52:51
- * @LastEditors: clq
- * @LastEditTime: 2021-09-17 20:37:45
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-20 17:13:36
 -->
 <template>
   <div class="user-sort">
@@ -43,28 +43,30 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 
 /**
  * @description: 排序选择
+ * @param {Number} 1: 时间升序 2:时间降序 3:访问量升序 4:访问量降序 `必传参数`
  * @event changeSort 排序标志 1: 时间升序 2:时间降序 3:访问量升序 4:访问量降序
  * @author: clq
  */
 
 export default defineComponent({
   name: 'userSort',
-
+  props: {
+    sortFlag: {
+      type: Number,
+      required: true,
+    },
+  },
   setup(props, context) {
-    const sortFlag = ref(1); //排序标志 1: 时间升序 2:时间降序 3:访问量升序 4:访问量降序
-
     /**
      * @description: 按发布时间升序排序
      * @return {void}
      * @author: clq
      */
     function timeIncrease() {
-      sortFlag.value = 1;
-      // console.log('timeIncrease');
       context.emit('changeSort', 1);
     }
 
@@ -74,8 +76,6 @@ export default defineComponent({
      * @author: clq
      */
     function timeDecrease() {
-      sortFlag.value = 2;
-      // console.log('timeDecrease');
       context.emit('changeSort', 2);
     }
 
@@ -85,8 +85,6 @@ export default defineComponent({
      * @author: clq
      */
     function viewIncrease() {
-      sortFlag.value = 3;
-      // console.log('viewIncrease');
       context.emit('changeSort', 3);
     }
 
@@ -96,13 +94,10 @@ export default defineComponent({
      * @author: clq
      */
     function viewDecrease() {
-      sortFlag.value = 4;
-      // console.log('viewDecrease');
       context.emit('changeSort', 4);
     }
 
     return {
-      sortFlag,
       timeIncrease,
       timeDecrease,
       viewIncrease,
