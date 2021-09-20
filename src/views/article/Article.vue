@@ -3,13 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 16:32:13
-<<<<<<< HEAD
  * @LastEditors: clq
- * @LastEditTime: 2021-09-20 17:56:30
-=======
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-20 17:24:59
->>>>>>> 85dc7c38633746f591ea8de41709462c1132f7f7
+ * @LastEditTime: 2021-09-20 21:14:47
 -->
 <template>
   <div
