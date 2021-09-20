@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-17 15:09:41
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-18 17:25:27
+ * @LastEditTime: 2021-09-20 17:18:25
 -->
 <template>
   <div class="article-content">
@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import { computed, defineComponent, nextTick, onMounted, reactive, ref } from 'vue';
+import { computed, defineComponent, inject, nextTick, onMounted, reactive, ref } from 'vue';
 import { binary_bound } from '@/util/algorithm';
 
 /**
@@ -97,12 +97,10 @@ export default defineComponent({
     const showBackTop = ref(false); // 是否显示回顶部
     const tocTop = ref(304); // 菜单置顶距离
     const activeIndex = ref(0); // 菜单激活项
+    const articlePage = inject('articlePage'); // 获取主页面 ref (dom)
 
     // dom 渲染完成
-    let page = null; // 滚动页面
     onMounted(() => {
-      page = document.querySelector('#app > div.article'); // 滚动页面
-
       // 锚点菜单
       const anchors = preview.value.$el.querySelectorAll('h2,h3,h4');
       const aTitles = Array.from(anchors).filter((title) => !!title.innerText.trim());
@@ -116,7 +114,7 @@ export default defineComponent({
           ...aTitles.map((el) => {
             return {
               title: el.innerText,
-              offset: preview.value.getOffsetTop(el, page),
+              offset: preview.value.getOffsetTop(el, articlePage.value),
               indent: hTags.indexOf(el.tagName),
             };
           })
@@ -124,13 +122,13 @@ export default defineComponent({
       }
 
       // 菜单高度滚动监听;
-      showBackTop.value = page.scrollTop > 288;
-      page.onscroll = function (e) {
+      showBackTop.value = articlePage.value.scrollTop > 288;
+      articlePage.value.addEventListener('scroll', (e) => {
         scrollbar.value.update();
         showBackTop.value = e.target.scrollTop > 288;
         tocTop.value = Math.max(16, 304 - e.target.scrollTop);
         activeIndex.value = Math.max(0, binary_bound(titles, (value) => value.offset >= e.target.scrollTop + 2) - 1);
-      };
+      });
     });
 
     /**
@@ -140,7 +138,7 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function anchorClick(top) {
-      page.scrollTo({ top, behavior: 'smooth' });
+      articlePage.value.scrollTo({ top, behavior: 'smooth' });
     }
 
     const tocShow = ref(true); // 菜单显示
@@ -167,8 +165,8 @@ export default defineComponent({
           class: showBackTop.value ? null : 'to-bottom',
           click() {
             showBackTop.value
-              ? page.scrollTo({ top: 0, behavior: 'smooth' })
-              : page.scrollTo({ top: page.scrollHeight, behavior: 'smooth' });
+              ? articlePage.value.scrollTo({ top: 0, behavior: 'smooth' })
+              : articlePage.value.scrollTo({ top: articlePage.value.scrollHeight, behavior: 'smooth' });
           },
         },
       ];
