@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-04 18:49:08
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-13 20:03:51
+ * @LastEditTime: 2021-09-20 12:59:42
 -->
 <template>
   <div class="history-content">
@@ -40,7 +40,7 @@
       class="history-content-end"
       v-if="end"
     >
-      <base-svg svg="bottom" />
+      欢迎来到历史记录的尽头！
     </div>
   </div>
 </template>
@@ -293,11 +293,15 @@ export default defineComponent({
   }
 
   .history-content-end {
+    margin-top: 30px;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: $green-1;
     width: 100%;
     display: flex;
     align-items: center;
+    font-family: YouYuan;
     justify-content: center;
-    margin-bottom: -100px;
   }
 }
 </style>
