@@ -16,11 +16,18 @@ body {
     box-sizing: border-box;
     overflow-x: hidden;
     line-height: normal !important;
+    //overflow-x: hidden;
+    line-height: normal !important;
+
     &::-webkit-scrollbar {
         width: 0;
     }
-    //overflow-x: hidden;
-    line-height: normal !important;
+}
+
+::selection {
+    background-color: $green-1;
+    color: $grey-0;
+    text-shadow: none;
 }
 
 a {

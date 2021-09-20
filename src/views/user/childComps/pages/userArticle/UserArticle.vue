@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: clq
- * @LastEditTime: 2021-09-17 20:31:42
+ * @LastEditTime: 2021-09-17 20:45:58
 -->
 <template>
   <div class="user-article">
@@ -103,15 +103,15 @@ export default defineComponent({
      * @return {void}
      * @author: clq
      */
-    function categoryHandleSelect(key) {
-      for (const elem of categoryOptions) {
-        if (elem.key === key) {
-          categoryBtnInfo.value = elem.label;
-          LabelBtnInfo.value = '选择标签';
-          break;
-        }
-      }
-      message.info(key);
+    function categoryHandleSelect(item, index) {
+      // for (const elem of categoryOptions) {
+      //   if (elem.key === key) {
+      //     categoryBtnInfo.value = elem.label;
+      //     LabelBtnInfo.value = '选择标签';
+      //     break;
+      //   }
+      // }
+      message.info(`item:${item} , index:${index}`);
     }
 
     /**
@@ -120,15 +120,15 @@ export default defineComponent({
      * @return {void}
      * @author: clq
      */
-    function labelHandleSelect(key) {
-      for (const elem of labelOptions) {
-        if (elem.key === key) {
-          LabelBtnInfo.value = elem.label;
-          categoryBtnInfo.value = '选择分类';
-          break;
-        }
-      }
-      message.info(key);
+    function labelHandleSelect(item, index) {
+      // for (const elem of labelOptions) {
+      //   if (elem.key === key) {
+      //     LabelBtnInfo.value = elem.label;
+      //     categoryBtnInfo.value = '选择分类';
+      //     break;
+      //   }
+      // }
+      message.info(`item:${item} , index:${index}`);
     }
 
     function changeSortHandle(key) {

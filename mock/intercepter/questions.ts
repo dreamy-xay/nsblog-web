@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 20:59:37
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-14 09:29:41
+ * @LastEditTime: 2021-09-20 17:33:00
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -23,7 +23,7 @@ export default function(baseUrl: string, app: Application) {
       for (let i: number = 0; i < limit; ++i) {
         ans.push({
           id: Random.increment(),
-          title: Random.integer(0, 1) ? Random.title(3, 100) : Random.ctitle(3, 50),
+          title: Random.integer(0, 1) ? Random.title(1, 40) : Random.ctitle(1, 40),
           content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
           release_time: Random.datetime(),
           reply_count: Random.integer(1, 100)
