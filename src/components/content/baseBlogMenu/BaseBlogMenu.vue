@@ -1,0 +1,119 @@
+<!--
+ * @Description: 基础blog菜单
+ * @Version:
+ * @Autor: dreamy-xay
+ * @Date: 2021-09-20 20:28:35
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-20 21:12:59
+-->
+<template>
+  <div
+    class="base-blog-menu"
+    :class="{'base-blog-menu-change': buttonChange}"
+    role="button"
+    @click="showMenu"
+  >
+    <div class="base-blog-menu-icon">
+      <i class="iconfont blog-menu"></i>
+    </div>
+    <div
+      class="base-blog-menu-text"
+      v-show="!buttonChange"
+    >
+      MENU
+    </div>
+    <n-drawer
+      v-model:show="show"
+      :width="380"
+      placement="left"
+    >
+
+    </n-drawer>
+  </div>
+</template>
+
+<script>
+import { defineComponent, getCurrentInstance, onMounted, ref } from 'vue';
+
+/**
+ * @description: 基础blog菜单
+ * @author: dreamy-xay
+ */
+
+export default defineComponent({
+  name: 'base-blog-menu',
+  props: {
+    height: {
+      type: Number,
+      default: 288,
+    },
+  },
+  setup(props) {
+    const show = ref(false); // 是否显示侧边栏菜单
+    const buttonChange = ref(false); // 菜单按钮是否改变状态
+
+    // dom 渲染完成
+    onMounted(() => {
+      const parent = getCurrentInstance().parent.vnode.el; // 父亲级别dom
+      buttonChange.value = parent.scrollTop > props.height;
+      parent.addEventListener('scroll', (e) => {
+        buttonChange.value = e.target.scrollTop > props.height;
+      });
+    });
+
+    /**
+     * @description: 点击打开抽屉菜单
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function showMenu() {
+      show.value = true;
+    }
+
+    return {
+      show,
+      showMenu,
+      buttonChange,
+    };
+  },
+});
+</script>
+
+<style lang="scss" scoped>
+.base-blog-menu {
+  position: fixed;
+  top: 18px;
+  left: 22px;
+  width: 84px;
+  height: 30px;
+  border: 1px solid $grey-0;
+  border-radius: $border-radius-1;
+  @include flex(center, center);
+  background-color: transparent;
+  color: $grey-0;
+  font-size: 12px;
+  font-family: 'Open Sans', Arial, serif;
+  z-index: 2000;
+  opacity: 1;
+  transition: 0.25s;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &.base-blog-menu-change {
+  }
+
+  .base-blog-menu-icon {
+    width: 12px;
+    height: 12px;
+    margin-right: 8px;
+    @include flex(center, center);
+
+    .iconfont {
+      font-size: 13px;
+      color: $grey-0;
+    }
+  }
+}
+</style>
