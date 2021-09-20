@@ -4,13 +4,13 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-17 19:34:19
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-20 16:12:17
+ * @LastEditTime: 2021-09-20 17:27:12
 -->
 
 <template>
   <div
     class="user-question-switch"
-    v-if="(privacy || isSelf) && data.length"
+    v-if="(privacy || self) && data.length"
   >
     <div
       class="user-question-switch-context"
