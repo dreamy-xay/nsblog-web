@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-31 12:08:35
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-14 15:01:36
+ * @LastEditTime: 2021-09-17 15:01:17
  */
 import { App } from 'vue';
 // 编辑器
@@ -78,7 +78,7 @@ const theme = {
  * @description: 设置markdown组件选项
  * @param {any} component 导入的组件 `必传参数`
  * @param {'github' | 'vuepress'} themeName 主题名  `必传参数`
- * @return {*}
+ * @return {any} 返回 component
  * @author: Z_Y_C
  */
 function setOptions(component: any, themeName: 'github' | 'vuepress'): any {

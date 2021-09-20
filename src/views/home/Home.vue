@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-08-31 14:50:03
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-17 14:51:03
 -->
 
 <template>
@@ -29,9 +29,6 @@ export default defineComponent({
   name: 'Home',
   components: {
     BaseView,
-  },
-  setup() {
-    return {};
   },
 });
 </script>
