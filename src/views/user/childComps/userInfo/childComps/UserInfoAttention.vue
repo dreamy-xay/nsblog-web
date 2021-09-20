@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-09-09 18:55:02
- * @LastEditors: clq
- * @LastEditTime: 2021-09-16 14:18:43
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-20 12:50:30
 -->
 <template>
   <n-modal
@@ -97,6 +97,7 @@ import { defineComponent, ref, reactive, watch } from 'vue';
 import UserInfoAttentionItem from '@/views/user/childComps/userInfo/childComps/UserInfoAttentionItem.vue';
 import { getAttentions, getFans } from '@/network/api/attentions';
 import { useMessage } from 'naive-ui';
+import { useRoute } from 'vue-router';
 /**
  * @description: 关注详情模态框
  * @param {Boolean} modelValue 模态框显示绑定值，使用v-model指令即可 `默认为false`
@@ -135,12 +136,14 @@ export default defineComponent({
   },
   setup(props, context) {
     const msg = useMessage(); // navie-ui
+    const route = useRoute(); // 路由参数获取
     const limit = 10; //记录增量
     const attentionItems = reactive([]); //关注了数据
     const fansItems = reactive([]); //粉丝数据
     const loadingButtonShow = reactive([false, false]); // 加载更多按钮是否显示
     const myScrollbar = ref(null); //滚动条组件引用对象
 
+    // 监听用户名变化
     watch(
       () => props.username,
       () => {
@@ -148,6 +151,13 @@ export default defineComponent({
         addFansItems();
       }
     );
+
+    // 根据路由参数打开组件
+    const attention = route.query.attention;
+    if (attention !== undefined) {
+      context.emit('update:modelValue', true);
+      context.emit('update:flag', Boolean(Number(attention)));
+    }
 
     /**
      * @description: 增加关注者消息
