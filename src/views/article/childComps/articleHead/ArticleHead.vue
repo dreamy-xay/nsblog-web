@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 17:51:15
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-18 17:28:52
+ * @LastEditors: clq
+ * @LastEditTime: 2021-09-20 21:15:14
 -->
 <template>
   <div class="article-head">
@@ -210,6 +210,7 @@ export default defineComponent({
       transform: scale(1, 1.1);
 
       .info-item {
+        user-select: all;
         height: 100%;
         @include flex(center, center);
         margin-right: 12px;

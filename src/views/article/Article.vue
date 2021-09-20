@@ -3,22 +3,32 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 16:32:13
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-18 17:23:05
+ * @LastEditors: clq
+ * @LastEditTime: 2021-09-20 21:01:45
 -->
+
 <template>
-  <div class="article">
+  <div
+    class="article"
+    ref="articlePage"
+  >
     <base-background :mask="false" />
+    <base-blog-menu />
+    <article-loading-bar />
     <article-head />
     <article-body />
+    <article-footer />
   </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, provide, ref } from 'vue';
 import BaseBackground from '@/components/content/baseBackground/BaseBackground.vue';
+import BaseBlogMenu from '@/components/content/baseBlogMenu/BaseBlogMenu.vue';
+import ArticleLoadingBar from '@/views/article/childComps/ArticleLoadingBar.vue';
 import ArticleHead from '@/views/article/childComps/articleHead/ArticleHead.vue';
 import ArticleBody from '@/views/article/childComps/articleBody/ArticleBody.vue';
+import ArticleFooter from './childComps/articleFooter/ArticleFooter.vue';
 
 /**
  * @description:
@@ -29,8 +39,21 @@ export default defineComponent({
   name: 'Article',
   components: {
     BaseBackground,
+    BaseBlogMenu,
+    ArticleLoadingBar,
     ArticleHead,
     ArticleBody,
+    ArticleFooter,
+  },
+  setup() {
+    const articlePage = ref(null); // article page ref
+
+    // 向子组件传递
+    provide('articlePage', articlePage);
+
+    return {
+      articlePage,
+    };
   },
 });
 </script>
@@ -53,10 +76,10 @@ export default defineComponent({
   &::-webkit-scrollbar-thumb {
     /*滚动条里面小方块*/
     border-radius: 5px;
-    background: rgba($green-4, 0.7);
+    background: $green-0;
 
     &:hover {
-      background-color: $green-4;
+      background-color: $green-1;
     }
   }
 
