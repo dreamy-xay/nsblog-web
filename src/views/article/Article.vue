@@ -3,14 +3,15 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 16:32:13
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-18 17:23:05
+ * @LastEditors: clq
+ * @LastEditTime: 2021-09-20 17:56:30
 -->
 <template>
   <div class="article">
     <base-background :mask="false" />
     <article-head />
     <article-body />
+    <article-footer />
   </div>
 </template>
 
@@ -19,6 +20,7 @@ import { defineComponent } from 'vue';
 import BaseBackground from '@/components/content/baseBackground/BaseBackground.vue';
 import ArticleHead from '@/views/article/childComps/articleHead/ArticleHead.vue';
 import ArticleBody from '@/views/article/childComps/articleBody/ArticleBody.vue';
+import ArticleFooter from './childComps/articleFooter/ArticleFooter.vue';
 
 /**
  * @description:
@@ -31,6 +33,7 @@ export default defineComponent({
     BaseBackground,
     ArticleHead,
     ArticleBody,
+    ArticleFooter,
   },
 });
 </script>
