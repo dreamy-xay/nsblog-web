@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-14 18:01:22
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-15 20:56:39
+ * @LastEditTime: 2021-09-17 18:18:28
 -->
 
 <template>
@@ -27,8 +27,8 @@
           role="button"
         > <a
             class="link"
-            :href="`/article/${item.content_id}`"
-            :target="`/article/${item.content_id}`"
+            :href="(item.type === 1 ?'/article/' : ( item.type === 2 ? '/question/' : '/resource/')) + item.content_id"
+            :target="(item.type === 1 ?'/article/' : ( item.type === 2 ? '/question/' : '/resource/')) + item.content_id"
           >{{item.title}}</a> </div>
       </div>
 
