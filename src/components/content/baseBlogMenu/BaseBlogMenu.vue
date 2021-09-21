@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-20 20:28:35
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-20 21:12:59
+ * @LastEditTime: 2021-09-21 12:48:04
 -->
 <template>
   <div
@@ -95,13 +95,13 @@ export default defineComponent({
   font-family: 'Open Sans', Arial, serif;
   z-index: 2000;
   opacity: 1;
-  transition: 0.25s;
+  transition: opacity 0.25s;
+  transition: width 0.1s;
+  transition: box-shadow 0.25s;
+  overflow: hidden;
 
   &:hover {
     opacity: 0.8;
-  }
-
-  &.base-blog-menu-change {
   }
 
   .base-blog-menu-icon {
@@ -113,6 +113,30 @@ export default defineComponent({
     .iconfont {
       font-size: 13px;
       color: $grey-0;
+      transition: 0.25s;
+    }
+  }
+
+  &.base-blog-menu-change {
+    width: 30px;
+    background-color: $grey-0;
+    box-shadow: $shadow-0;
+
+    .base-blog-menu-icon {
+      margin-right: 0;
+
+      .iconfont {
+        color: $green-0;
+      }
+    }
+
+    &:hover {
+      opacity: 1;
+      box-shadow: $shadow-2;
+
+      .iconfont {
+        color: $green-1;
+      }
     }
   }
 }
