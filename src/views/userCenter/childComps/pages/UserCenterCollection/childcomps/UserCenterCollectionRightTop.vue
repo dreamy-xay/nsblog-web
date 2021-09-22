@@ -4,54 +4,54 @@
  * @Autor: continue-hs
  * @Date: 2021-09-01 16:41:52
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-09-11 19:12:11
+ * @LastEditTime: 2021-09-21 16:36:11
 -->
 <template>
   <div class="user-center-collection-right-top">
-    <div
-      class="user-center-collection-right-top-name"
-      role="button"
-      v-show="!isEditName"
-      @click="editName"
-    >
-      {{data.name ? data.name : '编辑收藏夹标题~ o(*￣▽￣*)o'}}
-      <i
-        class="iconfont blog-bianji1"
+    <div class="user-center-collection-right-top-text">
+      <div
+        class="user-center-collection-right-top-name"
         role="button"
-      ></i>
-    </div>
-    <user-center-input
-      class="user-center-collection-right-top-nametext"
-      v-show="isEditName"
-      type="text"
-      v-model="inputName"
-      ref="nameInput"
-      :maxlength="100"
-      @blur="updateName(false,true)"
-      show-close
-    />
-    <div
-      class="user-center-collection-right-top-remark"
-      role="button"
-      v-show="!isEditRemark"
-      @click="editRemark"
-    >
-      {{data.remark ? data.remark : '编辑收藏夹描述~ o(*￣▽￣*)o'}}
-      <i
-        class="iconfont blog-bianji1"
+        v-show="!isEditName"
+        @click="editName"
+      >
+        {{data.name ? data.name : '编辑收藏夹标题~ o(*￣▽￣*)o'}}
+        <i
+          class="iconfont blog-bianji1"
+          role="button"
+        ></i>
+      </div>
+      <user-center-input
+        v-show="isEditName"
+        type="text"
+        v-model="inputName"
+        ref="nameInput"
+        :maxlength="100"
+        @blur="updateName(false,true)"
+        show-close
+      />
+      <div
+        class="user-center-collection-right-top-remark"
         role="button"
-      ></i>
+        v-show="!isEditRemark"
+        @click="editRemark"
+      >
+        {{data.remark ? data.remark : '编辑收藏夹描述~ o(*￣▽￣*)o'}}
+        <i
+          class="iconfont blog-bianji1"
+          role="button"
+        ></i>
+      </div>
+      <user-center-input
+        v-show="isEditRemark"
+        type="text"
+        v-model="inputRemark"
+        ref="remarkInput"
+        :maxlength="100"
+        @blur="updateRemark(false,true)"
+        show-close
+      />
     </div>
-    <user-center-input
-      class="user-center-collection-right-top-remarktext"
-      v-show="isEditRemark"
-      type="text"
-      v-model="inputRemark"
-      ref="remarkInput"
-      :maxlength="100"
-      @blur="updateRemark(false,true)"
-      show-close
-    />
     <div class="user-center-collection-right-top-button">
       <div
         class="button1"
@@ -140,7 +140,7 @@ export default defineComponent({
       }
     );
 
-    //watch收藏夹标题
+    //watch收藏夹描述
     watch(
       () => props.data.remark,
       (value) => {
@@ -219,16 +219,16 @@ export default defineComponent({
       if (isConfirm) {
         if (props.data.is_private === true) {
           context.emit('updatePrivate', false);
-          confirmPrivateModal.value = isConfirmPrivate;
         } else {
           context.emit('updatePrivate', true);
-          isConfirmPrivateModal.value = isConfirmPrivate;
         }
       }
       if (isConfirmPrivate && !isConfirm) {
         if (props.data.is_private === true) confirmPrivateModal.value = true;
         else isConfirmPrivateModal.value = true;
       }
+      if (props.data.is_private === true) confirmPrivateModal.value = isConfirmPrivate;
+      else isConfirmPrivateModal.value = isConfirmPrivate;
     }
 
     /**
@@ -275,34 +275,25 @@ export default defineComponent({
 .user-center-collection-right-top {
   @include size(736px, 139px);
 
-  .user-center-collection-right-top-name {
-    color: $grey-8;
-    padding: 17px 0 0 30px;
-    height: 32px;
-  }
+  .user-center-collection-right-top-text {
+    margin: 17px 0 0 30px;
 
-  i {
-    margin-left: 14px;
-  }
-
-  :deep(.user-center-input.user-center-collection-right-top-nametext input) {
-    margin: 17px 0 0 30px !important;
-  }
-
-  .user-center-collection-right-top-remark {
-    color: $grey-8;
-    padding-left: 30px;
-    height: 32px;
-    display: flex;
-
-    .user-center-collection-right-top-remarktext {
-      width: 300px;
-      @include ellipsis(1);
+    .user-center-collection-right-top-name {
+      color: $grey-8;
+      padding: 6px 0 6px 8px;
+      height: 20px;
     }
-  }
 
-  :deep(.user-center-input.user-center-collection-right-top-remarktext input) {
-    margin-left: 30px !important;
+    i {
+      margin-left: 14px;
+    }
+
+    .user-center-collection-right-top-remark {
+      color: $grey-8;
+      padding: 6px 0 6px 8px;
+      height: 20px;
+      display: flex;
+    }
   }
 
   .user-center-collection-right-top-button {
@@ -320,7 +311,7 @@ export default defineComponent({
       box-shadow: $shadow-0;
 
       &:hover {
-        background: $green-2;
+        background: $green-1;
       }
     }
 
