@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-20 20:28:35
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-20 21:12:59
+ * @LastEditTime: 2021-09-21 17:16:27
 -->
 <template>
   <div
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { defineComponent, getCurrentInstance, onMounted, ref } from 'vue';
+import { defineComponent, inject, onMounted, ref } from 'vue';
 
 /**
  * @description: 基础blog菜单
@@ -41,23 +41,18 @@ import { defineComponent, getCurrentInstance, onMounted, ref } from 'vue';
  */
 
 export default defineComponent({
-  name: 'base-blog-menu',
-  props: {
-    height: {
-      type: Number,
-      default: 288,
-    },
-  },
-  setup(props) {
+  name: 'articleMenu',
+  setup() {
     const show = ref(false); // 是否显示侧边栏菜单
     const buttonChange = ref(false); // 菜单按钮是否改变状态
+    const articlePage = inject('articlePage'); // 获取主页面 ref (dom)
+    const height = 288 - 30; // 标题图片高度
 
     // dom 渲染完成
     onMounted(() => {
-      const parent = getCurrentInstance().parent.vnode.el; // 父亲级别dom
-      buttonChange.value = parent.scrollTop > props.height;
-      parent.addEventListener('scroll', (e) => {
-        buttonChange.value = e.target.scrollTop > props.height;
+      buttonChange.value = articlePage.valuescrollTop > height;
+      articlePage.value.addEventListener('scroll', (e) => {
+        buttonChange.value = e.target.scrollTop > height;
       });
     });
 
@@ -95,13 +90,13 @@ export default defineComponent({
   font-family: 'Open Sans', Arial, serif;
   z-index: 2000;
   opacity: 1;
-  transition: 0.25s;
+  transition: opacity 0.25s;
+  transition: width 0.1s;
+  transition: box-shadow 0.25s;
+  overflow: hidden;
 
   &:hover {
     opacity: 0.8;
-  }
-
-  &.base-blog-menu-change {
   }
 
   .base-blog-menu-icon {
@@ -113,6 +108,30 @@ export default defineComponent({
     .iconfont {
       font-size: 13px;
       color: $grey-0;
+      transition: 0.25s;
+    }
+  }
+
+  &.base-blog-menu-change {
+    width: 30px;
+    background-color: $grey-0;
+    box-shadow: $shadow-0;
+
+    .base-blog-menu-icon {
+      margin-right: 0;
+
+      .iconfont {
+        color: $green-0;
+      }
+    }
+
+    &:hover {
+      opacity: 1;
+      box-shadow: $shadow-2;
+
+      .iconfont {
+        color: $green-1;
+      }
     }
   }
 }
