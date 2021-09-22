@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-27 12:19:40
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-13 12:32:57
+ * @LastEditTime: 2021-09-22 16:17:06
  */
 
 /**
@@ -42,11 +42,12 @@ export interface EventsInterface<T> {
   /**
    * @description: 绑定接收事件
    * @param {T} eventId 事件名 `必传参数`
-   * @param {EventCallback} callback 绑定接收事件回调函数
+   * @param {EventCallback} callback 绑定接收事件回调函数 `必传参数`
+   * @param {boolean} 是否覆盖之前绑定的事件 `默认为false`
    * @return {this} 返回自身，可链式调用
    * @author: dreamy-xay
    */
-  on(eventId: T, callback: EventCallback): this;
+  on(eventId: T, callback: EventCallback, override?: boolean): this;
 
   /**
    * @description: 解除事件绑定
@@ -59,11 +60,12 @@ export interface EventsInterface<T> {
   /**
    * @description: 绑定一次性接收事件
    * @param {T} eventId 事件名 `必传参数`
-   * @param {EventCallback} callback 绑定接收事件回调函数
+   * @param {EventCallback} callback 绑定接收事件回调函数 `必传参数`
+   * @param {boolean} 是否覆盖之前绑定的事件 `默认为false`
    * @return {this} 返回自身，可链式调用
    * @author: dreamy-xay
    */
-  once(eventId: T, callback: EventCallback): this;
+  once(eventId: T, callback: EventCallback, override?: boolean): this;
 
   /**
    * @description: 清楚全部事件
@@ -133,13 +135,15 @@ export default class Events<T extends string | number = string> implements Event
         const newEventInfoList: EventInfo[] = [];
         for (let i: number = 0; i < eventInfoList.length; ++i)
           if (!offEventIndex.has(i)) newEventInfoList.push(eventInfoList[i]);
+        this.events.set(eventId, newEventInfoList);
       }
     }
     return this;
   }
 
-  public on(eventId: T, callback: EventCallback): this {
-    if (this.events.has(eventId)) this.events.set(eventId, [...this.events.get(eventId), [callback, false]]);
+  public on(eventId: T, callback: EventCallback, override: boolean = false): this {
+    if (!override && this.events.has(eventId))
+      this.events.set(eventId, [...(<EventInfo[]>this.events.get(eventId)), [callback, false]]);
     else this.events.set(eventId, [[callback, false]]);
     return this;
   }
@@ -149,8 +153,9 @@ export default class Events<T extends string | number = string> implements Event
     return this;
   }
 
-  public once(eventId: T, callback: EventCallback): this {
-    if (this.events.has(eventId)) this.events.set(eventId, [...this.events.get(eventId), [callback, true]]);
+  public once(eventId: T, callback: EventCallback, override: boolean = false): this {
+    if (!override && this.events.has(eventId))
+      this.events.set(eventId, [...(<EventInfo[]>this.events.get(eventId)), [callback, true]]);
     else this.events.set(eventId, [[callback, true]]);
     return this;
   }
