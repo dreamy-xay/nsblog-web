@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-19 18:32:43
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-11 11:35:47
+ * @LastEditTime: 2021-09-20 12:52:31
 -->
 <template>
   <div class="top-bar-avatar">
@@ -226,17 +226,17 @@ export default defineComponent({
       return [
         {
           name: '关注',
-          url: '#',
+          url: `/user/${username.value}?attention=1`,
           count: recommendCount.value ? recommendCount.value : '--',
         },
         {
           name: '粉丝',
-          url: '#',
+          url: `/user/${username.value}?attention=0`,
           count: fansCount.value ? fansCount.value : '--',
         },
         {
           name: '动态',
-          url: '#',
+          url: `/user/${username.value}/dynamic`,
           count: dynamicCount.value ? dynamicCount.value : '--',
         },
       ];

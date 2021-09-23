@@ -4,7 +4,7 @@
  * @Autor: clqf
  * @Date: 2021-09-14 17:32:49
  * @LastEditors: clq
- * @LastEditTime: 2021-09-16 19:44:17
+ * @LastEditTime: 2021-09-17 19:34:23
 -->
 <template>
   <div
@@ -17,13 +17,20 @@
       <div class="body">{{articleInfo.content}}</div>
       <div class="footer">
         <div class="left">
-          <div class="special-column">{{articleInfo.specialColumn}}</div>
+          <div>
+            <base-tag
+              :size="21"
+              color="#ffb792"
+              :hollow="true"
+              :text="articleInfo.topic_tag"
+            />
+          </div>
           <div class="page-view">
             <span class="iconfont blog-eye"></span>
             <span class="info">{{articleInfo.viewCount}} 浏览</span>
           </div>
           <div class="comment">
-            <span class="iconfont blog-liaotian"></span>
+            <span class="iconfont blog-comment"></span>
             <span class="info">{{articleInfo.commentCount}} 评论</span>
           </div>
           <div class="recommend">
@@ -42,6 +49,7 @@
 
 <script>
 import { defineComponent } from 'vue';
+import BaseTag from '@/components/content/baseTag/BaseTag.vue';
 
 /**
  * @description: 文章详情组件
@@ -50,6 +58,7 @@ import { defineComponent } from 'vue';
  */
 export default defineComponent({
   name: 'UserArticleItem',
+  components: { BaseTag },
   props: {
     articleInfo: {
       type: Object,
@@ -99,33 +108,17 @@ export default defineComponent({
     .footer {
       @include flex(center, space-between, row);
       .left {
-        width: 364px;
+        width: 334px;
         @include flex(center, space-between, row);
-        .special-column {
-          width: 56px;
-          height: 21px;
-          margin-right: 24px;
-          padding: 2.5px 4px;
-          border-radius: 5px;
-          border: solid 1px #ffb792;
-          font-family: Arial;
-          font-size: 12px;
-          line-height: 21px;
-          text-align: center;
-          color: #ffb792;
-        }
 
         div {
           .iconfont {
-            // width: 21px;
-            // height: 21px;
             font-size: 14px;
             color: #8c8c8c;
           }
 
           .info {
             margin-left: 4px;
-            margin-right: 24px;
             font-family: Arial;
             font-size: 14px;
             line-height: 21px;
