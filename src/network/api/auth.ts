@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-10 20:30:04
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-28 22:15:27
+ * @LastEditTime: 2021-09-23 18:07:28
  */
 
 import { post, RequestLifeCycle } from '@/network/request';
@@ -49,7 +49,7 @@ export function authLogout(RLC: RequestLifeCycle = {}): Promise<unknown> {
  */
 export function authLogoff(RLC: RequestLifeCycle = {}): Promise<unknown> {
   return post({
-    url: '/auth/logout',
+    url: '/auth/logoff',
     ...RLC
   });
 }
