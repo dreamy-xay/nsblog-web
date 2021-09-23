@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-19 18:32:43
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-20 12:52:31
+ * @LastEditTime: 2021-09-23 18:24:48
 -->
 <template>
   <div class="top-bar-avatar">
@@ -137,6 +137,7 @@
 import { defineComponent, ref, computed } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import { getUserInfo } from '@/network/api/user';
+import { authLogout } from '@/network/api/auth';
 import { clearToken } from '@/network/token';
 import { getCurrentDiffirence } from '@/util/date';
 import { mapState, mapMutations } from '@/util/store';
@@ -250,6 +251,8 @@ export default defineComponent({
     function exit() {
       clearToken();
       updateTokenInfo({ status: false });
+      // 登出
+      authLogout().catch((error) => console.log(error));
     }
 
     const active = ref(false); // 是否激活显示菜单
