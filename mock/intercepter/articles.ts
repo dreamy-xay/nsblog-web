@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-23 20:25:20
+ * @LastEditTime: 2021-09-23 22:02:22
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -93,7 +93,7 @@ export default function(baseUrl: string, app: Application) {
       return ans;
     }
 
-    const user: RandomUser = randomUsers().random();
+    const user: RandomUser = randomUsers(username as string).random();
     const ans: Record<string, unknown> = {
       username: user.username,
       nickname: user.nickname,
@@ -118,6 +118,76 @@ export default function(baseUrl: string, app: Application) {
     return res.status(200).send();
   });
 
+  // 获取文章评论
+  app.get(baseUrl + '/articles/comments', (req: Request, res: Response) => {
+    let username: string = '';
+    if (verifyToken(req.headers)) username = getToken(req.headers).username;
+    const { article_id, comment_id, limit, offset } = req.query;
+    console.log(
+      `getArticlesComments... :  article_id=>${article_id}  ${comment_id ? 'comment_id=>' + comment_id : ''}`
+    );
+
+    const RUsers = randomUsers(username);
+    function getRandom(limit: number): Record<string, unknown>[] {
+      const ans: Record<string, unknown>[] = [];
+
+      let cur: number;
+      let maxn: number;
+      function getComments(): Record<string, unknown>[] {
+        const ans: Record<string, unknown>[] = [];
+        if (cur >= maxn) return ans;
+        const sum = Random.integer(0, 2);
+        for (let i: number = 0; i < sum; ++i) {
+          const user: RandomUser = RUsers.random();
+          const params: Record<string, unknown> = username !== '' ? { evaluation: Random.integer(0, 2) } : {};
+          ans.push({
+            comment_id: Random.id(),
+            username: user.username,
+            avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
+            time: Random.time(),
+            content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
+            support_count: Random.integer(0, 9999),
+            oppose_count: Random.integer(0, 9999),
+            ...params,
+            child_comments: getComments()
+          });
+        }
+        return ans;
+      }
+
+      for (let i: number = 0; i < limit; ++i) {
+        const user: RandomUser = RUsers.random();
+        cur = 0;
+        maxn = Random.integer(0, 20);
+        const params: Record<string, unknown> = username !== '' ? { evaluation: Random.integer(0, 2) } : {};
+        ans.push({
+          comment_id: Random.id(),
+          username: user.username,
+          avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
+          time: Random.time(),
+          content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
+          support_count: Random.integer(0, 9999),
+          oppose_count: Random.integer(0, 9999),
+          ...params,
+          child_comments: getComments()
+        });
+      }
+
+      return ans;
+    }
+
+    return res.json({ comments: getRandom(int(offset) >= 25 ? 0 : Math.min(int(limit), 25 - int(offset))) });
+  });
+
+  // 修改文章评论状态，推荐反对还是不操作
+  app.put(baseUrl + '/articles/comments/evaluation', (req: Request, res: Response) => {
+    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
+    const username: string = getToken(req.headers).username;
+    const { type, comment_id } = req.body;
+    console.log(`${username} modifyArticleCommentsEvaluation... :   type=>${type}  comment_id=>${comment_id}`);
+    return res.status(200).send();
+  });
+
   // 获取文章详情
   app.get(baseUrl + '/articles/:article_id', (req: Request, res: Response) => {
     let username: string = '';
@@ -133,7 +203,14 @@ export default function(baseUrl: string, app: Application) {
       return ans;
     }
 
-    const params: Record<string, unknown> = username !== '' ? {} : {};
+    const params: Record<string, unknown> =
+      username !== ''
+        ? {
+            evaluation: Random.integer(0, 2),
+            attention: Random.integer(0, 1),
+            collection: Random.integer(0, 2)
+          }
+        : {};
 
     const ans: Record<string, unknown> = {
       article_id,
