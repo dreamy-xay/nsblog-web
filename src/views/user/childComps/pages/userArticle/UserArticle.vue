@@ -4,95 +4,30 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: clq
- * @LastEditTime: 2021-09-16 20:03:33
+ * @LastEditTime: 2021-09-17 20:45:58
 -->
 <template>
   <div class="user-article">
     <div class="user-article-header">
       <div class="left">
-        <!-- <div
-          class="iconfont blog-fenlei category-icon"
-          role="button"
-        ></div> -->
-        <!-- <div class="category">
-          <n-dropdown
-            trigger="click"
-            @select="categoryHandleSelect"
-            :options="categoryOptions"
-            :show-arrow="true"
-            class="user-article-dropdown"
-          >
-            <n-button
-              class="btn"
-              text
-            >{{categoryBtnInfo}}</n-button>
-          </n-dropdown>
-        </div> -->
         <div>
           <user-article-select
-            :sdata="[1,2,3,4,5,6,7,8,9]"
+            :sdata="categoryOptions"
             :category="true"
+            @changeItem="categoryHandleSelect"
           ></user-article-select>
         </div>
         <div>
           <user-article-select
-            :sdata="[1,2,3,4]"
+            :sdata="labelOptions"
             :category="false"
+            @changeItem="labelHandleSelect"
           ></user-article-select>
         </div>
-
-        <!-- <div
-          class="iconfont blog-label label-icon"
-          role="button"
-        ></div>
-        <div class="label">
-          <n-dropdown
-            trigger="hover"
-            @select="labelHandleSelect"
-            :options="categoryOptions"
-            :show-arrow="true"
-            class="user-article-dropdown"
-          >
-            <n-button
-              class="btn"
-              text
-            >{{LabelBtnInfo}}</n-button>
-          </n-dropdown>
-        </div> -->
       </div>
 
       <div class="right">
-        <div class="label">发布时间</div>
-        <div class="btnContainer">
-          <div
-            :class="{'active': sortFlag === 1}"
-            class="iconfont blog-up"
-            role="button"
-            @click="timeIncrease"
-          ></div>
-          <div
-            :class="{'active': sortFlag === 2}"
-            class="iconfont blog-down"
-            role="button"
-            @click="timeDecrease"
-          ></div>
-        </div>
-
-        <div class="label">访问量</div>
-        <div class="btnContainer">
-          <div
-            :class="{'active': sortFlag === 3}"
-            class="iconfont blog-up"
-            role="button"
-            @click="viewIncrease"
-          ></div>
-          <div
-            :class="{'active': sortFlag === 4}"
-            class="iconfont blog-down"
-            role="button"
-            @click="viewDecrease"
-          ></div>
-        </div>
+        <user-sort @changeSort="changeSortHandle" />
       </div>
     </div>
 
@@ -118,6 +53,7 @@
 import { defineComponent, reactive, ref } from 'vue';
 import UserArticleItem from '@/views/user/childComps/pages/userArticle/childComps/UserArticleItem.vue';
 import UserArticleSelect from '@/views/user/childComps/pages/userArticle/childComps/UserArticleSelect.vue';
+import UserSort from '@/views/user/childComps/UserSort.vue';
 import { useMessage } from 'naive-ui';
 /**
  * @description: 用户主页发布文章记录
@@ -126,70 +62,12 @@ import { useMessage } from 'naive-ui';
 
 export default defineComponent({
   name: 'userArticle',
-  components: { UserArticleItem, UserArticleSelect },
+  components: { UserArticleItem, UserArticleSelect, UserSort },
   setup() {
     //文章分类
-    const categoryOptions = reactive([
-      {
-        label: '滨海湾金沙，新加坡',
-        key: 'marina bay sands',
-      },
-      {
-        label: '布朗酒店，伦敦',
-        key: "brown's hotel, london",
-      },
-      {
-        label: '亚特兰蒂斯巴哈马，拿骚',
-        key: 'atlantis nahamas, nassau',
-      },
-      {
-        label: '比佛利山庄酒店，洛杉矶',
-        key: 'the beverly, los angeles',
-      },
-      {
-        label: '比佛利山庄酒店，洛杉矶',
-        key: 'the beverly hills hotel, los angeles',
-      },
-      {
-        label: '比佛利山庄酒店，洛杉矶',
-        key: 'the beverly hills angeles',
-      },
-      {
-        label: '比佛利山庄酒店，洛杉矶',
-        key: 'the bever',
-      },
-      {
-        label: '比佛利山庄酒店，洛杉矶',
-        key: 'the beverly hills hos angeles',
-      },
-      {
-        label: '比佛利山庄酒店，洛杉矶',
-        key: 'the beverly lls hotel, los angeles',
-      },
-      {
-        label: '比佛利山庄酒店，洛杉矶',
-        key: 'the beverly hills hotel, os angeles',
-      },
-    ]);
+    const categoryOptions = reactive(['分类1', '分类2', '分类3', '分类4', '分类5', '分类6', '分类7', '分类8']);
     //文章标签
-    const labelOptions = reactive([
-      {
-        label: '滨海湾金沙，新加坡',
-        key: 'marina bay sands',
-      },
-      {
-        label: '布朗酒店，伦敦',
-        key: "brown's hotel, london",
-      },
-      {
-        label: '亚特兰蒂斯巴哈马，拿骚',
-        key: 'atlantis nahamas, nassau',
-      },
-      {
-        label: '比佛利山庄酒店，洛杉矶',
-        key: 'the beverly hills hotel, los angeles',
-      },
-    ]);
+    const labelOptions = reactive(['标签1', '标签2', '标签3', '标签4', '标签5', '标签6', '标签7', '标签8']);
     //文章详情
     const articles = reactive([
       {
@@ -197,7 +75,7 @@ export default defineComponent({
         url: '文章链接',
         content:
           '内容11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111',
-        specialColumn: '专栏',
+        topic_tag: '专栏',
         viewCount: 2, //浏览量
         commentCount: 6, //评论数
         recommendCount: 8, //推荐数
@@ -208,7 +86,7 @@ export default defineComponent({
         url: '文章链接2',
         content:
           '内容22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222',
-        specialColumn: '专栏2',
+        topic_tag: '专栏2',
         viewCount: 2, //浏览量
         commentCount: 6, //评论数
         recommendCount: 8, //推荐数
@@ -218,7 +96,6 @@ export default defineComponent({
     const message = useMessage(); //navi-ui message
     const categoryBtnInfo = ref('选择分类'); //分类按钮信息
     const LabelBtnInfo = ref('选择标签'); //标签按钮信息
-    const sortFlag = ref(1); //排序标志 1: 时间升序 2:时间降序 3:访问量升序 4:访问量降序
 
     /**
      * @description: 选择分类
@@ -226,15 +103,15 @@ export default defineComponent({
      * @return {void}
      * @author: clq
      */
-    function categoryHandleSelect(key) {
-      for (const elem of categoryOptions) {
-        if (elem.key === key) {
-          categoryBtnInfo.value = elem.label;
-          LabelBtnInfo.value = '选择标签';
-          break;
-        }
-      }
-      message.info(key);
+    function categoryHandleSelect(item, index) {
+      // for (const elem of categoryOptions) {
+      //   if (elem.key === key) {
+      //     categoryBtnInfo.value = elem.label;
+      //     LabelBtnInfo.value = '选择标签';
+      //     break;
+      //   }
+      // }
+      message.info(`item:${item} , index:${index}`);
     }
 
     /**
@@ -243,55 +120,27 @@ export default defineComponent({
      * @return {void}
      * @author: clq
      */
-    function labelHandleSelect(key) {
-      for (const elem of labelOptions) {
-        if (elem.key === key) {
-          LabelBtnInfo.value = elem.label;
-          categoryBtnInfo.value = '选择分类';
-          break;
-        }
+    function labelHandleSelect(item, index) {
+      // for (const elem of labelOptions) {
+      //   if (elem.key === key) {
+      //     LabelBtnInfo.value = elem.label;
+      //     categoryBtnInfo.value = '选择分类';
+      //     break;
+      //   }
+      // }
+      message.info(`item:${item} , index:${index}`);
+    }
+
+    function changeSortHandle(key) {
+      if (key === 1) {
+        console.log('发布时间升序');
+      } else if (key === 2) {
+        console.log('发布时间降序');
+      } else if (key === 3) {
+        console.log('访问量升序');
+      } else {
+        console.log('访问量降序');
       }
-      message.info(key);
-    }
-
-    /**
-     * @description: 按发布时间升序排序
-     * @return {void}
-     * @author: clq
-     */
-    function timeIncrease() {
-      sortFlag.value = 1;
-      console.log('timeIncrease');
-    }
-
-    /**
-     * @description: 按发布时间降序排序
-     * @return {void}
-     * @author: clq
-     */
-    function timeDecrease() {
-      sortFlag.value = 2;
-      console.log('timeDecrease');
-    }
-
-    /**
-     * @description: 按访问量升序排序
-     * @return {void}
-     * @author: clq
-     */
-    function viewIncrease() {
-      sortFlag.value = 3;
-      console.log('viewIncrease');
-    }
-
-    /**
-     * @description: 按访问量降序排序
-     * @return {void}
-     * @author: clq
-     */
-    function viewDecrease() {
-      sortFlag.value = 4;
-      console.log('viewDecrease');
     }
 
     /**
@@ -309,14 +158,10 @@ export default defineComponent({
       articles,
       categoryBtnInfo,
       LabelBtnInfo,
-      sortFlag,
       categoryHandleSelect,
       labelHandleSelect,
+      changeSortHandle,
       loadMore,
-      timeIncrease,
-      timeDecrease,
-      viewIncrease,
-      viewDecrease,
     };
   },
 });
@@ -336,77 +181,7 @@ export default defineComponent({
 
     .left {
       @include flex(center, flex-start, row);
-
-      .category-icon {
-        margin-right: 6px;
-        font-size: 20px;
-        color: #f98fa8;
-      }
-
-      .category {
-        color: #8c8c8c;
-        margin-right: 16px;
-      }
-
-      .label-icon {
-        margin-right: 6px;
-        font-size: 20px;
-        color: #ffb792;
-      }
-
-      .label {
-        color: #8c8c8c;
-      }
-
-      :deep(.btn span) {
-        // box-sizing: border-box;
-        display: block;
-        width: 80px;
-        // background-color: #f4f4f4;
-        text-align: left;
-        color: #8c8c8c;
-        @include ellipsis(1);
-
-        &:hover {
-          color: #85e8c7;
-        }
-      }
     }
-
-    .right {
-      @include flex(center, flex-start);
-      .label {
-        margin-right: 4px;
-        margin-left: 8px;
-        color: #8c8c8c;
-      }
-
-      .btnContainer {
-        box-sizing: border-box;
-        height: 19.2px;
-        margin-right: 8px;
-        // padding: 10px 0;
-        @include flex(center, space-around, column);
-
-        .iconfont {
-          // height: 9px;
-          font-size: 0.5px;
-          color: #bfbfbf;
-          transition: all 0.25s;
-
-          &:hover {
-            color: $grey-7;
-          }
-        }
-
-        .active {
-          color: $grey-7;
-        }
-      }
-    }
-  }
-
-  .user-article-body {
   }
 
   .user-article-footer {
@@ -431,7 +206,6 @@ export default defineComponent({
 <style lang="scss">
 .user-article-dropdown {
   border-radius: 4px !important;
-  // height: 154px !important;
 
   .n-dropdown-option-body {
     height: 29px !important;

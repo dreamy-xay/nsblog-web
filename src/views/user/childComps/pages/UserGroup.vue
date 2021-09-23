@@ -4,10 +4,13 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-16 15:55:15
+ * @LastEditTime: 2021-09-17 11:28:00
 -->
 <template>
-  <div class="user-group">
+  <div
+    class="user-group"
+    v-if="groupData.length"
+  >
     <div
       v-for="(item, index) in groupData"
       :key="index"
@@ -49,6 +52,11 @@
       加载更多...
     </div>
   </div>
+
+  <user-null
+    v-else
+    :select="true"
+  />
 </template>
 
 <script>
@@ -58,6 +66,8 @@ import { useRoute } from 'vue-router';
 import BaseTag from '@/components/content/baseTag/BaseTag.vue';
 import styles from '@/assets/style/define.scss';
 import { dateFormat } from '@/util/date';
+import { useMessage } from 'naive-ui';
+import UserNull from '@/views/user/childComps/UserNull.vue';
 
 /**
  * @description: 用户主页学习小组记录
@@ -68,8 +78,10 @@ export default defineComponent({
   name: 'userGroup',
   components: {
     BaseTag,
+    UserNull,
   },
   setup() {
+    const msg = useMessage(); // naive-ui
     const route = useRoute();
     const username = route.params.username; // 获取路由的username
     const groupData = reactive([]);
@@ -77,17 +89,26 @@ export default defineComponent({
     const limit = 10; // 获取数据条数
 
     // 首次获取数据
-    getGroups(username, 0, limit).then((data) => {
-      // console.log(data.groups.length === limit);
-      loading.value = data.groups.length === limit;
-      groupData.splice(0, 0, ...data.groups);
-    });
+    getGroups(username, 0, limit)
+      .then((data) => {
+        loading.value = data.groups.length === limit;
+        groupData.splice(0, 0, ...data.groups);
+      })
+      .catch((error) => {
+        console.log(error);
+        msg.error('获取学习小组信息失败', { duration: 2000, closable: true });
+      });
 
     function addGroupData() {
-      getGroups(username, groupData.length, limit).then((data) => {
-        loading.value = data.groups.length === limit;
-        groupData.splice(groupData.length, 0, ...data.groups);
-      });
+      getGroups(username, groupData.length, limit)
+        .then((data) => {
+          loading.value = data.groups.length === limit;
+          groupData.splice(groupData.length, 0, ...data.groups);
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('获取学习小组信息失败', { duration: 2000, closable: true });
+        });
     }
 
     return { styles, groupData, dateFormat, addGroupData, loading };

@@ -4,18 +4,18 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-15 20:41:14
+ * @LastEditTime: 2021-09-17 19:30:39
 -->
 <template>
   <div
     class="user-profile"
-    v-if="privacySetting.view_profile && text"
+    v-if="(privacySetting.view_profile || isSelf) && text"
   >
     <v-md-preview :text="text" />
   </div>
   <user-null
     v-else
-    :select="privacySetting.view_profile"
+    :select="isSelf ? true : Boolean(privacySetting.view_profile)"
   />
 </template>
 
@@ -28,6 +28,7 @@ import { useRoute } from 'vue-router';
 
 import { mapState } from '@/util/store';
 import UserNull from '@/views/user/childComps/UserNull.vue';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description: 用户主页个人简介
@@ -40,15 +41,24 @@ export default defineComponent({
     UserNull,
   },
   setup() {
+    const msg = useMessage(); // naive-ui
     const route = useRoute(); // route
     const username = route.params.username;
+    const { tokenInfo } = mapState('global', ['tokenInfo']);
+    const isSelf = username === tokenInfo.value.username;
     const text = ref('');
-    getProfile(username).then((data) => {
-      text.value = data.profile;
-    });
+    getProfile(username)
+      .then((data) => {
+        text.value = data.profile;
+      })
+      .catch((error) => {
+        console.log(error);
+        msg.error('获取个人简介信息失败', { duration: 2000, closable: true });
+      });
     return {
       ...mapState('user', ['privacySetting']),
       text,
+      isSelf,
     };
   },
 });

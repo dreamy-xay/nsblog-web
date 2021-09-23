@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:06:39
- * @LastEditors: clq
- * @LastEditTime: 2021-09-14 17:14:58
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-17 19:33:02
  */
 import { RouteRecordRaw } from 'vue-router';
 
@@ -38,7 +38,7 @@ const userRouter: RouteRecordRaw = {
     {
       path: 'question',
       name: 'userQuestion',
-      component: () => import('@/views/user/childComps/pages/UserQuestion.vue'),
+      component: () => import('@/views/user/childComps/pages/UserQuestion/UserQuestion.vue'),
       meta: {
         title: '提问回答'
       }
