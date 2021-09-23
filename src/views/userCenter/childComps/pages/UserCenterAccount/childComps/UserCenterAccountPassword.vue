@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-26 15:11:17
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-15 12:50:57
+ * @LastEditors: Ban
+ * @LastEditTime: 2021-09-16 20:48:05
 -->
 <template>
   <div class="user-center-account-change">
@@ -66,26 +66,6 @@
             >
             </user-center-input>
           </div>
-        </div>
-        <div v-else-if="title === '换绑邮箱' || title === '绑定邮箱'">
-          <div>邮箱</div>
-          <user-center-input
-            placeholder="邮箱"
-            v-model="oldData"
-            clearable
-            class="input"
-          >
-          </user-center-input>
-          <div>验证码</div>
-          <user-center-input
-            placeholder="验证码"
-            v-model="newData1"
-            :clearable="true"
-            class="input"
-            style="width: 200px; margin-right: 20px"
-          >
-          </user-center-input>
-          <el-button>发送验证码</el-button>
         </div>
       </div>
       <template #footer>

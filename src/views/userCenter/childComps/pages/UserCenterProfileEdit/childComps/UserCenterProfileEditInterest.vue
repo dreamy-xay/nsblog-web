@@ -3,13 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-28 14:54:52
-<<<<<<< HEAD
  * @LastEditors: Ban
- * @LastEditTime: 2021-09-14 21:48:32
-=======
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-13 12:58:51
->>>>>>> 3b43a64f7e0f574d9eb165364a5a08c988a878cd
+ * @LastEditTime: 2021-09-17 18:22:13
 -->
 
 <template>
@@ -26,6 +21,7 @@
             v-for="(item, index) in tags"
             :key="index"
             @close="deleteTag(index)"
+            role="button"
           >
             {{ item }}
           </el-tag>
@@ -52,6 +48,7 @@
               :key="item"
               role="button"
               @click="addTag(item.name)"
+              :class="tagsPitched(item.name) ? 'active' : ''"
             >
               {{item.name}}
             </el-tag>
@@ -85,19 +82,9 @@ export default defineComponent({
   },
   setup(props, context) {
     const route = useRoute();
-    const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
     const tags = ref([]); // 兴趣标签
-    const tag = ref(props.data.tag);
     const tagsSelected = reactive([]); // 可选择标签
     const tagsPitch = ref(0); // 选中的标签
-    // 获取已有标签
-    getTag(tokenInfo.value.username)
-      .then((data) => {
-        tags.value = data.tags;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
 
     /**
      * @description: 通知UserCenter滚动条到底部
@@ -139,7 +126,9 @@ export default defineComponent({
 
     // 删除兴趣标签
     function deleteTag(index) {
-      tags.value.splice(index, 1);
+      context.emit('deleteTag', {
+        index,
+      });
     }
 
     // 选择标签中改变选中
@@ -159,27 +148,32 @@ export default defineComponent({
       }
     }
 
-    // 选择标签中已选中子标签
-    function tagsPitched() {
-      const lenght = tags.value.length - 1;
+    // 选择标签中-选中标签
+    function tagsPitched(tag) {
+      if (tags.value.indexOf(tag) === -1) return false;
+      else return true;
     }
 
     //新加用户标签
     function addTag(tag) {
-      addUserTag(tag)
-        .then(() => {
-          tags.value.push(tag);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      // addUserTag(tag)
+      //   .then(() => {
+      //     tags.value.push(tag);
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //   });
+      if (tags.value.indexOf(tag) === -1) tags.value.push(tag);
+      context.emit('addTag', {
+        tag,
+      });
     }
-
+    // 获取已有标签
     watch(
       () => props.data.username,
       () => {
-        tags.value = props.data.tag;
-        console.log(props.data);
+        tags.value = props.data.tags;
+        console.log(props.data.tags);
       }
     );
 
@@ -192,6 +186,7 @@ export default defineComponent({
       tagsPitch,
       changePitch,
       addTag,
+      tagsPitched,
     };
   },
 });
@@ -220,7 +215,7 @@ export default defineComponent({
 
     .body-show-tags {
       margin-left: 24px;
-      width: 724px;
+      width: 798px;
       border-bottom: 1px solid $grey-3;
       min-height: 29px;
 
@@ -258,8 +253,8 @@ export default defineComponent({
       line-height: 25px;
 
       .body-select-tags {
-        margin-left: 24px;
-        max-width: 671px;
+        margin-left: 12px;
+        max-width: 798px;
 
         .select-tag1 {
           ::v-deep(.el-tag) {
@@ -268,7 +263,8 @@ export default defineComponent({
             line-height: 25px;
             font-size: 14px;
             margin-bottom: 14px;
-            margin-right: 24px;
+            margin-right: 12px;
+            margin-left: 12px;
             border-radius: $border-radius-0;
             color: $grey-7;
             border: none;
@@ -290,10 +286,11 @@ export default defineComponent({
         .select-tag2 {
           box-sizing: border-box;
           padding: 0 10px 0 10px;
-          max-width: 671px;
+          width: 798px;
           border-radius: $border-radius-0;
           box-shadow: $shadow-0;
-          margin-right: 24px;
+          // margin-right: 24px;
+          margin-left: 12px;
 
           :deep(.el-tag) {
             background: $grey-0;
@@ -318,7 +315,7 @@ export default defineComponent({
           .active {
             background: $green-0;
             color: $green-3;
-            box-shadow: $shadow-2;
+            box-shadow: $shadow-0;
           }
         }
       }
