@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:02:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-16 17:16:10
+ * @LastEditTime: 2021-09-24 13:56:59
  */
 import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 import loginRouter from './modules/login';
@@ -41,7 +41,7 @@ const routes: Array<RouteRecordRaw> = [
   },
   // 文章页面
   {
-    path: '/article/:id',
+    path: '/article/:articleId',
     name: 'article',
     component: () => import('@/views/article/Article.vue')
   },

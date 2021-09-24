@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-23 22:02:22
+ * @LastEditTime: 2021-09-24 15:24:57
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -17,7 +17,7 @@ export default function(baseUrl: string, app: Application) {
     const { username, limit, offset, release_time, browsing_count, tag, category } = req.query;
     if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
     console.log(
-      `${username} getArticles...  tag=>${tag}  category=>${category}  release_time=>${release_time}  browsing_count=>${browsing_count}`
+      `--------${username} getArticles...  tag=>${tag}  category=>${category}  release_time=>${release_time}  browsing_count=>${browsing_count}`
     );
 
     function getRandom(limit: number): Record<string, unknown>[] {
@@ -43,7 +43,7 @@ export default function(baseUrl: string, app: Application) {
   app.get(baseUrl + '/articles/categories', (req: Request, res: Response) => {
     const { username } = req.query;
     if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
-    console.log(`${username} getArticlesCategories... `);
+    console.log(`--------${username} getArticlesCategories... `);
 
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = [];
@@ -59,7 +59,7 @@ export default function(baseUrl: string, app: Application) {
   app.get(baseUrl + '/articles/tags', (req: Request, res: Response) => {
     const { username } = req.query;
     if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
-    console.log(`${username} getArticlesTags... `);
+    console.log(`--------${username} getArticlesTags... `);
 
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = [];
@@ -75,7 +75,7 @@ export default function(baseUrl: string, app: Application) {
   app.get(baseUrl + '/articles/users', (req: Request, res: Response) => {
     const { username } = req.query;
     if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
-    console.log(`${username} getArticlesUsersInfo... `);
+    console.log(`--------${username} getArticlesUsersInfo... `);
 
     function getRandom(limit: number, isRecent: boolean = true): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = [];
@@ -114,7 +114,7 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { type, article_id } = req.body;
-    console.log(`${username} modifyArticleEvaluation... :   type=>${type}  article_id=>${article_id}`);
+    console.log(`--------${username} modifyArticleEvaluation... :   type=>${type}  article_id=>${article_id}`);
     return res.status(200).send();
   });
 
@@ -124,7 +124,7 @@ export default function(baseUrl: string, app: Application) {
     if (verifyToken(req.headers)) username = getToken(req.headers).username;
     const { article_id, comment_id, limit, offset } = req.query;
     console.log(
-      `getArticlesComments... :  article_id=>${article_id}  ${comment_id ? 'comment_id=>' + comment_id : ''}`
+      `--------getArticlesComments... :  article_id=>${article_id}  ${comment_id ? 'comment_id=>' + comment_id : ''}`
     );
 
     const RUsers = randomUsers(username);
@@ -184,17 +184,17 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { type, comment_id } = req.body;
-    console.log(`${username} modifyArticleCommentsEvaluation... :   type=>${type}  comment_id=>${comment_id}`);
+    console.log(`--------${username} modifyArticleCommentsEvaluation... :   type=>${type}  comment_id=>${comment_id}`);
     return res.status(200).send();
   });
 
   // 获取文章详情
-  app.get(baseUrl + '/articles/:article_id', (req: Request, res: Response) => {
+  app.get(baseUrl + '/articles/:article_id(\\d+)', (req: Request, res: Response) => {
     let username: string = '';
     if (verifyToken(req.headers)) username = getToken(req.headers).username;
 
     const { article_id } = req.params;
-    console.log(`${username} getDetailArticles:  article_id${article_id}`);
+    console.log(`--------${username} getDetailArticles:  article_id${article_id}`);
 
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = [];
