@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-23 19:22:16
  * @LastEditors: clq
- * @LastEditTime: 2021-09-24 13:51:34
+ * @LastEditTime: 2021-09-24 13:54:21
 -->
 <template>
   <div class="article-footer-comment-comp">
@@ -140,7 +140,7 @@ export default defineComponent({
           // line-height: 19px;
           // width: 661px;
           // overflow: hidden;
-          // color: #bfbfbf;
+          color: #bfbfbf;
         }
       }
 
