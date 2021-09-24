@@ -1,12 +1,12 @@
 /*
- * @Description: 获取问答记录api
+ * @Description: 问答相关api
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-09-17 20:17:15
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-20 16:32:30
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-24 10:13:28
  */
-import { get, del, RequestLifeCycle } from '@/network/request';
+import { get, RequestLifeCycle } from '@/network/request';
 
 /**
  * @description: 获取提问记录信息

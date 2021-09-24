@@ -1,10 +1,10 @@
 /*
- * @Description:
+ * @Description: 历史记录相关api
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-06 11:01:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-10 16:32:11
+ * @LastEditTime: 2021-09-24 10:13:05
  */
 
 import { get, del, RequestLifeCycle } from '@/network/request';
