@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: clq
- * @LastEditTime: 2021-09-24 20:56:10
+ * @LastEditTime: 2021-09-24 21:08:47
 -->
 <template>
   <div class="user-article">
@@ -285,6 +285,7 @@ export default defineComponent({
       categoryBtnInfo,
       LabelBtnInfo,
       sortType,
+      isShowLoadMore,
       handleSelector,
       changeSortHandle,
       loadMore,
