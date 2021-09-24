@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 19:39:14
+ * @LastEditTime: 2021-09-24 20:02:30
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -232,6 +232,11 @@ export default function(baseUrl: string, app: Application) {
       next_article: {
         article_id: Random.id(),
         title: Random.integer(0, 1) ? Random.title() : Random.ctitle()
+      },
+      sponsors: {
+        paypal: Random.integer(0, 1) ? Random.image('150x150', '#234567', '#FFFFFF', 'png', 'paypal') : '',
+        alipay: Random.integer(0, 1) ? Random.image('150x150', '#234567', '#FFFFFF', 'png', 'alipay') : '',
+        weixin: Random.integer(0, 1) ? Random.image('150x150', '#234567', '#FFFFFF', 'png', 'weixin') : ''
       }
     };
 
