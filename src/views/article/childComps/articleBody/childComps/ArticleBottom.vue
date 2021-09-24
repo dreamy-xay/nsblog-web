@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-20 12:06:41
  * @LastEditors: clq
- * @LastEditTime: 2021-09-20 21:09:05
+ * @LastEditTime: 2021-09-20 21:18:23
 -->
 <template>
   <div class="article-bottom">
@@ -130,7 +130,7 @@ import ArticleBottomComp from '@/views/article/childComps/articleBody/childComps
 import styles from '@/assets/style/define.scss';
 
 /**
- * @description:
+ * @description: 文章底部
  * @author: clq
  */
 
