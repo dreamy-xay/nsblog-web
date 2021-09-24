@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:42
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-24 18:29:30
+ * @LastEditTime: 2021-09-24 20:21:44
 -->
 <template>
   <div class="user-center-account">
@@ -46,7 +46,7 @@
         </div>
       </div>
     </div>
-    <user-center-account-login-record />
+    <!-- <user-center-account-login-record /> -->
   </div>
 </template>
 
@@ -59,8 +59,6 @@ import UserCenterAccountEmail from '@/views/userCenter/childComps/pages/UserCent
 import UserCenterAccountLoginRecord from '@/views/userCenter/childComps/pages/UserCenterAccount/childComps/UserCenterAccountLoginRecord.vue';
 /**
  * @description:
- * @param {*}
- * @return {*}
  * @author: Ban
  */
 
@@ -69,7 +67,7 @@ export default defineComponent({
   components: {
     UserCenterAccountPassword,
     UserCenterAccountEmail,
-    UserCenterAccountLoginRecord,
+    // UserCenterAccountLoginRecord,
   },
   setup() {
     const email = ref('');

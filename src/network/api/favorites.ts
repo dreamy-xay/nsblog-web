@@ -1,10 +1,10 @@
 /*
- * @Description: 收藏api
+ * @Description: 收藏相关api
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 12:55:44
- * @LastEditors: continue-hs
- * @LastEditTime: 2021-09-11 17:26:38
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-24 10:22:28
  */
 
 import { get, RequestLifeCycle, del, put, post } from '@/network/request';
@@ -16,7 +16,7 @@ import { get, RequestLifeCycle, del, put, post } from '@/network/request';
  * @param {number} offset 数据库收藏列表偏移量 `默认为0`
  * @param {number} type 获取收藏列表的类型 `默认为0`
  * @param {0 | 1} is_all 是否获取全部信息，0为不获取全部信息 `默认为0`
- * @param {number} favorites 收藏夹id `默认为''，返回全部收藏夹及其内容，传入id则返回指定收藏夹id内容`
+ * @param {number} favorite_id 收藏夹id `默认为''，返回全部收藏夹及其内容，传入id则返回指定收藏夹id内容`
  * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
  * @return {Promise<unknown>} 请求返回promise
  * @author: dreamy-xay
@@ -27,7 +27,7 @@ export function getFavorites(
   offset: number = 0,
   type: number = 0,
   is_all: 0 | 1 = 0,
-  favorites: number | string = '',
+  favorite_id: number | string = '',
   RLC: RequestLifeCycle = {}
 ): Promise<unknown> {
   return get({
@@ -39,7 +39,7 @@ export function getFavorites(
       offset,
       type,
       is_all,
-      favorite_id: favorites
+      favorite_id
     }
   });
 }

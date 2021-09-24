@@ -1,12 +1,12 @@
 /*
- * @Description: user
+ * @Description: 用户相关api
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:38:31
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-14 21:24:41
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-24 10:14:12
  */
-import { post, get, del, put, RequestLifeCycle } from '@/network/request';
+import { post, get, put, RequestLifeCycle } from '@/network/request';
 import { encrypt } from '@/util/crypto';
 
 /**
