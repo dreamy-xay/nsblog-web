@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-24 10:18:28
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-09-04 18:03:49
+ * @LastEditTime: 2021-09-21 17:40:05
 -->
 <template>
   <div class="user-center-collection-list">
@@ -18,7 +18,7 @@
         @click="isVisible = true"
       >新建文件夹</div>
     </div>
-    <div class="left-bottom">
+    <div class="user-center-collection-list-other">
       <el-scrollbar>
         <div
           :class="{active : index === activeIndex}"
@@ -26,7 +26,7 @@
           role="button"
           v-for="(item,index) in favorites"
           :key="index"
-          @click="chooseActive(index);this.scrollbar.setScrollTop(0)"
+          @click="chooseActive(index)"
         >
           <i
             v-if="!item.is_private"
@@ -46,55 +46,60 @@
         </div>
       </el-scrollbar>
     </div>
-    <div class="new-collection">
-      <n-dialog
-        title="新建文件夹"
-        maskClosable="isVisible"
-        :closable="false"
-        negative-text="取消"
-        positive-text="确认"
-        @positive-click="handlePositiveClick"
-        @negative-click="handleNegativeClick"
-        :width=462
+    <n-modal
+      title="新建文件夹"
+      :show="isVisible"
+      class="user-center-collection-list-new-modal"
+      preset="card"
+      :closable="true"
+      @close="isVisible = false"
+    >
+      <div class="user-center-collection-list-new-modal-title">收藏夹名称</div>
+      <user-center-input
+        class="input-title"
+        v-model="inputTitle"
+        ref="titleInput"
+        type="text"
+        :maxlength="20"
       >
-        <div class="title">标题</div>
-        <input
-          class="inputTitle"
-          id="name"
-          v-model="inputname"
-          required
-        />
-        <div class="detail">描述（选填）</div>
-        <textarea
-          class="inputDetail"
-          v-model="inputremark"
-        />
-        <div>私密</div>
-        <el-radio-group v-model="radio">
-          <el-radio :label="false">公开</el-radio>
-          <el-radio :label="true">私有</el-radio>
-        </el-radio-group>
-        <!-- <template #footer>
-          <span class="dialog-footer">
-            <el-button @click="isVisible = false">取 消</el-button>
-            <el-button
-              type="primary"
-              @click="newfavorites(this.inputname,this.inputremark,this.radio) ; isVisible = false"
-            >确 定</el-button>
-          </span>
-        </template> -->
-      </n-dialog>
-    </div>
+      </user-center-input>
+      <div class="user-center-collection-list-new-modal-detail">描述</div>
+      <el-input
+        class="input-remark"
+        v-model="inputRemark"
+        type="textarea"
+        :rows="7"
+        maxlength="128"
+        show-word-limit
+      >
+      </el-input>
+      <el-checkbox
+        class="option"
+        v-model="radio"
+        label="公开收藏夹"
+      ></el-checkbox>
+      <template #footer>
+        <div
+          class="submit"
+          role="button"
+          @click="newfavorites(inputTitle, inputRemark, !radio)"
+        >提交</div>
+      </template>
+    </n-modal>
   </div>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
 import styles from '@/assets/style/define.scss';
 import { useMessage } from 'naive-ui';
+import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput';
 
 export default defineComponent({
   name: 'usercentercollectionlist',
+  components: {
+    UserCenterInput,
+  },
   props: {
     activeIndex: {
       type: Number,
@@ -107,28 +112,32 @@ export default defineComponent({
   },
   setup() {
     const isVisible = ref(false);
-    const radio = ref(false);
+    const radio = ref(true);
     const scrollbar = ref(null); //scrollbar
-    const message = useMessage(); //message提示
+    const msg = useMessage(); //message提示
+    const inputTitle = ref('');
+    const titleInput = ref(null);
+    const inputRemark = ref('');
 
-    function check() {
-      let name = document.getElementsByClassName('inputname').value;
-      if (name == '') {
-        alert('标题为必填项，请重新填入');
-        return false;
-      } else newfavorites;
-    }
+    watch(
+      () => '',
+      (value) => {
+        inputTitle.value = value;
+      }
+    );
 
     function chooseActive(index) {
       this.$emit('change-index', index);
     }
 
     function newfavorites(name, remark, is_private) {
-      this.$emit('new-fav', [name, remark, is_private]);
-    }
-
-    function handlePositiveClick() {
-      message.success('新建文件夹成功');
+      if (name !== '') {
+        this.$emit('new-fav', [name, remark, is_private]);
+        isVisible.value = false;
+      } else msg.error('收藏夹标题为必填项');
+      inputTitle.value = '';
+      inputRemark.value = '';
+      radio.value = true;
     }
 
     return {
@@ -138,8 +147,9 @@ export default defineComponent({
       chooseActive,
       styles,
       newfavorites,
-      check,
-      handlePositiveClick,
+      inputTitle,
+      titleInput,
+      inputRemark,
     };
   },
 });
@@ -155,7 +165,7 @@ export default defineComponent({
 
   .user-center-collection-list-new {
     @include size(180px, 60px);
-    color: #8c8c8c;
+    color: $grey-7;
     border-bottom: 1px solid #e5e5e5;
 
     i {
@@ -169,7 +179,7 @@ export default defineComponent({
     }
   }
 
-  .left-bottom {
+  .user-center-collection-list-other {
     @include size(180px, 585px);
 
     :deep(.el-scrollbar__thumb) {
@@ -179,15 +189,15 @@ export default defineComponent({
     .collection-name {
       @include size(180px, 60px);
       display: flex;
-      color: #8c8c8c;
-      border-bottom: 1px solid #e5e5e5;
+      color: $grey-7;
+      border-bottom: 1px solid $grey-4;
 
       .n-badge {
         padding: 35px 0 0 20px;
       }
 
       &.active {
-        background: #f4f4f4;
+        background: $grey-2;
       }
 
       i {
@@ -201,61 +211,80 @@ export default defineComponent({
       }
     }
   }
+}
+.user-center-collection-list-new-modal {
+  .user-center-collection-list-new-modal-title {
+    @include size(75px, 20px);
+    margin-top: 10px;
+    color: $grey-8;
+    font-size: 15px;
+  }
 
-  .new-collection {
-    :deep(.el-dialog__body) {
-      margin-left: 20px !important;
+  .input-title {
+    border-radius: 4px;
+    box-shadow: 0 0 6px 0 $green-0;
+    margin-top: 10px;
+  }
 
-      .el-radio__input.is-checked + .el-radio__label {
-        color: #85e8c7;
+  .user-center-collection-list-new-modal-detail {
+    @include size(30px, 20px);
+    margin-top: 16px;
+    color: $grey-8;
+    font-size: 15px;
+  }
+
+  .input-remark {
+    margin-top: 10px;
+    border-radius: 4px;
+    box-shadow: 0 0 6px 0 $green-0;
+
+    :deep(.el-textarea__inner) {
+      resize: none;
+      &:hover,
+      &:focus {
+        color: $green-1;
+        box-shadow: $shadow-2;
+        border-color: $grey-0;
       }
-
-      .el-radio__input.is-checked .el-radio__inner {
-        border-color: #85e8c7;
-        background-color: #85e8c7;
-      }
-    }
-
-    :deep(.el-dialog__footer) {
-      .el-button--default {
-        &:hover {
-          border-color: #85e8c7;
-          color: #85e8c7;
-        }
-      }
-      .el-button--primary {
-        background-color: #85e8c7;
-        border-color: #85e8c7;
-
-        &:hover {
-          background-color: $green-1;
-        }
-      }
-    }
-    .title {
-      margin-bottom: 5px;
-    }
-
-    .inputTitle {
-      height: 32px;
-      width: 350px;
-      border: 1px solid $grey-7;
-      border-radius: 3px 0 0 3px;
-      outline: 0;
-    }
-
-    .detail {
-      margin-bottom: 5px;
-    }
-
-    .inputDetail {
-      height: 100px;
-      width: 350px;
-      border: 1px solid $grey-7;
-      border-radius: 3px 0 0 3px;
-      vertical-align: top;
-      outline: 0;
     }
   }
+
+  .option {
+    margin-top: 16px;
+
+    :deep(.el-checkbox__input.is-checked .el-checkbox__inner) {
+      background-color: $green-0;
+      border-color: $green-0;
+    }
+    :deep(.el-checkbox__input.is-checked + .el-checkbox__label) {
+      color: $green-0;
+    }
+  }
+  .option-text {
+    margin-left: 8px;
+  }
+
+  .submit {
+    @include size(67px, 30px);
+    @include flex(center, center);
+    float: right;
+    color: $grey-0;
+    background: $green-0;
+    border-radius: 8px;
+    box-shadow: $shadow-0;
+
+    &:hover {
+      background: $green-1;
+    }
+  }
+}
+</style>
+ <style lang="scss">
+.user-center-collection-list-new-modal {
+  background-color: $grey-0;
+  width: 446px;
+  height: 441px;
+  border-radius: 8px;
+  box-shadow: $shadow-0;
 }
 </style>
