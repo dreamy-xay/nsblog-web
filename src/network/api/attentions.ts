@@ -1,10 +1,10 @@
 /*
- * @Description:
+ * @Description: 关注相关api
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-09-01 17:02:19
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-14 11:41:18
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-24 10:20:45
  */
 import { del, get, post, RequestLifeCycle } from '@/network/request';
 
@@ -13,7 +13,8 @@ import { del, get, post, RequestLifeCycle } from '@/network/request';
  * @param {string} username 用户名
  * @param {number} offset 起始位置
  * @param {number} limit 限制条数
- * @return {*}
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
  * @author: clq
  */
 export function getAttentions(
@@ -38,7 +39,8 @@ export function getAttentions(
  * @param {string} username 用户名
  * @param {number} offset 起始位置
  * @param {number} limit 限制条数
- * @return {*}
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
  * @author: clq
  */
 export function getFans(username: string, offset: number, limit: number, RLC: RequestLifeCycle = {}): Promise<unknown> {
