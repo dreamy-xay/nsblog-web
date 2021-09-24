@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-09-17 19:52:51
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-20 17:13:36
+ * @LastEditors: clq
+ * @LastEditTime: 2021-09-24 20:39:52
 -->
 <template>
   <div class="user-sort">
@@ -113,7 +113,7 @@ export default defineComponent({
   .user-sort-label {
     margin-right: 4px;
     margin-left: 8px;
-    color: #8c8c8c;
+    color: $grey-7;
   }
 
   .user-sort-btn-container {
@@ -123,13 +123,21 @@ export default defineComponent({
 
     .iconfont {
       font-size: 12px;
-      color: #bfbfbf;
+      color: $grey-6;
       transition: all 0.25s;
       transform: scale(0.8);
 
       &:hover {
         color: $grey-7;
       }
+    }
+
+    & > div:nth-child(1) {
+      margin-bottom: -1.5px;
+    }
+
+    & > div:nth-child(2) {
+      margin-top: -1.5px;
     }
 
     .active {

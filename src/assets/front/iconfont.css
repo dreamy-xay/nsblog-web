@@ -1,9 +1,9 @@
 @font-face {
     font-family: "iconfont";
     /* Project id 2675107 */
-    src: url('//at.alicdn.com/t/font_2675107_v5tu12dsjgo.woff2?t=1632486686163') format('woff2'),
-        url('//at.alicdn.com/t/font_2675107_v5tu12dsjgo.woff?t=1632486686163') format('woff'),
-        url('//at.alicdn.com/t/font_2675107_v5tu12dsjgo.ttf?t=1632486686163') format('truetype');
+    src: url('//at.alicdn.com/t/font_2675107_sehyj936xp.woff2?t=1632489311700') format('woff2'),
+        url('//at.alicdn.com/t/font_2675107_sehyj936xp.woff?t=1632489311700') format('woff'),
+        url('//at.alicdn.com/t/font_2675107_sehyj936xp.ttf?t=1632489311700') format('truetype');
 }
 
 .iconfont {
@@ -12,6 +12,10 @@
     font-style: normal;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+.blog-liulan:before {
+    content: "\e664";
 }
 
 .blog-reply:before {
