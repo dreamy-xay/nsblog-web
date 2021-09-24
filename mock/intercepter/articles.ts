@@ -3,8 +3,13 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
+<<<<<<< HEAD
  * @LastEditors: clq
  * @LastEditTime: 2021-09-24 15:09:13
+=======
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-24 19:39:14
+>>>>>>> f40f2a0f40ab59d1bb006dc05e2a5e6cdaa9e7ba
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -17,7 +22,7 @@ export default function(baseUrl: string, app: Application) {
     const { username, limit, offset, release_time, browsing_count, tag, category } = req.query;
     if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
     console.log(
-      `${username} getArticles...  tag=>${tag}  category=>${category}  release_time=>${release_time}  browsing_count=>${browsing_count}`
+      `--------${username} getArticles...  tag=>${tag}  category=>${category}  release_time=>${release_time}  browsing_count=>${browsing_count}`
     );
 
     function getRandom(limit: number): Record<string, unknown>[] {
@@ -43,7 +48,7 @@ export default function(baseUrl: string, app: Application) {
   app.get(baseUrl + '/articles/categories', (req: Request, res: Response) => {
     const { username } = req.query;
     if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
-    console.log(`${username} getArticlesCategories... `);
+    console.log(`--------${username} getArticlesCategories... `);
 
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = [];
@@ -59,7 +64,7 @@ export default function(baseUrl: string, app: Application) {
   app.get(baseUrl + '/articles/tags', (req: Request, res: Response) => {
     const { username } = req.query;
     if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
-    console.log(`${username} getArticlesTags... `);
+    console.log(`--------${username} getArticlesTags... `);
 
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = [];
@@ -75,7 +80,7 @@ export default function(baseUrl: string, app: Application) {
   app.get(baseUrl + '/articles/users', (req: Request, res: Response) => {
     const { username } = req.query;
     if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
-    console.log(`${username} getArticlesUsersInfo... `);
+    console.log(`--------${username} getArticlesUsersInfo... `);
 
     function getRandom(limit: number, isRecent: boolean = true): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = [];
@@ -114,7 +119,7 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { type, article_id } = req.body;
-    console.log(`${username} modifyArticleEvaluation... :   type=>${type}  article_id=>${article_id}`);
+    console.log(`--------${username} modifyArticleEvaluation... :   type=>${type}  article_id=>${article_id}`);
     return res.status(200).send();
   });
 
@@ -124,41 +129,38 @@ export default function(baseUrl: string, app: Application) {
     if (verifyToken(req.headers)) username = getToken(req.headers).username;
     const { article_id, comment_id, limit, offset } = req.query;
     console.log(
-      `getArticlesComments... :  article_id=>${article_id}  ${comment_id ? 'comment_id=>' + comment_id : ''}`
+      `--------getArticlesComments... :  article_id=>${article_id}  ${comment_id ? 'comment_id=>' + comment_id : ''}`
     );
 
     const RUsers = randomUsers(username);
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = [];
 
-      let cur: number;
-      let maxn: number;
-      function getComments(): Record<string, unknown>[] {
-        const ans: Record<string, unknown>[] = [];
-        if (cur >= maxn) return ans;
-        const sum = Random.integer(0, 2);
-        for (let i: number = 0; i < sum; ++i) {
-          const user: RandomUser = RUsers.random();
-          const params: Record<string, unknown> = username !== '' ? { evaluation: Random.integer(0, 2) } : {};
-          ans.push({
-            comment_id: Random.id(),
-            username: user.username,
-            avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
-            time: Random.time(),
-            content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
-            support_count: Random.integer(0, 9999),
-            oppose_count: Random.integer(0, 9999),
-            ...params,
-            child_comments: getComments()
-          });
+      function getComments(): Record<string, unknown> {
+        let ans: Record<string, unknown> = {};
+        if (article_id) {
+          ans = { child_comments: [] };
+          const sum = Random.integer(0, 5);
+          for (let i: number = 0; i < sum; ++i) {
+            const user: RandomUser = RUsers.random();
+            const params: Record<string, unknown> = username !== '' ? { evaluation: Random.integer(0, 2) } : {};
+            (ans.child_comments as any).push({
+              comment_id: Random.id(),
+              username: user.username,
+              avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
+              time: Random.time(),
+              content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
+              support_count: Random.integer(0, 9999),
+              oppose_count: Random.integer(0, 9999),
+              ...params
+            });
+          }
         }
         return ans;
       }
 
       for (let i: number = 0; i < limit; ++i) {
         const user: RandomUser = RUsers.random();
-        cur = 0;
-        maxn = Random.integer(0, 20);
         const params: Record<string, unknown> = username !== '' ? { evaluation: Random.integer(0, 2) } : {};
         ans.push({
           comment_id: Random.id(),
@@ -169,7 +171,7 @@ export default function(baseUrl: string, app: Application) {
           support_count: Random.integer(0, 9999),
           oppose_count: Random.integer(0, 9999),
           ...params,
-          child_comments: getComments()
+          ...getComments()
         });
       }
 
@@ -184,7 +186,7 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { type, comment_id } = req.body;
-    console.log(`${username} modifyArticleCommentsEvaluation... :   type=>${type}  comment_id=>${comment_id}`);
+    console.log(`--------${username} modifyArticleCommentsEvaluation... :   type=>${type}  comment_id=>${comment_id}`);
     return res.status(200).send();
   });
 
@@ -194,7 +196,7 @@ export default function(baseUrl: string, app: Application) {
     if (verifyToken(req.headers)) username = getToken(req.headers).username;
 
     const { article_id } = req.params;
-    console.log(`${username} getDetailArticles:  article_id${article_id}`);
+    console.log(`--------${username} getDetailArticles:  article_id=>${article_id}`);
 
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = [];
@@ -212,17 +214,19 @@ export default function(baseUrl: string, app: Application) {
           }
         : {};
 
+    const user: RandomUser = randomUsers().random();
     const ans: Record<string, unknown> = {
       article_id,
       title: Random.integer(0, 1) ? Random.title() : Random.ctitle(),
-      username: Random.name(),
-      nickname: Random.integer(0, 1) ? Random.name() : Random.cname(),
+      username: user.username,
+      nickname: user.nickname,
+      avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
       release_time: Random.datetime(),
       page_view: Random.integer(0, 1000),
       comment_count: Random.integer(0, 1000),
       topic: Random.integer(0, 1) ? Random.word() : Random.cword(),
-      category: getRandom(Random.integer(0, 2)),
-      tag: getRandom(Random.integer(0, 3)),
+      categories: getRandom(Random.integer(0, 2)),
+      tags: getRandom(Random.integer(0, 3)),
       content: Random.integer(0, 1) ? Random.paragraph(3, 100) : Random.cparagraph(3, 100),
       recommend_count: Random.integer(0, 1000),
       ...params,
