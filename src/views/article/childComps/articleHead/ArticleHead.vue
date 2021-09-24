@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 17:51:15
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 14:52:27
+ * @LastEditTime: 2021-09-24 18:32:20
 -->
 <template>
   <div class="article-head">
@@ -36,7 +36,9 @@
           :color="styles.orange0"
           :hover-color="styles.orange1"
           v-for="(item, index) in data.categories"
-          :text="item"
+          :href="`/blog/${data.username}?category=${item.id}`"
+          :target="`/blog/${data.username}?category=${item.id}`"
+          :text="item.name"
           :key="index"
           :style="{borderRadius: '3px', letterSpacing: '1.5px'}"
         />
@@ -44,7 +46,9 @@
           :color="styles.blue0"
           :hover-color="styles.blue1"
           v-for="(item, index) in data.tags"
-          :text="item"
+          :href="`/blog/${data.username}?tag=${item.id}`"
+          :target="`/blog/${data.username}?tag=${item.id}`"
+          :text="item.name"
           :key="index"
           :style="{borderRadius: '3px', letterSpacing: '1.5px'}"
         />
@@ -54,7 +58,7 @@
 </template>
 
 <script>
-import { computed, defineComponent, ref, watch } from 'vue';
+import { computed, defineComponent, onMounted, ref, watch } from 'vue';
 import ArticleHeadBackground from '@/views/article/childComps/articleHead/childComps/ArticleHeadBackground.vue';
 import BaseTag from '@/components/content/baseTag/BaseTag.vue';
 import { dateFormat } from '@/util/date';
@@ -103,11 +107,16 @@ export default defineComponent({
       typing();
     }
 
+    // dom加载完后执行
+    onMounted(() => {
+      if (props.data.title) typingRun(props.data.title);
+    });
+
     // 监听标题，执行打字效果
     watch(
       () => props.data.title,
       (value) => {
-        if (value) typingRun(props.data.title);
+        if (value) typingRun(value);
       }
     );
 

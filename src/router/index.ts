@@ -4,13 +4,14 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:02:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 13:56:59
+ * @LastEditTime: 2021-09-24 18:30:44
  */
 import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 import loginRouter from './modules/login';
 import messageRouter from './modules/message';
 import userCenterRouter from './modules/userCenter';
-import user from './modules/user';
+import userRouter from './modules/user';
+import blogRouter from './modules/blog';
 
 const routes: Array<RouteRecordRaw> = [
   // 登录页面
@@ -20,7 +21,9 @@ const routes: Array<RouteRecordRaw> = [
   // 用户中心页面
   userCenterRouter,
   // 用户主页页面
-  user,
+  userRouter,
+  // 用户博客主页面
+  blogRouter,
   // 主页
   {
     path: '/',
