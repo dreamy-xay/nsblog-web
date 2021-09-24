@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 18:35:35
+ * @LastEditTime: 2021-09-24 19:39:14
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -131,34 +131,31 @@ export default function(baseUrl: string, app: Application) {
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = [];
 
-      let cur: number;
-      let maxn: number;
-      function getComments(): Record<string, unknown>[] {
-        const ans: Record<string, unknown>[] = [];
-        if (cur >= maxn) return ans;
-        const sum = Random.integer(0, 2);
-        for (let i: number = 0; i < sum; ++i) {
-          const user: RandomUser = RUsers.random();
-          const params: Record<string, unknown> = username !== '' ? { evaluation: Random.integer(0, 2) } : {};
-          ans.push({
-            comment_id: Random.id(),
-            username: user.username,
-            avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
-            time: Random.time(),
-            content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
-            support_count: Random.integer(0, 9999),
-            oppose_count: Random.integer(0, 9999),
-            ...params,
-            child_comments: getComments()
-          });
+      function getComments(): Record<string, unknown> {
+        let ans: Record<string, unknown> = {};
+        if (article_id) {
+          ans = { child_comments: [] };
+          const sum = Random.integer(0, 5);
+          for (let i: number = 0; i < sum; ++i) {
+            const user: RandomUser = RUsers.random();
+            const params: Record<string, unknown> = username !== '' ? { evaluation: Random.integer(0, 2) } : {};
+            (ans.child_comments as any).push({
+              comment_id: Random.id(),
+              username: user.username,
+              avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
+              time: Random.time(),
+              content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
+              support_count: Random.integer(0, 9999),
+              oppose_count: Random.integer(0, 9999),
+              ...params
+            });
+          }
         }
         return ans;
       }
 
       for (let i: number = 0; i < limit; ++i) {
         const user: RandomUser = RUsers.random();
-        cur = 0;
-        maxn = Random.integer(0, 20);
         const params: Record<string, unknown> = username !== '' ? { evaluation: Random.integer(0, 2) } : {};
         ans.push({
           comment_id: Random.id(),
@@ -169,7 +166,7 @@ export default function(baseUrl: string, app: Application) {
           support_count: Random.integer(0, 9999),
           oppose_count: Random.integer(0, 9999),
           ...params,
-          child_comments: getComments()
+          ...getComments()
         });
       }
 
