@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:42
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-15 12:30:38
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-24 18:29:30
 -->
 <template>
   <div class="user-center-account">
@@ -46,6 +46,7 @@
         </div>
       </div>
     </div>
+    <user-center-account-login-record />
   </div>
 </template>
 
@@ -55,7 +56,7 @@ import { getUserInfo } from '@/network/api/user';
 import { mapState } from '@/util/store';
 import UserCenterAccountPassword from '@/views/userCenter/childComps/pages/UserCenterAccount/childComps/UserCenterAccountPassword.vue';
 import UserCenterAccountEmail from '@/views/userCenter/childComps/pages/UserCenterAccount/childComps/UserCenterAccountEmail.vue';
-
+import UserCenterAccountLoginRecord from '@/views/userCenter/childComps/pages/UserCenterAccount/childComps/UserCenterAccountLoginRecord.vue';
 /**
  * @description:
  * @param {*}
@@ -68,6 +69,7 @@ export default defineComponent({
   components: {
     UserCenterAccountPassword,
     UserCenterAccountEmail,
+    UserCenterAccountLoginRecord,
   },
   setup() {
     const email = ref('');
