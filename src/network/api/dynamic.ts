@@ -1,12 +1,12 @@
 /*
- * @Description: 获取动态api
+ * @Description: 动态相关api
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-09-17 20:31:05
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-17 20:32:15
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-24 10:12:09
  */
-import { get, del, RequestLifeCycle } from '@/network/request';
+import { get, RequestLifeCycle } from '@/network/request';
 
 /**
  * @description: 获取动态信息

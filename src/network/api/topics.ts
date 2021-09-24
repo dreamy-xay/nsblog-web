@@ -1,12 +1,13 @@
 /*
- * @Description: 专题api
+ * @Description: 专题相关api
  * @Version:
  * @Autor: Ban
  * @Date: 2021-09-02 14:19:10
- * @LastEditors: Ban
- * @LastEditTime: 2021-09-02 15:26:42
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-24 10:26:08
  */
-import { post, get, del, put, RequestLifeCycle } from '@/network/request';
+import { get, RequestLifeCycle } from '@/network/request';
+
 /**
  * @description: 获取专题名
  * @param {RequestLifeCycle} RLC  请求生命周期 `默认值为 {}`
@@ -19,9 +20,10 @@ export function getTopics(RLC: RequestLifeCycle = {}): Promise<unknown> {
     ...RLC
   });
 }
+
 /**
  * @description: 获取专题标签名
- * @param {topic_name} 专题名
+ * @param {string} topic_name 专题名 `必传参数`
  * @param {RequestLifeCycle} RLC  请求生命周期 `默认值为 {}`
  * @return {Promise<unknown>} 请求返回promise
  * @author: dreamy-xay

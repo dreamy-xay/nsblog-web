@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 18:19:49
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-16 19:23:48
+ * @LastEditTime: 2021-09-21 17:19:46
 -->
 <template>
   <div
@@ -37,7 +37,8 @@ import { defineComponent, ref } from 'vue';
 export default defineComponent({
   name: 'articleHeadBackground',
   setup() {
-    const backgroundImage = ref('/article/background.jpg'); // 头部背景图片
+    const titleBackgroundImg = ['/article/background.jpg', '/article/background1.jpg', null]; // 标题背景图片
+    const backgroundImage = ref(titleBackgroundImg[Math.floor(Math.random() * titleBackgroundImg.length)]); // 头部背景图片
 
     return {
       backgroundImage,
