@@ -1,10 +1,10 @@
 /*
- * @Description:
+ * @Description: 消息相关api
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-08-10 19:39:04
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-25 17:24:04
+ * @LastEditTime: 2021-09-24 10:13:15
  */
 import { get, del, RequestLifeCycle } from '@/network/request';
 

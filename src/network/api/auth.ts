@@ -1,10 +1,10 @@
 /*
- * @Description: api
+ * @Description: 验证相关api
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-10 20:30:04
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-23 18:07:28
+ * @LastEditTime: 2021-09-24 10:11:58
  */
 
 import { post, RequestLifeCycle } from '@/network/request';

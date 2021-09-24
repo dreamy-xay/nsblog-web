@@ -1,22 +1,13 @@
 /*
- * @Description: 对话api
+ * @Description: 对话相关api
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 20:50:36
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-25 18:16:28
+ * @LastEditTime: 2021-09-24 10:12:29
  */
 
-/*
- * @Description:
- * @Version:
- * @Autor: dreamy-xay
- * @Date: 2021-08-06 11:01:03
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-10 16:32:11
- */
-
-import { get, del, RequestLifeCycle, put, upload } from '@/network/request';
+import { get, del, RequestLifeCycle, put } from '@/network/request';
 
 /**
  * @description: 获取对话记录信息
