@@ -118,7 +118,7 @@
       </div>
     </div>
 
-    <article-bottom-comp />
+    <article-bottom-comp :data="data" />
   </div>
 </template>
 
@@ -140,6 +140,12 @@ export default defineComponent({
     BaseAvatar,
     ArticleLink,
     ArticleBottomComp,
+  },
+  props: {
+    data: {
+      type: Object,
+      required: true,
+    },
   },
   setup() {
     return {
