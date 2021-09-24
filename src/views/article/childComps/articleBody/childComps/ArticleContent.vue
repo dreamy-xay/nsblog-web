@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-17 15:09:41
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 15:22:34
+ * @LastEditTime: 2021-09-24 18:10:18
 -->
 <template>
   <div class="article-content">
@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import { computed, defineComponent, inject, watch, reactive, ref } from 'vue';
+import { computed, defineComponent, inject, watch, reactive, ref, onMounted } from 'vue';
 import { binary_bound } from '@/util/algorithm';
 
 /**
@@ -99,45 +99,55 @@ export default defineComponent({
     const activeIndex = ref(0); // 菜单激活项
     const articlePage = inject('articlePage'); // 获取主页面 ref (dom)
 
+    /**
+     * @description: 更新标题栏
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function updateTitle() {
+      if (!preview.value) return;
+
+      // 锚点菜单
+      const anchors = preview.value.$el.querySelectorAll('h2,h3,h4');
+      const aTitles = Array.from(anchors).filter((title) => !!title.innerText.trim());
+
+      if (aTitles.length) {
+        const hTags = Array.from(new Set(aTitles.map((title) => title.tagName))).sort();
+        titles.splice(
+          0,
+          aTitles.length,
+          ...aTitles.map((el) => {
+            return {
+              title: el.innerText,
+              offset: preview.value.getOffsetTop(el, articlePage.value),
+              indent: hTags.indexOf(el.tagName),
+            };
+          })
+        );
+      }
+    }
+
     // watch content
     watch(
       () => props.content,
       (value) => {
-        if (value) {
-          // 锚点菜单
-          const anchors = preview.value.$el.querySelectorAll('h2,h3,h4');
-          const aTitles = Array.from(anchors).filter((title) => !!title.innerText.trim());
-
-          if (aTitles.length) {
-            const hTags = Array.from(new Set(aTitles.map((title) => title.tagName))).sort();
-            let sum = 0;
-            titles.splice(
-              0,
-              aTitles.length,
-              ...aTitles.map((el) => {
-                return {
-                  title: el.innerText,
-                  offset: preview.value.getOffsetTop(el, articlePage.value),
-                  indent: hTags.indexOf(el.tagName),
-                };
-              })
-            );
-          }
-
-          // 菜单高度滚动监听;
-          showBackTop.value = articlePage.value.scrollTop > 288;
-          articlePage.value.addEventListener('scroll', (e) => {
-            if (scrollbar.value) scrollbar.value.update();
-            showBackTop.value = e.target.scrollTop > 288;
-            tocTop.value = Math.max(16, 304 - e.target.scrollTop);
-            activeIndex.value = Math.max(
-              0,
-              binary_bound(titles, (value) => value.offset >= e.target.scrollTop + 2) - 1
-            );
-          });
-        }
+        if (value) updateTitle();
       }
     );
+
+    // dom 加载完成
+    onMounted(() => {
+      updateTitle();
+
+      // 菜单高度滚动监听;
+      showBackTop.value = articlePage.value.scrollTop > 288;
+      articlePage.value.addEventListener('scroll', (e) => {
+        if (scrollbar.value) scrollbar.value.update();
+        showBackTop.value = e.target.scrollTop > 288;
+        tocTop.value = Math.max(16, 304 - e.target.scrollTop);
+        activeIndex.value = Math.max(0, binary_bound(titles, (value) => value.offset >= e.target.scrollTop + 2) - 1);
+      });
+    });
 
     /**
      * @description: 点击锚点触发滚动

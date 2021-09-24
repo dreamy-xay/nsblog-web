@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 15:24:57
+ * @LastEditTime: 2021-09-24 18:35:35
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -194,7 +194,7 @@ export default function(baseUrl: string, app: Application) {
     if (verifyToken(req.headers)) username = getToken(req.headers).username;
 
     const { article_id } = req.params;
-    console.log(`--------${username} getDetailArticles:  article_id${article_id}`);
+    console.log(`--------${username} getDetailArticles:  article_id=>${article_id}`);
 
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = [];
@@ -212,17 +212,19 @@ export default function(baseUrl: string, app: Application) {
           }
         : {};
 
+    const user: RandomUser = randomUsers().random();
     const ans: Record<string, unknown> = {
       article_id,
       title: Random.integer(0, 1) ? Random.title() : Random.ctitle(),
-      username: Random.name(),
-      nickname: Random.integer(0, 1) ? Random.name() : Random.cname(),
+      username: user.username,
+      nickname: user.nickname,
+      avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
       release_time: Random.datetime(),
       page_view: Random.integer(0, 1000),
       comment_count: Random.integer(0, 1000),
       topic: Random.integer(0, 1) ? Random.word() : Random.cword(),
-      category: getRandom(Random.integer(0, 2)),
-      tag: getRandom(Random.integer(0, 3)),
+      categories: getRandom(Random.integer(0, 2)),
+      tags: getRandom(Random.integer(0, 3)),
       content: Random.integer(0, 1) ? Random.paragraph(3, 100) : Random.cparagraph(3, 100),
       recommend_count: Random.integer(0, 1000),
       ...params,

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 16:32:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 14:56:43
+ * @LastEditTime: 2021-09-24 18:40:17
 -->
 
 <template>
@@ -59,15 +59,18 @@ export default defineComponent({
       title: '',
       username: '',
       nickname: '',
+      avatar: null,
       release_time: null,
       page_view: 0,
       comment_count: 0,
       topic: '',
-      category: [],
-      tag: [],
+      categories: [],
+      tags: [],
       content: '',
       recommend_count: 0,
       evaluation: 0,
+      collection: 0,
+      attention: 0,
       last_article: {
         article_id: null,
         title: '',
@@ -84,15 +87,18 @@ export default defineComponent({
         articleData.title = data.title;
         articleData.username = data.username;
         articleData.nickname = data.nickname;
+        articleData.avatar = data.avatar;
         articleData.release_time = data.release_time;
         articleData.page_view = data.page_view;
         articleData.comment_count = data.comment_count;
         articleData.topic = data.topic;
-        articleData.category = data.category;
-        articleData.tag = data.tag;
+        articleData.categories = data.categories;
+        articleData.tags = data.tags;
         articleData.content = data.content;
         articleData.recommend_count = data.recommend_count;
         articleData.evaluation = data.evaluation;
+        articleData.collection = data.collection;
+        articleData.attention = data.attention;
         articleData.last_article = data.last_article;
         articleData.next_article = data.next_article;
       })
@@ -111,9 +117,9 @@ export default defineComponent({
         comment_count: articleData.comment_count,
         topic: articleData.topic,
         release_time: articleData.release_time,
-        category: articleData.category,
+        categories: articleData.categories,
         length: articleData.content.length,
-        tag: articleData.tag,
+        tags: articleData.tags,
       };
     });
 
@@ -123,9 +129,11 @@ export default defineComponent({
         article_id: articleId,
         username: articleData.username,
         nickname: articleData.nickname,
+        avatar: articleData.avatar,
         category: articleData.category,
-        tag: articleData.tag,
         content: articleData.content,
+        categories: articleData.categories,
+        tags: articleData.tags,
         last_article: articleData.last_article,
         next_article: articleData.next_article,
         attention: articleData.attention,
