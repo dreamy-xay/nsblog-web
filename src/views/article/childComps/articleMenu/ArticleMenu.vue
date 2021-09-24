@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-20 20:28:35
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 14:31:57
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-24 21:04:14
 -->
 <template>
   <div
@@ -33,7 +33,9 @@
 </template>
 
 <script>
-import { defineComponent, inject, onMounted, ref } from 'vue';
+import { defineComponent, inject, onMounted, reactive, ref } from 'vue';
+import { getArticlesUsers } from '@/network/api/articles';
+import { mapState } from '@/util/store';
 
 /**
  * @description: 基础blog菜单
@@ -47,6 +49,18 @@ export default defineComponent({
     const buttonChange = ref(false); // 菜单按钮是否改变状态
     const articlePage = inject('articlePage'); // 获取主页面 ref (dom)
     const height = 288 - 30; // 标题图片高度
+    const { tokenInfo } = mapState('global', ['tokenInfo']);
+    const menuData = reactive({
+      username: null,
+      nickname: null,
+      avatar: null,
+      signature: null,
+      article_count: null,
+      tag_count: null,
+      category_count: null,
+      friend_chain: [],
+      recent_article: [],
+    });
 
     // dom 渲染完成
     onMounted(() => {
@@ -64,6 +78,19 @@ export default defineComponent({
     function showMenu() {
       show.value = true;
     }
+
+    getArticlesUsers(tokenInfo.value.username).then((data) => {
+      console.log(data);
+      menuData.username = data.username;
+      menuData.nickname = data.nickname;
+      menuData.avatar = data.avatar;
+      menuData.signature = data.signature;
+      menuData.tag_count = data.tag_count;
+      menuData.article_count = data.article_count;
+      menuData.category_count = data.category_count;
+      menuData.friend_chain.splice(0, 0, ...data.friend_chain);
+      menuData.recent_article.splice(0, 0, ...data.recent_article);
+    });
 
     return {
       show,

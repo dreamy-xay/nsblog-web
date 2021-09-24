@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 10:10:43
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 14:50:35
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-24 20:47:59
  */
 import { del, get, post, RequestLifeCycle } from '@/network/request';
 
@@ -56,5 +56,23 @@ export function getArticles(
 export function getArticleInfo(article_id: number, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return get({
     url: `/articles/${article_id}`
+  });
+}
+
+/**
+ * @description: 获取文章页面用户信息
+ * @param {String} username 用户名
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: Z_Y_C
+ */
+
+export function getArticlesUsers(username: string, RLC: RequestLifeCycle = {}): Promise<unknown> {
+  return get({
+    url: '/articles/users',
+    ...RLC,
+    params: {
+      username
+    }
   });
 }
