@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-09-16 16:19:53
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-16 21:23:55
+ * @LastEditors: clq
+ * @LastEditTime: 2021-09-24 20:30:50
 -->
 <template>
   <n-popover
@@ -23,10 +23,10 @@
         class="user-article-select-content"
         v-for="(item,index) in sdata"
         :key="index"
-        :class="index === selectTag ? 'user-article-select-content-ok' : ''"
+        :class="index === selectTag && isActive ? 'user-article-select-content-ok' : ''"
         @click="changeSelect(index)"
         role="button"
-      >{{ item }}</div>
+      >{{ item.name }}</div>
 
     </el-scrollbar>
 
@@ -38,7 +38,14 @@
           class="user-article-button1"
         >
           <div class="icon1"><i class="iconfont blog-fenlei"></i></div>
-          <div class="text1">选择分类</div>
+          <div
+            v-if="correntChoice && isActive"
+            class="text1"
+          >{{correntChoice}}</div>
+          <div
+            v-else
+            class="text1"
+          >选择分类</div>
         </div>
 
         <div
@@ -47,7 +54,14 @@
           class="user-article-button2"
         >
           <div class="icon2"><i class="iconfont blog-label"></i></div>
-          <div class="text2">选择标签</div>
+          <div
+            v-if="correntChoice  && isActive"
+            class="text2"
+          >{{correntChoice}}</div>
+          <div
+            v-else
+            class="text2"
+          >选择标签</div>
         </div>
       </div>
     </template>
@@ -55,11 +69,12 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, nextTick, ref } from 'vue';
 /**
  * @description: 文章发布选择
  * @param {Arrey} sdata 可供选择的数据 `默认为[]`
  * @param {Boolean} category true 为选择分类 false 为选择标签 `默认为false`
+ * @param {Boolean} isActive true 有效 false 失效 `默认为false`
  * @event changeItem 改变选择数据 (item, index) => void
  * @author: Z_Y_C
  */
@@ -75,10 +90,15 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    isActive: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup(props, context) {
     const selectTag = ref(0);
     const npopoverRef = ref(null);
+    const correntChoice = ref(''); //当前选择项
 
     /**
      * @description: 改变select选择数据
@@ -89,7 +109,11 @@ export default defineComponent({
 
     function changeSelect(index) {
       selectTag.value = index;
-      context.emit('changeItem', props.sdata[index], index);
+      context.emit('changeItem', props.category, props.sdata[index].id);
+      nextTick(() => {
+        correntChoice.value = props.sdata[index].name;
+        // console.log('correntChoice.value' + correntChoice.value);
+      });
       npopoverRef.value.setShow(false);
     }
 
@@ -97,6 +121,7 @@ export default defineComponent({
       selectTag,
       changeSelect,
       npopoverRef,
+      correntChoice,
     };
   },
 });
@@ -144,6 +169,7 @@ export default defineComponent({
         color: $pink-0;
         .text1 {
           color: $grey-9;
+          @include ellipsis(1);
         }
       }
     }
@@ -151,11 +177,13 @@ export default defineComponent({
   .text1 {
     font-size: 14px;
     color: $grey-7;
+    @include ellipsis(1);
   }
 
   &:hover {
     .text1 {
       color: $grey-9;
+      @include ellipsis(1);
     }
 
     .iconfont {
@@ -183,6 +211,7 @@ export default defineComponent({
         color: $orange-1;
         .text2 {
           color: $grey-9;
+          @include ellipsis(1);
         }
       }
     }
@@ -191,11 +220,13 @@ export default defineComponent({
   .text2 {
     font-size: 14px;
     color: $grey-7;
+    @include ellipsis(1);
   }
 
   &:hover {
     .text2 {
       color: $grey-9;
+      @include ellipsis(1);
     }
 
     .iconfont {

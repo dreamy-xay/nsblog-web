@@ -4,7 +4,7 @@
  * @Autor: clqf
  * @Date: 2021-09-14 17:32:49
  * @LastEditors: clq
- * @LastEditTime: 2021-09-17 19:34:23
+ * @LastEditTime: 2021-09-24 20:44:33
 -->
 <template>
   <div
@@ -27,20 +27,20 @@
           </div>
           <div class="page-view">
             <span class="iconfont blog-eye"></span>
-            <span class="info">{{articleInfo.viewCount}} 浏览</span>
+            <span class="info">{{articleInfo.page_view}} 浏览</span>
           </div>
           <div class="comment">
             <span class="iconfont blog-comment"></span>
-            <span class="info">{{articleInfo.commentCount}} 评论</span>
+            <span class="info">{{articleInfo.comment_count}} 评论</span>
           </div>
           <div class="recommend">
             <span class="iconfont blog-tubiao73"></span>
-            <span class="info">{{articleInfo.recommendCount}} 推荐</span>
+            <span class="info">{{articleInfo.recommend_count}} 推荐</span>
           </div>
         </div>
         <div class="right">
           <span class="iconfont blog-lishijilu-copy"></span>
-          <span class="release-time">发布于{{articleInfo.releaseTime}}</span>
+          <span class="release-time">发布于{{articleInfo.release_time}}</span>
         </div>
       </div>
     </div>
@@ -67,7 +67,7 @@ export default defineComponent({
   },
   setup(props, context) {
     function toArticlePage() {
-      console.log('toArticlePage:' + props.articleInfo.url);
+      console.log('toArticlePage:' + props.articleInfo.id);
     }
     return {
       toArticlePage,
@@ -83,15 +83,17 @@ export default defineComponent({
   height: 129px;
   padding: 10px 16px;
   margin-bottom: 16px;
-  border-radius: 8px;
-  background-color: #fff;
+  border-radius: $border-radius-0;
+  background-color: $grey-0;
   box-shadow: $shadow-0;
 
   .user-article-item-body {
     .header {
       height: 21px;
+      width: 100%;
       font-size: 16px;
-      color: #262626;
+      color: $grey-10;
+      @include ellipsis(1);
     }
 
     .body {
@@ -100,7 +102,7 @@ export default defineComponent({
       font-family: Arial;
       font-size: 14px;
       text-align: left;
-      color: #262626;
+      color: $grey-10;
       @include word-break;
       @include ellipsis(2);
     }
@@ -114,7 +116,7 @@ export default defineComponent({
         div {
           .iconfont {
             font-size: 14px;
-            color: #8c8c8c;
+            color: $grey-7;
           }
 
           .info {
@@ -123,7 +125,7 @@ export default defineComponent({
             font-size: 14px;
             line-height: 21px;
             text-align: left;
-            color: #262626;
+            color: $grey-10;
           }
         }
       }
@@ -132,7 +134,7 @@ export default defineComponent({
         .iconfont {
           width: 18px;
           height: 18px;
-          color: #8c8c8c;
+          color: $grey-7;
         }
 
         .release-time {
@@ -142,7 +144,7 @@ export default defineComponent({
           font-size: 14px;
           line-height: 21px;
           text-align: right;
-          color: #262626;
+          color: $grey-10;
         }
       }
     }
