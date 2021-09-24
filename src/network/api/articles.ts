@@ -3,13 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 10:10:43
-<<<<<<< HEAD
  * @LastEditors: clq
- * @LastEditTime: 2021-09-24 20:49:24
-=======
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 14:50:35
->>>>>>> f40f2a0f40ab59d1bb006dc05e2a5e6cdaa9e7ba
+ * @LastEditTime: 2021-09-24 21:07:28
  */
 import { del, get, post, RequestLifeCycle } from '@/network/request';
 

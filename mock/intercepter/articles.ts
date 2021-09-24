@@ -3,13 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
-<<<<<<< HEAD
  * @LastEditors: clq
- * @LastEditTime: 2021-09-24 15:09:13
-=======
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 19:39:14
->>>>>>> f40f2a0f40ab59d1bb006dc05e2a5e6cdaa9e7ba
+ * @LastEditTime: 2021-09-24 21:08:51
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';

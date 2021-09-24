@@ -4,7 +4,7 @@
  * @Autor: clqf
  * @Date: 2021-09-14 17:32:49
  * @LastEditors: clq
- * @LastEditTime: 2021-09-24 20:44:33
+ * @LastEditTime: 2021-09-24 21:07:24
 -->
 <template>
   <div
@@ -67,7 +67,7 @@ export default defineComponent({
   },
   setup(props, context) {
     function toArticlePage() {
-      console.log('toArticlePage:' + props.articleInfo.id);
+      window.open(`/article/${props.articleInfo.id}`, `/article/${props.articleInfo.id}`);
     }
     return {
       toArticlePage,
@@ -126,6 +126,13 @@ export default defineComponent({
             line-height: 21px;
             text-align: left;
             color: $grey-10;
+          }
+        }
+
+        .comment {
+          & > span:nth-child(1) {
+            display: inline-block;
+            transform: scale(0.8);
           }
         }
       }
