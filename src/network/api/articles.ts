@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 10:10:43
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 11:05:30
+ * @LastEditTime: 2021-09-24 14:50:35
  */
 import { del, get, post, RequestLifeCycle } from '@/network/request';
 
@@ -32,7 +32,7 @@ export function getArticles(
   RLC: RequestLifeCycle = {}
 ): Promise<unknown> {
   return get({
-    url: '/attentions',
+    url: '/articles',
     ...RLC,
     params: {
       username,
@@ -55,6 +55,6 @@ export function getArticles(
  */
 export function getArticleInfo(article_id: number, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return get({
-    url: `/articles${article_id}`
+    url: `/articles/${article_id}`
   });
 }

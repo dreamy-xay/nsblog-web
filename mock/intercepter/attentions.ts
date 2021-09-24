@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-10 14:25:47
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-14 15:50:45
+ * @LastEditTime: 2021-09-24 14:47:16
  */
 
 import { Application, Request, Response } from 'express';
@@ -18,7 +18,7 @@ export default function(baseUrl: string, app: Application) {
     const { username, limit, offset } = req.query;
     if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
 
-    console.log(`${username} getAttentions...`);
+    console.log(`--------${username} getAttentions...`);
 
     const RUsers = randomUsers();
     function getRandom(limit: number): Record<string, unknown>[] {

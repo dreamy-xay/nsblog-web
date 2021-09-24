@@ -3,13 +3,16 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-17 15:05:14
- * @LastEditors: clq
- * @LastEditTime: 2021-09-20 12:11:42
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-24 14:58:38
 -->
 <template>
   <div class="article-body">
-    <article-content />
-    <article-bottom />
+    <article-content
+      :content="data.content"
+      :username="data.username"
+    />
+    <article-bottom :data="data" />
   </div>
 </template>
 
@@ -28,6 +31,12 @@ export default defineComponent({
   components: {
     ArticleContent,
     ArticleBottom,
+  },
+  props: {
+    data: {
+      type: Object,
+      required: true,
+    },
   },
 });
 </script>
