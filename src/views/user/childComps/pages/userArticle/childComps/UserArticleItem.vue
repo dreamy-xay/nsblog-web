@@ -4,43 +4,43 @@
  * @Autor: clqf
  * @Date: 2021-09-14 17:32:49
  * @LastEditors: clq
- * @LastEditTime: 2021-09-24 21:07:24
+ * @LastEditTime: 2021-09-25 12:46:08
 -->
 <template>
-  <div
-    class="user-article-item"
-    role="button"
-    @click="toArticlePage"
-  >
+  <div class="user-article-item">
     <div class="user-article-item-body">
-      <div class="header">{{articleInfo.title}}</div>
+      <div
+        class="header"
+        role="button"
+        @click="toArticlePage"
+      >{{articleInfo.title}}</div>
       <div class="body">{{articleInfo.content}}</div>
       <div class="footer">
         <div class="left">
-          <div>
-            <base-tag
-              :size="21"
-              color="#ffb792"
-              :hollow="true"
-              :text="articleInfo.topic_tag"
-            />
-          </div>
+          <base-tag
+            :size="21"
+            :color="style.orange0"
+            :hollow="true"
+            :hoverColor="style.orange1"
+            :text="articleInfo.topic_tag"
+            @click="toTopicTag"
+          />
           <div class="page-view">
-            <span class="iconfont blog-eye"></span>
-            <span class="info">{{articleInfo.page_view}} 浏览</span>
+            <div><i class="iconfont blog-eye"></i></div>
+            {{articleInfo.page_view}} 浏览
           </div>
           <div class="comment">
-            <span class="iconfont blog-comment"></span>
-            <span class="info">{{articleInfo.comment_count}} 评论</span>
+            <div><i class="iconfont blog-comment"></i></div>
+            {{articleInfo.comment_count}} 评论
           </div>
           <div class="recommend">
-            <span class="iconfont blog-tubiao73"></span>
-            <span class="info">{{articleInfo.recommend_count}} 推荐</span>
+            <div><span class="iconfont blog-tubiao73"></span></div>
+            {{articleInfo.recommend_count}} 推荐
           </div>
         </div>
         <div class="right">
-          <span class="iconfont blog-lishijilu-copy"></span>
-          <span class="release-time">发布于{{articleInfo.release_time}}</span>
+          <div><i class="iconfont blog-lishijilu-copy"></i></div>
+          发布于{{articleInfo.release_time}}
         </div>
       </div>
     </div>
@@ -50,6 +50,7 @@
 <script>
 import { defineComponent } from 'vue';
 import BaseTag from '@/components/content/baseTag/BaseTag.vue';
+import style from '@/assets/style/define.scss';
 
 /**
  * @description: 文章详情组件
@@ -66,11 +67,28 @@ export default defineComponent({
     },
   },
   setup(props, context) {
+    /**
+     * @description: 跳转至文章页面
+     * @return {void}
+     * @author: clq
+     */
     function toArticlePage() {
       window.open(`/article/${props.articleInfo.id}`, `/article/${props.articleInfo.id}`);
     }
+
+    /**
+     * @description: 跳转至主题页面
+     * @return {void}
+     * @author: clq
+     */
+    function toTopicTag() {
+      console.log(`跳转至 ${props.articleInfo.topic_tag} 主题页面...`);
+    }
+
     return {
+      style,
       toArticlePage,
+      toTopicTag,
     };
   },
 });
@@ -80,7 +98,6 @@ export default defineComponent({
 .user-article-item {
   box-sizing: border-box;
   width: 890px;
-  height: 129px;
   padding: 10px 16px;
   margin-bottom: 16px;
   border-radius: $border-radius-0;
@@ -93,7 +110,12 @@ export default defineComponent({
       width: 100%;
       font-size: 16px;
       color: $grey-10;
+      transition: all 0.25s;
       @include ellipsis(1);
+
+      &:hover {
+        color: $green-0;
+      }
     }
 
     .body {
@@ -109,49 +131,54 @@ export default defineComponent({
 
     .footer {
       @include flex(center, space-between, row);
+
       .left {
-        width: 334px;
+        height: 21px;
         @include flex(center, space-between, row);
 
-        div {
-          .iconfont {
-            font-size: 14px;
-            color: $grey-7;
-          }
+        .page-view,
+        .comment,
+        .recommend {
+          margin-left: 24px;
+          height: 100%;
+          @include flex(center);
 
-          .info {
-            margin-left: 4px;
-            font-family: Arial;
-            font-size: 14px;
-            line-height: 21px;
-            text-align: left;
-            color: $grey-10;
+          div {
+            height: 18px;
+            width: 18px;
+            margin-right: 6px;
+            @include flex(center, center);
+
+            .iconfont {
+              font-size: 18px;
+              color: $grey-7;
+            }
           }
         }
 
-        .comment {
-          & > span:nth-child(1) {
-            display: inline-block;
-            transform: scale(0.8);
-          }
+        .comment div {
+          transform: scale(0.9);
+        }
+
+        .page-view div .iconfont {
+          transform: scaleX(0.9);
         }
       }
 
       .right {
-        .iconfont {
-          width: 18px;
-          height: 18px;
-          color: $grey-7;
-        }
+        height: 100%;
+        @include flex(center);
 
-        .release-time {
-          height: 21px;
-          margin-left: 4px;
-          font-family: Arial;
-          font-size: 14px;
-          line-height: 21px;
-          text-align: right;
-          color: $grey-10;
+        div {
+          height: 18px;
+          width: 18px;
+          margin-right: 6px;
+          @include flex(center, center);
+
+          .iconfont {
+            font-size: 18px;
+            color: $grey-7;
+          }
         }
       }
     }

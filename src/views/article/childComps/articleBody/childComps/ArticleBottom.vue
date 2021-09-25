@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-20 12:06:41
  * @LastEditors: clq
- * @LastEditTime: 2021-09-20 21:18:23
+ * @LastEditTime: 2021-09-25 11:52:58
 -->
 <template>
   <div class="article-bottom">
@@ -106,7 +106,6 @@
                 :target="`/blog/${'dreamy'}`"
               >「CC BY 4.0」
               </article-link>
-              <!-- 「CC BY 4.0」 -->
               创作共享协议，转载请在文章明显位置注明作者及出处！
             </div>
           </div>

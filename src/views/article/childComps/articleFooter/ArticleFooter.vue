@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-20 17:53:48
  * @LastEditors: clq
- * @LastEditTime: 2021-09-24 10:27:30
+ * @LastEditTime: 2021-09-25 16:15:49
 -->
 <template>
   <div class="article-footer">
@@ -12,17 +12,20 @@
       发表评论
     </div>
     <article-footer-edit />
-    <article-footer-comment />
+    <!-- <article-footer-comment
+      v-for="(item,index) in comments"
+      :key="index"
+    /> -->
     <article-footer-comment />
   </div>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, reactive, ref } from 'vue';
 import ArticleFooterEdit from '@/views/article/childComps/articleFooter/childComps/ArticleFooterEdit.vue';
 import ArticleFooterComment from '@/views/article/childComps/articleFooter/childComps/ArticleFooterComment.vue';
 /**
- * @description:
+ * @description: 文章底部评论区
  * @author: clq
  */
 
@@ -30,7 +33,68 @@ export default defineComponent({
   components: { ArticleFooterEdit, ArticleFooterComment },
   name: 'articleFooter',
   setup() {
-    return {};
+    let comments = reactive([
+      {
+        comment_id: 123,
+        username: 'test',
+        avatar: 'https://ccc',
+        time: '',
+        content: '真不戳！',
+        support_count: 12,
+        oppose_count: 54,
+        evaluation: 0,
+        child_comments: [
+          {
+            comment_id: 123,
+            username: 'test',
+            avatar: 'https://ccc',
+            time: '',
+            content: '真不戳！',
+            support_count: 12,
+            oppose_count: 54,
+            evaluation: 0,
+            child_comments: [
+              {
+                comment_id: 123,
+                username: 'test',
+                avatar: 'https://ccc',
+                time: '',
+                content: '真不戳！',
+                support_count: 12,
+                oppose_count: 54,
+                evaluation: 0,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        comment_id: 123,
+        username: 'test',
+        avatar: 'https://ccc',
+        time: '',
+        content: '真不戳！',
+        support_count: 12,
+        oppose_count: 54,
+        evaluation: 0,
+        child_comments: [
+          {
+            comment_id: 123,
+            username: 'test',
+            avatar: 'https://ccc',
+            time: '',
+            content: '真不戳！',
+            support_count: 12,
+            oppose_count: 54,
+            evaluation: 0,
+            child_comments: [],
+          },
+        ],
+      },
+    ]);
+    return {
+      comments,
+    };
   },
 });
 </script>
