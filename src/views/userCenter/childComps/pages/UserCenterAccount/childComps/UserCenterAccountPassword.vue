@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-26 15:11:17
  * @LastEditors: Ban
- * @LastEditTime: 2021-09-25 15:11:51
+ * @LastEditTime: 2021-09-25 16:45:40
 -->
 <template>
   <div class="user-center-account-change">
@@ -97,7 +97,6 @@ import { clearToken } from '@/network/token';
  * @param {String} title 标题内容 `必传参数`
  * @author: Ban
  */
-
 export default defineComponent({
   name: 'UserCenterAccountChange',
   props: {

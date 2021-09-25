@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-09-14 19:08:58
  * @LastEditors: Ban
- * @LastEditTime: 2021-09-24 17:02:59
+ * @LastEditTime: 2021-09-25 16:44:42
 -->
 <template>
   <div class="user-center-account-email">
@@ -39,7 +39,10 @@
               :maxlength="6"
             >
             </user-center-input>
-            <div class="verification-code">
+            <div
+              class="verification-code"
+              role="button"
+            >
               发送验证码
             </div>
           </div>
@@ -105,7 +108,6 @@ export default defineComponent({
 <style lang='scss' scoped>
 .user-center-account-email-modal {
   .user-center-account-email-inner {
-    // width: 100%;
     @include flex(initial, center, column);
     div {
       padding: 5px 0;
@@ -113,10 +115,20 @@ export default defineComponent({
     .verification {
       @include flex();
       .verification-code {
-        @include flex();
-        height: 30px;
+        @include flex(center, center);
+        margin-top: 3px;
+        margin-left: 20px;
+        height: 24px;
         width: 80px;
         border: 1px solid $green-0;
+        border-radius: $border-radius-0;
+        color: $grey-0;
+        background: $green-0;
+        transition: 0.25s;
+
+        &:hover {
+          background: $green-1;
+        }
       }
     }
   }

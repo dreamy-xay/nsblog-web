@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-20 19:21:40
  * @LastEditors: clq
- * @LastEditTime: 2021-09-20 19:54:20
+ * @LastEditTime: 2021-09-25 12:00:22
 -->
 <template>
   <a
@@ -41,14 +41,13 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .article-link {
-  transition: 0.25s;
+  position: relative;
   @include ellipsis(1);
 
   &:active,
   &:link,
   &:visited {
     color: $grey-7;
-    position: relative;
     text-decoration: none;
   }
 
@@ -58,6 +57,7 @@ export default defineComponent({
 
     &:after {
       transform: scaleX(1);
+      background-color: $green-1;
       transform-origin: bottom left;
     }
   }
@@ -69,10 +69,10 @@ export default defineComponent({
     transform: scaleX(0);
     height: 2px;
     bottom: -2px;
-    left: 0;
+    left: 0px;
     background-color: $green-1;
     transform-origin: bottom right;
-    transition: transform 0.25s ease-out;
+    transition: transform 0.25s;
   }
 }
 </style>

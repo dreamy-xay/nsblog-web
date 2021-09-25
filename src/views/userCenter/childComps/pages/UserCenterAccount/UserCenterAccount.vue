@@ -3,8 +3,13 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:42
+<<<<<<< HEAD
  * @LastEditors: Z_Y_C
  * @LastEditTime: 2021-09-25 15:28:12
+=======
+ * @LastEditors: Ban
+ * @LastEditTime: 2021-09-25 15:23:15
+>>>>>>> 0c67bf6da76cb7a3f35153e789b54b0c6c212235
 -->
 <template>
   <div class="user-center-account">
@@ -50,7 +55,12 @@ import { getUserInfo } from '@/network/api/user';
 import { mapState } from '@/util/store';
 import UserCenterAccountPassword from '@/views/userCenter/childComps/pages/UserCenterAccount/childComps/UserCenterAccountPassword.vue';
 import UserCenterAccountEmail from '@/views/userCenter/childComps/pages/UserCenterAccount/childComps/UserCenterAccountEmail.vue';
+<<<<<<< HEAD
 import UserCenterAccountLoginRecord from '@/views/userCenter/childComps/pages/UserCenterAccount/childComps/UserCenterAccountLoginRecord.vue';
+=======
+import { useMessage } from 'naive-ui';
+
+>>>>>>> 0c67bf6da76cb7a3f35153e789b54b0c6c212235
 /**
  * @description:
  * @author: Ban
@@ -68,6 +78,7 @@ export default defineComponent({
     const weibo = ref(''); // 微博
     const qq = ref(''); // QQ
     const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
+    const message = useMessage();
 
     /**
      * @description: 获取用户相关信息
@@ -86,6 +97,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.log(error);
+          message.error('数据加载异常，请刷新页面！');
         });
     }
 
