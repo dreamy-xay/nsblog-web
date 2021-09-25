@@ -1,10 +1,10 @@
 /*
- * @Description: 个人设置api
+ * @Description: 个人设置相关api
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-06 21:49:03
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-14 11:40:02
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-24 10:13:48
  */
 import { get, put, RequestLifeCycle } from '@/network/request';
 

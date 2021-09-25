@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-19 11:26:49
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-07 20:17:51
+ * @LastEditTime: 2021-09-24 20:18:49
 -->
 <template>
   <div
@@ -38,6 +38,8 @@ import styles from '@/assets/style/define.scss';
  * @param {Number | String} size 设置头像的大小，类型为Number时单位为px `默认为50`
  * @param {Boolean} slot 是否启用内置插槽，将不再显示图片 `默认为false`
  * @param {Object} style 头像风格样式 `默认为null`
+ * @param {String} loadingImg 加载过程中显示图片 `默认为 '/home/avatarLoading.gif'`
+ * @param {String} loadErrorImg 加载失败显示图片 `默认为 '/home/avatarLoadError.png'`
  * @event load 图片加载完成触发 (e) => {}
  * @event error 图片加载失败触发 (e) => {}
  * @author: dreamy-xay
@@ -82,9 +84,17 @@ export default defineComponent({
       type: Object,
       defalut: null,
     },
+    loadingImg: {
+      type: String,
+      defalut: '/home/avatarLoading.gif',
+    },
+    loadErrorImg: {
+      type: String,
+      defalut: '/home/avatarLoadError.png',
+    },
   },
   setup(props, context) {
-    const avatar = ref(props.slot ? 'none' : '/home/avatarLoading.gif'); // 真正显示头像路径
+    const avatar = ref(props.slot ? 'none' : props.loadingImg); // 真正显示头像路径
     // 计算样式
     const avatarStyle = computed(() => {
       const size = typeof props.size === 'number' ? props.size + 'px' : props.size;
@@ -117,7 +127,7 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function error(e) {
-      avatar.value = '/home/avatarLoadError.png';
+      avatar.value = props.loadErrorImg;
       context.emit('error', e);
     }
 

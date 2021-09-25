@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:42
  * @LastEditors: Ban
- * @LastEditTime: 2021-09-24 11:25:47
+ * @LastEditTime: 2021-09-25 15:11:40
 -->
 <template>
   <div class="user-center-account">
@@ -52,8 +52,6 @@ import UserCenterAccountEmail from '@/views/userCenter/childComps/pages/UserCent
 
 /**
  * @description:
- * @param {*}
- * @return {*}
  * @author: Ban
  */
 

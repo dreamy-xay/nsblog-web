@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 17:51:15
- * @LastEditors: clq
- * @LastEditTime: 2021-09-20 21:15:14
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-24 19:44:13
 -->
 <template>
   <div class="article-head">
@@ -36,7 +36,9 @@
           :color="styles.orange0"
           :hover-color="styles.orange1"
           v-for="(item, index) in data.categories"
-          :text="item"
+          :href="`/blog/${data.username}?category=${item.id}`"
+          :target="`/blog/${data.username}?category=${item.id}`"
+          :text="item.name"
           :key="index"
           :style="{borderRadius: '3px', letterSpacing: '1.5px'}"
         />
@@ -44,7 +46,9 @@
           :color="styles.blue0"
           :hover-color="styles.blue1"
           v-for="(item, index) in data.tags"
-          :text="item"
+          :href="`/blog/${data.username}?tag=${item.id}`"
+          :target="`/blog/${data.username}?tag=${item.id}`"
+          :text="item.name"
           :key="index"
           :style="{borderRadius: '3px', letterSpacing: '1.5px'}"
         />
@@ -54,7 +58,7 @@
 </template>
 
 <script>
-import { computed, defineComponent, onMounted, ref } from 'vue';
+import { computed, defineComponent, onMounted, ref, watch } from 'vue';
 import ArticleHeadBackground from '@/views/article/childComps/articleHead/childComps/ArticleHeadBackground.vue';
 import BaseTag from '@/components/content/baseTag/BaseTag.vue';
 import { dateFormat } from '@/util/date';
@@ -75,13 +79,7 @@ export default defineComponent({
   props: {
     data: {
       type: Object,
-      default() {
-        return {
-          username: 'dreamy',
-          categories: ['测试进阶知识系列 - PYTHON'],
-          tags: ['PYTHON'],
-        };
-      },
+      required: true,
     },
   },
   setup(props) {
@@ -93,7 +91,7 @@ export default defineComponent({
      * @return {void}
      * @author: dreamy-xay
      */
-    function typingRun(value = '比培训机构还详细的 Python 学习路线，你信吗 0^0') {
+    function typingRun(value) {
       let timer = null;
       let index = 0;
       function typing() {
@@ -109,10 +107,18 @@ export default defineComponent({
       typing();
     }
 
-    // dom加载完成后，执行打字效果
+    // dom加载完后执行
     onMounted(() => {
-      typingRun();
+      if (props.data.title) typingRun(props.data.title);
     });
+
+    // 监听标题，执行打字效果
+    watch(
+      () => props.data.title,
+      (value) => {
+        if (value) typingRun(value);
+      }
+    );
 
     // 打字闪烁
     const visibility = ref(true);
@@ -125,31 +131,31 @@ export default defineComponent({
       return [
         {
           icon: 'blog-zuozhe',
-          value: props.data.username,
+          value: props.data.nickname,
         },
         {
           icon: 'blog-time',
-          value: dateFormat('YY/mm/dd HH:MM', new Date()),
+          value: dateFormat('YY/mm/dd HH:MM', new Date(props.data.release_time)),
         },
         {
           icon: 'blog-browse',
-          value: 28,
+          value: getSplitNum(props.data.page_view),
         },
         {
           icon: 'blog-interactive',
-          value: 3,
+          value: getSplitNum(props.data.comment_count),
         },
         {
           icon: 'blog-hot',
-          value: 15,
+          value: getSplitNum(props.data.recommend_count),
         },
         {
           icon: 'blog-wenzi',
-          value: getSplitNum(5876),
+          value: getSplitNum(props.data.length),
         },
         {
           icon: 'blog-zhuanlan',
-          value: 'Python',
+          value: props.data.topic,
         },
       ];
     });
@@ -162,7 +168,7 @@ export default defineComponent({
      */
     function clickInfoItem(index) {
       if (index === 0) window.open(`/user/${props.data.username}`, `/user/${props.data.username}`);
-      else if (index === infoList.value.length - 1) console.log('click topics tags');
+      else if (index === infoList.value.length - 1) console.log('click topics tags' + props.data.topic);
     }
 
     return {
@@ -210,7 +216,6 @@ export default defineComponent({
       transform: scale(1, 1.1);
 
       .info-item {
-        user-select: all;
         height: 100%;
         @include flex(center, center);
         margin-right: 12px;
