@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-20 16:56:09
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 14:32:02
+ * @LastEditTime: 2021-09-25 19:20:56
 -->
 <template>
   <div
@@ -51,6 +51,7 @@ export default defineComponent({
   position: fixed;
   left: 0;
   top: 0;
+  z-index: 2000;
   background-color: $green-1;
   height: 2.5px;
   transition: 0.4s ease;
