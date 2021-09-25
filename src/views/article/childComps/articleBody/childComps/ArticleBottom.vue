@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-20 12:06:41
  * @LastEditors: clq
- * @LastEditTime: 2021-09-25 11:52:58
+ * @LastEditTime: 2021-09-25 19:17:54
 -->
 <template>
   <div class="article-bottom">
@@ -122,7 +122,7 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import ArticleLink from '@/views/article/childComps/ArticleLink.vue';
 import ArticleBottomComp from '@/views/article/childComps/articleBody/childComps/ArticleBottomComp.vue';
@@ -146,7 +146,11 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {
+  setup(props) {
+    onMounted(() => {
+      console.log('ArticleBottomData:');
+      console.log(props.data);
+    });
     return {
       styles,
     };
