@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-23 17:11:47
  * @LastEditors: clq
- * @LastEditTime: 2021-09-24 10:25:16
+ * @LastEditTime: 2021-09-25 20:29:56
 -->
 <template>
   <div class="article-footer-edit">
@@ -12,7 +12,7 @@
       v-model="text"
       mode="edit"
       left-toolbar="undo redo clear| bold link code quote"
-      height="244px"
+      height="200px"
     />
 
     <div
@@ -50,6 +50,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .article-footer-edit {
   :deep(.v-md-editor) {
+    width: 100%;
     z-index: 9999999999;
     box-shadow: $shadow-0;
     border-radius: $border-radius-0;
