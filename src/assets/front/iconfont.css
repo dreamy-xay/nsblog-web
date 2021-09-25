@@ -1,13 +1,7 @@
 @font-face {
     font-family: "iconfont";
     /* Project id 2675107 */
-<<<<<<< HEAD
-    src: url('//at.alicdn.com/t/font_2675107_mr0beomjoa.woff2?t=1632489467395') format('woff2'), url('//at.alicdn.com/t/font_2675107_mr0beomjoa.woff?t=1632489467395') format('woff'), url('//at.alicdn.com/t/font_2675107_mr0beomjoa.ttf?t=1632489467395') format('truetype');
-=======
-    src: url('//at.alicdn.com/t/font_2675107_sehyj936xp.woff2?t=1632489311700') format('woff2'),
-        url('//at.alicdn.com/t/font_2675107_sehyj936xp.woff?t=1632489311700') format('woff'),
-        url('//at.alicdn.com/t/font_2675107_sehyj936xp.ttf?t=1632489311700') format('truetype');
->>>>>>> 47faca954947ded100549e3b03950cf3d991ec70
+    src: url('//at.alicdn.com/t/font_2675107_7t5crt59bmu.woff2?t=1632565372944') format('woff2'), url('//at.alicdn.com/t/font_2675107_7t5crt59bmu.woff?t=1632565372944') format('woff'), url('//at.alicdn.com/t/font_2675107_7t5crt59bmu.ttf?t=1632565372944') format('truetype');
 }
 
 .iconfont {
