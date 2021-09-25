@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-17 15:09:41
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 18:10:18
+ * @LastEditTime: 2021-09-25 19:17:54
 -->
 <template>
   <div class="article-content">
@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import { computed, defineComponent, inject, watch, reactive, ref, onMounted } from 'vue';
+import { computed, defineComponent, inject, watch, reactive, ref, onMounted, nextTick } from 'vue';
 import { binary_bound } from '@/util/algorithm';
 
 /**
@@ -107,24 +107,26 @@ export default defineComponent({
     function updateTitle() {
       if (!preview.value) return;
 
-      // 锚点菜单
-      const anchors = preview.value.$el.querySelectorAll('h2,h3,h4');
-      const aTitles = Array.from(anchors).filter((title) => !!title.innerText.trim());
+      nextTick(() => {
+        // 锚点菜单
+        const anchors = preview.value.$el.querySelectorAll('h2,h3,h4');
+        const aTitles = Array.from(anchors).filter((title) => !!title.innerText.trim());
 
-      if (aTitles.length) {
-        const hTags = Array.from(new Set(aTitles.map((title) => title.tagName))).sort();
-        titles.splice(
-          0,
-          aTitles.length,
-          ...aTitles.map((el) => {
-            return {
-              title: el.innerText,
-              offset: preview.value.getOffsetTop(el, articlePage.value),
-              indent: hTags.indexOf(el.tagName),
-            };
-          })
-        );
-      }
+        if (aTitles.length) {
+          const hTags = Array.from(new Set(aTitles.map((title) => title.tagName))).sort();
+          titles.splice(
+            0,
+            aTitles.length,
+            ...aTitles.map((el) => {
+              return {
+                title: el.innerText,
+                offset: preview.value.getOffsetTop(el, articlePage.value),
+                indent: hTags.indexOf(el.tagName),
+              };
+            })
+          );
+        }
+      });
     }
 
     // watch content
