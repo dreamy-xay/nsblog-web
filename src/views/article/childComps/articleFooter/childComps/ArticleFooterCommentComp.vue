@@ -3,8 +3,13 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-09-23 19:22:16
+<<<<<<< HEAD
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-25 20:21:03
+ * @LastEditTime: 2021-09-25 20:56:06
+=======
+ * @LastEditors: clq
+ * @LastEditTime: 2021-09-25 18:29:02
+>>>>>>> 3ea121d004c46f9aafa8bd7232e368909831ff3f
 -->
 <template>
   <div class="article-footer-comment-comp">

@@ -92,3 +92,21 @@ export function getArticleInfo(article_id: number, RLC: RequestLifeCycle = {}): 
     url: `/articles/${article_id}`
   });
 }
+
+/**
+ * @description: 获取文章页面用户信息
+ * @param {String} username 用户名
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: Z_Y_C
+ */
+
+export function getArticlesUsers(username: string, RLC: RequestLifeCycle = {}): Promise<unknown> {
+  return get({
+    url: '/articles/users',
+    ...RLC,
+    params: {
+      username
+    }
+  });
+}
