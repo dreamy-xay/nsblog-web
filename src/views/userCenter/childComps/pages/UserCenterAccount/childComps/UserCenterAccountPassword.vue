@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-26 15:11:17
  * @LastEditors: Ban
- * @LastEditTime: 2021-09-16 20:48:05
+ * @LastEditTime: 2021-09-24 16:44:55
 -->
 <template>
   <div class="user-center-account-change">
@@ -86,7 +86,7 @@
 
 <script>
 import { defineComponent, ref } from 'vue';
-import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput';
+import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput.vue';
 import { forgotPasswordChange } from '@/network/api/user';
 import { useMessage } from 'naive-ui';
 import router from '@/router';
