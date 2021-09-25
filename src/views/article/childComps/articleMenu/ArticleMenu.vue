@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-20 20:28:35
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 14:31:57
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-25 20:17:17
 -->
 <template>
   <div
@@ -24,16 +24,33 @@
     </div>
     <n-drawer
       v-model:show="show"
-      :width="380"
+      :width="320"
       placement="left"
     >
-
+      <el-scrollbar>
+        <div class="base-blog-menu-body">
+          <article-menu-avatar
+            :data="avatarData"
+            @closeMenu="close"
+          />
+          <article-menu-navigation :data="menuData.username" />
+          <article-menu-publication :data="menuData.recent_article" />
+          <article-menu-friend :data="menuData.friend_chain" />
+        </div>
+      </el-scrollbar>
     </n-drawer>
   </div>
 </template>
 
 <script>
-import { defineComponent, inject, onMounted, ref } from 'vue';
+import { computed, defineComponent, inject, onMounted, reactive, ref } from 'vue';
+import { getArticlesUsers } from '@/network/api/articles';
+import { mapState } from '@/util/store';
+import ArticleMenuAvatar from '@/views/article/childComps/articleMenu/childComps/ArticleMenuAvatar.vue';
+import ArticleMenuNavigation from '@/views/article/childComps/articleMenu/childComps/ArticleMenuNavigation.vue';
+import ArticleMenuPublication from '@/views/article/childComps/articleMenu/childComps/ArticleMenuPublication.vue';
+import ArticleMenuFriend from '@/views/article/childComps/articleMenu/childComps/ArticleMenuFriend.vue';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description: 基础blog菜单
@@ -42,11 +59,44 @@ import { defineComponent, inject, onMounted, ref } from 'vue';
 
 export default defineComponent({
   name: 'articleMenu',
+  components: {
+    ArticleMenuAvatar,
+    ArticleMenuNavigation,
+    ArticleMenuPublication,
+    ArticleMenuFriend,
+  },
   setup() {
+    const msg = useMessage(); // naive-ui
     const show = ref(false); // 是否显示侧边栏菜单
     const buttonChange = ref(false); // 菜单按钮是否改变状态
     const articlePage = inject('articlePage'); // 获取主页面 ref (dom)
     const height = 288 - 30; // 标题图片高度
+    const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取用户名
+    const menuData = reactive({
+      // 目录数据
+      username: null,
+      nickname: null,
+      avatar: null,
+      signature: null,
+      article_count: null,
+      tag_count: null,
+      category_count: null,
+      friend_chain: [],
+      recent_article: [],
+    });
+
+    const avatarData = computed(() => {
+      // 传入头部数据
+      return {
+        username: menuData.username,
+        nickname: menuData.nickname,
+        avatar: menuData.avatar,
+        signature: menuData.signature,
+        article_count: menuData.article_count,
+        tag_count: menuData.tag_count,
+        category_count: menuData.category_count,
+      };
+    });
 
     // dom 渲染完成
     onMounted(() => {
@@ -65,10 +115,41 @@ export default defineComponent({
       show.value = true;
     }
 
+    // 获取menu数据
+    getArticlesUsers(tokenInfo.value.username)
+      .then((data) => {
+        console.log(data);
+        menuData.username = data.username;
+        menuData.nickname = data.nickname;
+        menuData.avatar = data.avatar;
+        menuData.signature = data.signature;
+        menuData.tag_count = data.tag_count;
+        menuData.article_count = data.article_count;
+        menuData.category_count = data.category_count;
+        menuData.friend_chain.splice(0, 0, ...data.friend_chain);
+        menuData.recent_article.splice(0, 0, ...data.recent_article);
+      })
+      .catch((error) => {
+        console.log(error);
+        msg.error('获取目录失败', { duration: 2000, closable: true });
+      });
+
+    /**
+     * @description: 点击关闭抽屉
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function close() {
+      show.value = false;
+    }
+
     return {
       show,
       showMenu,
       buttonChange,
+      avatarData,
+      menuData,
+      close,
     };
   },
 });
@@ -134,5 +215,9 @@ export default defineComponent({
       }
     }
   }
+}
+
+.base-blog-menu-body {
+  padding: 24px;
 }
 </style>

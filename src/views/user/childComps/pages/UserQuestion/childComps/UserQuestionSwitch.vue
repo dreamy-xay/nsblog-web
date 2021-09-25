@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-17 19:34:19
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-20 17:27:12
+ * @LastEditTime: 2021-09-20 17:33:20
 -->
 
 <template>
@@ -144,6 +144,7 @@ export default defineComponent({
       font-weight: 700;
       margin-bottom: 5px;
       @include word-break;
+      transition: 0.25s;
 
       &:hover {
         color: $green-0;
