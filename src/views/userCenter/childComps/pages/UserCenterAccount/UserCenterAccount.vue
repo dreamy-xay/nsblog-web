@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:42
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-24 20:21:44
+ * @LastEditTime: 2021-09-25 15:25:28
 -->
 <template>
   <div class="user-center-account">
@@ -46,7 +46,7 @@
         </div>
       </div>
     </div>
-    <!-- <user-center-account-login-record /> -->
+    <!-- <user-center-account-login-record :isShow="true" /> -->
   </div>
 </template>
 

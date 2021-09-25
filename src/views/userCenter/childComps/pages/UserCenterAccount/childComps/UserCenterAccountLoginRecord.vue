@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-24 18:17:15
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-24 20:21:03
+ * @LastEditTime: 2021-09-25 15:24:18
 -->
 <template>
   <n-modal
@@ -94,24 +94,26 @@ export default defineComponent({
   padding: 24px;
 
   .user-center-login-top {
-    @include flex(center);
+    @include flex(center, center);
+    position: relative;
     width: 100%;
     height: 21px;
     margin-bottom: 24px;
 
     .title {
       line-height: 21px;
-      width: calc(100% - 16px);
       font-size: 16px;
       color: $grey-11;
       font-weight: 700;
-      text-align: center;
     }
 
     .close {
+      position: absolute;
+      right: 0;
       height: 16px;
       line-height: 16px;
       color: $grey-7;
+      transition: 0.25s;
 
       .iconfont {
         font-size: 16px;

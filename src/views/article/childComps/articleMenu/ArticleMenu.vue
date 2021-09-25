@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-20 20:28:35
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-24 21:04:14
+ * @LastEditTime: 2021-09-25 12:31:46
 -->
 <template>
   <div
@@ -26,16 +26,20 @@
       v-model:show="show"
       :width="380"
       placement="left"
+      :style="{padding: '24px'}"
     >
-
+      <div class="">
+        <article-menu-avatar :data="avatarData" />
+      </div>
     </n-drawer>
   </div>
 </template>
 
 <script>
-import { defineComponent, inject, onMounted, reactive, ref } from 'vue';
+import { computed, defineComponent, inject, onMounted, reactive, ref } from 'vue';
 import { getArticlesUsers } from '@/network/api/articles';
 import { mapState } from '@/util/store';
+import ArticleMenuAvatar from '@/views/article/childComps/articleMenu/childComps/ArticleMenuAvatar.vue';
 
 /**
  * @description: 基础blog菜单
@@ -44,6 +48,9 @@ import { mapState } from '@/util/store';
 
 export default defineComponent({
   name: 'articleMenu',
+  components: {
+    ArticleMenuAvatar,
+  },
   setup() {
     const show = ref(false); // 是否显示侧边栏菜单
     const buttonChange = ref(false); // 菜单按钮是否改变状态
@@ -60,6 +67,18 @@ export default defineComponent({
       category_count: null,
       friend_chain: [],
       recent_article: [],
+    });
+
+    const avatarData = computed(() => {
+      return {
+        username: menuData.username,
+        nickname: menuData.nickname,
+        avatar: menuData.avatar,
+        signature: menuData.signature,
+        article_count: menuData.article_count,
+        tag_count: menuData.tag_count,
+        category_count: menuData.category_count,
+      };
     });
 
     // dom 渲染完成
@@ -96,6 +115,7 @@ export default defineComponent({
       show,
       showMenu,
       buttonChange,
+      avatarData,
     };
   },
 });
