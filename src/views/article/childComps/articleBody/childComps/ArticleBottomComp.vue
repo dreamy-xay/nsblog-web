@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-09-20 19:56:13
- * @LastEditors: clq
- * @LastEditTime: 2021-09-20 21:04:44
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-24 20:09:58
 -->
 <template>
   <div class="article-bottom-comp">
@@ -34,7 +34,7 @@
           />
         </span>
       </div>
-
+      <article-bottom-sponsor :sponsors="data.sponsors" />
       <div class="btn-container">
         <div
           class="btn"
@@ -88,6 +88,7 @@
 import { defineComponent } from 'vue';
 import BaseTag from '@/components/content/baseTag/BaseTag.vue';
 import ArticleLink from '@/views/article/childComps/ArticleLink.vue';
+import ArticleBottomSponsor from '@/views/article/childComps/articleBody/childComps/ArticleBottomSponsor.vue';
 import styles from '@/assets/style/define.scss';
 /**
  * @description: 文章底部子组件
@@ -99,6 +100,13 @@ export default defineComponent({
   components: {
     BaseTag,
     ArticleLink,
+    ArticleBottomSponsor,
+  },
+  props: {
+    data: {
+      type: Object,
+      required: true,
+    },
   },
   setup() {
     return {

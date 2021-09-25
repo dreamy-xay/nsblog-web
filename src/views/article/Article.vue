@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 16:32:13
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-24 20:55:03
+ * @LastEditTime: 2021-09-24 21:22:42
 -->
 
 <template>
@@ -101,6 +101,7 @@ export default defineComponent({
         articleData.attention = data.attention;
         articleData.last_article = data.last_article;
         articleData.next_article = data.next_article;
+        articleData.sponsors = data.sponsors;
       })
       .catch((error) => {
         console.log(error);
@@ -139,6 +140,7 @@ export default defineComponent({
         attention: articleData.attention,
         collection: articleData.collection,
         evaluation: articleData.evaluation,
+        sponsors: articleData.sponsors,
       };
     });
 
