@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-19 11:26:49
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 20:18:49
+ * @LastEditTime: 2021-09-25 18:48:58
 -->
 <template>
   <div
@@ -86,11 +86,11 @@ export default defineComponent({
     },
     loadingImg: {
       type: String,
-      defalut: '/home/avatarLoading.gif',
+      default: '/home/avatarLoading.gif',
     },
     loadErrorImg: {
       type: String,
-      defalut: '/home/avatarLoadError.png',
+      default: '/home/avatarLoadError.png',
     },
   },
   setup(props, context) {
