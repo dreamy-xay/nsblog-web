@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-09-20 19:56:13
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 20:09:58
+ * @LastEditors: clq
+ * @LastEditTime: 2021-09-25 20:09:36
 -->
 <template>
   <div class="article-bottom-comp">
@@ -13,11 +13,13 @@
         <span class="label">分类 :</span>
         <span class="value">
           <base-tag
+            v-for="(item, index) in data.categories"
+            :key="index"
             :size="22"
             :color="styles.orange0"
             :hover-color="styles.orange1"
-            :style="{borderRadius: '3px', letterSpacing: '1.5px'}"
-            text="测试进阶知识系列 - Python "
+            :style="{borderRadius: '3px', letterSpacing: '1.5px',marginRight: '4px', marginBottom: '4px'}"
+            :text="item.name"
           />
         </span>
       </div>
@@ -26,11 +28,13 @@
         <span class="label">标签 :</span>
         <span class="value">
           <base-tag
+            v-for="(item, index) in data.tags"
+            :key="index"
             :size="22"
             :color="styles.blue0"
             :hover-color="styles.blue1"
-            :style="{borderRadius: '3px', letterSpacing: '1.5px'}"
-            text="python"
+            :style="{borderRadius: '3px', letterSpacing: '1.5px', marginRight: '4px',marginBottom: '4px'}"
+            :text="item.name"
           />
         </span>
       </div>
@@ -39,21 +43,25 @@
         <div
           class="btn"
           role="button"
+          @click="onAttention"
         >关注
         </div>
         <div
           class="btn"
           role="button"
+          @click="onRecommend"
         >推荐
         </div>
         <div
           class="btn"
           role="button"
+          @click="onCollect"
         >收藏
         </div>
         <div
           class="btn"
           role="button"
+          @click="onOppose"
         >反对
         </div>
       </div>
@@ -64,9 +72,9 @@
         <span class="label">上一篇 :</span>
         <span class="value">
           <article-link
-            :href="`/blog/${'dreamy'}`"
-            :target="`/blog/${'dreamy'}`"
-          >python基础
+            :href="`http://localhost:8888/article/${data.last_article.article_id}`"
+            :target="`http://localhost:8888/article/${data.last_article.article_id}`"
+          >{{data.last_article.title}}
           </article-link>
         </span>
       </div>
@@ -74,9 +82,9 @@
         <span class="label">下一篇 :</span>
         <span class="value">
           <article-link
-            :href="`/blog/${'dreamy'}`"
-            :target="`/blog/${'dreamy'}`"
-          >机器学习与深度学习
+            :href="`http://localhost:8888/article/${data.next_article.article_id}`"
+            :target="`http://localhost:8888/article/${data.next_article.article_id}`"
+          >{{data.next_article.title}}
           </article-link>
         </span>
       </div>
@@ -90,8 +98,12 @@ import BaseTag from '@/components/content/baseTag/BaseTag.vue';
 import ArticleLink from '@/views/article/childComps/ArticleLink.vue';
 import ArticleBottomSponsor from '@/views/article/childComps/articleBody/childComps/ArticleBottomSponsor.vue';
 import styles from '@/assets/style/define.scss';
+import { useMessage } from 'naive-ui';
+import { mapGetters } from '@/util/store';
+
 /**
  * @description: 文章底部子组件
+ * @param {Object} data 文章信息
  * @author: clq
  */
 
@@ -109,8 +121,65 @@ export default defineComponent({
     },
   },
   setup() {
+    const msg = useMessage(); // naive-ui mssage
+    const { isLogin } = mapGetters('global', ['isLogin']);
+
+    /**
+     * @description: 判断用户是否登录
+     * @return {Boolean} true:已登录 false:未登录
+     * @author: clq
+     */
+    function isUserLogin() {
+      if (isLogin.value) {
+        console.log('isLogin');
+        return true;
+      } else {
+        msg.error('请先登录', { duration: 2000, closable: true });
+        return false;
+      }
+    }
+    /**
+     * @description: 关注文章
+     * @return {void}
+     * @author: clq
+     */
+    function onAttention() {
+      if (!isUserLogin()) return;
+      console.log('onAttention');
+    }
+    /**
+     * @description: 推荐文章
+     * @return {void}
+     * @author: clq
+     */
+    function onRecommend() {
+      if (!isUserLogin()) return;
+      console.log('onRecommend');
+    }
+    /**
+     * @description: 收藏文章
+     * @return {void}
+     * @author: clq
+     */
+    function onCollect() {
+      if (!isUserLogin()) return;
+      console.log('onCollect');
+    }
+    /**
+     * @description: 反对文章
+     * @return {void}
+     * @author: clq
+     */
+    function onOppose() {
+      if (!isUserLogin()) return;
+      console.log('onOppose');
+    }
     return {
       styles,
+      onAttention,
+      onRecommend,
+      onCollect,
+      onOppose,
     };
   },
 });

@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-20 12:06:41
  * @LastEditors: clq
- * @LastEditTime: 2021-09-25 11:52:58
+ * @LastEditTime: 2021-09-25 19:34:09
 -->
 <template>
   <div class="article-bottom">
@@ -69,10 +69,10 @@
         <div class="avatar">
           <base-avatar
             shape="square"
-            src="999"
+            :src="data.avatar"
             :size="134"
-            :href="`/blog/${'dreamy'}`"
-            :target="`/blog/${'dreamy'}`"
+            :href="`/blog/${data.username}`"
+            :target="`/blog/${data.username}`"
           ></base-avatar>
         </div>
 
@@ -81,9 +81,9 @@
             <div class="item-label">本文作者</div>
             <div class="item-value">
               <article-link
-                :href="`/blog/${'dreamy'}`"
-                :target="`/blog/${'dreamy'}`"
-              >dreamy
+                :href="`/blog/${data.username}`"
+                :target="`/blog/${data.username}`"
+              >{{data.username}}
               </article-link>
             </div>
           </div>
@@ -91,10 +91,10 @@
             <div class="item-label">本文链接</div>
             <div class="item-value">
               <article-link
-                href="https://www.cnblogs.com/poloyy/p/15255670.html"
+                :href="`http://localhost:8888/article/${data.article_id}`"
                 target="_blank"
               >
-                https://www.cnblogs.com/poloyy/p/15255670.html
+                http://localhost:8888/article/{{data.article_id}}
               </article-link>
             </div>
           </div>
@@ -122,7 +122,7 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import ArticleLink from '@/views/article/childComps/ArticleLink.vue';
 import ArticleBottomComp from '@/views/article/childComps/articleBody/childComps/ArticleBottomComp.vue';
@@ -146,7 +146,11 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {
+  setup(props) {
+    onMounted(() => {
+      console.log('ArticleBottomData:');
+      console.log(props.data);
+    });
     return {
       styles,
     };
