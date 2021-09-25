@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: clq
- * @LastEditTime: 2021-09-24 21:08:47
+ * @LastEditTime: 2021-09-25 12:47:37
 -->
 <template>
   <div class="user-article">
@@ -93,7 +93,6 @@ export default defineComponent({
     const isShowLoadMore = ref(true); //是否显示`加载更多`按钮
 
     onMounted(() => {
-      console.log('useName: ' + route.params.username);
       initCategories(username);
       initTags(username);
       initArticles(
@@ -107,24 +106,25 @@ export default defineComponent({
       );
     });
 
+    // 监视排序规则
     watch(
       () => sortType.value,
       (newValue) => {
         limit.value = 10;
         if (newValue === 1) {
-          console.log('发布时间升序');
+          // console.log('发布时间升序');
           releaseTimeSortType.value = 1;
           browsingCountSortType.value = 0;
         } else if (newValue === 2) {
-          console.log('发布时间降序');
+          // console.log('发布时间降序');
           releaseTimeSortType.value = -1;
           browsingCountSortType.value = 0;
         } else if (newValue === 3) {
-          console.log('访问量升序');
+          // console.log('访问量升序');
           releaseTimeSortType.value = 0;
           browsingCountSortType.value = 1;
         } else {
-          console.log('访问量降序');
+          // console.log('访问量降序');
           releaseTimeSortType.value = 0;
           browsingCountSortType.value = -1;
         }
