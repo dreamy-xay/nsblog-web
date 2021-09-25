@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-26 15:11:17
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-23 20:35:40
+ * @LastEditors: Ban
+ * @LastEditTime: 2021-09-25 16:45:40
 -->
 <template>
   <div class="user-center-account-change">
@@ -66,26 +66,6 @@
             </user-center-input>
           </div>
         </div>
-        <div v-else-if="title === '换绑邮箱' || title === '绑定邮箱'">
-          <div>邮箱</div>
-          <user-center-input
-            placeholder="邮箱"
-            v-model="oldData"
-            clearable
-            class="input"
-          >
-          </user-center-input>
-          <div>验证码</div>
-          <user-center-input
-            placeholder="验证码"
-            v-model="newData1"
-            :clearable="true"
-            class="input"
-            style="width: 200px; margin-right: 20px"
-          >
-          </user-center-input>
-          <el-button>发送验证码</el-button>
-        </div>
       </div>
       <template #footer>
         <div class="user-center-account-change-footer">
@@ -105,7 +85,7 @@
 
 <script>
 import { defineComponent, ref } from 'vue';
-import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput';
+import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput.vue';
 import { forgotPasswordChange } from '@/network/api/user';
 import { useMessage } from 'naive-ui';
 import router from '@/router';
@@ -117,7 +97,6 @@ import { clearToken } from '@/network/token';
  * @param {String} title 标题内容 `必传参数`
  * @author: Ban
  */
-
 export default defineComponent({
   name: 'UserCenterAccountChange',
   props: {

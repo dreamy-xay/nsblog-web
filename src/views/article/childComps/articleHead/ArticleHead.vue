@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 17:51:15
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 18:32:20
+ * @LastEditTime: 2021-09-24 19:44:13
 -->
 <template>
   <div class="article-head">
@@ -216,7 +216,6 @@ export default defineComponent({
       transform: scale(1, 1.1);
 
       .info-item {
-        user-select: all;
         height: 100%;
         @include flex(center, center);
         margin-right: 12px;
