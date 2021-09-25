@@ -5,7 +5,11 @@
 			"nickname": "破釜沉舟",
 			"password": "Abcd1234",
 			"email": "dreamy@qq.com",
+<<<<<<< HEAD
 			"token": "6f3480f044ee8f129eba87c85ce8dde7e4232a7e7b0ad9c45117f4573bfbf2b2a4a72e3149ad0409108a86ed4e569cbd79b367f58a3a1630eb84a9728c34d55a",
+=======
+			"token": "e05f2c8f8bebf80b8325057af25e0ef2e59789da5fc56c721aa629a5e152f4339b32184cba16fdd4a355d738a9707e1d69b7fd072ad969898e9a7a4143f7edf1",
+>>>>>>> 0c67bf6da76cb7a3f35153e789b54b0c6c212235
 			"isActive": true,
 			"isSuper": true
 		},
