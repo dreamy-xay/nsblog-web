@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-02 11:13:42
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-11 12:19:15
+ * @LastEditTime: 2021-09-24 19:54:38
  */
 /**
  * 通过图片url 获取图片file对象
@@ -13,7 +13,7 @@
  * @param {(file: File) => void} callback 回调函数 `必传参数`
  * @returns {void}
  */
-export function getImageFileFromUrl(url: string, fileName: string, callback: (file: File) => void) {
+export function getImageFileFromUrl(url: string, fileName: string, callback: (file: File) => void): void {
   const xhr: XMLHttpRequest = new XMLHttpRequest();
   xhr.open('GET', url);
   xhr.setRequestHeader('Accept', 'image/jpeg');

@@ -1,13 +1,13 @@
 /*
- * @Description:学习小组
+ * @Description: 学习小组相关api
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-09-16 10:05:10
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-16 10:09:42
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-24 10:12:49
  */
 
-import { get, del, RequestLifeCycle } from '@/network/request';
+import { get, RequestLifeCycle } from '@/network/request';
 
 /**
  * @description: 获取学习小组

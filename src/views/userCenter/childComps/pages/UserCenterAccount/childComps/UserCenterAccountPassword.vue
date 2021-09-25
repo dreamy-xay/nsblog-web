@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-26 15:11:17
  * @LastEditors: Ban
- * @LastEditTime: 2021-09-24 16:44:55
+ * @LastEditTime: 2021-09-25 15:11:51
 -->
 <template>
   <div class="user-center-account-change">
@@ -19,7 +19,7 @@
       :show="showModal"
       class="user-center-account-change-modal"
       preset="card"
-      style="width : 400px"
+      :style="{width: '400px'}"
       :closable="true"
       @close="showModal = false"
     >
@@ -37,8 +37,7 @@
               :verify="verifyOldPassword"
               :maxlength="30"
               @enter="passwordEnter"
-            >
-            </user-center-input>
+            />
           </div>
           <div>新密码
             <user-center-input

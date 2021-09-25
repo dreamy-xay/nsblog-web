@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-20 20:28:35
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-21 17:16:27
+ * @LastEditTime: 2021-09-24 14:31:57
 -->
 <template>
   <div
@@ -50,7 +50,7 @@ export default defineComponent({
 
     // dom 渲染完成
     onMounted(() => {
-      buttonChange.value = articlePage.valuescrollTop > height;
+      buttonChange.value = articlePage.value.scrollTop > height;
       articlePage.value.addEventListener('scroll', (e) => {
         buttonChange.value = e.target.scrollTop > height;
       });

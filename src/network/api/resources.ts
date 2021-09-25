@@ -1,12 +1,12 @@
 /*
- * @Description: 获取共享资源api
+ * @Description: 资源相关api
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-09-17 11:13:57
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-17 20:40:51
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-24 10:13:35
  */
-import { get, del, RequestLifeCycle } from '@/network/request';
+import { get, RequestLifeCycle } from '@/network/request';
 
 /**
  * @description: 获取共享资源记录信息
