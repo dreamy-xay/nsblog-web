@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-20 20:28:35
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-25 20:13:35
+ * @LastEditTime: 2021-09-25 20:17:17
 -->
 <template>
   <div
@@ -50,6 +50,7 @@ import ArticleMenuAvatar from '@/views/article/childComps/articleMenu/childComps
 import ArticleMenuNavigation from '@/views/article/childComps/articleMenu/childComps/ArticleMenuNavigation.vue';
 import ArticleMenuPublication from '@/views/article/childComps/articleMenu/childComps/ArticleMenuPublication.vue';
 import ArticleMenuFriend from '@/views/article/childComps/articleMenu/childComps/ArticleMenuFriend.vue';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description: 基础blog菜单
@@ -65,6 +66,7 @@ export default defineComponent({
     ArticleMenuFriend,
   },
   setup() {
+    const msg = useMessage(); // naive-ui
     const show = ref(false); // 是否显示侧边栏菜单
     const buttonChange = ref(false); // 菜单按钮是否改变状态
     const articlePage = inject('articlePage'); // 获取主页面 ref (dom)
@@ -114,18 +116,23 @@ export default defineComponent({
     }
 
     // 获取menu数据
-    getArticlesUsers(tokenInfo.value.username).then((data) => {
-      console.log(data);
-      menuData.username = data.username;
-      menuData.nickname = data.nickname;
-      menuData.avatar = data.avatar;
-      menuData.signature = data.signature;
-      menuData.tag_count = data.tag_count;
-      menuData.article_count = data.article_count;
-      menuData.category_count = data.category_count;
-      menuData.friend_chain.splice(0, 0, ...data.friend_chain);
-      menuData.recent_article.splice(0, 0, ...data.recent_article);
-    });
+    getArticlesUsers(tokenInfo.value.username)
+      .then((data) => {
+        console.log(data);
+        menuData.username = data.username;
+        menuData.nickname = data.nickname;
+        menuData.avatar = data.avatar;
+        menuData.signature = data.signature;
+        menuData.tag_count = data.tag_count;
+        menuData.article_count = data.article_count;
+        menuData.category_count = data.category_count;
+        menuData.friend_chain.splice(0, 0, ...data.friend_chain);
+        menuData.recent_article.splice(0, 0, ...data.recent_article);
+      })
+      .catch((error) => {
+        console.log(error);
+        msg.error('获取目录失败', { duration: 2000, closable: true });
+      });
 
     /**
      * @description: 点击关闭抽屉
