@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-09-24 20:40:42
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-25 19:58:51
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-26 12:23:02
 -->
 <template>
   <div class="article-menu-avatar">
@@ -38,7 +38,7 @@
     >
       <div
         class="article"
-        @click="clickAvatar('/blog/'+data.username)"
+        @click="clickAvatar('/blog/' + data.username)"
       >
         <div class="number">{{data.article_count}}</div>
         <div class="text">文章</div>
@@ -126,8 +126,8 @@ export default defineComponent({
       margin-top: 8px;
       background-color: $grey-0;
       border-radius: 52px;
-      box-shadow: 0 0 12px rgba(0, 0, 0, 0.16);
-      transition: 1s;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+      transition: 0.8s;
 
       &:hover {
         transform: rotate(360deg);
@@ -138,7 +138,7 @@ export default defineComponent({
       position: absolute;
       height: 16px;
       line-height: 16px;
-      color: $grey-7;
+      color: $grey-5;
       right: 0;
       transition: 0.25s;
 
@@ -155,7 +155,7 @@ export default defineComponent({
   .article-menu-avatar-nickname {
     margin-top: 12px;
     font-family: 'Lucida Handwriting', Cursive;
-    font-size: 16px;
+    font-size: 18px;
     height: 20px;
     line-height: 20px;
     color: $grey-7;

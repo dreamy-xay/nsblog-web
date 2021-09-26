@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-09-23 19:22:16
- * @LastEditors: clq
- * @LastEditTime: 2021-09-25 18:29:02
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-26 16:08:02
 -->
 <template>
   <div class="article-footer-comment-comp">
@@ -12,7 +12,7 @@
       <div class="left">
         <base-avatar
           :size="32"
-          src="http://123"
+          src="123"
         />
       </div>
       <div class="right">

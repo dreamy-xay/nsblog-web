@@ -3,8 +3,13 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:42
+<<<<<<< HEAD
  * @LastEditors: Ban
  * @LastEditTime: 2021-09-25 15:23:15
+=======
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-25 20:41:48
+>>>>>>> 7326328d7c57ee3d3c39bb9385b1b190e824629c
 -->
 <template>
   <div class="user-center-account">
