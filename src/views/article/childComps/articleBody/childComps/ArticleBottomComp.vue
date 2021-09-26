@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-20 19:56:13
  * @LastEditors: clq
- * @LastEditTime: 2021-09-25 20:09:36
+ * @LastEditTime: 2021-09-26 17:02:22
 -->
 <template>
   <div class="article-bottom-comp">
@@ -38,31 +38,37 @@
           />
         </span>
       </div>
+
       <article-bottom-sponsor :sponsors="data.sponsors" />
+
       <div class="btn-container">
         <div
           class="btn"
           role="button"
           @click="onAttention"
-        >关注
+        >
+          {{data.attention === 1 ? "已关注" : "关注"}}
         </div>
         <div
           class="btn"
           role="button"
           @click="onRecommend"
-        >推荐
+        >
+          {{data.evaluation === 1 ? "已推荐" : "推荐"}}
         </div>
         <div
           class="btn"
           role="button"
           @click="onCollect"
-        >收藏
+        >
+          {{data.collection === 1 ? "已收藏" : "收藏"}}
         </div>
         <div
           class="btn"
           role="button"
           @click="onOppose"
-        >反对
+        >
+          {{data.evaluation === 0 ? "已反对" : "反对"}}
         </div>
       </div>
     </div>
@@ -72,8 +78,8 @@
         <span class="label">上一篇 :</span>
         <span class="value">
           <article-link
-            :href="`http://localhost:8888/article/${data.last_article.article_id}`"
-            :target="`http://localhost:8888/article/${data.last_article.article_id}`"
+            :href="`/article/${data.last_article.article_id}`"
+            :target="`/article/${data.last_article.article_id}`"
           >{{data.last_article.title}}
           </article-link>
         </span>
@@ -82,8 +88,8 @@
         <span class="label">下一篇 :</span>
         <span class="value">
           <article-link
-            :href="`http://localhost:8888/article/${data.next_article.article_id}`"
-            :target="`http://localhost:8888/article/${data.next_article.article_id}`"
+            :href="`/article/${data.next_article.article_id}`"
+            :target="`/article/${data.next_article.article_id}`"
           >{{data.next_article.title}}
           </article-link>
         </span>
@@ -138,6 +144,7 @@ export default defineComponent({
         return false;
       }
     }
+
     /**
      * @description: 关注文章
      * @return {void}
@@ -147,6 +154,7 @@ export default defineComponent({
       if (!isUserLogin()) return;
       console.log('onAttention');
     }
+
     /**
      * @description: 推荐文章
      * @return {void}
@@ -156,6 +164,7 @@ export default defineComponent({
       if (!isUserLogin()) return;
       console.log('onRecommend');
     }
+
     /**
      * @description: 收藏文章
      * @return {void}
@@ -165,6 +174,7 @@ export default defineComponent({
       if (!isUserLogin()) return;
       console.log('onCollect');
     }
+
     /**
      * @description: 反对文章
      * @return {void}
@@ -174,6 +184,7 @@ export default defineComponent({
       if (!isUserLogin()) return;
       console.log('onOppose');
     }
+
     return {
       styles,
       onAttention,
