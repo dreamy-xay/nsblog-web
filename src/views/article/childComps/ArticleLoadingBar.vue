@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-20 16:56:09
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-25 19:20:56
+ * @LastEditTime: 2021-09-26 12:16:15
 -->
 <template>
   <div
@@ -31,11 +31,12 @@ export default defineComponent({
     // dom渲染完成
     onMounted(() => {
       // 初始化加载条
-      width.value = (articlePage.value.scrollTop / articlePage.value.scrollHeight) * 100 + '%';
+      width.value =
+        (articlePage.value.scrollTop / (articlePage.value.scrollHeight - articlePage.value.offsetHeight)) * 100 + '%';
 
       // 更新加载条
       articlePage.value.addEventListener('scroll', (e) => {
-        width.value = ((e.target.scrollTop + articlePage.value.offsetHeight) / e.target.scrollHeight) * 100 + '%';
+        width.value = (e.target.scrollTop / (e.target.scrollHeight - e.target.offsetHeight)) * 100 + '%';
       });
     });
 

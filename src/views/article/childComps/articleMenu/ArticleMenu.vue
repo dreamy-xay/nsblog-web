@@ -3,21 +3,21 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-20 20:28:35
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-25 20:17:17
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-26 12:36:42
 -->
 <template>
   <div
-    class="base-blog-menu"
-    :class="{'base-blog-menu-change': buttonChange}"
+    class="article-menu"
+    :class="{'article-menu-change': buttonChange}"
     role="button"
     @click="showMenu"
   >
-    <div class="base-blog-menu-icon">
+    <div class="article-menu-icon">
       <i class="iconfont blog-menu"></i>
     </div>
     <div
-      class="base-blog-menu-text"
+      class="article-menu-text"
       v-show="!buttonChange"
     >
       MENU
@@ -26,9 +26,10 @@
       v-model:show="show"
       :width="320"
       placement="left"
+      class="article-menu-drawer"
     >
-      <el-scrollbar>
-        <div class="base-blog-menu-body">
+      <el-scrollbar class="article-menu-drawer-scrollbar">
+        <div class="article-menu-body">
           <article-menu-avatar
             :data="avatarData"
             @closeMenu="close"
@@ -156,7 +157,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.base-blog-menu {
+.article-menu {
   position: fixed;
   top: 18px;
   left: 22px;
@@ -180,7 +181,7 @@ export default defineComponent({
     opacity: 0.8;
   }
 
-  .base-blog-menu-icon {
+  .article-menu-icon {
     width: 12px;
     height: 12px;
     margin-right: 8px;
@@ -193,12 +194,12 @@ export default defineComponent({
     }
   }
 
-  &.base-blog-menu-change {
+  &.article-menu-change {
     width: 30px;
     background-color: $grey-0;
     box-shadow: $shadow-0;
 
-    .base-blog-menu-icon {
+    .article-menu-icon {
       margin-right: 0;
 
       .iconfont {
@@ -217,7 +218,15 @@ export default defineComponent({
   }
 }
 
-.base-blog-menu-body {
-  padding: 24px;
+.article-menu-drawer {
+  .article-menu-drawer-scrollbar {
+    :deep(.el-scrollbar__thumb) {
+      background-color: $grey-7;
+    }
+  }
+
+  .article-menu-body {
+    padding: 24px;
+  }
 }
 </style>
