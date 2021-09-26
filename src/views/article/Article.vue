@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 16:32:13
- * @LastEditors: clq
- * @LastEditTime: 2021-09-25 20:31:14
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-26 12:42:16
 -->
 
 <template>
@@ -13,7 +13,7 @@
     ref="articlePage"
   >
     <base-background :mask="false" />
-    <article-menu />
+    <article-menu :username="articleHeadData.username" />
     <article-loading-bar />
     <article-head :data="articleHeadData" />
     <article-body :data="articleBodyData" />
