@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-25 19:14:48
+ * @LastEditTime: 2021-09-26 12:55:45
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -74,7 +74,8 @@ export default function(baseUrl: string, app: Application) {
   // 文章侧边栏菜单，获取详情
   app.get(baseUrl + '/articles/users', (req: Request, res: Response) => {
     const { username } = req.query;
-    if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
+    const user: Record<string, unknown> = select('users').findOne({ username });
+    if (!user) return res.status(410).json({ error: 'User name error' });
     console.log(`--------${username} getArticlesUsersInfo... `);
 
     function getRandom(limit: number, isRecent: boolean = true): Record<string, unknown>[] {
@@ -93,11 +94,10 @@ export default function(baseUrl: string, app: Application) {
       return ans;
     }
 
-    const user: RandomUser = randomUsers(username as string).random();
     const ans: Record<string, unknown> = {
       username: user.username,
       nickname: user.nickname,
-      avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
+      avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username as string),
       signature: (Random.integer(0, 1) ? Random.cparagraph(1, 1) : Random.paragraph(1, 1)).slice(0, 128),
       article_count: Random.integer(0, 100),
       category_count: Random.integer(0, 40),
