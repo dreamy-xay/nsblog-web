@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-20 20:28:35
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-26 12:36:42
+ * @LastEditTime: 2021-09-26 12:52:13
 -->
 <template>
   <div
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { computed, defineComponent, inject, onMounted, reactive, ref } from 'vue';
+import { computed, defineComponent, inject, onMounted, reactive, ref, watch } from 'vue';
 import { getArticlesUsers } from '@/network/api/articles';
 import { mapState } from '@/util/store';
 import ArticleMenuAvatar from '@/views/article/childComps/articleMenu/childComps/ArticleMenuAvatar.vue';
@@ -66,13 +66,18 @@ export default defineComponent({
     ArticleMenuPublication,
     ArticleMenuFriend,
   },
-  setup() {
+  props: {
+    username: {
+      type: String,
+      required: true,
+    },
+  },
+  setup(props) {
     const msg = useMessage(); // naive-ui
     const show = ref(false); // 是否显示侧边栏菜单
     const buttonChange = ref(false); // 菜单按钮是否改变状态
     const articlePage = inject('articlePage'); // 获取主页面 ref (dom)
     const height = 288 - 30; // 标题图片高度
-    const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取用户名
     const menuData = reactive({
       // 目录数据
       username: null,
@@ -116,24 +121,42 @@ export default defineComponent({
       show.value = true;
     }
 
+    /**
+     * @description: 获取菜单数据
+     * @param {string} username 用户名 `必传参数`
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function getMenuData(username) {
+      if (username)
+        getArticlesUsers(username)
+          .then((data) => {
+            menuData.username = data.username;
+            menuData.nickname = data.nickname;
+            menuData.avatar = data.avatar;
+            menuData.signature = data.signature;
+            menuData.tag_count = data.tag_count;
+            menuData.article_count = data.article_count;
+            menuData.category_count = data.category_count;
+            menuData.friend_chain.splice(0, 0, ...data.friend_chain);
+            menuData.recent_article.splice(0, 0, ...data.recent_article);
+          })
+          .catch((error) => {
+            console.log(error);
+            msg.error('获取菜单目录失败', { duration: 2000, closable: true });
+          });
+    }
+
     // 获取menu数据
-    getArticlesUsers(tokenInfo.value.username)
-      .then((data) => {
-        console.log(data);
-        menuData.username = data.username;
-        menuData.nickname = data.nickname;
-        menuData.avatar = data.avatar;
-        menuData.signature = data.signature;
-        menuData.tag_count = data.tag_count;
-        menuData.article_count = data.article_count;
-        menuData.category_count = data.category_count;
-        menuData.friend_chain.splice(0, 0, ...data.friend_chain);
-        menuData.recent_article.splice(0, 0, ...data.recent_article);
-      })
-      .catch((error) => {
-        console.log(error);
-        msg.error('获取目录失败', { duration: 2000, closable: true });
-      });
+    getMenuData(props.username);
+
+    // 监听更新获取
+    watch(
+      () => props.username,
+      (username) => {
+        getMenuData(username);
+      }
+    );
 
     /**
      * @description: 点击关闭抽屉
