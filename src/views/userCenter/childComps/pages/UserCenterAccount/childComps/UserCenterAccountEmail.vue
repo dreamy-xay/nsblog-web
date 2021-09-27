@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-09-14 19:08:58
  * @LastEditors: Ban
- * @LastEditTime: 2021-09-27 15:01:11
+ * @LastEditTime: 2021-09-27 15:10:17
 -->
 <template>
   <div class="user-center-account-email">
@@ -21,7 +21,7 @@
       preset="card"
       style="width : 400px"
       :closable="true"
-      @close="showModal = false"
+      @close="close"
     >
       <div class="user-center-account-email-inner">
         <div>邮箱
