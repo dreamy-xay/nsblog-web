@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-23 19:22:16
  * @LastEditors: clq
- * @LastEditTime: 2021-09-27 19:35:29
+ * @LastEditTime: 2021-09-27 20:25:53
 -->
 <template>
   <div class="article-footer-comment-item">
@@ -18,9 +18,9 @@
       <div class="right">
         <div class="top">
           <span class="username">{{comment.username}} <span
-              v-if="replyUsername"
+              v-if="comment.replyUsername"
               class="reply"
-            >回复</span> {{replyUsername}}</span>
+            >回复</span> {{comment.replyUsername}}</span>
         </div>
 
         <v-md-preview
@@ -89,8 +89,9 @@ import { mapGetters } from '@/util/store';
 
 /**
  * @description: 用户评论子组件
+ * @param {Object} ArticleData 文章信息
  * @param {Object} comment 用户评论
- * @param {String} replyUsername 被回复用户名
+ * @param {String} replyCommentId 上层评论id
  * @author: clq
  */
 
@@ -98,11 +99,15 @@ export default defineComponent({
   name: 'articleFooterCommentItem',
   components: { BaseAvatar, ArticleFooterEdit },
   props: {
+    ArticleData: {
+      type: Object,
+      default: null,
+    },
     comment: {
       type: Object,
       default: null,
     },
-    replyUsername: {
+    replyCommentId: {
       type: String,
       default: null,
     },

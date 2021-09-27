@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-23 17:26:29
  * @LastEditors: clq
- * @LastEditTime: 2021-09-27 17:24:19
+ * @LastEditTime: 2021-09-27 20:22:28
 -->
 <template>
   <div class="article-footer-comment">
@@ -16,7 +16,7 @@
         v-for="(item,index) in comments.child_comments"
         :key="index"
         :comment="item"
-        :replyUsername="comments.username"
+        :replyCommentId="comments.comment_id"
       />
     </div>
   </div>
@@ -28,6 +28,7 @@ import ArticleFooterCommentItem from '@/views/article/childComps/articleFooter/c
 
 /**
  * @description: 用户评论组件
+ * @param {Object} data 文章信息
  * @param {Object} comments 用户评论
  * @author: clq
  */
@@ -36,6 +37,10 @@ export default defineComponent({
   name: 'articleFooterComment',
   components: { ArticleFooterCommentItem },
   props: {
+    data: {
+      type: Object,
+      default: null,
+    },
     comments: {
       type: Object,
       default: null,
