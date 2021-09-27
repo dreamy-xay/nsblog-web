@@ -4,35 +4,46 @@
  * @Autor: clq
  * @Date: 2021-09-20 17:53:48
  * @LastEditors: clq
- * @LastEditTime: 2021-09-25 16:15:49
+ * @LastEditTime: 2021-09-27 17:59:24
 -->
 <template>
   <div class="article-footer">
     <div class="article-footer-title">
       发表评论
     </div>
-    <article-footer-edit />
-    <!-- <article-footer-comment
+    <article-footer-edit @commit="commitComment" />
+    <article-footer-comment
       v-for="(item,index) in comments"
       :key="index"
-    /> -->
-    <article-footer-comment />
+      :comments="item"
+    />
   </div>
 </template>
 
 <script>
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, onMounted, reactive, ref } from 'vue';
 import ArticleFooterEdit from '@/views/article/childComps/articleFooter/childComps/ArticleFooterEdit.vue';
 import ArticleFooterComment from '@/views/article/childComps/articleFooter/childComps/ArticleFooterComment.vue';
+import { getArticleComments } from '@/network/api/articles';
+import { useMessage } from 'naive-ui';
+
 /**
  * @description: 文章底部评论区
+ * @param {Object} data 文章相关数据
  * @author: clq
  */
 
 export default defineComponent({
   components: { ArticleFooterEdit, ArticleFooterComment },
   name: 'articleFooter',
-  setup() {
+  props: {
+    data: {
+      type: Object,
+      default: null,
+    },
+  },
+  setup(props) {
+    const msg = useMessage(); //naive-ui message
     let comments = reactive([
       {
         comment_id: 123,
@@ -92,8 +103,46 @@ export default defineComponent({
         ],
       },
     ]);
+
+    onMounted(() => {
+      getComments(props.data.article_id);
+    });
+
+    /**
+     * @description: 获取文章评论
+     * @param {*} arricleId 文章id
+     * @param {*} commentId 评论id
+     * @param {*} offset 起始位置
+     * @param {*} limit 数量限制
+     * @return {void}
+     * @author: clq
+     */
+    function getComments(arricleId, commentId = '', offset = 0, limit = 5) {
+      getArticleComments(arricleId, commentId, offset, limit)
+        .then((res) => {
+          console.log('articleFooter');
+          console.log(res);
+          comments.splice(0, comments.length, ...res.comments);
+        })
+        .catch((err) => {
+          console.log(err);
+          msg.error('获取评论失败', { duration: 2000, closable: true });
+        });
+    }
+
+    /**
+     * @description: 提交评论
+     * @param {String} comment 评论
+     * @return {void}
+     * @author: clq
+     */
+    function commitComment(comment) {
+      console.log('ArticleFooter: ' + comment);
+    }
+
     return {
       comments,
+      commitComment,
     };
   },
 });

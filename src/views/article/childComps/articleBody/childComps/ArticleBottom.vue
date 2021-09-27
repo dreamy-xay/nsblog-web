@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-20 12:06:41
  * @LastEditors: clq
- * @LastEditTime: 2021-09-26 16:45:08
+ * @LastEditTime: 2021-09-27 19:05:20
 -->
 <template>
   <div class="article-bottom">
@@ -91,7 +91,7 @@
             <div class="item-label">本文链接</div>
             <div class="item-value">
               <article-link
-                :href="`http://localhost:8888/article/${data.article_id}`"
+                :href="`/article/${data.article_id}`"
                 target="_blank"
               >
                 http://localhost:8888/article/{{data.article_id}}
@@ -148,10 +148,10 @@ export default defineComponent({
     },
   },
   setup(props) {
-    onMounted(() => {
-      console.log('ArticleBottomData:');
-      console.log(props.data);
-    });
+    // onMounted(() => {
+    //   console.log('ArticleBottomData:');
+    //   console.log(props.data);
+    // });
     return {
       styles,
     };
