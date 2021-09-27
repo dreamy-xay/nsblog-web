@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-27 11:55:25
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-27 12:42:41
+ * @LastEditTime: 2021-09-27 18:09:44
 -->
 <template>
   <div
@@ -119,6 +119,8 @@ export default defineComponent({
 .base-image {
   overflow: hidden;
   user-select: none;
+  width: 100%;
+  height: 100%;
   position: relative;
   background-color: transparent;
 
