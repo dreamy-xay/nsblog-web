@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-27 19:34:00
+ * @LastEditTime: 2021-09-27 20:07:42
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -144,6 +144,7 @@ export default function(baseUrl: string, app: Application) {
               username: user.username,
               avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
               time: Random.time(),
+              reply_username: RUsers.random().username,
               content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
               support_count: Random.integer(0, 9999),
               oppose_count: Random.integer(0, 9999),
@@ -160,7 +161,6 @@ export default function(baseUrl: string, app: Application) {
         ans.push({
           comment_id: Random.id(),
           username: user.username,
-          reply_username: RUsers.random().username,
           avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
           time: Random.time(),
           content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
@@ -175,6 +175,17 @@ export default function(baseUrl: string, app: Application) {
     }
 
     return res.json({ comments: getRandom(int(offset) >= 25 ? 0 : Math.min(int(limit), 25 - int(offset))) });
+  });
+
+  // 获取文章评论
+  app.post(baseUrl + '/articles/comments', (req: Request, res: Response) => {
+    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
+    const username: string = getToken(req.headers).username;
+    const { article_id, content, parent_id, reply_username } = req.body;
+    console.log(
+      `--------${username} articleComments:   article_id=>${article_id}  content=>${content}  parent_id=>${parent_id}  reply_username=>${reply_username}`
+    );
+    return res.send();
   });
 
   // 修改文章评论状态，推荐反对还是不操作
