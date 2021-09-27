@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-26 15:11:17
  * @LastEditors: Ban
- * @LastEditTime: 2021-09-25 16:45:40
+ * @LastEditTime: 2021-09-27 14:49:27
 -->
 <template>
   <div class="user-center-account-change">
@@ -36,7 +36,7 @@
               type="password"
               :verify="verifyOldPassword"
               :maxlength="30"
-              @enter="passwordEnter"
+              @enter="oldPasswordEnter"
             />
           </div>
           <div>新密码
@@ -121,9 +121,20 @@ export default defineComponent({
     const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
 
     /**
-     * @description: 账号输入框按下回车键执行函数
+     * @description: 旧密码输入框按下回车键执行函数
      * @return {void}
-     * @author: dreamy-xay
+     * @author: Ban
+     */
+    function oldPasswordEnter() {
+      if (oldPassword.value === '') oldPassword.value.userCenterInput.focus();
+      else if (password.value === '') passwordInput.value.userCenterInput.focus();
+      else submit();
+    }
+
+    /**
+     * @description: 新密码输入框按下回车键执行函数
+     * @return {void}
+     * @author: Ban
      */
     function passwordEnter() {
       if (password.value === '') password.value.userCenterInput.focus();
@@ -232,6 +243,7 @@ export default defineComponent({
       verifyConfirmedPassword,
       passwordEnter,
       closeModal,
+      oldPasswordEnter,
     };
   },
 });
