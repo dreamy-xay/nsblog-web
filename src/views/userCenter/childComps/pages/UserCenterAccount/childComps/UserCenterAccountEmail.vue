@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-09-14 19:08:58
  * @LastEditors: Ban
- * @LastEditTime: 2021-09-25 16:44:42
+ * @LastEditTime: 2021-09-25 17:12:31
 -->
 <template>
   <div class="user-center-account-email">
@@ -28,6 +28,7 @@
           <user-center-input
             placeholder="邮箱"
             :clearable="true"
+            ref="mailbox"
           >
           </user-center-input>
         </div>
