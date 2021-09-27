@@ -4,14 +4,14 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-17 15:09:41
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 18:10:18
+ * @LastEditTime: 2021-09-25 20:45:44
 -->
 <template>
   <div class="article-content">
     <div
       class="article-content-toc"
       :class="{'article-content-toc-show': tocShow}"
-      :style="{maxHeight: showBackTop ? 'calc(100% - 46px)' : 'calc(100% - 330px)', top: tocTop + 'px'}"
+      :style="{height: articleTocHeight, top: tocTop + 'px'}"
       v-if="titles.length"
     >
       <div class="toc-head">
@@ -30,7 +30,7 @@
             :key="index"
             @click="anchorClick(anchor.offset)"
           >
-            <div :style="{ marginLeft: `${anchor.indent * 22}px` }">
+            <div :style="{marginLeft: `${anchor.indent * 22}px`}">
               {{anchor.title}}
             </div>
           </div>
@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import { computed, defineComponent, inject, watch, reactive, ref, onMounted } from 'vue';
+import { computed, defineComponent, inject, watch, reactive, ref, onMounted, nextTick } from 'vue';
 import { binary_bound } from '@/util/algorithm';
 
 /**
@@ -99,6 +99,22 @@ export default defineComponent({
     const activeIndex = ref(0); // 菜单激活项
     const articlePage = inject('articlePage'); // 获取主页面 ref (dom)
 
+    // 计算 toc 高度
+    const articleTocHeight = computed(() => {
+      const height = document.body
+        ? showBackTop.value
+          ? document.body.offsetHeight - 46
+          : document.body.offsetHeight - 330
+        : 0;
+      // toc高度变化
+      return (
+        Math.min(
+          scrollbar.value ? scrollbar.value.$el.querySelector('.el-scrollbar__view').offsetHeight + 60 : 0,
+          height
+        ) + 'px'
+      );
+    });
+
     /**
      * @description: 更新标题栏
      * @return {void}
@@ -107,24 +123,26 @@ export default defineComponent({
     function updateTitle() {
       if (!preview.value) return;
 
-      // 锚点菜单
-      const anchors = preview.value.$el.querySelectorAll('h2,h3,h4');
-      const aTitles = Array.from(anchors).filter((title) => !!title.innerText.trim());
+      nextTick(() => {
+        // 锚点菜单
+        const anchors = preview.value.$el.querySelectorAll('h2,h3,h4');
+        const aTitles = Array.from(anchors).filter((title) => !!title.innerText.trim());
 
-      if (aTitles.length) {
-        const hTags = Array.from(new Set(aTitles.map((title) => title.tagName))).sort();
-        titles.splice(
-          0,
-          aTitles.length,
-          ...aTitles.map((el) => {
-            return {
-              title: el.innerText,
-              offset: preview.value.getOffsetTop(el, articlePage.value),
-              indent: hTags.indexOf(el.tagName),
-            };
-          })
-        );
-      }
+        if (aTitles.length) {
+          const hTags = Array.from(new Set(aTitles.map((title) => title.tagName))).sort();
+          titles.splice(
+            0,
+            aTitles.length,
+            ...aTitles.map((el) => {
+              return {
+                title: el.innerText,
+                offset: preview.value.getOffsetTop(el, articlePage.value),
+                indent: hTags.indexOf(el.tagName),
+              };
+            })
+          );
+        }
+      });
     }
 
     // watch content
@@ -196,11 +214,11 @@ export default defineComponent({
       scrollbar,
       titles,
       tocTop,
-      showBackTop,
       activeIndex,
       anchorClick,
       tocShow,
       menuList,
+      articleTocHeight,
     };
   },
 });
@@ -212,7 +230,6 @@ export default defineComponent({
 
   .article-content-toc {
     width: 260px;
-    height: 100%;
     overflow: hidden;
     position: fixed;
     left: calc(50% + 460px);

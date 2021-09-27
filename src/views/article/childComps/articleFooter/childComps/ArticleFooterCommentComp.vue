@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-09-23 19:22:16
- * @LastEditors: clq
- * @LastEditTime: 2021-09-24 13:54:21
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-26 16:08:02
 -->
 <template>
   <div class="article-footer-comment-comp">
@@ -12,19 +12,17 @@
       <div class="left">
         <base-avatar
           :size="32"
-          :src="123"
+          src="123"
         />
       </div>
-
       <div class="right">
         <div class="top">
           <span class="username">FLY <span class="reply">回复</span> 海</span>
-          <!-- <span class="comment">正如前面所说，大家最普遍的理解就是当我们遇到某个页面打开很慢的时候，会想到引入缓存，这样页面打开就快了。其实快和慢是相对的，从技术角度来说，缓存之所以快是因为缓存是基</span> -->
-          <v-md-preview
-            text="正如前面所说，大家最普遍的理解就是当我们遇到某个页面打开很慢的时候，会想到引入缓存，这样页面打开就快了。其实快和慢是相对的，从技术角度来说，缓存之所以快是因为缓存是基"
-            class="comment"
-          ></v-md-preview>
         </div>
+        <v-md-preview
+          text="正如前面所说，大家最普遍的理解就是当我们遇到某个页面打开很慢的时候，会想到引入缓存，这样页面打开就快了。其实快和慢是相对的，从技术角度来说，缓存之所以快是因为缓存是基"
+          class="comment"
+        ></v-md-preview>
         <div class="middle">
           <span class="time">2021-7-27 10:45</span>
           <span
@@ -77,12 +75,19 @@ import ArticleFooterEdit from '@/views/article/childComps/articleFooter/childCom
 
 /**
  * @description: 用户评论子组件
+ * @param {Object} comment 用户评论
  * @author: clq
  */
 
 export default defineComponent({
   name: 'articleFooterCommentComp',
   components: { BaseAvatar, ArticleFooterEdit },
+  props: {
+    comment: {
+      type: Object,
+      default: null,
+    },
+  },
   setup() {
     let showEdit = ref(false);
 
@@ -103,8 +108,6 @@ export default defineComponent({
   width: 100%;
   padding-top: 12px;
   border-bottom: 1px solid #ccc;
-  // padding: 0 12px;
-  // padding-bottom: 28px;
 
   .article-footer-comment-comp-content {
     @include flex(flex-start, initial, row);
@@ -117,15 +120,12 @@ export default defineComponent({
       @include flex(initial, initial, column);
 
       .top {
-        // height: 19px;
+        height: 19px;
         overflow: hidden;
-        margin-bottom: 8px;
         width: 100%;
-        // @include flex(initial, center, row);
 
         .username {
-          margin-right: 12px;
-          height: 19px;
+          line-height: 19px;
           color: #8c8c8c;
 
           .reply {
@@ -133,14 +133,6 @@ export default defineComponent({
             line-height: 19px;
             color: #bfbfbf;
           }
-        }
-
-        .comment {
-          // padding-bottom: 1px;
-          // line-height: 19px;
-          // width: 661px;
-          // overflow: hidden;
-          color: #bfbfbf;
         }
       }
 
@@ -168,10 +160,10 @@ export default defineComponent({
 
       .bottom {
         width: 100%;
+        height: 19px;
         margin-bottom: 12px;
         font-size: 14px;
         color: #bfbfbf;
-        height: 19px;
         @include flex(center, flex-end, row);
 
         .bottom-button {
@@ -198,6 +190,23 @@ export default defineComponent({
           &:last-child div {
             transform: rotateZ(180deg);
           }
+        }
+      }
+    }
+  }
+}
+</style>
+
+<style lang="scss">
+.article-footer-comment-comp {
+  .right {
+    .comment {
+      color: #bfbfbf;
+      .github-markdown-body {
+        padding: 0px !important;
+
+        & > p {
+          margin-bottom: 0px !important;
         }
       }
     }
