@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 16:32:13
  * @LastEditors: clq
- * @LastEditTime: 2021-09-26 17:03:42
+ * @LastEditTime: 2021-09-26 20:49:31
 -->
 
 <template>
@@ -17,7 +17,7 @@
     <article-loading-bar />
     <article-head :data="articleHeadData" />
     <article-body :data="articleBodyData" />
-    <article-footer />
+    <article-footer :data="articleFooterData" />
   </div>
 </template>
 
@@ -30,7 +30,10 @@ import ArticleHead from '@/views/article/childComps/articleHead/ArticleHead.vue'
 import ArticleBody from '@/views/article/childComps/articleBody/ArticleBody.vue';
 import ArticleFooter from './childComps/articleFooter/ArticleFooter.vue';
 import { getArticleInfo } from '@/network/api/articles';
+import { addAttentions, deleteAttentions, modifyArticleEvaluation } from '@/network/api/attentions';
 import { useRoute } from 'vue-router';
+import events from '@/events';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description:
@@ -48,6 +51,7 @@ export default defineComponent({
     ArticleFooter,
   },
   setup() {
+    const msg = useMessage(); // naive-ui message
     const articlePage = ref(null); // article page ref
 
     // 向子组件传递
@@ -59,7 +63,7 @@ export default defineComponent({
       title: '',
       username: '',
       nickname: '',
-      avatar: null,
+      avatar: '',
       release_time: null,
       page_view: 0,
       comment_count: 0,
@@ -68,9 +72,9 @@ export default defineComponent({
       tags: [],
       content: '',
       recommend_count: 0,
-      evaluation: undefined,
-      collection: undefined,
-      attention: undefined,
+      evaluation: undefined, //0:反对 1:推荐 2:不反对,不推荐
+      collection: undefined, //0:未收藏 1:已收藏
+      attention: undefined, //0:未关注 1:已关注
       last_article: {
         article_id: null,
         title: '',
@@ -146,10 +150,47 @@ export default defineComponent({
       };
     });
 
+    // 计算 footer data
+    const articleFooterData = computed(() => {
+      return {
+        article_id: articleId,
+        username: articleData.username,
+      };
+    });
+
+    //处理 ArticleBottomComp 发出的事件
+    events
+      .on('ArticleBottomComp-changeAttention', (newValue) => {
+        console.log('newAttention:' + newValue);
+        (newValue ? addAttentions : deleteAttentions)(articleData.username)
+          .then(() => {
+            articleData.attention = newValue;
+          })
+          .catch((err) => {
+            console.log(err);
+            msg.error(`${newValue ? '' : '取消'}关注失败`, { duration: 2000, closable: true });
+          });
+      })
+      .on('ArticleBottomComp-changeCollection', (newValue) => {
+        console.log('newCollection:' + newValue);
+      })
+      .on('ArticleBottomComp-changeEvaluation', (newValue) => {
+        console.log('newEvaluation:' + newValue);
+        modifyArticleEvaluation(articleId, newValue)
+          .then(() => {
+            articleData.evaluation = newValue;
+          })
+          .catch((err) => {
+            console.log(err);
+            msg.error('修改评价失败', { duration: 2000, closable: true });
+          });
+      });
+
     return {
       articlePage,
       articleHeadData,
       articleBodyData,
+      articleFooterData,
     };
   },
 });

@@ -3,28 +3,33 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-09-23 19:22:16
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-26 16:08:02
+ * @LastEditors: clq
+ * @LastEditTime: 2021-09-27 19:35:29
 -->
 <template>
-  <div class="article-footer-comment-comp">
-    <div class="article-footer-comment-comp-content">
+  <div class="article-footer-comment-item">
+    <div class="article-footer-comment-item-content">
       <div class="left">
         <base-avatar
           :size="32"
-          src="123"
+          :src="comment.avatar"
         />
       </div>
       <div class="right">
         <div class="top">
-          <span class="username">FLY <span class="reply">回复</span> 海</span>
+          <span class="username">{{comment.username}} <span
+              v-if="replyUsername"
+              class="reply"
+            >回复</span> {{replyUsername}}</span>
         </div>
+
         <v-md-preview
-          text="正如前面所说，大家最普遍的理解就是当我们遇到某个页面打开很慢的时候，会想到引入缓存，这样页面打开就快了。其实快和慢是相对的，从技术角度来说，缓存之所以快是因为缓存是基"
+          :text="comment.content"
           class="comment"
         ></v-md-preview>
+
         <div class="middle">
-          <span class="time">2021-7-27 10:45</span>
+          <span class="time">{{comment.time}}</span>
           <span
             class="reply-btn"
             role="button"
@@ -36,33 +41,40 @@
             <span class="reply">回复</span>
           </span>
         </div>
+
         <div class="bottom">
           <div
             role="button"
-            class="bottom-button"
+            class="bottom-button support"
+            @click="supportComment"
           >
             <div>
               <i class="iconfont blog-tubiao73"></i>
             </div>
-            支持(3)
+            支持({{comment.support_count}})
           </div>
+
           <div
             role="button"
-            class="bottom-button"
+            class="bottom-button oppose"
+            @click="opposeComment"
           >
             <div>
               <i class="iconfont blog-tubiao73"></i>
             </div>
-            反对(0)
+            反对({{comment.oppose_count}})
           </div>
         </div>
+
       </div>
     </div>
 
-    <div class="article-footer-comment-comp-edit">
+    <div class="article-footer-comment-item-edit">
       <article-footer-edit
+        :shadow="false"
+        height="160px"
         v-if="showEdit"
-        @close="showEdit=false"
+        @commit="commitComment"
       />
     </div>
   </div>
@@ -72,44 +84,95 @@
 import { defineComponent, ref } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import ArticleFooterEdit from '@/views/article/childComps/articleFooter/childComps/ArticleFooterEdit.vue';
+import { useMessage } from 'naive-ui';
+import { mapGetters } from '@/util/store';
 
 /**
  * @description: 用户评论子组件
  * @param {Object} comment 用户评论
+ * @param {String} replyUsername 被回复用户名
  * @author: clq
  */
 
 export default defineComponent({
-  name: 'articleFooterCommentComp',
+  name: 'articleFooterCommentItem',
   components: { BaseAvatar, ArticleFooterEdit },
   props: {
     comment: {
       type: Object,
       default: null,
     },
+    replyUsername: {
+      type: String,
+      default: null,
+    },
   },
   setup() {
+    const msg = useMessage(); // naive-ui mssage
+    const { isLogin } = mapGetters('global', ['isLogin']);
     let showEdit = ref(false);
 
+    /**
+     * @description: 显示回复框
+     * @return {void}
+     * @author: clq
+     */
     function isShowEdit() {
+      if (!isLogin.value) {
+        msg.error('登录后才可以回复', { duration: 2000, closable: true });
+        return;
+      }
       showEdit.value = !showEdit.value;
     }
+
+    /**
+     * @description: 支持评论
+     * @return {void}
+     * @author: clq
+     */
+    function supportComment() {
+      console.log('supportComment');
+    }
+
+    /**
+     * @description: 反对评论
+     * @return {void}
+     * @author: clq
+     */
+    function opposeComment() {
+      console.log('opposeComment');
+    }
+
+    /**
+     * @description: 提交评论
+     * @param {String} comment 评论
+     * @return {void}
+     * @author: clq
+     */
+    function commitComment(comment) {
+      console.log('ArticleFooterCommentItem: ' + comment);
+      showEdit.value = false;
+    }
+
     return {
       showEdit,
       isShowEdit,
+      supportComment,
+      opposeComment,
+      commitComment,
     };
   },
 });
 </script>
 
 <style lang="scss" scoped>
-.article-footer-comment-comp {
+.article-footer-comment-item {
   box-sizing: border-box;
   width: 100%;
   padding-top: 12px;
   border-bottom: 1px solid #ccc;
 
-  .article-footer-comment-comp-content {
+  .article-footer-comment-item-content {
     @include flex(flex-start, initial, row);
     .left {
       margin-right: 6px;
@@ -171,10 +234,6 @@ export default defineComponent({
           height: 100%;
           @include flex(center);
 
-          &:hover {
-            color: #85e8c7;
-          }
-
           div {
             width: 16px;
             height: 100%;
@@ -191,6 +250,14 @@ export default defineComponent({
             transform: rotateZ(180deg);
           }
         }
+
+        .support:hover {
+          color: #85e8c7;
+        }
+
+        .oppose:hover {
+          color: #ffb792;
+        }
       }
     }
   }
@@ -198,7 +265,7 @@ export default defineComponent({
 </style>
 
 <style lang="scss">
-.article-footer-comment-comp {
+.article-footer-comment-item {
   .right {
     .comment {
       color: #bfbfbf;

@@ -4,21 +4,27 @@
  * @Autor: clq
  * @Date: 2021-09-23 17:26:29
  * @LastEditors: clq
- * @LastEditTime: 2021-09-25 18:25:13
+ * @LastEditTime: 2021-09-27 17:24:19
 -->
 <template>
   <div class="article-footer-comment">
-    <article-footer-comment-comp />
+    <!-- 第一级评论 -->
+    <article-footer-comment-item :comment="comments" />
+    <!-- 子级评论 -->
     <div class="article-footer-comment-reply">
-      <article-footer-comment-comp />
-      <article-footer-comment-comp />
+      <article-footer-comment-item
+        v-for="(item,index) in comments.child_comments"
+        :key="index"
+        :comment="item"
+        :replyUsername="comments.username"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import { defineComponent, reactive, ref } from 'vue';
-import ArticleFooterCommentComp from '@/views/article/childComps/articleFooter/childComps/ArticleFooterCommentComp.vue';
+import ArticleFooterCommentItem from '@/views/article/childComps/articleFooter/childComps/ArticleFooterCommentItem.vue';
 
 /**
  * @description: 用户评论组件
@@ -28,7 +34,7 @@ import ArticleFooterCommentComp from '@/views/article/childComps/articleFooter/c
 
 export default defineComponent({
   name: 'articleFooterComment',
-  components: { ArticleFooterCommentComp },
+  components: { ArticleFooterCommentItem },
   props: {
     comments: {
       type: Object,

@@ -4,9 +4,38 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 10:10:43
  * @LastEditors: clq
- * @LastEditTime: 2021-09-24 21:07:28
+ * @LastEditTime: 2021-09-26 20:58:07
  */
-import { del, get, post, RequestLifeCycle } from '@/network/request';
+import { get, RequestLifeCycle } from '@/network/request';
+
+/**
+ * @description: 获取文章评论
+ * @param {string} articleId 文章id `必传参数`
+ * @param {string} commentId 评论id `默认为空`
+ * @param {number} offset 起始位置 `默认为0`
+ * @param {number} limit 数量限制 `默认为5`
+ * @param {RequestLifeCycle} RLC
+ * @return {*}
+ * @author: clq
+ */
+export function getArticleComments(
+  articleId: string,
+  commentId: string = '',
+  offset: number = 0,
+  limit: number = 5,
+  RLC: RequestLifeCycle = {}
+): Promise<unknown> {
+  return get({
+    url: '/articles/comments',
+    ...RLC,
+    params: {
+      article_id: articleId,
+      comment_id: commentId,
+      limit,
+      offset
+    }
+  });
+}
 
 /**
  * @description: 获取文章标签
