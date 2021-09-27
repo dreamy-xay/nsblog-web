@@ -4,11 +4,10 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-10 21:44:12
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-25 18:25:55
+ * @LastEditTime: 2021-09-26 17:28:34
  */
 import { Random } from 'better-mock';
 import { Server } from 'http';
-import { Base64 } from 'js-base64';
 import * as socketIo from 'socket.io';
 
 class OnlineUser {

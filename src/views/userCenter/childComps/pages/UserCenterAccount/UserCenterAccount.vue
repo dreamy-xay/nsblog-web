@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:42
  * @LastEditors: clq
- * @LastEditTime: 2021-09-26 17:03:59
+ * @LastEditTime: 2021-09-27 19:36:52
 -->
 <template>
   <div class="user-center-account">
@@ -89,7 +89,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.log(error);
-          message.error('数据加载异常，请刷新页面！');
+          message.error('数据加载异常，请刷新页面！', { duration: 3000, closable: true });
         });
     }
 

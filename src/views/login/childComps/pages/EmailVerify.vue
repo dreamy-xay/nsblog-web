@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-28 23:10:42
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-31 22:28:34
+ * @LastEditors: Ban
+ * @LastEditTime: 2021-09-27 14:25:03
 -->
 <template>
   <div class="email-verify">

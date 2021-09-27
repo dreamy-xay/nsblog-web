@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-26 15:11:17
  * @LastEditors: Ban
- * @LastEditTime: 2021-09-25 16:45:40
+ * @LastEditTime: 2021-09-27 15:08:44
 -->
 <template>
   <div class="user-center-account-change">
@@ -21,7 +21,7 @@
       preset="card"
       :style="{width: '400px'}"
       :closable="true"
-      @close="showModal = false"
+      @close="closeModal"
     >
       <div class="user-center-account-change-inner">
         <div v-if="title === '修改密码'">
@@ -36,7 +36,7 @@
               type="password"
               :verify="verifyOldPassword"
               :maxlength="30"
-              @enter="passwordEnter"
+              @enter="oldPasswordEnter"
             />
           </div>
           <div>新密码
@@ -114,16 +114,27 @@ export default defineComponent({
     const password = ref(''); // 密码
     const confirmedPassword = ref(''); // 验证密码（重复密码）
 
-    const oldPasswordInput = ref(null); // 老密码ref
-    const passwordInput = ref(null); // 密码ref
-    const confirmedPasswordInput = ref(null); // 验证密码ref
+    const oldPasswordInput = ref(''); // 老密码ref
+    const passwordInput = ref(''); // 密码ref
+    const confirmedPasswordInput = ref(''); // 验证密码ref
     const msg = useMessage(); // naive-ui mssage
     const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
 
     /**
-     * @description: 账号输入框按下回车键执行函数
+     * @description: 旧密码输入框按下回车键执行函数
      * @return {void}
-     * @author: dreamy-xay
+     * @author: Ban
+     */
+    function oldPasswordEnter() {
+      if (oldPassword.value === '') oldPassword.value.userCenterInput.focus();
+      else if (password.value === '') passwordInput.value.userCenterInput.focus();
+      else submit();
+    }
+
+    /**
+     * @description: 新密码输入框按下回车键执行函数
+     * @return {void}
+     * @author: Ban
      */
     function passwordEnter() {
       if (password.value === '') password.value.userCenterInput.focus();
@@ -232,6 +243,7 @@ export default defineComponent({
       verifyConfirmedPassword,
       passwordEnter,
       closeModal,
+      oldPasswordEnter,
     };
   },
 });
