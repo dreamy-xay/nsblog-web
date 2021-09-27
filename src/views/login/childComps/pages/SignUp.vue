@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 18:50:47
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-16 10:49:03
+ * @LastEditors: Ban
+ * @LastEditTime: 2021-09-27 10:43:19
 -->
 <template>
   <div class="sign-up">
