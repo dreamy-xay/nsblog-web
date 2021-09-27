@@ -4,9 +4,9 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 10:10:43
  * @LastEditors: clq
- * @LastEditTime: 2021-09-26 20:58:07
+ * @LastEditTime: 2021-09-27 19:57:35
  */
-import { get, RequestLifeCycle } from '@/network/request';
+import { get, post, RequestLifeCycle } from '@/network/request';
 
 /**
  * @description: 获取文章评论
@@ -15,7 +15,7 @@ import { get, RequestLifeCycle } from '@/network/request';
  * @param {number} offset 起始位置 `默认为0`
  * @param {number} limit 数量限制 `默认为5`
  * @param {RequestLifeCycle} RLC
- * @return {*}
+ * @return {Promise<unknown>} 请求返回promise
  * @author: clq
  */
 export function getArticleComments(
@@ -33,6 +33,34 @@ export function getArticleComments(
       comment_id: commentId,
       limit,
       offset
+    }
+  });
+}
+/**
+ * @description: 发表文章评论
+ * @param {string} article_id 文章id `必传参数`
+ * @param {string} content 评论id `必传参数`
+ * @param {string} parent_id 上层评论id `默认为空`
+ * @param {string} reply_username 回复用户名 `默认为空`
+ * @param {RequestLifeCycle} RLC
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: clq
+ */
+export function postArticleComments(
+  article_id: string,
+  content: string,
+  parent_id: string = '',
+  reply_username: string = '',
+  RLC: RequestLifeCycle = {}
+): Promise<unknown> {
+  return post({
+    url: '/articles/comments',
+    ...RLC,
+    params: {
+      article_id,
+      content,
+      parent_id,
+      reply_username
     }
   });
 }

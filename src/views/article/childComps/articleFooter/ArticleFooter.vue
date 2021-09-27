@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-20 17:53:48
  * @LastEditors: clq
- * @LastEditTime: 2021-09-27 17:59:24
+ * @LastEditTime: 2021-09-27 20:03:52
 -->
 <template>
   <div class="article-footer">
@@ -16,6 +16,7 @@
       v-for="(item,index) in comments"
       :key="index"
       :comments="item"
+      :data="data"
     />
   </div>
 </template>
@@ -24,7 +25,7 @@
 import { defineComponent, onMounted, reactive, ref } from 'vue';
 import ArticleFooterEdit from '@/views/article/childComps/articleFooter/childComps/ArticleFooterEdit.vue';
 import ArticleFooterComment from '@/views/article/childComps/articleFooter/childComps/ArticleFooterComment.vue';
-import { getArticleComments } from '@/network/api/articles';
+import { getArticleComments, postArticleComments } from '@/network/api/articles';
 import { useMessage } from 'naive-ui';
 
 /**
@@ -44,65 +45,7 @@ export default defineComponent({
   },
   setup(props) {
     const msg = useMessage(); //naive-ui message
-    let comments = reactive([
-      {
-        comment_id: 123,
-        username: 'test',
-        avatar: 'https://ccc',
-        time: '',
-        content: '真不戳！',
-        support_count: 12,
-        oppose_count: 54,
-        evaluation: 0,
-        child_comments: [
-          {
-            comment_id: 123,
-            username: 'test',
-            avatar: 'https://ccc',
-            time: '',
-            content: '真不戳！',
-            support_count: 12,
-            oppose_count: 54,
-            evaluation: 0,
-            child_comments: [
-              {
-                comment_id: 123,
-                username: 'test',
-                avatar: 'https://ccc',
-                time: '',
-                content: '真不戳！',
-                support_count: 12,
-                oppose_count: 54,
-                evaluation: 0,
-              },
-            ],
-          },
-        ],
-      },
-      {
-        comment_id: 123,
-        username: 'test',
-        avatar: 'https://ccc',
-        time: '',
-        content: '真不戳！',
-        support_count: 12,
-        oppose_count: 54,
-        evaluation: 0,
-        child_comments: [
-          {
-            comment_id: 123,
-            username: 'test',
-            avatar: 'https://ccc',
-            time: '',
-            content: '真不戳！',
-            support_count: 12,
-            oppose_count: 54,
-            evaluation: 0,
-            child_comments: [],
-          },
-        ],
-      },
-    ]);
+    let comments = reactive([]);
 
     onMounted(() => {
       getComments(props.data.article_id);
@@ -138,6 +81,13 @@ export default defineComponent({
      */
     function commitComment(comment) {
       console.log('ArticleFooter: ' + comment);
+      postArticleComments(props.data.article_id, comment)
+        .then((res) => {
+          msg.success('成功发表评论', { duration: 2000, closable: true });
+        })
+        .catch((err) => {
+          msg.error('发表评论失败', { duration: 2000, closable: true });
+        });
     }
 
     return {
