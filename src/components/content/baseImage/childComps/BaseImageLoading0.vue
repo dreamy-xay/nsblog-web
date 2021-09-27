@@ -29,6 +29,7 @@ export default defineComponent({
   width: 50px;
   height: 50px;
   background-color: transparent;
+  position: relative;
 
   &:before {
     content: '';

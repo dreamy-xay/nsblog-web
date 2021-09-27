@@ -43,7 +43,7 @@ export default defineComponent({
     width: 20px;
     border-radius: 100%;
     position: absolute;
-    border: 2px solid $grey-0;
+    border: 1px solid $grey-0;
 
     &:first-child {
       background-color: #8cc759;
