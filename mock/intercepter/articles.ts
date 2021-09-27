@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-26 12:55:45
+ * @LastEditTime: 2021-09-27 19:06:25
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -160,6 +160,7 @@ export default function(baseUrl: string, app: Application) {
         ans.push({
           comment_id: Random.id(),
           username: user.username,
+          reply_username: RUsers.random().username,
           avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
           time: Random.time(),
           content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
@@ -200,12 +201,13 @@ export default function(baseUrl: string, app: Application) {
       return ans;
     }
 
+    const collection: Record<string, unknown> = Random.integer(0, 1) ? { collection: Random.id() } : {};
     const params: Record<string, unknown> =
       username !== ''
         ? {
             evaluation: Random.integer(0, 2),
             attention: Random.integer(0, 1),
-            collection: Random.integer(0, 2)
+            ...collection
           }
         : {};
 
