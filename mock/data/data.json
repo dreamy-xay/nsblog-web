@@ -5,7 +5,7 @@
 			"nickname": "破釜沉舟",
 			"password": "Abcd1234",
 			"email": "dreamy@qq.com",
-			"token": "b766ef5ba0aca818b028be741dde3bb321317d17318707f06d5c6234524aac58b02908edd044860c049284ed8b1ddf52de5763b7ca9746f30df1df9e51db6698",
+			"token": "81bccf33c57b6d5bd61c44a80914225f5518e10db184c7094925b7c0a100f04a99c33f40e66049a9e2d07676a4f3b0e98f2324e040240c82570b9cd49f0c9a97",
 			"isActive": true,
 			"isSuper": true
 		},
@@ -1936,5 +1936,10 @@
 			"isSuper": false
 		}
 	],
-	"codes": []
+	"codes": [
+		{
+			"code": "769763",
+			"email": "1040316946@qq.com"
+		}
+	]
 }

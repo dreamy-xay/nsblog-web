@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:42
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-25 20:41:48
+ * @LastEditors: Ban
+ * @LastEditTime: 2021-09-27 10:40:22
 -->
 <template>
   <div class="user-center-account">
@@ -89,7 +89,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.log(error);
-          message.error('数据加载异常，请刷新页面！');
+          message.error('数据加载异常，请刷新页面！', { duration: 3000, closable: true });
         });
     }
 
