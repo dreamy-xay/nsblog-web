@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 16:32:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 20:03:15
+ * @LastEditTime: 2021-09-26 16:58:07
 -->
 
 <template>
@@ -13,7 +13,7 @@
     ref="articlePage"
   >
     <base-background :mask="false" />
-    <article-menu />
+    <article-menu :username="articleHeadData.username" />
     <article-loading-bar />
     <article-head :data="articleHeadData" />
     <article-body :data="articleBodyData" />
@@ -68,9 +68,9 @@ export default defineComponent({
       tags: [],
       content: '',
       recommend_count: 0,
-      evaluation: 0,
-      collection: 0,
-      attention: 0,
+      evaluation: undefined,
+      collection: undefined,
+      attention: undefined,
       last_article: {
         article_id: null,
         title: '',
@@ -79,11 +79,13 @@ export default defineComponent({
         article_id: null,
         title: '',
       },
+      sponsors: {},
     });
 
     // 获取文章数据
     getArticleInfo(articleId)
       .then((data) => {
+        console.log(data);
         articleData.title = data.title;
         articleData.username = data.username;
         articleData.nickname = data.nickname;

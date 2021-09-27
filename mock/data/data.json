@@ -5,7 +5,7 @@
 			"nickname": "破釜沉舟",
 			"password": "Abcd1234",
 			"email": "dreamy@qq.com",
-			"token": "0159664e197eff1cb3de8227faaf26108574d6db5a1dfe26fd104d9d4e4ae5aae6360945c57092c2d06d492a0d9b692d1097614a758ca982efeb147ed7cd5a8d",
+			"token": "b766ef5ba0aca818b028be741dde3bb321317d17318707f06d5c6234524aac58b02908edd044860c049284ed8b1ddf52de5763b7ca9746f30df1df9e51db6698",
 			"isActive": true,
 			"isSuper": true
 		},
@@ -59,7 +59,7 @@
 			"nickname": "清幽兰",
 			"password": "Abcd1234",
 			"email": "6@qq.com",
-			"token": "de9fc355cf8fd6f3c81eb9021ca3f4e6d02c80c1542c341393f8f4697e6c92702ffe21f43d33f48a396c3d308ffc14d35a89e3bf13e27b12bdf518e26ce2d407",
+			"token": "334f1053267a24eff6aaac0cbe7723996bf693770e233d1d9074f5668e86d9fe2965fb4c7412200925af6e16b4e1363a5d24ec3e7a6af82a833053d1a69d6aba",
 			"isActive": true,
 			"isSuper": false
 		},
@@ -1571,7 +1571,7 @@
 			"nickname": "浅眉明明眸",
 			"password": "Abcd1234",
 			"email": "174@qq.com",
-			"token": null,
+			"token": "12c38e8fedf66aff145ca9c51ab0463c12e26616fd5e2098a4286df0868de8340ab036e49666c136d15389440d534bc7cb07880bf36513d8d1edfd578ce818d5",
 			"isActive": true,
 			"isSuper": false
 		},
@@ -1931,14 +1931,6 @@
 			"nickname": "≮枕歌褵яeη≯",
 			"password": "Abcd1234",
 			"email": "214@qq.com",
-			"token": null,
-			"isActive": true,
-			"isSuper": false
-		},
-		{
-			"username": "xd",
-			"password": "Abcd1234",
-			"email": "1985332264@qq.com",
 			"token": null,
 			"isActive": true,
 			"isSuper": false
