@@ -4,10 +4,13 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-27 12:13:30
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-27 12:40:14
+ * @LastEditTime: 2021-09-28 18:23:43
 -->
 <template>
-  <div class="base-image-loading-1">
+  <div
+    class="base-image-loading-1"
+    :style="{transform: `scale(${_scale_})`}"
+  >
     <div
       class='base-image-loading-1-dot'
       v-for="index of 6"
@@ -17,15 +20,35 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, ref, onMounted, getCurrentInstance } from 'vue';
 
 /**
- * @description: 基本图片加载动画，编号0
+ * @description: 基本图片加载动画，编号1
+ * @param {Number} scale 加载动画相对图片高度缩放比例 `必传参数`
  * @author: dreamy-xay
  */
 
 export default defineComponent({
-  name: 'baseImageLoading0',
+  name: 'baseImageLoading1',
+  props: {
+    scale: {
+      type: Number,
+      required: true,
+    },
+  },
+  setup(props) {
+    const _scale_ = ref(1); // 缩放比例
+
+    // 以高度 0.5 被缩放
+    onMounted(() => {
+      const el = getCurrentInstance().vnode.el;
+      _scale_.value = (el.parentElement.offsetHeight * props.scale) / el.offsetHeight;
+    });
+
+    return {
+      _scale_,
+    };
+  },
 });
 </script>
 
@@ -46,32 +69,32 @@ export default defineComponent({
     border: 1px solid $grey-0;
 
     &:first-child {
-      background-color: #8cc759;
+      background-color: $green-0;
       animation-delay: 0.5s;
     }
 
     &:nth-child(2) {
-      background-color: #8c6daf;
+      background-color: $purple-0;
       animation-delay: 0.4s;
     }
 
     &:nth-child(3) {
-      background-color: #ef5d74;
+      background-color: $red-1;
       animation-delay: 0.3s;
     }
 
     &:nth-child(4) {
-      background-color: #f9a74b;
+      background-color: $orange-1;
       animation-delay: 0.2s;
     }
 
     &:nth-child(5) {
-      background-color: #60beeb;
+      background-color: $blue-0;
       animation-delay: 0.1s;
     }
 
     &:nth-child(6) {
-      background-color: #fbef5a;
+      background-color: $yellow-0;
       animation-delay: 0s;
     }
 

@@ -4,23 +4,46 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-27 12:13:30
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-27 12:39:59
+ * @LastEditTime: 2021-09-28 18:21:07
 -->
 <template>
-  <div class="base-image-loading-0">
+  <div
+    class="base-image-loading-0"
+    :style="{transform: `scale(${_scale_})`}"
+  >
   </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, ref, onMounted, getCurrentInstance } from 'vue';
 
 /**
  * @description: 基本图片加载动画，编号0
+ * @param {Number} scale 加载动画相对图片高度缩放比例 `必传参数`
  * @author: dreamy-xay
  */
 
 export default defineComponent({
   name: 'baseImageLoading0',
+  props: {
+    scale: {
+      type: Number,
+      required: true,
+    },
+  },
+  setup(props) {
+    const _scale_ = ref(1); // 缩放比例
+
+    // 以高度 0.5 被缩放
+    onMounted(() => {
+      const el = getCurrentInstance().vnode.el;
+      _scale_.value = (el.parentElement.offsetHeight * props.scale) / 79;
+    });
+
+    return {
+      _scale_,
+    };
+  },
 });
 </script>
 
@@ -55,6 +78,7 @@ export default defineComponent({
     left: 0;
     border-radius: 3px;
   }
+
   @keyframes animate {
     17% {
       border-bottom-right-radius: 3px;
