@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-09-20 12:06:41
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-28 12:33:36
+ * @LastEditors: clq
+ * @LastEditTime: 2021-09-28 18:06:14
 -->
 <template>
   <div class="article-bottom">
@@ -91,7 +91,7 @@
             <div class="item-label">本文链接</div>
             <div class="item-value">
               <article-link
-                :href="`http://localhost:8888/article/${data.article_id}`"
+                :href="`/article/${data.article_id}`"
                 target="_blank"
               >
                 http://localhost:8888/article/{{data.article_id}}
@@ -131,6 +131,7 @@ import styles from '@/assets/style/define.scss';
 
 /**
  * @description: 文章底部
+ * @param {Object} data 文章信息
  * @author: clq
  */
 
@@ -148,10 +149,10 @@ export default defineComponent({
     },
   },
   setup(props) {
-    onMounted(() => {
-      console.log('ArticleBottomData:');
-      console.log(props.data);
-    });
+    // onMounted(() => {
+    //   console.log('ArticleBottomData:');
+    //   console.log(props.data);
+    // });
     return {
       styles,
     };

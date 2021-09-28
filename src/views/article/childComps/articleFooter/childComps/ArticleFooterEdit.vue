@@ -3,16 +3,19 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-09-23 17:11:47
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-26 16:11:31
+ * @LastEditors: clq
+ * @LastEditTime: 2021-09-27 18:08:06
 -->
 <template>
-  <div class="article-footer-edit">
+  <div
+    class="article-footer-edit"
+    :class="{'article-footer-edit-shadow': shadow}"
+  >
     <v-md-editor
       v-model="text"
       mode="edit"
       left-toolbar="undo redo clear| bold link code quote"
-      height="200px"
+      :height="height"
     />
 
     <div
@@ -26,20 +29,35 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, nextTick, ref } from 'vue';
 
 /**
  * @description: 评论编辑组件
+ * @param {Boolean} shadow 是否显示绿色阴影 `默认显示`
  * @author: clq
  */
 
 export default defineComponent({
   name: 'articleFooterEdit',
-  setup(props, context) {
+  props: {
+    shadow: {
+      type: Boolean,
+      default: true,
+    },
+    height: {
+      type: String,
+      default: '240px',
+    },
+  },
+  setup(_, context) {
     const text = ref('');
 
     function commit() {
-      context.emit('close', true);
+      // console.log('articleFooterEdit: ' + text.value);
+      context.emit('commit', text.value);
+      nextTick(() => {
+        text.value = '';
+      });
     }
 
     return { text, commit };
@@ -56,7 +74,9 @@ export default defineComponent({
     border-radius: $border-radius-0;
     transition: 0.25s;
     overflow: hidden;
+  }
 
+  &.article-footer-edit-shadow :deep(.v-md-editor) {
     &:focus-within {
       box-shadow: $shadow-2;
     }
@@ -74,11 +94,16 @@ export default defineComponent({
     margin-top: 10px;
     margin-bottom: 12px;
     border-radius: 4px;
-    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
-    background-color: #85e8c7;
-    color: #fff;
+    box-shadow: $shadow-0;
+    background-color: $green-0;
+    color: $grey-0;
     line-height: 32px;
     text-align: center;
+    transition: all 0.25s;
+
+    &:hover {
+      background-color: $green-1;
+    }
   }
 }
 </style>
