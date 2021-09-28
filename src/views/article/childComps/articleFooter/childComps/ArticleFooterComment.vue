@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-23 17:26:29
  * @LastEditors: clq
- * @LastEditTime: 2021-09-28 12:24:23
+ * @LastEditTime: 2021-09-28 18:02:23
 -->
 <template>
   <div class="article-footer-comment">
@@ -24,6 +24,11 @@
         :first-index="firstIndex"
         :seccond-index="index"
       />
+      <article-footer-load-more-btn
+        v-if="comments.child_comments.length != 0"
+        :btnStyle="'margin: 10px auto;'"
+        @loadMore="loadMoreHandler"
+      />
     </div>
   </div>
 </template>
@@ -31,6 +36,7 @@
 <script>
 import { defineComponent, reactive, ref } from 'vue';
 import ArticleFooterCommentItem from '@/views/article/childComps/articleFooter/childComps/ArticleFooterCommentItem.vue';
+import ArticleFooterLoadMoreBtn from '@/views/article/childComps/articleFooter/childComps/ArticleFooterLoadMoreBtn.vue';
 
 /**
  * @description: 用户评论组件
@@ -42,7 +48,7 @@ import ArticleFooterCommentItem from '@/views/article/childComps/articleFooter/c
 
 export default defineComponent({
   name: 'articleFooterComment',
-  components: { ArticleFooterCommentItem },
+  components: { ArticleFooterCommentItem, ArticleFooterLoadMoreBtn },
   props: {
     data: {
       type: Object,
@@ -57,15 +63,31 @@ export default defineComponent({
       default: -1,
     },
   },
-  setup() {
+  setup(props, context) {
     let showEdit = ref(false);
 
+    /**
+     * @description: 控制编辑区显示
+     * @return {void}
+     * @author: clq
+     */
     function isShowEdit() {
       showEdit.value = !showEdit.value;
     }
+
+    /**
+     * @description: 处理加载更多事件
+     * @return {void}
+     * @author: clq
+     */
+    function loadMoreHandler() {
+      context.emit('loadMoreHandler', props.comments.comment_id);
+    }
+
     return {
       showEdit,
       isShowEdit,
+      loadMoreHandler,
     };
   },
 });
@@ -78,8 +100,8 @@ export default defineComponent({
   padding: 0 16px 16px;
   margin-bottom: 16px;
   border-radius: 8px;
-  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
-  background-color: #fff;
+  box-shadow: $shadow-0;
+  background-color: $grey-0;
 
   & > div:first-child {
     border-bottom: 0;
@@ -90,11 +112,11 @@ export default defineComponent({
     width: 100%;
     padding: 0 12px;
     border-radius: 8px;
-    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
-    background-color: #f4f4f4;
+    box-shadow: $shadow-0;
+    background-color: $grey-2;
 
     & > div:last-child {
-      border-bottom: 0;
+      border-bottom: 16px;
     }
   }
 }

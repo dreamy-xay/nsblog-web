@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-23 19:22:16
  * @LastEditors: clq
- * @LastEditTime: 2021-09-28 12:26:59
+ * @LastEditTime: 2021-09-28 18:01:30
 -->
 <template>
   <div class="article-footer-comment-item">
@@ -13,14 +13,28 @@
         <base-avatar
           :size="32"
           :src="comment.avatar"
+          :href="`/blog/${comment.username}`"
+          :target="`/blog/${comment.username}`"
         />
       </div>
       <div class="right">
         <div class="top">
-          <span class="username">{{comment.username}} <span
+          <span class="username">
+            <article-link
+              :href="`/blog/${comment.username}`"
+              :target="`/blog/${comment.username}`"
+            >{{comment.username}}
+            </article-link>
+            <span
               v-if="comment.reply_username"
               class="reply"
-            >回复</span> {{comment.reply_username}}</span>
+            > 回复 </span>
+            <article-link
+              :href="`/blog/${comment.reply_username}`"
+              :target="`/blog/${comment.reply_username}`"
+            >{{comment.reply_username}}
+            </article-link>
+          </span>
         </div>
 
         <v-md-preview
@@ -86,6 +100,7 @@
 import { defineComponent, ref } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import ArticleFooterEdit from '@/views/article/childComps/articleFooter/childComps/ArticleFooterEdit.vue';
+import ArticleLink from '@/views/article/childComps/ArticleLink.vue';
 import { useMessage } from 'naive-ui';
 import { mapGetters } from '@/util/store';
 import events from '@/events';
@@ -104,7 +119,7 @@ import events from '@/events';
 
 export default defineComponent({
   name: 'articleFooterCommentItem',
-  components: { BaseAvatar, ArticleFooterEdit },
+  components: { BaseAvatar, ArticleFooterEdit, ArticleLink },
   props: {
     ArticleData: {
       type: Object,
@@ -197,7 +212,7 @@ export default defineComponent({
   box-sizing: border-box;
   width: 100%;
   padding-top: 12px;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid $grey-5;
 
   .article-footer-comment-item-content {
     @include flex(flex-start, initial, row);
@@ -216,12 +231,12 @@ export default defineComponent({
 
         .username {
           line-height: 19px;
-          color: #8c8c8c;
+          color: $grey-7;
 
           .reply {
             font-size: 12px;
             line-height: 19px;
-            color: #bfbfbf;
+            color: $grey-6;
           }
         }
       }
@@ -230,7 +245,7 @@ export default defineComponent({
         height: 14px;
         line-height: 14px;
         font-size: 12px;
-        color: #bfbfbf;
+        color: $grey-6;
 
         .time {
           margin-right: 20px;
@@ -243,7 +258,7 @@ export default defineComponent({
           }
 
           &:hover {
-            color: #85e8c7;
+            color: $green-0;
           }
         }
       }
@@ -257,18 +272,18 @@ export default defineComponent({
         @include flex(center, flex-end, row);
 
         & > div:first-child:hover {
-          color: green;
+          color: $green-1;
         }
         & > div:last-child:hover {
-          color: red;
+          color: $orange-1;
         }
 
         .support {
-          color: #85e8c7;
+          color: $green-0;
         }
 
         .oppose {
-          color: #ffb792;
+          color: $orange-0;
         }
 
         .bottom-button {
