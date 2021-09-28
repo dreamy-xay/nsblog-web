@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-23 19:22:16
  * @LastEditors: clq
- * @LastEditTime: 2021-09-28 18:01:30
+ * @LastEditTime: 2021-09-28 18:09:17
 -->
 <template>
   <div class="article-footer-comment-item">
@@ -166,7 +166,7 @@ export default defineComponent({
      * @author: clq
      */
     function modifyEvaluation(type) {
-      console.log('modifyEvaluation');
+      // console.log('modifyEvaluation');
       if (type === 1) {
         //已支持
         if (props.comment.evaluation === 1) {
