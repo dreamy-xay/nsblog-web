@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-20 12:06:41
  * @LastEditors: clq
- * @LastEditTime: 2021-09-27 19:05:20
+ * @LastEditTime: 2021-09-28 18:06:14
 -->
 <template>
   <div class="article-bottom">
@@ -100,13 +100,14 @@
           </div>
           <div class="item">
             <div class="item-label">版权声明</div>
-            <div class="item-value">本站使用
+            <div class="item-value">本站使用「
               <article-link
-                :href="`/blog/${'dreamy'}`"
-                :target="`/blog/${'dreamy'}`"
-              >「CC BY 4.0」
+                href="https://creativecommons.org/licenses/"
+                target="https://creativecommons.org/licenses/"
+              >
+                {{data.license}}
               </article-link>
-              创作共享协议，转载请在文章明显位置注明作者及出处！
+              」创作共享协议，转载请在文章明显位置注明作者及出处！
             </div>
           </div>
           <div class="item">

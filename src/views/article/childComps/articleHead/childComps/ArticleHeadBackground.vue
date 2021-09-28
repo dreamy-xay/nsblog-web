@@ -4,13 +4,15 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 18:19:49
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 19:45:50
+ * @LastEditTime: 2021-09-28 12:57:12
 -->
 <template>
-  <div
-    class="article-head-background"
-    :style="{backgroundImage: `url(${backgroundImage})`}"
-  >
+  <div class="article-head-background">
+    <base-image
+      v-if="backgroundImage"
+      :src="backgroundImage"
+      :loading="2"
+    />
     <ul class="circles">
       <li></li>
       <li></li>
@@ -27,7 +29,8 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
+import BaseImage from '@/components/content/baseImage/BaseImage.vue';
 
 /**
  * @description:
@@ -36,13 +39,14 @@ import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'articleHeadBackground',
-  setup() {
-    const titleBackgroundImg = ['/article/background.jpg', '/article/background1.jpg', null]; // 标题背景图片
-    const backgroundImage = ref(titleBackgroundImg[Math.floor(Math.random() * titleBackgroundImg.length)]); // 头部背景图片
-
-    return {
-      backgroundImage,
-    };
+  components: {
+    BaseImage,
+  },
+  props: {
+    backgroundImage: {
+      type: String,
+      default: '',
+    },
   },
 });
 </script>
@@ -52,9 +56,6 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   background-color: $grey-10;
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
   overflow: hidden;
   position: absolute;
   top: 0;

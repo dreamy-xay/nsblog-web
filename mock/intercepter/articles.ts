@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-27 20:07:42
+ * @LastEditTime: 2021-09-28 13:06:24
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -231,6 +231,15 @@ export default function(baseUrl: string, app: Application) {
       avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
       release_time: Random.datetime(),
       page_view: Random.integer(0, 1000),
+      cover_image: [
+        null,
+        '/article/background1.jpg',
+        '/article/background.jpg',
+        '/article/background1.jpg',
+        '/article/background.jpg'
+      ][Random.integer(0, 2)],
+      license: 'CC BY 4.0',
+      blog_article_html: Random.integer(0, 1) ? '' : `<script>console.log('${user.username + ' 的文章'}')</script>`,
       comment_count: Random.integer(0, 1000),
       topic: Random.integer(0, 1) ? Random.word() : Random.cword(),
       categories: getRandom(Random.integer(0, 2)),
@@ -251,9 +260,9 @@ export default function(baseUrl: string, app: Application) {
         title: Random.integer(0, 1) ? Random.title() : Random.ctitle()
       },
       sponsors: {
-        paypal: Random.integer(0, 1) ? Random.image('150x150', '#234567', '#FFFFFF', 'png', 'paypal') : '',
-        alipay: Random.integer(0, 1) ? Random.image('150x150', '#234567', '#FFFFFF', 'png', 'alipay') : '',
-        weixin: Random.integer(0, 1) ? Random.image('150x150', '#234567', '#FFFFFF', 'png', 'weixin') : ''
+        paypal: Random.integer(0, 1) ? Random.image('150x150', '#234567', '#FFFFFF', 'png', 'paypal') : null,
+        alipay: Random.integer(0, 1) ? Random.image('150x150', '#234567', '#FFFFFF', 'png', 'alipay') : null,
+        weixin: Random.integer(0, 1) ? Random.image('150x150', '#234567', '#FFFFFF', 'png', 'weixin') : null
       }
     };
 
