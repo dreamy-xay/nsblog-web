@@ -4,11 +4,11 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 17:51:15
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 19:44:13
+ * @LastEditTime: 2021-09-28 12:49:57
 -->
 <template>
   <div class="article-head">
-    <article-head-background />
+    <article-head-background :background-mage="data.cover_image" />
     <div class="article-head-inner">
       <div class="title">
         <span>{{articleTitle}}</span>

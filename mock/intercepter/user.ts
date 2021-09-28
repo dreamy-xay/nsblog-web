@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:15:05
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-27 21:52:29
+ * @LastEditTime: 2021-09-28 12:19:03
  */
 import { Random, mock } from 'better-mock';
 import { Application, Request, Response } from 'express';
@@ -145,7 +145,6 @@ export default function(baseUrl: string, app: Application) {
     } else if (type === 3) {
       if (user && user.isActive)
         return res.json({
-          username,
           qq: Random.integer(0, 2) ? Random.integer(1000000, 30000000000) : null,
           weibo: Random.integer(0, 2) ? Random.integer(1000000, 30000000000) : null,
           email: user.email

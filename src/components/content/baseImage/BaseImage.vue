@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-27 11:55:25
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-27 18:09:44
+ * @LastEditTime: 2021-09-28 12:51:31
 -->
 <template>
   <div
@@ -135,7 +135,6 @@ export default defineComponent({
     background-color: transparent;
     left: 0;
     top: 0;
-    z-index: 1;
     @include flex(center, center);
     width: 100%;
     height: 100%;
