@@ -4,12 +4,15 @@
  * @Autor: clq
  * @Date: 2021-09-20 19:56:13
  * @LastEditors: clq
- * @LastEditTime: 2021-09-25 20:09:36
+ * @LastEditTime: 2021-09-27 19:27:05
 -->
 <template>
   <div class="article-bottom-comp">
     <div class="article-bottom-comp-body">
-      <div class="category">
+      <div
+        class="category"
+        v-if="data.categories.length !== 0"
+      >
         <span class="label">分类 :</span>
         <span class="value">
           <base-tag
@@ -20,11 +23,18 @@
             :hover-color="styles.orange1"
             :style="{borderRadius: '3px', letterSpacing: '1.5px',marginRight: '4px', marginBottom: '4px'}"
             :text="item.name"
-          />
+          >
+            <template #text-pre>
+              <i class="iconfont blog-marketing_fill"></i>
+            </template>
+          </base-tag>
         </span>
       </div>
 
-      <div class="tag">
+      <div
+        class="tag"
+        v-if="data.tags.length != 0"
+      >
         <span class="label">标签 :</span>
         <span class="value">
           <base-tag
@@ -35,34 +45,44 @@
             :hover-color="styles.blue1"
             :style="{borderRadius: '3px', letterSpacing: '1.5px', marginRight: '4px',marginBottom: '4px'}"
             :text="item.name"
-          />
+          >
+            <template #text-pre>
+              <i class="iconfont blog-label_fill"></i>
+            </template>
+          </base-tag>
         </span>
       </div>
+
       <article-bottom-sponsor :sponsors="data.sponsors" />
+
       <div class="btn-container">
         <div
           class="btn"
           role="button"
           @click="onAttention"
-        >关注
+        >
+          {{data.attention === 1 ? "已关注" : "关注"}}
         </div>
         <div
           class="btn"
           role="button"
           @click="onRecommend"
-        >推荐
+        >
+          {{data.evaluation === 1 ? "已推荐" : "推荐"}}
         </div>
         <div
           class="btn"
           role="button"
           @click="onCollect"
-        >收藏
+        >
+          {{data.collection === 1 ? "已收藏" : "收藏"}}
         </div>
         <div
           class="btn"
           role="button"
           @click="onOppose"
-        >反对
+        >
+          {{data.evaluation === 0 ? "已反对" : "反对"}}
         </div>
       </div>
     </div>
@@ -72,8 +92,8 @@
         <span class="label">上一篇 :</span>
         <span class="value">
           <article-link
-            :href="`http://localhost:8888/article/${data.last_article.article_id}`"
-            :target="`http://localhost:8888/article/${data.last_article.article_id}`"
+            :href="`/article/${data.last_article.article_id}`"
+            :target="`/article/${data.last_article.article_id}`"
           >{{data.last_article.title}}
           </article-link>
         </span>
@@ -82,8 +102,8 @@
         <span class="label">下一篇 :</span>
         <span class="value">
           <article-link
-            :href="`http://localhost:8888/article/${data.next_article.article_id}`"
-            :target="`http://localhost:8888/article/${data.next_article.article_id}`"
+            :href="`/article/${data.next_article.article_id}`"
+            :target="`/article/${data.next_article.article_id}`"
           >{{data.next_article.title}}
           </article-link>
         </span>
@@ -100,10 +120,14 @@ import ArticleBottomSponsor from '@/views/article/childComps/articleBody/childCo
 import styles from '@/assets/style/define.scss';
 import { useMessage } from 'naive-ui';
 import { mapGetters } from '@/util/store';
+import events from '@/events';
 
 /**
  * @description: 文章底部子组件
  * @param {Object} data 文章信息
+ * @emits ArticleBottomComp-changeEvaluation 修改 evaluation, (newValue: number) => void, newValue=>0:反对 1:推荐 2:不反对,不推荐
+ * @emits ArticleBottomComp-changeCollection 修改 collection, (newValue: number) => void, newValue=>0:未收藏 1:已收藏
+ * @emits ArticleBottomComp-changeAttention 修改 attention, (newValue: number) => void, newValue=>0:未关注 1:已关注
  * @author: clq
  */
 
@@ -120,7 +144,7 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {
+  setup(props, context) {
     const msg = useMessage(); // naive-ui mssage
     const { isLogin } = mapGetters('global', ['isLogin']);
 
@@ -138,6 +162,7 @@ export default defineComponent({
         return false;
       }
     }
+
     /**
      * @description: 关注文章
      * @return {void}
@@ -146,16 +171,13 @@ export default defineComponent({
     function onAttention() {
       if (!isUserLogin()) return;
       console.log('onAttention');
+      if (props.data.attention === 0) {
+        events.emit('ArticleBottomComp-changeAttention', 1); // 关注
+      } else {
+        events.emit('ArticleBottomComp-changeAttention', 0); // 取消关注
+      }
     }
-    /**
-     * @description: 推荐文章
-     * @return {void}
-     * @author: clq
-     */
-    function onRecommend() {
-      if (!isUserLogin()) return;
-      console.log('onRecommend');
-    }
+
     /**
      * @description: 收藏文章
      * @return {void}
@@ -164,7 +186,28 @@ export default defineComponent({
     function onCollect() {
       if (!isUserLogin()) return;
       console.log('onCollect');
+      if (props.data.collection === 0) {
+        events.emit('ArticleBottomComp-changeCollection', 1); //收藏
+      } else {
+        events.emit('ArticleBottomComp-changeCollection', 0); //取消收藏
+      }
     }
+
+    /**
+     * @description: 推荐文章
+     * @return {void}
+     * @author: clq
+     */
+    function onRecommend() {
+      if (!isUserLogin()) return;
+      console.log('onRecommend');
+      if (props.data.evaluation === 1) {
+        events.emit('ArticleBottomComp-changeEvaluation', 2); //取消推荐
+      } else {
+        events.emit('ArticleBottomComp-changeEvaluation', 1); //推荐
+      }
+    }
+
     /**
      * @description: 反对文章
      * @return {void}
@@ -173,7 +216,13 @@ export default defineComponent({
     function onOppose() {
       if (!isUserLogin()) return;
       console.log('onOppose');
+      if (props.data.evaluation === 0) {
+        events.emit('ArticleBottomComp-changeEvaluation', 2); //取消反对
+      } else {
+        events.emit('ArticleBottomComp-changeEvaluation', 0); //反对
+      }
     }
+
     return {
       styles,
       onAttention,
@@ -225,9 +274,10 @@ export default defineComponent({
 
       div:nth-child(1) {
         background-color: $red-0;
-      }
-      div:nth-child(1):hover {
-        background-color: $red-1;
+
+        &:hover {
+          background-color: $pink-0;
+        }
       }
 
       div:nth-child(2) {
@@ -269,6 +319,10 @@ export default defineComponent({
 
       .label {
         margin-right: 8px;
+      }
+
+      .value {
+        @include ellipsis(1);
       }
     }
 
