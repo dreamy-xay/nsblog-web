@@ -4,9 +4,9 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 10:10:43
  * @LastEditors: clq
- * @LastEditTime: 2021-09-27 19:57:35
+ * @LastEditTime: 2021-09-28 12:58:11
  */
-import { get, post, RequestLifeCycle } from '@/network/request';
+import { get, post, put, RequestLifeCycle } from '@/network/request';
 
 /**
  * @description: 获取文章评论
@@ -36,6 +36,7 @@ export function getArticleComments(
     }
   });
 }
+
 /**
  * @description: 发表文章评论
  * @param {string} article_id 文章id `必传参数`
@@ -61,6 +62,29 @@ export function postArticleComments(
       content,
       parent_id,
       reply_username
+    }
+  });
+}
+
+/**
+ * @description: 修改文章评论评价
+ * @param {string} comment_id 评论id `必传参数`
+ * @param {number} type 修改类型 `必传参数`
+ * @param {RequestLifeCycle} RLC
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: clq
+ */
+export function modifyArticleCommentEvaluation(
+  comment_id: string,
+  type: number,
+  RLC: RequestLifeCycle = {}
+): Promise<unknown> {
+  return put({
+    url: '/articles/comments/evaluation',
+    ...RLC,
+    params: {
+      comment_id,
+      type
     }
   });
 }

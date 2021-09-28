@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-23 19:22:16
  * @LastEditors: clq
- * @LastEditTime: 2021-09-27 20:25:53
+ * @LastEditTime: 2021-09-28 12:26:59
 -->
 <template>
   <div class="article-footer-comment-item">
@@ -18,9 +18,9 @@
       <div class="right">
         <div class="top">
           <span class="username">{{comment.username}} <span
-              v-if="comment.replyUsername"
+              v-if="comment.reply_username"
               class="reply"
-            >回复</span> {{comment.replyUsername}}</span>
+            >回复</span> {{comment.reply_username}}</span>
         </div>
 
         <v-md-preview
@@ -45,8 +45,9 @@
         <div class="bottom">
           <div
             role="button"
-            class="bottom-button support"
-            @click="supportComment"
+            :class="{support: comment.evaluation === 1}"
+            class="bottom-button"
+            @click="modifyEvaluation(1)"
           >
             <div>
               <i class="iconfont blog-tubiao73"></i>
@@ -56,8 +57,9 @@
 
           <div
             role="button"
-            class="bottom-button oppose"
-            @click="opposeComment"
+            :class="{oppose: comment.evaluation === 2}"
+            class="bottom-button"
+            @click="modifyEvaluation(2)"
           >
             <div>
               <i class="iconfont blog-tubiao73"></i>
@@ -86,12 +88,17 @@ import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import ArticleFooterEdit from '@/views/article/childComps/articleFooter/childComps/ArticleFooterEdit.vue';
 import { useMessage } from 'naive-ui';
 import { mapGetters } from '@/util/store';
+import events from '@/events';
 
 /**
  * @description: 用户评论子组件
  * @param {Object} ArticleData 文章信息
  * @param {Object} comment 用户评论
- * @param {String} replyCommentId 上层评论id
+ * @param {String} parentId 上层评论id
+ * @param {Number} firstIndex 评论一级索引
+ * @param {Number} seccondIndex 评论二级索引
+ * @emits articleFooterCommentItem-comment 发表评论 (content: string,parent_id: string,reply_username: string) => void
+ * @emits articleFooterCommentItem-modifyEvaluation 发表评论 (newValue: number,firstIndex: number,seccondIndex: number) => void
  * @author: clq
  */
 
@@ -107,12 +114,20 @@ export default defineComponent({
       type: Object,
       default: null,
     },
-    replyCommentId: {
+    parentId: {
       type: String,
-      default: null,
+      default: '',
+    },
+    firstIndex: {
+      type: Number,
+      default: -1,
+    },
+    seccondIndex: {
+      type: Number,
+      default: -1,
     },
   },
-  setup() {
+  setup(props) {
     const msg = useMessage(); // naive-ui mssage
     const { isLogin } = mapGetters('global', ['isLogin']);
     let showEdit = ref(false);
@@ -131,21 +146,27 @@ export default defineComponent({
     }
 
     /**
-     * @description: 支持评论
+     * @description: 修改评论评价
      * @return {void}
      * @author: clq
      */
-    function supportComment() {
-      console.log('supportComment');
-    }
-
-    /**
-     * @description: 反对评论
-     * @return {void}
-     * @author: clq
-     */
-    function opposeComment() {
-      console.log('opposeComment');
+    function modifyEvaluation(type) {
+      console.log('modifyEvaluation');
+      if (type === 1) {
+        //已支持
+        if (props.comment.evaluation === 1) {
+          events.emit('articleFooterCommentItem-modifyEvaluation', 0, props.firstIndex, props.seccondIndex);
+        } else {
+          events.emit('articleFooterCommentItem-modifyEvaluation', 1, props.firstIndex, props.seccondIndex);
+        }
+      } else {
+        //以反对
+        if (props.comment.evaluation === 2) {
+          events.emit('articleFooterCommentItem-modifyEvaluation', 0, props.firstIndex, props.seccondIndex);
+        } else {
+          events.emit('articleFooterCommentItem-modifyEvaluation', 2, props.firstIndex, props.seccondIndex);
+        }
+      }
     }
 
     /**
@@ -157,13 +178,14 @@ export default defineComponent({
     function commitComment(comment) {
       console.log('ArticleFooterCommentItem: ' + comment);
       showEdit.value = false;
+      // context.emit('postComment');
+      events.emit('articleFooterCommentItem-comment', comment, props.parentId, props.comment.username);
     }
 
     return {
       showEdit,
       isShowEdit,
-      supportComment,
-      opposeComment,
+      modifyEvaluation,
       commitComment,
     };
   },
@@ -234,9 +256,25 @@ export default defineComponent({
         color: #bfbfbf;
         @include flex(center, flex-end, row);
 
+        & > div:first-child:hover {
+          color: green;
+        }
+        & > div:last-child:hover {
+          color: red;
+        }
+
+        .support {
+          color: #85e8c7;
+        }
+
+        .oppose {
+          color: #ffb792;
+        }
+
         .bottom-button {
           margin-right: 47px;
           height: 100%;
+          transition: all 0.25s;
           @include flex(center);
 
           div {
@@ -254,14 +292,6 @@ export default defineComponent({
           &:last-child div {
             transform: rotateZ(180deg);
           }
-        }
-
-        .support:hover {
-          color: #85e8c7;
-        }
-
-        .oppose:hover {
-          color: #ffb792;
         }
       }
     }
