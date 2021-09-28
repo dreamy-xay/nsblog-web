@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-28 19:16:32
+ * @LastEditTime: 2021-09-28 20:08:13
 -->
 
 <template>
@@ -16,7 +16,7 @@
     <div style="width: 100%; height: 288px;">
       <base-image
         src=""
-        :loading="0"
+        :loading="2"
         :loading-scale="0.5"
       ></base-image>
     </div>

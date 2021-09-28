@@ -4,12 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-27 12:13:30
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-28 18:30:23
+ * @LastEditTime: 2021-09-28 20:17:51
 -->
 <template>
   <div
     class="base-image-loading-2"
-    :style="{transform: `scale(${_scale_})`}"
+    :style="{transform: `scale(${thisScale})`}"
   >
     <ul>
       <li
@@ -38,16 +38,16 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const _scale_ = ref(1); // 缩放比例
+    const thisScale = ref(1); // 缩放比例
 
     // 以高度 0.5 被缩放
     onMounted(() => {
       const el = getCurrentInstance().vnode.el;
-      _scale_.value = (el.parentElement.offsetHeight * props.scale) / el.offsetHeight;
+      thisScale.value = (el.parentElement.offsetHeight * props.scale) / el.offsetHeight;
     });
 
     return {
-      _scale_,
+      thisScale,
     };
   },
 });
@@ -71,54 +71,54 @@ export default defineComponent({
 
       &:nth-child(1) {
         background-color: $red-0;
-        animation: love1 1.5s infinite;
+        animation: love1 2s infinite;
       }
 
       &:nth-child(2) {
         background-color: $orange-0;
-        animation: love2 1.5s infinite;
+        animation: love2 2s infinite;
         animation-delay: 0.1s;
       }
 
       &:nth-child(3) {
         background-color: $yellow-0;
-        animation: love3 1.5s infinite;
+        animation: love3 2s infinite;
         animation-delay: 0.2s;
       }
 
       &:nth-child(4) {
         background-color: $green-0;
-        animation: love4 1.5s infinite;
+        animation: love4 2s infinite;
         animation-delay: 0.3s;
       }
 
       &:nth-child(5) {
         background-color: $blue-0;
-        animation: love5 1.5s infinite;
+        animation: love5 2s infinite;
         animation-delay: 0.4s;
       }
 
       &:nth-child(6) {
         background-color: $red-1;
-        animation: love4 1.5s infinite;
+        animation: love4 2s infinite;
         animation-delay: 0.5s;
       }
 
       &:nth-child(7) {
         background-color: $purple-0;
-        animation: love3 1.5s infinite;
+        animation: love3 2s infinite;
         animation-delay: 0.6s;
       }
 
       &:nth-child(8) {
         background-color: $pink-0;
-        animation: love2 1.5s infinite;
+        animation: love2 2s infinite;
         animation-delay: 0.7s;
       }
 
       &:nth-child(9) {
         background-color: $green-0;
-        animation: love1 1.5s infinite;
+        animation: love1 2s infinite;
         animation-delay: 0.8s;
       }
 
