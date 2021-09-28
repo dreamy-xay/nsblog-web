@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 16:32:13
  * @LastEditors: clq
- * @LastEditTime: 2021-09-26 20:49:31
+ * @LastEditTime: 2021-09-28 18:07:19
 -->
 
 <template>
@@ -18,6 +18,9 @@
     <article-head :data="articleHeadData" />
     <article-body :data="articleBodyData" />
     <article-footer :data="articleFooterData" />
+    <teleport to="body">
+      <div v-html="articleData.blog_article_html"></div>
+    </teleport>
   </div>
 </template>
 
@@ -71,6 +74,9 @@ export default defineComponent({
       categories: [],
       tags: [],
       content: '',
+      cover_image: null,
+      license: null,
+      blog_article_html: '',
       recommend_count: 0,
       evaluation: undefined, //0:反对 1:推荐 2:不反对,不推荐
       collection: undefined, //0:未收藏 1:已收藏
@@ -98,6 +104,9 @@ export default defineComponent({
         articleData.page_view = data.page_view;
         articleData.comment_count = data.comment_count;
         articleData.topic = data.topic;
+        articleData.cover_image = data.cover_image;
+        articleData.license = data.license;
+        articleData.blog_article_html = data.blog_article_html;
         articleData.categories = data.categories;
         articleData.tags = data.tags;
         articleData.content = data.content;
@@ -119,6 +128,7 @@ export default defineComponent({
         title: articleData.title,
         username: articleData.username,
         nickname: articleData.nickname,
+        cover_image: articleData.cover_image,
         page_view: articleData.page_view,
         recommend_count: articleData.recommend_count,
         comment_count: articleData.comment_count,
@@ -141,6 +151,7 @@ export default defineComponent({
         content: articleData.content,
         categories: articleData.categories,
         tags: articleData.tags,
+        license: articleData.license,
         last_article: articleData.last_article,
         next_article: articleData.next_article,
         attention: articleData.attention,
@@ -188,6 +199,7 @@ export default defineComponent({
 
     return {
       articlePage,
+      articleData,
       articleHeadData,
       articleBodyData,
       articleFooterData,

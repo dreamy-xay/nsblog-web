@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 22:15:27
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-15 12:48:51
+ * @LastEditTime: 2021-09-28 12:01:31
 -->
 <template>
   <div class="login-input">
@@ -294,9 +294,10 @@ $error: $red-2;
   .login-input-focus-border {
     position: relative;
     left: 0;
-    top: -2px;
+    top: -3px;
     width: 0;
-    height: 2px;
+    height: 4px;
+    transform: scaleY(0.5);
     background-color: $success;
     transition: all 0.4s;
   }
