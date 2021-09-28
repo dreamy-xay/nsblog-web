@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-28 13:06:24
+ * @LastEditTime: 2021-09-28 19:03:26
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -233,11 +233,11 @@ export default function(baseUrl: string, app: Application) {
       page_view: Random.integer(0, 1000),
       cover_image: [
         null,
-        '/article/background1.jpg',
-        '/article/background.jpg',
-        '/article/background1.jpg',
-        '/article/background.jpg'
-      ][Random.integer(0, 2)],
+        'https://s3.bmp.ovh/imgs/2021/09/fd25f71e808f3f23.jpg',
+        'https://s3.bmp.ovh/imgs/2021/09/8bcf34ab186f752c.jpg',
+        'https://s3.bmp.ovh/imgs/2021/09/040fbcab0802511e.jpg',
+        'https://s3.bmp.ovh/imgs/2021/09/7fc65c1d3e881ea5.jpg'
+      ][Random.integer(0, 4)],
       license: 'CC BY 4.0',
       blog_article_html: Random.integer(0, 1) ? '' : `<script>console.log('${user.username + ' 的文章'}')</script>`,
       comment_count: Random.integer(0, 1000),
