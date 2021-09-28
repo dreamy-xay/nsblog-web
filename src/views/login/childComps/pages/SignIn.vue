@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 14:41:12
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-16 10:48:37
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-28 12:12:54
 -->
 <template>
   <div class="sign-in">
@@ -78,9 +78,11 @@ import LoginInput from '@/views/login/childComps/LoginInput.vue';
 import LoginButton from '@/views/login/childComps/LoginButton.vue';
 import { useMessage } from 'naive-ui';
 import { mapMutations } from '@/util/store';
+import { useRoute } from 'vue-router';
 
 /**
  * @description: 登录卡片页面
+ * @route {params} back 登录成功后返回页面 `默认为 {name: home}`
  * @author: dreamy-xay
  */
 
@@ -93,6 +95,7 @@ export default defineComponent({
   },
   setup() {
     const msg = useMessage(); // naive-ui message
+    const route = useRoute(); // route
     const username = ref(''); // 用户名
     const password = ref(''); // 密码
     const passwordInput = ref(null); // 密码输入框dom
@@ -157,7 +160,9 @@ export default defineComponent({
           .then((data) => {
             setToken(data.token, data.username);
             updateTokenInfo();
-            router.push({ name: 'home' });
+            router.push(
+              Object.prototype.hasOwnProperty.call(route.params, 'back') ? route.params.back : { name: 'home' }
+            );
           })
           .catch((error) => {
             console.log(error);
