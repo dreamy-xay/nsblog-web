@@ -4,19 +4,25 @@
  * @Autor: clq
  * @Date: 2021-09-23 17:26:29
  * @LastEditors: clq
- * @LastEditTime: 2021-09-27 20:22:28
+ * @LastEditTime: 2021-09-28 12:24:23
 -->
 <template>
   <div class="article-footer-comment">
     <!-- 第一级评论 -->
-    <article-footer-comment-item :comment="comments" />
+    <article-footer-comment-item
+      :comment="comments"
+      :parent-id="comments.comment_id"
+      :first-index="firstIndex"
+    />
     <!-- 子级评论 -->
     <div class="article-footer-comment-reply">
       <article-footer-comment-item
         v-for="(item,index) in comments.child_comments"
         :key="index"
         :comment="item"
-        :replyCommentId="comments.comment_id"
+        :parent-id="comments.comment_id"
+        :first-index="firstIndex"
+        :seccond-index="index"
       />
     </div>
   </div>
@@ -30,6 +36,7 @@ import ArticleFooterCommentItem from '@/views/article/childComps/articleFooter/c
  * @description: 用户评论组件
  * @param {Object} data 文章信息
  * @param {Object} comments 用户评论
+ * @param {Number} firstIndex 评论一级索引
  * @author: clq
  */
 
@@ -44,6 +51,10 @@ export default defineComponent({
     comments: {
       type: Object,
       default: null,
+    },
+    firstIndex: {
+      type: Number,
+      default: -1,
     },
   },
   setup() {
