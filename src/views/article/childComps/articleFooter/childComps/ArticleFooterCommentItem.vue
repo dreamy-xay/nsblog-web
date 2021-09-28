@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-23 19:22:16
  * @LastEditors: clq
- * @LastEditTime: 2021-09-28 18:09:17
+ * @LastEditTime: 2021-09-28 18:15:52
 -->
 <template>
   <div class="article-footer-comment-item">
@@ -191,7 +191,7 @@ export default defineComponent({
      * @author: clq
      */
     function commitComment(comment) {
-      console.log('ArticleFooterCommentItem: ' + comment);
+      // console.log('ArticleFooterCommentItem: ' + comment);
       showEdit.value = false;
       // context.emit('postComment');
       events.emit('articleFooterCommentItem-comment', comment, props.parentId, props.comment.username);
