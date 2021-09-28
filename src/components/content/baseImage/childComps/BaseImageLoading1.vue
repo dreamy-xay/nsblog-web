@@ -4,12 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-27 12:13:30
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-28 18:23:43
+ * @LastEditTime: 2021-09-28 20:17:47
 -->
 <template>
   <div
     class="base-image-loading-1"
-    :style="{transform: `scale(${_scale_})`}"
+    :style="{transform: `scale(${thisScale})`}"
   >
     <div
       class='base-image-loading-1-dot'
@@ -37,16 +37,16 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const _scale_ = ref(1); // 缩放比例
+    const thisScale = ref(1); // 缩放比例
 
     // 以高度 0.5 被缩放
     onMounted(() => {
       const el = getCurrentInstance().vnode.el;
-      _scale_.value = (el.parentElement.offsetHeight * props.scale) / el.offsetHeight;
+      thisScale.value = (el.parentElement.offsetHeight * props.scale) / el.offsetHeight;
     });
 
     return {
-      _scale_,
+      thisScale,
     };
   },
 });
