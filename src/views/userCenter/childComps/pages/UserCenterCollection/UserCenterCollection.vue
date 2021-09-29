@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-18 15:25:00
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-09-29 20:44:40
+ * @LastEditTime: 2021-09-29 21:40:57
 -->
 <template>
   <div class="user-center-collection">
@@ -78,10 +78,10 @@ export default defineComponent({
       };
     });
     const msg = useMessage();
-    let offset = ref(0);
 
     if (tokenInfo.value.status) {
-      getFavorites(tokenInfo.value.username, 25, offset.value, 0, 1)
+      console.log(1);
+      getFavorites(tokenInfo.value.username, 20, 0, 0, 1)
         .then((res) => {
           const len = res.favorites.length;
           for (var i = 0; i < len; i++) {
@@ -89,12 +89,13 @@ export default defineComponent({
             typeList.push({ List: [] }, { List: [] }, { List: [] }, { List: [] });
             let lenList = reactive([]);
             lenList.push({ lens: 0 }, { lens: 0 }, { lens: 0 }, { lens: 0 });
-            favorites.push({ ...res.favorites[i], typeList, isBottom: false, lenList });
+            favorites.push({ ...res.favorites[i], typeList, isBottom: false, lenList, offset: 0 });
+            if (res.favorites[i].collections.length < 20) favorites[i].isBottom = true;
             for (var n = 0; n < favorites[i].collections.length; n++) {
               typeList[0].List.push({ ...favorites[i].collections[n], allIndex: n, Index: 0 });
             }
+            favorites[i].offset += typeList[0].List.length;
           }
-          offset.value += 25;
           for (var y = 0; y < favorites.length; y++) {
             for (var x = 0; x < favorites[y].typeList[0].List.length; x++) {
               const j = favorites[y].typeList[0].List[x].type;
@@ -110,7 +111,6 @@ export default defineComponent({
         .catch((error) => {
           console.log(error);
         });
-      console.log(favorites);
     }
 
     /**
@@ -151,13 +151,25 @@ export default defineComponent({
         });
     }
 
+    /**
+     * @description: 更新收藏列表
+     * @return {void}
+     * @author: continue-hs
+     */
     function getList() {
-      getFavorites(tokenInfo.value.username, 25, offset.value, 0, 1, favorites[activeIndex.value].id)
+      getFavorites(
+        tokenInfo.value.username,
+        20,
+        favorites[activeIndex.value].offset,
+        0,
+        1,
+        favorites[activeIndex.value].id
+      )
         .then((res) => {
           if (res.collections.length > 0) {
             const lens = favorites[activeIndex.value].typeList[0].List.length;
             favorites[activeIndex.value].typeList[0].List.splice(lens, 0, ...res.collections);
-            offset.value += 25;
+            favorites[activeIndex.value].offset += res.collections.length;
             for (var x = lens; x < favorites[activeIndex.value].typeList[0].List.length; x++) {
               const j = favorites[activeIndex.value].typeList[0].List[x].type;
               favorites[activeIndex.value].typeList[j].List.push(favorites[activeIndex.value].typeList[0].List[x]);
@@ -276,7 +288,6 @@ export default defineComponent({
     }
 
     return {
-      offset,
       choiceIndex,
       activeIndex,
       getList,
