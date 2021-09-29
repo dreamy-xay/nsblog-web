@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-18 15:25:00
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-09-11 20:21:03
+ * @LastEditTime: 2021-09-29 20:44:40
 -->
 <template>
   <div class="user-center-collection">
@@ -26,10 +26,13 @@
       </user-center-collection-right-top>
       <div class="right-line"></div>
       <user-center-collection-right-bottom
-        :typeList="typeList"
         :choiceIndex="choiceIndex"
+        :Index="activeIndex"
+        :List="List"
+        :favoritesList="favorites"
         @change-choice="chooseChoice($event)"
         @cancel-col="cancelCol($event)"
+        @update="getList"
       ></user-center-collection-right-bottom>
     </div>
   </div>
@@ -61,16 +64,11 @@ export default defineComponent({
     UserCenterCollectionRightBottom,
   },
   setup() {
-    let typeList = reactive([
-      { name: '全部', List: [] },
-      { name: '文章', List: [] },
-      { name: '问答', List: [] },
-      { name: '资源', List: [] },
-    ]);
-    const activeIndex = ref(0); //显示收藏夹的下标
+    const List = ['全部', '文章', '问答', '资源'];
     const { tokenInfo } = mapState('global', ['tokenInfo']);
     let favorites = reactive([]); //全部收藏夹全部内容
     const choiceIndex = ref(0); //显示收藏类型的下标
+    const activeIndex = ref(0); //显示收藏夹的下标
     let display = computed(() => {
       const len = favorites.length;
       return {
@@ -80,30 +78,39 @@ export default defineComponent({
       };
     });
     const msg = useMessage();
-    let offset = 0;
-    /**
-     * @description: 获取收藏内容
-     * @return {void}
-     * @author: continue-hs
-     */
+    let offset = ref(0);
+
     if (tokenInfo.value.status) {
-      getFavorites(tokenInfo.value.username, 0, 0, 0, 1)
+      getFavorites(tokenInfo.value.username, 25, offset.value, 0, 1)
         .then((res) => {
-          console.log(res.favorites);
-          favorites.splice(0, 0, ...res.favorites);
-          getFavorites(tokenInfo.value.username, 15, offset, 0, 0, res.favorites[0].id)
-            .then((data) => {
-              typeList[0].List.splice(0, favorites[0].collections.length);
-              typeList[0].List.splice(0, 0, ...data.collections);
-              console.log(data.collections);
-            })
-            .catch((error) => {
-              console.log(error);
-            });
+          const len = res.favorites.length;
+          for (var i = 0; i < len; i++) {
+            let typeList = reactive([]);
+            typeList.push({ List: [] }, { List: [] }, { List: [] }, { List: [] });
+            let lenList = reactive([]);
+            lenList.push({ lens: 0 }, { lens: 0 }, { lens: 0 }, { lens: 0 });
+            favorites.push({ ...res.favorites[i], typeList, isBottom: false, lenList });
+            for (var n = 0; n < favorites[i].collections.length; n++) {
+              typeList[0].List.push({ ...favorites[i].collections[n], allIndex: n, Index: 0 });
+            }
+          }
+          offset.value += 25;
+          for (var y = 0; y < favorites.length; y++) {
+            for (var x = 0; x < favorites[y].typeList[0].List.length; x++) {
+              const j = favorites[y].typeList[0].List[x].type;
+              favorites[y].typeList[j].List.push({
+                ...favorites[y].typeList[0].List[x],
+                allIndex: x,
+                Index: favorites[y].lenList[j].lens,
+              });
+              favorites[y].lenList[j].lens++;
+            }
+          }
         })
         .catch((error) => {
           console.log(error);
         });
+      console.log(favorites);
     }
 
     /**
@@ -115,15 +122,6 @@ export default defineComponent({
     function chooseActive(index) {
       activeIndex.value = index;
       choiceIndex.value = 0;
-      typeList[0].List.splice(0, typeList[0].List.length);
-      getFavorites(tokenInfo.value.username, 15, offset, 0, 1, favorites[index].id)
-        .then((data) => {
-          typeList[0].List.splice(0, typeList[0].List.length);
-          typeList[0].List.splice(0, 0, ...data.collections);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
     }
 
     /**
@@ -134,14 +132,6 @@ export default defineComponent({
      */
     function chooseChoice(index) {
       choiceIndex.value = index;
-      getFavorites(tokenInfo.value.username, 15, offset, index, 0, favorites[index].id)
-        .then((data) => {
-          typeList[index].List.splice(0, typeList[index].List.length);
-          typeList[index].List.splice(0, 0, ...data.collections);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
     }
 
     /**
@@ -161,6 +151,26 @@ export default defineComponent({
         });
     }
 
+    function getList() {
+      getFavorites(tokenInfo.value.username, 25, offset.value, 0, 1, favorites[activeIndex.value].id)
+        .then((res) => {
+          if (res.collections.length > 0) {
+            const lens = favorites[activeIndex.value].typeList[0].List.length;
+            favorites[activeIndex.value].typeList[0].List.splice(lens, 0, ...res.collections);
+            offset.value += 25;
+            for (var x = lens; x < favorites[activeIndex.value].typeList[0].List.length; x++) {
+              const j = favorites[activeIndex.value].typeList[0].List[x].type;
+              favorites[activeIndex.value].typeList[j].List.push(favorites[activeIndex.value].typeList[0].List[x]);
+            }
+          } else {
+            favorites[activeIndex.value].isBottom = true;
+            msg.error('已经到底了哦');
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
     /**
      * @description: 修改收藏夹标题
      * @param {string} name 修改的收藏夹标题内容
@@ -188,7 +198,7 @@ export default defineComponent({
     function changeRemark(remark, error) {
       modifyRemark(remark, favorites[activeIndex.value].id)
         .then(() => {
-          msg.favorites[activeIndex.value].remark = remark;
+          favorites[activeIndex.value].remark = remark;
           msg.success('修改收藏夹描述成功');
         })
         .catch((err) => {
@@ -206,11 +216,7 @@ export default defineComponent({
       deleteFavorites(favorites[index].id)
         .then(() => {
           favorites.splice(index, 1);
-          if (!favorites.length)
-            for (var i = 0; i < 4; i++) {
-              typeList[i].List.splice(0, typeList[i].List.length);
-              msg.success('删除收藏夹成功');
-            }
+          msg.success('删除收藏夹成功');
           chooseActive(activeIndex.value);
         })
         .catch((error) => {
@@ -225,9 +231,19 @@ export default defineComponent({
      * @author: continue-hs
      */
     function cancelCol(index) {
-      cancelCollections(typeList[choiceIndex.value].List[index].collection_id)
+      cancelCollections(favorites[activeIndex.value].typeList[choiceIndex.value].List[index].collection_id)
         .then(() => {
-          typeList[choiceIndex.value].List.splice(index, 1);
+          const type = favorites[activeIndex.value].typeList[choiceIndex.value].List[index].type;
+          if (choiceIndex.value === 0) {
+            const Index = favorites[activeIndex.value].typeList[choiceIndex.value].List[index].Index;
+            favorites[activeIndex.value].typeList[0].List.splice(index, 1);
+            favorites[activeIndex.value].typeList[type].List.splice(Index, 1);
+          } else {
+            const allIndex = favorites[activeIndex.value].typeList[choiceIndex.value].List[index].allIndex;
+            favorites[activeIndex.value].typeList[0].List.splice(allIndex, 1);
+            favorites[activeIndex.value].typeList[type].List.splice(index, 1);
+          }
+          favorites[activeIndex.value].count--;
           msg.success('取消收藏成功');
         })
         .catch((error) => {
@@ -242,23 +258,28 @@ export default defineComponent({
      */
     function newfavorites(e) {
       const id = Random.id();
-      newFavorites(tokenInfo.value.username, id, e[0], e[1], e[2]).then(() => {
-        favorites.unshift({
-          id: id,
-          name: e[0],
-          count: 0,
-          remark: e[1],
-          is_private: e[2],
-          collection: [],
+      newFavorites(tokenInfo.value.username, id, e[0], e[1], e[2])
+        .then(() => {
+          favorites.unshift({
+            id: id,
+            name: e[0],
+            count: ref(0),
+            remark: e[1],
+            is_private: e[2],
+            collections: [],
+          });
+          chooseActive(0);
+        })
+        .catch((error) => {
+          console.log(error);
         });
-      });
     }
 
     return {
       offset,
       choiceIndex,
       activeIndex,
-      typeList,
+      getList,
       favorites,
       display,
       changePrivate,
@@ -269,6 +290,7 @@ export default defineComponent({
       newfavorites,
       changeName,
       changeRemark,
+      List,
     };
   },
 });
@@ -287,13 +309,13 @@ export default defineComponent({
   @include flex(center, center);
 
   .user-center-collection-line {
-    @include size(1px, 645px);
+    @include size(1px, 675px);
     opacity: 1;
     border-left: 1px solid $grey-4;
   }
 
   .user-center-collection-right {
-    @include size(736px, 645px);
+    @include size(736px, 675px);
     margin-right: 10px;
 
     .right-line {
