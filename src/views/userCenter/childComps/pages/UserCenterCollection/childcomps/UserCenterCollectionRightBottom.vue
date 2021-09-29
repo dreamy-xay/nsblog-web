@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-23 20:34:57
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-09-29 20:33:45
+ * @LastEditTime: 2021-09-29 21:42:04
 -->
 <template>
   <div class="user-center-collection-right-bottom">
@@ -31,7 +31,7 @@
         >
           <div v-if=" index === Index">
             <div
-              class="collections"
+              class="user-center-collection-right-bottom-collections"
               v-for="(item3,index) in item1.typeList[choiceIndex].List"
               :key="index"
             >
@@ -45,7 +45,7 @@
                   :hollow="true"
                   role="button"
                 ></base-tag>
-                <div class="title">{{item3.title}} </div>
+                <div class="user-center-collection-right-bottom-title">{{item3.title}} </div>
               </a>
               <i
                 class="iconfont blog-fav"
@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
 import styles from '@/assets/style/define.scss';
 import BaseTag from '@/components/content/baseTag/BaseTag.vue';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
@@ -107,6 +107,18 @@ export default defineComponent({
     const modalShow = ref(false); // 是否显示n-modal
     const scrollbar = ref(null); //scrollbar
     const sureIndex = ref(-1);
+    const index = ref(0);
+
+    //监听收藏夹改变，使滚动条回到顶部
+    watch(
+      () => props.Index,
+      (value) => {
+        if (index.value !== value) {
+          scrollbar.value.setScrollTop(0);
+          index.value = value;
+        }
+      }
+    );
 
     /**
      * @description: 更新类型列表下标
@@ -134,6 +146,11 @@ export default defineComponent({
       modalShow.value = isModalShow;
     }
 
+    /**
+     * @description: 更新收藏列表
+     * @return {void}
+     * @author: continue-hs
+     */
     function upload() {
       this.$emit('update');
     }
@@ -146,6 +163,7 @@ export default defineComponent({
       scrollbar,
       sureIndex,
       upload,
+      index,
     };
   },
 });
@@ -190,7 +208,7 @@ export default defineComponent({
       background-color: $grey-7 !important;
     }
 
-    .collections {
+    .user-center-collection-right-bottom-collections {
       @include size(726px, 53px);
       margin: 16px 0 0 9px;
       background: $grey-0;
@@ -206,7 +224,7 @@ export default defineComponent({
         float: left;
       }
 
-      .title {
+      .user-center-collection-right-bottom-title {
         color: $grey-11;
         padding-top: 17px;
         margin-left: 78px;
