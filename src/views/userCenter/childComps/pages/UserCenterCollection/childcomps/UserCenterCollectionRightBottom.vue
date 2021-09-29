@@ -4,13 +4,13 @@
  * @Autor: continue-hs
  * @Date: 2021-08-23 20:34:57
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-09-11 19:52:23
+ * @LastEditTime: 2021-09-29 21:42:04
 -->
 <template>
   <div class="user-center-collection-right-bottom">
     <div class="user-center-collection-right-bottom-typelist">
       <div
-        v-for="(item,index) in typeList"
+        v-for="(item,index) in List"
         :key="index"
         :class="{'Type':true,'Choice': choiceIndex === index}"
         @click="chooseChoice(index)"
@@ -19,38 +19,49 @@
           role="button"
           class="type"
         >
-          {{item.name}}
+          {{item}}
         </div>
       </div>
     </div>
     <div class="user-center-collection-right-bottom-collectionlist">
-      <!-- <el-scrollbar ref="scrollbar"> -->
-      <ul>
-        <li
-          class="collections"
-          v-for="(item,index) in typeList[choiceIndex].List"
+      <el-scrollbar ref="scrollbar">
+        <div
+          v-for="(item1,index) in favoritesList"
           :key="index"
         >
-          <a
-            :href="(item.type === 1 ? '/article' : (item.type === 2 ? '/question' : '/resource') )+ item.content_id"
-            :target="(item.type === 1 ? '/article' : (item.type === 2 ? '/question' : '/resource') )+ item.content_id"
-          >
-            <base-tag
-              :text="item.type === 1 ? '文章' : (item.type === 2 ? '问答' : '资源')"
-              :color="styles.pink0"
-              :hollow="true"
+          <div v-if=" index === Index">
+            <div
+              class="user-center-collection-right-bottom-collections"
+              v-for="(item3,index) in item1.typeList[choiceIndex].List"
+              :key="index"
+            >
+              <a
+                :href="(item3.type === 1 ? '/article' : (item3.type === 2 ? '/question' : '/resource') )+ item3.content_id"
+                :target="(item3.type === 1 ? '/article' : (item3.type === 2 ? '/question' : '/resource') )+ item3.content_id"
+              >
+                <base-tag
+                  :text="item3.type === 1 ? '文章' : (item3.type === 2 ? '问答' : '资源')"
+                  :color="styles.pink0"
+                  :hollow="true"
+                  role="button"
+                ></base-tag>
+                <div class="user-center-collection-right-bottom-title">{{item3.title}} </div>
+              </a>
+              <i
+                class="iconfont blog-fav"
+                role="button"
+                @click="cancelCol(index,false,true)"
+              ></i>
+            </div>
+            <div
+              class="user-center-collection-right-bottom-more"
+              v-if="item1.isBottom == false"
+              @click="upload"
               role="button"
-            ></base-tag>
-            <div class="title">{{item.title}} </div>
-          </a>
-          <i
-            class="iconfont blog-fav"
-            role="button"
-            @click.stop="cancelCol(index,false,true)"
-          ></i>
-        </li>
-      </ul>
-      <!-- </el-scrollbar> -->
+            >查看更多</div>
+          </div>
+        </div>
+      </el-scrollbar>
     </div>
   </div>
   <base-modal
@@ -63,28 +74,51 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
 import styles from '@/assets/style/define.scss';
 import BaseTag from '@/components/content/baseTag/BaseTag.vue';
+import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 
 export default defineComponent({
   name: 'userCenterCollectionRightBottom',
   components: {
     BaseTag,
+    BaseModal,
   },
   props: {
-    typeList: {
-      type: Object,
-      default: null,
-    },
     choiceIndex: {
       type: Number,
       default: 0,
     },
+    Index: {
+      type: Number,
+      default: 0,
+    },
+    List: {
+      type: Array,
+      default: null,
+    },
+    favoritesList: {
+      type: Object,
+      default: null,
+    },
   },
-  setup(context) {
+  setup(props) {
     const modalShow = ref(false); // 是否显示n-modal
     const scrollbar = ref(null); //scrollbar
+    const sureIndex = ref(-1);
+    const index = ref(0);
+
+    //监听收藏夹改变，使滚动条回到顶部
+    watch(
+      () => props.Index,
+      (value) => {
+        if (index.value !== value) {
+          scrollbar.value.setScrollTop(0);
+          index.value = value;
+        }
+      }
+    );
 
     /**
      * @description: 更新类型列表下标
@@ -94,6 +128,7 @@ export default defineComponent({
      */
     function chooseChoice(index) {
       this.$emit('change-Choice', index);
+      scrollbar.value.setScrollTop(0);
     }
 
     /**
@@ -103,10 +138,21 @@ export default defineComponent({
      * @author: continue-hs
      */
     function cancelCol(index, isConfirm, isModalShow = false) {
+      console.log(index);
+      sureIndex.value = index;
       if (isConfirm) {
-        context.emit('cancel-col', index);
+        this.$emit('cancel-col', sureIndex.value);
       }
       modalShow.value = isModalShow;
+    }
+
+    /**
+     * @description: 更新收藏列表
+     * @return {void}
+     * @author: continue-hs
+     */
+    function upload() {
+      this.$emit('update');
     }
 
     return {
@@ -115,6 +161,9 @@ export default defineComponent({
       modalShow,
       cancelCol,
       scrollbar,
+      sureIndex,
+      upload,
+      index,
     };
   },
 });
@@ -159,7 +208,7 @@ export default defineComponent({
       background-color: $grey-7 !important;
     }
 
-    .collections {
+    .user-center-collection-right-bottom-collections {
       @include size(726px, 53px);
       margin: 16px 0 0 9px;
       background: $grey-0;
@@ -175,7 +224,7 @@ export default defineComponent({
         float: left;
       }
 
-      .title {
+      .user-center-collection-right-bottom-title {
         color: $grey-11;
         padding-top: 17px;
         margin-left: 78px;
@@ -191,6 +240,10 @@ export default defineComponent({
         bottom: 20px;
         font-size: 20px;
       }
+    }
+
+    .user-center-collection-right-bottom-more {
+      @include flex(center, center, center);
     }
   }
 }
