@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-24 18:17:15
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-25 15:24:18
+ * @LastEditTime: 2021-09-27 19:55:12
 -->
 <template>
   <n-modal
@@ -44,7 +44,6 @@ import { useMessage } from 'naive-ui';
 /**
  * @description: 登录日志界面
  * @param {Boolean} isShow 是否显示登录日志界面 `默认为false`
- * @event closeLogPage 关闭登录日志界面事件
  * @author: Z_Y_C
  */
 
@@ -76,7 +75,7 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function close() {
-      context.emit('closeLogPage');
+      context.emit('update:isShow', false);
     }
 
     return { LogData, close };
