@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 16:32:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-28 21:45:49
+ * @LastEditTime: 2021-09-29 21:53:28
 -->
 
 <template>
@@ -18,6 +18,7 @@
     <article-head :data="articleHeadData" />
     <article-body :data="articleBodyData" />
     <article-footer :data="articleFooterData" />
+    <article-loading-page :show="showLoadingPage" />
   </div>
 </template>
 
@@ -29,6 +30,7 @@ import ArticleLoadingBar from '@/views/article/childComps/ArticleLoadingBar.vue'
 import ArticleHead from '@/views/article/childComps/articleHead/ArticleHead.vue';
 import ArticleBody from '@/views/article/childComps/articleBody/ArticleBody.vue';
 import ArticleFooter from './childComps/articleFooter/ArticleFooter.vue';
+import ArticleLoadingPage from '@/views/article/childComps/ArticleLoadingPage.vue';
 import { getArticleInfo } from '@/network/api/articles';
 import { addAttentions, deleteAttentions, modifyArticleEvaluation } from '@/network/api/attentions';
 import { useRoute } from 'vue-router';
@@ -50,10 +52,12 @@ export default defineComponent({
     ArticleHead,
     ArticleBody,
     ArticleFooter,
+    ArticleLoadingPage,
   },
   setup() {
     const msg = useMessage(); // naive-ui message
     const articlePage = ref(null); // article page ref
+    const showLoadingPage = ref(true); // 显示加载页面
 
     // 向子组件传递
     provide('articlePage', articlePage);
@@ -91,7 +95,7 @@ export default defineComponent({
 
     // 获取文章数据
     getArticleInfo(articleId)
-      .then((data) => {
+      .then(async (data) => {
         articleData.title = data.title;
         articleData.username = data.username;
         articleData.nickname = data.nickname;
@@ -114,7 +118,10 @@ export default defineComponent({
         articleData.sponsors = data.sponsors;
 
         // 动态添加html
-        appendHTML(document.body, data.blog_article_html);
+        await appendHTML(document.body, data.blog_article_html);
+
+        // 取消显示加载页面
+        showLoadingPage.value = false;
       })
       .catch((error) => {
         console.log(error);
@@ -197,6 +204,7 @@ export default defineComponent({
 
     return {
       articlePage,
+      showLoadingPage,
       articleData,
       articleHeadData,
       articleBodyData,
