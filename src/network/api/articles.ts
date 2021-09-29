@@ -4,9 +4,90 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 10:10:43
  * @LastEditors: clq
- * @LastEditTime: 2021-09-24 21:07:28
+ * @LastEditTime: 2021-09-28 12:58:11
  */
-import { del, get, post, RequestLifeCycle } from '@/network/request';
+import { get, post, put, RequestLifeCycle } from '@/network/request';
+
+/**
+ * @description: 获取文章评论
+ * @param {string} articleId 文章id `必传参数`
+ * @param {string} commentId 评论id `默认为空`
+ * @param {number} offset 起始位置 `默认为0`
+ * @param {number} limit 数量限制 `默认为5`
+ * @param {RequestLifeCycle} RLC
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: clq
+ */
+export function getArticleComments(
+  articleId: string,
+  commentId: string = '',
+  offset: number = 0,
+  limit: number = 5,
+  RLC: RequestLifeCycle = {}
+): Promise<unknown> {
+  return get({
+    url: '/articles/comments',
+    ...RLC,
+    params: {
+      article_id: articleId,
+      comment_id: commentId,
+      limit,
+      offset
+    }
+  });
+}
+
+/**
+ * @description: 发表文章评论
+ * @param {string} article_id 文章id `必传参数`
+ * @param {string} content 评论id `必传参数`
+ * @param {string} parent_id 上层评论id `默认为空`
+ * @param {string} reply_username 回复用户名 `默认为空`
+ * @param {RequestLifeCycle} RLC
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: clq
+ */
+export function postArticleComments(
+  article_id: string,
+  content: string,
+  parent_id: string = '',
+  reply_username: string = '',
+  RLC: RequestLifeCycle = {}
+): Promise<unknown> {
+  return post({
+    url: '/articles/comments',
+    ...RLC,
+    params: {
+      article_id,
+      content,
+      parent_id,
+      reply_username
+    }
+  });
+}
+
+/**
+ * @description: 修改文章评论评价
+ * @param {string} comment_id 评论id `必传参数`
+ * @param {number} type 修改类型 `必传参数`
+ * @param {RequestLifeCycle} RLC
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: clq
+ */
+export function modifyArticleCommentEvaluation(
+  comment_id: string,
+  type: number,
+  RLC: RequestLifeCycle = {}
+): Promise<unknown> {
+  return put({
+    url: '/articles/comments/evaluation',
+    ...RLC,
+    params: {
+      comment_id,
+      type
+    }
+  });
+}
 
 /**
  * @description: 获取文章标签

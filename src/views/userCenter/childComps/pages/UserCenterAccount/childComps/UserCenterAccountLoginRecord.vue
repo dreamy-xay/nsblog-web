@@ -4,12 +4,13 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-24 18:17:15
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-27 19:55:12
+ * @LastEditTime: 2021-09-29 16:17:15
 -->
 <template>
   <n-modal
     display-directive="show"
     :show="isShow"
+    @update:show="close"
   >
 
     <div class="user-center-login">

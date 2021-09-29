@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:42
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-27 20:27:52
+ * @LastEditTime: 2021-09-29 16:06:19
 -->
 <template>
   <div class="user-center-account">
@@ -31,7 +31,10 @@
       </div>
     </div>
     <user-center-account-password v-model:isShow="showPage[0]" />
-    <user-center-account-email v-model:isShow="showPage[1]" />
+    <user-center-account-email
+      v-model:isShow="showPage[1]"
+      @changeEmail="changeEmail"
+    />
     <user-center-account-login-record v-model:isShow="showPage[4]" />
 
   </div>
@@ -71,7 +74,7 @@ export default defineComponent({
      * @author: Ban
      */
     if (tokenInfo.value.status) {
-      getUserInfo(tokenInfo.value.username, 2)
+      getUserInfo(tokenInfo.value.username, 3)
         .then((data) => {
           email.value = data.email;
           if (data.weibo) weibo.value = '已授权绑定微博';
@@ -128,10 +131,21 @@ export default defineComponent({
       showPage[index] = true;
     }
 
+    /**
+     * @description: 改变邮箱
+     * @param {String} email 邮箱
+     * @return {Void}
+     * @author: Z_Y_C
+     */
+    function changeEmail(data) {
+      email.value = data;
+    }
+
     return {
       list,
       openPage,
       showPage,
+      changeEmail,
     };
   },
 });

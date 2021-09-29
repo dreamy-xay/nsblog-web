@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-07-29 16:37:09
- * @LastEditors: Ban
- * @LastEditTime: 2021-09-12 18:35:17
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-28 12:08:01
 -->
 <template>
   <div class="top-bar-left">
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { computed, defineComponent, watch } from 'vue';
 import { mapState } from '@/util/store';
 import { useRoute } from 'vue-router';
 
@@ -49,35 +49,37 @@ export default defineComponent({
   setup() {
     const { tokenInfo } = mapState('global', ['tokenInfo']); // 拿到token验证信息
     // 左侧菜单按钮
-    const menu = [
-      {
-        name: '首页',
-        url: '/',
-      },
-      {
-        name: '博客',
-        url: tokenInfo.value.status ? '/' + tokenInfo.value.username : '/login',
-      },
-      {
-        name: '问答',
-        url: '/question',
-      },
-      {
-        name: '资源',
-        url: '/resource',
-      },
-      {
-        name: '学习小组',
-        url: '/group',
-      },
-    ];
+    const menu = computed(() => {
+      return [
+        {
+          name: '首页',
+          url: '/',
+        },
+        {
+          name: '博客',
+          url: tokenInfo.value.status ? `/blog/${tokenInfo.value.username}` : '/login',
+        },
+        {
+          name: '问答',
+          url: '/question',
+        },
+        {
+          name: '资源',
+          url: '/resource',
+        },
+        {
+          name: '学习小组',
+          url: '/group',
+        },
+      ];
+    });
 
-    const route = useRoute().path.split('/')[1]; // 当前路由
+    const route = useRoute(); // 当前路由
 
     let activeIndex = -1; // 激活索引
     // 更新激活索引
-    for (let i = 0; i < menu.length; ++i)
-      if (menu[i].url.split('/')[1] === route) {
+    for (let i = 0; i < menu.value.length; ++i)
+      if (menu.value[i].url.split('/')[1] === route.path.split('/')[1]) {
         activeIndex = i;
         break;
       }

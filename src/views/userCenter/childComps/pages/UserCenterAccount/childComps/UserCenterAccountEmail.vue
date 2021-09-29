@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-09-14 19:08:58
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-27 20:20:56
+ * @LastEditTime: 2021-09-29 16:06:14
 -->
 <template>
   <div class="user-center-account-email">
@@ -73,11 +73,12 @@
 import { defineComponent, ref, computed } from 'vue';
 import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput.vue';
 import { useMessage } from 'naive-ui';
-import { emailSendVCode } from '@/network/api/user';
+import { changeEmail, emailSendVCode } from '@/network/api/user';
 
 /**
  * @description: 帐号安全-绑定邮箱
  * @param {Boolean} isShow 是否显示绑定邮箱页面 `默认为false`
+ * @event changeEmail 改变email
  * @author: Ban
  */
 
@@ -208,8 +209,18 @@ export default defineComponent({
       if (!verificationCodeInput.value.check({ message: '请输入有效验证码' })) success = false;
 
       if (success) {
-        msg.success('修改成功', { duration: 3000, closable: true });
-        close();
+        changeEmail(email.value, verificationCode.value)
+          .then(() => {
+            msg.success('修改成功', { duration: 3000, closable: true });
+            context.emit('changeEmail', email.value);
+            close();
+          })
+          .catch((error) => {
+            console.log(error);
+            if (error.response && error.response.status === 403)
+              msg.error('验证码错误，验证失败', { duration: 3000, closable: true });
+            else msg.error('服务器错误，验证失败', { duration: 3000, closable: true });
+          });
       }
     }
 
