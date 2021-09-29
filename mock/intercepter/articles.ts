@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-28 19:03:26
+ * @LastEditTime: 2021-09-29 22:15:39
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -239,7 +239,21 @@ export default function(baseUrl: string, app: Application) {
         'https://s3.bmp.ovh/imgs/2021/09/7fc65c1d3e881ea5.jpg'
       ][Random.integer(0, 4)],
       license: 'CC BY 4.0',
-      blog_article_html: Random.integer(0, 1) ? '' : `<script>console.log('${user.username + ' 的文章'}')</script>`,
+      blog_article_html: Random.integer(0, 1)
+        ? ''
+        : `
+      <script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+
+      <script src="/article/tempJs/mouse-click.js"></script>
+<canvas width="1777" height="841" style="position: fixed; left: 0px; top: 0px; z-index: 2147483647; pointer-events: none;"></canvas>
+
+      <!--live2d-->
+      <script src="/article/tempJs/autoload.js"></script>
+      <!--live2dend-->
+
+      <script src="/article/tempJs/mouse.min.js"></script>
+      <script type="text/javascript"> setTimeout(() =>{ $.shuicheMouse({ type:11, color:"rgba(172,12,177,0.8)" })}, 2000) </script>
+      `,
       comment_count: Random.integer(0, 1000),
       topic: Random.integer(0, 1) ? Random.word() : Random.cword(),
       categories: getRandom(Random.integer(0, 2)),
