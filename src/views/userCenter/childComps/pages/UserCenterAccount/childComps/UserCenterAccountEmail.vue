@@ -3,20 +3,13 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-09-14 19:08:58
- * @LastEditors: Ban
- * @LastEditTime: 2021-09-27 15:10:17
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-29 16:06:14
 -->
 <template>
   <div class="user-center-account-email">
-    <div
-      @click="init"
-      class="user-center-account-change-title"
-    >
-      {{title}}
-    </div>
     <n-modal
-      :title="title"
-      :show="showModal"
+      :show="isShow"
       class="user-center-account-email-modal"
       preset="card"
       style="width : 400px"
@@ -80,42 +73,44 @@
 import { defineComponent, ref, computed } from 'vue';
 import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput.vue';
 import { useMessage } from 'naive-ui';
-import { emailSendVCode } from '@/network/api/user';
-import { emailValidate } from '@/network/api/user';
+import { changeEmail, emailSendVCode } from '@/network/api/user';
+
 /**
  * @description: 帐号安全-绑定邮箱
- * @param {String} title 标题内容 `必传参数`
+ * @param {Boolean} isShow 是否显示绑定邮箱页面 `默认为false`
+ * @event changeEmail 改变email
  * @author: Ban
  */
+
 export default defineComponent({
-  name: 'UserCenterAccountEmail',
+  name: 'userCenterAccountEmail',
   props: {
-    title: {
-      type: String,
-      required: true,
+    isShow: {
+      type: Boolean,
+      default: false,
     },
   },
   components: {
     UserCenterInput,
   },
-  setup() {
-    const showModal = ref(false); // 是否显示模态框
+  setup(props, context) {
+    const msg = useMessage(); // naive-ui message
     const email = ref(''); //邮箱
     const verificationCode = ref(''); //验证码
 
-    const emailInput = ref(''); //邮箱ref
-    const verificationCodeInput = ref(''); //验证码ref
+    const emailInput = ref(null); //邮箱ref
+    const verificationCodeInput = ref(null); //验证码ref
     const verificationCodeCount = ref(0); //计时器
-    const message = useMessage();
+
     const verificationCodeContent = computed(() => {
       return verificationCodeCount.value === 0 ? '发送验证码' : verificationCodeCount.value;
     });
+
     /**
      * @description: 初始化（清空数据）
      * @author: Ban
      */
     function init() {
-      showModal.value = true;
       email.value = '';
       verificationCode.value = '';
     }
@@ -183,9 +178,9 @@ export default defineComponent({
      * @author: Ban
      */
     function sendVerificationCode() {
-      const emailStuts = verifyEmail(email.value); //邮箱是否有效
+      const emailStuts = emailInput.value.check({ message: '请输入有效邮箱' }); //邮箱是否有效
       if (emailStuts && verificationCodeCount.value === 0) {
-        let loading = message.loading('验证码发送中', { duration: 0 });
+        let loading = msg.loading('验证码发送中', { duration: 0 });
         //发送验证码
         emailSendVCode(email.value, {
           afterResopnse() {
@@ -197,14 +192,10 @@ export default defineComponent({
           })
           .catch((error) => {
             console.log(error);
-            message.error('发送失败', { duration: 3000, closable: true });
+            msg.error('发送失败', { duration: 3000, closable: true });
           });
-      } else if (!emailStuts) {
-        message.error('请检查邮箱是否正确。', { duration: 3000, closable: true });
-        emailInput.value.userCenterInput.focus();
-      } else {
-        message.error(`请${verificationCodeCount.value}秒后再试一次`, { duration: 3000, closable: true });
-      }
+      } else if (!emailStuts) emailInput.value.userCenterInput.focus();
+      else msg.error(`请${verificationCodeCount.value}秒后再试一次`, { duration: 3000, closable: true });
     }
 
     /**
@@ -215,21 +206,20 @@ export default defineComponent({
     function submit() {
       let success = true; //所填信息是否有效
       if (!emailInput.value.check({ message: '请输入有效邮箱' })) success = false;
-      else if (verificationCode.value.length < 6) {
-        message.error('请输入有效验证码', { duration: 3000, closable: true });
-        success = false;
-      }
+      if (!verificationCodeInput.value.check({ message: '请输入有效验证码' })) success = false;
+
       if (success) {
-        emailValidate(email.value, verificationCode.value)
+        changeEmail(email.value, verificationCode.value)
           .then(() => {
-            message.success('修改成功', { duration: 3000, closable: true });
-            showModal.value = false;
+            msg.success('修改成功', { duration: 3000, closable: true });
+            context.emit('changeEmail', email.value);
+            close();
           })
           .catch((error) => {
             console.log(error);
             if (error.response && error.response.status === 403)
-              message.error('验证码错误，验证失败', { duration: 3000, closable: true });
-            else message.error('服务器错误，验证失败', { duration: 3000, closable: true });
+              msg.error('验证码错误，验证失败', { duration: 3000, closable: true });
+            else msg.error('服务器错误，验证失败', { duration: 3000, closable: true });
           });
       }
     }
@@ -240,11 +230,11 @@ export default defineComponent({
      * @author: Ban
      */
     function close() {
-      showModal.value = false;
+      context.emit('update:isShow', false);
+      init();
     }
+
     return {
-      showModal,
-      init,
       verifyEmail,
       email,
       emailInput,

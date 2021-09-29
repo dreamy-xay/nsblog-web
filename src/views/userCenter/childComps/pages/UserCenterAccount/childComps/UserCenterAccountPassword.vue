@@ -3,20 +3,13 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-26 15:11:17
- * @LastEditors: Ban
- * @LastEditTime: 2021-09-27 15:08:44
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-27 20:33:05
 -->
 <template>
   <div class="user-center-account-change">
-    <div
-      @click="init"
-      class="user-center-account-change-title"
-    >
-      {{title}}
-    </div>
     <n-modal
-      :title="title"
-      :show="showModal"
+      :show="isShow"
       class="user-center-account-change-modal"
       preset="card"
       :style="{width: '400px'}"
@@ -24,21 +17,21 @@
       @close="closeModal"
     >
       <div class="user-center-account-change-inner">
-        <div v-if="title === '修改密码'">
-          <div>原密码
-            <user-center-input
-              placeholder="原密码"
-              ref="oldPasswordInput"
-              v-model="oldPassword"
-              :clearable="true"
-              :show-password="true"
-              class="input"
-              type="password"
-              :verify="verifyOldPassword"
-              :maxlength="30"
-              @enter="oldPasswordEnter"
-            />
-          </div>
+
+        <div>原密码
+          <user-center-input
+            placeholder="原密码"
+            ref="oldPasswordInput"
+            v-model="oldPassword"
+            :clearable="true"
+            :show-password="true"
+            class="input"
+            type="password"
+            :verify="verifyOldPassword"
+            :maxlength="30"
+            @enter="oldPasswordEnter"
+          />
+
           <div>新密码
             <user-center-input
               placeholder="新密码"
@@ -94,22 +87,22 @@ import { clearToken } from '@/network/token';
 
 /**
  * @description: 重置密码
- * @param {String} title 标题内容 `必传参数`
+ * @param {Boolean} isShow 是否显示重置密码页面 `默认为false`
  * @author: Ban
  */
+
 export default defineComponent({
-  name: 'UserCenterAccountChange',
+  name: 'userCenterAccountChange',
   props: {
-    title: {
-      type: String,
-      required: true,
+    isShow: {
+      type: Boolean,
+      default: false,
     },
   },
   components: {
     UserCenterInput,
   },
-  setup() {
-    const showModal = ref(false); // 是否显示修改密码模态框
+  setup(props, context) {
     const oldPassword = ref(''); // 老密码
     const password = ref(''); // 密码
     const confirmedPassword = ref(''); // 验证密码（重复密码）
@@ -213,7 +206,6 @@ export default defineComponent({
      * @author: Ban
      */
     function init() {
-      showModal.value = true;
       password.value = '';
       confirmedPassword.value = '';
       oldPassword.value = '';
@@ -225,11 +217,11 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function closeModal() {
-      showModal.value = false;
+      context.emit('update:isShow', false);
+      init();
     }
 
     return {
-      showModal,
       password,
       confirmedPassword,
       oldPasswordInput,
@@ -237,7 +229,6 @@ export default defineComponent({
       confirmedPasswordInput,
       oldPassword,
       submit,
-      init,
       verifyOldPassword,
       verifyPassword,
       verifyConfirmedPassword,
@@ -283,6 +274,20 @@ export default defineComponent({
       &:first-child {
         margin-right: 10px;
       }
+    }
+  }
+}
+</style>
+
+<style lang="scss">
+.user-center-account-change-modal {
+  .n-base-close {
+    color: $grey-7;
+    transition: 0.25s;
+
+    &:hover,
+    &:active {
+      color: $green-1;
     }
   }
 }

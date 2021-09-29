@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:42
- * @LastEditors: clq
- * @LastEditTime: 2021-09-27 19:36:52
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-29 16:06:19
 -->
 <template>
   <div class="user-center-account">
@@ -25,27 +25,23 @@
       <div
         class="body-right"
         role="button"
+        @click="openPage(index)"
       >
-        <div v-if="item.left === '登录记录' || item.left === '帐号注销'">
-          {{item.right}}
-        </div>
-        <div v-else-if="item.left === '绑定微博' || item.left === '绑定QQ帐号'">
-          {{item.right}}
-        </div>
-        <div v-else-if="item.right === '修改密码'">
-          <user-center-account-password :title="item.right" />
-        </div>
-        <div v-else-if="item.right === '换绑邮箱'">
-          <user-center-account-email :title="item.right"></user-center-account-email>
-        </div>
+        {{item.right}}
       </div>
     </div>
-    <!-- <user-center-account-login-record :isShow="true" /> -->
+    <user-center-account-password v-model:isShow="showPage[0]" />
+    <user-center-account-email
+      v-model:isShow="showPage[1]"
+      @changeEmail="changeEmail"
+    />
+    <user-center-account-login-record v-model:isShow="showPage[4]" />
+
   </div>
 </template>
 
 <script>
-import { defineComponent, computed, ref } from 'vue';
+import { defineComponent, computed, ref, reactive } from 'vue';
 import { getUserInfo } from '@/network/api/user';
 import { mapState } from '@/util/store';
 import UserCenterAccountPassword from '@/views/userCenter/childComps/pages/UserCenterAccount/childComps/UserCenterAccountPassword.vue';
@@ -59,11 +55,11 @@ import { useMessage } from 'naive-ui';
  */
 
 export default defineComponent({
-  name: 'UserCenterAccount',
+  name: 'userCenterAccount',
   components: {
     UserCenterAccountPassword,
     UserCenterAccountEmail,
-    // UserCenterAccountLoginRecord,
+    UserCenterAccountLoginRecord,
   },
   setup() {
     const email = ref(''); //邮箱
@@ -71,21 +67,18 @@ export default defineComponent({
     const qq = ref(''); // QQ
     const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
     const message = useMessage();
+    const showPage = reactive([false, false, false, false, false, false]); // 是否显示页面
 
     /**
      * @description: 获取用户相关信息
      * @author: Ban
      */
     if (tokenInfo.value.status) {
-      getUserInfo(tokenInfo.value.username, 2)
+      getUserInfo(tokenInfo.value.username, 3)
         .then((data) => {
-          if (0 !== data.email.length) email.value = data.email;
-
-          if (0 !== data.weibo.length) weibo.value = '已授权绑定微博';
-
-          if (0 !== data.qq.length) qq.value = '已授权绑定QQ';
-          console.log(list.value);
-          console.log(data);
+          email.value = data.email;
+          if (data.weibo) weibo.value = '已授权绑定微博';
+          if (data.qq) qq.value = '已授权绑定QQ';
         })
         .catch((error) => {
           console.log(error);
@@ -128,8 +121,31 @@ export default defineComponent({
       ];
     });
 
+    /**
+     * @description: 打开页面
+     * @param {number} index 数组下标
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function openPage(index) {
+      showPage[index] = true;
+    }
+
+    /**
+     * @description: 改变邮箱
+     * @param {String} email 邮箱
+     * @return {Void}
+     * @author: Z_Y_C
+     */
+    function changeEmail(data) {
+      email.value = data;
+    }
+
     return {
       list,
+      openPage,
+      showPage,
+      changeEmail,
     };
   },
 });
