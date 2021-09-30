@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-23 17:26:29
  * @LastEditors: clq
- * @LastEditTime: 2021-09-30 21:21:38
+ * @LastEditTime: 2021-09-30 21:47:23
 -->
 <template>
   <div class="article-footer-comment">
@@ -26,7 +26,6 @@
       />
       <article-footer-load-more-btn
         v-if="comments.child_comments.length != 0 && showBtn"
-        class="loadMoreBtn"
         btnStyle=""
         @loadMore="loadMoreHandler"
       />
@@ -133,22 +132,16 @@ export default defineComponent({
       border-bottom: 16px;
     }
   }
-}
-</style>
 
+  :deep(.article-footer-load-more-btn .btn) {
+    width: 100px;
+    height: 28px;
+    line-height: 28px;
+    margin: 10px auto;
+    background-color: $grey-3;
 
-<style lang="scss">
-.article-footer-comment {
-  .loadMoreBtn {
-    .btn {
-      width: 100px;
-      height: 28px;
-      line-height: 28px;
-      margin: 10px auto;
-      background-color: $grey-3;
-      &:hover {
-        background-color: $grey-4;
-      }
+    &:hover {
+      background-color: $grey-4;
     }
   }
 }

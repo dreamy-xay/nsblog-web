@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-28 16:08:43
  * @LastEditors: clq
- * @LastEditTime: 2021-09-30 21:22:26
+ * @LastEditTime: 2021-09-30 21:38:51
 -->
 <template>
   <div class="article-footer-load-more-btn">
@@ -58,7 +58,7 @@ export default defineComponent({
     text-align: center;
     color: $grey-9;
     transition: 0.25s;
-    box-shadow: $shadow-1;
+    box-shadow: $shadow-0;
   }
 }
 </style>
