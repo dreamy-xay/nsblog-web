@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-28 21:37:34
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-29 22:10:54
+ * @LastEditTime: 2021-09-30 14:44:22
  */
 import ResizeObserver from 'resize-observer-polyfill';
 import { debounce, throttle } from 'lodash';
@@ -13,37 +13,34 @@ import { debounce, throttle } from 'lodash';
  * @description: 向后动态添加dom元素
  * @param {Element} element 需要添加的元素  `必传参数`
  * @param {string} html html字符串 `必传参数`
- * @return {void}
+ * @return {Promise<void>}
  * @author: dreamy-xay
  */
 export async function appendHTML(element: Element, html: string): Promise<void> {
   const divTemp: HTMLDivElement = document.createElement('div');
   let nodes: any = null;
   // 文档片段，一次性append，提高性能
-  let fragment: DocumentFragment = document.createDocumentFragment();
   divTemp.innerHTML = html;
   nodes = divTemp.childNodes;
+
   for (let i: number = 0; i < nodes.length; ++i) {
     if (nodes[i]['getAttributeNames'] !== undefined) {
       const attrs: string[] = nodes[i].getAttributeNames();
       let newNode: any = document.createElement(nodes[i].nodeName);
       for (const key of attrs) newNode.setAttribute(key, nodes[i].getAttribute(key));
+      element.appendChild(newNode);
       if (nodes[i].childNodes.length) appendHTML(newNode, nodes[i].innerHTML);
-      if (nodes[i].nodeName.toLowerCase() === 'script' && nodes[i].getAttribute('src')) {
-        element.appendChild(newNode);
+      if (nodes[i].nodeName.toLowerCase() === 'script' && nodes[i].getAttribute('src'))
         await new Promise<void>((resolve: () => void) => {
           newNode.onload = function() {
             resolve();
           };
         });
-      } else fragment.appendChild(newNode);
       newNode = null;
-    } else fragment.appendChild(nodes[i].cloneNode(true));
+    } else element.appendChild(nodes[i].cloneNode(true));
   }
-  element.appendChild(fragment);
   // 据说下面这样子世界会更清净
   nodes = null;
-  fragment = null;
 }
 
 /**

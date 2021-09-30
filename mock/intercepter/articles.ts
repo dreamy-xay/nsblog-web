@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-29 22:15:39
+ * @LastEditTime: 2021-09-30 14:51:34
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -242,17 +242,22 @@ export default function(baseUrl: string, app: Application) {
       blog_article_html: Random.integer(0, 1)
         ? ''
         : `
+      <link rel="stylesheet" href="//at.alicdn.com/t/font_1346053_111ghkv8md9.css">
+      <link rel="stylesheet" href="//at.alicdn.com/t/font_2250819_2hhizzrngl7.css">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+      <div class="test" style="display:none;"><span>asasas<div>inainsas</div></span></div>
       <script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 
-      <script src="/article/tempJs/mouse-click.js"></script>
-<canvas width="1777" height="841" style="position: fixed; left: 0px; top: 0px; z-index: 2147483647; pointer-events: none;"></canvas>
+      <canvas class="fireworks" style="position: fixed; left: 0px; top: 0px; z-index: 99999999; pointer-events: none; width: 1536px; height: 722px;" width="3072" height="1444"></canvas>
+      <script type="text/javascript" src="/article/tempJs/anime.min.js"></script>
+      <script type="text/javascript" src="/article/tempJs/fireworks.js"></script>
 
       <!--live2d-->
       <script src="/article/tempJs/autoload.js"></script>
       <!--live2dend-->
 
       <script src="/article/tempJs/mouse.min.js"></script>
-      <script type="text/javascript"> setTimeout(() =>{ $.shuicheMouse({ type:11, color:"rgba(172,12,177,0.8)" })}, 2000) </script>
+      <script type="text/javascript"> $.shuicheMouse({ type:11, color:"rgba(172,12,177,0.8)" }) </script>
       `,
       comment_count: Random.integer(0, 1000),
       topic: Random.integer(0, 1) ? Random.word() : Random.cword(),
