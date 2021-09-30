@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-24 10:18:28
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-09-28 16:52:21
+ * @LastEditTime: 2021-09-29 21:47:26
 -->
 <template>
   <div class="user-center-collection-list">
@@ -58,7 +58,6 @@
       <user-center-input
         class="input-title"
         v-model="inputTitle"
-        ref="titleInput"
         type="text"
         showClose="true"
         :maxlength="20"
@@ -99,7 +98,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, watch } from 'vue';
+import { defineComponent, ref } from 'vue';
 import styles from '@/assets/style/define.scss';
 import { useMessage } from 'naive-ui';
 import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput';
@@ -121,26 +120,29 @@ export default defineComponent({
       default: null,
     },
   },
-  setup(props) {
+  setup() {
     const isVisible = ref(false);
     const radio = ref(true);
     const msg = useMessage(); //message提示
     const inputTitle = ref('');
-    const titleInput = ref(null);
     const inputRemark = ref('');
     const modalShow = ref(false);
 
-    watch(
-      () => '',
-      (value) => {
-        inputTitle.value = value;
-      }
-    );
-
+    /**
+     * @description: 改变显示收藏夹
+     * @param {number} index 显示收藏夹下标
+     * @return {void}
+     * @author: continue-hs
+     */
     function chooseActive(index) {
       this.$emit('change-index', index);
     }
 
+    /**
+     * @description: 新建文件夹
+     * @return {void}
+     * @author: continue-hs
+     */
     function newfavorites(name, remark, is_private, isConfirm, isConfirmModal = false) {
       if (isConfirm) {
         if (name !== '') {
@@ -161,7 +163,6 @@ export default defineComponent({
       styles,
       newfavorites,
       inputTitle,
-      titleInput,
       inputRemark,
       modalShow,
     };
