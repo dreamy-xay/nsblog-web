@@ -4,19 +4,19 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-28 21:37:34
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-30 14:44:22
+ * @LastEditTime: 2021-09-30 15:20:48
  */
 import ResizeObserver from 'resize-observer-polyfill';
 import { debounce, throttle } from 'lodash';
 
 /**
  * @description: 向后动态添加dom元素
- * @param {Element} element 需要添加的元素  `必传参数`
+ * @param {HTMLElement} element 需要添加的元素  `必传参数`
  * @param {string} html html字符串 `必传参数`
  * @return {Promise<void>}
  * @author: dreamy-xay
  */
-export async function appendHTML(element: Element, html: string): Promise<void> {
+export async function appendHTML(element: HTMLElement, html: string): Promise<void> {
   const divTemp: HTMLDivElement = document.createElement('div');
   let nodes: any = null;
   // 文档片段，一次性append，提高性能
@@ -45,12 +45,12 @@ export async function appendHTML(element: Element, html: string): Promise<void> 
 
 /**
  * @description: 向前动态添加dom元素
- * @param {Element} element 需要添加的元素  `必传参数`
+ * @param {HTMLElement} element 需要添加的元素  `必传参数`
  * @param {string} html html字符串 `必传参数`
  * @return {void}
  * @author: dreamy-xay
  */
-export async function prependHTML(element: Element, html: string): Promise<void> {
+export async function prependHTML(element: HTMLElement, html: string): Promise<void> {
   const divTemp: HTMLDivElement = document.createElement('div');
   let nodes: any = null;
   // 文档片段，一次性append，提高性能
@@ -82,7 +82,7 @@ export async function prependHTML(element: Element, html: string): Promise<void>
 
 /**
  * @description: 增加resize监听，包括高度宽度变化('mutation')
- * @param {Element} element 监听dom节点 `必传参数`
+ * @param {HTMLElement} element 监听dom节点 `必传参数`
  * @param {'resize' | 'mutation'} observer 选用的resize Observer `默认为 'resize'`
  * @param {function} callback 监听回调函数 `必传参数`
  * @param {'throttle' | 'debounce' | null} method 监听模式，包括节流，防抖，或者原生 `默认为null`
@@ -92,7 +92,7 @@ export async function prependHTML(element: Element, html: string): Promise<void>
  * @author: dreamy-xay
  */
 export function addObserverListener(
-  element: Element,
+  element: HTMLElement,
   callback: (...args: any[]) => void,
   observer: 'resize' | 'mutation' = 'resize',
   method: 'throttle' | 'debounce' | null = null,
