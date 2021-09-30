@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-20 19:56:13
  * @LastEditors: clq
- * @LastEditTime: 2021-09-27 19:27:05
+ * @LastEditTime: 2021-09-30 19:28:56
 -->
 <template>
   <div class="article-bottom-comp">
@@ -332,6 +332,18 @@ export default defineComponent({
 
     .next {
       margin: 16px 0 27px 0;
+    }
+  }
+}
+</style>
+
+<style lang="scss">
+.article-bottom-comp {
+  .article-bottom-comp-body {
+    .value {
+      .iconfont {
+        margin-right: 5px;
+      }
     }
   }
 }

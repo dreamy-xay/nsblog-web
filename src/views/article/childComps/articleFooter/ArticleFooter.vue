@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-20 17:53:48
  * @LastEditors: clq
- * @LastEditTime: 2021-09-28 18:03:10
+ * @LastEditTime: 2021-09-30 21:18:01
 -->
 <template>
   <div class="article-footer">
@@ -18,9 +18,11 @@
       :comments="item"
       :first-index="index"
       :data="data"
+      :index="index"
       @loadMoreHandler="loadMoreComments"
     />
     <article-footer-load-more-btn
+      class="loadMoreBtn"
       v-if="isShowLoadMoreBtn"
       @loadMore="loadMoreComments"
     />
@@ -39,6 +41,7 @@ import events from '@/events';
 /**
  * @description: 文章底部评论区
  * @param {Object} data 文章相关数据
+ * @emits articleFooter-delBtn 去除加载更多按钮 (i: number)=>void
  * @author: clq
  */
 
@@ -53,7 +56,7 @@ export default defineComponent({
   },
   setup(props) {
     const msg = useMessage(); //naive-ui message
-    let comments = reactive([]);
+    let comments = reactive([]); //用户评论
     let commentsOffset = ref(0); // 获取评论的偏移量
     let commentLimit = ref(5); // 单次获取评论数
     let isShowLoadMoreBtn = ref(true); // 底部加载更多按钮显示控制
@@ -66,7 +69,7 @@ export default defineComponent({
     events.on('articleFooterCommentItem-modifyEvaluation', (newValue, firstIndex, seccondIndex) => {
       // console.log('evaluationNewValue: ' + newValue);
       if (seccondIndex === -1) {
-        // 修改一级评论
+        // 修改一级评论评价
         modifyArticleCommentEvaluation(comments[firstIndex].comment_id, newValue)
           .then(() => {
             if (comments[firstIndex].evaluation === 0) {
@@ -97,7 +100,7 @@ export default defineComponent({
             msg.error('修改评价失败', { duration: 2000, closable: true });
           });
       } else {
-        // 修改二级评论
+        // 修改二级评论评价
         modifyArticleCommentEvaluation(comments[firstIndex].child_comments[seccondIndex].comment_id, newValue)
           .then(() => {
             if (comments[firstIndex].child_comments[seccondIndex].evaluation === 0) {
@@ -142,15 +145,20 @@ export default defineComponent({
     function getComments(arricleId, commentId, offset, limit) {
       getArticleComments(arricleId, commentId, offset, limit)
         .then((res) => {
-          // console.log('articleFooterGetComments');
-          // console.log(res);
+          console.log('articleFooterGetComments: ' + commentId);
+          console.log(res);
           if (commentId === '') {
+            // 获取一级评论
             if (res.comments.length < limit) isShowLoadMoreBtn.value = false;
             comments.splice(comments.length, 0, ...res.comments);
           } else {
+            // 获取二级评论
             for (let i = 0; i < comments.length; i++) {
               if (comments[i].comment_id === commentId) {
-                if (res.comments.length < limit) msg.warning('没有更多评论可加载', { duration: 2000, closable: true });
+                if (res.comments.length < limit) {
+                  // msg.warning('没有更多评论可加载', { duration: 2000, closable: true });
+                  events.emit('articleFooter-delBtn', i);
+                }
                 comments[i].child_comments.splice(comments[i].child_comments.length, 0, ...res.comments);
                 break;
               }
@@ -220,7 +228,7 @@ export default defineComponent({
         // 发表一级评论
         let comment = {
           avatar: '',
-          comment_id: '',
+          comment_id: '123',
           content,
           evaluation: 0,
           support_count: 0,
@@ -261,7 +269,7 @@ export default defineComponent({
      * @author: clq
      */
     function loadMoreComments(commentId = '') {
-      // console.log('loadMoreCommentsCommentId: ' + commentId);
+      console.log('loadMoreCommentsCommentId: ' + commentId);
       commentsOffset.value += commentLimit.value;
       getComments(props.data.article_id, commentId, commentsOffset.value, commentLimit.value);
     }
@@ -292,6 +300,19 @@ export default defineComponent({
     font-family: Arial;
     font-size: 20px;
     color: $grey-11;
+  }
+}
+</style>
+
+<style lang="scss">
+.article-footer {
+  .loadMoreBtn {
+    .btn {
+      background-color: $grey-1;
+      &:hover {
+        background-color: $grey-3;
+      }
+    }
   }
 }
 </style>
