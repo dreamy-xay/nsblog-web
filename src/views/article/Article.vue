@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 16:32:13
- * @LastEditors: clq
- * @LastEditTime: 2021-09-28 18:07:19
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-30 16:34:32
 -->
 
 <template>
@@ -18,15 +18,14 @@
     <article-head :data="articleHeadData" />
     <article-body :data="articleBodyData" />
     <article-footer :data="articleFooterData" />
-    <teleport to="body">
-      <div v-html="articleData.blog_article_html"></div>
-    </teleport>
+    <base-loading-page :show="showLoadingPage" />
   </div>
 </template>
 
 <script>
 import { computed, defineComponent, provide, reactive, ref } from 'vue';
 import BaseBackground from '@/components/content/baseBackground/BaseBackground.vue';
+import BaseLoadingPage from '@/components/common/baseLoadingPage/BaseLoadingPage.vue';
 import ArticleMenu from '@/views/article/childComps/articleMenu/ArticleMenu.vue';
 import ArticleLoadingBar from '@/views/article/childComps/ArticleLoadingBar.vue';
 import ArticleHead from '@/views/article/childComps/articleHead/ArticleHead.vue';
@@ -37,6 +36,7 @@ import { addAttentions, deleteAttentions, modifyArticleEvaluation } from '@/netw
 import { useRoute } from 'vue-router';
 import events from '@/events';
 import { useMessage } from 'naive-ui';
+import { appendHTML } from '@/util/dom';
 
 /**
  * @description:
@@ -52,10 +52,12 @@ export default defineComponent({
     ArticleHead,
     ArticleBody,
     ArticleFooter,
+    BaseLoadingPage,
   },
   setup() {
     const msg = useMessage(); // naive-ui message
     const articlePage = ref(null); // article page ref
+    const showLoadingPage = ref(true); // 显示加载页面
 
     // 向子组件传递
     provide('articlePage', articlePage);
@@ -76,7 +78,6 @@ export default defineComponent({
       content: '',
       cover_image: null,
       license: null,
-      blog_article_html: '',
       recommend_count: 0,
       evaluation: undefined, //0:反对 1:推荐 2:不反对,不推荐
       collection: undefined, //0:未收藏 1:已收藏
@@ -94,8 +95,7 @@ export default defineComponent({
 
     // 获取文章数据
     getArticleInfo(articleId)
-      .then((data) => {
-        console.log(data);
+      .then(async (data) => {
         articleData.title = data.title;
         articleData.username = data.username;
         articleData.nickname = data.nickname;
@@ -106,7 +106,6 @@ export default defineComponent({
         articleData.topic = data.topic;
         articleData.cover_image = data.cover_image;
         articleData.license = data.license;
-        articleData.blog_article_html = data.blog_article_html;
         articleData.categories = data.categories;
         articleData.tags = data.tags;
         articleData.content = data.content;
@@ -117,6 +116,12 @@ export default defineComponent({
         articleData.last_article = data.last_article;
         articleData.next_article = data.next_article;
         articleData.sponsors = data.sponsors;
+
+        // 动态添加html
+        await appendHTML(document.body, data.blog_article_html);
+
+        // 取消显示加载页面
+        showLoadingPage.value = false;
       })
       .catch((error) => {
         console.log(error);
@@ -199,6 +204,7 @@ export default defineComponent({
 
     return {
       articlePage,
+      showLoadingPage,
       articleData,
       articleHeadData,
       articleBodyData,

@@ -4,26 +4,24 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 18:19:49
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-28 12:57:12
+ * @LastEditTime: 2021-09-28 19:15:38
 -->
 <template>
-  <div class="article-head-background">
+  <div
+    class="article-head-background"
+    :style="{backgroundColor: backgroundImage ? null : styles.grey10}"
+  >
     <base-image
       v-if="backgroundImage"
       :src="backgroundImage"
       :loading="2"
+      :style="{backgroundColor: `rgba(${colorHexToDec(styles.green0).rgb}, 0.5)`}"
     />
     <ul class="circles">
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
+      <li
+        v-for="index of 10"
+        :key="index"
+      ></li>
     </ul>
   </div>
 </template>
@@ -31,6 +29,8 @@
 <script>
 import { defineComponent } from 'vue';
 import BaseImage from '@/components/content/baseImage/BaseImage.vue';
+import styles from '@/assets/style/define.scss';
+import { colorHexToDec } from '@/util/util';
 
 /**
  * @description:
@@ -48,6 +48,12 @@ export default defineComponent({
       default: '',
     },
   },
+  setup() {
+    return {
+      styles,
+      colorHexToDec,
+    };
+  },
 });
 </script>
 
@@ -55,7 +61,6 @@ export default defineComponent({
 .article-head-background {
   width: 100%;
   height: 100%;
-  background-color: $grey-10;
   overflow: hidden;
   position: absolute;
   top: 0;
@@ -67,6 +72,12 @@ export default defineComponent({
     width: 100%;
     height: 100%;
     overflow: hidden;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba($grey-11, 0.2);
 
     @keyframes nhBannerAnimation {
       0% {
