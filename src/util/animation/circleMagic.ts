@@ -4,12 +4,29 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-29 19:15:51
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-30 15:55:52
+ * @LastEditTime: 2021-09-30 17:07:02
  */
 
+/**
+ * @description: 圆圈魔法动画
+ * @param {HTMLElement} 绑定元素dom节点 `必传参数`
+ * @param {{ color?: string | 'random'; radius?: number; density?: number; clearOffset?: number; scrollElement?: HTMLElement }} 动画配置选项 `默认为{
+    color: 'rgba(255, 255, 255, 0.5)',
+    radius: 10,
+    density: 0.3,
+    clearOffset: 0.25}`
+ * @return {void}
+ * @author: dreamy-xay
+ */
 export default function(
   element: HTMLElement,
-  options: { color?: string; radius?: number; density?: number; clearOffset?: number; scrollElement?: HTMLElement }
+  options: {
+    color?: string | 'random';
+    radius?: number;
+    density?: number;
+    clearOffset?: number;
+    scrollElement?: HTMLElement;
+  } = {}
 ): void {
   const circles: Circle[] = [];
 
@@ -27,9 +44,9 @@ export default function(
     scrollElement?: HTMLElement;
   } = {
     color: 'rgba(255, 255, 255, 0.5)',
-    radius: 10,
+    radius: 12,
     density: 0.3,
-    clearOffset: 0.2,
+    clearOffset: 0.25,
     ...options
   };
 
@@ -94,7 +111,6 @@ export default function(
   function initCanvas(): void {
     canvasElement = document.createElement('canvas');
     element.appendChild(canvasElement);
-    canvasElement.parentElement.style.position = 'relative';
     canvasElement.parentElement.style.overflow = 'hidden';
     canvasElement.width = width;
     canvasElement.height = height;
@@ -106,20 +122,24 @@ export default function(
 
   // Event handling
   function addListeners() {
-    if (settings.scrollElement) window.addEventListener('scroll', scrollCheck, false);
-    window.addEventListener('resize', resize, false);
-  }
+    settings?.scrollElement.addEventListener(
+      'scroll',
+      () => {
+        animateHeader = settings.scrollElement.scrollTop <= height;
+      },
+      false
+    );
 
-  function scrollCheck() {
-    if (settings?.scrollElement.scrollTop > height) animateHeader = false;
-    else animateHeader = true;
-  }
-
-  function resize() {
-    width = element.clientWidth;
-    height = element.clientHeight;
-    canvasElement.width = width;
-    canvasElement.height = height;
+    window.addEventListener(
+      'resize',
+      () => {
+        width = element.clientWidth;
+        height = element.clientHeight;
+        canvasElement.width = width;
+        canvasElement.height = height;
+      },
+      false
+    );
   }
 
   function animate() {

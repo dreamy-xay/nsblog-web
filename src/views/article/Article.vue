@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 16:32:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-30 14:54:06
+ * @LastEditTime: 2021-09-30 16:34:32
 -->
 
 <template>
@@ -18,19 +18,19 @@
     <article-head :data="articleHeadData" />
     <article-body :data="articleBodyData" />
     <article-footer :data="articleFooterData" />
-    <article-loading-page :show="showLoadingPage" />
+    <base-loading-page :show="showLoadingPage" />
   </div>
 </template>
 
 <script>
 import { computed, defineComponent, provide, reactive, ref } from 'vue';
 import BaseBackground from '@/components/content/baseBackground/BaseBackground.vue';
+import BaseLoadingPage from '@/components/common/baseLoadingPage/BaseLoadingPage.vue';
 import ArticleMenu from '@/views/article/childComps/articleMenu/ArticleMenu.vue';
 import ArticleLoadingBar from '@/views/article/childComps/ArticleLoadingBar.vue';
 import ArticleHead from '@/views/article/childComps/articleHead/ArticleHead.vue';
 import ArticleBody from '@/views/article/childComps/articleBody/ArticleBody.vue';
 import ArticleFooter from './childComps/articleFooter/ArticleFooter.vue';
-import ArticleLoadingPage from '@/views/article/childComps/ArticleLoadingPage.vue';
 import { getArticleInfo } from '@/network/api/articles';
 import { addAttentions, deleteAttentions, modifyArticleEvaluation } from '@/network/api/attentions';
 import { useRoute } from 'vue-router';
@@ -52,7 +52,7 @@ export default defineComponent({
     ArticleHead,
     ArticleBody,
     ArticleFooter,
-    ArticleLoadingPage,
+    BaseLoadingPage,
   },
   setup() {
     const msg = useMessage(); // naive-ui message
