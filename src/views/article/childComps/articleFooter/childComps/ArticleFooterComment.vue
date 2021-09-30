@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-23 17:26:29
  * @LastEditors: clq
- * @LastEditTime: 2021-09-28 18:02:23
+ * @LastEditTime: 2021-09-30 21:21:38
 -->
 <template>
   <div class="article-footer-comment">
@@ -25,8 +25,9 @@
         :seccond-index="index"
       />
       <article-footer-load-more-btn
-        v-if="comments.child_comments.length != 0"
-        :btnStyle="'margin: 10px auto;'"
+        v-if="comments.child_comments.length != 0 && showBtn"
+        class="loadMoreBtn"
+        btnStyle=""
         @loadMore="loadMoreHandler"
       />
     </div>
@@ -34,9 +35,10 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, ref } from 'vue';
 import ArticleFooterCommentItem from '@/views/article/childComps/articleFooter/childComps/ArticleFooterCommentItem.vue';
 import ArticleFooterLoadMoreBtn from '@/views/article/childComps/articleFooter/childComps/ArticleFooterLoadMoreBtn.vue';
+import events from '@/events';
 
 /**
  * @description: 用户评论组件
@@ -62,9 +64,20 @@ export default defineComponent({
       type: Number,
       default: -1,
     },
+    index: {
+      type: Number,
+      default: -1,
+    },
   },
   setup(props, context) {
     let showEdit = ref(false);
+    let showBtn = ref(true);
+
+    events.on('articleFooter-delBtn', (i) => {
+      if (i === props.index) {
+        showBtn.value = false;
+      }
+    });
 
     /**
      * @description: 控制编辑区显示
@@ -86,6 +99,7 @@ export default defineComponent({
 
     return {
       showEdit,
+      showBtn,
       isShowEdit,
       loadMoreHandler,
     };
@@ -117,6 +131,24 @@ export default defineComponent({
 
     & > div:last-child {
       border-bottom: 16px;
+    }
+  }
+}
+</style>
+
+
+<style lang="scss">
+.article-footer-comment {
+  .loadMoreBtn {
+    .btn {
+      width: 100px;
+      height: 28px;
+      line-height: 28px;
+      margin: 10px auto;
+      background-color: $grey-3;
+      &:hover {
+        background-color: $grey-4;
+      }
     }
   }
 }

@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-28 13:06:24
+ * @LastEditors: clq
+ * @LastEditTime: 2021-09-30 20:51:58
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -133,7 +133,7 @@ export default function(baseUrl: string, app: Application) {
 
       function getComments(): Record<string, unknown> {
         let ans: Record<string, unknown> = {};
-        if (article_id) {
+        if (!(article_id && comment_id)) {
           ans = { child_comments: [] };
           const sum = Random.integer(0, 5);
           for (let i: number = 0; i < sum; ++i) {
