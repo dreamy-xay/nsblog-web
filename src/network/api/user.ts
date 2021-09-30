@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:38:31
- * @LastEditors: Ban
- * @LastEditTime: 2021-09-27 11:16:12
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-29 10:11:08
  */
 import { post, get, put, RequestLifeCycle } from '@/network/request';
 import { encrypt } from '@/util/crypto';
@@ -265,6 +265,23 @@ export function getProfile(username: string, RLC: RequestLifeCycle = {}): Promis
     ...RLC,
     params: {
       username
+    }
+  });
+}
+
+/**
+ * @description: 换绑邮箱api
+ * @param {*}
+ * @return {*}
+ * @author: Z_Y_C
+ */
+export function changeEmail(email: string, code: string, RLC: RequestLifeCycle = {}): Promise<unknown> {
+  return post({
+    url: '/users/email',
+    ...RLC,
+    data: {
+      email,
+      code
     }
   });
 }

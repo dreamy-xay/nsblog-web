@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: clq
- * @LastEditTime: 2021-09-30 20:51:58
+ * @LastEditTime: 2021-09-30 21:25:28
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -233,13 +233,32 @@ export default function(baseUrl: string, app: Application) {
       page_view: Random.integer(0, 1000),
       cover_image: [
         null,
-        '/article/background1.jpg',
-        '/article/background.jpg',
-        '/article/background1.jpg',
-        '/article/background.jpg'
-      ][Random.integer(0, 2)],
+        'https://s3.bmp.ovh/imgs/2021/09/fd25f71e808f3f23.jpg',
+        'https://s3.bmp.ovh/imgs/2021/09/8bcf34ab186f752c.jpg',
+        'https://s3.bmp.ovh/imgs/2021/09/040fbcab0802511e.jpg',
+        'https://s3.bmp.ovh/imgs/2021/09/7fc65c1d3e881ea5.jpg'
+      ][Random.integer(0, 4)],
       license: 'CC BY 4.0',
-      blog_article_html: Random.integer(0, 1) ? '' : `<script>console.log('${user.username + ' 的文章'}')</script>`,
+      blog_article_html: Random.integer(0, 1)
+        ? ''
+        : `
+      <link rel="stylesheet" href="//at.alicdn.com/t/font_1346053_111ghkv8md9.css">
+      <link rel="stylesheet" href="//at.alicdn.com/t/font_2250819_2hhizzrngl7.css">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+      <div class="test" style="display:none;"><span>asasas<div>inainsas</div></span></div>
+      <script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+
+      <canvas class="fireworks" style="position: fixed; left: 0px; top: 0px; z-index: 99999999; pointer-events: none; width: 1536px; height: 722px;" width="3072" height="1444"></canvas>
+      <script type="text/javascript" src="/article/tempJs/anime.min.js"></script>
+      <script type="text/javascript" src="/article/tempJs/fireworks.js"></script>
+
+      <!--live2d-->
+      <script src="/article/tempJs/autoload.js"></script>
+      <!--live2dend-->
+
+      <script src="/article/tempJs/mouse.min.js"></script>
+      <script type="text/javascript"> $.shuicheMouse({ type:11, color:"rgba(172,12,177,0.8)" }) </script>
+      `,
       comment_count: Random.integer(0, 1000),
       topic: Random.integer(0, 1) ? Random.word() : Random.cword(),
       categories: getRandom(Random.integer(0, 2)),
