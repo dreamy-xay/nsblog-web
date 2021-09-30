@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-18 15:25:00
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-09-29 21:40:57
+ * @LastEditTime: 2021-09-29 22:36:34
 -->
 <template>
   <div class="user-center-collection">
@@ -78,33 +78,34 @@ export default defineComponent({
       };
     });
     const msg = useMessage();
+    const limit = ref(20);
 
     if (tokenInfo.value.status) {
-      console.log(1);
-      getFavorites(tokenInfo.value.username, 20, 0, 0, 1)
+      getFavorites(tokenInfo.value.username, limit.value, 0, 0, 1)
         .then((res) => {
           const len = res.favorites.length;
           for (var i = 0; i < len; i++) {
-            let typeList = reactive([]);
+            let typeList = reactive([]); //收藏夹分类收藏列表
             typeList.push({ List: [] }, { List: [] }, { List: [] }, { List: [] });
-            let lenList = reactive([]);
+            let lenList = reactive([]); //收藏夹分类列表数量
             lenList.push({ lens: 0 }, { lens: 0 }, { lens: 0 }, { lens: 0 });
+
             favorites.push({ ...res.favorites[i], typeList, isBottom: false, lenList, offset: 0 });
-            if (res.favorites[i].collections.length < 20) favorites[i].isBottom = true;
+            //判断获取到的收藏列表长度是否小于limit，以此判断是否到底
+            if (res.favorites[i].collections.length < limit.value) favorites[i].isBottom = true;
             for (var n = 0; n < favorites[i].collections.length; n++) {
               typeList[0].List.push({ ...favorites[i].collections[n], allIndex: n, Index: 0 });
             }
             favorites[i].offset += typeList[0].List.length;
-          }
-          for (var y = 0; y < favorites.length; y++) {
-            for (var x = 0; x < favorites[y].typeList[0].List.length; x++) {
-              const j = favorites[y].typeList[0].List[x].type;
-              favorites[y].typeList[j].List.push({
-                ...favorites[y].typeList[0].List[x],
-                allIndex: x,
-                Index: favorites[y].lenList[j].lens,
+            //判断每个收藏夹下全部列表中的元素类型，并推入对应类型列表
+            for (var x = 0; x < favorites[i].typeList[0].List.length; x++) {
+              const j = favorites[i].typeList[0].List[x].type;
+              favorites[i].typeList[j].List.push({
+                ...favorites[i].typeList[0].List[x],
+                allIndex: x, //该收藏在总列表中的下标
+                Index: favorites[i].lenList[j].lens, //该收藏在分类列表中的下标
               });
-              favorites[y].lenList[j].lens++;
+              favorites[i].lenList[j].lens++;
             }
           }
         })
@@ -157,16 +158,17 @@ export default defineComponent({
      * @author: continue-hs
      */
     function getList() {
-      getFavorites(
-        tokenInfo.value.username,
-        20,
-        favorites[activeIndex.value].offset,
-        0,
-        1,
-        favorites[activeIndex.value].id
-      )
-        .then((res) => {
-          if (res.collections.length > 0) {
+      //若判断该收藏夹是否到底，未到底则继续获取列表
+      if (favorites[activeIndex.value].isBottom === false) {
+        getFavorites(
+          tokenInfo.value.username,
+          limit.value,
+          favorites[activeIndex.value].offset,
+          0,
+          1,
+          favorites[activeIndex.value].id
+        )
+          .then((res) => {
             const lens = favorites[activeIndex.value].typeList[0].List.length;
             favorites[activeIndex.value].typeList[0].List.splice(lens, 0, ...res.collections);
             favorites[activeIndex.value].offset += res.collections.length;
@@ -174,14 +176,16 @@ export default defineComponent({
               const j = favorites[activeIndex.value].typeList[0].List[x].type;
               favorites[activeIndex.value].typeList[j].List.push(favorites[activeIndex.value].typeList[0].List[x]);
             }
-          } else {
-            favorites[activeIndex.value].isBottom = true;
-            msg.error('已经到底了哦');
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+            //若获取到的列表长度小于limit,则判断列表已到底
+            if (res.collections.length < limit.value) {
+              favorites[activeIndex.value].isBottom = true;
+              msg.success('已经获取到了全部了哦');
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     }
     /**
      * @description: 修改收藏夹标题
@@ -270,17 +274,26 @@ export default defineComponent({
      */
     function newfavorites(e) {
       const id = Random.id();
+      let typeList = reactive([]);
+      typeList.push({ List: [] }, { List: [] }, { List: [] }, { List: [] });
+      let lenList = reactive([]);
+      lenList.push({ lens: 0 }, { lens: 0 }, { lens: 0 }, { lens: 0 });
       newFavorites(tokenInfo.value.username, id, e[0], e[1], e[2])
         .then(() => {
           favorites.unshift({
             id: id,
             name: e[0],
-            count: ref(0),
+            count: 0,
             remark: e[1],
             is_private: e[2],
             collections: [],
+            typeList,
+            isBottom: false,
+            lenList,
+            offset: 0,
           });
           chooseActive(0);
+          console.log(favorites);
         })
         .catch((error) => {
           console.log(error);

@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-23 20:34:57
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-09-29 21:42:04
+ * @LastEditTime: 2021-09-29 22:15:21
 -->
 <template>
   <div class="user-center-collection-right-bottom">
@@ -54,11 +54,17 @@
               ></i>
             </div>
             <div
-              class="user-center-collection-right-bottom-more"
-              v-if="item1.isBottom == false"
-              @click="upload"
-              role="button"
-            >查看更多</div>
+              class="user-center-collection-right-bottom-blank"
+              v-if="item1.typeList[choiceIndex].List.length === 0"
+            >此收藏夹为空，快去添加收藏吧</div>
+            <div v-else>
+              <div
+                class="user-center-collection-right-bottom-more"
+                v-if="item1.isBottom == false"
+                @click="upload"
+                role="button"
+              >查看更多</div>
+            </div>
           </div>
         </div>
       </el-scrollbar>
