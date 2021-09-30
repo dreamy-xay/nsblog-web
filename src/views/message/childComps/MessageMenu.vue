@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 22:48:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-15 18:09:30
+ * @LastEditTime: 2021-09-29 16:37:22
 -->
 <template>
   <div class="message-left">
@@ -155,13 +155,14 @@ $green0: $green-0;
   border-radius: $border-radius0;
   box-shadow: $shadow0;
   font-size: 14px;
-  line-height: 18px;
   font-weight: 700;
   transition: all 0.4s;
 
   .message-left-title1 {
     margin-bottom: 25px;
     color: $grey11;
+    line-height: 19px;
+    height: 19px;
 
     .message-left-title1-iconfont {
       margin-right: 6px;
@@ -173,7 +174,8 @@ $green0: $green-0;
     align-items: center;
     padding: 15px 0;
     font-size: 14px;
-    line-height: 18px;
+    line-height: 19px;
+    height: 19px;
     font-weight: 700;
     color: $grey7;
     transition: all 0.4s;
@@ -204,6 +206,8 @@ $green0: $green-0;
     @include flex(center, initial, row);
     padding-top: 5px;
     color: $grey-7;
+    line-height: 19px;
+    height: 19px;
     transition: all 0.4s;
 
     .iconfont {

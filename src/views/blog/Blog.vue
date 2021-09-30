@@ -3,17 +3,22 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 18:20:47
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 18:22:06
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-09-29 20:20:14
 -->
 <template>
   <div class="blog">
     <base-background :mask="false" />
+    <div>
+      <blog-main-article />
+    </div>
+
   </div>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
+import BlogMainArticle from '@/views/blog/childComps/blogMain/BlogMainArticle.vue';
 import BaseBackground from '@/components/content/baseBackground/BaseBackground.vue';
 
 /**
@@ -25,6 +30,7 @@ export default defineComponent({
   name: 'blog',
   components: {
     BaseBackground,
+    BlogMainArticle,
   },
 });
 </script>
