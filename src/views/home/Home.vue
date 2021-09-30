@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-30 16:01:04
+ * @LastEditTime: 2021-09-30 17:00:36
 -->
 
 <template>
@@ -20,20 +20,16 @@
         :loading-scale="0.5"
       ></base-image>
     </div>
-    <div
-      style="width: 100%; height: 500px; background: #222222; margin-bottom: 100px;"
-      ref="circle"
-    ></div>
+
   </base-view>
 </template>
 
 <script>
-import { defineComponent, onMounted, ref } from 'vue';
+import { defineComponent } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import BaseImage from '@/components/content/baseImage/BaseImage.vue';
 import styles from '@/assets/style/define.scss';
 import { colorHexToDec } from '@/util/util';
-import circleMagic from '@/util/animation/circleMagic';
 
 /**
  * @description: 博客主页
@@ -47,14 +43,8 @@ export default defineComponent({
     BaseImage,
   },
   setup() {
-    const circle = ref(null);
-    onMounted(() => {
-      circleMagic(circle.value, { scrollElement: document.body });
-    });
-
     return {
       styles,
-      circle,
       colorHexToDec,
     };
   },

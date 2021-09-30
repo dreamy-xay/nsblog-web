@@ -4,15 +4,15 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-29 16:55:47
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-29 17:32:44
+ * @LastEditTime: 2021-09-30 16:32:17
 -->
 <template>
   <div
-    class="article-loading-page"
+    class="base-loading-page"
     :style="{opacity: Number(show), pointerEvents: show ? null : 'none'}"
   >
     <div
-      class="article-loading-page-loading"
+      class="base-loading-page-loading"
       :style="{transform: `scale(${scale})`}"
     >
       <div class="border out"></div>
@@ -39,7 +39,7 @@ import { defineComponent, onMounted, ref } from 'vue';
  */
 
 export default defineComponent({
-  name: 'articleLoadingPage',
+  name: 'baseLoadingPage',
   props: {
     show: {
       type: Boolean,
@@ -62,7 +62,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.article-loading-page {
+.base-loading-page {
   position: fixed;
   left: 0;
   top: 0;
@@ -74,7 +74,7 @@ export default defineComponent({
   opacity: 1;
   transition: 0.25s;
 
-  .article-loading-page-loading {
+  .base-loading-page-loading {
     position: relative;
     width: 200px;
     height: 200px;
