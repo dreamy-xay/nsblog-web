@@ -3,10 +3,10 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-09-01 17:02:19
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 10:20:45
+ * @LastEditors: clq
+ * @LastEditTime: 2021-09-26 19:47:12
  */
-import { del, get, post, RequestLifeCycle } from '@/network/request';
+import { del, put, get, post, RequestLifeCycle } from '@/network/request';
 
 /**
  * @description: 获取关注人员信息
@@ -81,12 +81,31 @@ export function addAttentions(username: string, RLC: RequestLifeCycle = {}): Pro
  * @author: Z_Y_C
  */
 
-export function deleteAttentions(username: string, RLC: RequestLifeCycle = {}) {
+export function deleteAttentions(username: string, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return del({
     url: '/attentions',
     ...RLC,
     data: {
       username
+    }
+  });
+}
+
+/**
+ * @description: 修改文章评价
+ * @param {string} articleId 文章id `必传参数`
+ * @param {number} type 修改方式 `必传参数`
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: clq
+ */
+export function modifyArticleEvaluation(articleId: string, type: number, RLC: RequestLifeCycle = {}): Promise<unknown> {
+  return put({
+    url: '/articles/evaluation',
+    ...RLC,
+    data: {
+      articleId,
+      type
     }
   });
 }

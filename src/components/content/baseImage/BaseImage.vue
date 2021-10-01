@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-27 11:55:25
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-27 12:42:41
+ * @LastEditTime: 2021-09-28 18:09:25
 -->
 <template>
   <div
@@ -21,7 +21,10 @@
       class="base-image-loading"
       v-if="!imageSrc"
     >
-      <component :is="`BaseImageLoading${loading}`" />
+      <component
+        :is="`BaseImageLoading${loading}`"
+        :scale="loadingScale"
+      />
     </div>
   </div>
 </template>
@@ -30,6 +33,7 @@
 import { defineComponent, ref, computed } from 'vue';
 import BaseImageLoading0 from '@/components/content/baseImage/childComps/BaseImageLoading0.vue';
 import BaseImageLoading1 from '@/components/content/baseImage/childComps/BaseImageLoading1.vue';
+import BaseImageLoading2 from '@/components/content/baseImage/childComps/BaseImageLoading2.vue';
 
 /**
  * @description: 基本图片组件
@@ -38,6 +42,7 @@ import BaseImageLoading1 from '@/components/content/baseImage/childComps/BaseIma
  * @param {Object} style 头像风格样式 `默认为null`
  * @param {Number | String} loading 加载过程中显示图片或者动画，动画请看子组件下loading编号 `默认为 0`
  * @param {String} loadError 加载失败显示图片 `默认为 null`
+ * @param {Number} loadingScale 加载动画相对图片高度缩放比例 `默认为0.5`
  * @event load 图片加载完成触发 (e) => {}
  * @event error 图片加载失败触发 (e) => {}
  * @author: dreamy-xay
@@ -48,6 +53,7 @@ export default defineComponent({
   components: {
     BaseImageLoading0,
     BaseImageLoading1,
+    BaseImageLoading2,
   },
   props: {
     src: {
@@ -69,6 +75,10 @@ export default defineComponent({
     loadError: {
       type: String,
       default: null,
+    },
+    loadingScale: {
+      type: Number,
+      default: 0.5,
     },
   },
   setup(props, context) {
@@ -119,8 +129,13 @@ export default defineComponent({
 .base-image {
   overflow: hidden;
   user-select: none;
+  width: 100%;
+  height: 100%;
   position: relative;
   background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
 
   img {
     width: 100%;
@@ -133,7 +148,6 @@ export default defineComponent({
     background-color: transparent;
     left: 0;
     top: 0;
-    z-index: 1;
     @include flex(center, center);
     width: 100%;
     height: 100%;

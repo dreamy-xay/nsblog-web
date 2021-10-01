@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-09-20 19:21:40
- * @LastEditors: clq
- * @LastEditTime: 2021-09-25 12:00:22
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-09-28 11:59:15
 -->
 <template>
   <a
@@ -21,6 +21,8 @@ import { defineComponent } from 'vue';
 
 /**
  * @description: 文章页面链接组件
+ * @param {String} href 链接跳转 `默认为 null`
+ * @param {String} target 链接跳转目标 `默认为 null`
  * @author: clq
  */
 
@@ -43,20 +45,20 @@ export default defineComponent({
 .article-link {
   position: relative;
   @include ellipsis(1);
+  text-decoration: none;
+  transition: color 0.25s;
 
   &:active,
   &:link,
   &:visited {
     color: $grey-7;
-    text-decoration: none;
   }
 
   &:hover {
     color: $green-1;
-    text-decoration: none;
 
     &:after {
-      transform: scaleX(1);
+      transform: scale(1, 0.5);
       background-color: $green-1;
       transform-origin: bottom left;
     }
@@ -66,11 +68,12 @@ export default defineComponent({
     content: '';
     position: absolute;
     width: 100%;
-    transform: scaleX(0);
-    height: 2px;
-    bottom: -2px;
+    transform: scale(0, 0.5);
+    height: 4px;
+    bottom: -3px;
     left: 0px;
     background-color: $green-1;
+    overflow: hidden;
     transform-origin: bottom right;
     transition: transform 0.25s;
   }

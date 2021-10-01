@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:15:05
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-15 11:57:24
+ * @LastEditTime: 2021-09-28 12:19:03
  */
 import { Random, mock } from 'better-mock';
 import { Application, Request, Response } from 'express';
@@ -135,13 +135,21 @@ export default function(baseUrl: string, app: Application) {
           },
           resource_chart: {
             resource_count: Random.natural(0, 10000),
-            data: mock({
-              'list|12': ['@natural(0, 100)']
-            }).list,
+            ...mock({
+              'data|12': ['@natural(0, 100)']
+            }),
             release_recently: Random.natural(0, 10000)
           }
         });
       } else return res.status(410).json({ error: 'User name error' });
+    } else if (type === 3) {
+      if (user && user.isActive)
+        return res.json({
+          qq: Random.integer(0, 2) ? Random.integer(1000000, 30000000000) : null,
+          weibo: Random.integer(0, 2) ? Random.integer(1000000, 30000000000) : null,
+          email: user.email
+        });
+      else return res.status(410).json({ error: 'User name error' });
     } else return res.status(410).json({ error: 'Type error' });
   });
 
@@ -172,6 +180,19 @@ export default function(baseUrl: string, app: Application) {
       );
     }
     return res.send();
+  });
+
+  // 换绑邮箱
+  app.post(baseUrl + '/users/email', (req: Request, res: Response) => {
+    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
+    const username: string = getToken(req.headers).username;
+    const { code, email } = req.body;
+    const codes: DataBaseOperator = select('codes');
+    if (codes.findOne({ code, email })) {
+      codes.removeOne({ code, email });
+      select('users').modifyOne({ username }, { email });
+      return res.send();
+    } else return res.status(403).json({ error: 'code error' });
   });
 
   // 邮箱发送验证码
