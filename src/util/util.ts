@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-02 11:13:42
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 19:54:38
+ * @LastEditTime: 2021-09-28 18:57:39
  */
 /**
  * 通过图片url 获取图片file对象
@@ -80,4 +80,23 @@ export function getSplitNum(num: string | number, count: number = 3, split: stri
   }
   if (str.length % count === 0) ans = ans.slice(0, ans.length - 1);
   return reverse(ans);
+}
+
+/**
+ * @description: 颜色10进制转10进制
+ * @param {string} color 传入16进制颜色，如 '#ff0a4a' `必传参数`
+ * @return {{r: number, g: number, b: number, rgb: string}} 返回对象,其中rgb为字符串  如 121,255,10 => r(121) g(255) b(10)
+ * @author: dreamy-xay
+ */
+export function colorHexToDec(color: string): { r: number; g: number; b: number; rgb: string } {
+  if (!new RegExp(/#[0-9a-fA-F]{6}/).test(color)) return { r: 0, g: 0, b: 0, rgb: '0,0,0' };
+  const r = parseInt(color.substr(1, 2), 16),
+    g = parseInt(color.substr(3, 2), 16),
+    b = parseInt(color.substr(5, 2), 16);
+  return {
+    r,
+    g,
+    b,
+    rgb: `${r},${g},${b}`
+  };
 }

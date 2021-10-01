@@ -4,11 +4,11 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 17:51:15
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 19:44:13
+ * @LastEditTime: 2021-09-28 19:14:21
 -->
 <template>
   <div class="article-head">
-    <article-head-background />
+    <article-head-background :background-image="data.cover_image" />
     <div class="article-head-inner">
       <div class="title">
         <span>{{articleTitle}}</span>
@@ -187,6 +187,7 @@ export default defineComponent({
   width: 100%;
   height: 288px;
   position: relative;
+  background-color: $grey-0;
   @include flex(center, center);
   box-shadow: 0 1px 2px rgba($grey-8, 70%);
 

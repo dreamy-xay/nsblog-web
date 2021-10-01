@@ -4,30 +4,33 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 18:19:49
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 19:45:50
+ * @LastEditTime: 2021-09-28 19:15:38
 -->
 <template>
   <div
     class="article-head-background"
-    :style="{backgroundImage: `url(${backgroundImage})`}"
+    :style="{backgroundColor: backgroundImage ? null : styles.grey10}"
   >
+    <base-image
+      v-if="backgroundImage"
+      :src="backgroundImage"
+      :loading="2"
+      :style="{backgroundColor: `rgba(${colorHexToDec(styles.green0).rgb}, 0.5)`}"
+    />
     <ul class="circles">
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
+      <li
+        v-for="index of 10"
+        :key="index"
+      ></li>
     </ul>
   </div>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
+import BaseImage from '@/components/content/baseImage/BaseImage.vue';
+import styles from '@/assets/style/define.scss';
+import { colorHexToDec } from '@/util/util';
 
 /**
  * @description:
@@ -36,12 +39,19 @@ import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'articleHeadBackground',
+  components: {
+    BaseImage,
+  },
+  props: {
+    backgroundImage: {
+      type: String,
+      default: '',
+    },
+  },
   setup() {
-    const titleBackgroundImg = ['/article/background.jpg', '/article/background1.jpg', null]; // 标题背景图片
-    const backgroundImage = ref(titleBackgroundImg[Math.floor(Math.random() * titleBackgroundImg.length)]); // 头部背景图片
-
     return {
-      backgroundImage,
+      styles,
+      colorHexToDec,
     };
   },
 });
@@ -51,10 +61,6 @@ export default defineComponent({
 .article-head-background {
   width: 100%;
   height: 100%;
-  background-color: $grey-10;
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
   overflow: hidden;
   position: absolute;
   top: 0;
@@ -66,6 +72,12 @@ export default defineComponent({
     width: 100%;
     height: 100%;
     overflow: hidden;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba($grey-11, 0.2);
 
     @keyframes nhBannerAnimation {
       0% {

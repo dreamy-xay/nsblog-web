@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-26 12:55:45
+ * @LastEditors: clq
+ * @LastEditTime: 2021-09-30 21:25:28
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -133,7 +133,7 @@ export default function(baseUrl: string, app: Application) {
 
       function getComments(): Record<string, unknown> {
         let ans: Record<string, unknown> = {};
-        if (article_id) {
+        if (!(article_id && comment_id)) {
           ans = { child_comments: [] };
           const sum = Random.integer(0, 5);
           for (let i: number = 0; i < sum; ++i) {
@@ -144,6 +144,7 @@ export default function(baseUrl: string, app: Application) {
               username: user.username,
               avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
               time: Random.time(),
+              reply_username: RUsers.random().username,
               content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
               support_count: Random.integer(0, 9999),
               oppose_count: Random.integer(0, 9999),
@@ -176,6 +177,17 @@ export default function(baseUrl: string, app: Application) {
     return res.json({ comments: getRandom(int(offset) >= 25 ? 0 : Math.min(int(limit), 25 - int(offset))) });
   });
 
+  // 获取文章评论
+  app.post(baseUrl + '/articles/comments', (req: Request, res: Response) => {
+    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
+    const username: string = getToken(req.headers).username;
+    const { article_id, content, parent_id, reply_username } = req.body;
+    console.log(
+      `--------${username} articleComments:   article_id=>${article_id}  content=>${content}  parent_id=>${parent_id}  reply_username=>${reply_username}`
+    );
+    return res.send();
+  });
+
   // 修改文章评论状态，推荐反对还是不操作
   app.put(baseUrl + '/articles/comments/evaluation', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
@@ -200,12 +212,13 @@ export default function(baseUrl: string, app: Application) {
       return ans;
     }
 
+    const collection: Record<string, unknown> = Random.integer(0, 1) ? { collection: Random.id() } : {};
     const params: Record<string, unknown> =
       username !== ''
         ? {
             evaluation: Random.integer(0, 2),
             attention: Random.integer(0, 1),
-            collection: Random.integer(0, 2)
+            ...collection
           }
         : {};
 
@@ -218,6 +231,34 @@ export default function(baseUrl: string, app: Application) {
       avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
       release_time: Random.datetime(),
       page_view: Random.integer(0, 1000),
+      cover_image: [
+        null,
+        'https://s3.bmp.ovh/imgs/2021/09/fd25f71e808f3f23.jpg',
+        'https://s3.bmp.ovh/imgs/2021/09/8bcf34ab186f752c.jpg',
+        'https://s3.bmp.ovh/imgs/2021/09/040fbcab0802511e.jpg',
+        'https://s3.bmp.ovh/imgs/2021/09/7fc65c1d3e881ea5.jpg'
+      ][Random.integer(0, 4)],
+      license: 'CC BY 4.0',
+      blog_article_html: Random.integer(0, 1)
+        ? ''
+        : `
+      <link rel="stylesheet" href="//at.alicdn.com/t/font_1346053_111ghkv8md9.css">
+      <link rel="stylesheet" href="//at.alicdn.com/t/font_2250819_2hhizzrngl7.css">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+      <div class="test" style="display:none;"><span>asasas<div>inainsas</div></span></div>
+      <script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+
+      <canvas class="fireworks" style="position: fixed; left: 0px; top: 0px; z-index: 99999999; pointer-events: none; width: 1536px; height: 722px;" width="3072" height="1444"></canvas>
+      <script type="text/javascript" src="/article/tempJs/anime.min.js"></script>
+      <script type="text/javascript" src="/article/tempJs/fireworks.js"></script>
+
+      <!--live2d-->
+      <script src="/article/tempJs/autoload.js"></script>
+      <!--live2dend-->
+
+      <script src="/article/tempJs/mouse.min.js"></script>
+      <script type="text/javascript"> $.shuicheMouse({ type:11, color:"rgba(172,12,177,0.8)" }) </script>
+      `,
       comment_count: Random.integer(0, 1000),
       topic: Random.integer(0, 1) ? Random.word() : Random.cword(),
       categories: getRandom(Random.integer(0, 2)),
@@ -238,9 +279,9 @@ export default function(baseUrl: string, app: Application) {
         title: Random.integer(0, 1) ? Random.title() : Random.ctitle()
       },
       sponsors: {
-        paypal: Random.integer(0, 1) ? Random.image('150x150', '#234567', '#FFFFFF', 'png', 'paypal') : '',
-        alipay: Random.integer(0, 1) ? Random.image('150x150', '#234567', '#FFFFFF', 'png', 'alipay') : '',
-        weixin: Random.integer(0, 1) ? Random.image('150x150', '#234567', '#FFFFFF', 'png', 'weixin') : ''
+        paypal: Random.integer(0, 1) ? Random.image('150x150', '#234567', '#FFFFFF', 'png', 'paypal') : null,
+        alipay: Random.integer(0, 1) ? Random.image('150x150', '#234567', '#FFFFFF', 'png', 'alipay') : null,
+        weixin: Random.integer(0, 1) ? Random.image('150x150', '#234567', '#FFFFFF', 'png', 'weixin') : null
       }
     };
 

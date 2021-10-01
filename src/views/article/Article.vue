@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 16:32:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-26 16:58:07
+ * @LastEditTime: 2021-09-30 16:34:32
 -->
 
 <template>
@@ -17,20 +17,26 @@
     <article-loading-bar />
     <article-head :data="articleHeadData" />
     <article-body :data="articleBodyData" />
-    <article-footer />
+    <article-footer :data="articleFooterData" />
+    <base-loading-page :show="showLoadingPage" />
   </div>
 </template>
 
 <script>
 import { computed, defineComponent, provide, reactive, ref } from 'vue';
 import BaseBackground from '@/components/content/baseBackground/BaseBackground.vue';
+import BaseLoadingPage from '@/components/common/baseLoadingPage/BaseLoadingPage.vue';
 import ArticleMenu from '@/views/article/childComps/articleMenu/ArticleMenu.vue';
 import ArticleLoadingBar from '@/views/article/childComps/ArticleLoadingBar.vue';
 import ArticleHead from '@/views/article/childComps/articleHead/ArticleHead.vue';
 import ArticleBody from '@/views/article/childComps/articleBody/ArticleBody.vue';
 import ArticleFooter from './childComps/articleFooter/ArticleFooter.vue';
 import { getArticleInfo } from '@/network/api/articles';
+import { addAttentions, deleteAttentions, modifyArticleEvaluation } from '@/network/api/attentions';
 import { useRoute } from 'vue-router';
+import events from '@/events';
+import { useMessage } from 'naive-ui';
+import { appendHTML } from '@/util/dom';
 
 /**
  * @description:
@@ -46,9 +52,12 @@ export default defineComponent({
     ArticleHead,
     ArticleBody,
     ArticleFooter,
+    BaseLoadingPage,
   },
   setup() {
+    const msg = useMessage(); // naive-ui message
     const articlePage = ref(null); // article page ref
+    const showLoadingPage = ref(true); // 显示加载页面
 
     // 向子组件传递
     provide('articlePage', articlePage);
@@ -59,7 +68,7 @@ export default defineComponent({
       title: '',
       username: '',
       nickname: '',
-      avatar: null,
+      avatar: '',
       release_time: null,
       page_view: 0,
       comment_count: 0,
@@ -67,10 +76,12 @@ export default defineComponent({
       categories: [],
       tags: [],
       content: '',
+      cover_image: null,
+      license: null,
       recommend_count: 0,
-      evaluation: undefined,
-      collection: undefined,
-      attention: undefined,
+      evaluation: undefined, //0:反对 1:推荐 2:不反对,不推荐
+      collection: undefined, //0:未收藏 1:已收藏
+      attention: undefined, //0:未关注 1:已关注
       last_article: {
         article_id: null,
         title: '',
@@ -84,8 +95,7 @@ export default defineComponent({
 
     // 获取文章数据
     getArticleInfo(articleId)
-      .then((data) => {
-        console.log(data);
+      .then(async (data) => {
         articleData.title = data.title;
         articleData.username = data.username;
         articleData.nickname = data.nickname;
@@ -94,6 +104,8 @@ export default defineComponent({
         articleData.page_view = data.page_view;
         articleData.comment_count = data.comment_count;
         articleData.topic = data.topic;
+        articleData.cover_image = data.cover_image;
+        articleData.license = data.license;
         articleData.categories = data.categories;
         articleData.tags = data.tags;
         articleData.content = data.content;
@@ -104,6 +116,12 @@ export default defineComponent({
         articleData.last_article = data.last_article;
         articleData.next_article = data.next_article;
         articleData.sponsors = data.sponsors;
+
+        // 动态添加html
+        await appendHTML(document.body, data.blog_article_html);
+
+        // 取消显示加载页面
+        showLoadingPage.value = false;
       })
       .catch((error) => {
         console.log(error);
@@ -115,6 +133,7 @@ export default defineComponent({
         title: articleData.title,
         username: articleData.username,
         nickname: articleData.nickname,
+        cover_image: articleData.cover_image,
         page_view: articleData.page_view,
         recommend_count: articleData.recommend_count,
         comment_count: articleData.comment_count,
@@ -137,6 +156,7 @@ export default defineComponent({
         content: articleData.content,
         categories: articleData.categories,
         tags: articleData.tags,
+        license: articleData.license,
         last_article: articleData.last_article,
         next_article: articleData.next_article,
         attention: articleData.attention,
@@ -146,10 +166,49 @@ export default defineComponent({
       };
     });
 
+    // 计算 footer data
+    const articleFooterData = computed(() => {
+      return {
+        article_id: articleId,
+        username: articleData.username,
+      };
+    });
+
+    //处理 ArticleBottomComp 发出的事件
+    events
+      .on('ArticleBottomComp-changeAttention', (newValue) => {
+        console.log('newAttention:' + newValue);
+        (newValue ? addAttentions : deleteAttentions)(articleData.username)
+          .then(() => {
+            articleData.attention = newValue;
+          })
+          .catch((err) => {
+            console.log(err);
+            msg.error(`${newValue ? '' : '取消'}关注失败`, { duration: 2000, closable: true });
+          });
+      })
+      .on('ArticleBottomComp-changeCollection', (newValue) => {
+        console.log('newCollection:' + newValue);
+      })
+      .on('ArticleBottomComp-changeEvaluation', (newValue) => {
+        console.log('newEvaluation:' + newValue);
+        modifyArticleEvaluation(articleId, newValue)
+          .then(() => {
+            articleData.evaluation = newValue;
+          })
+          .catch((err) => {
+            console.log(err);
+            msg.error('修改评价失败', { duration: 2000, closable: true });
+          });
+      });
+
     return {
       articlePage,
+      showLoadingPage,
+      articleData,
       articleHeadData,
       articleBodyData,
+      articleFooterData,
     };
   },
 });
