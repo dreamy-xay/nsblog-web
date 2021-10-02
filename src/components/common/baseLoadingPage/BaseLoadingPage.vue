@@ -1,10 +1,10 @@
 <!--
- * @Description: 文章加载页面
+ * @Description: 博客或文章加载页面
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-29 16:55:47
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-30 16:32:17
+ * @LastEditTime: 2021-10-02 10:10:50
 -->
 <template>
   <div
@@ -33,7 +33,7 @@
 import { defineComponent, onMounted, ref } from 'vue';
 
 /**
- * @description: 文章加载页面
+ * @description: 博客或文章加载页面
  * @param {Boolean} show 文章是否显示 `必传参数`
  * @author: dreamy-xay
  */
