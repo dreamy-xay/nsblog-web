@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 18:20:47
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-30 16:56:51
+ * @LastEditTime: 2021-10-02 10:15:39
 -->
 <template>
   <div
@@ -12,6 +12,7 @@
     ref="blogPage"
   >
     <base-background :mask="false" />
+    <base-loading-bar inject-name="blogPage" />
     <blog-head />
     <div style="width:100%; height: 1000px"></div>
     <base-loading-page :show="showLoadingPage" />
@@ -22,6 +23,7 @@
 import { defineComponent, ref, provide, onMounted } from 'vue';
 import BaseBackground from '@/components/content/baseBackground/BaseBackground.vue';
 import BaseLoadingPage from '@/components/common/baseLoadingPage/BaseLoadingPage.vue';
+import BaseLoadingBar from '@/components/common/baseLoadingBar/BaseLoadingBar.vue';
 import BlogHead from '@/views/blog/childComps/BlogHead.vue';
 
 /**
@@ -34,6 +36,7 @@ export default defineComponent({
   components: {
     BaseBackground,
     BaseLoadingPage,
+    BaseLoadingBar,
     BlogHead,
   },
   setup() {
