@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-30 16:27:56
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-10-03 18:33:15
+ * @LastEditTime: 2021-10-03 18:45:36
 -->
 <template>
   <div class="blog-head">
@@ -79,6 +79,7 @@ export default defineComponent({
   width: 100%;
   position: relative;
   @include flex(center, center);
+  box-shadow: 0 1px 3px rgba($grey-11, 0.4);
 
   .blog-head-cover {
     width: 100%;
@@ -155,7 +156,7 @@ export default defineComponent({
       @include ellipsis(1);
       text-align: center;
       width: 46%;
-      color: rgba($grey-0, 0.8);
+      color: rgba($grey-0, 0.9);
       text-shadow: 0 3px 6px rgba($grey-11, 0.5);
       font-weight: 400;
       animation: fade-in-down 0.9s both;
@@ -183,7 +184,7 @@ export default defineComponent({
     width: 30px;
     display: inline-block;
     animation-iteration-count: infinite;
-    bottom: 30px;
+    bottom: 6%;
     left: calc(50% - 15px);
     margin-left: -15px;
     position: absolute;
