@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 18:20:47
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-10-02 10:15:39
+ * @LastEditTime: 2021-10-03 17:32:19
 -->
 <template>
   <div
@@ -13,6 +13,7 @@
   >
     <base-background :mask="false" />
     <base-loading-bar inject-name="blogPage" />
+    <blog-menu />
     <blog-head />
     <div style="width:100%; height: 1000px"></div>
     <base-loading-page :show="showLoadingPage" />
@@ -25,6 +26,7 @@ import BaseBackground from '@/components/content/baseBackground/BaseBackground.v
 import BaseLoadingPage from '@/components/common/baseLoadingPage/BaseLoadingPage.vue';
 import BaseLoadingBar from '@/components/common/baseLoadingBar/BaseLoadingBar.vue';
 import BlogHead from '@/views/blog/childComps/BlogHead.vue';
+import BlogMenu from '@/views/blog/childComps/BlogMenu.vue';
 
 /**
  * @description: 博客主页
@@ -38,6 +40,7 @@ export default defineComponent({
     BaseLoadingPage,
     BaseLoadingBar,
     BlogHead,
+    BlogMenu,
   },
   setup() {
     const blogPage = ref(null); // article page ref
