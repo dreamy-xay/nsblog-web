@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-30 16:27:56
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-30 16:59:19
+ * @LastEditTime: 2021-10-03 18:33:15
 -->
 <template>
   <div class="blog-head">
@@ -18,7 +18,16 @@
       />
     </div>
     <div class="blog-head-inner">
-
+      <h1 class="title">
+        <span>小菠萝测试笔记</span>
+      </h1>
+      <h2 class="signature">未来的你，会感谢今天仍在努力奋斗的你</h2>
+    </div>
+    <div
+      class="blog-head-arrow"
+      role="button"
+      @click="toContent"
+    >
     </div>
   </div>
 </template>
@@ -47,8 +56,18 @@ export default defineComponent({
       circleMagic(blogHeadCoverRef.value, { scrollElement: blogPage.value });
     });
 
+    /**
+     * @description: 滚动到内容部分
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function toContent() {
+      blogPage.value.scrollTo({ top: document.body.offsetHeight, behavior: 'smooth' });
+    }
+
     return {
       blogHeadCoverRef,
+      toContent,
     };
   },
 });
@@ -59,6 +78,7 @@ export default defineComponent({
   height: 100vh;
   width: 100%;
   position: relative;
+  @include flex(center, center);
 
   .blog-head-cover {
     width: 100%;
@@ -69,6 +89,139 @@ export default defineComponent({
     right: 0;
     top: 0;
     bottom: 0;
+  }
+
+  .blog-head-inner {
+    width: 100%;
+    z-index: 9;
+    @include flex(center, center, column);
+
+    .title {
+      text-shadow: 0 3px 6px rgba($grey-11, 0.3);
+      font-weight: 700;
+      font-size: 50px;
+      color: $grey-0;
+      animation: fade-in-down 1s both;
+      mix-blend-mode: screen;
+      font-family: Playball, cursive;
+      margin: 0;
+
+      ::selection {
+        background-color: rgba($grey-0, 0.5);
+      }
+
+      span:hover {
+        animation: pageTitleText 2s infinite;
+      }
+
+      @keyframes pageTitleText {
+        0% {
+          text-shadow: 2px 0 0 tomato;
+        }
+        10% {
+          text-shadow: -2px -2px 0 gold;
+        }
+        100%,
+        20% {
+          text-shadow: 2px 0 0 #0f0;
+        }
+        30%,
+        70% {
+          text-shadow: 2px 0 0 #40e0d0;
+        }
+        40% {
+          text-shadow: 2px 2px 0 tomato;
+        }
+        50% {
+          text-shadow: 0 -2px 0 gold;
+        }
+        60% {
+          text-shadow: 0 2px 0 #0f0;
+        }
+        80% {
+          text-shadow: 2px -4px 0 tomato;
+        }
+        90% {
+          text-shadow: 2px 2px 0 gold;
+        }
+      }
+    }
+
+    .signature {
+      font-size: 22px;
+      font-weight: 400;
+      font-family: '华文行楷', cursive;
+      margin-top: 10px;
+      @include ellipsis(1);
+      text-align: center;
+      width: 46%;
+      color: rgba($grey-0, 0.8);
+      text-shadow: 0 3px 6px rgba($grey-11, 0.5);
+      font-weight: 400;
+      animation: fade-in-down 0.9s both;
+      animation-delay: 0.3s;
+      overflow: hidden;
+    }
+
+    @keyframes fade-in-down {
+      0% {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  }
+
+  .blog-head-arrow {
+    animation-duration: 2s;
+    animation-name: blink;
+    height: 30px;
+    width: 30px;
+    display: inline-block;
+    animation-iteration-count: infinite;
+    bottom: 30px;
+    left: calc(50% - 15px);
+    margin-left: -15px;
+    position: absolute;
+    z-index: 10;
+
+    &::after,
+    &::before {
+      background-color: $grey-1;
+      content: '';
+      height: 4px;
+      left: 50%;
+      margin-left: -11px;
+      margin-top: -1px;
+      position: absolute;
+      top: 50%;
+      border-radius: 2px;
+      width: 22px;
+    }
+
+    &::before {
+      transform: translateX(-7px) rotate(45deg);
+    }
+
+    &::after {
+      transform: translateX(7px) rotate(-45deg);
+    }
+  }
+
+  @keyframes blink {
+    0% {
+      transform: translateY(-5px);
+    }
+    50% {
+      transform: translateY(0px);
+    }
+    100% {
+      transform: translateY(-5px);
+    }
   }
 }
 </style>
