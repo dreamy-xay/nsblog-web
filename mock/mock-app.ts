@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-10 17:38:14
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-03 11:44:18
+ * @LastEditTime: 2021-10-04 19:45:26
  */
 
 import Mock, { MockCbOptions } from 'better-mock';
@@ -47,7 +47,7 @@ function lowerObjKey(obj: Record<string, unknown>): Record<string, unknown> {
  * @return {Record<string, unknown>}
  * @author: dreamy-xay
  */
-function paramsObj(url: string): Record<string, unknown> {
+function getQuery(url: string): Record<string, unknown> {
   const search = decodeURIComponent(url.split('?')[1]).replace(/\+/g, ' ');
   if (!search) return {};
   const obj = {};
@@ -69,7 +69,7 @@ function paramsObj(url: string): Record<string, unknown> {
  * @return {RegExp} 返回特殊正则表达式
  * @author: dreamy-xay
  */
-function getUrlRegExp(url: string) {
+function getUrlRegExp(url: string): RegExp {
   return new RegExp(url.replace(/.*?:\/\/.*?(\/.*)/, '$1').replace(/(.*?):.*?(\/|$)/g, '$1.+$2') + '(\\?|$)');
 }
 
@@ -230,7 +230,7 @@ class ResponseObj implements Response {
 function request(url: string, type: string, callback: (req: Request, res: Response) => void): void {
   Mock.mock(getUrlRegExp(url), type, (options: MockCbOptions | any) => {
     const req: Request = {
-      query: paramsObj(options.url),
+      query: getQuery(options.url),
       body: JSON.parse(options.body),
       params: getParams(url, options.url),
       path: options.url,
@@ -245,31 +245,22 @@ function request(url: string, type: string, callback: (req: Request, res: Respon
 
 /**
  * @description: Application 接口
- * @method request 拦截指定类型请求
  * @method get 拦截get请求
  * @method post 拦截post请求
  * @method delete 拦截delete请求
+ * @method put 拦截put请求
  * @author: dreamy-xay
  */
 export interface Application {
-  request: (url: string, type: string, callback: (req: Request, res: Response) => void) => void;
   get: (url: string, callback: (req: Request, res: Response) => void) => void;
   post: (url: string, callback: (req: Request, res: Response) => void) => void;
   delete: (url: string, callback: (req: Request, res: Response) => void) => void;
+  put: (url: string, callback: (req: Request, res: Response) => void) => void;
 }
 
 (function() {
   if (process.env.VUE_APP_MOCK_SEVER !== 'false' && process.env.VUE_APP_MOCK !== 'false') {
     const app: Application = {
-      /**
-       * @description: 拦截指定类型请求
-       * @param {string} url 请求路由
-       * @param {string} type 请求类型
-       * @param {function} callback 请求回调
-       * @return {void}
-       * @author: dreamy-xay
-       */
-      request,
       /**
        * @description: 拦截get请求
        * @param {string} url 请求路由
@@ -299,6 +290,16 @@ export interface Application {
        */
       delete(url: string, callback: (req: Request, res: Response) => void): void {
         request(url, 'delete', callback);
+      },
+      /**
+       * @description: 拦截put请求
+       * @param {string} url 请求路由
+       * @param {function} callback 请求回调
+       * @return {void}
+       * @author: dreamy-xay
+       */
+      put(url: string, callback: (req: Request, res: Response) => void): void {
+        request(url, 'put', callback);
       }
     };
 
