@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 18:20:47
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-10-03 17:32:19
+ * @LastEditTime: 2021-10-04 17:48:01
 -->
 <template>
   <div
@@ -13,7 +13,7 @@
   >
     <base-background :mask="false" />
     <base-loading-bar inject-name="blogPage" />
-    <blog-menu />
+    <blog-menu :username="username" />
     <blog-head />
     <div style="width:100%; height: 1000px"></div>
     <base-loading-page :show="showLoadingPage" />
@@ -27,6 +27,7 @@ import BaseLoadingPage from '@/components/common/baseLoadingPage/BaseLoadingPage
 import BaseLoadingBar from '@/components/common/baseLoadingBar/BaseLoadingBar.vue';
 import BlogHead from '@/views/blog/childComps/BlogHead.vue';
 import BlogMenu from '@/views/blog/childComps/BlogMenu.vue';
+import { useRoute } from 'vue-router';
 
 /**
  * @description: 博客主页
@@ -43,6 +44,8 @@ export default defineComponent({
     BlogMenu,
   },
   setup() {
+    const route = useRoute(); // route
+    const username = route.params.username; // 获取用户名
     const blogPage = ref(null); // article page ref
     const showLoadingPage = ref(true); // 显示加载页面
 
@@ -54,6 +57,7 @@ export default defineComponent({
     });
 
     return {
+      username,
       blogPage,
       showLoadingPage,
     };
