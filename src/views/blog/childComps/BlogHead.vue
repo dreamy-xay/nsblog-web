@@ -4,10 +4,33 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-30 16:27:56
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-10-04 11:31:35
+ * @LastEditTime: 2021-10-04 19:32:03
 -->
 <template>
   <div class="blog-head">
+    <div class="blog-back-top-menu">
+      <n-tooltip
+        trigger="hover"
+        display-directive="show"
+        placement="left"
+        class="blog-back-top-menu-tooltip"
+      >
+        {{backTop.content}}
+        <template #trigger>
+          <div
+            class="menu-item"
+            :class="backTop.class"
+            role="button"
+            @click="backTop.click"
+          >
+            <i
+              class="iconfont"
+              :class="backTop.icon"
+            ></i>
+          </div>
+        </template>
+      </n-tooltip>
+    </div>
     <div
       class="blog-head-cover"
       ref="blogHeadCoverRef"
@@ -36,7 +59,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, inject, onMounted } from 'vue';
+import { defineComponent, ref, inject, onMounted, computed } from 'vue';
 import BaseImage from '@/components/content/baseImage/BaseImage.vue';
 import circleMagic from '@/util/animation/circleMagic';
 import styles from '@/assets/style/define.scss';
@@ -71,7 +94,14 @@ export default defineComponent({
 
     // dom 渲染完成
     onMounted(() => {
+      // 魔法水泡
       circleMagic(blogHeadCoverRef.value, { scrollElement: blogPage.value });
+
+      // 监听滚动
+      showBackTop.value = blogPage.value.scrollTop > document.body.offsetHeight;
+      blogPage.value.addEventListener('scroll', (e) => {
+        showBackTop.value = e.target.scrollTop > document.body.offsetHeight;
+      });
     });
 
     /**
@@ -83,11 +113,27 @@ export default defineComponent({
       blogPage.value.scrollTo({ top: document.body.offsetHeight, behavior: 'smooth' });
     }
 
+    const showBackTop = ref(false);
+    // 计算backTop状态
+    const backTop = computed(() => {
+      return {
+        content: showBackTop.value ? '返回顶部' : '跳至底部',
+        icon: 'blog-huidingbu',
+        class: showBackTop.value ? null : 'to-bottom',
+        click() {
+          showBackTop.value
+            ? blogPage.value.scrollTo({ top: 0, behavior: 'smooth' })
+            : blogPage.value.scrollTo({ top: blogPage.value.scrollHeight, behavior: 'smooth' });
+        },
+      };
+    });
+
     return {
       styles,
       colorHexToDec,
       blogHeadCoverRef,
       toContent,
+      backTop,
     };
   },
 });
@@ -101,6 +147,42 @@ export default defineComponent({
   @include flex(center, center);
   background-color: $grey-0;
   box-shadow: 0 1px 3px rgba($grey-11, 0.4);
+
+  .blog-back-top-menu {
+    position: fixed;
+    right: 40px;
+    bottom: 40px;
+    height: 36px;
+    width: 36px;
+
+    .menu-item {
+      height: 100%;
+      width: 100%;
+      background-color: $grey-0;
+      border-radius: 50%;
+      box-shadow: $shadow-0;
+      @include flex(center, center);
+      transition: transform 0.6s ease-in-out;
+
+      &.to-bottom .iconfont {
+        transform: rotateZ(180deg);
+      }
+
+      &:hover {
+        box-shadow: $shadow-2;
+
+        .iconfont {
+          color: $green-1;
+        }
+      }
+
+      .iconfont {
+        transition: 0.25s;
+        font-size: 18px;
+        color: $green-0;
+      }
+    }
+  }
 
   .blog-head-cover {
     width: 100%;
@@ -243,6 +325,22 @@ export default defineComponent({
     100% {
       transform: translateY(-5px);
     }
+  }
+}
+</style>
+
+<style lang="scss">
+.blog-back-top-menu-tooltip {
+  height: 20px;
+  @include flex(center);
+  padding: 4px 10px !important;
+  font-weight: 300;
+  font-size: 14px;
+  letter-spacing: 1px;
+  opacity: 0.9;
+
+  .n-popover-arrow-wrapper {
+    left: calc(100% - 0.5px) !important;
   }
 }
 </style>
