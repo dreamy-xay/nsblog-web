@@ -4,16 +4,16 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-29 16:58:46
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-29 20:52:02
+ * @LastEditTime: 2021-09-30 20:43:24
 -->
 <template>
-  <div class="blog-main-article">
-    <blog-main-article-item :data="articleData" />
+  <div class="blog-main">
+    <blog-main-article :data="articleData" />
   </div>
 </template>
 <script>
 import { defineComponent, reactive } from 'vue';
-import BlogMainArticleItem from '@/views/blog/childComps/blogMain/BlogMainArticleItem.vue';
+import BlogMainArticle from '@/views/blog/childComps/blogMain/childComps/BlogMainArticle.vue';
 
 /**
  * @description: 博客展示文章信息
@@ -21,9 +21,9 @@ import BlogMainArticleItem from '@/views/blog/childComps/blogMain/BlogMainArticl
  */
 
 export default defineComponent({
-  name: 'blogMainArticle',
+  name: 'blogMain',
   components: {
-    BlogMainArticleItem,
+    BlogMainArticle,
   },
   setup() {
     const articleData = reactive([
@@ -53,7 +53,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.blog-main-article {
+.blog-main {
   margin: auto;
   width: 800px;
 }

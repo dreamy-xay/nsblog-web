@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-24 10:18:28
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-09-21 17:40:05
+ * @LastEditTime: 2021-09-29 21:47:26
 -->
 <template>
   <div class="user-center-collection-list">
@@ -58,8 +58,8 @@
       <user-center-input
         class="input-title"
         v-model="inputTitle"
-        ref="titleInput"
         type="text"
+        showClose="true"
         :maxlength="20"
       >
       </user-center-input>
@@ -70,6 +70,7 @@
         type="textarea"
         :rows="7"
         maxlength="128"
+        @keydown.enter="newfavorites(inputTitle, inputRemark, !radio,false,true)"
         show-word-limit
       >
       </el-input>
@@ -82,23 +83,32 @@
         <div
           class="submit"
           role="button"
-          @click="newfavorites(inputTitle, inputRemark, !radio)"
+          @click="newfavorites(inputTitle, inputRemark, !radio,true,false)"
         >提交</div>
       </template>
     </n-modal>
+    <base-modal
+      content="确定要新建文件夹嘛(⊙o⊙)"
+      confirmeText="确认"
+      :show="modalShow"
+      @confirm="newfavorites(inputTitle, inputRemark, !radio,true)"
+      @cancel="newfavorites(inputTitle, inputRemark, !radio,false)"
+    />
   </div>
 </template>
 
 <script>
-import { defineComponent, ref, watch } from 'vue';
+import { defineComponent, ref } from 'vue';
 import styles from '@/assets/style/define.scss';
 import { useMessage } from 'naive-ui';
 import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput';
+import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 
 export default defineComponent({
   name: 'usercentercollectionlist',
   components: {
     UserCenterInput,
+    BaseModal,
   },
   props: {
     activeIndex: {
@@ -106,50 +116,55 @@ export default defineComponent({
       default: 0,
     },
     favorites: {
-      type: Object,
+      type: Array,
       default: null,
     },
   },
   setup() {
     const isVisible = ref(false);
     const radio = ref(true);
-    const scrollbar = ref(null); //scrollbar
     const msg = useMessage(); //message提示
     const inputTitle = ref('');
-    const titleInput = ref(null);
     const inputRemark = ref('');
+    const modalShow = ref(false);
 
-    watch(
-      () => '',
-      (value) => {
-        inputTitle.value = value;
-      }
-    );
-
+    /**
+     * @description: 改变显示收藏夹
+     * @param {number} index 显示收藏夹下标
+     * @return {void}
+     * @author: continue-hs
+     */
     function chooseActive(index) {
       this.$emit('change-index', index);
     }
 
-    function newfavorites(name, remark, is_private) {
-      if (name !== '') {
-        this.$emit('new-fav', [name, remark, is_private]);
-        isVisible.value = false;
-      } else msg.error('收藏夹标题为必填项');
-      inputTitle.value = '';
-      inputRemark.value = '';
-      radio.value = true;
+    /**
+     * @description: 新建文件夹
+     * @return {void}
+     * @author: continue-hs
+     */
+    function newfavorites(name, remark, is_private, isConfirm, isConfirmModal = false) {
+      if (isConfirm) {
+        if (name !== '') {
+          this.$emit('new-fav', [name, remark, is_private]);
+          isVisible.value = false;
+          inputTitle.value = '';
+          inputRemark.value = '';
+          radio.value = true;
+        } else msg.error('收藏夹标题为必填项');
+      }
+      modalShow.value = isConfirmModal;
     }
 
     return {
       radio,
-      scrollbar,
       isVisible,
       chooseActive,
       styles,
       newfavorites,
       inputTitle,
-      titleInput,
       inputRemark,
+      modalShow,
     };
   },
 });
@@ -212,6 +227,7 @@ export default defineComponent({
     }
   }
 }
+
 .user-center-collection-list-new-modal {
   .user-center-collection-list-new-modal-title {
     @include size(75px, 20px);
@@ -240,6 +256,7 @@ export default defineComponent({
 
     :deep(.el-textarea__inner) {
       resize: none;
+      padding: 6px 8px;
       &:hover,
       &:focus {
         color: $green-1;
@@ -256,26 +273,38 @@ export default defineComponent({
       background-color: $green-0;
       border-color: $green-0;
     }
+
     :deep(.el-checkbox__input.is-checked + .el-checkbox__label) {
       color: $green-0;
+    }
+
+    :deep(.el-checkbox__inner) {
+      border-color: #bfbfbf;
     }
   }
   .option-text {
     margin-left: 8px;
   }
 
-  .submit {
-    @include size(67px, 30px);
-    @include flex(center, center);
-    float: right;
-    color: $grey-0;
-    background: $green-0;
-    border-radius: 8px;
-    box-shadow: $shadow-0;
+  :deep(.el-checkbox__label) {
+    color: #707070;
+  }
+}
+.option-text {
+  margin-left: 8px;
+}
 
-    &:hover {
-      background: $green-1;
-    }
+.submit {
+  @include size(67px, 30px);
+  @include flex(center, center);
+  float: right;
+  color: $grey-0;
+  background: $green-0;
+  border-radius: 8px;
+  box-shadow: $shadow-0;
+
+  &:hover {
+    background: $green-1;
   }
 }
 </style>

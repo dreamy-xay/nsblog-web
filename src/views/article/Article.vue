@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 16:32:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-28 21:45:49
+ * @LastEditTime: 2021-09-30 16:34:32
 -->
 
 <template>
@@ -18,12 +18,14 @@
     <article-head :data="articleHeadData" />
     <article-body :data="articleBodyData" />
     <article-footer :data="articleFooterData" />
+    <base-loading-page :show="showLoadingPage" />
   </div>
 </template>
 
 <script>
 import { computed, defineComponent, provide, reactive, ref } from 'vue';
 import BaseBackground from '@/components/content/baseBackground/BaseBackground.vue';
+import BaseLoadingPage from '@/components/common/baseLoadingPage/BaseLoadingPage.vue';
 import ArticleMenu from '@/views/article/childComps/articleMenu/ArticleMenu.vue';
 import ArticleLoadingBar from '@/views/article/childComps/ArticleLoadingBar.vue';
 import ArticleHead from '@/views/article/childComps/articleHead/ArticleHead.vue';
@@ -50,10 +52,12 @@ export default defineComponent({
     ArticleHead,
     ArticleBody,
     ArticleFooter,
+    BaseLoadingPage,
   },
   setup() {
     const msg = useMessage(); // naive-ui message
     const articlePage = ref(null); // article page ref
+    const showLoadingPage = ref(true); // 显示加载页面
 
     // 向子组件传递
     provide('articlePage', articlePage);
@@ -91,7 +95,7 @@ export default defineComponent({
 
     // 获取文章数据
     getArticleInfo(articleId)
-      .then((data) => {
+      .then(async (data) => {
         articleData.title = data.title;
         articleData.username = data.username;
         articleData.nickname = data.nickname;
@@ -114,7 +118,10 @@ export default defineComponent({
         articleData.sponsors = data.sponsors;
 
         // 动态添加html
-        appendHTML(document.body, data.blog_article_html);
+        await appendHTML(document.body, data.blog_article_html);
+
+        // 取消显示加载页面
+        showLoadingPage.value = false;
       })
       .catch((error) => {
         console.log(error);
@@ -197,6 +204,7 @@ export default defineComponent({
 
     return {
       articlePage,
+      showLoadingPage,
       articleData,
       articleHeadData,
       articleBodyData,

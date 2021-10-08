@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-28 20:08:13
+ * @LastEditTime: 2021-09-30 17:00:36
 -->
 
 <template>
@@ -13,13 +13,14 @@
     :top-bar="true"
     bind-class="message"
   >
-    <div style="width: 100%; height: 288px;">
+    <div style="width: 100%; height: 200px;">
       <base-image
         src=""
         :loading="2"
         :loading-scale="0.5"
       ></base-image>
     </div>
+
   </base-view>
 </template>
 

@@ -4,25 +4,31 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 18:20:47
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-29 20:20:14
+ * @LastEditTime: 2021-09-30 20:57:52
 -->
 <template>
-  <div class="blog">
+  <div
+    class="blog"
+    ref="blogPage"
+  >
     <base-background :mask="false" />
-    <div>
-      <blog-main-article />
-    </div>
+
+    <blog-head />
+    <blog-main />
+    <base-loading-page :show="showLoadingPage" />
 
   </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
-import BlogMainArticle from '@/views/blog/childComps/blogMain/BlogMainArticle.vue';
+import { defineComponent, ref, provide, onMounted } from 'vue';
 import BaseBackground from '@/components/content/baseBackground/BaseBackground.vue';
+import BaseLoadingPage from '@/components/common/baseLoadingPage/BaseLoadingPage.vue';
+import BlogHead from '@/views/blog/childComps/BlogHead.vue';
+import BlogMain from '@/views/blog/childComps/blogMain/BlogMain.vue';
 
 /**
- * @description:
+ * @description: 博客主页
  * @author: dreamy-xay
  */
 
@@ -30,7 +36,25 @@ export default defineComponent({
   name: 'blog',
   components: {
     BaseBackground,
-    BlogMainArticle,
+    BlogMain,
+    BaseLoadingPage,
+    BlogHead,
+  },
+  setup() {
+    const blogPage = ref(null); // article page ref
+    const showLoadingPage = ref(true); // 显示加载页面
+
+    // 向子组件传递
+    provide('blogPage', blogPage);
+
+    onMounted(() => {
+      showLoadingPage.value = false;
+    });
+
+    return {
+      blogPage,
+      showLoadingPage,
+    };
   },
 });
 </script>
