@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-23 19:22:16
  * @LastEditors: clq
- * @LastEditTime: 2021-09-28 18:15:52
+ * @LastEditTime: 2021-09-30 20:32:12
 -->
 <template>
   <div class="article-footer-comment-item">
@@ -113,7 +113,7 @@ import events from '@/events';
  * @param {Number} firstIndex 评论一级索引
  * @param {Number} seccondIndex 评论二级索引
  * @emits articleFooterCommentItem-comment 发表评论 (content: string,parent_id: string,reply_username: string) => void
- * @emits articleFooterCommentItem-modifyEvaluation 发表评论 (newValue: number,firstIndex: number,seccondIndex: number) => void
+ * @emits articleFooterCommentItem-modifyEvaluation 修改评论评价 (newValue: number,firstIndex: number,seccondIndex: number) => void
  * @author: clq
  */
 

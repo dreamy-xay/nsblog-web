@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-30 14:51:34
+ * @LastEditTime: 2021-10-01 21:17:00
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -133,7 +133,7 @@ export default function(baseUrl: string, app: Application) {
 
       function getComments(): Record<string, unknown> {
         let ans: Record<string, unknown> = {};
-        if (article_id) {
+        if (!(article_id && comment_id)) {
           ans = { child_comments: [] };
           const sum = Random.integer(0, 5);
           for (let i: number = 0; i < sum; ++i) {
@@ -280,8 +280,8 @@ export default function(baseUrl: string, app: Application) {
       },
       sponsors: {
         paypal: Random.integer(0, 1) ? Random.image('150x150', '#234567', '#FFFFFF', 'png', 'paypal') : null,
-        alipay: Random.integer(0, 1) ? Random.image('150x150', '#234567', '#FFFFFF', 'png', 'alipay') : null,
-        weixin: Random.integer(0, 1) ? Random.image('150x150', '#234567', '#FFFFFF', 'png', 'weixin') : null
+        alipay: Random.integer(0, 2) ? 'https://s3.bmp.ovh/imgs/2021/10/c706c0cc3da4d493.jpg' : null,
+        weixin: Random.integer(0, 2) ? 'https://s3.bmp.ovh/imgs/2021/10/2b9296f39cbbd91e.jpg' : null
       }
     };
 
