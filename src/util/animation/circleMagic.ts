@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-29 19:15:51
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-30 17:07:02
+ * @LastEditTime: 2021-10-03 18:35:29
  */
 
 /**
@@ -43,7 +43,7 @@ export default function(
     clearOffset: number;
     scrollElement?: HTMLElement;
   } = {
-    color: 'rgba(255, 255, 255, 0.5)',
+    color: 'rgba(255, 255, 255, 0.4)',
     radius: 12,
     density: 0.3,
     clearOffset: 0.25,

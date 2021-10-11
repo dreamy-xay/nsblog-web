@@ -4,13 +4,12 @@
  * @Autor: clq
  * @Date: 2021-09-28 16:08:43
  * @LastEditors: clq
- * @LastEditTime: 2021-09-28 18:03:51
+ * @LastEditTime: 2021-09-30 21:38:51
 -->
 <template>
   <div class="article-footer-load-more-btn">
     <div
       class="btn"
-      :style="btnStyle"
       role="button"
       @click="loadMore"
     >
@@ -29,12 +28,6 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'articleFooterLoadMoreBtn',
-  props: {
-    btnStyle: {
-      type: String,
-      default: '',
-    },
-  },
   setup(_, context) {
     /**
      * @description: 加载更多
@@ -60,16 +53,12 @@ export default defineComponent({
     height: 32px;
     margin: auto;
     opacity: 1;
-    background: $grey-4;
     border-radius: 8px;
     line-height: 32px;
     text-align: center;
     color: $grey-9;
     transition: 0.25s;
-
-    &:hover {
-      background-color: $grey-5;
-    }
+    box-shadow: $shadow-0;
   }
 }
 </style>
