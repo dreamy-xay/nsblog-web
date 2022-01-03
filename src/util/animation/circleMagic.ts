@@ -4,13 +4,14 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-29 19:15:51
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-10-03 18:35:29
+ * @LastEditTime: 2022-01-03 16:42:50
  */
 
 /**
  * @description: 圆圈魔法动画
  * @param {HTMLElement} 绑定元素dom节点 `必传参数`
- * @param {{ color?: string | 'random'; radius?: number; density?: number; clearOffset?: number; scrollElement?: HTMLElement }} 动画配置选项 `默认为{
+ * @param {{ color?: string | 'random'; radius?: number; density?: number; clearOffset?: number; scrollElement?: HTMLElement }} 动画配置选项
+ * `默认为{
     color: 'rgba(255, 255, 255, 0.5)',
     radius: 10,
     density: 0.3,
