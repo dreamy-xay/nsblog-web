@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-23 20:34:57
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-09-29 22:15:21
+ * @LastEditTime: 2021-10-07 20:32:21
 -->
 <template>
   <div class="user-center-collection-right-bottom">
@@ -56,7 +56,7 @@
             <div
               class="user-center-collection-right-bottom-blank"
               v-if="item1.typeList[choiceIndex].List.length === 0"
-            >此收藏夹为空，快去添加收藏吧</div>
+            ></div>
             <div v-else>
               <div
                 class="user-center-collection-right-bottom-more"
@@ -181,8 +181,6 @@ export default defineComponent({
 }
 
 .user-center-collection-right-bottom {
-  @include size(736px, 872px);
-
   .user-center-collection-right-bottom-typelist {
     @include size(736px, 21px);
     margin: 10px 0 0 35px;
@@ -207,8 +205,8 @@ export default defineComponent({
   }
 
   .user-center-collection-right-bottom-collectionlist {
-    margin-top: 15px;
-    @include size(736px, 465px);
+    margin: 15px 0 15px 0;
+    @include size(736px, 434px);
 
     :deep(.el-scrollbar__thumb) {
       background-color: $grey-7 !important;
