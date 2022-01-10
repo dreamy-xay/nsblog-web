@@ -4,16 +4,17 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-30 17:00:36
+ * @LastEditTime: 2022-01-10 22:52:46
 -->
 
 <template>
   <base-view
     :background="true"
     :top-bar="true"
+    :footer="true"
     bind-class="message"
   >
-    <div style="width: 100%; height: 200px;">
+    <div style="width: 100%; height: 200px; margin-bottom:300px">
       <base-image
         src=""
         :loading="2"
