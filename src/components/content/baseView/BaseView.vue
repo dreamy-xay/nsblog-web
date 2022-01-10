@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 11:51:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-13 20:28:46
+ * @LastEditTime: 2022-01-10 21:20:33
 -->
 <template>
   <div
@@ -40,6 +40,7 @@
                 </div>
               </div>
             </div>
+            <base-footer v-if="footer" />
           </el-scrollbar>
         </div>
       </div>
@@ -58,11 +59,13 @@
 import { defineComponent, onMounted, ref, nextTick } from 'vue';
 import BaseBackground from '@/components/content/baseBackground/BaseBackground.vue';
 import BaseTopBar from '@/components/content/baseTopBar/BaseTopBar.vue';
+import BaseFooter from '@/components/content/baseFooter/BaseFooter.vue';
 
 /**
  * @description: 基本页面框架
  * @param {Boolean} background 是否启用背景颜色 `默认为false,不启用`
  * @param {Boolean} topBar 是否启用topBar `默认为false,不启用`
+ * @param {Boolean} footer 是否启用footer `默认为false,不启用`
  * @param {String} bindClass 绑定类 `默认为null`
  * @param {Number} scrollDelay 滚动条触发底部最长延时 `默认200ms`
  * @param {Number} scrollDistance 触发加载的距离阈值，单位为px `默认200px`
@@ -85,6 +88,10 @@ export default defineComponent({
       default: false,
     },
     topBar: {
+      type: Boolean,
+      default: false,
+    },
+    footer: {
       type: Boolean,
       default: false,
     },
@@ -124,6 +131,7 @@ export default defineComponent({
   components: {
     BaseTopBar,
     BaseBackground,
+    BaseFooter,
   },
   setup(props, context) {
     const width = ref(document.body.offsetWidth); // 容器宽度设置
