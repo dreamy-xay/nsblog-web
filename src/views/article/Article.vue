@@ -4,7 +4,9 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 16:32:13
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-13 16:08:26
+ * @LastEditTime: 2022-01-13 18:26:38
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2021-10-02 10:14:24
 -->
 
 <template>
@@ -13,8 +15,8 @@
     ref="articlePage"
   >
     <base-background :mask="false" />
+    <base-loading-bar inject-name="articlePage" />
     <article-menu :username="articleHeadData.username" />
-    <article-loading-bar />
     <article-head :data="articleHeadData" />
     <article-body :data="articleBodyData" />
     <article-footer :data="articleFooterData" />
@@ -26,8 +28,8 @@
 import { computed, defineComponent, provide, reactive, ref } from 'vue';
 import BaseBackground from '@/components/content/baseBackground/BaseBackground.vue';
 import BaseLoadingPage from '@/components/common/baseLoadingPage/BaseLoadingPage.vue';
+import BaseLoadingBar from '@/components/common/baseLoadingBar/BaseLoadingBar.vue';
 import ArticleMenu from '@/views/article/childComps/articleMenu/ArticleMenu.vue';
-import ArticleLoadingBar from '@/views/article/childComps/ArticleLoadingBar.vue';
 import ArticleHead from '@/views/article/childComps/articleHead/ArticleHead.vue';
 import ArticleBody from '@/views/article/childComps/articleBody/ArticleBody.vue';
 import ArticleFooter from './childComps/articleFooter/ArticleFooter.vue';
@@ -48,12 +50,12 @@ export default defineComponent({
   name: 'Article',
   components: {
     BaseBackground,
+    BaseLoadingBar,
+    BaseLoadingPage,
     ArticleMenu,
-    ArticleLoadingBar,
     ArticleHead,
     ArticleBody,
     ArticleFooter,
-    BaseLoadingPage,
   },
   setup() {
     const msg = useMessage(); // naive-ui message
