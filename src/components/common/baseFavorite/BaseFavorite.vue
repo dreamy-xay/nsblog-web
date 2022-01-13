@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2021-09-27 17:17:24
  * @LastEditors: xiao
- * @LastEditTime: 2021-10-01 15:25:53
+ * @LastEditTime: 2022-01-13 18:13:15
 -->
 <template>
   <n-modal
@@ -50,6 +50,7 @@ import { defineComponent, reactive, ref } from 'vue';
 import BaseFavoriteList from '@/components/common/baseFavorite/childComps/BaseFavoriteList.vue';
 import { getFavorites } from '@/network/api/favorites';
 import { useMessage } from 'naive-ui';
+import events from '@/events';
 
 /**
  * @description: 收藏夹界面
@@ -102,19 +103,40 @@ export default defineComponent({
     }
 
     /**
-     * @description: 收藏数量加一
+     * @description: 添加收藏
      * @return {Void}
      * @author: xiao
      */
     function addCollection() {
-      let d = 0;
-      favorites.some((item, i) => {
-        d = i;
-        return item.id === id.value;
-      });
+      context.emit('update:isShow', false);
+      let d = -1;
+      for (var index in favorites) {
+        if (favorites[index].id === id.value) {
+          d = index;
+        }
+      }
       favorites[d].count++;
+      if (d != -1) {
+        events.emit('ArticleBottomComp-changeCollection', 1); //收藏
+      }
     }
 
+    /**
+     * @description: 取消收藏
+     * @return {Void}
+     * @author: xiao
+     */
+    function delCollection() {
+      let d = 0;
+      for (var index in favorites) {
+        if (favorites[index].id === id.value) {
+          d = index;
+        }
+      }
+      favorites[d].count--;
+      console.log(favorites);
+      events.emit('ArticleBottomComp-changeCollection', 0); //取消收藏
+    }
     /**
      * @description: 新建一个收藏夹
      * @param {String} e 收藏夹名称
@@ -127,7 +149,8 @@ export default defineComponent({
         if (favorites[i].name == e) f = 0;
       }
       if (f) {
-        favorites.splice(favorites.length, 0, { collections: [], id: '123', name: e, count: 0, is_private: false });
+        let num = Number(Math.random().toString().substr(2, 0) + Date.now()).toString(36);
+        favorites.splice(favorites.length, 0, { collections: [], id: num, name: e, count: 0, is_private: false });
       } else {
         msg.error('不能重名', { duration: 2000, closable: true });
       }
@@ -139,6 +162,7 @@ export default defineComponent({
       addCollection,
       childFavorite,
       newFavorite,
+      delCollection,
     };
   },
 });
