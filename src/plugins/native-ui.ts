@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 16:13:02
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-20 20:36:57
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-01-09 14:11:50
  */
 import { App } from 'vue';
 import {
@@ -17,10 +17,22 @@ import {
   NDialog,
   NCard,
   NTooltip,
-  NDrawer
+  NDrawer,
+  NPagination
 } from 'naive-ui';
 
-const components = [NMessageProvider, NModal, NBadge, NButton, NPopover, NDialog, NCard, NTooltip, NDrawer];
+const components = [
+  NMessageProvider,
+  NModal,
+  NBadge,
+  NButton,
+  NPopover,
+  NDialog,
+  NCard,
+  NTooltip,
+  NDrawer,
+  NPagination
+];
 
 export default (app: App): void => {
   const naive = create({
