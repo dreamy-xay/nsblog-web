@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 12:55:44
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 10:22:28
+ * @LastEditors: xiao
+ * @LastEditTime: 2022-01-13 14:56:05
  */
 
 import { get, RequestLifeCycle, del, put, post } from '@/network/request';
@@ -92,19 +92,38 @@ export function deleteFavorites(fid: number | string, RLC: RequestLifeCycle = {}
 
 /**
  * @description: 取消收藏
- * @param number | string} cid 取消收藏的id `默认为''，删除第一个收藏`
+ * @param {number | string} cid 取消收藏的id `默认为''，删除第一个收藏`
  * @param {number | string} fid 取消收藏的id `默认为''，删除第一个收藏`
  * @param {number} type 删除历史记录类型的列表，0为全部，1为文章，2为问答，3为资源 `默认为0`
  * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
  * @return {Promise<unknown>} 请求返回promise
  * @author: continue-hs
  */
-export function cancelCollections(cid: number | string = '', RLC: RequestLifeCycle = {}) {
+export function cancelCollections(cid: number | string = '', RLC: RequestLifeCycle = {}): Promise<unknown> {
   return del({
     url: `/favorites/collections/${cid}`,
     ...RLC,
     data: {
       conllection_id: cid
+    }
+  });
+}
+
+/**
+ * @description: 添加收藏
+ * @param {number | string} cid 取消收藏的id `默认为''，添加第一个收藏`
+ * @param {number | string} fid 取消收藏的id `默认为''，添加第一个收藏`
+ * @param {number} type 删除历史记录类型的列表，0为全部，1为文章，2为问答，3为资源 `默认为0`
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: xiao
+ */
+export function addCollections(cid: number | string = '', RLC: RequestLifeCycle = {}) {
+  return post({
+    url: `/favorites/collections/${cid}`,
+    ...RLC,
+    data: {
+      collection_id: cid
     }
   });
 }
