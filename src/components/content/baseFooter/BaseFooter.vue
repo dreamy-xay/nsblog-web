@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-10 20:39:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-10 22:57:12
+ * @LastEditTime: 2022-01-13 21:32:17
 -->
 
 <template>
@@ -536,7 +536,7 @@
               v-for="(sItem, sIndex) in item.itemSub"
               :href="sItem.url"
               :key="sIndex"
-              :target="_blank"
+              target="_blank"
             >{{ sItem.name }}</a>
           </div>
         </div>
