@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:42
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-29 16:06:19
+ * @LastEditors: Ban
+ * @LastEditTime: 2022-01-13 16:35:40
 -->
 <template>
   <div class="user-center-account">
@@ -36,7 +36,7 @@
       @changeEmail="changeEmail"
     />
     <user-center-account-login-record v-model:isShow="showPage[4]" />
-
+    <user-center-account-logout v-model:isShow="showPage[5]"></user-center-account-logout>
   </div>
 </template>
 
@@ -47,6 +47,7 @@ import { mapState } from '@/util/store';
 import UserCenterAccountPassword from '@/views/userCenter/childComps/pages/UserCenterAccount/childComps/UserCenterAccountPassword.vue';
 import UserCenterAccountEmail from '@/views/userCenter/childComps/pages/UserCenterAccount/childComps/UserCenterAccountEmail.vue';
 import UserCenterAccountLoginRecord from '@/views/userCenter/childComps/pages/UserCenterAccount/childComps/UserCenterAccountLoginRecord.vue';
+import UserCenterAccountLogout from '@/views/userCenter/childComps/pages/UserCenterAccount/childComps/UserCenterAccountLogout.vue';
 import { useMessage } from 'naive-ui';
 
 /**
@@ -60,6 +61,7 @@ export default defineComponent({
     UserCenterAccountPassword,
     UserCenterAccountEmail,
     UserCenterAccountLoginRecord,
+    UserCenterAccountLogout,
   },
   setup() {
     const email = ref(''); //邮箱
