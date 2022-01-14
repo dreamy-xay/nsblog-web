@@ -1,10 +1,10 @@
 /*
- * @Description:
+ * @Description: 消息页面状态
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-11 11:45:25
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-24 20:28:30
+ * @LastEditTime: 2022-01-14 12:40:28
  */
 
 import { StoreOptions, ActionContext } from 'vuex';
