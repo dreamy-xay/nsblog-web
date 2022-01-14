@@ -3,13 +3,14 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-09-29 16:58:46
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-09 23:21:48
+ * @LastEditors: xiao
+ * @LastEditTime: 2022-01-14 09:40:48
 -->
 <template>
   <div class="blog-main">
-    <blog-main-article :data="articleData" />
-    <div class="blog-main-pagination">
+    <blog-tags />
+    <!-- <blog-main-article :data="articleData" /> -->
+    <!-- <div class="blog-main-pagination">
       <n-pagination
         v-model:page="page"
         v-model:pageSize="pageSize"
@@ -20,12 +21,13 @@
         @update:page="changePage(page)"
         @update:pageSize="changePageSize(pageSize)"
       />
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
 import { defineComponent, reactive, ref } from 'vue';
 import BlogMainArticle from '@/views/blog/childComps/blogMain/childComps/BlogMainArticle.vue';
+import BlogTags from '@/views/blog/childComps/pages/BlogTags.vue';
 
 /**
  * @description: 博客展示文章信息
@@ -35,7 +37,8 @@ import BlogMainArticle from '@/views/blog/childComps/blogMain/childComps/BlogMai
 export default defineComponent({
   name: 'blogMain',
   components: {
-    BlogMainArticle,
+    // BlogMainArticle,
+    BlogTags,
   },
   setup() {
     const page = ref(2); // 当前页面页数
@@ -172,7 +175,8 @@ $green1: $green-1;
 
 .blog-main {
   margin: auto;
-  width: 800px;
+  // width: 800px;
+  width: 100%;
 
   .blog-main-pagination {
     @include flex(center, center);
