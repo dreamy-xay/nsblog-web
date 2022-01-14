@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 18:22:23
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-10-04 17:54:19
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-01-14 16:47:06
  */
 import { RouteRecordRaw } from 'vue-router';
 
@@ -16,6 +16,14 @@ const blogRouter: RouteRecordRaw = {
     title: '用户博客主页'
   },
   children: [
+    {
+      path: '',
+      name: 'blogMain',
+      component: () => import('@/views/blog/childComps/pages/blogMain/BlogMain.vue'),
+      meta: {
+        title: '用户博客全部信息'
+      }
+    },
     {
       path: 'tags',
       name: 'blogTags',

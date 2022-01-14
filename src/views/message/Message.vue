@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-28 13:11:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-15 18:10:57
+ * @LastEditTime: 2022-01-14 17:14:57
 -->
 <template>
 
@@ -117,6 +117,25 @@ export default defineComponent({
         }
       }
     }
+
+    watch(
+      () => route.path,
+      () => {
+        const redirect = route.path; // 当前界面路由
+        const array = redirect.split('/'); //获取路由
+
+        if (array[array.length - 1] === menu.id) {
+          //得到路由相对应的key值
+          messagetag.value = menu.key;
+        } else {
+          for (let i = 0; i < 5; i++) {
+            if (menus[i].id === array[array.length - 1]) {
+              messagetag.value = menus[i].key;
+            }
+          }
+        }
+      }
+    );
 
     /**
      * @description:改变路由，传递数据（页面名称）到父组件

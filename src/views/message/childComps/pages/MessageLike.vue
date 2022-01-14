@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:31:44
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-15 19:30:24
+ * @LastEditTime: 2022-01-12 12:54:07
 -->
 <template>
   <el-scrollbar max-height="calc(100vh - 108px)">
@@ -13,11 +13,9 @@
       infinite-scroll-delay="300"
     >
       <div
-        role="button"
         class="message-like"
         v-for="(item , index) in likeData"
         :key="item.messages_id"
-        @click="changePages('/article/'+item.content.id)"
       >
         <div class="message-like-avator">
           <base-avatar
@@ -33,13 +31,19 @@
           <div class="message-like-right-text">
 
             <span
+              role="button"
               class="message-like-right-text-name"
               @click.stop="changePages('/user/' + item.content.username)"
             >{{item.content.nickname}}</span>
-            <span v-if="item.content.type === 1">赞了我的文章</span>
-            <span v-else-if="item.content.type === 2">赞了我的问答</span>
-            <span v-else-if="item.content.type === 3">赞了我的文章评论</span>
-            <span v-else>赞了我的问答评论</span>
+            <div
+              @click="changePages('/article/'+item.content.id)"
+              role="button"
+            >
+              <span v-if="item.content.type === 1">赞了我的文章</span>
+              <span v-else-if="item.content.type === 2">赞了我的问答</span>
+              <span v-else-if="item.content.type === 3">赞了我的文章评论</span>
+              <span v-else>赞了我的问答评论</span>
+            </div>
           </div>
 
           <div class="message-like-right-bottom">
@@ -48,6 +52,7 @@
             <div
               class="message-like-right-bottom-delete"
               @click.stop="deleteItem(index)"
+              role="button"
             >
               <i class="iconfont blog-shanchu message-like-right-bottom-delete-iconfont"></i>
               <span>删除该通知</span>
