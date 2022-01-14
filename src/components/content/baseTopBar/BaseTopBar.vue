@@ -1,8 +1,8 @@
 <!--
  * @Author: Ban
  * @Date: 2021-07-19 12:47:11
- * @LastEditTime: 2021-09-07 11:42:11
- * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-01-13 21:36:58
+ * @LastEditors: dreamy-xay
  * @Description: In User Settings Edit
  * @FilePath:
 -->
@@ -46,8 +46,6 @@ $shadow: $shadow-0;
   background: $background-0;
   width: 100%;
   box-shadow: $shadow;
-  z-index: 2000;
-  position: fixed;
 
   .base-top-bar-to-center {
     display: flex;

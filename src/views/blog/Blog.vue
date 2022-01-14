@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 18:20:47
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-10-04 17:48:01
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2021-10-08 20:53:56
 -->
 <template>
   <div
@@ -15,9 +15,14 @@
     <base-loading-bar inject-name="blogPage" />
     <blog-menu :username="username" />
     <blog-head />
+<<<<<<< HEAD
     <router-view></router-view>
     <div style="width:100%; height: 1000px"></div>
+=======
+    <blog-main />
+>>>>>>> 8c3312d50f5c9eeba35a9ec144ddd3fda1daa6fe
     <base-loading-page :show="showLoadingPage" />
+
   </div>
 </template>
 
@@ -27,6 +32,7 @@ import BaseBackground from '@/components/content/baseBackground/BaseBackground.v
 import BaseLoadingPage from '@/components/common/baseLoadingPage/BaseLoadingPage.vue';
 import BaseLoadingBar from '@/components/common/baseLoadingBar/BaseLoadingBar.vue';
 import BlogHead from '@/views/blog/childComps/BlogHead.vue';
+import BlogMain from '@/views/blog/childComps/blogMain/BlogMain.vue';
 import BlogMenu from '@/views/blog/childComps/BlogMenu.vue';
 import { useRoute } from 'vue-router';
 
@@ -39,6 +45,7 @@ export default defineComponent({
   name: 'blog',
   components: {
     BaseBackground,
+    BlogMain,
     BaseLoadingPage,
     BaseLoadingBar,
     BlogHead,
