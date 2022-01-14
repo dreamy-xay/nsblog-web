@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 11:51:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-10 21:20:33
+ * @LastEditTime: 2022-01-14 12:36:47
 -->
 <template>
   <div
@@ -17,13 +17,21 @@
     >
       <div class="base-view-container">
         <base-background v-if="background" />
-        <base-top-bar
-          v-if="topBar"
-          ref="topBarRef"
-        />
+        <div class="container-top-bar">
+          <div
+            class="top-bar-inner"
+            :style="{transform: 'translateY(' + topBarTop + 'px)'}"
+          >
+            <base-top-bar
+              v-if="topBar"
+              ref="topBarRef"
+            />
+            <slot name="top-bar-bottom"></slot>
+          </div>
+        </div>
         <div
           class="base-view-inner"
-          :style="{height: innerHeight + 'px', marginTop: topBarHeight + 'px'}"
+          :style="{height: innerHeight + 'px', marginTop: containerTopBarHeight + 'px'}"
         >
           <el-scrollbar
             @scroll="scroll($event, false)"
@@ -74,9 +82,13 @@ import BaseFooter from '@/components/content/baseFooter/BaseFooter.vue';
  * @param {Number} backTopRight 启用回顶部按钮生效right位置  `默认为40`
  * @param {Number} backTopBottom 启用回顶部按钮生效bottom位置  `默认为40`
  * @param {Number} backTopVisibilityHeight 滚动高度达到此参数值才出现 `默认为200`
+ * @param {Boolean} topBarScroll topBar 是否跟随页面滚动而滚动（配合插槽【top-bar-bottom】使用）`默认为false,不启用`
+ * @param {Number} topBarScrollLimitHeight topBar 触发滚动的极限高度 `默认为50`
  * @event scroll 滚动监听事件，回调参数{scrollTop, scrollLeft}
  * @event scrollToBottom 滚动到底部触发事件，无回调参数
  * @method setScrollTop 设置滚动条到顶部的距离,类型为boolean时:true为滚动到顶部,false为滚动到底部;类型为number时则直接设置高度  (value: boolean | number) => void
+ * @slot 全局内容插槽
+ * @slot name="top-bar-bottom" 具名插槽，在top-bar下方
  * @author: dreamy-xay
  */
 
@@ -127,6 +139,14 @@ export default defineComponent({
       type: Number,
       default: 200,
     },
+    topBarScroll: {
+      type: Boolean,
+      default: false,
+    },
+    topBarScrollLimitHeight: {
+      type: Number,
+      default: 50,
+    },
   },
   components: {
     BaseTopBar,
@@ -139,13 +159,16 @@ export default defineComponent({
     const innerRef = ref(null); // inner ref
     const innerHeight = ref(height.value); // 内部容器高度设置
     const topBarRef = ref(null); // topBar的ref
-    const topBarHeight = ref(0); // 获取topBar高度
+    let topBarHeight = 0; // 获取topBar高度
+    const containerTopBarHeight = ref(0); // 页面 topBar 真实高度
+    const topBarTop = ref(0); // 页面 topBar 距离顶部距离
 
     // dom加载完毕后执行
     onMounted(() => {
       if (props.topBar) {
-        topBarHeight.value = topBarRef.value.$el.offsetHeight;
-        innerHeight.value -= topBarHeight.value;
+        topBarHeight = topBarRef.value.$el.offsetHeight;
+        containerTopBarHeight.value = topBarRef.value.$el.parentNode.offsetHeight;
+        innerHeight.value = height.value - containerTopBarHeight.value;
       }
     });
 
@@ -153,7 +176,7 @@ export default defineComponent({
     window.onresize = function () {
       width.value = document.body.offsetWidth;
       height.value = document.body.offsetHeight;
-      innerHeight.value = height.value - topBarHeight.value;
+      innerHeight.value = height.value - containerTopBarHeight.value;
     };
 
     let scrollLeft = 0; // 滚动条位置
@@ -169,7 +192,11 @@ export default defineComponent({
      */
     function scroll(e, hasLeft) {
       if (hasLeft) scrollLeft = (e.scrollLeft / 100) * width.value;
-      else scrollTop = (e.scrollTop / 100) * innerHeight.value;
+      else {
+        const thisScrollTop = (e.scrollTop / 100) * innerHeight.value;
+        listenrTopBarScroll(thisScrollTop - scrollTop); // 上下滚动时增加监听
+        scrollTop = thisScrollTop;
+      }
       context.emit('scroll', { scrollTop, scrollLeft });
       if (
         !props.scrollDisabled &&
@@ -180,6 +207,49 @@ export default defineComponent({
         timer = setTimeout(() => {
           timer = null;
         }, props.scrollDelay);
+      }
+    }
+
+    let scrollCache = 0; // 滚动缓存高度
+    // 5s 情况一次滚动缓存高度
+    setInterval(() => {
+      scrollCache = 0;
+    }, 1000 * 5);
+    /**
+     * @description: 监听滚动行为，并做出相应答复
+     * @param {Number} scrollValue 本次滚动滚动距离（矢量）`必传参数`
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function listenrTopBarScroll(scrollValue) {
+      if (props.topBarScroll) {
+        scrollCache += scrollValue;
+        if (Math.abs(scrollCache) >= props.topBarScrollLimitHeight) {
+          if (scrollCache > 0) {
+            // 向下滚的
+            if (topBarTop.value === 0) {
+              topBarTop.value = -topBarHeight;
+              containerTopBarHeight.value -= topBarHeight;
+              innerHeight.value = height.value - containerTopBarHeight.value;
+              setTimeout(() => {
+                // 更新滚动条
+                scrollbarColumnRef.value.update();
+              }, 200);
+            }
+          } else {
+            // 向上滚的
+            if (topBarTop.value !== 0) {
+              topBarTop.value = 0;
+              containerTopBarHeight.value += topBarHeight;
+              innerHeight.value = height.value - containerTopBarHeight.value;
+              setTimeout(() => {
+                // 更新滚动条
+                scrollbarColumnRef.value.update();
+              }, 200);
+            }
+          }
+          scrollCache = 0;
+        }
       }
     }
 
@@ -210,7 +280,9 @@ export default defineComponent({
       scroll,
       topBarHeight,
       scrollbarColumnRef,
+      containerTopBarHeight,
       setScrollTop,
+      topBarTop,
     };
   },
 });
@@ -230,8 +302,23 @@ export default defineComponent({
     min-width: 1154px;
     overflow: hidden;
 
+    .container-top-bar {
+      width: 100%;
+      display: inline-block;
+      z-index: 2000;
+      position: fixed;
+
+      .top-bar-inner {
+        width: 100%;
+        @include flex(center, center, column);
+        transition: 0.2s;
+        transform: translateY(0);
+      }
+    }
+
     .base-view-inner {
       width: 100%;
+      transition: 0.2s;
       overflow: hidden;
 
       .inner {
