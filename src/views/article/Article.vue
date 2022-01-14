@@ -3,6 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 16:32:13
+ * @LastEditors: xiao
+ * @LastEditTime: 2022-01-13 18:26:38
  * @LastEditors: dreamy-xay
  * @LastEditTime: 2021-10-02 10:14:24
 -->
@@ -33,6 +35,7 @@ import ArticleBody from '@/views/article/childComps/articleBody/ArticleBody.vue'
 import ArticleFooter from './childComps/articleFooter/ArticleFooter.vue';
 import { getArticleInfo } from '@/network/api/articles';
 import { addAttentions, deleteAttentions, modifyArticleEvaluation } from '@/network/api/attentions';
+import { addCollections, cancelCollections } from '@/network/api/favorites';
 import { useRoute } from 'vue-router';
 import events from '@/events';
 import { useMessage } from 'naive-ui';
@@ -189,6 +192,14 @@ export default defineComponent({
       })
       .on('ArticleBottomComp-changeCollection', (newValue) => {
         console.log('newCollection:' + newValue);
+        (newValue ? addCollections : cancelCollections)(articleData.article_id)
+          .then(() => {
+            articleData.collection = newValue;
+          })
+          .catch((err) => {
+            console.log(err);
+            msg.error(`${newValue ? '' : '取消'}收藏失败`, { duration: 2000, closable: true });
+          });
       })
       .on('ArticleBottomComp-changeEvaluation', (newValue) => {
         console.log('newEvaluation:' + newValue);

@@ -3,8 +3,13 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-09-20 19:56:13
+<<<<<<< HEAD
  * @LastEditors: clq
  * @LastEditTime: 2021-10-08 20:28:51
+=======
+ * @LastEditors: xiao
+ * @LastEditTime: 2022-01-13 18:05:44
+>>>>>>> 8c3312d50f5c9eeba35a9ec144ddd3fda1daa6fe
 -->
 <template>
   <div class="article-bottom-comp">
@@ -55,6 +60,11 @@
 
       <article-bottom-sponsor :sponsors="data.sponsors" />
 
+      <base-favorite
+        v-model:isShow="show"
+        ref="b"
+      >
+      </base-favorite>
       <div class="btn-container">
         <div
           class="btn"
@@ -124,6 +134,7 @@ import styles from '@/assets/style/define.scss';
 import { useMessage } from 'naive-ui';
 import { mapGetters } from '@/util/store';
 import events from '@/events';
+import BaseFavorite from '@/components/common/baseFavorite/BaseFavorite.vue';
 
 /**
  * @description: 文章底部子组件
@@ -151,7 +162,12 @@ export default defineComponent({
   setup(props, context) {
     const msg = useMessage(); // naive-ui mssage
     const { isLogin } = mapGetters('global', ['isLogin']);
+<<<<<<< HEAD
     const showBaseFavorite = ref(false);
+=======
+    const show = ref(false);
+    const b = ref(b);
+>>>>>>> 8c3312d50f5c9eeba35a9ec144ddd3fda1daa6fe
 
     /**
      * @description: 判断用户是否登录
@@ -193,9 +209,14 @@ export default defineComponent({
       showBaseFavorite.value = true;
       console.log('onCollect');
       if (props.data.collection === 0) {
-        events.emit('ArticleBottomComp-changeCollection', 1); //收藏
+        console.log(props.data.collection);
+        show.value = true;
       } else {
-        events.emit('ArticleBottomComp-changeCollection', 0); //取消收藏
+        //收藏夹数量减一
+        console.log('bbb', b.value);
+        b.value.delCollection();
+        console.log(props.data.collection);
+        // events.emit('ArticleBottomComp-changeCollection', 0); //取消收藏
       }
     }
 
@@ -236,6 +257,8 @@ export default defineComponent({
       onRecommend,
       onCollect,
       onOppose,
+      show,
+      b,
     };
   },
 });
