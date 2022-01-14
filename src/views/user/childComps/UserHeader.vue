@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 18:05:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-11 12:50:02
+ * @LastEditTime: 2022-01-14 15:33:32
 -->
 <template>
   <div class="user-header">
@@ -18,14 +18,37 @@
       <div class="info">
         <div
           class="nickname"
-          role="button"
+          :role="isLogin ? 'button' : null"
         >
-          {{data.nickname}}
-          <a
-            v-if="isLogin"
-            href="/userCenter/profile"
-            target="/userCenter/profile"
-          ><i class="iconfont blog-edit"></i></a>
+          <template v-if="isSelf">
+            {{data.nickname}}
+            <a
+              href="/userCenter/profile"
+              target="/userCenter/profile"
+            ><i class="iconfont blog-edit"></i></a>
+          </template>
+          <template v-else-if="isLogin">
+            <n-popover
+              trigger="hover"
+              display-directive="show"
+              placement="right"
+              :raw="true"
+            >
+              <template #trigger>
+                {{data.nickname}}
+              </template>
+              <div
+                class="user-header-left-send"
+                role="button"
+                @click="sendMessage"
+              >
+                发消息
+              </div>
+            </n-popover>
+          </template>
+          <template v-else>
+            {{data.nickname}}
+          </template>
         </div>
         <div class="username">
           {{data.username}}
@@ -43,10 +66,11 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, computed } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import { getSplitNum } from '@/util/util';
-import { mapGetters } from '@/util/store';
+import { mapState, mapGetters } from '@/util/store';
+import router from '@/router';
 
 /**
  * @description: 用户中心头部
@@ -67,9 +91,35 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {
+  setup(props) {
+    const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取登录信息
+    // 判断是否登录并且访问页面是否为自己的主页
+    const isSelf = computed(() => {
+      return tokenInfo.value.status && tokenInfo.value.username === props.data.username;
+    });
+
+    /**
+     * @description: 发消息
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function sendMessage() {
+      router.push({
+        name: 'messageMy',
+        params: {
+          dialogue: JSON.stringify({
+            username: props.data.username,
+            nickname: props.data.nickname,
+            avatar: props.data.avatar,
+          }),
+        },
+      });
+    }
+
     return {
       getSplitNum,
+      isSelf,
+      sendMessage,
       ...mapGetters('global', ['isLogin']),
     };
   },
@@ -77,6 +127,21 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.user-header-left-send {
+  width: 76px;
+  height: 30px;
+  background-color: $grey-0;
+  overflow: hidden;
+  @include flex(center, center);
+  color: $grey-9;
+  transition: 0.25s;
+  font-size: 15px;
+
+  &:hover {
+    color: $green-1;
+  }
+}
+
 .user-header {
   width: calc(100% - 16px);
   height: 80px;
