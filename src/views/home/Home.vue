@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-13 22:53:48
+ * @LastEditTime: 2022-01-14 13:14:00
 -->
 
 <template>
@@ -36,13 +36,17 @@
         </div>
       </div>
     </template>
-    <div style="width:100%; height: 3000px"></div>
+    <div style="width:100%; height: 3000px; background: #fff;">
+      <button @click="gotoNewDialogue">前往新的对话</button><br />
+      1 Test <br />2 Test<br />3 Test<br />4 Test<br />5 Test<br />6 Test<br />7 Test<br />8 Test<br />9 Test
+    </div>
   </base-view>
 </template>
 
 <script>
 import { defineComponent, reactive, ref } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
+import router from '@/router';
 
 /**
  * @description: 博客主页
@@ -104,10 +108,25 @@ export default defineComponent({
       // console.log(index);
     }
 
+    // 仅供参考，测试私信
+    function gotoNewDialogue() {
+      router.push({
+        name: 'messageMy',
+        params: {
+          dialogue: JSON.stringify({
+            username: 'dreamy-test',
+            nickname: '测试账号',
+            avatar: 'https://dummyimage.com/150x150/234567/FFFFFF.png?text=dreamy-test',
+          }),
+        },
+      });
+    }
+
     return {
       topics,
       topicActiveIndex,
       clickTopic,
+      gotoNewDialogue,
     };
   },
 });

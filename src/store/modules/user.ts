@@ -1,10 +1,10 @@
 /*
- * @Description: 公共页面全局变量
+ * @Description: 用户页面状态
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-16 15:51:19
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-13 21:18:16
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-14 12:40:39
  */
 import { StoreOptions } from 'vuex';
 

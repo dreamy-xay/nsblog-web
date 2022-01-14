@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 11:51:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-13 22:53:00
+ * @LastEditTime: 2022-01-14 12:36:47
 -->
 <template>
   <div
@@ -227,10 +227,26 @@ export default defineComponent({
         if (Math.abs(scrollCache) >= props.topBarScrollLimitHeight) {
           if (scrollCache > 0) {
             // 向下滚的
-            if (topBarTop.value === 0) topBarTop.value = -topBarHeight;
+            if (topBarTop.value === 0) {
+              topBarTop.value = -topBarHeight;
+              containerTopBarHeight.value -= topBarHeight;
+              innerHeight.value = height.value - containerTopBarHeight.value;
+              setTimeout(() => {
+                // 更新滚动条
+                scrollbarColumnRef.value.update();
+              }, 200);
+            }
           } else {
             // 向上滚的
-            if (topBarTop.value !== 0) topBarTop.value = 0;
+            if (topBarTop.value !== 0) {
+              topBarTop.value = 0;
+              containerTopBarHeight.value += topBarHeight;
+              innerHeight.value = height.value - containerTopBarHeight.value;
+              setTimeout(() => {
+                // 更新滚动条
+                scrollbarColumnRef.value.update();
+              }, 200);
+            }
           }
           scrollCache = 0;
         }
@@ -302,6 +318,7 @@ export default defineComponent({
 
     .base-view-inner {
       width: 100%;
+      transition: 0.2s;
       overflow: hidden;
 
       .inner {
