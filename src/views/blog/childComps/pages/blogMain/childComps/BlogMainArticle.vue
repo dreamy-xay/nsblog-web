@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-29 17:08:41
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-14 13:57:07
+ * @LastEditTime: 2022-01-14 16:42:54
 -->
 
 <template>
@@ -67,7 +67,7 @@
 <script>
 import { defineComponent } from 'vue';
 import BaseImage from '@/components/content/baseImage/BaseImage.vue';
-import BlogMainText from '@/views/blog/childComps/blogMain/childComps/BlogMainText.vue';
+import BlogMainText from '@/views/blog/childComps/pages/blogMain/childComps/BlogMainText.vue';
 
 /**
  * @description:
