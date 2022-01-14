@@ -4,15 +4,15 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-29 16:58:46
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-14 17:15:52
+ * @LastEditTime: 2022-01-14 17:55:21
 -->
 <template>
   <div class="blog-main">
-    <blog-main-article
-      :data="articleData"
-      :title="'22'"
-      :type="false"
+    <blog-main-text
+      :title="'title'"
+      :type="true"
     />
+    <blog-main-article :data="articleData" />
     <blog-pagination
       :page="page"
       :pageCount="pageCount"
@@ -24,6 +24,8 @@
 import { defineComponent, reactive, ref } from 'vue';
 import BlogMainArticle from '@/views/blog/childComps/pages/blogMain/childComps/BlogMainArticle.vue';
 import BlogPagination from '@/views/blog/childComps/pages/blogMain/childComps/BlogPagination.vue';
+import BlogMainText from '@/views/blog/childComps/pages/blogMain/childComps/BlogMainText.vue';
+
 import { useRoute, useRouter } from 'vue-router';
 
 /**
@@ -34,6 +36,7 @@ import { useRoute, useRouter } from 'vue-router';
 export default defineComponent({
   name: 'blogMain',
   components: {
+    BlogMainText,
     BlogMainArticle,
     BlogPagination,
   },

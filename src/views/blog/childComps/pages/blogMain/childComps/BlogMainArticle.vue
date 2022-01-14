@@ -4,16 +4,11 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-29 17:08:41
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-14 16:42:54
+ * @LastEditTime: 2022-01-14 17:52:35
 -->
 
 <template>
   <div class="blog-main-article">
-    <blog-main-text
-      :title="title"
-      :type="type"
-    ></blog-main-text>
-
     <div
       class="blog-main-article-context"
       v-for="(item, index) in data"
@@ -67,31 +62,20 @@
 <script>
 import { defineComponent } from 'vue';
 import BaseImage from '@/components/content/baseImage/BaseImage.vue';
-import BlogMainText from '@/views/blog/childComps/pages/blogMain/childComps/BlogMainText.vue';
 
 /**
  * @description:
  * @param {Array} data 展示文章数据 `必传参数`
- * @param {String} title 显示内容 `默认为null`
- * @param {Boolean} type 标签或分类类型 `默认为true 标签`
  * @author: Z_Y_C
  */
 
 export default defineComponent({
   name: 'blogMainArticle',
-  components: { BaseImage, BlogMainText },
+  components: { BaseImage },
   props: {
     data: {
       type: Array,
       required: true,
-    },
-    title: {
-      type: String,
-      default: null,
-    },
-    type: {
-      type: Boolean,
-      default: true,
     },
   },
 
