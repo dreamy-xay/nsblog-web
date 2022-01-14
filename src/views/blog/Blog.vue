@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 18:20:47
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-13 23:30:46
+ * @LastEditTime: 2022-01-14 15:34:45
 -->
 <template>
   <div
@@ -17,7 +17,6 @@
     <blog-head />
     <blog-main :username="username" />
     <base-loading-page :show="showLoadingPage" />
-
   </div>
 </template>
 
