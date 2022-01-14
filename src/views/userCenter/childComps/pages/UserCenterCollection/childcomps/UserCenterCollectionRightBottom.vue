@@ -12,7 +12,7 @@
       <div
         v-for="(item,index) in List"
         :key="index"
-        :class="{'Type':true,'Choice': choiceIndex === index}"
+        :class="{'Type':true,'Choice': index === choiceIndex}"
         @click="chooseChoice(index)"
       >
         <div
@@ -63,7 +63,7 @@
                 v-if="item1.isBottom == false"
                 @click="upload"
                 role="button"
-              >查看更多</div>
+              >加载更多...</div>
             </div>
           </div>
         </div>
@@ -87,6 +87,11 @@ import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 
 export default defineComponent({
   name: 'userCenterCollectionRightBottom',
+  emits: {
+    changeChoice: null,
+    'cancel-col': null,
+    update: null,
+  },
   components: {
     BaseTag,
     BaseModal,
@@ -109,23 +114,34 @@ export default defineComponent({
       default: null,
     },
   },
-  setup(props) {
+  setup(props, context) {
     const modalShow = ref(false); // 是否显示n-modal
     const scrollbar = ref(null); //scrollbar
     const sureIndex = ref(-1);
-    const index = ref(0);
+    const actieveindex = ref(0);
+    const choiceindex = ref(0);
 
     //监听收藏夹改变，使滚动条回到顶部
     watch(
       () => props.Index,
       (value) => {
-        if (index.value !== value) {
+        if (actieveindex.value !== value) {
+          actieveindex.value = value;
           scrollbar.value.setScrollTop(0);
-          index.value = value;
         }
       }
     );
 
+    //监听收藏夹改变，使滚动条回到顶部
+    watch(
+      () => props.choiceIndex,
+      (value) => {
+        if (choiceindex.value !== value) {
+          choiceindex.value = value;
+          scrollbar.value.setScrollTop(0);
+        }
+      }
+    );
     /**
      * @description: 更新类型列表下标
      * @param {number} index 选择的下标
@@ -133,7 +149,7 @@ export default defineComponent({
      * @author: continue-hs
      */
     function chooseChoice(index) {
-      this.$emit('change-Choice', index);
+      context.emit('changeChoice', index);
       scrollbar.value.setScrollTop(0);
     }
 
@@ -144,10 +160,9 @@ export default defineComponent({
      * @author: continue-hs
      */
     function cancelCol(index, isConfirm, isModalShow = false) {
-      console.log(index);
       sureIndex.value = index;
       if (isConfirm) {
-        this.$emit('cancel-col', sureIndex.value);
+        context.emit('cancel-col', sureIndex.value);
       }
       modalShow.value = isModalShow;
     }
@@ -158,7 +173,7 @@ export default defineComponent({
      * @author: continue-hs
      */
     function upload() {
-      this.$emit('update');
+      context.emit('update');
     }
 
     return {
@@ -169,7 +184,7 @@ export default defineComponent({
       scrollbar,
       sureIndex,
       upload,
-      index,
+      // index,
     };
   },
 });
@@ -181,6 +196,7 @@ export default defineComponent({
 }
 
 .user-center-collection-right-bottom {
+  @include size(736px, 450px);
   .user-center-collection-right-bottom-typelist {
     @include size(736px, 21px);
     margin: 10px 0 0 35px;
