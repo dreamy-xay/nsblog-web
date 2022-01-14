@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 17:21:17
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-20 21:36:37
+ * @LastEditTime: 2022-01-14 13:02:56
 -->
 <template>
   <div class="message-my-friend">
@@ -69,6 +69,7 @@
 <script>
 import { defineComponent, reactive, ref } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
+import events from '@/events';
 import styles from '@/assets/style/define.scss';
 
 /**
@@ -160,6 +161,11 @@ export default defineComponent({
       currentMenuIndex = -1;
       menuShow.value = false;
     }
+
+    // 监听私信，产生新的对话
+    events.on('MessageMy-newDialogue', () => {
+      friendClick(0);
+    });
 
     return {
       styles,

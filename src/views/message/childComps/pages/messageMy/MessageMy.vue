@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 12:49:53
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-07 19:06:22
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-14 13:18:26
 -->
 
 <template>
@@ -48,6 +48,7 @@ import { useRoute } from 'vue-router';
 
 /**
  * @description: 我的消息页面
+ * @emits MessageMy-newDialogue 私信过来产生新的对话，发送激活消息
  * @author: dreamy-xay
  */
 
@@ -92,17 +93,34 @@ export default defineComponent({
       records: [],
       all: false,
     });
+
     const modalShow = ref(false); // 是否显示模态框
     let deleteItemCallback = null; // 当前删除操作索引
 
     const offset = new Map(); // 对应消息偏移量
     const limit = 20; // 每次获取对话数量
+
+    const newDialogueDataItem = JSON.parse(route.params.dialogue); // 接口：接收私信传递参数
+
     // 如果已登录则获取消息
-    if (isLogin.value)
+    if (isLogin.value) {
       getDialogue(0, limit)
         .then((data) => {
           dialogues.splice(0, 0, ...data.dialogues);
           activeDialogueData.avatar = data.avatar; // 当前聊天对象头像
+
+          // 如果存在新对话
+          if (newDialogueDataItem) {
+            dialogues.splice(0, 0, {
+              username: newDialogueDataItem.username,
+              nickname: newDialogueDataItem.nickname,
+              avatar: newDialogueDataItem.avatar,
+              count: 0,
+              records: [],
+              all: true,
+            });
+            events.emit('MessageMy-newDialogue'); // 发送激活消息
+          }
 
           // 设置偏移量
           for (let item of data.dialogues) {
@@ -113,6 +131,7 @@ export default defineComponent({
         .catch((error) => {
           console.log(error);
         });
+    }
 
     /**
      * @description: 点击好友对话项时触发
