@@ -4,10 +4,10 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-02 11:13:42
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-28 18:57:39
+ * @LastEditTime: 2022-01-03 16:50:01
  */
 /**
- * 通过图片url 获取图片file对象
+ * @description: 通过图片url 获取图片file对象
  * @param {string} url 图片路径 `必传参数`
  * @param {string} fileName 文件名称(一定要带后缀) `必传参数`
  * @param {(file: File) => void} callback 回调函数 `必传参数`
@@ -83,7 +83,7 @@ export function getSplitNum(num: string | number, count: number = 3, split: stri
 }
 
 /**
- * @description: 颜色10进制转10进制
+ * @description: 颜色16进制转10进制
  * @param {string} color 传入16进制颜色，如 '#ff0a4a' `必传参数`
  * @return {{r: number, g: number, b: number, rgb: string}} 返回对象,其中rgb为字符串  如 121,255,10 => r(121) g(255) b(10)
  * @author: dreamy-xay
