@@ -6,8 +6,8 @@
 }
 
 body {
-    font-family: Arial, "Microsoft YaHei", "微软雅黑", sans-serif;
-    //user-select: none;
+    font-family: system-ui, Arial, "Microsoft YaHei", "微软雅黑", sans-serif;
+    // user-select: none;
     /* 禁止用户鼠标在页面上选中文字/图片等 */
     -webkit-tap-highlight-color: transparent;
     /* webkit是苹果浏览器引擎，tap点击，highlight背景高亮，color颜色，颜色用数值调节 */
@@ -16,7 +16,7 @@ body {
     box-sizing: border-box;
     overflow-x: hidden;
     line-height: normal !important;
-    //overflow-x: hidden;
+    // overflow-x: hidden;
     line-height: normal !important;
     &::-webkit-scrollbar {
         width: 0;
@@ -64,7 +64,6 @@ input {
     user-select: none;
 }
 
-
 /* element-plus */
 
 // 修改 el-popover 框内大小
@@ -82,7 +81,7 @@ input {
 }
 
 // v-md-edit el-scrollbar
-div.v-md-editor__left-area>div.v-md-editor__left-area-body>div.scrollbar>div.scrollbar__bar {
+div.v-md-editor__left-area > div.v-md-editor__left-area-body > div.scrollbar > div.scrollbar__bar {
     pointer-events: none;
     opacity: 0;
 }

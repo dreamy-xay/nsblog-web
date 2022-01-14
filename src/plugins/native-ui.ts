@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 16:13:02
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-13 16:26:03
+ * @LastEditTime: 2022-01-14 16:28:55
  */
 import { App } from 'vue';
 import {
@@ -18,7 +18,8 @@ import {
   NCard,
   NTooltip,
   NDrawer,
-  NDialogProvider
+  NDialogProvider,
+  NPagination
 } from 'naive-ui';
 
 const components = [
@@ -31,7 +32,8 @@ const components = [
   NCard,
   NTooltip,
   NDrawer,
-  NDialogProvider
+  NDialogProvider,
+  NPagination
 ];
 
 export default (app: App): void => {

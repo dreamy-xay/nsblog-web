@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-09-20 19:56:13
- * @LastEditors: clq
- * @LastEditTime: 2021-09-30 19:28:56
+ * @LastEditors: xiao
+ * @LastEditTime: 2022-01-13 18:05:44
 -->
 <template>
   <div class="article-bottom-comp">
@@ -55,6 +55,11 @@
 
       <article-bottom-sponsor :sponsors="data.sponsors" />
 
+      <base-favorite
+        v-model:isShow="show"
+        ref="b"
+      >
+      </base-favorite>
       <div class="btn-container">
         <div
           class="btn"
@@ -113,7 +118,7 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import BaseTag from '@/components/content/baseTag/BaseTag.vue';
 import ArticleLink from '@/views/article/childComps/ArticleLink.vue';
 import ArticleBottomSponsor from '@/views/article/childComps/articleBody/childComps/ArticleBottomSponsor.vue';
@@ -121,6 +126,7 @@ import styles from '@/assets/style/define.scss';
 import { useMessage } from 'naive-ui';
 import { mapGetters } from '@/util/store';
 import events from '@/events';
+import BaseFavorite from '@/components/common/baseFavorite/BaseFavorite.vue';
 
 /**
  * @description: 文章底部子组件
@@ -137,6 +143,7 @@ export default defineComponent({
     BaseTag,
     ArticleLink,
     ArticleBottomSponsor,
+    BaseFavorite,
   },
   props: {
     data: {
@@ -147,6 +154,8 @@ export default defineComponent({
   setup(props, context) {
     const msg = useMessage(); // naive-ui mssage
     const { isLogin } = mapGetters('global', ['isLogin']);
+    const show = ref(false);
+    const b = ref(b);
 
     /**
      * @description: 判断用户是否登录
@@ -187,9 +196,14 @@ export default defineComponent({
       if (!isUserLogin()) return;
       console.log('onCollect');
       if (props.data.collection === 0) {
-        events.emit('ArticleBottomComp-changeCollection', 1); //收藏
+        console.log(props.data.collection);
+        show.value = true;
       } else {
-        events.emit('ArticleBottomComp-changeCollection', 0); //取消收藏
+        //收藏夹数量减一
+        console.log('bbb', b.value);
+        b.value.delCollection();
+        console.log(props.data.collection);
+        // events.emit('ArticleBottomComp-changeCollection', 0); //取消收藏
       }
     }
 
@@ -229,6 +243,8 @@ export default defineComponent({
       onRecommend,
       onCollect,
       onOppose,
+      show,
+      b,
     };
   },
 });

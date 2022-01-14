@@ -1,10 +1,10 @@
 /*
- * @Description:
+ * @Description: 公共页面全局状态（缓存）
  * @Version:
  * @Autor: continue-hs
  * @Date: 2021-08-17 09:50:38
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-26 10:04:06
+ * @LastEditTime: 2022-01-14 12:40:17
  */
 import { StoreOptions } from 'vuex';
 
