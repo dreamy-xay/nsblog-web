@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-25 16:15:14
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-25 20:12:11
+ * @LastEditTime: 2022-01-14 16:57:25
 -->
 
 <template>
@@ -122,6 +122,7 @@ export default defineComponent({
       color: $green-0;
       border-left: 2px solid $green-1;
       background-color: $grey-2;
+      border-radius: 4px;
     }
   }
 

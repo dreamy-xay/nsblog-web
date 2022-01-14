@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-05 10:41:38
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-14 15:11:05
+ * @LastEditTime: 2022-01-14 16:11:34
 -->
 
 <template>
@@ -264,14 +264,13 @@ export default defineComponent({
     }
 
     function gotoNewDialogue(index) {
-      console.log(index);
       router.push({
         name: 'messageMy',
         params: {
           dialogue: JSON.stringify({
             username: attentionData[index].content.username,
             nickname: attentionData[index].content.nickname,
-            avatar: attentionData[index].content.avatar + '/?text=' + attentionData[index].content.username,
+            avatar: attentionData[index].content.avatar,
           }),
         },
       });

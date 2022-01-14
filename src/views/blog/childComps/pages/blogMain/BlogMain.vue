@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-29 16:58:46
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-14 13:57:32
+ * @LastEditTime: 2022-01-14 17:15:52
 -->
 <template>
   <div class="blog-main">
@@ -22,8 +22,8 @@
 </template>
 <script>
 import { defineComponent, reactive, ref } from 'vue';
-import BlogMainArticle from '@/views/blog/childComps/blogMain/childComps/BlogMainArticle.vue';
-import BlogPagination from '@/views/blog/childComps/blogMain/childComps/BlogPagination.vue';
+import BlogMainArticle from '@/views/blog/childComps/pages/blogMain/childComps/BlogMainArticle.vue';
+import BlogPagination from '@/views/blog/childComps/pages/blogMain/childComps/BlogPagination.vue';
 import { useRoute, useRouter } from 'vue-router';
 
 /**
@@ -37,15 +37,10 @@ export default defineComponent({
     BlogMainArticle,
     BlogPagination,
   },
-  props: {
-    username: {
-      type: String,
-      requierd: true,
-    },
-  },
   setup(props) {
     const route = useRoute(); //路由
     const router = useRouter();
+    const username = route.params.username; // 获取用户名
     const page = ref(1); // 当前页面页数
     const pageCount = 5; // 总页数
     const messageCount = 49; // 信息总条数
@@ -161,7 +156,6 @@ export default defineComponent({
      * @author: Z_Y_C
      */
 
-    // category=前端&tag=数据结构&limit=10&offset=0
     function changePage(p) {
       page.value = p.page;
       router.push(
