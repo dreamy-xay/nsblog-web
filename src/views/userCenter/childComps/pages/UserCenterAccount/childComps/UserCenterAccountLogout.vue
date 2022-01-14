@@ -4,42 +4,56 @@
  * @Autor: Ban
  * @Date: 2022-01-13 15:32:53
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-13 19:09:37
+ * @LastEditTime: 2022-01-14 15:16:16
 -->
 <template>
-  <n-modal
-    :show="isShow"
-    class="user-center-account-logout"
-    preset="card"
-    :style="{width: '400px'}"
-    :closable="true"
-    @close="closeModal"
-  >
-    <div class="user-center-account-logout-text">
-      注销之前需要对密码进行验证
-    </div>
-
-    <user-center-input
-      :placeholder="'请输入密码'"
-      :type="'password'"
-      v-model="password"
-      :showPassword="true"
-      @enter="passwordEnter"
-      ref="passwordInput"
-    ></user-center-input>
-    <template #footer>
-      <div class="user-center-account-logout-footer">
-        <div
-          role="button"
-          @click="beforeSubmit"
-        >确定</div>
-        <div
-          role="button"
-          @click="closeModal"
-        >取消</div>
+  <div>
+    <n-modal
+      :show="isShow"
+      class="user-center-account-logout"
+      preset="card"
+      :style="{width: '400px'}"
+      :closable="true"
+      @close="closeModal"
+    >
+      <template #header>请验证您的身份</template>
+      <div class="user-center-account-logout-text">
+        账号
       </div>
-    </template>
-  </n-modal>
+      <user-center-input
+        ref="usernameInput"
+        :placeholder="'请输入账号'"
+        :type="'text'"
+        v-model="username"
+        @enter="usernameEnter"
+      ></user-center-input>
+
+      <div class="user-center-account-logout-text">
+        密码
+      </div>
+      <user-center-input
+        ref="passwordInput"
+        :placeholder="'请输入密码'"
+        :type="'password'"
+        v-model="password"
+        :showPassword="true"
+        @enter="passwordEnter"
+      ></user-center-input>
+      <template #footer>
+        <div class="user-center-account-logout-footer">
+          <div
+            role="button"
+            @click="beforeSubmit"
+          >确定</div>
+          <div
+            role="button"
+            @click="closeModal"
+          >取消</div>
+        </div>
+      </template>
+    </n-modal>
+  </div>
+
 </template>
 
 <script>
@@ -66,13 +80,14 @@ export default defineComponent({
   setup(props, context) {
     const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
     const dialog = useDialog(); // 对话框api
+    const username = ref(''); // 账号
+    const usernameInput = ref(null); // 账号框ref
     const password = ref(''); // 密码
     const msg = useMessage(); //消息框api
-    const passwordInput = ref(''); // 密码框ref
+    const passwordInput = ref(null); // 密码框ref
 
     /**
      * @description: 关闭模态框
-     * @param {*}
      * @return {*}
      * @author: Ban
      */
@@ -83,7 +98,6 @@ export default defineComponent({
 
     /**
      * @description: 提交
-     * @param {*}
      * @return {*}
      * @author: Ban
      */
@@ -94,7 +108,7 @@ export default defineComponent({
       // 如果验证成功
       if (success) {
         // 修改密码
-        authLogoff()
+        authLogoff(password.value)
           .then(() => {
             clearToken();
             msg.loading('注销成功，正在跳转到登录界面', { duration: 2000, closable: true });
@@ -111,21 +125,24 @@ export default defineComponent({
     }
     /**
      * @description: 确认注销
-     * @param {*}
      * @return {*}
      * @author: Ban
      */
     function beforeSubmit() {
-      dialog.success({
-        title: '警告',
-        content: '注销不可逆，确定注销？',
-        positiveText: '确定',
-        negativeText: '取消',
-        onPositiveClick: () => {
-          submit();
-        },
-        showIcon: false,
-      });
+      if (username.value == tokenInfo.value.username)
+        dialog.success({
+          title: '警告',
+          content: '注销不可逆，确定注销？',
+          positiveText: '确定',
+          negativeText: '取消',
+          onPositiveClick: () => {
+            submit();
+          },
+          showIcon: false,
+        });
+      else {
+        msg.error('账号不匹配');
+      }
     }
 
     /**
@@ -134,7 +151,18 @@ export default defineComponent({
      * @author: Ban
      */
     function passwordEnter() {
-      if (password.value === '') passwordInput.value.UserCenterInput.focus();
+      if (password.value === '');
+      else beforeSubmit();
+    }
+
+    /**
+     * @description: 账号框按下回车执行函数
+     * @return {*}
+     * @author: Ban
+     */
+    function usernameEnter() {
+      if (username.value === '');
+      else if (password.value === '') passwordInput.value.userCenterInput.focus();
       else beforeSubmit();
     }
     return {
@@ -144,6 +172,9 @@ export default defineComponent({
       beforeSubmit,
       passwordEnter,
       submit,
+      username,
+      usernameInput,
+      usernameEnter,
     };
   },
 });
@@ -152,7 +183,7 @@ export default defineComponent({
 <style lang='scss' scoped>
 .user-center-account-logout {
   .user-center-account-logout-text {
-    margin-bottom: 10px;
+    margin: 10px 0;
   }
 
   .user-center-account-logout-footer {
