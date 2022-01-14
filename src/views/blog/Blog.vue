@@ -15,6 +15,7 @@
     <base-loading-bar inject-name="blogPage" />
     <blog-menu :username="username" />
     <blog-head />
+    <router-view></router-view>
     <div style="width:100%; height: 1000px"></div>
     <base-loading-page :show="showLoadingPage" />
   </div>
