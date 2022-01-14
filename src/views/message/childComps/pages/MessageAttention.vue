@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-05 10:41:38
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-09 17:02:32
+ * @LastEditTime: 2022-01-12 12:57:04
 -->
 
 <template>
@@ -17,19 +17,23 @@
         class="message-attention"
         v-for="(item , index) in attentionData"
         :key="item.message_id"
-        @click="changePages('/user/'+item.content.username)"
-        role="button"
       >
         <div class="message-attention-avatar">
           <base-avatar
             :size='46'
             :src="item.content.avatar"
+            :href="'/user/'+item.content.username"
+            :target="'/user/'+item.content.username"
           ></base-avatar>
         </div>
 
         <div class="message-attention-right">
 
-          <div class="message-attention-right-name">
+          <div
+            class="message-attention-right-name"
+            @click="changePages('/user/'+item.content.username)"
+            role="button"
+          >
             <span class="message-attention-right-name-text">
               {{ item.content.nickname}}
             </span>
@@ -39,7 +43,10 @@
             <span class="message-attention-right-bottom-time">{{getDate(item.time)}}</span>
             <span class="message-attention-right-bottom-text">关注了你</span>
 
-            <div class="message-attention-right-bottom-iconfont1">
+            <div
+              class="message-attention-right-bottom-iconfont1"
+              role="button"
+            >
               <i class="iconfont blog-c-comment message-attention-right-bottom-iconfont1-xiaoxi"></i>
               <span>私信</span>
             </div>
@@ -47,6 +54,7 @@
             <div
               class="message-attention-right-bottom-iconfont2"
               @click.stop="deleteItem(index)"
+              role="button"
             >
               <i class="iconfont blog-shanchu message-attention-right-bottom-iconfont2-delete"></i>
               <span>删除该通知</span>

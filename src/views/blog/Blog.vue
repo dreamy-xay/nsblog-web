@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 18:20:47
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-10-08 20:53:56
+ * @LastEditTime: 2022-01-13 23:30:46
 -->
 <template>
   <div
@@ -15,7 +15,7 @@
     <base-loading-bar inject-name="blogPage" />
     <blog-menu :username="username" />
     <blog-head />
-    <blog-main />
+    <blog-main :username="username" />
     <base-loading-page :show="showLoadingPage" />
 
   </div>
