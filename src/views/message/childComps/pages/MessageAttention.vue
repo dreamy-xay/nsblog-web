@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-05 10:41:38
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-12 12:57:04
+ * @LastEditTime: 2022-01-14 15:11:05
 -->
 
 <template>
@@ -46,6 +46,7 @@
             <div
               class="message-attention-right-bottom-iconfont1"
               role="button"
+              @click="gotoNewDialogue(index)"
             >
               <i class="iconfont blog-c-comment message-attention-right-bottom-iconfont1-xiaoxi"></i>
               <span>私信</span>
@@ -98,7 +99,7 @@ import { dateFormat } from '@/util/date.ts';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 import { mapMutations, mapState } from '@/util/store';
 import { useMessage } from 'naive-ui';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 /**
  * @description: message页面——关注我的
@@ -114,6 +115,7 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute();
+    const router = useRouter();
     const attentionData = reactive([]); // 关注我的界面数据
     const msg = useMessage(); // naive-ui mssage
     const deleteTag = ref(true); // 判断数据是否全部加载的标志
@@ -261,6 +263,20 @@ export default defineComponent({
         });
     }
 
+    function gotoNewDialogue(index) {
+      console.log(index);
+      router.push({
+        name: 'messageMy',
+        params: {
+          dialogue: JSON.stringify({
+            username: attentionData[index].content.username,
+            nickname: attentionData[index].content.nickname,
+            avatar: attentionData[index].content.avatar + '/?text=' + attentionData[index].content.username,
+          }),
+        },
+      });
+    }
+
     return {
       modalShow,
       attentionData,
@@ -270,6 +286,7 @@ export default defineComponent({
       changePages,
       cancelAttention,
       sureCancelAttention,
+      gotoNewDialogue,
     };
   },
 });
