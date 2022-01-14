@@ -3,8 +3,13 @@
  * @Version:
  * @Autor: xiao
  * @Date: 2021-09-27 17:17:24
+<<<<<<< HEAD
+ * @LastEditors: clq
+ * @LastEditTime: 2021-10-08 20:28:47
+=======
  * @LastEditors: xiao
  * @LastEditTime: 2022-01-13 18:13:15
+>>>>>>> 8c3312d50f5c9eeba35a9ec144ddd3fda1daa6fe
 -->
 <template>
   <n-modal

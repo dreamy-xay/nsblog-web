@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 11:51:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-14 12:36:47
+ * @LastEditTime: 2022-01-14 16:45:14
 -->
 <template>
   <div
@@ -14,6 +14,7 @@
     <el-scrollbar
       @scroll="scroll($event, true)"
       class="base-view-scrollbar"
+      ref="scrollbarRowRef"
     >
       <div class="base-view-container">
         <base-background v-if="background" />
@@ -31,7 +32,7 @@
         </div>
         <div
           class="base-view-inner"
-          :style="{height: innerHeight + 'px', marginTop: containerTopBarHeight + 'px'}"
+          :style="{height: innerHeight + 'px', marginTop: containerTopBarHeight + 'px', transition: innerTransition}"
         >
           <el-scrollbar
             @scroll="scroll($event, false)"
@@ -162,6 +163,7 @@ export default defineComponent({
     let topBarHeight = 0; // 获取topBar高度
     const containerTopBarHeight = ref(0); // 页面 topBar 真实高度
     const topBarTop = ref(0); // 页面 topBar 距离顶部距离
+    const innerTransition = ref('0s'); // 内部容器过渡效果
 
     // dom加载完毕后执行
     onMounted(() => {
@@ -170,6 +172,11 @@ export default defineComponent({
         containerTopBarHeight.value = topBarRef.value.$el.parentNode.offsetHeight;
         innerHeight.value = height.value - containerTopBarHeight.value;
       }
+
+      // 初始时取消动画，0.2s后加载
+      setTimeout(() => {
+        innerTransition.value = '0.2s';
+      }, 200);
     });
 
     // 监听窗口变化
@@ -177,6 +184,11 @@ export default defineComponent({
       width.value = document.body.offsetWidth;
       height.value = document.body.offsetHeight;
       innerHeight.value = height.value - containerTopBarHeight.value;
+      nextTick(() => {
+        // 更新滚动条
+        scrollbarColumnRef.value.update();
+        scrollbarRowRef.value.upsate();
+      });
     };
 
     let scrollLeft = 0; // 滚动条位置
@@ -253,7 +265,7 @@ export default defineComponent({
       }
     }
 
-    // const scrollbarRowRef = ref(null); // 控制左右滚动条 ref
+    const scrollbarRowRef = ref(null); // 控制左右滚动条 ref
     const scrollbarColumnRef = ref(null); // 控制上下滚动条 ref
     /**
      * @description: 设置滚动条到顶部的距离
@@ -279,10 +291,12 @@ export default defineComponent({
       height,
       scroll,
       topBarHeight,
+      scrollbarRowRef,
       scrollbarColumnRef,
       containerTopBarHeight,
       setScrollTop,
       topBarTop,
+      innerTransition,
     };
   },
 });
