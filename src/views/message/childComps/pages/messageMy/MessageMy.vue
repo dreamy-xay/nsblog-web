@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 12:49:53
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-14 13:18:26
+ * @LastEditTime: 2022-01-14 14:11:34
 -->
 
 <template>
@@ -100,7 +100,7 @@ export default defineComponent({
     const offset = new Map(); // 对应消息偏移量
     const limit = 20; // 每次获取对话数量
 
-    const newDialogueDataItem = JSON.parse(route.params.dialogue); // 接口：接收私信传递参数
+    const newDialogueDataItem = route.params.dialogue ? JSON.parse(route.params.dialogue) : null; // 接口：接收私信传递参数
 
     // 如果已登录则获取消息
     if (isLogin.value) {
