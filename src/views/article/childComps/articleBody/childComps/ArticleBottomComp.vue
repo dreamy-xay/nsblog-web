@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-20 19:56:13
  * @LastEditors: clq
- * @LastEditTime: 2021-09-30 19:28:56
+ * @LastEditTime: 2021-10-08 20:28:51
 -->
 <template>
   <div class="article-bottom-comp">
@@ -109,14 +109,17 @@
         </span>
       </div>
     </div>
+
+    <base-favorite v-model:isShow='showBaseFavorite' />
   </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import BaseTag from '@/components/content/baseTag/BaseTag.vue';
 import ArticleLink from '@/views/article/childComps/ArticleLink.vue';
 import ArticleBottomSponsor from '@/views/article/childComps/articleBody/childComps/ArticleBottomSponsor.vue';
+import BaseFavorite from '@/components/common/baseFavorite/BaseFavorite.vue';
 import styles from '@/assets/style/define.scss';
 import { useMessage } from 'naive-ui';
 import { mapGetters } from '@/util/store';
@@ -137,6 +140,7 @@ export default defineComponent({
     BaseTag,
     ArticleLink,
     ArticleBottomSponsor,
+    BaseFavorite,
   },
   props: {
     data: {
@@ -147,6 +151,7 @@ export default defineComponent({
   setup(props, context) {
     const msg = useMessage(); // naive-ui mssage
     const { isLogin } = mapGetters('global', ['isLogin']);
+    const showBaseFavorite = ref(false);
 
     /**
      * @description: 判断用户是否登录
@@ -185,6 +190,7 @@ export default defineComponent({
      */
     function onCollect() {
       if (!isUserLogin()) return;
+      showBaseFavorite.value = true;
       console.log('onCollect');
       if (props.data.collection === 0) {
         events.emit('ArticleBottomComp-changeCollection', 1); //收藏
@@ -225,6 +231,7 @@ export default defineComponent({
 
     return {
       styles,
+      showBaseFavorite,
       onAttention,
       onRecommend,
       onCollect,
