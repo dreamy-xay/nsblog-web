@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:02:59
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 18:30:44
+ * @LastEditors: Ban
+ * @LastEditTime: 2022-01-14 16:55:01
  */
 import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 import loginRouter from './modules/login';
@@ -47,6 +47,12 @@ const routes: Array<RouteRecordRaw> = [
     path: '/article/:articleId',
     name: 'article',
     component: () => import('@/views/article/Article.vue')
+  },
+  // 搜索页面
+  {
+    path: '/search',
+    name: 'search',
+    component: () => import('@/views/search/Search.vue')
   },
   // 404 not find pages
   {
