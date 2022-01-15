@@ -4,56 +4,53 @@
  * @Autor: Ban
  * @Date: 2022-01-13 15:32:53
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-14 15:16:16
+ * @LastEditTime: 2022-01-15 09:59:33
 -->
 <template>
-  <div>
-    <n-modal
-      :show="isShow"
-      class="user-center-account-logout"
-      preset="card"
-      :style="{width: '400px'}"
-      :closable="true"
-      @close="closeModal"
-    >
-      <template #header>请验证您的身份</template>
-      <div class="user-center-account-logout-text">
-        账号
-      </div>
-      <user-center-input
-        ref="usernameInput"
-        :placeholder="'请输入账号'"
-        :type="'text'"
-        v-model="username"
-        @enter="usernameEnter"
-      ></user-center-input>
+  <n-modal
+    :show="isShow"
+    class="user-center-account-logout"
+    preset="card"
+    :style="{width: '400px'}"
+    :closable="true"
+    @close="closeModal"
+  >
+    <template #header>请验证您的身份</template>
+    <div class="user-center-account-logout-text">
+      账号
+    </div>
+    <user-center-input
+      ref="usernameInput"
+      :placeholder="'请输入账号'"
+      :type="'text'"
+      v-model="username"
+      @enter="usernameEnter"
+    ></user-center-input>
 
-      <div class="user-center-account-logout-text">
-        密码
+    <div class="user-center-account-logout-text">
+      密码
+    </div>
+    <user-center-input
+      ref="passwordInput"
+      :placeholder="'请输入密码'"
+      :type="'password'"
+      v-model="password"
+      :showPassword="true"
+      @enter="passwordEnter"
+    ></user-center-input>
+    <template #footer>
+      <div class="user-center-account-logout-footer">
+        <div
+          role="button"
+          @click="beforeSubmit"
+        >确定</div>
+        <div
+          role="button"
+          @click="closeModal"
+        >取消</div>
       </div>
-      <user-center-input
-        ref="passwordInput"
-        :placeholder="'请输入密码'"
-        :type="'password'"
-        v-model="password"
-        :showPassword="true"
-        @enter="passwordEnter"
-      ></user-center-input>
-      <template #footer>
-        <div class="user-center-account-logout-footer">
-          <div
-            role="button"
-            @click="beforeSubmit"
-          >确定</div>
-          <div
-            role="button"
-            @click="closeModal"
-          >取消</div>
-        </div>
-      </template>
-    </n-modal>
-  </div>
-
+    </template>
+  </n-modal>
 </template>
 
 <script>
@@ -65,7 +62,10 @@ import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput.vue';
 import { authLogoff } from '@/network/api/auth';
 import { clearToken } from '@/network/token';
 import router from '@/router';
-
+/**
+ * @description: 账号注销
+ * @author: Ban
+ */
 export default defineComponent({
   name: 'UserCenterAccountLogout',
   components: {
