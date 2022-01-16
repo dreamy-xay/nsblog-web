@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 18:26:04
- * @LastEditors: xiao
- * @LastEditTime: 2022-01-14 18:10:58
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-16 16:24:37
 -->
 <template>
   <div class="blog-tags">
@@ -16,40 +16,44 @@
     </div>
     <div class="blog-show">
       <div
-        v-for="(tag, index) in tags"
-        :key="index"
-        class="showtag"
-        :class="col[index%4]"
-        :style="{
-            left:`${Math.random()*921}px`,
-            top:`${Math.random()*150}px`,
-            'font-size':`${10+Math.random()*51}px`,
-            }"
+        v-for="tag in randomTags"
+        :key="tag.name"
+        class="tag-item"
+        :style="{left: `${tag.position.x}px`, top: `${tag.position.y}px`, fontSize: `${tag.size}px`, color: tag.color}"
       >
-        <div>
-          {{tag.name}}
-        </div>
+        {{tag.text}}
       </div>
     </div>
-    <div class="blog-alltags">
-      <div
-        v-for="(tag, index) in tags"
-        :key="index"
-        class="tag-name"
-        :class="tagn[index%4]"
+    <div class="blog-all-tags">
+      <base-tag
+        :size="38"
+        v-for="tag in tags"
+        :key="tag.name"
+        :text="tag.name"
+        :color="tag.color"
+        :hover-color="tag.hoverColor"
+        :style="{borderRadius: styles.borderRadius1, boxShadow: styles.shadow0, fontSize: '16px', marginRight: '20px', marginBottom: '20px'}"
+        :href="tag.url"
       >
-        <div class="tag-name-content">{{tag.name}}</div>
-        <div class="tag-name-number">117</div>
-      </div>
+        <template #text-after>
+          <div class="tags-count">
+            {{tag.count}}
+          </div>
+        </template>
+      </base-tag>
     </div>
   </div>
 
 </template>
 
 <script>
-import { defineComponent, reactive, ref } from 'vue';
+import { computed, defineComponent, reactive } from 'vue';
+import BaseTag from '@/components/content/baseTag/BaseTag.vue';
 import { getTags } from '@/network/api/articles';
 import { useMessage } from 'naive-ui';
+import { circleRandomText } from '@/util/dom';
+import styles from '@/assets/style/define.scss';
+import { useRoute } from 'vue-router';
 
 /**
  * @description: 博客全部标签页面
@@ -58,15 +62,78 @@ import { useMessage } from 'naive-ui';
 
 export default defineComponent({
   name: 'blogTags',
-  setup(props) {
+  components: {
+    BaseTag,
+  },
+  setup() {
+    const msg = useMessage(); // naive-ui 组件 消息
+    const route = useRoute(); // route
     const tags = reactive([]); //标签数据
-    const msg = useMessage(); // naive-ui 组件
+
+    const username = route.params.username; // 获取博客用户名
+
+    const colorList = [
+      // 颜色列表
+      [styles.purple0, styles.purple1],
+      [styles.orange0, styles.orange1],
+      [styles.red0, styles.pink0],
+      [styles.yellow0, styles.yellow1],
+      [styles.green0, styles.green1],
+      [styles.blue0, styles.blue1],
+    ];
+    /**
+     * @description: 随机获取颜色
+     * @return {[string, string]} 返回颜色和hover色
+     * @author: dreamy-xay
+     */
+    function randomColor() {
+      return colorList[Math.floor(Math.random() * colorList.length)];
+    }
+
+    // 生成随机标签位置及颜色
+    const randomTags = computed(() => {
+      const textList = [];
+      for (let item of tags)
+        textList.push({
+          weight: item.count,
+          text: item.name,
+        });
+      return circleRandomText(
+        textList,
+        [
+          styles.purple0,
+          styles.purple1,
+          styles.orange0,
+          styles.orange1,
+          styles.red0,
+          styles.pink0,
+          styles.yellow0,
+          styles.yellow1,
+          styles.green0,
+          styles.green1,
+          styles.blue0,
+          styles.blue1,
+        ],
+        [12, 54],
+        {
+          x: [0, 920],
+          y: [0, 200],
+        },
+        false
+      );
+    });
 
     //获取标签数据
-    getTags('dreamy', 0)
+    getTags(username)
       .then((data) => {
-        console.log(data);
-        tags.splice(0, 0, ...data.tags);
+        for (let tag of data.tags) {
+          const color = randomColor();
+          tag.color = color[0];
+          tag.hoverColor = color[1];
+          tag.url = `/blog/${username}?tag=${tag.id}`;
+          delete tag['id'];
+          tags.splice(0, 0, tag);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -74,14 +141,14 @@ export default defineComponent({
       });
 
     return {
+      styles,
       tags,
-      tagn: ['tag1', 'tag2', 'tag3', 'tag4'], //字体颜色
-      col: ['col1', 'col2', 'col3', 'col4'], //背景颜色
+      randomTags,
     };
   },
 });
 </script>
-g
+
 <style lang="scss" scoped>
 .blog-tags {
   @include flex(center, flex-start, column);
@@ -94,7 +161,7 @@ g
     border-radius: $border-radius-0;
     background-color: $grey-0;
     box-shadow: $shadow-0; //阴影
-    @include flex(center, center, row);
+    @include flex(center, center);
 
     .left-icon {
       height: 100%;
@@ -109,10 +176,7 @@ g
 
     .blog-tag-content {
       font-size: 32px;
-      font-family: Arial;
       font-weight: bold;
-      font-stretch: normal;
-      font-style: normal;
       color: $grey-8;
     }
   }
@@ -123,78 +187,26 @@ g
     height: 200px;
     position: relative;
 
-    .showtag {
+    .tag-item {
       position: absolute;
     }
   }
 
-  .blog-alltags {
-    @include flex(first-start, center, row);
+  .blog-all-tags {
+    @include flex(flex-start);
     align-content: flex-start;
     flex-wrap: wrap;
     margin-top: 16px;
-    margin-bottom: 175px;
+    margin-bottom: 100px;
     width: 800px;
-    height: 558px;
     border-radius: $border-radius-0;
     box-shadow: $shadow-0; //阴影
-    padding: 24px;
-    padding-right: 4px;
-    padding-bottom: 3px;
+    padding: 24px 4px 4px 24px;
     background-color: $grey-0;
 
-    .tag-name {
-      width: auto;
-      height: 38px;
-      border-radius: $border-radius-0;
-      margin-right: 20px;
-      margin-bottom: 21px;
-      box-shadow: $shadow-0; //阴影
-      @include flex(center, center);
-
-      .tag-name-content {
-        font-size: 16px;
-        color: $grey-10;
-        margin-right: 5px;
-        margin-left: 10px;
-      }
-
-      .tag-name-number {
-        font-size: 16px;
-        color: $grey-7;
-        margin-right: 10px;
-      }
-
-      &.tag-name-item {
-        box-shadow: $shadow-2;
-      }
+    .tags-count {
+      margin-left: 6px;
     }
-  }
-
-  .tag1 {
-    background-color: $purple-0;
-  }
-  .tag2 {
-    background-color: $orange-0;
-  }
-  .tag3 {
-    background-color: $red-0;
-  }
-  .tag4 {
-    background-color: $yellow-0;
-  }
-
-  .col1 {
-    color: $green-1;
-  }
-  .col2 {
-    color: $green-2;
-  }
-  .col3 {
-    color: $green-3;
-  }
-  .col4 {
-    color: $green-4;
   }
 }
 </style>

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-10-03 17:31:09
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-10-04 17:56:42
+ * @LastEditTime: 2022-01-15 16:58:22
 -->
 <template>
   <div
@@ -123,6 +123,7 @@ export default defineComponent({
   left: 0;
   border-top: 0;
   background: $grey-0;
+  box-shadow: $shadow-0;
   width: calc(100% - 8px);
   height: 56px;
   z-index: 999;

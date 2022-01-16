@@ -30,7 +30,7 @@
         :Index="activeIndex"
         :List="List"
         :favoritesList="favorites"
-        @change-choice="chooseChoice($event)"
+        @changeChoice="chooseChoice($event)"
         @cancel-col="cancelCol($event)"
         @update="getList"
       ></user-center-collection-right-bottom>
@@ -233,7 +233,8 @@ export default defineComponent({
         .then(() => {
           favorites.splice(index, 1);
           msg.success('删除收藏夹成功');
-          chooseActive(activeIndex.value);
+          if (index === favorites.length) chooseActive(index - 1);
+          else chooseActive(activeIndex.value);
         })
         .catch((error) => {
           console.log(error);
@@ -330,20 +331,20 @@ export default defineComponent({
   box-shadow: $shadow-0;
   background: $grey-0;
   border-radius: 8px;
-  @include flex(center, center);
+  @include flex(initial, center);
 
   .user-center-collection-line {
-    @include size(1px, 675px);
+    @include size(1px, 626px);
     opacity: 1;
     border-left: 1px solid $grey-4;
   }
 
   .user-center-collection-right {
-    @include size(736px, 675px);
+    @include size(736px, 626px);
     margin-right: 10px;
 
     .right-line {
-      @include size(747px, 1px);
+      @include size(736px, 1px);
       background: $grey-4;
     }
   }

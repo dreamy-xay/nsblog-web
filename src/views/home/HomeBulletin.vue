@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-15 13:19:14
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-15 21:09:52
+ * @LastEditTime: 2022-01-16 23:25:44
 -->
 <template>
   <div class="home-bulletin">
@@ -16,7 +16,7 @@
     <div
       class="home-bulletin-context"
       role="button"
-      v-for="(item , index) in data"
+      v-for="(item , index) in bulletinData"
       :key="index"
     >
       <div class="icon"> <i class="iconfont blog-gonggao1"></i> </div>
@@ -38,7 +38,7 @@ import { defineComponent } from 'vue';
 
 /**
  * @description:公告牌
- * @param {Array} bulletinData 公告牌告示和连接 `默认[]`
+ * @param {Array} bulletinData 公告牌告示text和连接href `默认[]`
  * @author: Z_Y_C
  */
 
@@ -51,17 +51,7 @@ export default defineComponent({
     },
   },
   setup() {
-    const data = [
-      { text: '哈哈哈哈哈', href: 'http://localhost:8888/' },
-      {
-        text: '哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-        href: 'http://localhost:8888/',
-      },
-      { text: '哈哈哈哈哈', href: 'http://localhost:8888/' },
-      { text: '哈哈哈哈哈', href: 'http://localhost:8888/' },
-      { text: '哈哈哈哈哈', href: 'http://localhost:8888/' },
-    ];
-    return { data };
+    return {};
   },
 });
 </script>

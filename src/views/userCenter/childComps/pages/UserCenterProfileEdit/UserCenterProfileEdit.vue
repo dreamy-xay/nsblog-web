@@ -1,10 +1,10 @@
 <!--
- * @Description:
+ * @Description: 个人中心-个人资料
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:31
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-14 21:28:06
+ * @LastEditors: Ban
+ * @LastEditTime: 2022-01-14 16:07:28
 -->
 <template>
   <div class="user-center-profile-edit">
@@ -21,7 +21,11 @@
       :data="jobData"
       @changeJob="changeJob"
     />
-    <user-center-profile-edit-interest :data="tagData" />
+    <user-center-profile-edit-interest
+      :data="tagData"
+      id="userCenterProfileEditInteres"
+      @deleteTag="deleteTag"
+    />
   </div>
 </template>
 
@@ -207,6 +211,17 @@ export default defineComponent({
         });
     }
 
+    /**
+     * @description: 删除兴趣标签
+     * @param {index} 标签索引
+     * @author: Ban
+     */
+
+    function deleteTag(index) {
+      userData.tags.splice(index, 1);
+      console.log(userData.tags);
+    }
+
     return {
       uploadAvatar,
       updateSignature,
@@ -219,6 +234,8 @@ export default defineComponent({
 
       changeInformation,
       changeJob,
+
+      deleteTag,
     };
   },
 });
