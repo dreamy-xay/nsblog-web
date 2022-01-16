@@ -1,10 +1,10 @@
 <!--
- * @Description: 用户中心-基础资料-兴趣标签
+ * @Description: 用户中心-个人资料-兴趣标签
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-28 14:54:52
  * @LastEditors: Ban
- * @LastEditTime: 2021-09-25 15:11:57
+ * @LastEditTime: 2022-01-14 15:21:07
 -->
 
 <template>
