@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-24 10:18:28
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-09-29 21:47:26
+ * @LastEditTime: 2022-01-16 10:00:12
 -->
 <template>
   <div class="user-center-collection-list">
@@ -21,7 +21,7 @@
     <div class="user-center-collection-list-other">
       <el-scrollbar>
         <div
-          :class="{active : index === activeIndex}"
+          :class="{active : index === Index}"
           class="collection-name"
           role="button"
           v-for="(item,index) in favorites"
@@ -59,7 +59,7 @@
         class="input-title"
         v-model="inputTitle"
         type="text"
-        showClose="true"
+        :show-Close="true"
         :maxlength="20"
       >
       </user-center-input>
@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
 import styles from '@/assets/style/define.scss';
 import { useMessage } from 'naive-ui';
 import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput';
@@ -106,6 +106,10 @@ import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 
 export default defineComponent({
   name: 'usercentercollectionlist',
+  emits: {
+    'change-index': null,
+    'new-fav': null,
+  },
   components: {
     UserCenterInput,
     BaseModal,
@@ -120,13 +124,24 @@ export default defineComponent({
       default: null,
     },
   },
-  setup() {
+  setup(props, context) {
     const isVisible = ref(false);
     const radio = ref(true);
     const msg = useMessage(); //message提示
     const inputTitle = ref('');
     const inputRemark = ref('');
     const modalShow = ref(false);
+    const Index = ref(0);
+
+    //监听收藏夹改变，使滚动条回到顶部
+    watch(
+      () => props.activeIndex,
+      (value) => {
+        if (Index.value !== value) {
+          Index.value = value;
+        }
+      }
+    );
 
     /**
      * @description: 改变显示收藏夹
@@ -146,7 +161,7 @@ export default defineComponent({
     function newfavorites(name, remark, is_private, isConfirm, isConfirmModal = false) {
       if (isConfirm) {
         if (name !== '') {
-          this.$emit('new-fav', [name, remark, is_private]);
+          context.emit('new-fav', [name, remark, is_private]);
           isVisible.value = false;
           inputTitle.value = '';
           inputRemark.value = '';
@@ -165,6 +180,7 @@ export default defineComponent({
       inputTitle,
       inputRemark,
       modalShow,
+      Index,
     };
   },
 });
@@ -176,8 +192,8 @@ export default defineComponent({
 }
 
 .user-center-collection-list {
-  @include size(180px, 645px);
-
+  @include size(180px, 626px);
+  overflow: hidden;
   .user-center-collection-list-new {
     @include size(180px, 60px);
     color: $grey-7;
@@ -186,7 +202,7 @@ export default defineComponent({
     i {
       padding-left: 30px;
       position: relative;
-      top: 22px;
+      top: 18px;
     }
 
     .newcollection {
@@ -195,7 +211,7 @@ export default defineComponent({
   }
 
   .user-center-collection-list-other {
-    @include size(180px, 585px);
+    @include size(180px, 565px);
 
     :deep(.el-scrollbar__thumb) {
       background-color: $grey-7 !important;
@@ -206,7 +222,6 @@ export default defineComponent({
       display: flex;
       color: $grey-7;
       border-bottom: 1px solid $grey-4;
-
       .n-badge {
         padding: 35px 0 0 20px;
       }

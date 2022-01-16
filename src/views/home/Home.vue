@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-15 15:06:44
+ * @LastEditTime: 2022-01-16 23:25:15
 -->
 
 <template>
@@ -39,8 +39,9 @@
     <div style="width:100%; height: 3000px; background: #fff;">
       <button @click="gotoNewDialogue">前往新的对话</button><br />
       1 Test <br />2 Test<br />3 Test<br />4 Test<br />5 Test<br />6 Test<br />7 Test<br />8 Test<br />9 Test
-      <home-bulletin />
-      <home-activity />
+      <div style="width: 50%; margin: 20px;">
+        <base-content-loading />
+      </div>
     </div>
 
   </base-view>
@@ -49,8 +50,7 @@
 <script>
 import { defineComponent, reactive, ref } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
-import HomeBulletin from '@/views/home/HomeBulletin.vue';
-import HomeActivity from '@/views/home/HomeActivity.vue';
+import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
 import router from '@/router';
 
 /**
@@ -62,8 +62,7 @@ export default defineComponent({
   name: 'Home',
   components: {
     BaseView,
-    HomeBulletin,
-    HomeActivity,
+    BaseContentLoading,
   },
   setup() {
     const topics = reactive([

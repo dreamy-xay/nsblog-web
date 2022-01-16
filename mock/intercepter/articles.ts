@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-10-01 21:17:00
+ * @LastEditTime: 2022-01-16 12:50:03
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -48,7 +48,11 @@ export default function(baseUrl: string, app: Application) {
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = [];
       for (let i: number = 0; i < limit; ++i)
-        ans.push({ id: Random.id(), name: Random.integer(0, 1) ? Random.word() : Random.cword() });
+        ans.push({
+          id: Random.id(),
+          name: Random.integer(0, 1) ? Random.word() : Random.cword(),
+          count: Random.integer(1, 100)
+        });
       return ans;
     }
 
@@ -64,7 +68,11 @@ export default function(baseUrl: string, app: Application) {
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = [];
       for (let i: number = 0; i < limit; ++i)
-        ans.push({ id: Random.id(), name: Random.integer(0, 1) ? Random.word() : Random.cword() });
+        ans.push({
+          id: Random.id(),
+          name: Random.integer(0, 1) ? Random.word() : Random.cword(),
+          count: Random.integer(1, 100)
+        });
       return ans;
     }
 
