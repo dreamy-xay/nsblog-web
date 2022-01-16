@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-28 21:37:34
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-16 15:46:25
+ * @LastEditTime: 2022-01-16 16:26:14
  */
 import ResizeObserver from 'resize-observer-polyfill';
 import { debounce, throttle, shuffle } from 'lodash';
@@ -130,8 +130,8 @@ type DistanceArgs = {
 type Range = [number, number];
 // 位置范围参数类型
 type PositionRange = {
-  x?: Range;
-  y?: Range;
+  x: Range;
+  y: Range;
 };
 // 位置参数类型
 type Position = { x: number; y: number };
@@ -196,10 +196,11 @@ export function circleRandomText(
   // 计算中心位置
   const centerX = (positionRange.x[1] + positionRange.x[0]) / 2;
   const centerY = (positionRange.y[1] + positionRange.y[0]) / 2;
-  // 生成圈数
+  // 定义部分辅助变量
   const positionList: Position[] = [];
   const sizeList: number[] = [];
   const circle: number[] = [1];
+  // 生成圈数及其对应数量
   let sum: number = 1;
   for (let i: number = 1; ; ++i) {
     const num: number = (2 * i - 1) * 4;
@@ -227,7 +228,7 @@ export function circleRandomText(
     const posArr: Position[] = [];
     // 计算平均偏移度数
     const avgOC: number = (Math.PI * 2) / circle[i];
-    let theta: number = 0;
+    let theta: number = 0; // 角度
     // 计算当前size
     const currentSize = randomSize(avgSize);
     for (let j: number = 0; j < circle[i]; ++j) {
@@ -256,14 +257,15 @@ export function circleRandomText(
     }
   }
 
-  // 预处理 text, 权重重大大小排序
+  // 预处理 text, 权重从大到小排序
   textArgs.sort((a: TextArgs, b: TextArgs) => {
     return b.weight - a.weight;
   });
 
+  // 整合全部数据
   for (let i: number = 0; i < textArgs.length; ++i) {
     const pos: Position = positionList[i];
-    const rect = getTextRect(textArgs[i].text, sizeList[i]);
+    const rect = getTextRect(textArgs[i].text, sizeList[i]); // 获取文字实际区域大小
     pos.x -= rect.width / 2;
     pos.y -= rect.height / 2;
     texts.push({

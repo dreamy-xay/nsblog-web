@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 18:26:04
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-16 15:52:47
+ * @LastEditTime: 2022-01-16 16:24:37
 -->
 <template>
   <div class="blog-tags">
@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { computed, defineComponent, reactive, ref } from 'vue';
+import { computed, defineComponent, reactive } from 'vue';
 import BaseTag from '@/components/content/baseTag/BaseTag.vue';
 import { getTags } from '@/network/api/articles';
 import { useMessage } from 'naive-ui';
@@ -90,6 +90,7 @@ export default defineComponent({
       return colorList[Math.floor(Math.random() * colorList.length)];
     }
 
+    // 生成随机标签位置及颜色
     const randomTags = computed(() => {
       const textList = [];
       for (let item of tags)
