@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-24 18:26:04
  * @LastEditors: clq
- * @LastEditTime: 2022-01-14 14:44:17
+ * @LastEditTime: 2022-01-16 18:44:35
 -->
 <template>
   <div class="blog-categories">
@@ -19,7 +19,7 @@
       <div
         v-for="(item, index) in categories"
         :key="index"
-        :class="['category-item',{green: index%3==0},{orange: index%3==1},{red: index%3==2}]"
+        :class="['category-item',{purple: index%3==0},{orange: index%3==1},{red: index%3==2}]"
         role="button"
         @click="toCategory(item.url)"
       >
@@ -128,6 +128,7 @@ export default defineComponent({
     background-color: $grey-0;
     border-radius: 8px;
     margin-bottom: 20px;
+    box-shadow: $shadow-0;
   }
 
   .blog-categories-title {
@@ -159,18 +160,34 @@ export default defineComponent({
       font-size: 16px;
       font-weight: 400;
       color: $grey-10;
+      box-shadow: $shadow-0;
     }
 
-    .green {
-      background-color: $green-0;
+    .purple {
+      background-color: $purple-0;
+      transition: 0.25s;
+
+      &:hover {
+        background-color: $purple-1;
+      }
     }
 
     .orange {
       background-color: $orange-0;
+      transition: 0.25s;
+
+      &:hover {
+        background-color: $orange-1;
+      }
     }
 
     .red {
       background-color: $red-0;
+      transition: 0.25s;
+
+      &:hover {
+        background-color: $red-1;
+      }
     }
   }
 

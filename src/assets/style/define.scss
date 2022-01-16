@@ -84,6 +84,7 @@ $border-radius-1: 4px;
     borderRadius1: $border-radius-1;
 }
 
+
 /* mixin */
 
 @mixin ellipsis($line-clamp: 2) {
@@ -92,13 +93,14 @@ $border-radius-1: 4px;
         text-overflow: ellipsis;
         overflow: hidden;
         word-break: break-all;
-    } @else if $line-clamp>1 {
+    }
+    @else if $line-clamp>1 {
         overflow: hidden;
         display: -webkit-box;
         -webkit-line-clamp: $line-clamp;
         -webkit-box-orient: vertical;
-    } @else {
     }
+    @else {}
 }
 
 @mixin flex($align-items: initial, $justify-content: initial, $flex-direction: initial) {
