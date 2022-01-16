@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-05 10:41:38
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-09 17:02:32
+ * @LastEditTime: 2022-01-14 16:11:34
 -->
 
 <template>
@@ -17,19 +17,23 @@
         class="message-attention"
         v-for="(item , index) in attentionData"
         :key="item.message_id"
-        @click="changePages('/user/'+item.content.username)"
-        role="button"
       >
         <div class="message-attention-avatar">
           <base-avatar
             :size='46'
             :src="item.content.avatar"
+            :href="'/user/'+item.content.username"
+            :target="'/user/'+item.content.username"
           ></base-avatar>
         </div>
 
         <div class="message-attention-right">
 
-          <div class="message-attention-right-name">
+          <div
+            class="message-attention-right-name"
+            @click="changePages('/user/'+item.content.username)"
+            role="button"
+          >
             <span class="message-attention-right-name-text">
               {{ item.content.nickname}}
             </span>
@@ -39,7 +43,11 @@
             <span class="message-attention-right-bottom-time">{{getDate(item.time)}}</span>
             <span class="message-attention-right-bottom-text">关注了你</span>
 
-            <div class="message-attention-right-bottom-iconfont1">
+            <div
+              class="message-attention-right-bottom-iconfont1"
+              role="button"
+              @click="gotoNewDialogue(index)"
+            >
               <i class="iconfont blog-c-comment message-attention-right-bottom-iconfont1-xiaoxi"></i>
               <span>私信</span>
             </div>
@@ -47,6 +55,7 @@
             <div
               class="message-attention-right-bottom-iconfont2"
               @click.stop="deleteItem(index)"
+              role="button"
             >
               <i class="iconfont blog-shanchu message-attention-right-bottom-iconfont2-delete"></i>
               <span>删除该通知</span>
@@ -90,7 +99,7 @@ import { dateFormat } from '@/util/date.ts';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 import { mapMutations, mapState } from '@/util/store';
 import { useMessage } from 'naive-ui';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 /**
  * @description: message页面——关注我的
@@ -106,6 +115,7 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute();
+    const router = useRouter();
     const attentionData = reactive([]); // 关注我的界面数据
     const msg = useMessage(); // naive-ui mssage
     const deleteTag = ref(true); // 判断数据是否全部加载的标志
@@ -253,6 +263,19 @@ export default defineComponent({
         });
     }
 
+    function gotoNewDialogue(index) {
+      router.push({
+        name: 'messageMy',
+        params: {
+          dialogue: JSON.stringify({
+            username: attentionData[index].content.username,
+            nickname: attentionData[index].content.nickname,
+            avatar: attentionData[index].content.avatar,
+          }),
+        },
+      });
+    }
+
     return {
       modalShow,
       attentionData,
@@ -262,6 +285,7 @@ export default defineComponent({
       changePages,
       cancelAttention,
       sureCancelAttention,
+      gotoNewDialogue,
     };
   },
 });
