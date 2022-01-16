@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 12:49:53
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-14 14:11:34
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-01-15 20:38:44
 -->
 
 <template>
@@ -301,6 +301,15 @@ export default defineComponent({
       () => messageCount.value[4],
       () => {
         if (new RegExp('/message/my' + '(/|$|\\?)').test(route.path)) updateMessageCount({ type: 5, count: 0 });
+      }
+    );
+
+    // 监听路由变化更新数据
+    watch(
+      () => route.path,
+      (path) => {
+        if (messageCount.value[4] > 0 && new RegExp('/message/my' + '(/|$|\\?)').test(path))
+          updateMessageCount({ type: 5, count: 0 });
       }
     );
 

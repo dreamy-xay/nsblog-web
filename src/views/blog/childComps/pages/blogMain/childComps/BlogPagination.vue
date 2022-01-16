@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-12 16:07:55
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-14 14:02:44
+ * @LastEditTime: 2022-01-15 16:15:32
 -->
 <template>
   <div class="blog-pagination">
@@ -211,7 +211,7 @@ export default defineComponent({
     height: 30px;
     line-height: 30px;
     border-radius: 15px;
-    transform: 0.5;
+    transition: 0.5s;
 
     &:hover {
       background-color: $green-0;
@@ -241,7 +241,7 @@ export default defineComponent({
   }
 
   .enable {
-    transform: 0.25s;
+    transition: 0.25s;
 
     &:hover {
       background-color: $green-0;
