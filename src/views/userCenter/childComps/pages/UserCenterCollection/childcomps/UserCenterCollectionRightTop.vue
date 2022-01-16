@@ -37,10 +37,6 @@
         @click="editRemark"
       >
         {{data.remark ? data.remark : '编辑收藏夹描述~ o(*￣▽￣*)o'}}
-        <i
-          class="iconfont blog-bianji1"
-          role="button"
-        ></i>
       </div>
       <user-center-input
         v-show="isEditRemark"
@@ -110,6 +106,12 @@ import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 
 export default defineComponent({
   name: 'userCenterCollectionRightTop',
+  emits: {
+    updateName: null,
+    updateRemark: null,
+    updatePrivate: null,
+    cancelf: null,
+  },
   components: {
     UserCenterInput,
     BaseModal,
@@ -273,7 +275,7 @@ export default defineComponent({
 }
 
 .user-center-collection-right-top {
-  @include size(736px, 139px);
+  @include size(736px, 136px);
 
   .user-center-collection-right-top-text {
     margin: 17px 0 0 30px;
@@ -290,9 +292,9 @@ export default defineComponent({
 
     .user-center-collection-right-top-remark {
       color: $grey-8;
-      padding: 6px 0 6px 8px;
-      height: 20px;
-      display: flex;
+      padding: 6px 25px 6px 8px;
+      @include ellipsis(1);
+      @include size(673px, 20px);
     }
   }
 

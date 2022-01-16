@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-23 20:34:57
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-10-07 20:32:21
+ * @LastEditTime: 2022-01-16 10:02:34
 -->
 <template>
   <div class="user-center-collection-right-bottom">
@@ -12,7 +12,7 @@
       <div
         v-for="(item,index) in List"
         :key="index"
-        :class="{'Type':true,'Choice': choiceIndex === index}"
+        :class="{'Type':true,'Choice': index === choiceIndex}"
         @click="chooseChoice(index)"
       >
         <div
@@ -26,11 +26,17 @@
     <div class="user-center-collection-right-bottom-collectionlist">
       <el-scrollbar ref="scrollbar">
         <div
+          class="user-center-collection-tight-bottom-collectionlists"
           v-for="(item1,index) in favoritesList"
           :key="index"
         >
           <div v-if=" index === Index">
             <div
+              class="user-center-collection-right-bottom-blank"
+              v-if="item1.typeList[choiceIndex].List.length === 0"
+            >空空如也，快去寻找你想要的资源吧</div>
+            <div
+              v-else
               class="user-center-collection-right-bottom-collections"
               v-for="(item3,index) in item1.typeList[choiceIndex].List"
               :key="index"
@@ -54,17 +60,11 @@
               ></i>
             </div>
             <div
-              class="user-center-collection-right-bottom-blank"
-              v-if="item1.typeList[choiceIndex].List.length === 0"
-            ></div>
-            <div v-else>
-              <div
-                class="user-center-collection-right-bottom-more"
-                v-if="item1.isBottom == false"
-                @click="upload"
-                role="button"
-              >查看更多</div>
-            </div>
+              class="user-center-collection-right-bottom-more"
+              v-if="item1.typeList[choiceIndex].List.length != 0 && item1.isBottom == false"
+              @click="upload"
+              role="button"
+            >加载更多...</div>
           </div>
         </div>
       </el-scrollbar>
@@ -87,6 +87,11 @@ import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 
 export default defineComponent({
   name: 'userCenterCollectionRightBottom',
+  emits: {
+    changeChoice: null,
+    'cancel-col': null,
+    update: null,
+  },
   components: {
     BaseTag,
     BaseModal,
@@ -109,23 +114,34 @@ export default defineComponent({
       default: null,
     },
   },
-  setup(props) {
+  setup(props, context) {
     const modalShow = ref(false); // 是否显示n-modal
     const scrollbar = ref(null); //scrollbar
     const sureIndex = ref(-1);
-    const index = ref(0);
+    const actieveindex = ref(0);
+    const choiceindex = ref(0);
 
     //监听收藏夹改变，使滚动条回到顶部
     watch(
       () => props.Index,
       (value) => {
-        if (index.value !== value) {
+        if (actieveindex.value !== value) {
+          actieveindex.value = value;
           scrollbar.value.setScrollTop(0);
-          index.value = value;
         }
       }
     );
 
+    //监听收藏夹改变，使滚动条回到顶部
+    watch(
+      () => props.choiceIndex,
+      (value) => {
+        if (choiceindex.value !== value) {
+          choiceindex.value = value;
+          scrollbar.value.setScrollTop(0);
+        }
+      }
+    );
     /**
      * @description: 更新类型列表下标
      * @param {number} index 选择的下标
@@ -133,7 +149,7 @@ export default defineComponent({
      * @author: continue-hs
      */
     function chooseChoice(index) {
-      this.$emit('change-Choice', index);
+      context.emit('changeChoice', index);
       scrollbar.value.setScrollTop(0);
     }
 
@@ -144,10 +160,9 @@ export default defineComponent({
      * @author: continue-hs
      */
     function cancelCol(index, isConfirm, isModalShow = false) {
-      console.log(index);
       sureIndex.value = index;
       if (isConfirm) {
-        this.$emit('cancel-col', sureIndex.value);
+        context.emit('cancel-col', sureIndex.value);
       }
       modalShow.value = isModalShow;
     }
@@ -158,7 +173,7 @@ export default defineComponent({
      * @author: continue-hs
      */
     function upload() {
-      this.$emit('update');
+      context.emit('update');
     }
 
     return {
@@ -169,7 +184,6 @@ export default defineComponent({
       scrollbar,
       sureIndex,
       upload,
-      index,
     };
   },
 });
@@ -181,6 +195,8 @@ export default defineComponent({
 }
 
 .user-center-collection-right-bottom {
+  @include size(736px, 488px);
+  overflow: hidden;
   .user-center-collection-right-bottom-typelist {
     @include size(736px, 21px);
     margin: 10px 0 0 35px;
@@ -205,11 +221,19 @@ export default defineComponent({
   }
 
   .user-center-collection-right-bottom-collectionlist {
-    margin: 15px 0 15px 0;
-    @include size(736px, 434px);
+    margin-top: 15px;
+    @include size(736px, 442px);
 
     :deep(.el-scrollbar__thumb) {
       background-color: $grey-7 !important;
+    }
+    :deep(.el-scrollbar) {
+      width: 742px;
+    }
+
+    .user-center-collection-right-bottom-blank {
+      @include flex(center, center);
+      @include size(736px, 442px);
     }
 
     .user-center-collection-right-bottom-collections {
@@ -218,7 +242,7 @@ export default defineComponent({
       background: $grey-0;
       border-radius: 8px;
       box-shadow: $shadow-0;
-
+      overflow: hidden;
       &:hover {
         background-color: $grey-1;
       }
@@ -245,9 +269,12 @@ export default defineComponent({
         font-size: 20px;
       }
     }
-
     .user-center-collection-right-bottom-more {
-      @include flex(center, center, center);
+      height: 20px;
+      @include flex(center, center);
+      background: $grey-0;
+      border-radius: 8px;
+      box-shadow: $shadow-0;
     }
   }
 }

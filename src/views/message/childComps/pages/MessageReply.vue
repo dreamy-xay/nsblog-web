@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:25:27
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-15 19:30:10
+ * @LastEditTime: 2022-01-14 17:06:40
 -->
 
 <template>
@@ -15,10 +15,8 @@
     >
       <div
         class="message-reply"
-        role="button"
         v-for="(item , index) in replyData"
         :key="item.message_id"
-        @click="changePages('/article/'+item.content.id)"
       >
 
         <div class="message-reply-avator">
@@ -34,13 +32,19 @@
 
           <div class="message-reply-right-top">
             <span
+              role="button"
               class="message-reply-right-top-name"
               @click.stop="changePages('/user/' + item.content.username)"
             >{{item.content.nickname}}</span>
-            <span v-if="item.content.type===1">回复我的文章</span>
-            <span v-else-if="item.content.type===2">回复我的问答</span>
-            <span v-else-if="item.content.type===3">回复我的文章评论</span>
-            <span v-else>回复我的问答评论</span>
+            <div
+              @click="changePages('/article/'+item.message_id)"
+              role="button"
+            >
+              <span v-if="item.content.type===1">回复我的文章</span>
+              <span v-else-if="item.content.type===2">回复我的问答</span>
+              <span v-else-if="item.content.type===3">回复我的文章评论</span>
+              <span v-else>回复我的问答评论</span>
+            </div>
           </div>
 
           <div
@@ -80,6 +84,7 @@
             <div
               class="message-reply-right-bottom-delete"
               @click.stop="deleteItem(index)"
+              role="button"
             >
               <i class="iconfont blog-shanchu "></i>
               <span>删除该通知</span>

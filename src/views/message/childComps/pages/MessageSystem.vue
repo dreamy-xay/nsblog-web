@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:34:31
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-15 19:29:35
+ * @LastEditTime: 2022-01-14 17:14:43
 -->
 <template>
   <el-scrollbar max-height="calc(100vh - 108px)">
@@ -128,6 +128,7 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function getSelfMessage(limit = 1) {
+      console.log('----------------------------------------------');
       updateMessageCount({ type: 1, count: 0 });
       getMessages(1, 0, limit)
         .then((data) => {

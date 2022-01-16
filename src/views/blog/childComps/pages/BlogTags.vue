@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 18:26:04
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-14 15:48:27
+ * @LastEditTime: 2022-01-14 18:10:58
 -->
 <template>
   <div class="blog-tags">
@@ -41,9 +41,6 @@
         <div class="tag-name-content">{{tag.name}}</div>
         <div class="tag-name-number">117</div>
       </div>
-    </div>
-    <div class="blog-bottom">
-
     </div>
   </div>
 
@@ -84,12 +81,11 @@ export default defineComponent({
   },
 });
 </script>
-
+g
 <style lang="scss" scoped>
 .blog-tags {
   @include flex(center, flex-start, column);
   width: 100%;
-  height: 2160px;
 
   .blog-tag {
     margin-top: 31px;
@@ -173,11 +169,6 @@ export default defineComponent({
         box-shadow: $shadow-2;
       }
     }
-  }
-
-  .blog-bottom {
-    width: 100%;
-    height: 1080px;
   }
 
   .tag1 {

@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-29 17:08:41
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-30 20:56:11
+ * @LastEditTime: 2022-01-14 17:52:35
 -->
 
 <template>
@@ -81,7 +81,9 @@ export default defineComponent({
 
   setup() {
     const iconData = ['yulan', 'huifu1', 'ren'];
-    return { iconData };
+    return {
+      iconData,
+    };
   },
 });
 </script>
