@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-24 10:18:28
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-09-29 21:47:26
+ * @LastEditTime: 2022-01-16 10:00:12
 -->
 <template>
   <div class="user-center-collection-list">
@@ -193,7 +193,7 @@ export default defineComponent({
 
 .user-center-collection-list {
   @include size(180px, 626px);
-
+  overflow: hidden;
   .user-center-collection-list-new {
     @include size(180px, 60px);
     color: $grey-7;
@@ -202,7 +202,7 @@ export default defineComponent({
     i {
       padding-left: 30px;
       position: relative;
-      top: 22px;
+      top: 18px;
     }
 
     .newcollection {
@@ -211,7 +211,7 @@ export default defineComponent({
   }
 
   .user-center-collection-list-other {
-    @include size(180px, 590px);
+    @include size(180px, 565px);
 
     :deep(.el-scrollbar__thumb) {
       background-color: $grey-7 !important;
@@ -222,7 +222,6 @@ export default defineComponent({
       display: flex;
       color: $grey-7;
       border-bottom: 1px solid $grey-4;
-
       .n-badge {
         padding: 35px 0 0 20px;
       }
