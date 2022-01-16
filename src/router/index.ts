@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:02:59
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-14 16:55:01
+ * @LastEditTime: 2022-01-15 18:12:31
  */
 import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 import loginRouter from './modules/login';
@@ -12,6 +12,7 @@ import messageRouter from './modules/message';
 import userCenterRouter from './modules/userCenter';
 import userRouter from './modules/user';
 import blogRouter from './modules/blog';
+import searchRouter from './modules/search';
 
 const routes: Array<RouteRecordRaw> = [
   // 登录页面
@@ -24,6 +25,8 @@ const routes: Array<RouteRecordRaw> = [
   userRouter,
   // 用户博客主页面
   blogRouter,
+  // 搜索主页页面
+  searchRouter,
   // 主页
   {
     path: '/',
@@ -47,12 +50,6 @@ const routes: Array<RouteRecordRaw> = [
     path: '/article/:articleId',
     name: 'article',
     component: () => import('@/views/article/Article.vue')
-  },
-  // 搜索页面
-  {
-    path: '/search',
-    name: 'search',
-    component: () => import('@/views/search/Search.vue')
   },
   // 404 not find pages
   {
