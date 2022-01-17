@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-16 17:14:35
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-01-16 23:25:15
 -->
 
 <template>
@@ -43,6 +43,7 @@
         <base-content-loading />
       </div>
     </div>
+
   </base-view>
 </template>
 
