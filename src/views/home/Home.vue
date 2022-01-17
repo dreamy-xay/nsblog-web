@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-16 23:25:15
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-17 21:58:05
 -->
 
 <template>
@@ -15,26 +15,7 @@
     bind-class="home"
   >
     <template #top-bar-bottom>
-      <div class="home-top-bar">
-        <div class="home-top-bar-inner">
-          <div class="left">
-            <div
-              class="topic"
-              v-for="(item, index) in topics"
-              :class="{'topic-active': topicActiveIndex === index}"
-              :key="index"
-              role="button"
-              @click="clickTopic(index)"
-            >
-              {{ item.name }}
-            </div>
-          </div>
-          <div
-            class="right"
-            role="button"
-          >标签管理</div>
-        </div>
-      </div>
+      <base-topic-bar />
     </template>
     <div style="width:100%; height: 3000px; background: #fff;">
       <button @click="gotoNewDialogue">前往新的对话</button><br />
@@ -50,6 +31,7 @@
 <script>
 import { defineComponent, reactive, ref } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
+import BaseTopicBar from '@/components/common/baseTopicBar/BaseTopicBar.vue';
 import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
 import router from '@/router';
 
@@ -62,58 +44,10 @@ export default defineComponent({
   name: 'Home',
   components: {
     BaseView,
+    BaseTopicBar,
     BaseContentLoading,
   },
   setup() {
-    const topics = reactive([
-      // 专题列表
-      {
-        name: '推荐',
-      },
-      {
-        name: '关注',
-      },
-      {
-        name: '编程开发',
-      },
-      {
-        name: '经验人生',
-      },
-      {
-        name: '设计',
-      },
-      {
-        name: '数学',
-      },
-      {
-        name: '自然学科',
-      },
-      {
-        name: '人工智能',
-      },
-      {
-        name: '工具',
-      },
-      {
-        name: '阅读',
-      },
-      {
-        name: '其他',
-      },
-    ]);
-    const topicActiveIndex = ref(0); // 专题激活
-
-    /**
-     * @description: 点击专题
-     * @param {Number} index 专题索引号 `必传参数`
-     * @return {void}
-     * @author: dreamy-xay
-     */
-    function clickTopic(index) {
-      topicActiveIndex.value = index;
-      // console.log(index);
-    }
-
     // 仅供参考，测试私信
     function gotoNewDialogue() {
       router.push({
@@ -129,9 +63,6 @@ export default defineComponent({
     }
 
     return {
-      topics,
-      topicActiveIndex,
-      clickTopic,
       gotoNewDialogue,
     };
   },
