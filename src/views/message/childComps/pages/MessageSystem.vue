@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:34:31
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-14 17:14:43
+ * @LastEditTime: 2022-01-15 20:36:47
 -->
 <template>
   <el-scrollbar max-height="calc(100vh - 108px)">
@@ -151,7 +151,7 @@ export default defineComponent({
     watch(
       () => route.path,
       (path) => {
-        if (messageCount.value[3] > 0 && new RegExp('/message/reply' + '(/|$|\\?)').test(path))
+        if (messageCount.value[3] > 0 && new RegExp('/message/system' + '(/|$|\\?)').test(path))
           getSelfMessage(messageCount.value[3]);
       }
     );

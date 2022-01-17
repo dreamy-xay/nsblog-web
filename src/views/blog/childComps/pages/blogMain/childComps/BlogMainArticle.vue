@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-29 17:08:41
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-14 17:52:35
+ * @LastEditTime: 2022-01-15 16:12:01
 -->
 
 <template>
@@ -92,6 +92,7 @@ export default defineComponent({
 .blog-main-article {
   width: 100%;
   margin-top: 20px;
+  transition: 0.25s;
 
   .blog-main-article-context {
     @include flex(center);
@@ -204,6 +205,7 @@ export default defineComponent({
         color: $grey-10;
         height: 20px;
         width: 85px;
+        transition: 0.25s;
 
         &:hover {
           color: $green-1;
