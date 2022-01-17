@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: clq
- * @LastEditTime: 2021-09-30 21:51:08
+ * @LastEditTime: 2022-01-16 20:41:21
 -->
 <template>
   <div class="user-article">
@@ -320,7 +320,6 @@ export default defineComponent({
       box-shadow: $shadow-0;
       background-color: $grey-0;
       transition: 0.25s;
-      font-family: Arial;
       font-size: 14px;
       line-height: 32px;
       text-align: center;
