@@ -3,12 +3,15 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-28 14:54:52
- * @LastEditors: Ban
- * @LastEditTime: 2022-01-14 15:21:07
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-17 23:28:21
 -->
 
 <template>
-  <div class="user-center-profile-interest">
+  <div
+    class="user-center-profile-interest"
+    id="interest-topics-tags"
+  >
     <div class="user-center-profile-interest-top">
       兴趣标签
     </div>
@@ -18,8 +21,8 @@
         <div class="body-show-tags">
           <el-tag
             closable
-            v-for="(item, index) in tags"
-            :key="index"
+            v-for="(item, index) in selectedTags"
+            :key="item"
             @close="deleteTag(index)"
             role="button"
           >
@@ -30,61 +33,68 @@
       <div class="body-select">
         <div class="body-text">选择标签</div>
         <div class="body-select-tags">
-          <div class="select-tag1">
+          <div class="select-topic">
             <el-tag
-              v-for="(item, index) in tagsSelected"
-              :key="index"
+              v-for="(item, index) in allTopicsTags"
+              :key="item"
               role="button"
-              @click="changePitch(index)"
-              :class="tagsPitch === index ? 'active' : ''"
+              @click="selectTopic(index)"
+              :class="topicActiveIndex === index ? 'active' : ''"
             >
-              {{item.name}}
+              {{item.topic}}
             </el-tag>
           </div>
 
-          <div class="select-tag2">
+          <div class="select-tag">
             <el-tag
-              v-for="item in (tagsSelected.length > 0 ? tagsSelected[tagsPitch].tags : [])"
+              v-for="item in (allTopicsTags.length ? allTopicsTags[topicActiveIndex].tags : [])"
               :key="item"
               role="button"
-              @click="addTag(item.name)"
-              :class="tagsPitched(item.name) ? 'active' : ''"
+              @click="addTag(item)"
+              :class="tagActiveIndexed(item) ? 'active' : ''"
             >
-              {{item.name}}
+              {{item}}
             </el-tag>
           </div>
         </div>
       </div>
     </div>
+    <div
+      class="user-center-profile-interest-button"
+      role="button"
+      @click="$emit('updateTags')"
+    >
+      保存
+    </div>
   </div>
 </template>
 
 <script>
-import { defineComponent, reactive, ref, computed, onMounted, watch } from 'vue';
-import { getTag, addUserTag } from '@/network/api/user';
-import { mapState } from '@/util/store';
+import { defineComponent, reactive, ref } from 'vue';
 import { getTopics, getTopicTags } from '@/network/api/topics';
 import events from '@/events';
 import { useRoute } from 'vue-router';
+
 /**
  * @description: 用户中心-基础资料-兴趣标签
- * @param {*}
- * @return {*}
+ * @param {Array} selectedTags 选中的兴趣标签 `必传参数`
+ * @event addTag 添加兴趣标签 (tag: string) => void
+ * @event deleteTag 删除兴趣标签 (index: number) => void
+ * @event updateTags 更新兴趣标签 () => void
  * @author: Ban
  */
 export default defineComponent({
   name: 'UserCenterProfileInterest',
   props: {
-    data: {
-      type: Object,
-      required: true,
+    selectedTags: {
+      type: Array,
+      default: () => [],
     },
   },
   setup(props, context) {
     const route = useRoute();
-    const tags = ref([]); // 兴趣标签
-    const tagsSelected = reactive([]); // 可选择标签
-    const tagsPitch = ref(0); // 选中的标签
+    const allTopicsTags = reactive([]); // 可选择标签
+    const topicActiveIndex = ref(0); // 选中的标签
 
     /**
      * @description: 通知UserCenter滚动条到底部
@@ -100,18 +110,14 @@ export default defineComponent({
     // 获取专题名
     getTopics()
       .then((data) => {
-        // console.log(data);
-        const length = data.topics.length;
-        for (let i = 0; i < length; i++) {
-          let obj = new Object();
-          obj.name = data.topics[i].name;
-          obj.tags = '';
-          tagsSelected.push(obj);
-        }
-        // console.log(tagsSelected);
-        getTopicTags(tagsSelected[0].name)
+        for (const topic of data.topics)
+          allTopicsTags.splice(0, 0, {
+            topic: topic,
+            tags: [],
+          });
+        getTopicTags(allTopicsTags[0].topic)
           .then((data) => {
-            tagsSelected[0].tags = data.tags;
+            allTopicsTags[0].tags = data.tags;
           })
           .catch((error) => {
             console.log(error);
@@ -122,71 +128,64 @@ export default defineComponent({
         toBottom();
         console.log(error);
       });
-    // });
 
-    // 删除兴趣标签
+    /**
+     * @description: 删除兴趣标签
+     * @param {number} index 选中标签索引 `必传参数`
+     * @return {void}
+     * @author: dreamy-xay
+     */
     function deleteTag(index) {
-      context.emit('deleteTag', {
-        index,
-      });
+      context.emit('deleteTag', index);
     }
 
-    // 选择标签中改变选中
-    function changePitch(index) {
-      //   获取标签名
-      if (tagsSelected[index].tags === '') {
-        getTopicTags(tagsSelected[index].name)
+    /**
+     * @description: 增加标签
+     * @param {string} tag 标签名 `必传参数`
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function addTag(tag) {
+      if (!tagActiveIndexed(tag)) context.emit('addTag', tag);
+    }
+
+    /**
+     * @description: 选择专题
+     * @param {number} index 专题索引 `必传参数`
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function selectTopic(index) {
+      // 获取标签名
+      if (!allTopicsTags[index].tags.length)
+        getTopicTags(allTopicsTags[index].topic)
           .then((data) => {
-            tagsSelected[index].tags = data.tags;
-            tagsPitch.value = index;
+            allTopicsTags[index].tags = data.tags;
+            topicActiveIndex.value = index;
           })
           .catch((error) => {
             console.log(error);
           });
-      } else {
-        tagsPitch.value = index;
-      }
+      else topicActiveIndex.value = index;
     }
 
-    // 选择标签中-选中标签
-    function tagsPitched(tag) {
-      if (tags.value.indexOf(tag) === -1) return false;
-      else return true;
+    /**
+     * @description: 判断标签是否被选中
+     * @param {string} tag 标签名 `必传参数`
+     * @return {boolean} 返回标签是否选中
+     * @author: dreamy-xay
+     */
+    function tagActiveIndexed(tag) {
+      return props.selectedTags.indexOf(tag) !== -1;
     }
-
-    //新加用户标签
-    function addTag(tag) {
-      // addUserTag(tag)
-      //   .then(() => {
-      //     tags.value.push(tag);
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //   });
-      if (tags.value.indexOf(tag) === -1) tags.value.push(tag);
-      context.emit('addTag', {
-        tag,
-      });
-    }
-    // 获取已有标签
-    watch(
-      () => props.data.username,
-      () => {
-        tags.value = props.data.tags;
-        console.log(props.data.tags);
-      }
-    );
-
-    //选择标签和兴趣标签的匹配
 
     return {
-      tags,
       deleteTag,
-      tagsSelected,
-      tagsPitch,
-      changePitch,
+      allTopicsTags,
+      topicActiveIndex,
+      selectTopic,
       addTag,
-      tagsPitched,
+      tagActiveIndexed,
     };
   },
 });
@@ -256,7 +255,7 @@ export default defineComponent({
         margin-left: 12px;
         max-width: 798px;
 
-        .select-tag1 {
+        .select-topic {
           ::v-deep(.el-tag) {
             background: $grey-1;
             height: 25px;
@@ -283,7 +282,7 @@ export default defineComponent({
           }
         }
 
-        .select-tag2 {
+        .select-tag {
           box-sizing: border-box;
           padding: 0 10px 0 10px;
           width: 798px;
@@ -319,6 +318,25 @@ export default defineComponent({
           }
         }
       }
+    }
+  }
+
+  .user-center-profile-interest-button {
+    margin: auto;
+    width: 60px;
+    height: 30px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $green-0;
+    color: $grey-0;
+    border-radius: 15px;
+    box-shadow: $shadow-0;
+
+    &:hover {
+      background-color: $green-1;
+      box-shadow: $shadow-2;
     }
   }
 }
