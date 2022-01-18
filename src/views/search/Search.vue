@@ -87,6 +87,7 @@ export default defineComponent({
       },
       {
         name: '资源',
+        path: '/search/resource',
       },
       {
         name: '标签',
