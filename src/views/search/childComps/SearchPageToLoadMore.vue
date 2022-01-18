@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2022-01-16 12:55:29
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-16 15:42:40
+ * @LastEditTime: 2022-01-18 20:42:36
 -->
 <template>
   <div
@@ -62,8 +62,7 @@ export default defineComponent({
   border-radius: 8px;
   box-shadow: $shadow-0;
   color: $grey-9;
-  // 右侧高度不够，会使下阴影部分被遮挡
-  margin-bottom: 8px;
+  margin-bottom: 3px;
 
   &:hover {
     background: $grey-1;

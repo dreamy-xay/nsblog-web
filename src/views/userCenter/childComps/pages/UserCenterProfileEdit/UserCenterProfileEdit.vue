@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:31
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-14 16:07:28
+ * @LastEditTime: 2022-01-18 11:03:32
 -->
 <template>
   <div class="user-center-profile-edit">
@@ -22,9 +22,10 @@
       @changeJob="changeJob"
     />
     <user-center-profile-edit-interest
-      :data="tagData"
-      id="userCenterProfileEditInteres"
+      :selected-tags="tagsData.tags"
       @deleteTag="deleteTag"
+      @addTag="addTag"
+      @updateTags="updateTags"
     />
   </div>
 </template>
@@ -36,7 +37,7 @@ import UserCenterProfileEditInformation from '@/views/userCenter/childComps/page
 import UserCenterProfileEditJob from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/UserCenterProfileEditJob.vue';
 import UserCenterProfileEditInterest from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/UserCenterProfileEditInterest.vue';
 import { base64ToFile } from '@/util/util';
-import { getUserInfo, putUserInfo, modifySignature } from '@/network/api/user';
+import { getUserInfo, putUserInfo, modifySignature, delUserTag, addUserTag } from '@/network/api/user';
 import { mapState } from '@/util/store';
 import { useMessage } from 'naive-ui';
 import events from '@/events';
@@ -119,8 +120,8 @@ export default defineComponent({
       };
     });
 
-    //标签
-    const tagData = computed(() => {
+    // 兴趣标签
+    const tagsData = computed(() => {
       return {
         username: userData.username,
         tags: userData.tags,
@@ -213,13 +214,48 @@ export default defineComponent({
 
     /**
      * @description: 删除兴趣标签
-     * @param {index} 标签索引
+     * @param {number} index 标签索引 `必传参数`
      * @author: Ban
      */
-
     function deleteTag(index) {
-      userData.tags.splice(index, 1);
-      console.log(userData.tags);
+      delUserTag(userData.tags[index])
+        .then(() => {
+          userData.tags.splice(index, 1);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    /**
+     * @description: 添加兴趣标签
+     * @param {number} index 标签索引 `必传参数`
+     * @author: Ban
+     */
+    function addTag(tag) {
+      addUserTag(tag)
+        .then(() => {
+          userData.tags.splice(userData.tags.length, 0, tag);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    /**
+     * @description: 更改兴趣标签信息
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function updateTags() {
+      putUserInfo(tagsData)
+        .then(() => {
+          msg.success('修改成功', { duration: 2000, closable: true });
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('修改兴趣标签失败', { duration: 2000, closable: true });
+        });
     }
 
     return {
@@ -230,12 +266,14 @@ export default defineComponent({
       informationData,
       userData,
       jobData,
-      tagData,
+      tagsData,
 
       changeInformation,
       changeJob,
 
       deleteTag,
+      addTag,
+      updateTags,
     };
   },
 });

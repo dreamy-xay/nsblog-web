@@ -4,8 +4,8 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2021-07-22 17:52:26
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-31 17:43:29
+ * @LastEditors: Ban
+ * @LastEditTime: 2022-01-18 21:38:43
 -->
 <template>
   <div
@@ -80,6 +80,7 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import { mapState, mapMutations } from '@/util/store';
+import { useRouter } from 'vue-router';
 
 /**
  * @description: 首页顶部之中间部分组件
@@ -93,6 +94,7 @@ export default defineComponent({
     const inputText = ref('');
     const { List } = mapState('globalStore', { List: 'searchHistory' });
     const { set, del } = mapMutations('globalStore', { set: 'setSearchHistory', del: 'deleteSearchHistory' });
+    const router = useRouter();
 
     /**
      * @description: 显示历史记录框
@@ -131,7 +133,8 @@ export default defineComponent({
       if (value) {
         visible.value = false;
         set(value);
-        console.log(`search: ${value}`);
+        // console.log(`search: ${value}`);
+        router.push({ path: `/search`, query: { value: value } });
       }
     }
 

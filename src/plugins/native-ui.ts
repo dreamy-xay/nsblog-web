@@ -3,13 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 16:13:02
-<<<<<<< HEAD
- * @LastEditors: Ban
- * @LastEditTime: 2022-01-16 15:44:12
-=======
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-12 21:48:23
->>>>>>> ab8da4ed08b0e766c865e5e61434cf96115f1d91
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-16 16:32:41
  */
 import { App } from 'vue';
 import {
@@ -24,7 +19,8 @@ import {
   NTooltip,
   NDrawer,
   NDialogProvider,
-  NPagination
+  NPagination,
+  NSkeleton
 } from 'naive-ui';
 
 const components = [
@@ -38,7 +34,8 @@ const components = [
   NTooltip,
   NDrawer,
   NDialogProvider,
-  NPagination
+  NPagination,
+  NSkeleton
 ];
 
 export default (app: App): void => {
