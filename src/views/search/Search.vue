@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: Ban
- * @LastEditTime: 2022-01-16 15:32:36
+ * @LastEditors: clq
+ * @LastEditTime: 2022-01-17 17:49:46
 -->
 
 <template>
@@ -75,6 +75,7 @@ export default defineComponent({
       },
       {
         name: '资源',
+        path: '/search/resource',
       },
       {
         name: '标签',
