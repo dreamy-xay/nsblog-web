@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-13 14:38:10
  * @LastEditors: clq
- * @LastEditTime: 2022-01-17 17:01:43
+ * @LastEditTime: 2022-01-18 13:36:05
 -->
 <template>
   <div class="blog-categories-chart">
@@ -18,7 +18,7 @@
 
 <script>
 import { computed, defineComponent, onMounted, reactive, watch } from 'vue';
-
+import styles from '@/assets/style/define.scss';
 /**
  * @description:
  * @author: clq
@@ -30,68 +30,28 @@ export default defineComponent({
     indicator: {
       type: Array,
       required: true,
-      default: () => [
-        { name: 'Sales', max: 6500 },
-        { name: 'Administration', max: 16000 },
-        { name: 'Information Technology', max: 30000 },
-        { name: 'Customer Support', max: 38000 },
-        { name: 'Development', max: 52000 },
-        { name: 'Marketing', max: 25000 },
-      ],
+      default: () => [],
     },
     chartData: {
       type: Array,
       required: true,
-      default: () => [4200, 3000, 20000, 35000, 50000, 18000],
+      default: () => [],
     },
   },
   setup(props) {
-    let indicator = reactive([
-      { name: 'Sales', max: 6500 },
-      { name: 'Administration', max: 16000 },
-      { name: 'Information Technology', max: 30000 },
-      { name: 'Customer Support', max: 38000 },
-      { name: 'Development', max: 52000 },
-      { name: 'Marketing', max: 25000 },
-    ]);
-
-    let value = reactive([4200, 3000, 20000, 35000, 50000, 18000]);
-
-    // indicator.slice(0, 0, ...props.indicator);
-    // value.slice(0, 0, ...props.chartData);
-
     //计算图标选项
     const option = computed(() => {
-      // let indicator1 = [];
-      // let value1 = [];
-      console.log('props.indicator');
-      console.log(props.indicator);
-      console.log('props.chartData');
-      console.log(props.chartData);
-      // indicator1.slice(0, 0, ...props.indicator);
-      // value1.slice(0, 0, ...props.chartData);
-
-      // for (const item of props.indicator) {
-      //   indicator1.push(item);
-      // }
-      // for (const item of props.chartData) {
-      //   value1.push(item);
-      // }
-
       return {
         radar: {
-          indicator,
-          // indicator: indicator1,
-          // indicator: props.indicator,
+          indicator: props.indicator,
         },
         series: [
           {
             type: 'radar',
+            color: styles.grey7,
             data: [
               {
-                value,
-                // value: value1,
-                // value: props.chartData,
+                value: props.chartData,
               },
             ],
           },
@@ -101,6 +61,7 @@ export default defineComponent({
 
     return {
       option,
+      styles,
     };
   },
 });

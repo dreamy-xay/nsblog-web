@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-24 18:26:04
  * @LastEditors: clq
- * @LastEditTime: 2022-01-17 17:32:25
+ * @LastEditTime: 2022-01-18 14:00:28
 -->
 <template>
   <div class="blog-categories">
@@ -38,6 +38,7 @@
         <base-svg
           style="width:100%;height:200px;padding-left: 60px;"
           svg="data-empty"
+          :color="svgColor"
         ></base-svg>
       </template>
     </div>
@@ -85,6 +86,8 @@ export default defineComponent({
     const msg = useMessage(); // naive-ui 消息组件
     const route = useRoute(); //route
     const username = route.params.username; //获取博主用户名
+    const svgColor = styles.green1; //svg图片颜色
+    const chartDataCount = ref(20); //雷达图数据项限制
 
     let categories = reactive([]); // 文章分类信息
     let indicator = reactive([]);
@@ -100,6 +103,7 @@ export default defineComponent({
       [styles.green0, styles.green1],
       [styles.blue0, styles.blue1],
     ];
+
     /**
      * @description: 随机获取颜色
      * @return {[string, string]} 返回颜色和hover色
@@ -109,45 +113,38 @@ export default defineComponent({
       return colorList[Math.floor(Math.random() * colorList.length)];
     }
 
-    // 雷达图数据
-    // const radarData = computed(() => {
-    //   return {
-    //     indicator: [
-    //       { name: 'class1', max: 6500 },
-    //       { name: 'class2', max: 16000 },
-    //       { name: 'class3', max: 30000 },
-    //       { name: 'class4', max: 38000 },
-    //       { name: 'class5', max: 52000 },
-    //       { name: 'class6', max: 25000 },
-    //     ],
-    //     data: [
-    //       {
-    //         value: [4200, 3000, 20000, 35000, 50000, 18000],
-    //         name: 'Allocated Budget',
-    //       },
-    //     ],
-    //   };
-    // });
+    /**
+     * @description: 文章分类数组按分类数降序排序
+     * @param {*} a
+     * @param {*} b
+     * @return {*}
+     * @author: clq
+     */
+    function sortCategoriesByCount(a, b) {
+      return b.count - a.count;
+    }
 
     getCategories(username)
       .then((data) => {
+        data.categories.sort(sortCategoriesByCount);
+        console.log('data.categories');
+        console.log(data.categories);
+
         for (let category of data.categories) {
           const color = randomColor();
           category.color = color[0];
           category.hoverColor = color[1];
           category.url = `/blog/${username}?category=${category.id}`;
           delete category['id'];
-          // categories.splice(0, 0, category);
-          categoryCount.splice(0, 0, category.count);
+          categories.splice(0, 0, category);
         }
-        // console.log(data.categories);
-        // console.log(categoryCount);
-        maxCount = Math.max(...categoryCount);
-        // console.log(maxCount);
-        for (let category of data.categories) {
-          indicator.splice(0, 0, { name: category.name, max: maxCount });
+        maxCount = data.categories[0].count;
+        chartDataCount.value =
+          chartDataCount.value > data.categories.length ? data.categories.length : chartDataCount.value;
+        for (let i = 0; i < chartDataCount.value; i++) {
+          indicator.splice(0, 0, { name: data.categories[i].name, max: maxCount });
+          categoryCount.splice(0, 0, data.categories[i].count);
         }
-        // console.log(indicator);
       })
       .catch((error) => {
         console.log(error);
@@ -169,6 +166,7 @@ export default defineComponent({
       categories,
       indicator,
       categoryCount,
+      svgColor,
       toCategory,
     };
   },
@@ -205,11 +203,8 @@ export default defineComponent({
   }
 
   .blog-categories-content {
-    // @include flex(flex-start);
-    // align-content: flex-start;
-    // flex-wrap: wrap;
     margin-top: 16px;
-    margin-bottom: 100px;
+    margin-bottom: 50px;
     width: 800px;
     border-radius: $border-radius-0;
     box-shadow: $shadow-0; //阴影
