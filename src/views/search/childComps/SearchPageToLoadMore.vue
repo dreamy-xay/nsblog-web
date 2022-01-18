@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2022-01-16 12:55:29
- * @LastEditors: Ban
- * @LastEditTime: 2022-01-16 15:42:40
+ * @LastEditors: clq
+ * @LastEditTime: 2022-01-17 18:00:50
 -->
 <template>
   <div
@@ -64,6 +64,7 @@ export default defineComponent({
   color: $grey-9;
   // 右侧高度不够，会使下阴影部分被遮挡
   margin-bottom: 8px;
+  transition: 0.25s;
 
   &:hover {
     background: $grey-1;

@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2022-01-15 17:29:49
- * @LastEditors: Ban
- * @LastEditTime: 2022-01-16 15:28:28
+ * @LastEditors: clq
+ * @LastEditTime: 2022-01-17 20:32:42
  */
 import { RouteRecordRaw } from 'vue-router';
 
@@ -18,6 +18,14 @@ const searchRouter: RouteRecordRaw = {
     title: '标签'
   },
   children: [
+    {
+      path: 'resource',
+      name: 'searchPageResource',
+      meta: {
+        title: '资源'
+      },
+      component: () => import('@/views/search/childComps/pages/searchPageResource/SearchPageResource.vue')
+    },
     {
       path: 'tag',
       name: 'searchPageTag',
