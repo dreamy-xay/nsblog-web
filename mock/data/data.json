@@ -2,19 +2,17 @@
 	"users": [
 		{
 			"username": "dreamy",
-			"nickname": "破釜沉舟",
 			"password": "Abcd1234",
 			"email": "dreamy@qq.com",
-			"token": "e48a7c53a6f9ef84744b3a146c8884cf2f8886252c48477dc30a1cf327f8cce86858f9a37c9fdbc5e3bda9b4cbd99dcbb2194b48bf05d64244a6d27503d1ac50",
+			"token": "489587bdc28b26c24f63d06091512ddfa5799b3a2dc5dc89692ca332861579685d16f963e0d9b4ad888536472ff54a515bb70d226979f23fad0d6be25832e48b",
 			"isActive": true,
 			"isSuper": true
 		},
 		{
 			"username": "us1",
-			"nickname": "幻墨如烟",
 			"password": "Abcd1234",
 			"email": "1@qq.com",
-			"token": null,
+			"token": "aba807f5d9af7232904ea55f68504029cc6f527d4f1451da106556d9fc16dbc3780d0edd4ac635216a41f2d1f229b7269127e63e8b745567b11472826cf803b1",
 			"isActive": true,
 			"isSuper": false
 		},

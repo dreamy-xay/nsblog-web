@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-25 18:30:32
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-14 16:56:04
+ * @LastEditTime: 2022-01-15 13:25:48
 -->
 <template>
   <div class="article-menu-friend">
@@ -105,7 +105,7 @@ export default defineComponent({
     &:hover {
       color: $green-0;
       background-color: $grey-2;
-      border-radius: 4px;
+      border-radius: $border-radius-1;
     }
   }
 

@@ -4,13 +4,13 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-29 16:58:46
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-14 18:49:06
+ * @LastEditTime: 2022-01-15 11:20:19
 -->
 <template>
   <div class="blog-main">
     <blog-main-text
-      :title="'title'"
-      :type="true"
+      :title="text"
+      :type="type"
     />
     <blog-main-article :data="articleData" />
     <blog-pagination
@@ -21,7 +21,7 @@
   </div>
 </template>
 <script>
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, reactive, ref, watch } from 'vue';
 import BlogMainArticle from '@/views/blog/childComps/pages/blogMain/childComps/BlogMainArticle.vue';
 import BlogPagination from '@/views/blog/childComps/pages/blogMain/childComps/BlogPagination.vue';
 import BlogMainText from '@/views/blog/childComps/pages/blogMain/childComps/BlogMainText.vue';
@@ -48,6 +48,8 @@ export default defineComponent({
     const pageCount = 5; // 总页数
     const messageCount = 49; // 信息总条数
     const limit = 10;
+    const text = ref(); // 标签或分类Id
+    const type = ref(true); // 判断是标签还是分类
 
     const data = [
       {
@@ -147,11 +149,22 @@ export default defineComponent({
         name: 'dreamy',
       },
     ]);
+    if (route.query.category != null) {
+      text.value = route.query.category;
+      type.value = false;
+    }
+    if (route.query.tag != null) text.value = route.query.tag;
 
-    if (route.query.offest != null) page.value = parseInt(route.query.offest) / 10 + 1;
-    console.log(parseInt(route.query.offest) / 10 + 1);
+    if (route.query.offest != null) page.value = parseInt(parseInt(route.query.offest) / 10) + 1;
+    console.log(parseInt(parseInt(route.query.offest) / 10) + 1);
 
-    console.log(route.path);
+    // console.log(route.path);
+    // watch(
+    //   () => route.query,
+    //   () => {
+    //     console.log('++++++++++++++++++++++++++++++++++++++++');
+    //   }
+    // );
     /**
      * @description: 页面改变后响应函数
      * @param {Number} p 页面页数改变页数
@@ -182,6 +195,8 @@ export default defineComponent({
       articleData,
       page,
       pageCount,
+      text,
+      type,
       changePage,
     };
   },
