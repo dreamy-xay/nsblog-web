@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-10 20:30:04
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 10:11:58
+ * @LastEditors: Ban
+ * @LastEditTime: 2022-01-14 14:06:43
  */
 
 import { post, RequestLifeCycle } from '@/network/request';
@@ -43,13 +43,17 @@ export function authLogout(RLC: RequestLifeCycle = {}): Promise<unknown> {
 
 /**
  * @description: 用户注销
+ * @param {password} 登陆密码
  * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
  * @return {Promise<unknown>} 请求返回promise
  * @author: dreamy-xay
  */
-export function authLogoff(RLC: RequestLifeCycle = {}): Promise<unknown> {
+export function authLogoff(password: string, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return post({
     url: '/auth/logoff',
-    ...RLC
+    ...RLC,
+    data: {
+      password
+    }
   });
 }

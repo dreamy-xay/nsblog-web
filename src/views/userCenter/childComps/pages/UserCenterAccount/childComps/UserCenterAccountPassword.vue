@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-26 15:11:17
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-27 20:33:05
+ * @LastEditors: Ban
+ * @LastEditTime: 2022-01-14 14:47:01
 -->
 <template>
   <div class="user-center-account-change">
@@ -119,7 +119,7 @@ export default defineComponent({
      * @author: Ban
      */
     function oldPasswordEnter() {
-      if (oldPassword.value === '') oldPassword.value.userCenterInput.focus();
+      if (oldPassword.value === '') oldPasswordInput.value.userCenterInput.focus();
       else if (password.value === '') passwordInput.value.userCenterInput.focus();
       else submit();
     }
@@ -130,7 +130,7 @@ export default defineComponent({
      * @author: Ban
      */
     function passwordEnter() {
-      if (password.value === '') password.value.userCenterInput.focus();
+      if (password.value === '') passwordInput.value.userCenterInput.focus();
       else if (confirmedPassword.value === '') confirmedPasswordInput.value.userCenterInput.focus();
       else submit();
     }

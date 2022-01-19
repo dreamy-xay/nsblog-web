@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-13 14:38:10
  * @LastEditors: clq
- * @LastEditTime: 2022-01-14 14:43:26
+ * @LastEditTime: 2022-01-18 13:36:05
 -->
 <template>
   <div class="blog-categories-chart">
@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import { computed, defineComponent } from 'vue';
-
+import { computed, defineComponent, onMounted, reactive, watch } from 'vue';
+import styles from '@/assets/style/define.scss';
 /**
  * @description:
  * @author: clq
@@ -27,9 +27,15 @@ import { computed, defineComponent } from 'vue';
 export default defineComponent({
   name: 'blogCategoriesChart',
   props: {
-    chartData: {
-      type: Object,
+    indicator: {
+      type: Array,
       required: true,
+      default: () => [],
+    },
+    chartData: {
+      type: Array,
+      required: true,
+      default: () => [],
     },
   },
   setup(props) {
@@ -37,13 +43,17 @@ export default defineComponent({
     const option = computed(() => {
       return {
         radar: {
-          // shape: 'circle',
-          indicator: props.chartData.indicator,
+          indicator: props.indicator,
         },
         series: [
           {
             type: 'radar',
-            data: props.chartData.data,
+            color: styles.grey7,
+            data: [
+              {
+                value: props.chartData,
+              },
+            ],
           },
         ],
       };
@@ -51,6 +61,7 @@ export default defineComponent({
 
     return {
       option,
+      styles,
     };
   },
 });

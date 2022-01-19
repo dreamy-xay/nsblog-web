@@ -4,7 +4,7 @@
  * @Autor: clqf
  * @Date: 2021-09-14 17:32:49
  * @LastEditors: clq
- * @LastEditTime: 2021-09-25 12:46:08
+ * @LastEditTime: 2022-01-16 20:41:32
 -->
 <template>
   <div class="user-article-item">
@@ -121,7 +121,6 @@ export default defineComponent({
     .body {
       width: 858px;
       margin: 10px 0;
-      font-family: Arial;
       font-size: 14px;
       text-align: left;
       color: $grey-10;
