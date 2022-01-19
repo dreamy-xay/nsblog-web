@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 10:10:43
- * @LastEditors: clq
- * @LastEditTime: 2021-09-28 12:58:11
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-19 12:17:30
  */
 import { get, post, put, RequestLifeCycle } from '@/network/request';
 
@@ -182,9 +182,9 @@ export function getArticleInfo(article_id: number, RLC: RequestLifeCycle = {}): 
  * @author: Z_Y_C
  */
 
-export function getArticlesUsers(username: string, RLC: RequestLifeCycle = {}): Promise<unknown> {
+export function getArticlesUser(username: string, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return get({
-    url: '/articles/users',
+    url: '/articles/user',
     ...RLC,
     params: {
       username

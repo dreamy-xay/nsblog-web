@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-017 11:59:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-23 12:34:09
+ * @LastEditTime: 2022-01-19 13:15:38
  */
 
 import { Application, Request, Response } from 'express';
@@ -16,8 +16,8 @@ export default function(baseUrl: string, app: Application) {
   // 获取对话消息和记录
   app.get(baseUrl + '/dialogues', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
-    const { limit, offset, friend_id } = req.query;
     const username: string = getToken(req.headers).username;
+    const { limit, offset, friend_id } = req.query;
 
     console.log(`--------${username} getDialogues...`);
 
@@ -64,20 +64,20 @@ export default function(baseUrl: string, app: Application) {
   });
 
   // 清零未读消息
-  app.put(baseUrl + '/dialogues/:friend_id', (req: Request, res: Response) => {
+  app.put(baseUrl + '/dialogues/:dialogue_id(\\d+)', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
-    const { friend_id } = req.params;
+    const { dialogue_id } = req.params;
     const username: string = getToken(req.headers).username;
-    console.log(`--------clear dialogue: friend_id ${friend_id}   username ${username}   success`);
+    console.log(`--------clear dialogue: dialogue_id ${dialogue_id}   username ${username}   success`);
     return res.send();
   });
 
   // 删除对话消息和记录
-  app.delete(baseUrl + '/dialogues/:friend_id', (req: Request, res: Response) => {
+  app.delete(baseUrl + '/dialogues/:dialogue_id(\\d+)', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
-    const { friend_id } = req.params;
+    const { dialogue_id } = req.params;
     const username: string = getToken(req.headers).username;
-    console.log(`--------delete dialogue: friend_id ${friend_id}   username ${username}   success`);
+    console.log(`--------delete dialogue: dialogue_id ${dialogue_id}   username ${username}   success`);
     return res.send();
   });
 }
