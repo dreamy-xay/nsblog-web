@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 17:51:15
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-28 19:14:21
+ * @LastEditTime: 2022-01-19 12:11:46
 -->
 <template>
   <div class="article-head">
@@ -155,7 +155,7 @@ export default defineComponent({
         },
         {
           icon: 'blog-zhuanlan',
-          value: props.data.topic,
+          value: props.data.topic_tag,
         },
       ];
     });
@@ -168,7 +168,7 @@ export default defineComponent({
      */
     function clickInfoItem(index) {
       if (index === 0) window.open(`/user/${props.data.username}`, `/user/${props.data.username}`);
-      else if (index === infoList.value.length - 1) console.log('click topics tags' + props.data.topic);
+      else if (index === infoList.value.length - 1) console.log('click topics tags' + props.data.topic_tag);
     }
 
     return {
