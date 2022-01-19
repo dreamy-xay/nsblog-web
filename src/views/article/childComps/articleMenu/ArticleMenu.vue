@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-20 20:28:35
- * @LastEditors: clq
- * @LastEditTime: 2021-09-26 17:23:27
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-19 12:17:12
 -->
 <template>
   <div
@@ -45,8 +45,7 @@
 
 <script>
 import { computed, defineComponent, inject, onMounted, reactive, ref, watch } from 'vue';
-import { getArticlesUsers } from '@/network/api/articles';
-import { mapState } from '@/util/store';
+import { getArticlesUser } from '@/network/api/articles';
 import ArticleMenuAvatar from '@/views/article/childComps/articleMenu/childComps/ArticleMenuAvatar.vue';
 import ArticleMenuNavigation from '@/views/article/childComps/articleMenu/childComps/ArticleMenuNavigation.vue';
 import ArticleMenuPublication from '@/views/article/childComps/articleMenu/childComps/ArticleMenuPublication.vue';
@@ -129,7 +128,7 @@ export default defineComponent({
      */
     function getMenuData(username) {
       if (username)
-        getArticlesUsers(username)
+        getArticlesUser(username)
           .then((data) => {
             menuData.username = data.username;
             menuData.nickname = data.nickname;

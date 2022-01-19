@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-28 14:54:52
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-17 23:28:21
+ * @LastEditTime: 2022-01-19 16:25:04
 -->
 
 <template>
@@ -59,13 +59,6 @@
         </div>
       </div>
     </div>
-    <div
-      class="user-center-profile-interest-button"
-      role="button"
-      @click="$emit('updateTags')"
-    >
-      保存
-    </div>
   </div>
 </template>
 
@@ -80,7 +73,6 @@ import { useRoute } from 'vue-router';
  * @param {Array} selectedTags 选中的兴趣标签 `必传参数`
  * @event addTag 添加兴趣标签 (tag: string) => void
  * @event deleteTag 删除兴趣标签 (index: number) => void
- * @event updateTags 更新兴趣标签 () => void
  * @author: Ban
  */
 export default defineComponent({
@@ -108,7 +100,7 @@ export default defineComponent({
     }
 
     // 获取专题名
-    getTopics()
+    getTopics(1000000000)
       .then((data) => {
         for (const topic of data.topics)
           allTopicsTags.splice(0, 0, {
@@ -191,7 +183,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .user-center-profile-interest {
   margin: 16px 0;
   box-shadow: $shadow-0;
@@ -318,25 +310,6 @@ export default defineComponent({
           }
         }
       }
-    }
-  }
-
-  .user-center-profile-interest-button {
-    margin: auto;
-    width: 60px;
-    height: 30px;
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: $green-0;
-    color: $grey-0;
-    border-radius: 15px;
-    box-shadow: $shadow-0;
-
-    &:hover {
-      background-color: $green-1;
-      box-shadow: $shadow-2;
     }
   }
 }

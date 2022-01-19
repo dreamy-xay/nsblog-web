@@ -3,10 +3,9 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-17 21:58:05
+ * @LastEditors: xiao
+ * @LastEditTime: 2022-01-19 16:19:05
 -->
-
 <template>
   <base-view
     :background="true"
@@ -17,15 +16,29 @@
     <template #top-bar-bottom>
       <base-topic-bar />
     </template>
-    <div style="width:100%; height: 3000px; background: #fff;">
+
+    <div class="home-container">
+
+      <div class="home-bottom">
+        <div class="home-bottom-left">
+          <home-left />
+        </div>
+        <div class="home-bottom-right">
+          <home-right />
+        </div>
+      </div>
+    </div>
+    <!-- <div style="width:100%; height: 3000px; background: #fff;">
       <button @click="gotoNewDialogue">前往新的对话</button><br />
       1 Test <br />2 Test<br />3 Test<br />4 Test<br />5 Test<br />6 Test<br />7 Test<br />8 Test<br />9 Test
       <div style="width: 50%; margin: 20px;">
         <base-content-loading />
       </div>
-    </div>
-
+    </div> -->
+    <BaseSearchStudyGroup></BaseSearchStudyGroup>
+    <base-content-loading />
   </base-view>
+
 </template>
 
 <script>
@@ -34,6 +47,8 @@ import BaseView from '@/components/content/baseView/BaseView.vue';
 import BaseTopicBar from '@/components/common/baseTopicBar/BaseTopicBar.vue';
 import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
 import router from '@/router';
+import HomeLeft from '@/views/home/childComps/HomeLeft';
+import HomeRight from '@/views/home/childComps/HomeRight.vue';
 
 /**
  * @description: 博客主页
@@ -45,7 +60,8 @@ export default defineComponent({
   components: {
     BaseView,
     BaseTopicBar,
-    BaseContentLoading,
+    HomeLeft,
+    HomeRight,
   },
   setup() {
     // 仅供参考，测试私信
@@ -70,52 +86,33 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.home-top-bar {
+:deep(.home) {
+  // height: 100%;
+  // width: 1000px;
+  // @include flex(initial, space-between);
   width: 100%;
-  height: 44px;
-  @include flex(center, center);
-  background-color: $grey-0;
-  border-top: 1px solid $grey-3;
-  box-shadow: 0 1.5px 3px rgba(0, 0, 0, 0.08);
+  @include flex(initial, initial, column);
+  .home-container {
+    width: 100%;
+    // @include flex(center, center);
 
-  .home-top-bar-inner {
-    height: 100%;
-    width: 1000px;
-    @include flex(center, space-between);
-
-    .left {
-      height: 100%;
-      @include flex(center, flex-start);
-
-      .topic {
-        margin: 0 12px;
-
-        &:first-child {
-          margin-left: 0;
-        }
-
-        &.topic-active {
-          color: $green-1;
-        }
-      }
+    .home-top {
+      width: 1142px;
     }
+    .home-bottom {
+      @include flex(initial, space-between);
+      .home-bottom-left {
+        width: 758px;
+        background: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.16);
+      }
 
-    .left .topic,
-    .right {
-      font-size: 15px;
-      color: $grey-9;
-      transition: 0.25s;
-
-      &:hover {
-        color: $green-0;
+      .home-bottom-right {
+        margin-left: 16px;
+        width: 384px;
       }
     }
   }
-}
-
-.home {
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
 }
 </style>

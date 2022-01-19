@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 10:01:23
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-23 12:34:28
+ * @LastEditTime: 2022-01-19 13:47:53
  */
 
 import { Application, Request, Response } from 'express';
@@ -71,12 +71,12 @@ export default function(baseUrl: string, app: Application) {
   });
 
   // 删除某条历史记录
-  app.delete(baseUrl + '/history/:history_id', (req: Request, res: Response) => {
+  app.delete(baseUrl + '/history/:history_id(\\d+)', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const { history_id } = req.params;
-    const type: string = req.query.type as string;
+    const type: string = req.body.type as string;
     const username: string = getToken(req.headers).username;
-    console.log(`--------delete history: history_id ${history_id}  type: ${type}  username ${username}   success`);
+    console.log(`--------delete history:  username ${username}  history_id ${history_id}  type: ${type}   success`);
     return res.send();
   });
 }

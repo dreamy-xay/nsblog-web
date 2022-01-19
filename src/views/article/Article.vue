@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 16:32:13
- * @LastEditors: xiao
- * @LastEditTime: 2022-01-13 18:26:38
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-19 12:10:42
  * @LastEditors: dreamy-xay
  * @LastEditTime: 2021-10-02 10:14:24
 -->
@@ -75,7 +75,7 @@ export default defineComponent({
       release_time: null,
       page_view: 0,
       comment_count: 0,
-      topic: '',
+      topic_tag: '',
       categories: [],
       tags: [],
       content: '',
@@ -106,7 +106,7 @@ export default defineComponent({
         articleData.release_time = data.release_time;
         articleData.page_view = data.page_view;
         articleData.comment_count = data.comment_count;
-        articleData.topic = data.topic;
+        articleData.topic_tag = data.topic_tag;
         articleData.cover_image = data.cover_image;
         articleData.license = data.license;
         articleData.categories = data.categories;
@@ -140,7 +140,7 @@ export default defineComponent({
         page_view: articleData.page_view,
         recommend_count: articleData.recommend_count,
         comment_count: articleData.comment_count,
-        topic: articleData.topic,
+        topic_tag: articleData.topic_tag,
         release_time: articleData.release_time,
         categories: articleData.categories,
         length: articleData.content.length,
