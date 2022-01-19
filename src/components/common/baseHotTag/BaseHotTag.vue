@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2022-01-15 15:07:06
  * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-19 11:01:51
+ * @LastEditTime: 2022-01-19 13:45:05
 -->
 <template>
   <div class="base-hot-tag">
@@ -20,16 +20,15 @@
           :key="index"
           role="button"
         >
-          <!-- <div class="base-hot-tag-list-text"> -->
           {{item.name}}
           <i
             v-if=" index <= 2 && Isimage"
             class="iconfont blog-hot1"
           ></i>
-          <!-- </div> -->
         </el-tag>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -102,7 +101,7 @@ export default defineComponent({
         border-radius: 9px;
         color: $grey-7;
         border: none;
-        margin: 8px 6px 8px 8px;
+        margin: 0 12px 12px 0;
 
         &:hover {
           color: $grey-10;
