@@ -3,17 +3,47 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 18:26:04
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-10-04 17:51:53
+ * @LastEditors: xiao
+ * @LastEditTime: 2022-01-18 15:44:05
 -->
 <template>
   <div class="blog-friends">
-
+    <div class="blog-head">
+      <div class="left-icon">
+        <i class="iconfont blog-shuye1"></i>
+      </div>
+      <div class="blog-tag-content">小伙伴们</div>
+    </div>
+    <div class="body">
+      <div
+        class="link-item"
+        v-for="(friendChain,index) in friendChains"
+        :key="index"
+      >
+        <a
+          href="friendChain.link"
+          class="link"
+        >
+          <div class="back"></div>
+          <img
+            src="../../../../../public/blog/none.jpg"
+            alt=""
+            class="img"
+          >
+          <div class="name">{{friendChain.title}}</div>
+          <hr class="hr" />
+          <div class="describe">立flag-一个酷玩代码的网站</div>
+        </a>
+      </div>
+    </div>
   </div>
+
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, reactive } from 'vue';
+import { getArticlesUsers } from '@/network/api/articles';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description: 博客全部友链页面
@@ -22,10 +52,192 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'blogFriends',
+  setup(props) {
+    const friendChains = reactive([]);
+    const msg = useMessage(); // naive-ui
+
+    //获取友链信息
+    getArticlesUsers('dreamy')
+      .then((data) => {
+        friendChains.splice(0, 0, ...data.friend_chain);
+        console.log('friendChains', friendChains);
+      })
+      .catch((error) => {
+        console.log(error);
+        msg.error('获取友链失败', { duration: 2000, closable: true });
+      });
+
+    return {
+      friendChains,
+    };
+  },
 });
 </script>
 
 <style lang="scss" scoped>
 .blog-friends {
+  @include flex(center, flex-start, column);
+  width: 100%;
+
+  .blog-head {
+    margin-top: 31px;
+    width: 800px;
+    height: 80px;
+    border-radius: $border-radius-0;
+    background-color: $grey-0;
+    box-shadow: $shadow-0; //阴影
+    @include flex(center, center, row);
+
+    .left-icon {
+      height: 100%;
+      margin-right: 16px;
+      @include flex(center);
+
+      .iconfont {
+        font-size: 35px;
+        color: $grey-8;
+      }
+    }
+
+    .blog-tag-content {
+      font-size: 32px;
+      font-family: Arial;
+      font-weight: bold;
+      font-stretch: normal;
+      font-style: normal;
+      color: $grey-8;
+    }
+  }
+
+  .body {
+    @include flex(first-start, first-start);
+    align-content: flex-start;
+    flex-wrap: wrap;
+    margin: 16px 16px;
+    width: 784px;
+    min-height: 828px;
+    height: auto !important;
+    height: 828px;
+    border-radius: $border-radius-0;
+    box-shadow: $shadow-0; //阴影
+    padding-left: 16px;
+    padding-top: 16px;
+    background-color: $grey-0;
+    transition: 0.25;
+
+    .link-item {
+      width: 183px;
+      height: 80px;
+      border: 1px solid $grey-3;
+      transition: 0.25s;
+      border-radius: $border-radius-0;
+      overflow: hidden;
+      padding: 10px 30px;
+      margin-bottom: 16px;
+      margin-right: 16px;
+
+      &:hover {
+        border: 1px solid $green-1;
+      }
+
+      .back {
+        animation: back2 1s ease;
+
+        @keyframes back2 {
+          from {
+            transform: translate(700px, -300px) rotate(45deg);
+          }
+          to {
+            transform: translate(0px, 100px) rotate(45deg);
+          }
+        }
+      }
+
+      &:hover {
+        .back {
+          animation: back1 1s ease;
+          animation-fill-mode: forwards;
+
+          @keyframes back1 {
+            from {
+              transform: translate(0px, 100px) rotate(45deg);
+            }
+            to {
+              transform: translate(700px, -300px) rotate(45deg);
+            }
+          }
+        }
+      }
+
+      .img {
+        animation: myfirst2 1s ease;
+
+        @keyframes myfirst2 {
+          from {
+            transform: rotate(359deg);
+          }
+          to {
+            transform: rotate(0deg);
+          }
+        }
+      }
+
+      &:hover img {
+        animation: myfirst1 1s ease;
+        animation-fill-mode: forwards;
+
+        @keyframes myfirst1 {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(359deg);
+          }
+        }
+      }
+      .link {
+        position: relative;
+        .back {
+          width: 500px;
+          height: 500px;
+          background: rgba(133, 232, 199, 0.16);
+          position: absolute;
+          top: 100px;
+          left: -700px;
+        }
+        .img {
+          float: right;
+          background: rgba(0, 0, 0, 0);
+          border: 1px solid $grey-3;
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          margin-top: 10px;
+        }
+
+        .name {
+          @include ellipsis(1);
+          height: 20px;
+          font-size: 15px;
+          color: $green-1;
+          margin-bottom: 6px;
+          margin-top: 10px;
+        }
+        .hr {
+          width: 125px;
+          height: 1px;
+          border: none;
+          border-top: 1px dashed $grey-6;
+          margin-bottom: 10px;
+        }
+        .describe {
+          height: 32px;
+          font-size: 13px;
+          color: $grey-7;
+          @include ellipsis(2);
+        }
+      }
+    }
+  }
 }
 </style>

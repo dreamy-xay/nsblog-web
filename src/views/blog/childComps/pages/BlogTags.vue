@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 18:26:04
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-14 18:10:58
+ * @LastEditTime: 2022-01-15 17:06:29
 -->
 <template>
   <div class="blog-tags">
@@ -37,6 +37,7 @@
         :key="index"
         class="tag-name"
         :class="tagn[index%4]"
+        role="button"
       >
         <div class="tag-name-content">{{tag.name}}</div>
         <div class="tag-name-number">117</div>
@@ -133,7 +134,7 @@ g
     align-content: flex-start;
     flex-wrap: wrap;
     margin-top: 16px;
-    margin-bottom: 175px;
+    margin-bottom: 40px;
     width: 800px;
     height: 558px;
     border-radius: $border-radius-0;

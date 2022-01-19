@@ -1,9 +1,9 @@
 @font-face {
     font-family: "iconfont";
     /* Project id 2675107 */
-    src: url('//at.alicdn.com/t/font_2675107_b0i7gns89vg.woff2?t=1633338212270') format('woff2'),
-        url('//at.alicdn.com/t/font_2675107_b0i7gns89vg.woff?t=1633338212270') format('woff'),
-        url('//at.alicdn.com/t/font_2675107_b0i7gns89vg.ttf?t=1633338212270') format('truetype');
+    src: url('//at.alicdn.com/t/font_2675107_vimc3j62e9a.woff2?t=1642303359785') format('woff2'),
+        url('//at.alicdn.com/t/font_2675107_vimc3j62e9a.woff?t=1642303359785') format('woff'),
+        url('//at.alicdn.com/t/font_2675107_vimc3j62e9a.ttf?t=1642303359785') format('truetype');
 }
 
 .iconfont {
@@ -12,6 +12,26 @@
     font-style: normal;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+.blog-shuye1:before {
+    content: "\e662";
+}
+
+.blog-jian:before {
+    content: "\e65f";
+}
+
+.blog-hot1:before {
+    content: "\e660";
+}
+
+.blog-gonggao:before {
+    content: "\e65d";
+}
+
+.blog-gonggao1:before {
+    content: "\e65e";
 }
 
 .blog-friend-link:before {
