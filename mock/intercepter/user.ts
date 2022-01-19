@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:15:05
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-28 12:19:03
+ * @LastEditTime: 2022-01-19 16:33:00
  */
 import { Random, mock } from 'better-mock';
 import { Application, Request, Response } from 'express';
@@ -322,17 +322,17 @@ export default function(baseUrl: string, app: Application) {
   app.post(baseUrl + '/users/tag', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
-    const { name } = req.body;
-    console.log(`--------add tags: username=>${username}   name=>${name}`);
+    const { tag_name } = req.body;
+    console.log(`--------add tags: username=>${username}   tag_name=>${tag_name}`);
     return res.send();
   });
 
   // 删除兴趣标签
-  app.delete(baseUrl + '/users/tag/:name', (req: Request, res: Response) => {
+  app.delete(baseUrl + '/users/tag/:tag_name', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
-    const { name } = req.params;
-    console.log(`--------delete tags: username=>${username}   name=>${name}`);
+    const { tag_name } = req.params;
+    console.log(`--------delete tags: username=>${username}   tag_name=>${tag_name}`);
     return res.send();
   });
 
