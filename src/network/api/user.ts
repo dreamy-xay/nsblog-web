@@ -3,10 +3,10 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:38:31
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-29 10:11:08
+ * @LastEditors: Ban
+ * @LastEditTime: 2022-01-18 11:05:44
  */
-import { post, get, put, RequestLifeCycle } from '@/network/request';
+import { post, get, put, RequestLifeCycle, del } from '@/network/request';
 import { encrypt } from '@/util/crypto';
 
 /**
@@ -231,6 +231,20 @@ export function addUserTag(tagname: string, RLC: RequestLifeCycle = {}): Promise
     data: {
       tagname
     }
+  });
+}
+
+/**
+ * @description: 删除兴趣标签
+ * @param {String} tag_name 标签名 `必传参数`
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: Ban
+ */
+export function delUserTag(tagname: string, RLC: RequestLifeCycle = {}): Promise<unknown> {
+  return del({
+    url: `/users/tag/${tagname}`,
+    ...RLC
   });
 }
 
