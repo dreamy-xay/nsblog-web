@@ -1,7 +1,13 @@
 @font-face {
     font-family: 'iconfont';
     /* Project id 2675107 */
+
+    src: url('//at.alicdn.com/t/font_2675107_vimc3j62e9a.woff2?t=1642303359785') format('woff2'),
+        url('//at.alicdn.com/t/font_2675107_vimc3j62e9a.woff?t=1642303359785') format('woff'),
+        url('//at.alicdn.com/t/font_2675107_vimc3j62e9a.ttf?t=1642303359785') format('truetype');
+
     src: url('//at.alicdn.com/t/font_2675107_nome2z5kgkb.woff2?t=1642224678036') format('woff2'), url('//at.alicdn.com/t/font_2675107_nome2z5kgkb.woff?t=1642224678036') format('woff'), url('//at.alicdn.com/t/font_2675107_nome2z5kgkb.ttf?t=1642224678036') format('truetype');
+
 }
 
 .iconfont {
@@ -11,6 +17,12 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+
+
+.blog-shuye1:before {
+    content: "\e662";
+}
+
 
 .blog-jian:before {
     content: "\e65f";
