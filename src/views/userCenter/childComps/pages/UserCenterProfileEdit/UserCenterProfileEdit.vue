@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:31
- * @LastEditors: Ban
- * @LastEditTime: 2022-01-18 11:03:32
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-19 16:36:40
 -->
 <template>
   <div class="user-center-profile-edit">
@@ -22,10 +22,9 @@
       @changeJob="changeJob"
     />
     <user-center-profile-edit-interest
-      :selected-tags="tagsData.tags"
+      :selected-tags="userData.tags"
       @deleteTag="deleteTag"
       @addTag="addTag"
-      @updateTags="updateTags"
     />
   </div>
 </template>
@@ -37,7 +36,7 @@ import UserCenterProfileEditInformation from '@/views/userCenter/childComps/page
 import UserCenterProfileEditJob from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/UserCenterProfileEditJob.vue';
 import UserCenterProfileEditInterest from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/UserCenterProfileEditInterest.vue';
 import { base64ToFile } from '@/util/util';
-import { getUserInfo, putUserInfo, modifySignature, delUserTag, addUserTag } from '@/network/api/user';
+import { getUserInfo, modifyUserInfo, modifySignature, delUserTag, addUserTag } from '@/network/api/user';
 import { mapState } from '@/util/store';
 import { useMessage } from 'naive-ui';
 import events from '@/events';
@@ -120,14 +119,6 @@ export default defineComponent({
       };
     });
 
-    // 兴趣标签
-    const tagsData = computed(() => {
-      return {
-        username: userData.username,
-        tags: userData.tags,
-      };
-    });
-
     /**
      * @description: 上传新头像
      * @param {string} image base64字符串 `必传参数`
@@ -178,7 +169,7 @@ export default defineComponent({
      */
 
     function changeInformation(data) {
-      putUserInfo(data)
+      modifyUserInfo(data)
         .then(() => {
           userData.nickname = data.nickname;
           userData.gender = data.gender;
@@ -200,7 +191,7 @@ export default defineComponent({
      */
 
     function changeJob(data) {
-      putUserInfo(data)
+      modifyUserInfo(data)
         .then(() => {
           userData.profession = data.profile;
           userData.address = data.address;
@@ -242,22 +233,6 @@ export default defineComponent({
         });
     }
 
-    /**
-     * @description: 更改兴趣标签信息
-     * @return {void}
-     * @author: dreamy-xay
-     */
-    function updateTags() {
-      putUserInfo(tagsData)
-        .then(() => {
-          msg.success('修改成功', { duration: 2000, closable: true });
-        })
-        .catch((error) => {
-          console.log(error);
-          msg.error('修改兴趣标签失败', { duration: 2000, closable: true });
-        });
-    }
-
     return {
       uploadAvatar,
       updateSignature,
@@ -266,14 +241,12 @@ export default defineComponent({
       informationData,
       userData,
       jobData,
-      tagsData,
 
       changeInformation,
       changeJob,
 
       deleteTag,
       addTag,
-      updateTags,
     };
   },
 });
