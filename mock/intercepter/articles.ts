@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-16 12:50:03
+ * @LastEditTime: 2022-01-19 12:33:10
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -12,6 +12,7 @@ import { int, verifyToken, getToken, RandomUser, randomUsers } from './util';
 import select from '../data/index';
 
 export default function(baseUrl: string, app: Application) {
+  // @待定
   // 获取发布的文章
   app.get(baseUrl + '/articles', (req: Request, res: Response) => {
     const { username, limit, offset, release_time, browsing_count, tag, category } = req.query;
@@ -79,8 +80,8 @@ export default function(baseUrl: string, app: Application) {
     return res.json({ tags: getRandom(Random.integer(0, 40)) });
   });
 
-  // 文章侧边栏菜单，获取详情
-  app.get(baseUrl + '/articles/users', (req: Request, res: Response) => {
+  // 文章侧边栏菜单，获取详情（获取文章页面用户信息）
+  app.get(baseUrl + '/articles/user', (req: Request, res: Response) => {
     const { username } = req.query;
     const user: Record<string, unknown> = select('users').findOne({ username });
     if (!user) return res.status(410).json({ error: 'User name error' });
@@ -117,7 +118,7 @@ export default function(baseUrl: string, app: Application) {
     return res.json(ans);
   });
 
-  // 修改文章状态，推荐反对还是不操作
+  // 修改文章状态，推荐反对还是不操作（修改文章评价）
   app.put(baseUrl + '/articles/evaluation', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
@@ -185,7 +186,7 @@ export default function(baseUrl: string, app: Application) {
     return res.json({ comments: getRandom(int(offset) >= 25 ? 0 : Math.min(int(limit), 25 - int(offset))) });
   });
 
-  // 获取文章评论
+  // 发表文章评论
   app.post(baseUrl + '/articles/comments', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
@@ -239,14 +240,16 @@ export default function(baseUrl: string, app: Application) {
       avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
       release_time: Random.datetime(),
       page_view: Random.integer(0, 1000),
-      cover_image: [
-        null,
-        'https://s3.bmp.ovh/imgs/2021/09/fd25f71e808f3f23.jpg',
-        'https://s3.bmp.ovh/imgs/2021/09/8bcf34ab186f752c.jpg',
-        'https://s3.bmp.ovh/imgs/2021/09/040fbcab0802511e.jpg',
-        'https://s3.bmp.ovh/imgs/2021/09/7fc65c1d3e881ea5.jpg'
-      ][Random.integer(0, 4)],
-      license: 'CC BY 4.0',
+      comment_count: Random.integer(0, 1000),
+      recommend_count: Random.integer(0, 1000),
+      topic_tag: Random.integer(0, 1) ? Random.word() : Random.cword(),
+      categories: getRandom(Random.integer(0, 2)),
+      tags: getRandom(Random.integer(0, 3)),
+      content: Random.integer(0, 3)
+        ? templateArticles[Random.integer(0, templateArticles.length - 1)]
+        : Random.integer(0, 1)
+        ? Random.paragraph(3, 100)
+        : Random.cparagraph(3, 100),
       blog_article_html: Random.integer(0, 1)
         ? ''
         : `
@@ -267,16 +270,19 @@ export default function(baseUrl: string, app: Application) {
       <script src="/article/tempJs/mouse.min.js"></script>
       <script type="text/javascript"> $.shuicheMouse({ type:11, color:"rgba(172,12,177,0.8)" }) </script>
       `,
-      comment_count: Random.integer(0, 1000),
-      topic: Random.integer(0, 1) ? Random.word() : Random.cword(),
-      categories: getRandom(Random.integer(0, 2)),
-      tags: getRandom(Random.integer(0, 3)),
-      content: Random.integer(0, 3)
-        ? templateArticles[Random.integer(0, templateArticles.length - 1)]
-        : Random.integer(0, 1)
-        ? Random.paragraph(3, 100)
-        : Random.cparagraph(3, 100),
-      recommend_count: Random.integer(0, 1000),
+      cover_image: [
+        null,
+        'https://s3.bmp.ovh/imgs/2021/09/fd25f71e808f3f23.jpg',
+        'https://s3.bmp.ovh/imgs/2021/09/8bcf34ab186f752c.jpg',
+        'https://s3.bmp.ovh/imgs/2021/09/040fbcab0802511e.jpg',
+        'https://s3.bmp.ovh/imgs/2021/09/7fc65c1d3e881ea5.jpg'
+      ][Random.integer(0, 4)],
+      license: 'CC BY 4.0',
+      sponsors: {
+        paypal: Random.integer(0, 1) ? Random.image('150x150', '#234567', '#FFFFFF', 'png', 'paypal') : null,
+        alipay: Random.integer(0, 2) ? 'https://s3.bmp.ovh/imgs/2021/10/c706c0cc3da4d493.jpg' : null,
+        weixin: Random.integer(0, 2) ? 'https://s3.bmp.ovh/imgs/2021/10/2b9296f39cbbd91e.jpg' : null
+      },
       ...params,
       last_article: {
         article_id: Random.id(),
@@ -285,11 +291,6 @@ export default function(baseUrl: string, app: Application) {
       next_article: {
         article_id: Random.id(),
         title: Random.integer(0, 1) ? Random.title() : Random.ctitle()
-      },
-      sponsors: {
-        paypal: Random.integer(0, 1) ? Random.image('150x150', '#234567', '#FFFFFF', 'png', 'paypal') : null,
-        alipay: Random.integer(0, 2) ? 'https://s3.bmp.ovh/imgs/2021/10/c706c0cc3da4d493.jpg' : null,
-        weixin: Random.integer(0, 2) ? 'https://s3.bmp.ovh/imgs/2021/10/2b9296f39cbbd91e.jpg' : null
       }
     };
 
