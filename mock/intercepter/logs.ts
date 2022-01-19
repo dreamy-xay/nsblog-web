@@ -4,12 +4,11 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-23 18:26:27
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-23 18:29:48
+ * @LastEditTime: 2022-01-19 13:43:42
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { getToken, verifyToken, int } from './util';
-import select from '../data/index';
+import { getToken, verifyToken } from './util';
 
 export default function(baseUrl: string, app: Application) {
   // 获取登录登出日志内容

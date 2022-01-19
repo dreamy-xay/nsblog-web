@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:25:27
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-14 17:06:40
+ * @LastEditTime: 2022-01-19 17:08:40
 -->
 
 <template>
@@ -66,17 +66,30 @@
           <div class="message-reply-right-bottom">
             <span class="message-reply-right-bottom-time">{{getDate(item.time)}}</span>
 
-            <div class="message-reply-right-bottom-reply">
+            <div
+              class="message-reply-right-bottom-reply"
+              role="button"
+            >
               <i class="iconfont blog-huifu1"></i>
               <span>回复</span>
             </div>
 
-            <div class="message-reply-right-bottom-reply">
+            <div
+              class="message-reply-right-bottom-reply"
+              role="button"
+              @click="changeEvaluation(index,1)"
+              :class="replyData[index].content.evaluation==1 ? 'message-reply-right-bottom-reply-click':''"
+            >
               <i class="iconfont blog-dianzan1"></i>
               <span>点赞</span>
             </div>
 
-            <div class="message-reply-right-bottom-reply">
+            <div
+              class="message-reply-right-bottom-reply"
+              role="button"
+              @click="changeEvaluation(index,0)"
+              :class="replyData[index].content.evaluation==0 ? 'message-reply-right-bottom-reply-click':''"
+            >
               <i class="iconfont blog-dianzan1 message-reply-right-bottom-reply-iconfont"></i>
               <span>反对</span>
             </div>
@@ -159,6 +172,7 @@ export default defineComponent({
             deleteTag.value = false;
           }
           replyData.splice(replyData.length, 0, ...data.messages);
+          console.log(data);
         })
         .catch((error) => {
           console.log(error);
@@ -231,12 +245,25 @@ export default defineComponent({
       }
     );
 
+    /**
+     * @description: 点赞或反对
+     * @param {Number} index 该消息索引
+     * @param {Number} num 0反对，1点赞，2无
+     * @return {Void}
+     * @author: Z_Y_C
+     */
+    function changeEvaluation(index, num) {
+      if (replyData[index].content.evaluation == num) replyData[index].content.evaluation = 2;
+      else replyData[index].content.evaluation = num;
+    }
+
     return {
       replyData,
       getMessagesList,
       deleteItem,
       getDate,
       changePages,
+      changeEvaluation,
     };
   },
 });
@@ -339,6 +366,14 @@ $grey9: $grey-9;
 
         &:hover {
           color: $green0;
+        }
+      }
+
+      .message-reply-right-bottom-reply-click {
+        color: $green0;
+
+        &:hover {
+          color: $green-1;
         }
       }
 

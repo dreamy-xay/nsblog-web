@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-19 11:57:31
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-17 23:24:56
+ * @LastEditors: Ban
+ * @LastEditTime: 2022-01-18 11:03:32
 -->
 <template>
   <div class="user-center-profile-edit">
@@ -37,7 +37,7 @@ import UserCenterProfileEditInformation from '@/views/userCenter/childComps/page
 import UserCenterProfileEditJob from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/UserCenterProfileEditJob.vue';
 import UserCenterProfileEditInterest from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/UserCenterProfileEditInterest.vue';
 import { base64ToFile } from '@/util/util';
-import { getUserInfo, putUserInfo, modifySignature } from '@/network/api/user';
+import { getUserInfo, putUserInfo, modifySignature, delUserTag, addUserTag } from '@/network/api/user';
 import { mapState } from '@/util/store';
 import { useMessage } from 'naive-ui';
 import events from '@/events';
@@ -218,7 +218,13 @@ export default defineComponent({
      * @author: Ban
      */
     function deleteTag(index) {
-      userData.tags.splice(index, 1);
+      delUserTag(userData.tags[index])
+        .then(() => {
+          userData.tags.splice(index, 1);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
 
     /**
@@ -227,7 +233,13 @@ export default defineComponent({
      * @author: Ban
      */
     function addTag(tag) {
-      userData.tags.splice(userData.tags.length, 0, tag);
+      addUserTag(tag)
+        .then(() => {
+          userData.tags.splice(userData.tags.length, 0, tag);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
 
     /**

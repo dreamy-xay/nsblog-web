@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 11:59:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-16 12:10:07
+ * @LastEditTime: 2022-01-19 13:18:51
  */
 
 import { Application, Request, Response } from 'express';
@@ -15,7 +15,6 @@ import select from '../data/index';
 export default function(baseUrl: string, app: Application) {
   // 获取收藏夹或者收藏
   app.get(baseUrl + '/favorites', (req: Request, res: Response) => {
-    // if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const { username, limit, offset, favorite_id, is_all, type } = req.query;
     if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
 
@@ -40,7 +39,7 @@ export default function(baseUrl: string, app: Application) {
         collections: getRandom(int(offset) >= 29 ? 0 : Math.min(int(limit), 29 - int(offset)), int(type) === 0)
       });
     else {
-      const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
+      const ans: Record<string, unknown>[] = [];
       const cs: number = Random.natural(0, 15);
       for (let i: number = 0; i < cs; ++i) {
         const sum: number = Random.integer(1, 27);
@@ -52,7 +51,7 @@ export default function(baseUrl: string, app: Application) {
           ? { remark: Random.integer(0, 1) ? Random.paragraph(1, 1) : Random.cparagraph(1, 2), time: Random.datetime() }
           : {};
         ans.push({
-          id: Random.id(),
+          favorite_id: Random.id(),
           name: Random.natural(0, 2) ? Random.cword(1, 8) : Random.word(2, 15),
           count: Random.integer(1, 99),
           is_private: Random.integer(0, 1) ? true : false,
@@ -62,28 +61,6 @@ export default function(baseUrl: string, app: Application) {
       }
       return res.json({ favorites: ans });
     }
-  });
-
-  // 添加收藏
-  app.post(baseUrl + '/favorites/collections', (req: Request, res: Response) => {
-    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
-    const username: string = getToken(req.headers).username;
-    const { type, content_id, favorite_id } = req.body;
-    console.log(
-      `--------add favorites>collections: username=>${username}  type=>${type}  content_id=>${content_id}  favorite_id=>${favorite_id}  success`
-    );
-    return res.send();
-  });
-
-  // 取消收藏
-  app.delete(baseUrl + '/favorites/collections/:collection_id', (req: Request, res: Response) => {
-    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
-    const username: string = getToken(req.headers).username;
-    const { collection_id } = req.params;
-    console.log(
-      `--------cancel favorites>collections: username=>${username}  collection_id=>${collection_id}  success`
-    );
-    return res.send();
   });
 
   // 新建收藏夹
@@ -98,11 +75,33 @@ export default function(baseUrl: string, app: Application) {
   });
 
   // 删除收藏夹
-  app.delete(baseUrl + '/favorites/:favorite_id', (req: Request, res: Response) => {
+  app.delete(baseUrl + '/favorites/:favorite_id(\\d+)', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { favorite_id } = req.params;
     console.log(`--------delete favorites: username=>${username}  favorite_id=>${favorite_id}  success`);
+    return res.send();
+  });
+
+  // 添加收藏
+  app.post(baseUrl + '/favorites/collections', (req: Request, res: Response) => {
+    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
+    const username: string = getToken(req.headers).username;
+    const { type, content_id, favorite_id } = req.body;
+    console.log(
+      `--------add favorites>collections: username=>${username}  type=>${type}  content_id=>${content_id}  favorite_id=>${favorite_id}  success`
+    );
+    return res.send();
+  });
+
+  // 取消收藏
+  app.delete(baseUrl + '/favorites/collections/:collection_id(\\d+)', (req: Request, res: Response) => {
+    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
+    const username: string = getToken(req.headers).username;
+    const { collection_id } = req.params;
+    console.log(
+      `--------cancel favorites>collections: username=>${username}  collection_id=>${collection_id}  success`
+    );
     return res.send();
   });
 
@@ -112,7 +111,7 @@ export default function(baseUrl: string, app: Application) {
     const username: string = getToken(req.headers).username;
     const { name, favorite_id } = req.body;
     console.log(
-      `--------cancel favorites>collections: username=>${username}  name=>${name}  favorite_id=>${favorite_id}  success`
+      `--------modify favorites name: username=>${username}  name=>${name}  favorite_id=>${favorite_id}  success`
     );
     return res.send();
   });
@@ -123,7 +122,7 @@ export default function(baseUrl: string, app: Application) {
     const username: string = getToken(req.headers).username;
     const { remark, favorite_id } = req.body;
     console.log(
-      `--------cancel favorites>collections: username=>${username}  remark=>${remark}  favorite_id=>${favorite_id}  success`
+      `--------modify favorites remark: username=>${username}  remark=>${remark}  favorite_id=>${favorite_id}  success`
     );
     return res.send();
   });
@@ -134,7 +133,7 @@ export default function(baseUrl: string, app: Application) {
     const username: string = getToken(req.headers).username;
     const { is_private, favorite_id } = req.body;
     console.log(
-      `--------cancel favorites>collections: username=>${username}  is_private=>${is_private}  favorite_id=>${favorite_id}  success`
+      `--------modify favorites private: username=>${username}  is_private=>${is_private}  favorite_id=>${favorite_id}  success`
     );
     return res.send();
   });

@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 11:51:03
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-14 16:45:14
+ * @LastEditors: xiao
+ * @LastEditTime: 2022-01-18 16:46:49
 -->
 <template>
   <div
@@ -49,7 +49,7 @@
                 </div>
               </div>
             </div>
-            <base-footer v-if="footer" />
+            <base-footer v-if="true" />
           </el-scrollbar>
         </div>
       </div>
