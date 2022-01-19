@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 20:59:37
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-20 17:33:00
+ * @LastEditTime: 2022-01-19 15:38:40
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -34,6 +34,7 @@ export default function(baseUrl: string, app: Application) {
     return res.json({ questions: getRandom(int(offset) >= 78 ? 0 : Math.min(int(limit), 78 - int(offset))) });
   });
 
+  // @待定
   // 获取发布的提问的回答
   app.get(baseUrl + '/questions/replies', (req: Request, res: Response) => {
     const { username, limit, offset, release_time, browsing_count } = req.query;

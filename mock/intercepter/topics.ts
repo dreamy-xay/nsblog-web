@@ -4,18 +4,19 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-23 12:31:32
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-17 21:49:35
+ * @LastEditTime: 2022-01-19 15:59:35
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { verifyToken, getToken } from './util';
+import { verifyToken, getToken, int } from './util';
 
 export default function(baseUrl: string, app: Application) {
   // 获取专题名
   app.get(baseUrl + '/topics', (req: Request, res: Response) => {
+    const { offset, limit } = req.query;
     const topics: string[] = [];
-    const sum: number = Random.integer(2, 25);
-    for (let i: number = 0; i < sum; ++i) topics.push(Random.integer(0, 1) ? Random.word(5, 9) : Random.cword(2, 6));
+    for (let i: number = 0; i < int(limit); ++i)
+      topics.push(Random.integer(0, 1) ? Random.word(5, 9) : Random.cword(2, 6));
     return res.json({ topics });
   });
 
@@ -27,6 +28,19 @@ export default function(baseUrl: string, app: Application) {
     const sum: number = Random.integer(1, 40);
     for (let i: number = 0; i < sum; ++i) tags.push(Random.integer(0, 1) ? Random.word(5, 9) : Random.cword(2, 6));
     return res.json({ tags });
+  });
+
+  // 获取专题标签详情信息
+  app.get(baseUrl + '/topics/tags/:tag_name', (req: Request, res: Response) => {
+    const { tag_name } = req.params;
+    console.log(`--------get topic-tag detail: tag_name=>${tag_name}  success`);
+    return res.json({
+      name: tag_name,
+      remark: Random.integer(0, 1) ? Random.paragraph(1, 2) : Random.cparagraph(1, 2),
+      article_count: Random.integer(1, 1000),
+      attention_count: Random.integer(1, 10000),
+      attention: Random.integer(0, 1)
+    });
   });
 
   // 创建专题
