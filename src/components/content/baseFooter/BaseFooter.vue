@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-10 20:39:59
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-18 17:14:12
+ * @LastEditTime: 2022-01-19 16:06:38
 -->
 
 <template>
@@ -24,8 +24,8 @@
       class="foot2"
       v-if="true"
     >
-      <i class="iconfont blog-weibo"></i>
-      <i class="iconfont blog-email"></i>
+      <a href=""><i class="iconfont blog-weibo"></i></a>
+      <a href=""> <i class="iconfont blog-email"></i></a>
     </div>
     <div class="foot3">© 2021 · 笔记分享部落阁 · ALL RIGHTS RESERVED</div>
   </div>

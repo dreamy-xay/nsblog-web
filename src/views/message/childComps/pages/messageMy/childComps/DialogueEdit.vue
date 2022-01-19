@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-19 16:19:04
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-16 10:11:35
+ * @LastEditTime: 2022-01-17 20:57:14
 -->
 <template>
   <div class="dialogue-edit">
@@ -47,7 +47,7 @@
           v-model="content"
           :maxlength="500"
           :style="{height: inputHeight}"
-          placeholder="ctrl+enter send..."
+          placeholder="按下Enter换行，Ctrl+Enter发表内容..."
           @keydown.ctrl.enter="submit"
         ></textarea>
       </el-scrollbar>

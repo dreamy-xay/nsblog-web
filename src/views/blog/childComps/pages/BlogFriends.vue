@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 18:26:04
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-18 15:44:05
+ * @LastEditTime: 2022-01-19 16:12:35
 -->
 <template>
   <div class="blog-friends">
@@ -141,7 +141,7 @@ export default defineComponent({
       }
 
       .back {
-        animation: back2 1s ease;
+        animation: back2 1.5s ease;
 
         @keyframes back2 {
           from {
@@ -155,7 +155,7 @@ export default defineComponent({
 
       &:hover {
         .back {
-          animation: back1 1s ease;
+          animation: back1 1.5s ease;
           animation-fill-mode: forwards;
 
           @keyframes back1 {
@@ -170,7 +170,7 @@ export default defineComponent({
       }
 
       .img {
-        animation: myfirst2 1s ease;
+        animation: myfirst2 1.5s ease;
 
         @keyframes myfirst2 {
           from {
@@ -183,7 +183,7 @@ export default defineComponent({
       }
 
       &:hover img {
-        animation: myfirst1 1s ease;
+        animation: myfirst1 1.5s ease;
         animation-fill-mode: forwards;
 
         @keyframes myfirst1 {

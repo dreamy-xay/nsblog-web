@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-16 16:19:53
  * @LastEditors: clq
- * @LastEditTime: 2021-09-24 20:30:50
+ * @LastEditTime: 2022-01-17 20:43:33
 -->
 <template>
   <n-popover
@@ -72,7 +72,7 @@
 import { defineComponent, nextTick, ref } from 'vue';
 /**
  * @description: 文章发布选择
- * @param {Arrey} sdata 可供选择的数据 `默认为[]`
+ * @param {Array} sdata 可供选择的数据 `默认为[]`
  * @param {Boolean} category true 为选择分类 false 为选择标签 `默认为false`
  * @param {Boolean} isActive true 有效 false 失效 `默认为false`
  * @event changeItem 改变选择数据 (item, index) => void

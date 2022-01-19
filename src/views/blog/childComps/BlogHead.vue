@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-30 16:27:56
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-10-04 19:32:03
+ * @LastEditTime: 2022-01-15 16:56:53
 -->
 <template>
   <div class="blog-head">
@@ -110,7 +110,7 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function toContent() {
-      blogPage.value.scrollTo({ top: document.body.offsetHeight, behavior: 'smooth' });
+      blogPage.value.scrollTo({ top: document.body.offsetHeight - 54, behavior: 'smooth' });
     }
 
     const showBackTop = ref(false);

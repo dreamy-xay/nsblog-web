@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-17 19:34:19
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-20 17:33:20
+ * @LastEditTime: 2022-01-14 18:46:25
 -->
 
 <template>
@@ -212,7 +212,7 @@ export default defineComponent({
             color: $grey-10;
             font-size: 14px;
             transition: 0.25s;
-            width: 580px;
+            width: 500px;
             @include ellipsis(1);
 
             &:hover {

@@ -3,12 +3,15 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:02:59
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-20 17:58:22
+ * @LastEditors: Ban
+ * @LastEditTime: 2022-01-13 16:40:34
 -->
 <template>
   <n-message-provider>
-    <router-view />
+    <n-dialog-provider>
+      <router-view />
+    </n-dialog-provider>
+
   </n-message-provider>
 </template>
 

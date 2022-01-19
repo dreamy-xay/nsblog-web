@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-24 18:26:04
  * @LastEditors: clq
- * @LastEditTime: 2022-01-14 14:44:17
+ * @LastEditTime: 2022-01-18 14:00:28
 -->
 <template>
   <div class="blog-categories">
@@ -16,23 +16,45 @@
     </div>
 
     <div class="blog-categories-content">
-      <div
-        v-for="(item, index) in categories"
-        :key="index"
-        :class="['category-item',{green: index%3==0},{orange: index%3==1},{red: index%3==2}]"
-        role="button"
-        @click="toCategory(item.url)"
-      >
-        {{item.name}}
-      </div>
+      <template v-if="categories.length">
+        <base-tag
+          :size="38"
+          v-for="category in categories"
+          :key="category.name"
+          :text="category.name"
+          :color="category.color"
+          :hover-color="category.hoverColor"
+          :style="{borderRadius: styles.borderRadius1, boxShadow: styles.shadow0, fontSize: '16px', marginRight: '20px', marginBottom: '20px'}"
+          :href="category.url"
+        >
+          <template #text-after>
+            <div class="categories-count">
+              {{ category.count }}
+            </div>
+          </template>
+        </base-tag>
+      </template>
+      <template v-else>
+        <base-svg
+          style="width:100%;height:200px;padding-left: 60px;"
+          svg="data-empty"
+          :color="svgColor"
+        ></base-svg>
+      </template>
     </div>
 
-    <div class="blog-categories-chart">
+    <div
+      v-if="categories.length"
+      class="blog-categories-chart"
+    >
       <div class="title">
         文章分类雷达图
       </div>
       <div class="chart">
-        <blog-categories-chart :chartData="radarData" />
+        <blog-categories-chart
+          :indicator="indicator"
+          :chartData="categoryCount"
+        />
       </div>
     </div>
   </div>
@@ -40,7 +62,13 @@
 
 <script>
 import { computed, defineComponent, reactive, ref } from 'vue';
+import BaseTag from '@/components/content/baseTag/BaseTag.vue';
+import BaseSvg from '@/components/content/baseSvg/BaseSvg.vue';
 import BlogCategoriesChart from '@/views/blog/childComps/pages/childComps/BlogCategoriesChart.vue';
+import { getCategories } from '@/network/api/articles';
+import { useRoute } from 'vue-router';
+import { useMessage } from 'naive-ui';
+import styles from '@/assets/style/define.scss';
 /**
  * @description: 博客全部分类页面
  * @author: clq
@@ -50,66 +78,95 @@ export default defineComponent({
   name: 'blogCategories',
   components: {
     BlogCategoriesChart,
+    BaseTag,
+    BaseSvg,
   },
   props: {},
   setup(props, context) {
-    // 文章分类信息
-    const categories = reactive([
-      {
-        name: 'class1',
-        url: '/class1',
-      },
-      {
-        name: 'class2',
-        url: '/class2',
-      },
-      {
-        name: 'class3',
-        url: '/class3',
-      },
-      {
-        name: 'class4',
-        url: '/class4',
-      },
-      {
-        name: 'class5',
-        url: '/class5',
-      },
-    ]);
+    const msg = useMessage(); // naive-ui 消息组件
+    const route = useRoute(); //route
+    const username = route.params.username; //获取博主用户名
+    const svgColor = styles.green1; //svg图片颜色
+    const chartDataCount = ref(20); //雷达图数据项限制
 
-    // 雷达图数据
-    const radarData = computed(() => {
-      return {
-        indicator: [
-          { name: 'class1', max: 6500 },
-          { name: 'class2', max: 16000 },
-          { name: 'class3', max: 30000 },
-          { name: 'class4', max: 38000 },
-          { name: 'class5', max: 52000 },
-          { name: 'class6', max: 25000 },
-        ],
-        data: [
-          {
-            value: [4200, 3000, 20000, 35000, 50000, 18000],
-            name: 'Allocated Budget',
-          },
-        ],
-      };
-    });
+    let categories = reactive([]); // 文章分类信息
+    let indicator = reactive([]);
+    let categoryCount = reactive([]); // 各分类的文章数量
+    let maxCount = ref(); // categoryCount中的最大值
+
+    const colorList = [
+      // 颜色列表
+      [styles.purple0, styles.purple1],
+      [styles.orange0, styles.orange1],
+      [styles.red0, styles.pink0],
+      [styles.yellow0, styles.yellow1],
+      [styles.green0, styles.green1],
+      [styles.blue0, styles.blue1],
+    ];
+
+    /**
+     * @description: 随机获取颜色
+     * @return {[string, string]} 返回颜色和hover色
+     * @author: dreamy-xay
+     */
+    function randomColor() {
+      return colorList[Math.floor(Math.random() * colorList.length)];
+    }
+
+    /**
+     * @description: 文章分类数组按分类数降序排序
+     * @param {*} a
+     * @param {*} b
+     * @return {*}
+     * @author: clq
+     */
+    function sortCategoriesByCount(a, b) {
+      return b.count - a.count;
+    }
+
+    getCategories(username)
+      .then((data) => {
+        data.categories.sort(sortCategoriesByCount);
+        console.log('data.categories');
+        console.log(data.categories);
+
+        for (let category of data.categories) {
+          const color = randomColor();
+          category.color = color[0];
+          category.hoverColor = color[1];
+          category.url = `/blog/${username}?category=${category.id}`;
+          delete category['id'];
+          categories.splice(0, 0, category);
+        }
+        maxCount = data.categories[0].count;
+        chartDataCount.value =
+          chartDataCount.value > data.categories.length ? data.categories.length : chartDataCount.value;
+        for (let i = 0; i < chartDataCount.value; i++) {
+          indicator.splice(0, 0, { name: data.categories[i].name, max: maxCount });
+          categoryCount.splice(0, 0, data.categories[i].count);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        msg.error('获取标签失败', { duration: 2000, closable: true });
+      });
 
     /**
      * @description: 跳转至分类页面
-     * @param url:地址
+     * @param id:地址
      * @return {void}
      * @author: clq
      */
-    function toCategory(url) {
-      console.log(url);
+    function toCategory(id) {
+      window.open(`/blog/${username}?category=${id}`);
     }
 
     return {
+      styles,
       categories,
-      radarData,
+      indicator,
+      categoryCount,
+      svgColor,
       toCategory,
     };
   },
@@ -118,7 +175,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .blog-categories {
-  @include flex(center, _, column);
+  @include flex(center, initial, column);
   width: 100%;
   height: 100%;
 
@@ -128,6 +185,7 @@ export default defineComponent({
     background-color: $grey-0;
     border-radius: 8px;
     margin-bottom: 20px;
+    box-shadow: $shadow-0;
   }
 
   .blog-categories-title {
@@ -145,37 +203,21 @@ export default defineComponent({
   }
 
   .blog-categories-content {
-    @include flex(_, center);
-    flex-wrap: wrap;
-    padding: 24px;
-    padding-bottom: 0;
+    margin-top: 16px;
+    margin-bottom: 50px;
+    width: 800px;
+    border-radius: $border-radius-0;
+    box-shadow: $shadow-0; //阴影
+    padding: 24px 4px 4px 24px;
+    background-color: $grey-0;
 
-    .category-item {
-      box-sizing: border-box;
-      height: 38px;
-      padding: 11px 12px;
-      margin: 0 20px 20px 0;
-      border-radius: 4px;
-      font-size: 16px;
-      font-weight: 400;
-      color: $grey-10;
-    }
-
-    .green {
-      background-color: $green-0;
-    }
-
-    .orange {
-      background-color: $orange-0;
-    }
-
-    .red {
-      background-color: $red-0;
+    .categories-count {
+      margin-left: 6px;
     }
   }
 
   .blog-categories-chart {
-    @include flex(center, _, column);
+    @include flex(center, initial, column);
 
     .title {
       margin: 12px 0 0;

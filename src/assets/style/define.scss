@@ -28,9 +28,11 @@ $red-4: #7d0003;
 $blue-0: #5ac8fa;
 $blue-1: #4a9afd;
 $purple-0: #ebc5ff;
-$purple-1: #6b05b3;
-$purple-2: #3b056b;
+$purple-1: #d78cff;
+$purple-2: #6b05b3;
+$purple-3: #3b056b;
 $yellow-0: #ffd886;
+$yellow-1: #ffc346;
 
 /* 全局样式 */
 
@@ -71,7 +73,9 @@ $border-radius-1: 4px;
     purple0: $purple-0;
     purple1: $purple-1;
     purple2: $purple-2;
+    purple3: $purple-3;
     yellow0: $yellow-0;
+    yellow1: $yellow-1;
     /* 全局样式 */
     shadow0: $shadow-0;
     shadow1: $shadow-1;
