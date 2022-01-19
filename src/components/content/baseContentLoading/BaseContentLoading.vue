@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2022-01-16 16:27:09
- * @LastEditors: Ban
- * @LastEditTime: 2022-01-18 20:13:30
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-19 16:04:46
 -->
 <template>
   <div
@@ -29,9 +29,13 @@ import { defineComponent } from 'vue';
 
 /**
  * @description: 基础内容加载框
+ * @param {Array} line 骨架条设置数组，[number(百分比宽度，width，也可以设置 px)] `默认为 ['40%', '100%', '80%', '60%']`
+ * @param {String} type 骨架条类型，有['text', 'round', 'circle']三选一 `默认为text`
+ * @param {Object} style 组件样式 `默认为 {}`
+ * @param {Object} skeletonStyle 骨架条样式 `默认为 {}`
+ * @param {Number} skeletonSize 股价条大小 `默认为 undefined`
  * @author: dreamy-xay
  */
-
 export default defineComponent({
   name: 'baseContentLoading',
   props: {
