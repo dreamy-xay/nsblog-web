@@ -4,11 +4,11 @@
  * @Autor: xiao
  * @Date: 2022-01-14 18:52:17
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-19 20:36:40
+ * @LastEditTime: 2022-01-19 20:49:11
 -->
 <template>
-  <div class="search-study-group">
-    <div class="search-study-group-less">
+  <div class="base-search-study-group">
+    <div class="base-search-study-group-less">
       <div
         v-for="(group,index) in studyGroups"
         :key="index"
@@ -55,7 +55,7 @@
       </div>
     </div>
     <div
-      class="search-study-group-moreGroup"
+      class="base-search-study-group-more"
       role="button"
       @click="moreGroup"
       v-if="!show"
@@ -129,9 +129,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.search-study-group {
+.base-search-study-group {
   @include flex(center, center, column);
-  .search-study-group-less {
+  .base-search-study-group-less {
     width: 660px;
     height: 100%;
     background: $grey-0;
@@ -210,7 +210,7 @@ export default defineComponent({
     }
   }
 
-  .search-study-group-moreGroup {
+  .base-search-study-group-more {
     @include flex(center, center);
     width: 300px;
     height: 32px;
