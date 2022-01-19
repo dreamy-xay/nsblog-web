@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-10 20:30:04
- * @LastEditors: Ban
- * @LastEditTime: 2022-01-14 14:06:43
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-19 12:50:57
  */
 
 import { post, RequestLifeCycle } from '@/network/request';
@@ -43,7 +43,7 @@ export function authLogout(RLC: RequestLifeCycle = {}): Promise<unknown> {
 
 /**
  * @description: 用户注销
- * @param {password} 登陆密码
+ * @param {string} password 登陆密码`必传参数`
  * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
  * @return {Promise<unknown>} 请求返回promise
  * @author: dreamy-xay

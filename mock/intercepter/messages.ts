@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-10 19:45:44
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-23 12:34:35
+ * @LastEditTime: 2022-01-19 13:59:20
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -35,7 +35,8 @@ export default function(baseUrl: string, app: Application) {
             content: Random.integer(0, 1) ? Random.cparagraph(1, 10) : Random.paragraph(1, 10),
             type: Random.natural(1, 2),
             reply_username: RUsers.random().username,
-            reply_content: Random.integer(0, 1) ? Random.cparagraph(1, 10) : Random.paragraph(1, 10)
+            reply_content: Random.integer(0, 1) ? Random.cparagraph(1, 10) : Random.paragraph(1, 10),
+            evaluation: Random.integer(0, 2)
           };
         else if (int(type) === 3)
           content = {
@@ -72,7 +73,7 @@ export default function(baseUrl: string, app: Application) {
   });
 
   // 删除消息
-  app.delete(baseUrl + '/messages/:message_id', (req: Request, res: Response) => {
+  app.delete(baseUrl + '/messages/:message_id(\\d+)', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
 

@@ -3,20 +3,24 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-16 12:20:17
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-19 13:36:57
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { int } from './util';
+import { int, verifyToken, getToken } from './util';
 import select from '../data/index';
 
 export default function(baseUrl: string, app: Application) {
   // 获取学习小组
   app.get(baseUrl + '/groups', (req: Request, res: Response) => {
-    const { username, limit, offset } = req.query;
+    const { username, topic_name, limit, offset } = req.query;
     if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
-    console.log(`${username} getStudyGroups... `);
+    console.log(
+      `------- get studyGroups:${username ? `  username=>${username}` : ''}${
+        topic_name ? `  topic_name=>${topic_name}` : ''
+      }  success`
+    );
 
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
@@ -24,13 +28,24 @@ export default function(baseUrl: string, app: Application) {
         ans.push({
           name: Random.integer(0, 1) ? Random.word(2, 10) : Random.cword(2, 10),
           remark: Random.integer(0, 1) ? Random.paragraph(1, 2) : Random.cparagraph(1, 2),
-          category: Random.integer(0, 1) ? Random.word(2, 10) : Random.cword(2, 10),
+          topic_name: Random.integer(0, 1) ? Random.word(2, 10) : Random.cword(2, 10),
           member_count: Random.integer(0, 300),
-          time: Random.datetime()
+          ...(username ? { time: Random.datetime() } : {})
         });
       }
       return ans;
     }
     return res.json({ groups: getRandom(int(offset) >= 66 ? 0 : Math.min(int(limit), 66 - int(offset))) });
+  });
+
+  // 创建学习小组
+  app.post(baseUrl + '/groups', (req: Request, res: Response) => {
+    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
+    const username: string = getToken(req.headers).username;
+    const { group_name, remark, topic_name } = req.body;
+    console.log(
+      `--------new groups: username=>${username}   group_name=>${group_name}  topic_name=>${topic_name}  remark=>${remark}  success`
+    );
+    return res.send();
   });
 }
