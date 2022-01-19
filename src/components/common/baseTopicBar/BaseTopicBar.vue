@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2022-01-17 20:58:36
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-17 22:13:56
+ * @LastEditors: continue-hs
+ * @LastEditTime: 2022-01-19 12:27:46
 -->
 <template>
   <div class="base-topic-bar">
@@ -51,6 +51,7 @@ import { mapGetters } from '@/util/store';
 
 export default defineComponent({
   name: 'baseTopicBar',
+
   props: {
     details: {
       type: Boolean,
