@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-19 12:28:26
+ * @LastEditors: xiao
+ * @LastEditTime: 2022-01-19 16:19:05
 -->
 <template>
   <base-view
@@ -27,7 +27,6 @@
           <home-right />
         </div>
       </div>
-
     </div>
     <!-- <div style="width:100%; height: 3000px; background: #fff;">
       <button @click="gotoNewDialogue">前往新的对话</button><br />
@@ -36,8 +35,10 @@
         <base-content-loading />
       </div>
     </div> -->
+    <BaseSearchStudyGroup></BaseSearchStudyGroup>
     <base-content-loading />
   </base-view>
+
 </template>
 
 <script>
@@ -48,6 +49,7 @@ import BaseContentLoading from '@/components/content/baseContentLoading/BaseCont
 import router from '@/router';
 import HomeLeft from '@/views/home/childComps/HomeLeft';
 import HomeRight from '@/views/home/childComps/HomeRight.vue';
+
 /**
  * @description: 博客主页
  * @author: dreamy-xay
@@ -58,7 +60,6 @@ export default defineComponent({
   components: {
     BaseView,
     BaseTopicBar,
-
     HomeLeft,
     HomeRight,
   },
