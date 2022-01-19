@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: clq
- * @LastEditTime: 2022-01-17 17:49:46
+ * @LastEditors: Ban
+ * @LastEditTime: 2022-01-18 22:59:35
 -->
 
 <template>
@@ -34,9 +34,17 @@
     </template>
     <div class="search-content">
       <div class="search-content-left">
-        <router-view>
-
+        <base-content-loading v-if="!fetchState[topicActiveIndex]"></base-content-loading>
+        <router-view
+          v-slot="{ Component }"
+          v-else
+        >
+          <!-- 将页面数据缓存 -->
+          <keep-alive>
+            <component :is="Component" />
+          </keep-alive>
         </router-view>
+
       </div>
       <div class="search-content-right"></div>
     </div>
@@ -47,6 +55,8 @@
 import { defineComponent, reactive, ref } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import router from '@/router';
+import { useRoute } from 'vue-router';
+import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
 
 /**
  * @description: 搜索主页
@@ -57,8 +67,10 @@ export default defineComponent({
   name: 'search',
   components: {
     BaseView,
+    BaseContentLoading,
   },
   setup() {
+    const fetchState = reactive([false, false, false, false, false, false, false]); // 数据获取状态
     const topics = [
       // 专题列表
       {
@@ -79,14 +91,16 @@ export default defineComponent({
       },
       {
         name: '标签',
-        path: '/search/tag',
+        path: 'tag',
       },
       {
         name: '用户',
-        path: '/search/user',
+        path: 'user',
       },
     ];
     const topicActiveIndex = ref(5); // 专题激活
+    const route = useRoute();
+    console.log(route.params);
 
     /**
      * @description: 点击专题
@@ -96,13 +110,23 @@ export default defineComponent({
      */
     function clickTopic(index) {
       topicActiveIndex.value = index;
-      router.push(topics[index].path);
+      router.push({ path: `/search/${topics[index].path}`, query: route.query });
+      fetch();
     }
 
+    // 模拟数据获取
+    function fetch() {
+      setTimeout(() => {
+        fetchState[topicActiveIndex.value] = true;
+      }, 2000);
+    }
+    fetch();
     return {
       topics,
       topicActiveIndex,
       clickTopic,
+      fetchState,
+      fetch,
     };
   },
 });
@@ -162,11 +186,9 @@ export default defineComponent({
     margin-top: 16px;
     @include flex(initial, space-between);
 
-    // .search-content-left {
-    //   width: 700px;
-    //   height: 500px;
-    //   background: #fff;
-    // }
+    .search-content-left {
+      width: 700px;
+    }
 
     .search-content-right {
       width: 284px;

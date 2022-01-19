@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-18 15:25:00
  * @LastEditors: continue-hs
- * @LastEditTime: 2021-09-29 22:36:34
+ * @LastEditTime: 2022-01-15 21:26:10
 -->
 <template>
   <div class="user-center-collection">
@@ -84,6 +84,7 @@ export default defineComponent({
       getFavorites(tokenInfo.value.username, limit.value, 0, 0, 1)
         .then((res) => {
           const len = res.favorites.length;
+          console.log(res.favorites);
           for (var i = 0; i < len; i++) {
             let typeList = reactive([]); //收藏夹分类收藏列表
             typeList.push({ List: [] }, { List: [] }, { List: [] }, { List: [] });

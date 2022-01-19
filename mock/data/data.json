@@ -2,10 +2,9 @@
 	"users": [
 		{
 			"username": "dreamy",
-			"nickname": "破釜沉舟",
 			"password": "Abcd1234",
 			"email": "dreamy@qq.com",
-			"token": "a8fadd3357e064feca1ce3cad25ef20d95df2a2dfda0586a9a3b1f353d1fb8f6033acf211c9c8750d13b3ce7cb891c74d2bc856abc3aae9136d24a788b57f973",
+			"token": "1f1da1bca0368e39ba44c714f1eb12c820e666bf0a014bcb7113c6208d7deec0b90b43df4c4648c01648a5fee33f90db916167e300d7fc871bcd5c00307e65db",
 			"isActive": true,
 			"isSuper": true
 		},
@@ -59,7 +58,11 @@
 			"nickname": "清幽兰",
 			"password": "Abcd1234",
 			"email": "6@qq.com",
+<<<<<<< HEAD
 			"token": "6399c3b213b0ff409d79ef52dba97f3f610c809439a826ca863fe6466d749e9dc05b2532db3ea5f48e66b144e909e7ee71df823968d086fc8dad39487160cb51",
+=======
+			"token": "af7f89815f9071e19eddedbe61ef25ddf170354125bf1eaaa653a7622884a12452b7e185d667eb81ef67c4b033f07e2f277745fc909d5dadff1b995f92ad9acc",
+>>>>>>> f1bac7249a6b771620e57aabd920cfd11e310216
 			"isActive": true,
 			"isSuper": false
 		},
