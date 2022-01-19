@@ -4,7 +4,7 @@
 			"username": "dreamy",
 			"password": "Abcd1234",
 			"email": "dreamy@qq.com",
-			"token": "1f1da1bca0368e39ba44c714f1eb12c820e666bf0a014bcb7113c6208d7deec0b90b43df4c4648c01648a5fee33f90db916167e300d7fc871bcd5c00307e65db",
+			"token": "f4efa014e3bc5e5d61135b1c32a352e4b98cac6454019666b103920f78317d3b8970c3d1046c7507fc79b5e29e8afcb0610f522ac0bd698f800be15f821d58fc",
 			"isActive": true,
 			"isSuper": true
 		},
@@ -58,11 +58,7 @@
 			"nickname": "清幽兰",
 			"password": "Abcd1234",
 			"email": "6@qq.com",
-<<<<<<< HEAD
-			"token": "6399c3b213b0ff409d79ef52dba97f3f610c809439a826ca863fe6466d749e9dc05b2532db3ea5f48e66b144e909e7ee71df823968d086fc8dad39487160cb51",
-=======
 			"token": "af7f89815f9071e19eddedbe61ef25ddf170354125bf1eaaa653a7622884a12452b7e185d667eb81ef67c4b033f07e2f277745fc909d5dadff1b995f92ad9acc",
->>>>>>> f1bac7249a6b771620e57aabd920cfd11e310216
 			"isActive": true,
 			"isSuper": false
 		},
