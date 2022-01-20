@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-17 17:46:10
  * @LastEditors: clq
- * @LastEditTime: 2022-01-18 12:56:16
+ * @LastEditTime: 2022-01-18 14:14:42
 -->
 <template>
   <div class="search-page-resource">
@@ -68,7 +68,8 @@
 import { defineComponent, reactive, ref } from 'vue';
 import SearchPageToLoadMore from '@/views/search/childComps/SearchPageToLoadMore.vue';
 import SearchPageResourceItem from '@/views/search/childComps/pages/searchPageResource/childComps/SearchPageResourceItem.vue';
-
+import { getResources } from '@/network/api/resources';
+import { useMessage } from 'naive-ui';
 /**
  * @description:
  * @author: clq
@@ -81,6 +82,7 @@ export default defineComponent({
     SearchPageResourceItem,
   },
   setup() {
+    const msg = useMessage(); // naive-ui 消息组件
     const selectOptions = reactive(['时间不限', '最近一天', '最近一周', '最近三月']);
     const npopoverRef = ref(null); //n-popover引用对象
     let currentIndex = ref(0); //当前选定项索引
@@ -92,6 +94,7 @@ export default defineComponent({
         content:
           '日常生活休闲中，相信不少小伙伴可能需要健康和生产效率管理，在这里，为大家整理发布了健康和为大家整理发布了健康和为大家整理发布了健康和...',
         author: 'Biutty',
+        link: 'http://www.xxx',
         uploadTime: '2022-01-01',
       },
       {
@@ -99,6 +102,7 @@ export default defineComponent({
         name: '健康和生产效率管理PPT',
         content: '日常生活休闲中，相信不少小伙伴可能需要健康和生产效率管理，在这里，为大家整理发布了健康和...',
         author: 'Biutty',
+        link: 'http://www.xxx',
         uploadTime: '2022-01-01',
       },
       {
@@ -106,6 +110,7 @@ export default defineComponent({
         name: '健康和生产效率管理PPT',
         content: '日常生活休闲中，相信不少小伙伴可能需要健康和生产效率管理，在这里，为大家整理发布了健康和...',
         author: 'Biutty',
+        link: 'http://www.xxx',
         uploadTime: '2022-01-01',
       },
       {
@@ -120,6 +125,7 @@ export default defineComponent({
         name: '健康和生产效率管理PPT',
         content: '日常生活休闲中，相信不少小伙伴可能需要健康和生产效率管理，在这里，为大家整理发布了健康和...',
         author: 'Biutty',
+        link: 'http://www.xxx',
         uploadTime: '2022-01-01',
       },
       {
@@ -144,6 +150,16 @@ export default defineComponent({
         uploadTime: '2022-01-01',
       },
     ]);
+
+    getResources('us1', 0, 10)
+      .then((data) => {
+        console.log('resourcesData');
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+        msg.error('获取标签失败', { duration: 2000, closable: true });
+      });
 
     /**
      * @description: 综合排序
