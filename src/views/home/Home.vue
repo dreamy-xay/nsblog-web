@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-20 21:51:54
+ * @LastEditTime: 2022-01-20 21:53:51
 -->
 <template>
   <base-view
@@ -39,7 +39,6 @@
     <base-content-loading />
 
   </base-view>
-
 </template>
 
 <script>
