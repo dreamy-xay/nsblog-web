@@ -4,8 +4,7 @@
  * @Autor: xiao
  * @Date: 2021-09-27 17:17:24
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-17 13:26:59
->>>>>>> 8c3312d50f5c9eeba35a9ec144ddd3fda1daa6fe
+ * @LastEditTime: 2022-01-19 20:33:04
 -->
 <template>
   <n-modal
@@ -21,7 +20,6 @@
           @click="close"
         ><i class="iconfont blog-close"></i></div>
       </div>
-
       <div>
         <el-scrollbar height="300px">
           <base-favorite-list
@@ -52,11 +50,13 @@ import BaseFavoriteList from '@/components/common/baseFavorite/childComps/BaseFa
 import { getFavorites } from '@/network/api/favorites';
 import { useMessage } from 'naive-ui';
 import events from '@/events';
+import { useRoute } from 'vue-router';
 
 /**
  * @description: 收藏夹界面
  * @param {Boolean} isShow 是否显示收藏夹界面 `默认为false`
  * @event closeFavorite 关闭收藏夹界面事件
+ * @event ArticleBottomComp-changeCollection 添加或取消收藏
  * @author: xiao
  */
 
@@ -69,13 +69,15 @@ export default defineComponent({
       default: false,
     },
   },
-  setup(params, context) {
+  setup(_, context) {
     const msg = useMessage(); // naive-ui 组件
     const favorites = reactive([]); // 收藏夹数据
     const id = ref(null);
+    const route = useRoute(); // route
+    const username = route.params.username; // 获取博客用户名
 
     // 获取收藏夹数据
-    getFavorites('dreamy', 0)
+    getFavorites(username, 0)
       .then((data) => {
         console.log(data);
         favorites.splice(0, 0, ...data.favorites);
@@ -138,6 +140,7 @@ export default defineComponent({
       console.log(favorites);
       events.emit('ArticleBottomComp-changeCollection', 0); //取消收藏
     }
+
     /**
      * @description: 新建一个收藏夹
      * @param {String} e 收藏夹名称
