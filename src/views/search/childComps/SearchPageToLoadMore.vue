@@ -4,14 +4,13 @@
  * @Autor: Ban
  * @Date: 2022-01-16 12:55:29
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-18 23:02:54
+ * @LastEditTime: 2022-01-20 12:22:31
 -->
 <template>
   <div
     :class="bindClass === null ? 'search-page-to-load-more' : bindClass"
     v-show="show"
     role="button"
-    @click="onClick"
   >
     {{ title }}
   </div>
@@ -19,6 +18,7 @@
 
 <script>
 import { defineComponent } from 'vue';
+
 /**
  * @description: 加载更多
  * @param {Boolean} show 是否展示 `默认为true`
@@ -27,8 +27,9 @@ import { defineComponent } from 'vue';
  * @param {String} title 标题 `默认为加载更多...`
  * @author: Ban
  */
+
 export default defineComponent({
-  name: 'SearchPageToLoadMore',
+  name: 'searchPageToLoadMore',
   props: {
     show: {
       type: Boolean,
@@ -38,10 +39,10 @@ export default defineComponent({
       type: String,
       default: null,
     },
-    onClick: {
-      type: String,
-      default: null,
-    },
+    // onClick: {
+    //   type: String,
+    //   default: null,
+    // },
     title: {
       type: String,
       default: '加载更多...',
