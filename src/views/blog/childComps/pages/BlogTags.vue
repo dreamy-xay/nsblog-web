@@ -4,17 +4,17 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 18:26:04
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-19 16:00:37
+ * @LastEditTime: 2022-01-19 20:11:52
 -->
 <template>
   <div class="blog-tags">
-    <div class="blog-tag">
+    <div class="blog-tags-head">
       <div class="left-icon">
         <i class="iconfont blog-biaoqian"></i>
       </div>
       <div class="blog-tag-content">文章标签</div>
     </div>
-    <div class="blog-show">
+    <div class="blog-tags-show">
       <div
         v-for="tag in randomTags"
         :key="tag.name"
@@ -24,7 +24,7 @@
         {{tag.text}}
       </div>
     </div>
-    <div class="blog-all-tags">
+    <div class="blog-tags-all">
       <base-tag
         :size="38"
         v-for="tag in tags"
@@ -67,9 +67,8 @@ export default defineComponent({
   },
   setup() {
     const msg = useMessage(); // naive-ui 组件 消息
-    const route = useRoute(); // route
     const tags = reactive([]); //标签数据
-
+    const route = useRoute(); // route
     const username = route.params.username; // 获取博客用户名
 
     const colorList = [
@@ -81,6 +80,7 @@ export default defineComponent({
       [styles.green0, styles.green1],
       [styles.blue0, styles.blue1],
     ];
+
     /**
      * @description: 随机获取颜色
      * @return {[string, string]} 返回颜色和hover色
@@ -154,13 +154,13 @@ export default defineComponent({
   @include flex(center, flex-start, column);
   width: 100%;
 
-  .blog-tag {
+  .blog-tags-head {
     margin-top: 31px;
     width: 800px;
     height: 80px;
     border-radius: $border-radius-0;
     background-color: $grey-0;
-    box-shadow: $shadow-0; //阴影
+    box-shadow: $shadow-0;
     @include flex(center, center);
 
     .left-icon {
@@ -181,7 +181,7 @@ export default defineComponent({
     }
   }
 
-  .blog-show {
+  .blog-tags-show {
     margin-top: 16px;
     width: 920px;
     height: 200px;
@@ -192,7 +192,7 @@ export default defineComponent({
     }
   }
 
-  .blog-all-tags {
+  .blog-tags-all {
     @include flex(flex-start);
     align-content: flex-start;
     flex-wrap: wrap;

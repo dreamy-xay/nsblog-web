@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-12 16:07:55
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-15 16:15:32
+ * @LastEditTime: 2022-01-18 20:12:20
 -->
 <template>
   <div class="blog-pagination">
@@ -45,6 +45,7 @@ import { defineComponent, ref } from 'vue';
  * @description:分页组件
  * @param {Number} page 当前所在页数 `默认为1`
  * @param {Number} pageCount 总页数 `默认为3`
+ * @event changePage 换页 {page:页数}
  * @author: Z_Y_C
  */
 
