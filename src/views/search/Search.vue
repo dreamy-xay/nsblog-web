@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-18 22:59:35
+ * @LastEditTime: 2022-01-20 13:10:17
 -->
 
 <template>
@@ -34,10 +34,11 @@
     </template>
     <div class="search-content">
       <div class="search-content-left">
-        <base-content-loading v-if="!fetchState[topicActiveIndex]"></base-content-loading>
+        <base-content-loading v-if="!loadingState[topicActiveIndex]"></base-content-loading>
         <router-view
           v-slot="{ Component }"
-          v-else
+          @changeLoadingState="changeLoadingState"
+          @changeAcitiveIndex="changeAcitiveIndex"
         >
           <!-- 将页面数据缓存 -->
           <keep-alive>
@@ -70,7 +71,7 @@ export default defineComponent({
     BaseContentLoading,
   },
   setup() {
-    const fetchState = reactive([false, false, false, false, false, false, false]); // 数据获取状态
+    const loadingState = reactive([false, false, false, false, false, false, false]); // 数据获取状态
     const topics = [
       // 专题列表
       {
@@ -87,7 +88,7 @@ export default defineComponent({
       },
       {
         name: '资源',
-        path: '/search/resource',
+        path: 'resource',
       },
       {
         name: '标签',
@@ -100,7 +101,6 @@ export default defineComponent({
     ];
     const topicActiveIndex = ref(5); // 专题激活
     const route = useRoute();
-    console.log(route.params);
 
     /**
      * @description: 点击专题
@@ -111,22 +111,35 @@ export default defineComponent({
     function clickTopic(index) {
       topicActiveIndex.value = index;
       router.push({ path: `/search/${topics[index].path}`, query: route.query });
-      fetch();
     }
 
-    // 模拟数据获取
-    function fetch() {
-      setTimeout(() => {
-        fetchState[topicActiveIndex.value] = true;
-      }, 2000);
+    /**
+     * @description: 改变专题
+     * @param {Number} index `索引`
+     * @author: Ban
+     */
+    function changeAcitiveIndex(index) {
+      topicActiveIndex.value = index;
     }
-    fetch();
+
+    /**
+     * @description: 改变数据加载状态
+     * @param {Number} index `索引`
+     * @author: Ban
+     */
+    function changeLoadingState(index) {
+      loadingState[index] = true;
+      console.log('change' + index);
+      console.log(loadingState[index]);
+    }
+
     return {
       topics,
       topicActiveIndex,
       clickTopic,
-      fetchState,
-      fetch,
+      loadingState,
+      changeLoadingState,
+      changeAcitiveIndex,
     };
   },
 });
