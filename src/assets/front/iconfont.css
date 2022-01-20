@@ -1,13 +1,7 @@
 @font-face {
-    font-family: 'iconfont';
+    font-family: "iconfont";
     /* Project id 2675107 */
-
-    src: url('//at.alicdn.com/t/font_2675107_vimc3j62e9a.woff2?t=1642303359785') format('woff2'),
-        url('//at.alicdn.com/t/font_2675107_vimc3j62e9a.woff?t=1642303359785') format('woff'),
-        url('//at.alicdn.com/t/font_2675107_vimc3j62e9a.ttf?t=1642303359785') format('truetype');
-
-    src: url('//at.alicdn.com/t/font_2675107_nome2z5kgkb.woff2?t=1642224678036') format('woff2'), url('//at.alicdn.com/t/font_2675107_nome2z5kgkb.woff?t=1642224678036') format('woff'), url('//at.alicdn.com/t/font_2675107_nome2z5kgkb.ttf?t=1642224678036') format('truetype');
-
+    src: url('//at.alicdn.com/t/font_2675107_dy5wu95ug5.woff2?t=1642668540795') format('woff2'), url('//at.alicdn.com/t/font_2675107_dy5wu95ug5.woff?t=1642668540795') format('woff'), url('//at.alicdn.com/t/font_2675107_dy5wu95ug5.ttf?t=1642668540795') format('truetype');
 }
 
 .iconfont {
@@ -18,11 +12,45 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.blog-jubao:before {
+    content: "\e666";
+}
+
+.blog-wodeziyuan:before {
+    content: "\e6d5";
+}
+
+.blog-shoucang21:before {
+    content: "\e667";
+}
+
+.blog-zhiling:before {
+    content: "\e665";
+}
+
+.blog-huida1:before {
+    content: "\e7a0";
+}
+
+.blog-tiwen1:before {
+    content: "\e7bf";
+}
+
+.blog-icon_chengweiguanliyuan:before {
+    content: "\e749";
+}
+
+.blog-chuangjianxiaozu:before {
+    content: "\e661";
+}
+
+.blog-zhaomu:before {
+    content: "\e6b3";
+}
 
 .blog-shuye1:before {
     content: "\e662";
 }
-
 
 .blog-jian:before {
     content: "\e65f";
