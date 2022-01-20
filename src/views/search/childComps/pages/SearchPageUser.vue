@@ -4,27 +4,27 @@
  * @Autor: Ban
  * @Date: 2022-01-15 17:32:07
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-18 20:33:55
+ * @LastEditTime: 2022-01-20 13:11:13
 -->
 <template>
   <div class="search-page-tag">
     <div class="search-page-tag-list">
       <div
         class="search-page-tag-list-content"
-        v-for="item, index in data"
+        v-for="item, index in userData"
         :key="index"
       >
         <div class="left">
           <base-avatar
-            :src="item.avata"
+            :src="item.avatar"
             :size="46"
             alt="data.username"
           />
         </div>
         <div class="center">
-          <div class="username">{{ item.name }}</div>
+          <div class="username">{{ item.nickname }}</div>
           <div class="sign">
-            {{ item.sign }}</div>
+            {{ item.signature }}</div>
         </div>
         <div
           :class="item.isFocus ? 'cancel' : 'focus'"
@@ -33,82 +33,33 @@
         >{{item.isFocus ? "取消关注" : "关注"}}</div>
       </div>
     </div>
-    <search-page-to-load-more></search-page-to-load-more>
+    <search-page-to-load-more @click="getUser"></search-page-to-load-more>
   </div>
 
 </template>
 
 <script>
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, reactive, ref, onMounted } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import SearchPageToLoadMore from '@/views/search/childComps/SearchPageToLoadMore.vue';
+import { useRoute } from 'vue-router';
+import { searchUser } from '@/network/api/search';
+
 /**
  * @description: 搜索主页-用户
  * @author: Ban
  */
+
 export default defineComponent({
-  name: 'SearchPageTag',
+  name: 'searchPageTag',
   components: {
     BaseAvatar,
     SearchPageToLoadMore,
   },
-  setup() {
-    const data = reactive([
-      {
-        avatar: '',
-        name: 'Java',
-        sign: '是倒过来看的是非观是东方六国就的空间零零阿萨的浪费空间撒旦浪费空间爱上了手动阀',
-        isFocus: false,
-      },
-      {
-        avatar: '',
-        name: 'Java',
-        sign: '是倒过来看的是非观是东方六国i就',
-        isFocus: false,
-      },
-      {
-        avatar: '',
-        name: 'Java',
-        sign: '是倒过来看的是非观是东方六国i就',
-        isFocus: false,
-      },
-      {
-        avatar: '',
-        name: 'Java',
-        sign: '是倒过来看的是非观是东方六国i就',
-        isFocus: true,
-      },
-      {
-        avatar: '',
-        name: 'Java',
-        sign: '是倒过来看的是非观是东方六国i就',
-        isFocus: true,
-      },
-      {
-        avatar: '',
-        name: 'Java',
-        sign: '是倒过来看的是非观是东方六国i就',
-        isFocus: true,
-      },
-      {
-        avatar: '',
-        name: 'Java',
-        sign: '是倒过来看的是非观是东方六国i就',
-        isFocus: true,
-      },
-      {
-        avatar: '',
-        name: 'Java',
-        sign: '是倒过来看的是非观是东方六国i就',
-        isFocus: true,
-      },
-      {
-        avatar: '',
-        name: 'Java',
-        sign: '是倒过来看的是非观是东方六国i就',
-        isFocus: true,
-      },
-    ]);
+  setup(props, context) {
+    // 用户搜索数据
+    const userData = reactive([]);
+    const route = useRoute();
 
     /**
      * @description:关注事件
@@ -117,7 +68,7 @@ export default defineComponent({
      * @author: Ban
      */
     function focus(index) {
-      data[index].isFocus = true;
+      userData[index].isFocus = true;
     }
 
     /**
@@ -127,13 +78,39 @@ export default defineComponent({
      * @author: Ban
      */
     function cancel(index) {
-      data[index].isFocus = false;
+      userData[index].isFocus = false;
     }
 
+    /**
+     * @description: 获取用户搜索结果
+     * @author: Ban
+     */
+
+    function getUser() {
+      searchUser(route.query.value)
+        .then((data) => {
+          if (userData.length == 0) {
+            context.emit('changeLoadingState', 6);
+            context.emit('changeAcitiveIndex', 6);
+          }
+          data.searchTag.forEach((item) => {
+            userData.push(item);
+          });
+          console.log(userData);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    onMounted(() => {
+      getUser();
+    });
+
     return {
-      data,
+      userData,
       focus,
       cancel,
+      getUser,
     };
   },
 });
