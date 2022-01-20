@@ -8,8 +8,7 @@
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { getToken, verifyToken, int } from './util';
-import select from '../data/index';
+import { getToken, verifyToken } from './util';
 
 export default function(baseUrl: string, app: Application) {
   // 获取登录登出日志内容
