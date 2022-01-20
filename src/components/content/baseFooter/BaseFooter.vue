@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-10 20:39:59
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-19 18:43:05
+ * @LastEditTime: 2022-01-19 22:31:21
 -->
 
 <template>
@@ -50,8 +50,13 @@ import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'baseFooter',
+  props: {
+    isShow: {
+      type: Boolean,
+      default: true,
+    },
+  },
   setup() {
-    const isShow = ref(true); //是否显示前两行
     const titles = [
       //图标
       {
@@ -82,7 +87,6 @@ export default defineComponent({
     ];
 
     return {
-      isShow,
       titles,
       contents,
     };
