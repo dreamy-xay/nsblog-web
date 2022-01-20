@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2021-09-27 18:00:46
  * @LastEditors: xiao
- * @LastEditTime: 2021-10-01 15:43:33
+ * @LastEditTime: 2022-01-19 20:17:13
 -->
 <template>
   <div class="base-favorite-list">
@@ -261,13 +261,12 @@ export default defineComponent({
     border-radius: $border-radius-0;
     border: 1px solid $green-1;
     overflow: hidden;
-    box-shadow: $shadow-0; //阴影
+    box-shadow: $shadow-0;
     transition: 0.25s;
-    //margin-bottom: 14px;
 
     &:hover,
     &:focus-within {
-      box-shadow: $shadow-2; //阴影
+      box-shadow: $shadow-2;
     }
 
     .base-favorite-list-input {

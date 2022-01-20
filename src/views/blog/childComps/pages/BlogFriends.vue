@@ -4,24 +4,24 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 18:26:04
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-19 16:12:35
+ * @LastEditTime: 2022-01-19 20:42:22
 -->
 <template>
   <div class="blog-friends">
-    <div class="blog-head">
+    <div class="blog-friends-head">
       <div class="left-icon">
         <i class="iconfont blog-shuye1"></i>
       </div>
-      <div class="blog-tag-content">小伙伴们</div>
+      <div class="blog-friends-content">小伙伴们</div>
     </div>
-    <div class="body">
+    <div class="blog-friends-body">
       <div
         class="link-item"
         v-for="(friendChain,index) in friendChains"
         :key="index"
       >
         <a
-          href="friendChain.link"
+          :href="friendChain.link"
           class="link"
         >
           <div class="back"></div>
@@ -42,8 +42,9 @@
 
 <script>
 import { defineComponent, reactive } from 'vue';
-import { getArticlesUsers } from '@/network/api/articles';
+import { getArticlesUser } from '@/network/api/articles';
 import { useMessage } from 'naive-ui';
+import { useRoute } from 'vue-router';
 
 /**
  * @description: 博客全部友链页面
@@ -52,12 +53,14 @@ import { useMessage } from 'naive-ui';
 
 export default defineComponent({
   name: 'blogFriends',
-  setup(props) {
+  setup() {
     const friendChains = reactive([]);
     const msg = useMessage(); // naive-ui
+    const route = useRoute(); // route
+    const username = route.params.username; // 获取博客用户名
 
     //获取友链信息
-    getArticlesUsers('dreamy')
+    getArticlesUser(username)
       .then((data) => {
         friendChains.splice(0, 0, ...data.friend_chain);
         console.log('friendChains', friendChains);
@@ -79,7 +82,7 @@ export default defineComponent({
   @include flex(center, flex-start, column);
   width: 100%;
 
-  .blog-head {
+  .blog-friends-head {
     margin-top: 31px;
     width: 800px;
     height: 80px;
@@ -99,7 +102,7 @@ export default defineComponent({
       }
     }
 
-    .blog-tag-content {
+    .blog-friends-content {
       font-size: 32px;
       font-family: Arial;
       font-weight: bold;
@@ -109,7 +112,7 @@ export default defineComponent({
     }
   }
 
-  .body {
+  .blog-friends-body {
     @include flex(first-start, first-start);
     align-content: flex-start;
     flex-wrap: wrap;
@@ -141,9 +144,9 @@ export default defineComponent({
       }
 
       .back {
-        animation: back2 1.5s ease;
+        animation: last 1.5s ease;
 
-        @keyframes back2 {
+        @keyframes last {
           from {
             transform: translate(700px, -300px) rotate(45deg);
           }
@@ -155,10 +158,10 @@ export default defineComponent({
 
       &:hover {
         .back {
-          animation: back1 1.5s ease;
+          animation: first 1.5s ease;
           animation-fill-mode: forwards;
 
-          @keyframes back1 {
+          @keyframes first {
             from {
               transform: translate(0px, 100px) rotate(45deg);
             }
@@ -170,9 +173,9 @@ export default defineComponent({
       }
 
       .img {
-        animation: myfirst2 1.5s ease;
+        animation: imgFirst 1.5s ease;
 
-        @keyframes myfirst2 {
+        @keyframes imgFirst {
           from {
             transform: rotate(359deg);
           }
@@ -183,10 +186,10 @@ export default defineComponent({
       }
 
       &:hover img {
-        animation: myfirst1 1.5s ease;
+        animation: imgLast 1.5s ease;
         animation-fill-mode: forwards;
 
-        @keyframes myfirst1 {
+        @keyframes imgLast {
           from {
             transform: rotate(0deg);
           }
@@ -197,6 +200,7 @@ export default defineComponent({
       }
       .link {
         position: relative;
+
         .back {
           width: 500px;
           height: 500px;
@@ -205,6 +209,7 @@ export default defineComponent({
           top: 100px;
           left: -700px;
         }
+
         .img {
           float: right;
           background: rgba(0, 0, 0, 0);
@@ -223,6 +228,7 @@ export default defineComponent({
           margin-bottom: 6px;
           margin-top: 10px;
         }
+
         .hr {
           width: 125px;
           height: 1px;
@@ -230,6 +236,7 @@ export default defineComponent({
           border-top: 1px dashed $grey-6;
           margin-bottom: 10px;
         }
+
         .describe {
           height: 32px;
           font-size: 13px;

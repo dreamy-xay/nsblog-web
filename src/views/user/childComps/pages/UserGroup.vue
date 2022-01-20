@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-17 11:28:00
+ * @LastEditTime: 2022-01-19 16:50:17
 -->
 <template>
   <div
@@ -21,7 +21,7 @@
       <div class="bottom">
         <div class="info">
           <base-tag
-            :text="item.category"
+            :text="item.topic_name"
             :hollow="true"
             :size="20"
             :color="styles.orange0"
