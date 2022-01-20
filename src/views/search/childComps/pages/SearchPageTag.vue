@@ -4,29 +4,29 @@
  * @Autor: Ban
  * @Date: 2022-01-15 17:32:07
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-18 20:09:55
+ * @LastEditTime: 2022-01-20 13:10:39
 -->
 <template>
   <div class="search-page-tag">
     <div class="search-page-tag-list">
       <div
         class="search-page-tag-list-content"
-        v-for="item, index in data"
+        v-for="item, index in tagData"
         :key="index"
       >
         <div class="left">
           <div class="left-top">
             <div class="tag">
-              {{ item.name }}
+              {{ item.topic_name }}
             </div>
             <div class="center">
-              {{ item.focus }}关注
+              {{ item.fans_count }}关注
               <div class="point"> · </div>
-              {{ item.article }}文章
+              {{ item.article_count }}文章
             </div>
           </div>
           <div class="left-bottom">
-            {{ item.introduce }}
+            {{ item.remark }}
           </div>
         </div>
 
@@ -37,61 +37,30 @@
         >{{item.isFocus ? "取消关注" : "关注"}}</div>
       </div>
     </div>
-    <search-page-to-load-more>
+    <search-page-to-load-more @click="getTag">
     </search-page-to-load-more>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive } from 'vue';
+<script>
+import { defineComponent, reactive, onMounted, nextTick } from 'vue';
 import SearchPageToLoadMore from '@/views/search/childComps/SearchPageToLoadMore.vue';
+import { searchTag } from '@/network/api/search';
+import { useRoute } from 'vue-router';
+
 /**
  * @description: 搜索主页-标签
  * @author: Ban
  */
+
 export default defineComponent({
-  name: 'SearchPageTag',
+  name: 'searchPageTag',
   components: {
     SearchPageToLoadMore,
   },
-  setup() {
-    const data = reactive([
-      {
-        name: 'Java',
-        focus: '1000',
-        article: '999',
-        introduce: 'Java是一门强大的编程语言，Java是一门强大的编程语言，Java是一门强大的编程语言。。...',
-        isFocus: false,
-      },
-      {
-        name: 'Java',
-        focus: '1000',
-        article: '999',
-        introduce: 'Java是一门强大的编程语言，Java是一门强大的编程语言，Java是一门强大的编程语言。。...',
-        isFocus: false,
-      },
-      {
-        name: 'Java',
-        focus: '1000',
-        article: '999',
-        introduce: 'Java是一门强大的编程语言，Java是一门强大的编程语言，Java是一门强大的编程语言。。...',
-        isFocus: true,
-      },
-      {
-        name: 'Java',
-        focus: '1000',
-        article: '999',
-        introduce: 'Java是一门强大的编程语言，Java是一门强大的编程语言，Java是一门强大的编程语言。。...',
-        isFocus: true,
-      },
-      {
-        name: 'Java',
-        focus: '1000',
-        article: '999',
-        introduce: 'Java是一门强大的编程语言，Java是一门强大的编程语言，Java是一门强大的编程语言。。...',
-        isFocus: true,
-      },
-    ]);
+  setup(props, context) {
+    const tagData = reactive([]);
+    const route = useRoute();
 
     /**
      * @description:关注事件
@@ -100,7 +69,7 @@ export default defineComponent({
      * @author: Ban
      */
     function focus(index) {
-      data[index].isFocus = true;
+      tagData[index].isFocus = true;
     }
 
     /**
@@ -110,12 +79,39 @@ export default defineComponent({
      * @author: Ban
      */
     function cancel(index) {
-      data[index].isFocus = false;
+      tagData[index].isFocus = false;
     }
+
+    /**
+     * @description: 获取标签搜索结果
+     * @author: Ban
+     */
+    function getTag() {
+      searchTag(route.query.value)
+        .then((data) => {
+          if (tagData.length == 0) {
+            context.emit('changeLoadingState', 5);
+            context.emit('changeAcitiveIndex', 5);
+          }
+          data.searchTag.forEach((item) => {
+            tagData.push(item);
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    // 请求搜索结果
+    onMounted(() => {
+      getTag();
+    });
+
     return {
-      data,
+      tagData,
       focus,
       cancel,
+      getTag,
     };
   },
 });
@@ -150,6 +146,8 @@ export default defineComponent({
 
         .left-top {
           @include flex();
+          position: relative;
+
           .tag {
             height: 28px;
             box-sizing: border-box;
@@ -162,11 +160,11 @@ export default defineComponent({
           }
 
           .center {
-            font-size: 14px;
             color: $grey-8;
             @include flex(center);
             line-height: 28px;
-            margin: 0 165px;
+            position: absolute;
+            left: 220px;
 
             .point {
               font-size: 36px;
