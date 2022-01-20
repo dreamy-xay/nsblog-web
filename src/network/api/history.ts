@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-06 11:01:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 10:13:05
+ * @LastEditTime: 2022-01-19 13:49:17
  */
 
 import { get, del, RequestLifeCycle } from '@/network/request';
@@ -47,10 +47,10 @@ export function getHistory(
  * @author: dreamy-xay
  */
 export function deleteHistory(id: number | string = '', type: number = 1, RLC: RequestLifeCycle = {}) {
-  const params: Record<string, unknown> = id !== '' ? { type } : {};
+  const data: Record<string, unknown> = id !== '' ? { type } : {};
   return del({
     url: '/history' + (id !== '' ? '/' + id : ''),
     ...RLC,
-    params
+    data
   });
 }
