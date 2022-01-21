@@ -4,19 +4,19 @@
  * @Autor: Z_Y_C
  * @Date: 2021-08-19 11:57:31
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-08 21:12:30
+ * @LastEditTime: 2022-01-21 19:14:30
 -->
 <template>
   <div class="user-center-profile-job-edit">
     <div class="user-center-profile-job-edit-title">工作信息</div>
     <div class="user-center-profile-job-edit-describe1">
       <div class="user-center-profile-job-edit-describe1-text">职业</div>
-      <user-center-select
+      <base-select
         :swidth="150"
         :sdata="professionData"
         :selectTag="profession"
         @changeItem="changeProfession"
-      ></user-center-select>
+      ></base-select>
     </div>
 
     <div class="user-center-profile-job-edit-describe2">
@@ -27,7 +27,7 @@
         :key="index"
         :class="index !==addressData.length-1 ? 'user-center-profile-job-edit-describe2-select' : ''"
       >
-        <user-center-select
+        <base-select
           :sdata="item"
           :selectTag="address[index]"
           :showText="showAddressText[index]"
@@ -35,7 +35,7 @@
           :disabled="addressDisabled[index]"
           @changeItem="changeAddress($event,index)"
         >
-        </user-center-select>
+        </base-select>
       </div>
     </div>
 
@@ -52,7 +52,7 @@
 
 <script>
 import { computed, defineComponent, ref, reactive, watch } from 'vue';
-import UserCenterSelect from '@/views/userCenter/childComps/UserCenterSelect.vue';
+import BaseSelect from '@/components/content/baseSelect/BaseSelect.vue';
 import location from '@/util/json/location';
 
 /**
@@ -63,7 +63,7 @@ import location from '@/util/json/location';
 export default defineComponent({
   name: 'userCenterProfileEdit',
   components: {
-    UserCenterSelect,
+    BaseSelect,
   },
   props: {
     data: {

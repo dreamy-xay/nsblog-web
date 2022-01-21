@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-21 17:15:12
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-01-21 21:49:35
 -->
 <template>
   <base-view
@@ -42,7 +42,7 @@ import BaseTopicBar from '@/components/common/baseTopicBar/BaseTopicBar.vue';
 import BaseTopicTags from '@/components/common/baseTopicBar/BaseTopicTags.vue';
 // import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
 import HomeLeft from '@/views/home/childComps/HomeLeft';
-import HomeRight from '@/views/home/childComps/HomeRight.vue';
+import HomeRight from '@/views/home/childComps/homeRight/HomeRight.vue';
 import router from '@/router';
 
 /**

@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2022-01-20 17:15:26
- * @LastEditors: clq
- * @LastEditTime: 2022-01-20 19:37:34
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-01-21 21:53:36
 -->
 <template>
   <n-modal
@@ -24,15 +24,15 @@
       </div>
       <div class="question-create-question-body">
         <div class="body-top">
-          <user-center-input :style="{width: '100%',height: '36px'}" />
+          <base-input :style="{width: '100%',height: '36px'}" />
         </div>
         <div class="body-middle">
           <div class="title">添加标签</div>
           <div class="select">
-            <user-center-select :swidth="150" />
+            <base-select :swidth="150" />
           </div>
           <div class="select">
-            <user-center-select :swidth="150" />
+            <base-select :swidth="150" />
           </div>
         </div>
         <div class="body-bottom body-bottom-edit-shadow">
@@ -56,9 +56,8 @@
 
 <script>
 import { defineComponent } from 'vue';
-import UserCenterSelect from '@/views/userCenter/childComps/UserCenterSelect.vue';
-import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput.vue';
-
+import BaseSelect from '@/components/content/baseSelect/BaseSelect.vue';
+import BaseInput from '@/components/content/baseInput/BaseInput.vue';
 /**
  * @description: 创建问答模态框
  * @param {Boolean} modelValue 模态框显示绑定值，使用v-model指令即可 `默认为false`
@@ -68,8 +67,8 @@ import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput.vue';
 export default defineComponent({
   name: 'questionCreateQuestion',
   components: {
-    UserCenterSelect,
-    UserCenterInput,
+    BaseSelect,
+    BaseInput,
   },
   props: {
     modelValue: {
