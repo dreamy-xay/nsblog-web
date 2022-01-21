@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-28 14:54:52
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-19 16:25:04
+ * @LastEditTime: 2022-01-20 21:51:24
 -->
 
 <template>
@@ -100,7 +100,7 @@ export default defineComponent({
     }
 
     // 获取专题名
-    getTopics(1000000000)
+    getTopics()
       .then((data) => {
         for (const topic of data.topics)
           allTopicsTags.splice(0, 0, {

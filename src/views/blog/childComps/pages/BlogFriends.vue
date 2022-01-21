@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 18:26:04
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-19 20:42:22
+ * @LastEditTime: 2022-01-20 00:47:45
 -->
 <template>
   <div class="blog-friends">
@@ -88,7 +88,7 @@ export default defineComponent({
     height: 80px;
     border-radius: $border-radius-0;
     background-color: $grey-0;
-    box-shadow: $shadow-0; //阴影
+    box-shadow: $shadow-0;
     @include flex(center, center, row);
 
     .left-icon {
@@ -104,10 +104,7 @@ export default defineComponent({
 
     .blog-friends-content {
       font-size: 32px;
-      font-family: Arial;
       font-weight: bold;
-      font-stretch: normal;
-      font-style: normal;
       color: $grey-8;
     }
   }
