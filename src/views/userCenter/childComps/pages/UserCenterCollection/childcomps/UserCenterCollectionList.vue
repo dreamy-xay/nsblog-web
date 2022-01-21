@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2021-08-24 10:18:28
- * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-16 10:00:12
+ * @LastEditors: xiao
+ * @LastEditTime: 2022-01-20 15:28:18
 -->
 <template>
   <div class="user-center-collection-list">
