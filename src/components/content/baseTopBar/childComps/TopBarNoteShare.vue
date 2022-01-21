@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-07-29 15:53:25
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-18 15:40:15
+ * @LastEditTime: 2022-01-20 17:47:34
 -->
 
 <template>
@@ -65,22 +65,22 @@ export default defineComponent({
         {
           name: '写笔记',
           iconfont: 'blog-edit-article',
-          url: isLogin.value ? '#' : '/login/signIn',
+          url: isLogin.value ? '#' : '/login/signIn?back',
         },
         {
           name: '提问题',
           iconfont: 'blog-wenti',
-          url: isLogin.value ? '#' : '/login/signIn',
+          url: isLogin.value ? '#' : '/login/signIn?back',
         },
         {
           name: '享资源',
           iconfont: 'blog-shangchuan',
-          url: isLogin.value ? '#' : '/login/signIn',
+          url: isLogin.value ? '#' : '/login/signIn?back',
         },
         {
           name: '传图片',
           iconfont: 'blog-icons01',
-          url: isLogin.value ? '#' : '/login/signIn',
+          url: isLogin.value ? '#' : '/login/signIn?back',
         },
       ];
     });
