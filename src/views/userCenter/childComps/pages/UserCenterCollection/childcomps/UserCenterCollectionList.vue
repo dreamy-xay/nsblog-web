@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2021-08-24 10:18:28
- * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-16 10:00:12
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-01-21 19:34:35
 -->
 <template>
   <div class="user-center-collection-list">
@@ -55,14 +55,14 @@
       @close="isVisible = false"
     >
       <div class="user-center-collection-list-new-modal-title">收藏夹名称</div>
-      <user-center-input
+      <base-input
         class="input-title"
         v-model="inputTitle"
         type="text"
         :show-Close="true"
         :maxlength="20"
       >
-      </user-center-input>
+      </base-input>
       <div class="user-center-collection-list-new-modal-detail">描述</div>
       <el-input
         class="input-remark"
@@ -101,7 +101,7 @@
 import { defineComponent, ref, watch } from 'vue';
 import styles from '@/assets/style/define.scss';
 import { useMessage } from 'naive-ui';
-import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput';
+import BaseInput from '@/components/content/baseInput/BaseInput.vue';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 
 export default defineComponent({
@@ -111,7 +111,7 @@ export default defineComponent({
     'new-fav': null,
   },
   components: {
-    UserCenterInput,
+    BaseInput,
     BaseModal,
   },
   props: {
