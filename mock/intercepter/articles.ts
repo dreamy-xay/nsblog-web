@@ -4,35 +4,72 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-19 12:33:10
+ * @LastEditTime: 2022-01-21 23:10:28
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { int, verifyToken, getToken, RandomUser, randomUsers } from './util';
+import { int, print, verifyToken, getToken, RandomUser, randomUsers } from './util';
 import select from '../data/index';
 
 export default function(baseUrl: string, app: Application) {
-  // @待定
-  // 获取发布的文章
+  // 获取文章
   app.get(baseUrl + '/articles', (req: Request, res: Response) => {
-    const { username, limit, offset, release_time, browsing_count, tag, category } = req.query;
+    const {
+      username,
+      limit,
+      offset,
+      release_time,
+      browsing_count,
+      tag,
+      category,
+      topic_name,
+      tag_name,
+      type
+    } = req.query;
     if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
-    console.log(
-      `--------${username} getArticles...  tag=>${tag}  category=>${category}  release_time=>${release_time}  browsing_count=>${browsing_count}`
-    );
 
+    print('get articles', {
+      username,
+      limit,
+      offset,
+      release_time,
+      browsing_count,
+      tag,
+      category,
+      topic_name,
+      tag_name,
+      type
+    });
+
+    const RUsers = randomUsers();
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
       for (let i: number = 0; i < limit; ++i) {
+        const user: RandomUser = RUsers.random();
         ans.push({
+          username: user.username,
+          nickname: user.nickname,
           id: Random.increment(),
           title: Random.integer(0, 1) ? Random.title(3, 100) : Random.ctitle(3, 50),
           content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
-          topic_tag: Random.integer(0, 1) ? Random.word(2, 10) : Random.cword(2, 10),
+          topic_tag: tag_name ? tag_name : Random.integer(0, 1) ? Random.word(2, 8) : Random.cword(2, 5),
           page_view: Random.integer(0, 300),
           comment_count: Random.integer(0, 200),
           recommend_count: Random.integer(0, 900),
-          release_time: Random.datetime()
+          release_time: Random.datetime(),
+          ...(username
+            ? {}
+            : {
+                topic: topic_name ? topic_name : Random.integer(0, 1) ? Random.word(2, 8) : Random.cword(2, 5),
+                cover_image: Random.image(
+                  '150x150',
+                  '#234567',
+                  '#FFFFFF',
+                  'png',
+                  Random.integer(0, 1) ? Random.word(2, 8) : Random.cword(2, 5)
+                ),
+                recommend: Random.integer(0, 1)
+              })
         });
       }
       return ans;
@@ -44,7 +81,8 @@ export default function(baseUrl: string, app: Application) {
   app.get(baseUrl + '/articles/categories', (req: Request, res: Response) => {
     const { username } = req.query;
     if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
-    console.log(`--------${username} getArticlesCategories... `);
+
+    print('get articles categories', { username });
 
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = [];
@@ -64,7 +102,8 @@ export default function(baseUrl: string, app: Application) {
   app.get(baseUrl + '/articles/tags', (req: Request, res: Response) => {
     const { username } = req.query;
     if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
-    console.log(`--------${username} getArticlesTags... `);
+
+    print('get articles tags', { username });
 
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = [];
@@ -85,7 +124,8 @@ export default function(baseUrl: string, app: Application) {
     const { username } = req.query;
     const user: Record<string, unknown> = select('users').findOne({ username });
     if (!user) return res.status(410).json({ error: 'User name error' });
-    console.log(`--------${username} getArticlesUsersInfo... `);
+
+    print('get articles usersInfo', { username });
 
     function getRandom(limit: number, isRecent: boolean = true): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = [];
@@ -123,7 +163,9 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { type, article_id } = req.body;
-    console.log(`--------${username} modifyArticleEvaluation... :   type=>${type}  article_id=>${article_id}`);
+
+    print('modify article evaluation', { username, type, article_id });
+
     return res.status(200).send();
   });
 
@@ -132,9 +174,8 @@ export default function(baseUrl: string, app: Application) {
     let username: string = '';
     if (verifyToken(req.headers)) username = getToken(req.headers).username;
     const { article_id, comment_id, limit, offset } = req.query;
-    console.log(
-      `--------getArticlesComments... :  article_id=>${article_id}  ${comment_id ? 'comment_id=>' + comment_id : ''}`
-    );
+
+    print('get articles comments', { username, article_id, comment_id, limit, offset });
 
     const RUsers = randomUsers(username);
     function getRandom(limit: number): Record<string, unknown>[] {
@@ -191,9 +232,9 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { article_id, content, parent_id, reply_username } = req.body;
-    console.log(
-      `--------${username} articleComments:   article_id=>${article_id}  content=>${content}  parent_id=>${parent_id}  reply_username=>${reply_username}`
-    );
+
+    print('release articles comments', { username, article_id, content, parent_id, reply_username });
+
     return res.send();
   });
 
@@ -202,7 +243,9 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { type, comment_id } = req.body;
-    console.log(`--------${username} modifyArticleCommentsEvaluation... :   type=>${type}  comment_id=>${comment_id}`);
+
+    print('modify article comments evaluation', { username, type, comment_id });
+
     return res.status(200).send();
   });
 
@@ -212,7 +255,8 @@ export default function(baseUrl: string, app: Application) {
     if (verifyToken(req.headers)) username = getToken(req.headers).username;
 
     const { article_id } = req.params;
-    console.log(`--------${username} getDetailArticles:  article_id=>${article_id}`);
+
+    print('get detail articles', { username, article_id });
 
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = [];
