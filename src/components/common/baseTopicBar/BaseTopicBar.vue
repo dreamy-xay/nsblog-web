@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-17 20:58:36
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-21 16:50:42
+ * @LastEditTime: 2022-01-21 17:23:59
 -->
 <template>
   <div class="base-topic-bar">
@@ -15,7 +15,7 @@
           :key="topic"
           placement="bottom-start"
           trigger="hover"
-          :disabled="index < 2"
+          :disabled="index < 2 && details"
           :width="null"
           :show-after="200"
           :show-arrow="false"
@@ -92,6 +92,8 @@ import events from '@/events';
 
 /**
  * @description: 基础专题条
+ * @param {Boolean} details 是否显示细节（即显示专题标签） `默认为是`
+ * @param {String} firstItem 第一项文字 `默认为推荐`
  * @event selectTopic 选择了专题 (topic: string) => void
  * @event selectTag 选择了专题标签 (tag: string) => void
  * @emits BaseTopicBar-addTags 更新topic tags (topic_name: string, tags: string[]) => void
