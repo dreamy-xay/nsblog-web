@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-15 13:19:14
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-16 23:25:44
+ * @LastEditTime: 2022-01-21 21:43:46
 -->
 <template>
   <div class="home-bulletin">
@@ -28,7 +28,7 @@
     </div>
 
     <div
-      v-if="data.length==0"
+      v-if="bulletinData.length<=0"
       class="home-bulletin-null"
     >暂无公告哦~</div>
   </div>
@@ -63,6 +63,7 @@ export default defineComponent({
   border-radius: $border-radius-0;
   background-color: $grey-0;
   box-shadow: $shadow-0;
+  margin-bottom: 16px;
 
   .home-bulletin-top {
     height: 24px;

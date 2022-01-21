@@ -3,11 +3,13 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2022-01-17 10:18:37
- * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-19 12:18:42
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-01-21 21:46:26
 -->
 <template>
   <div class="home-right">
+    <home-bulletin :bulletinData="bulletinData"></home-bulletin>
+    <home-activity :activityData="activityData"></home-activity>
     <base-ranking-list
       :rankinglist="rankinglist"
       :Lefttext="Lefttext"
@@ -25,6 +27,8 @@
 import { defineComponent, reactive } from 'vue';
 import BaseHotTag from '@/components/common/baseHotTag/BaseHotTag.vue';
 import BaseRankingList from '@/components/common/baseRankingList/BaseRankingList.vue';
+import HomeActivity from '@/views/home/childComps/homeRight/childComps/HomeActivity.vue';
+import HomeBulletin from '@/views/home/childComps/homeRight/childComps/HomeBulletin.vue';
 import { mapGetters, mapState } from '@/util/store';
 import getArticles from '@/network/api/articles';
 
@@ -33,6 +37,8 @@ export default defineComponent({
   components: {
     BaseHotTag,
     BaseRankingList,
+    HomeActivity,
+    HomeBulletin,
   },
   setup() {
     const Lefttext = '热门排行榜';
@@ -104,6 +110,12 @@ export default defineComponent({
         name: 'Vscode',
       },
     ]);
+
+    const activityData = reactive([{ image: 'https://s3.bmp.ovh/imgs/2021/09/7fc65c1d3e881ea5.jpg', href: '#' }]);
+    const bulletinData = reactive([
+      { text: '123', href: '#' },
+      { text: '123', href: '#' },
+    ]);
     const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
     const username = tokenInfo.value.username; // 登录用户名
 
@@ -111,7 +123,8 @@ export default defineComponent({
     // .then((data) => {
 
     // })
-    return { Lefttext, hottext, rightList, rankinglist, hottags };
+
+    return { Lefttext, hottext, rightList, rankinglist, hottags, activityData, bulletinData };
   },
 });
 </script>

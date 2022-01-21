@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2021-09-01 16:41:52
- * @LastEditors: continue-hs
- * @LastEditTime: 2021-09-21 16:36:11
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-01-21 19:10:52
 -->
 <template>
   <div class="user-center-collection-right-top">
@@ -21,7 +21,7 @@
           role="button"
         ></i>
       </div>
-      <user-center-input
+      <base-input
         v-show="isEditName"
         type="text"
         v-model="inputName"
@@ -38,7 +38,7 @@
       >
         {{data.remark ? data.remark : '编辑收藏夹描述~ o(*￣▽￣*)o'}}
       </div>
-      <user-center-input
+      <base-input
         v-show="isEditRemark"
         type="text"
         v-model="inputRemark"
@@ -101,7 +101,7 @@
 
 <script>
 import { defineComponent, ref, nextTick, watch } from 'vue';
-import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput.vue';
+import BaseInput from '@/components/content/baseInput/BaseInput.vue';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 
 export default defineComponent({
@@ -113,7 +113,7 @@ export default defineComponent({
     cancelf: null,
   },
   components: {
-    UserCenterInput,
+    BaseInput,
     BaseModal,
   },
   props: {

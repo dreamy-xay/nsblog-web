@@ -2,10 +2,9 @@
   "users": [
     {
       "username": "dreamy",
-      "nickname": "远行*",
       "password": "Abcd1234",
       "email": "dreamy@qq.com",
-      "token": "a8f03ffe24ce3df9a3d0b05424317a77f064a8273e7bb38f82352bba479300b6ae5eaff1ed5146612a4867416988d79384eb463cd98fcc41e4c50b4156c63792",
+      "token": "d10e978534ebedaa527d75acdfcc1c089c9ffeeba1950264708a706d95a4c317d7b4e0e81ce09908c30fd2c02b2c1a557c4999ba96a46a9ac5991d2c58e212d7",
       "isActive": true,
       "isSuper": true
     },
@@ -14,7 +13,7 @@
       "nickname": "幻墨如烟",
       "password": "Abcd1234",
       "email": "1@qq.com",
-      "token": "06c9c2934c5ed4a8420682ad20ebce76bba68b94819aaeee8e7b275d86052ad3f7e2bc0e4c0e9b324824fc42f8206b93df351d6fa9ca9472cd5620d1d626a745",
+      "token": "c0b2fbc09e56f362314d566b4e49aef118619fd79d797ba182a48208acbd53bb003f9c91d0a6cd6fbc3bd58752ec9de7d1856197652f3cec2f1c46b04c441e48",
       "isActive": true,
       "isSuper": false
     },
