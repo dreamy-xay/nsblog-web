@@ -3,41 +3,35 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: xiao
- * @LastEditTime: 2022-01-20 21:53:51
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-21 17:15:12
 -->
 <template>
   <base-view
     :background="true"
     :top-bar="true"
     :top-bar-scroll="true"
+    :footer="true"
     bind-class="home"
   >
     <template #top-bar-bottom>
-      <base-topic-bar />
+      <base-topic-bar
+        @selectTag="selectTag"
+        @selectTopic="selectTopic"
+      />
     </template>
-
+    <base-topic-tags
+      @selectTag="selectTag"
+      @selectTopic="selectTopic"
+    />
     <div class="home-container">
-
-      <div class="home-bottom">
-        <div class="home-bottom-left">
-          <home-left />
-        </div>
-        <div class="home-bottom-right">
-          <home-right />
-        </div>
+      <div class="left">
+        <home-left />
+      </div>
+      <div class="right">
+        <home-right />
       </div>
     </div>
-    <!-- <div style="width:100%; height: 3000px; background: #fff;">
-      <button @click="gotoNewDialogue">前往新的对话</button><br />
-      1 Test <br />2 Test<br />3 Test<br />4 Test<br />5 Test<br />6 Test<br />7 Test<br />8 Test<br />9 Test
-      <div style="width: 50%; margin: 20px;">
-        <base-content-loading />
-      </div>
-    </div> -->
-
-    <base-content-loading />
-
   </base-view>
 </template>
 
@@ -45,10 +39,11 @@
 import { defineComponent, reactive, ref } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import BaseTopicBar from '@/components/common/baseTopicBar/BaseTopicBar.vue';
-import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
-import router from '@/router';
+import BaseTopicTags from '@/components/common/baseTopicBar/BaseTopicTags.vue';
+// import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
 import HomeLeft from '@/views/home/childComps/HomeLeft';
 import HomeRight from '@/views/home/childComps/HomeRight.vue';
+import router from '@/router';
 
 /**
  * @description: 博客主页
@@ -60,26 +55,34 @@ export default defineComponent({
   components: {
     BaseView,
     BaseTopicBar,
+    BaseTopicTags,
     HomeLeft,
     HomeRight,
   },
   setup() {
-    // 仅供参考，测试私信
-    function gotoNewDialogue() {
-      router.push({
-        name: 'messageMy',
-        params: {
-          dialogue: JSON.stringify({
-            username: 'dreamy-test',
-            nickname: '测试账号',
-            avatar: 'https://dummyimage.com/150x150/234567/FFFFFF.png?text=dreamy-test',
-          }),
-        },
-      });
+    /**
+     * @description: 选择了专题
+     * @param {string} topic 专题名
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function selectTopic(topic) {
+      console.log(`select Topic: ${topic}`);
+    }
+
+    /**
+     * @description: 选择了标签
+     * @param {string} topic 专题名
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function selectTag(tag) {
+      console.log(`select Tag: ${tag}`);
     }
 
     return {
-      gotoNewDialogue,
+      selectTopic,
+      selectTag,
     };
   },
 });
@@ -87,31 +90,23 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 :deep(.home) {
-  // height: 100%;
-  // width: 1000px;
-  // @include flex(initial, space-between);
-  width: 100%;
-  @include flex(initial, initial, column);
+  @include flex(center, center, column);
+
   .home-container {
-    width: 100%;
-    // @include flex(center, center);
+    width: 1000px;
+    margin-top: 16px;
+    margin-bottom: 6px;
+    @include flex(initial, space-between);
 
-    .home-top {
-      width: 1142px;
+    .left {
+      width: 700px;
+      background: $grey-0;
+      border-radius: $border-radius-0;
+      box-shadow: $shadow-0;
     }
-    .home-bottom {
-      @include flex(initial, space-between);
-      .home-bottom-left {
-        width: 758px;
-        background: #ffffff;
-        border-radius: 8px;
-        box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.16);
-      }
 
-      .home-bottom-right {
-        margin-left: 16px;
-        width: 384px;
-      }
+    .right {
+      width: 284px;
     }
   }
 }

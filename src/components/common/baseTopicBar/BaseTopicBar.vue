@@ -4,73 +4,99 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-17 20:58:36
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-20 18:53:35
+ * @LastEditTime: 2022-01-21 17:23:59
 -->
 <template>
   <div class="base-topic-bar">
-    <div class="base-topic-bar-container">
-      <div class="container-inner">
-        <div class="left">
+    <div class="base-topic-bar-inner">
+      <div class="left">
+        <el-popover
+          v-for="(topic, index) in currentTopics"
+          :key="topic"
+          placement="bottom-start"
+          trigger="hover"
+          :disabled="index < 2 && details"
+          :width="null"
+          :show-after="200"
+          :show-arrow="false"
+          @show="getTags(topic)"
+          popper-class="base-topic-bar-popover"
+        >
+          <template #reference>
+            <div
+              class="topic"
+              :class="{'topic-active': topicActiveName === topic}"
+              role="button"
+              @click="clickTopic(topic)"
+            >
+              {{ topic }}
+            </div>
+          </template>
           <div
-            class="topic"
-            v-for="(item, index) in allTopicTags"
-            :class="{'topic-active': topicActiveIndex === index}"
-            :key="item.topic"
-            role="button"
-            @click="clickTopic(index)"
+            class="base-topic-bar-popover-inner"
+            v-if="allTopicTags[topic] && allTopicTags[topic].length"
           >
-            {{ item.topic }}
+            <div class="tags">
+              <div
+                class="tag"
+                v-for="tag in allTopicTags[topic]"
+                :class="{'tag-active': tagActiveName === tag}"
+                :key="tag"
+                role="button"
+                @click="clickTag(topic, tag)"
+              >
+                {{ tag }}
+              </div>
+            </div>
           </div>
-        </div>
-        <div
-          v-if="details"
-          class="right"
-          role="button"
-          @click="tagManageClick"
-        >标签管理</div>
-        <div v-else></div>
-      </div>
-    </div>
-    <div
-      class="base-topic-bar-details"
-      v-if="details && currentTags.length"
-    >
-      <div class="details-inner">
-        <div
-          class="tag"
-          v-for="(tag, index) in currentTags"
-          :class="{'tag-active': tagActiveIndex === index}"
-          :key="tag"
-          role="button"
-          @click="clickTag(index)"
-        >
-          {{ tag }}
-        </div>
-        <div
-          class="tag"
-          role="button"
-          @click="selectAllTags"
-          v-if="!currentTagsAll"
-        >
-          展开
-          <div class="icon">
-            <i class="iconfont blog-down"></i>
+        </el-popover>
+        <div class="other">
+          其他
+          <div
+            class="topic-button"
+            role="button"
+          >
+            <div
+              class="up"
+              @click="changePage(true)"
+            >
+              <i class="iconfont blog-down"></i>
+            </div>
+            <div
+              class="down"
+              @click="changePage(false)"
+            >
+              <i class="iconfont blog-down"></i>
+            </div>
           </div>
         </div>
       </div>
+      <div
+        v-if="details"
+        class="right"
+        role="button"
+        @click="tagManageClick"
+      >标签管理</div>
+      <div v-else></div>
     </div>
   </div>
 </template>
 
 <script>
-import { defineComponent, reactive, ref, computed } from 'vue';
+import { defineComponent, reactive, ref, computed, watch } from 'vue';
 import { getTopics, getTopicTags } from '@/network/api/topics';
 import { mapGetters } from '@/util/store';
 import { useRoute } from 'vue-router';
 import router from '@/router';
+import events from '@/events';
 
 /**
  * @description: 基础专题条
+ * @param {Boolean} details 是否显示细节（即显示专题标签） `默认为是`
+ * @param {String} firstItem 第一项文字 `默认为推荐`
+ * @event selectTopic 选择了专题 (topic: string) => void
+ * @event selectTag 选择了专题标签 (tag: string) => void
+ * @emits BaseTopicBar-addTags 更新topic tags (topic_name: string, tags: string[]) => void
  * @author: dreamy-xay
  */
 
@@ -88,111 +114,164 @@ export default defineComponent({
   },
   setup(props, context) {
     const route = useRoute(); // route
-    const topicActiveIndex = ref(0); // 专题激活
-    const currentTagsAll = ref(false); // 是否显示全部tags
-    const tagActiveIndex = ref(0); // 专题标签激活
-    const allTopicTags = reactive([
-      {
-        topic: props.firstItem,
-        tags: [],
-        all: false,
-      },
-      {
-        topic: '关注',
-        tags: [],
-        all: false,
-      },
-      {
-        topic: '其他',
-        tags: [],
-        all: true,
-      },
-    ]); // 专题列表，已编辑的三个为非专题
+    const topicsLimit = 8;
+    const topicActiveName = ref(props.firstItem); // 专题激活
+    const topicActivePage = ref(0); // 专题激活页面
+    const topics = reactive([]); // 专题列表
+    const allTopicTags = reactive({}); // 缓存所有专题标签
+    const tagActiveName = ref(''); // 标签激活名
 
-    // 激活的专题标签
-    const currentTags = computed(() => [
-      ...(allTopicTags[topicActiveIndex.value].all ? ['全部'] : []),
-      ...(currentTagsAll.value
-        ? allTopicTags[topicActiveIndex.value].tags
-        : allTopicTags[topicActiveIndex.value].tags.slice(0, 10)),
-    ]);
+    // 监听当前路由变化
+    watch(
+      () => route.query,
+      (args) => {
+        tagActiveName.value = args.tag;
+        updateCurrentTopic();
+      }
+    );
 
     // 获取专题
     getTopics()
       .then((data) => {
-        const all = [];
-        for (const topic of data.topics) all.push({ topic, tags: [], all: true });
-        allTopicTags.splice(2, 0, ...all);
+        topics.splice(0, 0, ...data.topics);
+        updateCurrentTopic();
       })
       .catch((error) => {
         console.log(error);
       });
 
+    // 计算当前topic
+    const currentTopics = computed(() => [
+      props.firstItem,
+      '关注',
+      ...topics.slice(topicActivePage.value * topicsLimit, (topicActivePage.value + 1) * topicsLimit),
+    ]);
+
+    /**
+     * @description: 更新当前专题状态
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function updateCurrentTopic() {
+      const currentTopic =
+        route.query.topic ||
+        (Object.prototype.hasOwnProperty.call(route.query, 'attention') ? 'attention' : props.firstItem);
+      if (currentTopic === props.firstItem) topicActiveName.value = props.firstItem;
+      else if (currentTopic === 'attention') topicActiveName.value = '关注';
+      else {
+        const index = topics.indexOf(currentTopic);
+        if (index == -1) router.replace({ name: 'home' });
+        else {
+          topicActiveName.value = currentTopic;
+          topicActivePage.value = parseInt(Math.ceil((index + 1) / topicsLimit)) - 1;
+        }
+      }
+    }
+
     /**
      * @description: 点击专题
-     * @param {Number} index 专题索引号 `必传参数`
+     * @param {string} topic_name 当前专题索引号 `必传参数`
      * @return {void}
      * @author: dreamy-xay
      */
-    function clickTopic(index) {
-      topicActiveIndex.value = index;
-      currentTagsAll.value = false; // 每次切换置为false
-      tagActiveIndex.value = 0; // 每次切换置为0
-      // 获取新的标签
-      if (!allTopicTags[index].tags.length && allTopicTags[index].all) {
-        getTopicTags(allTopicTags[index].topic)
-          .then((data) => {
-            allTopicTags[index].tags.splice(0, 0, ...data.tags);
-            if (allTopicTags[index].tags.length <= 10) currentTagsAll.value = true;
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      } else if (allTopicTags[index].tags.length <= 10) currentTagsAll.value = true;
-      context.emit('selectTopic', index, allTopicTags[index].topic);
+    function clickTopic(topic_name) {
+      if (topic_name === topicActiveName.value) return;
+      context.emit('selectTopic', topic_name);
+      if (topic_name === props.firstItem) router.push({ name: 'home' });
+      else if (topic_name === '关注')
+        router.push({
+          name: 'home',
+          query: {
+            attention: null,
+          },
+        });
+      else
+        router.push({
+          name: 'home',
+          query: {
+            topic: topic_name,
+          },
+        });
     }
 
-    /**
-     * @description: 点击专题标签
-     * @param {Number} index 专题标签索引号 `必传参数`
-     * @return {void}
-     * @author: dreamy-xay
-     */
-    function clickTag(index) {
-      tagActiveIndex.value = index;
-      if (index === 0) context.emit('selectTopic', topicActiveIndex.value, allTopicTags[topicActiveIndex.value].topic);
-      else context.emit('selectTag', index - 1, currentTags.value[index]);
-    }
-
+    const { isLogin } = mapGetters('global', ['isLogin']); // 获取是否登录
     /**
      * @description: 标签管理点击
      * @return {void}
      * @author: dreamy-xay
      */
     function tagManageClick() {
-      const { isLogin } = mapGetters('global', ['isLogin']);
-      window.open(isLogin ? '/userCenter/profile#interest-topics-tags' : '/login/signIn?back', '_self');
+      window.open(isLogin.value ? '/userCenter/profile#interest-topics-tags' : '/login/signIn?back', '_self');
     }
 
     /**
-     * @description: 选择查看全部标签
+     * @description: 获取tags
+     * @param {string} topic_name 专题名 `必传参数`
      * @return {void}
      * @author: dreamy-xay
      */
-    function selectAllTags() {
-      currentTagsAll.value = true;
+    function getTags(topic_name) {
+      if (!allTopicTags[topic_name]) {
+        getTopicTags(topic_name)
+          .then((data) => {
+            allTopicTags[topic_name] = data.tags;
+            events.emit('BaseTopicBar-addTags', topic_name, data.tags); // 发出全局事件
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     }
 
+    /**
+     * @description: 点击专题标签
+     * @param {string} topic_name 专题 `必传参数`
+     * @param {string} tag_name 专题标签 `必传参数`
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function clickTag(topic_name, tag_name) {
+      if (tag_name === tagActiveName.value) return;
+      context.emit('selectTag', tag_name);
+      router.push({
+        name: 'home',
+        query: {
+          topic: topic_name,
+          tag: tag_name,
+        },
+      });
+    }
+
+    /**
+     * @description: 改变专题页
+     * @param {boolean} isPre 是否前一页 `必传参数`
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function changePage(isPre) {
+      if (isPre) {
+        if (topicActivePage.value > 0) --topicActivePage.value;
+      } else {
+        const len = parseInt(Math.ceil(topics.length / topicsLimit));
+        if (topicActivePage.value < len - 1) ++topicActivePage.value;
+      }
+    }
+
+    // 更新所有tags
+    events.on('BaseTopicTags-addTags', (topic_name, tags) => {
+      allTopicTags[topic_name] = tags;
+    });
+
     return {
+      topicActiveName,
+      currentTopics,
       allTopicTags,
-      currentTags,
-      currentTagsAll,
-      tagActiveIndex,
-      topicActiveIndex,
+      tagActiveName,
       clickTopic,
-      clickTag,
       tagManageClick,
-      selectAllTags,
+      getTags,
+      clickTag,
+      changePage,
     };
   },
 });
@@ -201,99 +280,123 @@ export default defineComponent({
 <style lang="scss" scoped>
 .base-topic-bar {
   width: 100%;
-  @include flex(initial, initial, column);
+  height: 44px;
+  @include flex(center, center);
+  background-color: $grey-0;
+  border-top: 1px solid $grey-3;
+  box-shadow: 0 1.5px 3px rgba(0, 0, 0, 0.08);
 
-  .base-topic-bar-container {
-    width: 100%;
-    height: 44px;
-    @include flex(center, center);
-    background-color: $grey-0;
-    border-top: 1px solid $grey-3;
-    box-shadow: 0 1.5px 3px rgba(0, 0, 0, 0.08);
+  .base-topic-bar-inner {
+    height: 100%;
+    width: 1000px;
+    @include flex(center, space-between);
 
-    .container-inner {
+    .left {
       height: 100%;
-      width: 1000px;
-      @include flex(center, space-between);
+      @include flex(center, flex-start);
 
-      .left {
-        height: 100%;
-        @include flex(center, flex-start);
+      .topic {
+        margin: 0 12px;
 
-        .topic {
-          margin: 0 12px;
+        &:first-child {
+          margin-left: 0;
+        }
 
-          &:first-child {
-            margin-left: 0;
-          }
-
-          &.topic-active {
-            color: $green-1;
-          }
+        &.topic-active {
+          color: $green-1;
         }
       }
 
-      .left .topic,
-      .right {
+      .other {
+        margin: 0 12px;
+        @include flex(center, center);
+        cursor: default;
         font-size: 15px;
         color: $grey-9;
-        transition: 0.25s;
 
-        &:hover {
-          color: $green-0;
+        .topic-button {
+          margin-left: 6px;
+          height: 20px;
+          @include flex(center, center, column);
+
+          & > div {
+            @include flex(center, center, center);
+            width: 100%;
+            height: 10px;
+            transition: 0.25s;
+
+            &:hover {
+              color: $green-0;
+            }
+
+            &.up .iconfont {
+              transform: rotate(180deg) scale(0.8);
+              margin-bottom: -2px;
+            }
+
+            &.down .iconfont {
+              margin-top: -2px;
+            }
+
+            .iconfont {
+              font-size: 10px;
+              transform: scale(0.8);
+            }
+          }
         }
       }
     }
+
+    .left .topic,
+    .right {
+      font-size: 15px;
+      color: $grey-9;
+      transition: 0.25s;
+
+      &:hover {
+        color: $green-0;
+      }
+    }
   }
+}
 
-  .base-topic-bar-details {
-    width: 100%;
-    @include flex(center, center);
+.base-topic-bar-popover-inner {
+  width: 360px;
+  overflow: hidden;
+  background-color: $grey-0;
+  border-radius: $border-radius-0;
 
-    .details-inner {
-      width: 1000px;
-      @include flex(flex-start);
-      align-content: flex-start;
-      flex-wrap: wrap;
+  .tags {
+    margin: 3px 3px 15px 15px;
+    width: 330px;
+    @include flex(flex-start);
+    align-content: flex-start;
+    flex-wrap: wrap;
 
-      .tag {
-        @include flex(center, center);
-        padding: 0 8px;
-        margin-top: 12px;
-        margin-right: 12px;
-        font-size: 14px;
-        height: 24px;
-        border-radius: $border-radius-0;
-        background-color: $grey-0;
-        overflow: hidden;
-        box-shadow: $shadow-0;
-        color: $grey-9;
-        transition: box-shadow 0.25s, color 0.25s;
+    .tag {
+      @include flex(center, center);
+      padding: 0 8px;
+      margin-top: 12px;
+      margin-right: 12px;
+      font-size: 14px;
+      height: 24px;
+      border-radius: $border-radius-0;
+      background-color: $grey-3;
+      overflow: hidden;
+      color: $grey-8;
+      transition: 0.25s;
 
-        &:hover {
-          color: $green-1;
-        }
+      &:hover {
+        color: $green-1;
+      }
 
-        &.tag-active {
-          color: $green-1;
-          box-shadow: $shadow-2;
-        }
+      &.tag-active {
+        color: $grey-0;
+        background-color: $green-0;
+      }
 
-        &:last-child {
-          margin-right: 0;
-        }
-
-        .icon {
-          width: 8px;
-          height: 8px;
-          margin-left: 6px;
-          @include flex(center, center);
-
-          .iconfont {
-            font-size: 10px;
-            transform: scale(0.9);
-          }
-        }
+      &:last-child {
+        margin-right: 0;
       }
     }
   }

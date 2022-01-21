@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-23 12:31:32
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-19 16:28:17
+ * @LastEditTime: 2022-01-20 21:50:19
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -13,10 +13,10 @@ import { verifyToken, getToken, int } from './util';
 export default function(baseUrl: string, app: Application) {
   // 获取专题名
   app.get(baseUrl + '/topics', (req: Request, res: Response) => {
-    const { offset, limit } = req.query;
+    console.log(`--------get topics success`);
     const topics: string[] = [];
-    for (let i: number = 0; i < Math.min(int(limit), 21); ++i)
-      topics.push(Random.integer(0, 1) ? Random.word(5, 9) : Random.cword(2, 6));
+    const sum: number = Random.integer(8, 21);
+    for (let i: number = 0; i < sum; ++i) topics.push(Random.integer(0, 1) ? Random.word(5, 9) : Random.cword(2, 6));
     return res.json({ topics });
   });
 
