@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-31 10:28:07
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-07 23:16:34
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-01-21 19:11:41
 -->
 <template>
   <div class="user-center-profile-edit-avatar">
@@ -48,7 +48,7 @@
           {{data.signature ? data.signature : '编辑个性签名~ o(*￣▽￣*)o'}}
         </div>
       </el-tooltip>
-      <user-center-input
+      <base-input
         v-show="isEditSignature"
         type="text"
         v-model="inputValue"
@@ -71,7 +71,7 @@
 <script>
 import { defineComponent, ref, watch, nextTick } from 'vue';
 
-import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput.vue';
+import BaseInput from '@/components/content/baseInput/BaseInput.vue';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 import AvatarCropper from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/AvatarCropper.vue';
 
@@ -86,7 +86,7 @@ import AvatarCropper from '@/views/userCenter/childComps/pages/UserCenterProfile
 export default defineComponent({
   name: 'userCenterProfileEditAvatar',
   components: {
-    UserCenterInput,
+    BaseInput,
     BaseModal,
     AvatarCropper,
   },
