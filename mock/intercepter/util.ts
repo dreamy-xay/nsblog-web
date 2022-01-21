@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-28 00:28:11
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-23 12:33:35
+ * @LastEditTime: 2022-01-21 21:47:12
  */
 
 import { Base64 } from 'js-base64';
@@ -13,13 +13,41 @@ import select, { DataBaseOperator } from '../data/index';
 import * as CryptoJS from 'crypto-js';
 
 /**
- * @description: 强转成number类型
+ * @description: 强转成number类型整数
  * @param {unknown} value 强转值 `必传参数`
  * @return {number} 返回number
  * @author: dreamy-xay
  */
 export function int(value: unknown): number {
   return parseInt(value as string);
+}
+
+/**
+ * @description: text格式化变量字符串
+ * @param {unknown} value 格式化的变量 `必传参数`
+ * @param {string} text 变量名 `必传参数`
+ * @return {void}
+ * @author: dreamy-xay
+ */
+/**
+ * @description: 打印请求参数，便于debug
+ * @param {string} preText 参数前文本 `必传参数`
+ * @param {Record<string, unknown> | undefined} params 打印的参数 `默认为 undefined`
+ * @param {string} endText 参数后文本 `默认为 'success!'`
+ * @param {string} prefix 打印文字的前缀 `默认为 '--------'`
+ * @return {void}
+ * @author: dreamy-xay
+ */
+export function print(
+  preText: string,
+  params: Record<string, unknown> | undefined = undefined,
+  endText: string = 'success!',
+  prefix: string = '--------'
+): void {
+  let str: string = prefix + preText + (params ? ':' : '');
+  if (params) for (const key in params) str += `${params[key] ? `  ${key}=>${params[key]}` : ''}`;
+  str += '  ' + endText;
+  console.log(str);
 }
 
 /**

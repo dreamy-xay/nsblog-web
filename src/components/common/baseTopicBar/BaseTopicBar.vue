@@ -4,52 +4,64 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-17 20:58:36
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-21 17:23:59
+ * @LastEditTime: 2022-01-21 17:40:33
 -->
 <template>
   <div class="base-topic-bar">
     <div class="base-topic-bar-inner">
       <div class="left">
-        <el-popover
-          v-for="(topic, index) in currentTopics"
-          :key="topic"
-          placement="bottom-start"
-          trigger="hover"
-          :disabled="index < 2 && details"
-          :width="null"
-          :show-after="200"
-          :show-arrow="false"
-          @show="getTags(topic)"
-          popper-class="base-topic-bar-popover"
-        >
-          <template #reference>
-            <div
-              class="topic"
-              :class="{'topic-active': topicActiveName === topic}"
-              role="button"
-              @click="clickTopic(topic)"
-            >
-              {{ topic }}
-            </div>
-          </template>
-          <div
-            class="base-topic-bar-popover-inner"
-            v-if="allTopicTags[topic] && allTopicTags[topic].length"
+        <template v-if="details">
+          <el-popover
+            v-for="(topic, index) in currentTopics"
+            :key="topic"
+            placement="bottom-start"
+            trigger="hover"
+            :disabled="index < 2"
+            :width="null"
+            :show-after="200"
+            :show-arrow="false"
+            @show="getTags(topic)"
+            popper-class="base-topic-bar-popover"
           >
-            <div class="tags">
+            <template #reference>
               <div
-                class="tag"
-                v-for="tag in allTopicTags[topic]"
-                :class="{'tag-active': tagActiveName === tag}"
-                :key="tag"
+                class="topic"
+                :class="{'topic-active': topicActiveName === topic}"
                 role="button"
-                @click="clickTag(topic, tag)"
+                @click="clickTopic(topic)"
               >
-                {{ tag }}
+                {{ topic }}
+              </div>
+            </template>
+            <div
+              class="base-topic-bar-popover-inner"
+              v-if="allTopicTags[topic] && allTopicTags[topic].length"
+            >
+              <div class="tags">
+                <div
+                  class="tag"
+                  v-for="tag in allTopicTags[topic]"
+                  :class="{'tag-active': tagActiveName === tag}"
+                  :key="tag"
+                  role="button"
+                  @click="clickTag(topic, tag)"
+                >
+                  {{ tag }}
+                </div>
               </div>
             </div>
+          </el-popover>
+        </template>
+        <template v-else>
+          <div
+            class="topic"
+            :class="{'topic-active': topicActiveName === topic}"
+            role="button"
+            @click="clickTopic(topic)"
+          >
+            {{ topic }}
           </div>
-        </el-popover>
+        </template>
         <div class="other">
           其他
           <div

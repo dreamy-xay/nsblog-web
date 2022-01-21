@@ -4,12 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 10:01:23
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-19 13:47:53
+ * @LastEditTime: 2022-01-21 21:38:33
  */
 
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { verifyToken, getToken, randomUsers, RandomUser, int } from './util';
+import { print, verifyToken, getToken, randomUsers, RandomUser, int } from './util';
 
 export default function(baseUrl: string, app: Application) {
   // 获取历史记录
@@ -17,6 +17,8 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const { limit, offset, keyword } = req.query;
     const type: number = int(req.query.type);
+
+    print('get histosies', { limit, offset, keyword, type });
 
     const RUsers = randomUsers();
     function getRandom(limit: number, hasType: boolean = true): Record<string, unknown>[] {
@@ -66,7 +68,9 @@ export default function(baseUrl: string, app: Application) {
   app.delete(baseUrl + '/history', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
-    console.log(`--------delete all history: username ${username}   success`);
+
+    print('delete all histories', { username });
+
     return res.send();
   });
 
@@ -76,7 +80,9 @@ export default function(baseUrl: string, app: Application) {
     const { history_id } = req.params;
     const type: string = req.body.type as string;
     const username: string = getToken(req.headers).username;
-    console.log(`--------delete history:  username ${username}  history_id ${history_id}  type: ${type}   success`);
+
+    print('delete history', { username, history_id, type });
+
     return res.send();
   });
 }
