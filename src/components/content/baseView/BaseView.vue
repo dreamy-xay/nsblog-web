@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 11:51:03
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-19 20:38:40
+ * @LastEditTime: 2022-01-20 21:54:15
 -->
 <template>
   <div
@@ -21,6 +21,7 @@
         <div class="container-top-bar">
           <div
             class="top-bar-inner"
+            v-resize="resizeListener"
             :style="{transform: 'translateY(' + topBarTop + 'px)'}"
           >
             <base-top-bar
@@ -179,16 +180,26 @@ export default defineComponent({
       }, 200);
     });
 
-    // 监听窗口变化
-    window.onresize = function () {
+    /**
+     * @description: 监听容器大小变化
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function resizeListener() {
       width.value = document.body.offsetWidth;
       height.value = document.body.offsetHeight;
+      containerTopBarHeight.value = topBarRef.value.$el.parentNode.offsetHeight;
       innerHeight.value = height.value - containerTopBarHeight.value;
       nextTick(() => {
         // 更新滚动条
         scrollbarColumnRef.value.update();
-        scrollbarRowRef.value.upsate();
+        scrollbarRowRef.value.update();
       });
+    }
+
+    // 监听窗口变化
+    window.onresize = function () {
+      resizeListener();
     };
 
     let scrollLeft = 0; // 滚动条位置
@@ -297,6 +308,7 @@ export default defineComponent({
       setScrollTop,
       topBarTop,
       innerTransition,
+      resizeListener,
     };
   },
 });

@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-09-14 19:08:58
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-29 16:06:14
+ * @LastEditTime: 2022-01-21 19:12:15
 -->
 <template>
   <div class="user-center-account-email">
@@ -18,7 +18,7 @@
     >
       <div class="user-center-account-email-inner">
         <div>邮箱
-          <user-center-input
+          <base-input
             placeholder="邮箱"
             :clearable="true"
             ref="emailInput"
@@ -26,11 +26,11 @@
             :verify="verifyEmail"
             @enter="emailEnter"
           >
-          </user-center-input>
+          </base-input>
         </div>
         <div>验证码
           <div class="verification">
-            <user-center-input
+            <base-input
               placeholder="验证码"
               style="width: 200px; margin: 0px;"
               :maxlength="6"
@@ -39,7 +39,7 @@
               @enter="verificationCodeEnter"
               :verify="verifyVerificationCode"
             >
-            </user-center-input>
+            </base-input>
             <div
               class="verification-code"
               role="button"
@@ -71,7 +71,7 @@
 
 <script>
 import { defineComponent, ref, computed } from 'vue';
-import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput.vue';
+import BaseInput from '@/components/content/baseInput/BaseInput.vue';
 import { useMessage } from 'naive-ui';
 import { changeEmail, emailSendVCode } from '@/network/api/user';
 
@@ -91,7 +91,7 @@ export default defineComponent({
     },
   },
   components: {
-    UserCenterInput,
+    BaseInput,
   },
   setup(props, context) {
     const msg = useMessage(); // naive-ui message

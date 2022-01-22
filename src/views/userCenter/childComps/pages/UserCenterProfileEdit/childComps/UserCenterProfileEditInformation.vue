@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-08-28 23:20:26
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-13 11:48:47
+ * @LastEditTime: 2022-01-21 19:15:15
 -->
 
 <template>
@@ -12,7 +12,7 @@
     <div class="user-center-profile-information-title">基本信息</div>
     <div class="user-center-profile-information-nickname">
       <div class="user-center-profile-information-nickname-text">昵称</div>
-      <user-center-input
+      <base-input
         v-model="nickName"
         :style="{width: '200px'}"
         ref="inputRef"
@@ -43,7 +43,7 @@
         :key="index"
         :class="index !==cityData.length-1 ? 'user-center-profile-information-city-select' : ''"
       >
-        <user-center-select
+        <base-select
           :sdata="item"
           :selectTag="city[index]"
           :showText="showCityText[index]"
@@ -51,7 +51,7 @@
           :disabled="cityDisabled[index]"
           @changeItem="changeCity($event,index)"
         >
-        </user-center-select>
+        </base-select>
       </div>
     </div>
 
@@ -62,7 +62,7 @@
         :key="index"
         :class="index !==birthdayData.length-1 ? 'user-center-profile-information-birthday-select' : ''"
       >
-        <user-center-select
+        <base-select
           :sdata="item"
           :selectTag="birthday[index]"
           :showText="showBirthdayText[index]"
@@ -70,7 +70,7 @@
           :disabled="birthdayDisabled[index]"
           @changeItem="changeBirthday($event,index)"
         >
-        </user-center-select>
+        </base-select>
       </div>
     </div>
 
@@ -100,8 +100,8 @@
 
 <script>
 import { computed, defineComponent, ref, reactive, watch } from 'vue';
-import UserCenterSelect from '@/views/userCenter/childComps/UserCenterSelect.vue';
-import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput.vue';
+import BaseSelect from '@/components/content/baseSelect/BaseSelect.vue';
+import BaseInput from '@/components/content/baseInput/BaseInput.vue';
 import location from '@/util/json/location';
 import { dateFormat } from '@/util/date';
 
@@ -113,8 +113,8 @@ import { dateFormat } from '@/util/date';
 export default defineComponent({
   name: 'userCenterProfileEdit',
   components: {
-    UserCenterSelect,
-    UserCenterInput,
+    BaseSelect,
+    BaseInput,
   },
   props: {
     data: {

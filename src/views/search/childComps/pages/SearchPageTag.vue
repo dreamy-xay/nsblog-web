@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2022-01-15 17:32:07
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-20 13:10:39
+ * @LastEditTime: 2022-01-22 14:02:39
 -->
 <template>
   <div class="search-page-tag">
@@ -16,11 +16,14 @@
       >
         <div class="left">
           <div class="left-top">
-            <div class="tag">
-              {{ item.topic_name }}
+            <div
+              class="tag"
+              role="button"
+            >
+              {{ item.name }}
             </div>
             <div class="center">
-              {{ item.fans_count }}关注
+              {{ item.attention_count }}关注
               <div class="point"> · </div>
               {{ item.article_count }}文章
             </div>
@@ -31,10 +34,10 @@
         </div>
 
         <div
-          :class="item.isFocus ? 'cancel' : 'focus'"
-          @click="item.isFocus ? cancel(index) : focus(index)"
+          :class="item.attention == 1 ? 'cancel' : 'focus'"
+          @click="item.attention == 1 ? cancel(index) : focus(index)"
           role="button"
-        >{{item.isFocus ? "取消关注" : "关注"}}</div>
+        >{{item.attention == 1 ? "取消关注" : "关注"}}</div>
       </div>
     </div>
     <search-page-to-load-more @click="getTag">
@@ -43,10 +46,11 @@
 </template>
 
 <script>
-import { defineComponent, reactive, onMounted, nextTick } from 'vue';
+import { defineComponent, reactive, onMounted, watch } from 'vue';
 import SearchPageToLoadMore from '@/views/search/childComps/SearchPageToLoadMore.vue';
-import { searchTag } from '@/network/api/search';
+import { search } from '@/network/api/search';
 import { useRoute } from 'vue-router';
+import router from '@/router';
 
 /**
  * @description: 搜索主页-标签
@@ -59,8 +63,8 @@ export default defineComponent({
     SearchPageToLoadMore,
   },
   setup(props, context) {
-    const tagData = reactive([]);
-    const route = useRoute();
+    const tagData = reactive([]); // 数据
+    const route = useRoute(); // 路由
 
     /**
      * @description:关注事件
@@ -69,7 +73,7 @@ export default defineComponent({
      * @author: Ban
      */
     function focus(index) {
-      tagData[index].isFocus = true;
+      tagData[index].attention = 1;
     }
 
     /**
@@ -79,7 +83,7 @@ export default defineComponent({
      * @author: Ban
      */
     function cancel(index) {
-      tagData[index].isFocus = false;
+      tagData[index].attention = 0;
     }
 
     /**
@@ -87,13 +91,13 @@ export default defineComponent({
      * @author: Ban
      */
     function getTag() {
-      searchTag(route.query.value)
+      search(route.query.keyword, 5)
         .then((data) => {
           if (tagData.length == 0) {
-            context.emit('changeLoadingState', 5);
+            context.emit('changeLoadingState', 5, true);
             context.emit('changeAcitiveIndex', 5);
           }
-          data.searchTag.forEach((item) => {
+          data.tags.forEach((item) => {
             tagData.push(item);
           });
         })
@@ -106,6 +110,15 @@ export default defineComponent({
     onMounted(() => {
       getTag();
     });
+
+    watch(
+      () => route.query.keyword,
+      () => {
+        context.emit('changeLoadingState', 5, false); // 改变数据加载状态
+        tagData.splice(0, tagData.length); // 清空数组
+        getTag(); // 重新获取数据
+      }
+    );
 
     return {
       tagData,

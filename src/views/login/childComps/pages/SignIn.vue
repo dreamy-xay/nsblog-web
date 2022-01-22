@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 14:41:12
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-19 12:38:29
+ * @LastEditTime: 2022-01-20 17:45:12
 -->
 <template>
   <div class="sign-in">
@@ -160,9 +160,15 @@ export default defineComponent({
           .then((data) => {
             setToken(data.token, username.value);
             updateTokenInfo();
-            router.push(
-              Object.prototype.hasOwnProperty.call(route.params, 'back') ? route.params.back : { name: 'home' }
-            );
+            if (
+              Object.prototype.hasOwnProperty.call(route.params, 'back') ||
+              Object.prototype.hasOwnProperty.call(route.query, 'back')
+            )
+              router.back();
+            else
+              router.push(
+                Object.prototype.hasOwnProperty.call(route.params, 'route') ? route.params.route : { name: 'home' }
+              );
           })
           .catch((error) => {
             console.log(error);

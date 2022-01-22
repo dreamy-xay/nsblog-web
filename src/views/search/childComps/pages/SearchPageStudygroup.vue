@@ -4,11 +4,11 @@
  * @Autor: xiao
  * @Date: 2022-01-14 18:52:17
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-18 15:41:28
+ * @LastEditTime: 2022-01-20 21:50:51
 -->
 <template>
-  <div class="search-study-group">
-    <div class="search-study-group-less">
+  <div class="search-page-studygroup">
+    <div class="search-page-studygroup-less">
       <div
         v-for="(group,index) in studyGroups"
         :key="index"
@@ -22,7 +22,7 @@
             <div
               class="join"
               role="button"
-              @click="joinGroup(index,group)"
+              @click="joinGroup(group)"
               v-show="!(change)"
             >
               <i class="iconfont blog-daochu1024-29"></i>
@@ -37,12 +37,12 @@
             </div>
           </div>
           <div class="remark">{{group.remark}}</div>
-          <div class="category-membercount">
+          <div class="category-member-count">
             <div class="category">
               <i class="iconfont blog-zhu"></i>
               {{group.category}}
             </div>
-            <div class="membercount">
+            <div class="member-count">
               <i class="iconfont blog-xiaozu1"></i>
               {{group.member_count}}
             </div>
@@ -55,7 +55,7 @@
       </div>
     </div>
     <div
-      class="moreGroup"
+      class="search-page-studygroup-more"
       role="button"
       @click="moreGroup"
       v-if="!show"
@@ -69,6 +69,7 @@
 import { defineComponent, reactive, ref } from 'vue';
 import { getGroups } from '@/network/api/groups';
 import { useMessage } from 'naive-ui';
+import { useRoute } from 'vue-router';
 
 /**
  * @description:搜索学习小组
@@ -76,15 +77,17 @@ import { useMessage } from 'naive-ui';
  */
 
 export default defineComponent({
-  name: 'SearchStudyGroup',
-  setup(props) {
+  name: 'searchPageStudygroup',
+  setup() {
     const msg = useMessage(); // naive-ui 组件
     const studyGroups = reactive([]); //学习小组数据
     const show = ref(false); //是否加载更多
     const change = ref(true); //是否加入
+    const route = useRoute(); // route
+    const username = route.params.username; // 获取博客用户名
 
     //获取学习小组信息
-    getGroups('dreamy')
+    getGroups(username)
       .then((data) => {
         console.log(data);
         studyGroups.splice(0, 0, ...data.groups);
@@ -109,7 +112,7 @@ export default defineComponent({
      * @return {void}
      * @author: xiao
      */
-    function joinGroup(index, group) {
+    function joinGroup(group) {
       change.value = !change.value;
       console.log('group', group);
     }
@@ -126,9 +129,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.search-study-group {
+.search-page-studygroup {
   @include flex(center, center, column);
-  .search-study-group-less {
+  .search-page-studygroup-less {
     width: 660px;
     height: 100%;
     background: $grey-0;
@@ -141,6 +144,7 @@ export default defineComponent({
         margin-top: 0px;
       }
     }
+
     .groups {
       widows: 660px;
       height: 84px;
@@ -173,6 +177,7 @@ export default defineComponent({
           }
         }
       }
+
       .remark {
         height: 22px;
         margin-bottom: 10px;
@@ -181,7 +186,8 @@ export default defineComponent({
         font-size: 13px;
         color: $grey-7;
       }
-      .category-membercount {
+
+      .category-member-count {
         height: 20px;
         margin-bottom: 11.8px;
         @include flex(center, flex-start);
@@ -195,7 +201,8 @@ export default defineComponent({
           font-size: 14px;
           padding: 0px 4px;
         }
-        .membercount {
+
+        .member-count {
           font-size: 14px;
           color: $grey-7;
         }
@@ -203,7 +210,7 @@ export default defineComponent({
     }
   }
 
-  .moreGroup {
+  .search-page-studygroup-more {
     @include flex(center, center);
     width: 300px;
     height: 32px;

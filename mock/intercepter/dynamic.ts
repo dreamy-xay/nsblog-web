@@ -4,11 +4,11 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 15:43:02
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-17 20:30:43
+ * @LastEditTime: 2022-01-21 21:55:15
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { int } from './util';
+import { int, print } from './util';
 import select from '../data/index';
 
 export default function(baseUrl: string, app: Application) {
@@ -16,7 +16,8 @@ export default function(baseUrl: string, app: Application) {
   app.get(baseUrl + '/dynamic', (req: Request, res: Response) => {
     const { username, limit, offset } = req.query;
     if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
-    console.log(`${username} getDynamic... `);
+
+    print('get dynamics', { username, limit, offset });
 
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
