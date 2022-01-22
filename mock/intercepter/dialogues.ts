@@ -4,12 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-017 11:59:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-19 13:15:38
+ * @LastEditTime: 2022-01-21 22:05:15
  */
 
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { getToken, RandomUser, randomUsers, verifyToken, int } from './util';
+import { print, getToken, RandomUser, randomUsers, verifyToken, int } from './util';
 import select from '../data/index';
 
 export default function(baseUrl: string, app: Application) {
@@ -19,7 +19,7 @@ export default function(baseUrl: string, app: Application) {
     const username: string = getToken(req.headers).username;
     const { limit, offset, friend_id } = req.query;
 
-    console.log(`--------${username} getDialogues...`);
+    print('get dialogues', { username, friend_id, limit, offset });
 
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
@@ -68,7 +68,9 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const { dialogue_id } = req.params;
     const username: string = getToken(req.headers).username;
-    console.log(`--------clear dialogue: dialogue_id ${dialogue_id}   username ${username}   success`);
+
+    print('clear dialogue', { username, dialogue_id });
+
     return res.send();
   });
 
@@ -77,7 +79,9 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const { dialogue_id } = req.params;
     const username: string = getToken(req.headers).username;
-    console.log(`--------delete dialogue: dialogue_id ${dialogue_id}   username ${username}   success`);
+
+    print('delete dialogue', { username, dialogue_id });
+
     return res.send();
   });
 }

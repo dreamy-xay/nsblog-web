@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-09 17:58:32
- * @LastEditors: Ban
- * @LastEditTime: 2022-01-19 19:30:21
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-20 15:30:41
  */
 
 import { Application } from 'express';
@@ -24,7 +24,6 @@ import questionsApi from './intercepter/questions';
 import dynamicApi from './intercepter/dynamic';
 import resourcesApi from './intercepter/resources';
 import logsApi from './intercepter/logs';
-
 import searchApi from './intercepter/search';
 
 // 拦截请求api
@@ -55,6 +54,5 @@ export default function intercepter(app: Application): void {
   dynamicApi(BASE_URL, app);
   resourcesApi(BASE_URL, app);
   logsApi(BASE_URL, app);
-
   searchApi(BASE_URL, app);
 }

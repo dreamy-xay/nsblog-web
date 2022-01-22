@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-07-29 16:37:09
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-28 12:08:01
+ * @LastEditTime: 2022-01-20 17:47:11
 -->
 <template>
   <div class="top-bar-left">
@@ -57,7 +57,7 @@ export default defineComponent({
         },
         {
           name: '博客',
-          url: tokenInfo.value.status ? `/blog/${tokenInfo.value.username}` : '/login',
+          url: tokenInfo.value.status ? `/blog/${tokenInfo.value.username}` : '/login/signIn?back',
         },
         {
           name: '问答',

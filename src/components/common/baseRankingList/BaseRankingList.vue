@@ -4,13 +4,10 @@
  * @Autor: continue-hs
  * @Date: 2022-01-15 09:05:31
  * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-19 12:29:18
+ * @LastEditTime: 2022-01-22 11:55:46
 -->
 <template>
-  <div
-    class="base-ranking-list"
-    :style="listStyle"
-  >
+  <div class="base-ranking-list">
 
     <div class="base-ranking-list-top">
       <span class="base-ranking-list-top-left">{{Lefttext}}</span>
@@ -28,7 +25,7 @@
             role="button"
             class="base-ranking-list-top-right-list"
           >
-            {{item.name}}
+            <div class="text">{{item}}</div>
           </span>
         </div>
       </div>
@@ -91,7 +88,7 @@ import { defineComponent, ref } from 'vue';
  * @param {String} Lefttext 顶部左侧文字 `默认为null`
  * @param {Boolean} showTopright 是否显示右侧类型选择 `默认为true`
  * @param {Array} rightList 顶部右侧类型列表 `默认为null`
- * @param {Array} rankinglist 排行榜内容列表 `默认为null`
+ * @param {Array} rankinglist 排行榜内容列表(type,title) `默认为null`
  * @author: continue-hs
  */
 
@@ -166,7 +163,7 @@ export default defineComponent({
       @include size(122px, 24px);
 
       .listType {
-        @include flex(center, flex-end);
+        @include flex(center, center);
         @include size(38px, 24px);
         background: $grey-1;
         border-radius: 8px;
@@ -181,6 +178,7 @@ export default defineComponent({
 
         .base-ranking-list-top-right-list {
           @include size(24px, 16px);
+          @include flex(center, center);
         }
       }
     }

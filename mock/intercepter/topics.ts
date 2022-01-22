@@ -4,26 +4,29 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-23 12:31:32
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-19 16:28:17
+ * @LastEditTime: 2022-01-21 21:48:10
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { verifyToken, getToken, int } from './util';
+import { print, verifyToken, getToken } from './util';
 
 export default function(baseUrl: string, app: Application) {
   // 获取专题名
   app.get(baseUrl + '/topics', (req: Request, res: Response) => {
-    const { offset, limit } = req.query;
+    print('get topics');
+
     const topics: string[] = [];
-    for (let i: number = 0; i < Math.min(int(limit), 21); ++i)
-      topics.push(Random.integer(0, 1) ? Random.word(5, 9) : Random.cword(2, 6));
+    const sum: number = Random.integer(8, 21);
+    for (let i: number = 0; i < sum; ++i) topics.push(Random.integer(0, 1) ? Random.word(5, 9) : Random.cword(2, 6));
     return res.json({ topics });
   });
 
   // 获取专题标签名
   app.get(baseUrl + '/topics/tags', (req: Request, res: Response) => {
     const { topic_name } = req.query;
-    console.log(`--------get topic-tags: topic_name=>${topic_name}  success`);
+
+    print('get topic tags', { topic_name });
+
     const tags: string[] = [];
     const sum: number = Random.integer(1, 40);
     for (let i: number = 0; i < sum; ++i) tags.push(Random.integer(0, 1) ? Random.word(5, 9) : Random.cword(2, 6));
@@ -33,7 +36,9 @@ export default function(baseUrl: string, app: Application) {
   // 获取专题标签详情信息
   app.get(baseUrl + '/topics/tags/:tag_name', (req: Request, res: Response) => {
     const { tag_name } = req.params;
-    console.log(`--------get topic-tag detail: tag_name=>${tag_name}  success`);
+
+    print('get topic tag detail', { tag_name });
+
     return res.json({
       name: tag_name,
       remark: Random.integer(0, 1) ? Random.paragraph(1, 2) : Random.cparagraph(1, 2),
@@ -48,7 +53,9 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { topic_name, remark } = req.body;
-    console.log(`--------create topic: username=>${username}  topic_name=>${topic_name}  remark=>${remark} success`);
+
+    print('create topic', { username, topic_name, remark });
+
     return res.send();
   });
 
@@ -57,9 +64,9 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { topic_name, tag_name, remark } = req.body;
-    console.log(
-      `--------create topic: username=>${username}  topic_name=>${topic_name}  tag_name=?${tag_name}  remark=>${remark} success`
-    );
+
+    print('create topic tag', { username, topic_name, tag_name, remark });
+
     return res.send();
   });
 }

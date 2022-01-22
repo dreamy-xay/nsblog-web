@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2022-01-15 17:32:07
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-20 13:11:13
+ * @LastEditTime: 2022-01-22 13:10:45
 -->
 <template>
   <div class="search-page-tag">
@@ -22,15 +22,22 @@
           />
         </div>
         <div class="center">
-          <div class="username">{{ item.nickname }}</div>
+          <div class="username">
+            <div
+              class="username-content"
+              role="button"
+            >
+              {{ item.nickname }}
+            </div>
+          </div>
           <div class="sign">
             {{ item.signature }}</div>
         </div>
         <div
-          :class="item.isFocus ? 'cancel' : 'focus'"
+          :class="item.attention == 1 ? 'cancel' : 'focus'"
           role="button"
-          @click="item.isFocus ? cancel(index) : focus(index)"
-        >{{item.isFocus ? "取消关注" : "关注"}}</div>
+          @click="item.attention == 1 ? cancel(index) : focus(index)"
+        >{{item.attention == 1 ? "取消关注" : "关注"}}</div>
       </div>
     </div>
     <search-page-to-load-more @click="getUser"></search-page-to-load-more>
@@ -39,11 +46,11 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref, onMounted } from 'vue';
+import { defineComponent, reactive, ref, onMounted, watch } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import SearchPageToLoadMore from '@/views/search/childComps/SearchPageToLoadMore.vue';
 import { useRoute } from 'vue-router';
-import { searchUser } from '@/network/api/search';
+import { search } from '@/network/api/search';
 
 /**
  * @description: 搜索主页-用户
@@ -68,7 +75,7 @@ export default defineComponent({
      * @author: Ban
      */
     function focus(index) {
-      userData[index].isFocus = true;
+      userData[index].attention = 1;
     }
 
     /**
@@ -78,7 +85,7 @@ export default defineComponent({
      * @author: Ban
      */
     function cancel(index) {
-      userData[index].isFocus = false;
+      userData[index].attention = 0;
     }
 
     /**
@@ -87,16 +94,15 @@ export default defineComponent({
      */
 
     function getUser() {
-      searchUser(route.query.value)
+      search(route.query.keyword, 6)
         .then((data) => {
           if (userData.length == 0) {
-            context.emit('changeLoadingState', 6);
+            context.emit('changeLoadingState', 6, true);
             context.emit('changeAcitiveIndex', 6);
           }
-          data.searchTag.forEach((item) => {
+          data.users.forEach((item) => {
             userData.push(item);
           });
-          console.log(userData);
         })
         .catch((error) => {
           console.log(error);
@@ -105,6 +111,15 @@ export default defineComponent({
     onMounted(() => {
       getUser();
     });
+
+    watch(
+      () => route.query.keyword,
+      () => {
+        context.emit('changeLoadingState', 6, false); // 改变数据加载状态
+        userData.splice(0, userData.length); // 清空数组
+        getUser(); // 重新获取数据
+      }
+    );
 
     return {
       userData,
@@ -146,9 +161,13 @@ export default defineComponent({
         @include flex(initial, space-around, column);
 
         .username {
-          color: $grey-11;
-          font-size: 16px;
-          font-weight: 700;
+          display: flex;
+
+          .username-content {
+            color: $grey-11;
+            font-size: 16px;
+            font-weight: 700;
+          }
         }
 
         .sign {

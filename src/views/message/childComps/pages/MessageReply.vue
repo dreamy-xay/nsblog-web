@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:25:27
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-19 17:08:40
+ * @LastEditTime: 2022-01-19 17:24:27
 -->
 
 <template>
@@ -172,7 +172,6 @@ export default defineComponent({
             deleteTag.value = false;
           }
           replyData.splice(replyData.length, 0, ...data.messages);
-          console.log(data);
         })
         .catch((error) => {
           console.log(error);

@@ -4,12 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-19 18:32:43
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-23 18:24:48
+ * @LastEditTime: 2022-01-20 20:12:23
 -->
 <template>
   <div class="top-bar-avatar">
     <a
-      href="/login/signIn"
+      href="/login/signIn?back"
       v-if="!tokenInfo.status"
     >
       <div

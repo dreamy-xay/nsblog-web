@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2022-01-10 20:39:59
- * @LastEditors: xiao
- * @LastEditTime: 2022-01-19 18:43:05
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-21 17:19:34
 -->
 
 <template>
@@ -12,7 +12,7 @@
     <div v-if="isShow">
       <div class="base-footer-first">
         <a
-          v-for="(content,index) in contents"
+          v-for="(content, index) in contents"
           :key="index"
           :href="content.url"
         >
@@ -32,7 +32,7 @@
 
     <div class="base-footer-third">
       <div>© 2021 ·</div>
-      <a href="">笔记分享部落阁</a>
+      <a href="/">笔记分享部落阁</a>
       <div>· ALL RIGHTS RESERVED</div>
     </div>
   </div>
@@ -50,8 +50,13 @@ import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'baseFooter',
+  props: {
+    isShow: {
+      type: Boolean,
+      default: true,
+    },
+  },
   setup() {
-    const isShow = ref(true); //是否显示前两行
     const titles = [
       //图标
       {
@@ -82,7 +87,6 @@ export default defineComponent({
     ];
 
     return {
-      isShow,
       titles,
       contents,
     };

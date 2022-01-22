@@ -4,12 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:15:05
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-19 16:33:00
+ * @LastEditTime: 2022-01-21 22:25:10
  */
 import { Random, mock } from 'better-mock';
 import { Application, Request, Response } from 'express';
 import select, { DataBaseOperator } from '../data/index';
-import { verifyToken, getToken, int } from './util';
+import { print, verifyToken, getToken, int } from './util';
 import * as location from '../../src/util/json/location.json';
 
 function randomAddress(): string {
@@ -32,6 +32,9 @@ export default function(baseUrl: string, app: Application) {
   app.get(baseUrl + '/users', (req: Request, res: Response) => {
     const username: string = req.query.username as string;
     const type = int(req.query.type);
+
+    print('get user info', { username, type });
+
     const user = select('users').findOne({ username });
     if (type === 0) {
       if (user && user.isActive) {
@@ -157,6 +160,9 @@ export default function(baseUrl: string, app: Application) {
   app.post(baseUrl + '/users', (req: Request, res: Response) => {
     const { username, email, password, code } = req.body;
     const users: DataBaseOperator = select('users');
+
+    print('new user', { username, email, password, code });
+
     if (select('codes').findOne({ code, email })) {
       users.insertOne({ username, password, email, token: null, isActive: true, isSuper: false });
       select('codes').removeOne({ code, email });
@@ -171,13 +177,13 @@ export default function(baseUrl: string, app: Application) {
     const { type } = req.body;
     if (int(type)) {
       const { profession, address } = req.body;
-      console.log(`--------modify userInfo: username=>${username}  profession=>${profession}   address=>${address}`);
+
+      print('modify userInfo', { username, type, profession, address });
     } else {
       const { nickname, gender, city, birthday, profile } = req.body;
       select('users').modifyOne({ username }, { nickname });
-      console.log(
-        `--------modify userInfo: username=>${username}  nickname=>${nickname}   gender=>${gender}  city=>${city}  birthday=>${birthday}  profile=>${profile}`
-      );
+
+      print('modify userInfo', { username, type, nickname, gender, city, birthday, profile });
     }
     return res.send();
   });
@@ -187,6 +193,9 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { code, email } = req.body;
+
+    print('modify email', { username, code, email });
+
     const codes: DataBaseOperator = select('codes');
     if (codes.findOne({ code, email })) {
       codes.removeOne({ code, email });
@@ -198,6 +207,8 @@ export default function(baseUrl: string, app: Application) {
   // 邮箱发送验证码
   app.post(baseUrl + '/users/email/validation', (req: Request, res: Response) => {
     const { code, email } = req.body;
+
+    print('the mailbox sends the verification code', { code, email });
 
     const codes: DataBaseOperator = select('codes');
 
@@ -212,6 +223,9 @@ export default function(baseUrl: string, app: Application) {
   app.get(baseUrl + '/users/email/validation', (req: Request, res: Response) => {
     const { code, email } = req.query;
     const codes: DataBaseOperator = select('codes');
+
+    print('verification code', { code, email });
+
     if (codes.findOne({ code, email })) {
       codes.removeOne({ code, email });
       const user: Record<string, unknown> = select('users').findOne({ email });
@@ -222,6 +236,9 @@ export default function(baseUrl: string, app: Application) {
   // 忘记密码，修改
   app.post(baseUrl + '/users/password', (req: Request, res: Response) => {
     const { username, password, data } = req.body;
+
+    print('forget the password and change it', { username, password, data });
+
     const users: DataBaseOperator = select('users');
     if (data === users.findOne({ username }).password) {
       users.modifyOne({ username }, { password });
@@ -233,6 +250,8 @@ export default function(baseUrl: string, app: Application) {
   // 查询存在信息
   app.get(baseUrl + '/users/exist', (req: Request, res: Response) => {
     const { username, email } = req.query;
+
+    print('get user exist', { username, email });
 
     const users: DataBaseOperator = select('users');
     if (username && email)
@@ -250,7 +269,9 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { avatar } = req.body;
-    console.log(`--------modify avatar: username=>${username}  avatar=>${avatar}`);
+
+    print('modify user avatar', { username, avatar });
+
     return res.send();
   });
 
@@ -259,7 +280,9 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { signature } = req.body;
-    console.log(`--------modify signature: username=>${username}  signature=>${signature}`);
+
+    print('modify user signature', { username, signature });
+
     return res.send();
   });
 
@@ -268,7 +291,9 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { email } = req.body;
-    console.log(`--------modify email: username=>${username}  email=>${email}`);
+
+    print('modify user email', { username, email });
+
     return res.send();
   });
 
@@ -277,7 +302,9 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { weibo } = req.body;
-    console.log(`--------modify weibo: username=>${username} weibo=>${weibo}`);
+
+    print('modify user weibo', { username, weibo });
+
     return res.send();
   });
 
@@ -285,7 +312,9 @@ export default function(baseUrl: string, app: Application) {
   app.delete(baseUrl + '/users/weibo', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
-    console.log(`--------delete weibo: username=>${username} `);
+
+    print('delete user weibo', { username });
+
     return res.send();
   });
 
@@ -294,7 +323,9 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { qq } = req.body;
-    console.log(`--------modify qq: username=>${username} qq=>${qq}`);
+
+    print('modify user qq', { username, qq });
+
     return res.send();
   });
 
@@ -302,7 +333,9 @@ export default function(baseUrl: string, app: Application) {
   app.delete(baseUrl + '/users/qq', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
-    console.log(`--------delete weibo: username=>${username} `);
+
+    print('delete user qq', { username });
+
     return res.send();
   });
 
@@ -310,7 +343,8 @@ export default function(baseUrl: string, app: Application) {
   app.get(baseUrl + '/users/tag', (req: Request, res: Response) => {
     const { username } = req.query;
     if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
-    console.log(`--------${username} getTags...`);
+
+    print('get user tags', { username });
 
     const tags: string[] = [];
     const sum: number = Random.integer(5, 10);
@@ -323,7 +357,9 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { tag_name } = req.body;
-    console.log(`--------add tags: username=>${username}   tag_name=>${tag_name}`);
+
+    print('add user tags', { username, tag_name });
+
     return res.send();
   });
 
@@ -332,7 +368,9 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { tag_name } = req.params;
-    console.log(`--------delete tags: username=>${username}   tag_name=>${tag_name}`);
+
+    print('delete user tags', { username, tag_name });
+
     return res.send();
   });
 
@@ -340,7 +378,9 @@ export default function(baseUrl: string, app: Application) {
   app.get(baseUrl + '/users/profile', (req: Request, res: Response) => {
     const { username } = req.query;
     if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
-    console.log(`--------${username} getProfile...`);
+
+    print('get user profile', { username });
+
     return res.send({ profile: Random.integer(0, 1) ? Random.paragraph(1, 10) : Random.cparagraph(1, 10) });
   });
 }
