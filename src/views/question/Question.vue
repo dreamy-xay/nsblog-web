@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-16 18:28:08
  * @LastEditors: clq
- * @LastEditTime: 2022-01-22 15:46:07
+ * @LastEditTime: 2022-01-22 15:55:52
 -->
 <template>
   <base-view
@@ -144,7 +144,7 @@ export default defineComponent({
     let activeFilterRuleIndex = ref(0);
 
     // 获取问答
-    getQuestions()
+    getQuestions('us1')
       .then((data) => {
         console.log('getQuestions');
         console.log(data);

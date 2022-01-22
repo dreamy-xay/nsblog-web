@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-17 20:17:15
  * @LastEditors: clq
- * @LastEditTime: 2022-01-22 15:47:27
+ * @LastEditTime: 2022-01-22 15:52:55
  */
 import { get, RequestLifeCycle } from '@/network/request';
 
@@ -55,12 +55,12 @@ import { get, RequestLifeCycle } from '@/network/request';
  * @author: clq
  */
 export function getQuestions(
-  username: string = 'us1',
+  username?: string,
   release_time?: number,
   browsing_count?: number,
-  type: number = 0,
-  topic_name: string = 'web',
-  tag_name: string = 'vue',
+  type?: number,
+  topic_name?: string,
+  tag_name?: string,
   limit: number = 10,
   offset: number = 0,
   RLC: RequestLifeCycle = {}
