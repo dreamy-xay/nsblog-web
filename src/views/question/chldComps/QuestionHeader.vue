@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-19 19:24:08
  * @LastEditors: clq
- * @LastEditTime: 2022-01-20 19:54:14
+ * @LastEditTime: 2022-01-22 15:22:36
 -->
 <template>
   <div class="question-header">
@@ -36,7 +36,7 @@ export default defineComponent({
     },
   },
   setup(props, context) {
-    const filterRules = reactive(['最新', '最热', '待回答', '周榜', '月榜']); //问答过滤规则
+    const filterRules = reactive(['最热', '最新', '待回答', '周榜', '月榜']); //问答过滤规则
 
     /**
      * @description: 更改过滤规则
