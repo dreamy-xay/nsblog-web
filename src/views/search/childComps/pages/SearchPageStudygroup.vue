@@ -1,10 +1,10 @@
 <!--
- * @Description:
+ * @Description:搜索学习小组
  * @Version:
  * @Autor: xiao
  * @Date: 2022-01-14 18:52:17
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-20 21:50:51
+ * @LastEditTime: 2022-01-22 14:26:45
 -->
 <template>
   <div class="search-page-studygroup">
@@ -31,6 +31,7 @@
             <div
               v-show="(change)"
               class="join"
+              role="button"
               @click="joinGroup(index,group)"
             >
               已加入
@@ -87,7 +88,7 @@ export default defineComponent({
     const username = route.params.username; // 获取博客用户名
 
     //获取学习小组信息
-    getGroups(username)
+    getGroups('dreamy')
       .then((data) => {
         console.log(data);
         studyGroups.splice(0, 0, ...data.groups);
@@ -153,16 +154,13 @@ export default defineComponent({
       .name {
         height: 24px;
         margin-bottom: 11px;
-        font-family: Arial;
         font-size: 16px;
         font-weight: bold;
         @include flex(center, center);
         justify-content: space-between;
 
         .join {
-          font-family: Arial;
           font-size: 14px;
-          font-weight: normal;
           color: $grey-7;
           height: 24px;
           width: 66px;
@@ -218,7 +216,6 @@ export default defineComponent({
     box-shadow: $shadow-0;
     margin-top: 10px;
     color: $grey-9;
-    font-family: Arial;
     font-size: 14px;
     transition: 0.25s;
 
