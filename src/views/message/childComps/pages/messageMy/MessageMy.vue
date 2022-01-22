@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 12:49:53
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-15 20:38:44
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-22 17:25:43
 -->
 
 <template>
@@ -141,7 +141,7 @@ export default defineComponent({
      */
     function clickItem(index) {
       // 清除未读消息数量
-      clearDialogue(dialogues[index].username)
+      clearDialogue(dialogues[index].id)
         .then(() => {
           dialogues[index].count = 0;
         })
@@ -167,7 +167,7 @@ export default defineComponent({
     function deleteItem(index, next) {
       modalShow.value = true;
       deleteItemCallback = () => {
-        deleteDialogue(dialogues[index].username)
+        deleteDialogue(dialogues[index].id)
           .then(() => {
             next((isEqual) => {
               if (isEqual) {
@@ -244,7 +244,7 @@ export default defineComponent({
         // 如果当前索引是已经激活索引，需更新激活数据
         if (dialogueIndex === firendListRef.value.activeIndex) {
           // 清除未读消息数量
-          clearDialogue(dialogues[dialogueIndex].username).catch((error) => {
+          clearDialogue(dialogues[dialogueIndex].id).catch((error) => {
             console.log(error);
           });
           activeDialogueData.records.splice(activeDialogueData.records.length, 0, data);
