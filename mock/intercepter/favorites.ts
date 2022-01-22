@@ -4,12 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 11:59:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-19 13:18:51
+ * @LastEditTime: 2022-01-21 22:10:25
  */
 
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { getToken, verifyToken, int } from './util';
+import { print, getToken, verifyToken, int } from './util';
 import select from '../data/index';
 
 export default function(baseUrl: string, app: Application) {
@@ -18,7 +18,7 @@ export default function(baseUrl: string, app: Application) {
     const { username, limit, offset, favorite_id, is_all, type } = req.query;
     if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
 
-    console.log(`--------${username} getCollections...`);
+    print('get favorites', { username, limit, offset, favorite_id, is_all, type });
 
     function getRandom(limit: number, hasType: boolean = true): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
@@ -68,9 +68,9 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { name, is_private, remark } = req.body;
-    console.log(
-      `--------new favorites: username=>${username}   name=>${name}  is_private=>${is_private}  remark=>${remark}  success`
-    );
+
+    print('new favorites', { username, name, is_private, remark });
+
     return res.send();
   });
 
@@ -79,7 +79,9 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { favorite_id } = req.params;
-    console.log(`--------delete favorites: username=>${username}  favorite_id=>${favorite_id}  success`);
+
+    print('delete favorites', { username, favorite_id });
+
     return res.send();
   });
 
@@ -88,9 +90,9 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { type, content_id, favorite_id } = req.body;
-    console.log(
-      `--------add favorites>collections: username=>${username}  type=>${type}  content_id=>${content_id}  favorite_id=>${favorite_id}  success`
-    );
+
+    print('add favorites collections', { username, type, content_id, favorite_id });
+
     return res.send();
   });
 
@@ -99,9 +101,9 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { collection_id } = req.params;
-    console.log(
-      `--------cancel favorites>collections: username=>${username}  collection_id=>${collection_id}  success`
-    );
+
+    print('cancel favorites collections', { username, collection_id });
+
     return res.send();
   });
 
@@ -110,9 +112,9 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { name, favorite_id } = req.body;
-    console.log(
-      `--------modify favorites name: username=>${username}  name=>${name}  favorite_id=>${favorite_id}  success`
-    );
+
+    print('modify favorites name', { username, name, favorite_id });
+
     return res.send();
   });
 
@@ -121,9 +123,9 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { remark, favorite_id } = req.body;
-    console.log(
-      `--------modify favorites remark: username=>${username}  remark=>${remark}  favorite_id=>${favorite_id}  success`
-    );
+
+    print('modify favorites remark', { username, remark, favorite_id });
+
     return res.send();
   });
 
@@ -132,9 +134,9 @@ export default function(baseUrl: string, app: Application) {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
     const { is_private, favorite_id } = req.body;
-    console.log(
-      `--------modify favorites private: username=>${username}  is_private=>${is_private}  favorite_id=>${favorite_id}  success`
-    );
+
+    print('modify favorites private', { username, is_private, favorite_id });
+
     return res.send();
   });
 }

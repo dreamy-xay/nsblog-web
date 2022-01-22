@@ -4,11 +4,11 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-10 19:45:44
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-19 13:59:20
+ * @LastEditTime: 2022-01-21 21:40:30
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { verifyToken, getToken, randomUsers, RandomUser, int } from './util';
+import { print, verifyToken, getToken, randomUsers, RandomUser, int } from './util';
 
 export default function(baseUrl: string, app: Application) {
   // 获取消息
@@ -18,7 +18,7 @@ export default function(baseUrl: string, app: Application) {
     const username: string = getToken(req.headers).username;
     if (int(type) < 0 && int(type) > 4) return res.status(403).json({ error: 'error' });
 
-    console.log(`--------get messages: type ${type}   username ${username}   success`);
+    print('get messages', { username, type, offset, limit });
 
     const RUsers = randomUsers();
     function getRandom(limit: number): Record<string, unknown>[] {
@@ -76,8 +76,10 @@ export default function(baseUrl: string, app: Application) {
   app.delete(baseUrl + '/messages/:message_id(\\d+)', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
+    const { message_id } = req.params;
 
-    console.log(`--------delete messages: username ${username}   message_id ${req.params.message_id} success`);
+    print('delete messages', { username, message_id });
+
     return res.send();
   });
 }
