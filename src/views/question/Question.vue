@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-16 18:28:08
  * @LastEditors: clq
- * @LastEditTime: 2022-01-20 17:26:02
+ * @LastEditTime: 2022-01-20 19:56:40
 -->
 <template>
   <base-view
@@ -20,7 +20,10 @@
     <div class="question-container">
       <div class="container-left">
         <div class="left-top">
-          <question-header @changeFilterRule="changeFilterRule" />
+          <question-header
+            :activeIndex="activeFilterRuleIndex"
+            @changeFilterRule="changeFilterRule"
+          />
           <question-item
             v-for="(item, index) in questions"
             :key="index"
@@ -138,6 +141,7 @@ export default defineComponent({
         ],
       },
     ]);
+    let activeFilterRuleIndex = ref(0);
 
     // 获取问答
     // getQuestions('us1')
@@ -167,10 +171,12 @@ export default defineComponent({
      */
     function changeFilterRule(newIndex) {
       console.log('newIndex: ' + newIndex);
+      activeFilterRuleIndex.value = newIndex;
     }
 
     return {
       questions,
+      activeFilterRuleIndex,
       loadMoreQuestions,
       changeFilterRule,
     };
