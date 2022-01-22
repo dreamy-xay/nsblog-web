@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-017 11:59:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-21 22:05:15
+ * @LastEditTime: 2022-01-22 15:57:43
  */
 
 import { Application, Request, Response } from 'express';
@@ -49,6 +49,7 @@ export default function(baseUrl: string, app: Application) {
         );
         const user: RandomUser = RUsers.random();
         ans.push({
+          id: Random.increment(),
           username: user.username,
           nickname: user.nickname,
           avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
