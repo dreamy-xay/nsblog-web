@@ -2,9 +2,10 @@
 	"users": [
 		{
 			"username": "dreamy",
+			"nickname": "启航",
 			"password": "Abcd1234",
 			"email": "dreamy@qq.com",
-			"token": "f19c145d838dbb519fdc3581cc9f2559b05a03fdc0d9ee1ffcf905e508b4a06b6acd3a050b1ac9368457ae6a674a705b659be169defb68ef7b0af2609f7eca32",
+			"token": "0736523e8e6e51295b147a8d63969eaa8dbbe31607c226ae79893fdb7525e0aed7ef6a7474a64e4959633d4444a79b230a8decccc15b9a978898a12041d6fa4f",
 			"isActive": true,
 			"isSuper": true
 		},
