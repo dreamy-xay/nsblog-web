@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-08-26 15:11:17
- * @LastEditors: Ban
- * @LastEditTime: 2022-01-14 14:47:01
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-01-21 19:07:16
 -->
 <template>
   <div class="user-center-account-change">
@@ -19,7 +19,7 @@
       <div class="user-center-account-change-inner">
 
         <div>原密码
-          <user-center-input
+          <base-input
             placeholder="原密码"
             ref="oldPasswordInput"
             v-model="oldPassword"
@@ -33,7 +33,7 @@
           />
 
           <div>新密码
-            <user-center-input
+            <base-input
               placeholder="新密码"
               v-model="password"
               :show-password="true"
@@ -43,10 +43,10 @@
               :verify="verifyPassword"
               @enter="passwordEnter"
             >
-            </user-center-input>
+            </base-input>
           </div>
           <div>确认新密码
-            <user-center-input
+            <base-input
               placeholder="确认新密码"
               v-model="confirmedPassword"
               :show-password="true"
@@ -55,8 +55,8 @@
               :maxlength="30"
               :verify="verifyConfirmedPassword"
               @enter="submit"
-            >
-            </user-center-input>
+            />
+
           </div>
         </div>
       </div>
@@ -78,7 +78,7 @@
 
 <script>
 import { defineComponent, ref } from 'vue';
-import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput.vue';
+import BaseInput from '@/components/content/baseInput/BaseInput.vue';
 import { forgotPasswordChange } from '@/network/api/user';
 import { useMessage } from 'naive-ui';
 import router from '@/router';
@@ -100,7 +100,7 @@ export default defineComponent({
     },
   },
   components: {
-    UserCenterInput,
+    BaseInput,
   },
   setup(props, context) {
     const oldPassword = ref(''); // 老密码

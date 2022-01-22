@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-15 14:15:21
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-16 23:26:04
+ * @LastEditTime: 2022-01-21 21:40:22
 -->
 <template>
   <div class="home-activity">
@@ -56,6 +56,7 @@ export default defineComponent({
   width: 284px;
   border-radius: $border-radius-0;
   background: transparent;
+  margin-bottom: 16px;
 
   .home-activity-image {
     width: 100%;
