@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2022-01-21 19:42:59
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-22 14:39:45
+ * @LastEditTime: 2022-01-22 15:39:56
 -->
 <template>
   <base-view
@@ -56,7 +56,7 @@ export default defineComponent({
   },
 
   setup() {
-    const isShow = ref('false'); //是否显示创建小组页面
+    const isShow = ref(false); //是否显示创建小组页面
 
     /**
      * @description: 点击创建学习小组

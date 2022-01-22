@@ -4,11 +4,7 @@
 			"username": "dreamy",
 			"password": "Abcd1234",
 			"email": "dreamy@qq.com",
-<<<<<<< HEAD
-			"token": "00e7fd20888efc9f56b15386cb13fddcf961283a944ca6c6316378e25e8995116d3fe707ae5e4272daf9c0952ceb0da34cff3005a2114989ba5a36db41a5bb2c",
-=======
-			"token": "d10e978534ebedaa527d75acdfcc1c089c9ffeeba1950264708a706d95a4c317d7b4e0e81ce09908c30fd2c02b2c1a557c4999ba96a46a9ac5991d2c58e212d7",
->>>>>>> fb63ed3bd422815ebcddec871dbc8843fe700a84
+			"token": "0a05aea276db9b8701dee7084626e747400af6cf388fdd2df924205898440a0d025ac7a7b1ab2ac51e70eefb3cbf051764f27b2d417c62389c160abad364daf3",
 			"isActive": true,
 			"isSuper": true
 		},
@@ -17,11 +13,7 @@
 			"nickname": "幻墨如烟",
 			"password": "Abcd1234",
 			"email": "1@qq.com",
-<<<<<<< HEAD
 			"token": "c0b2fbc09e56f362314d566b4e49aef118619fd79d797ba182a48208acbd53bb003f9c91d0a6cd6fbc3bd58752ec9de7d1856197652f3cec2f1c46b04c441e48",
-=======
-			"token": "33551c62e9c08106e170e57fc7fe6906e7a69432982f98e257cdd8602532bec8242f88b51e4a473667236b7ed292f16b3cbae574fe069b9871a0379ff18f4bb6",
->>>>>>> fb63ed3bd422815ebcddec871dbc8843fe700a84
 			"isActive": true,
 			"isSuper": false
 		},

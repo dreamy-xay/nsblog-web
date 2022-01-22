@@ -4,12 +4,12 @@
  * @Autor: xiao
  * @Date: 2022-01-20 15:53:19
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-22 14:37:41
+ * @LastEditTime: 2022-01-22 15:37:04
 -->
 <template>
   <n-modal
     display-directive="show"
-    :show="!modelValue"
+    :show="modelValue"
   >
     <div class="group-popover">
       <div class="group-popover-head">
@@ -23,32 +23,32 @@
       <hr class="group-popover-hr">
       <div class="group-popover-body">
         <div class="body-title">小组名称</div>
-        <user-center-input
+        <base-input
           class="body-input"
           v-model="inputName"
           type="text"
           :show-Close="true"
           :maxlength="20"
         >
-        </user-center-input>
+        </base-input>
         <div class="body-title">小组简介</div>
-        <user-center-input
+        <base-input
           class="body-input"
           v-model="inputIntroduce"
           type="text"
           :show-Close="true"
           :maxlength="20"
         >
-        </user-center-input>
+        </base-input>
         <div class="body-title">小组专题</div>
         <div class="body-select">
-          <user-center-select
+          <base-select
             :swidth="356"
             :sdata="selectProject"
             :showText="select"
             @changeItem="changeSelect($event)"
           >
-          </user-center-select>
+          </base-select>
         </div>
       </div>
       <hr class="group-popover-hr">
@@ -65,10 +65,11 @@
 
 <script>
 import { defineComponent, ref, reactive } from 'vue';
-import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput';
-import UserCenterSelect from '@/views/userCenter/childComps/UserCenterSelect.vue';
+import BaseSelect from '@/components/content/baseSelect/BaseSelect.vue';
+import BaseInput from '@/components/content/baseInput/BaseInput.vue';
 import { getGroups } from '@/network/api/groups';
 import { useMessage } from 'naive-ui';
+import { createGroups } from '@/network/api/groups';
 
 /**
  * @description:创建学习小组
@@ -79,8 +80,8 @@ import { useMessage } from 'naive-ui';
 export default defineComponent({
   name: 'groupPopover',
   components: {
-    UserCenterInput,
-    UserCenterSelect,
+    BaseSelect,
+    BaseInput,
   },
   props: {
     modelValue: {
@@ -116,7 +117,7 @@ export default defineComponent({
      * @author: xiao
      */
     function close() {
-      context.emit('update:modelValue', true);
+      context.emit('update:modelValue', false);
     }
 
     /**
@@ -128,7 +129,14 @@ export default defineComponent({
       console.log(inputName.value);
       console.log(inputIntroduce.value);
       console.log(select.value);
-      context.emit('update:modelValue', true);
+      //创建学习小组
+      createGroups(inputName.value, inputIntroduce.value, select.value)
+        .then()
+        .catch((error) => {
+          console.log(error);
+          msg.error('创建学习小组失败', { duration: 2000, closable: true });
+        });
+      context.emit('update:modelValue', false);
     }
 
     /**

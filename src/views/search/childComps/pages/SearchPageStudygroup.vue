@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2022-01-14 18:52:17
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-22 14:26:45
+ * @LastEditTime: 2022-01-22 15:34:01
 -->
 <template>
   <div class="search-page-studygroup">
@@ -23,16 +23,16 @@
               class="join"
               role="button"
               @click="joinGroup(group)"
-              v-show="!(change)"
+              v-show="group.join===0"
             >
               <i class="iconfont blog-daochu1024-29"></i>
               加入
             </div>
             <div
-              v-show="(change)"
+              v-show="group.join===1"
               class="join"
               role="button"
-              @click="joinGroup(index,group)"
+              @click="exitGroup(group)"
             >
               已加入
             </div>
@@ -70,7 +70,6 @@
 import { defineComponent, reactive, ref } from 'vue';
 import { getGroups } from '@/network/api/groups';
 import { useMessage } from 'naive-ui';
-import { useRoute } from 'vue-router';
 
 /**
  * @description:搜索学习小组
@@ -84,8 +83,6 @@ export default defineComponent({
     const studyGroups = reactive([]); //学习小组数据
     const show = ref(false); //是否加载更多
     const change = ref(true); //是否加入
-    const route = useRoute(); // route
-    const username = route.params.username; // 获取博客用户名
 
     //获取学习小组信息
     getGroups('dreamy')
@@ -114,14 +111,24 @@ export default defineComponent({
      * @author: xiao
      */
     function joinGroup(group) {
-      change.value = !change.value;
-      console.log('group', group);
+      group.join = 1;
+    }
+
+    /**
+     * @description: 退出学习小组
+     * @param {*} index 选择点击的小组
+     * @return {void}
+     * @author: xiao
+     */
+    function exitGroup(group) {
+      group.join = 0;
     }
 
     return {
       studyGroups,
       moreGroup,
       joinGroup,
+      exitGroup,
       show,
       change,
     };
