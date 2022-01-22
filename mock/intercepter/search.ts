@@ -4,55 +4,120 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-19 13:30:35
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-20 15:32:06
+ * @LastEditTime: 2022-01-21 23:16:08
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { getToken, verifyToken } from './util';
+import { int, print, RandomUser, randomUsers } from './util';
 
 export default function(baseUrl: string, app: Application) {
   // 获取搜索标签
-  app.get(baseUrl + '/search/tag', (req: Request, res: Response) => {
-    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
-    const username: string = getToken(req.headers).username;
-    console.log(`--------${username} search ${req.query.tagName} `);
+  app.get(baseUrl + '/search', (req: Request, res: Response) => {
+    const { keyword, type, time, limit, offset } = req.query;
+    const option: number = int(req.query.option);
 
-    function getRandom(limit: number): Record<string, unknown>[] {
-      const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
-      for (let i: number = 0; i < limit; ++i) {
-        ans.push({
-          topic_name: Random.string(2, 9), // 专题名
-          fans_count: Random.integer(0, 99999), // 关注数量
-          article_count: Random.integer(0, 99999), // 文章数量
-          remark: Random.cparagraph(20, 40), // 描述
-          isFocus: Random.boolean() // 是否关注
-        });
-      }
+    print('search', { keyword, option, type, time, limit, offset });
+
+    const RUsers = randomUsers();
+    function getRandom(limit: number, type: number): Record<string, unknown>[] {
+      const ans: Record<string, unknown>[] = [];
+      if (type === 0 || type === 1 || type === 2)
+        for (let i: number = 0; i < limit; ++i) {
+          const user: RandomUser = RUsers.random();
+          ans.push({
+            type: Random.integer(0, 1), // 0为文章，1为问答
+            id: Random.increment(),
+            title: Random.integer(0, 1) ? Random.title(3, 20) : Random.ctitle(3, 20),
+            content: Random.integer(0, 1) ? Random.paragraph(1, 2) : Random.ctitle(1, 2),
+            reply_count: Random.integer(0, 1000),
+            browsing_count: 12,
+            username: user.username,
+            nickname: user.nickname,
+            release_time: Random.time(),
+            ...(type === 1
+              ? {
+                  recommend: Random.integer(0, 1),
+                  recommend_count: Random.integer(0, 3000)
+                }
+              : {
+                  like: Random.integer(0, 1),
+                  like_count: Random.integer(0, 3000)
+                })
+          });
+        }
+      else if (type === 3)
+        for (let i: number = 0; i < limit; ++i)
+          ans.push({
+            name: Random.integer(0, 1) ? Random.word(2, 10) : Random.cword(2, 10),
+            remark: Random.integer(0, 1) ? Random.paragraph(1, 2) : Random.cparagraph(1, 2),
+            topic_name: Random.integer(0, 1) ? Random.word(2, 10) : Random.cword(2, 10),
+            member_count: Random.integer(0, 300),
+            join: Random.integer(0, 1)
+          });
+      else if (type === 4)
+        for (let i: number = 0; i < limit; ++i) {
+          const user: RandomUser = RUsers.random();
+          ans.push({
+            id: Random.increment(),
+            name: Random.integer(0, 1) ? Random.word(2, 10) : Random.cword(2, 10),
+            link: Random.url(),
+            username: user.username,
+            nickname: user.nickname,
+            remark: Random.integer(0, 1) ? Random.paragraph(1, 2) : Random.cparagraph(1, 2),
+            upload_time: Random.datetime()
+          });
+        }
+      else if (type === 5)
+        for (let i: number = 0; i < limit; ++i)
+          ans.push({
+            name: Random.integer(0, 1) ? Random.word(2, 8) : Random.cword(2, 5),
+            remark: Random.integer(0, 1) ? Random.paragraph(1, 2) : Random.cparagraph(1, 2),
+            article_count: Random.integer(0, 3000),
+            attention_count: Random.integer(0, 3000),
+            attention: Random.integer(0, 1)
+          });
+      else
+        for (let i: number = 0; i < limit; ++i) {
+          const user: RandomUser = RUsers.random();
+          ans.push({
+            username: user.username,
+            nickname: user.nickname,
+            avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
+            signature: (Random.integer(0, 1) ? Random.cparagraph(1, 1) : Random.paragraph(1, 1)).slice(0, 128),
+            attention: Random.integer(0, 1)
+          });
+        }
       return ans;
     }
-    return res.json({ searchTag: getRandom(Random.integer(0, 10)) });
-  });
 
-  // 获取搜索用户
-  app.get(baseUrl + '/search/user', (req: Request, res: Response) => {
-    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
-    const username: string = getToken(req.headers).username;
-    console.log(`${username} search ${req.query.value} `);
-
-    function getRandom(limit: number): Record<string, unknown>[] {
-      const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
-      for (let i: number = 0; i < limit; ++i) {
-        // 中英文随机
-        const r = Random.integer(0, 10) > 5;
-        ans.push({
-          nickname: r ? Random.cname() : Random.name(), // 昵称
-          avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png'), // 头像
-          signature: r ? Random.cparagraph(10, 100) : Random.paragraph(10, 100), // 个性签名
-          isFocus: Random.boolean() // 是否关注
-        });
-      }
-      return ans;
-    }
-    return res.json({ searchTag: getRandom(Random.integer(0, 10)) });
+    if (option === 0)
+      return res.json({
+        results: getRandom(int(offset) >= 151 ? 0 : Math.min(int(limit), 151 - int(offset)), option)
+      });
+    else if (option === 1)
+      return res.json({
+        articles: getRandom(int(offset) >= 151 ? 0 : Math.min(int(limit), 151 - int(offset)), option)
+      });
+    else if (option === 2)
+      return res.json({
+        questions: getRandom(int(offset) >= 151 ? 0 : Math.min(int(limit), 151 - int(offset)), option)
+      });
+    else if (option === 3)
+      return res.json({
+        gropus: getRandom(int(offset) >= 151 ? 0 : Math.min(int(limit), 151 - int(offset)), option)
+      });
+    else if (option === 4)
+      return res.json({
+        resources: getRandom(int(offset) >= 151 ? 0 : Math.min(int(limit), 151 - int(offset)), option)
+      });
+    else if (option === 5)
+      return res.json({
+        tags: getRandom(int(offset) >= 151 ? 0 : Math.min(int(limit), 151 - int(offset)), option)
+      });
+    else if (option === 6)
+      return res.json({
+        users: getRandom(int(offset) >= 151 ? 0 : Math.min(int(limit), 151 - int(offset)), option)
+      });
+    else return res.status(403).json({ error: 'error' });
   });
 }
