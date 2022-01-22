@@ -4,12 +4,12 @@
  * @Autor: clq
  * @Date: 2022-01-19 19:24:33
  * @LastEditors: clq
- * @LastEditTime: 2022-01-20 19:35:12
+ * @LastEditTime: 2022-01-20 20:17:21
 -->
 <template>
   <div class="question-my-question">
     <div
-      v-if="!isLogin.value"
+      v-if="isLogin"
       class="question-my-question-container"
     >
       <div class="top">
@@ -140,12 +140,17 @@ export default defineComponent({
           color: $grey-8;
         }
       }
+
+      div:nth-child(3),
+      div:nth-child(4) {
+        margin-bottom: 16px;
+      }
     }
   }
 
   .question-my-question-btn {
     width: 100%;
-    margin-top: 6px;
+    // margin-top: 6px;
     height: 40px;
     background: $grey-0;
     border: 1px solid $green-1;
