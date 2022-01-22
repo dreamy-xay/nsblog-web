@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-16 18:28:08
  * @LastEditors: clq
- * @LastEditTime: 2022-01-20 19:56:40
+ * @LastEditTime: 2022-01-22 15:46:07
 -->
 <template>
   <base-view
@@ -144,15 +144,15 @@ export default defineComponent({
     let activeFilterRuleIndex = ref(0);
 
     // 获取问答
-    // getQuestions('us1')
-    //   .then((data) => {
-    //     console.log('getQuestions');
-    //     console.log(data);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //     msg.error('获取问答失败', { duration: 2000, closable: true });
-    //   });
+    getQuestions()
+      .then((data) => {
+        console.log('getQuestions');
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+        msg.error('获取问答失败', { duration: 2000, closable: true });
+      });
 
     /**
      * @description: 加载更多问答信息
@@ -165,13 +165,13 @@ export default defineComponent({
 
     /**
      * @description: 更改过滤规则
-     * @param {number} newIndex 新规则对应索引 {0:'最新', 1:'最热', 2:'待回答', 3:'周榜', 4:'月榜'}
+     * @param {number} newFilterRuleIndex 新规则对应索引 {0:'最热', 1:'最新', 2:'待回答', 3:'周榜', 4:'月榜'}
      * @return {void}
      * @author: clq
      */
-    function changeFilterRule(newIndex) {
-      console.log('newIndex: ' + newIndex);
-      activeFilterRuleIndex.value = newIndex;
+    function changeFilterRule(newFilterRuleIndex) {
+      console.log('newFilterRuleIndex: ' + newFilterRuleIndex);
+      activeFilterRuleIndex.value = newFilterRuleIndex;
     }
 
     return {
