@@ -1,10 +1,10 @@
 <!--
- * @Description:
+ * @Description:搜索学习小组
  * @Version:
  * @Autor: xiao
  * @Date: 2022-01-14 18:52:17
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-20 21:50:51
+ * @LastEditTime: 2022-01-22 15:34:01
 -->
 <template>
   <div class="search-page-studygroup">
@@ -23,15 +23,16 @@
               class="join"
               role="button"
               @click="joinGroup(group)"
-              v-show="!(change)"
+              v-show="group.join===0"
             >
               <i class="iconfont blog-daochu1024-29"></i>
               加入
             </div>
             <div
-              v-show="(change)"
+              v-show="group.join===1"
               class="join"
-              @click="joinGroup(index,group)"
+              role="button"
+              @click="exitGroup(group)"
             >
               已加入
             </div>
@@ -69,7 +70,6 @@
 import { defineComponent, reactive, ref } from 'vue';
 import { getGroups } from '@/network/api/groups';
 import { useMessage } from 'naive-ui';
-import { useRoute } from 'vue-router';
 
 /**
  * @description:搜索学习小组
@@ -83,11 +83,9 @@ export default defineComponent({
     const studyGroups = reactive([]); //学习小组数据
     const show = ref(false); //是否加载更多
     const change = ref(true); //是否加入
-    const route = useRoute(); // route
-    const username = route.params.username; // 获取博客用户名
 
     //获取学习小组信息
-    getGroups(username)
+    getGroups('dreamy')
       .then((data) => {
         console.log(data);
         studyGroups.splice(0, 0, ...data.groups);
@@ -113,14 +111,24 @@ export default defineComponent({
      * @author: xiao
      */
     function joinGroup(group) {
-      change.value = !change.value;
-      console.log('group', group);
+      group.join = 1;
+    }
+
+    /**
+     * @description: 退出学习小组
+     * @param {*} index 选择点击的小组
+     * @return {void}
+     * @author: xiao
+     */
+    function exitGroup(group) {
+      group.join = 0;
     }
 
     return {
       studyGroups,
       moreGroup,
       joinGroup,
+      exitGroup,
       show,
       change,
     };
@@ -153,16 +161,13 @@ export default defineComponent({
       .name {
         height: 24px;
         margin-bottom: 11px;
-        font-family: Arial;
         font-size: 16px;
         font-weight: bold;
         @include flex(center, center);
         justify-content: space-between;
 
         .join {
-          font-family: Arial;
           font-size: 14px;
-          font-weight: normal;
           color: $grey-7;
           height: 24px;
           width: 66px;
@@ -218,7 +223,6 @@ export default defineComponent({
     box-shadow: $shadow-0;
     margin-top: 10px;
     color: $grey-9;
-    font-family: Arial;
     font-size: 14px;
     transition: 0.25s;
 
