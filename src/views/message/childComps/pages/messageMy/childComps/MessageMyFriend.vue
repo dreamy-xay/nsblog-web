@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 17:21:17
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-14 13:02:56
+ * @LastEditTime: 2022-01-22 21:30:32
 -->
 <template>
   <div class="message-my-friend">
@@ -163,8 +163,8 @@ export default defineComponent({
     }
 
     // 监听私信，产生新的对话
-    events.on('MessageMy-newDialogue', () => {
-      friendClick(0);
+    events.on('MessageMy-newDialogue', (index) => {
+      friendClick(index);
     });
 
     return {

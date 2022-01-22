@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 12:49:53
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-22 17:25:43
+ * @LastEditTime: 2022-01-22 21:36:37
 -->
 
 <template>
@@ -48,7 +48,7 @@ import { useRoute } from 'vue-router';
 
 /**
  * @description: 我的消息页面
- * @emits MessageMy-newDialogue 私信过来产生新的对话，发送激活消息
+ * @emits MessageMy-newDialogue 私信过来产生新的对话，发送激活消息 (index: number) => void
  * @author: dreamy-xay
  */
 
@@ -111,15 +111,22 @@ export default defineComponent({
 
           // 如果存在新对话
           if (newDialogueDataItem) {
-            dialogues.splice(0, 0, {
-              username: newDialogueDataItem.username,
-              nickname: newDialogueDataItem.nickname,
-              avatar: newDialogueDataItem.avatar,
-              count: 0,
-              records: [],
-              all: true,
+            // 获取已存在对话索引
+            const index = dialogues.findIndex((item) => {
+              item.username === newDialogueDataItem.username;
             });
-            events.emit('MessageMy-newDialogue'); // 发送激活消息
+
+            if (index === -1) {
+              dialogues.splice(0, 0, {
+                username: newDialogueDataItem.username,
+                nickname: newDialogueDataItem.nickname,
+                avatar: newDialogueDataItem.avatar,
+                count: 0,
+                records: [],
+                all: true,
+              });
+              events.emit('MessageMy-newDialogue', 0); // 发送激活消息
+            } else events.emit('MessageMy-newDialogue', index); // 发送激活消息
           }
 
           // 设置偏移量
@@ -141,13 +148,14 @@ export default defineComponent({
      */
     function clickItem(index) {
       // 清除未读消息数量
-      clearDialogue(dialogues[index].id)
-        .then(() => {
-          dialogues[index].count = 0;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      if (Object.prototype.hasOwnProperty.call(dialogues[index], 'id'))
+        clearDialogue(dialogues[index].id)
+          .then(() => {
+            dialogues[index].count = 0;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       dialogues[index].count = 0;
       activeDialogueData.friendNickname = dialogues[index].nickname;
       activeDialogueData.friendAvatar = dialogues[index].avatar;
@@ -167,21 +175,29 @@ export default defineComponent({
     function deleteItem(index, next) {
       modalShow.value = true;
       deleteItemCallback = () => {
-        deleteDialogue(dialogues[index].id)
-          .then(() => {
-            next((isEqual) => {
-              if (isEqual) {
-                activeDialogueData.friendNickname = '';
-                activeDialogueData.records.splice(0, activeDialogueData.records.length);
-              }
-            });
-            offset.delete(dialogues[index].username); // 删除偏移量
-            dialogues.splice(index, 1); // 删除对话
-          })
-          .catch((error) => {
-            console.log(error);
-            msg.error('删除对话失败，请重试', { duration: 2000, closable: true });
+        // 删除选中对话
+        function deleteSelectedDialogue() {
+          next((isEqual) => {
+            if (isEqual) {
+              activeDialogueData.friendNickname = '';
+              activeDialogueData.records.splice(0, activeDialogueData.records.length);
+            }
           });
+          offset.delete(dialogues[index].username); // 删除偏移量
+          dialogues.splice(index, 1); // 删除对话
+        }
+
+        if (Object.prototype.hasOwnProperty.call(dialogues[index], 'id'))
+          deleteDialogue(dialogues[index].id)
+            .then(() => {
+              deleteSelectedDialogue();
+            })
+            .catch((error) => {
+              console.log(error);
+              msg.error('删除对话失败，请重试', { duration: 2000, closable: true });
+            });
+        else deleteSelectedDialogue();
+
         deleteItemCallback = null;
       };
     }
@@ -244,9 +260,10 @@ export default defineComponent({
         // 如果当前索引是已经激活索引，需更新激活数据
         if (dialogueIndex === firendListRef.value.activeIndex) {
           // 清除未读消息数量
-          clearDialogue(dialogues[dialogueIndex].id).catch((error) => {
-            console.log(error);
-          });
+          if (Object.prototype.hasOwnProperty.call(dialogues[dialogueIndex], 'id'))
+            clearDialogue(dialogues[dialogueIndex].id).catch((error) => {
+              console.log(error);
+            });
           activeDialogueData.records.splice(activeDialogueData.records.length, 0, data);
         } else ++dialogues[dialogueIndex].count;
       } else {
