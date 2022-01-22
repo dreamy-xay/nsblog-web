@@ -4,11 +4,11 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 19:55:56
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-17 11:07:50
+ * @LastEditTime: 2022-01-21 21:31:55
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { int } from './util';
+import { int, print } from './util';
 import select from '../data/index';
 
 export default function(baseUrl: string, app: Application) {
@@ -16,7 +16,8 @@ export default function(baseUrl: string, app: Application) {
   app.get(baseUrl + '/resources', (req: Request, res: Response) => {
     const { username, limit, offset } = req.query;
     if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
-    console.log(`${username} getResources... `);
+
+    print('get resources', { username, limit, offset });
 
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
@@ -24,6 +25,7 @@ export default function(baseUrl: string, app: Application) {
         ans.push({
           id: Random.increment(),
           name: Random.integer(0, 1) ? Random.word(2, 10) : Random.cword(2, 10),
+          link: Random.url(),
           remark: Random.integer(0, 1) ? Random.paragraph(1, 2) : Random.cparagraph(1, 2),
           upload_time: Random.datetime()
         });

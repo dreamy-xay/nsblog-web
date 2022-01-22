@@ -3,19 +3,20 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-23 18:26:27
- * @LastEditors: Ban
- * @LastEditTime: 2022-01-19 18:41:59
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-21 21:36:42
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { getToken, verifyToken } from './util';
+import { print, getToken, verifyToken } from './util';
 
 export default function(baseUrl: string, app: Application) {
   // 获取登录登出日志内容
   app.get(baseUrl + '/logs/login', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
-    console.log(`${username} getLoginLogs... `);
+
+    print('get login logs', { username });
 
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();

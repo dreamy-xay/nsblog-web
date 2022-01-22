@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2022-01-13 15:32:53
- * @LastEditors: Ban
- * @LastEditTime: 2022-01-15 09:59:33
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-01-21 19:15:01
 -->
 <template>
   <n-modal
@@ -19,25 +19,25 @@
     <div class="user-center-account-logout-text">
       账号
     </div>
-    <user-center-input
+    <base-input
       ref="usernameInput"
       :placeholder="'请输入账号'"
       :type="'text'"
       v-model="username"
       @enter="usernameEnter"
-    ></user-center-input>
+    ></base-input>
 
     <div class="user-center-account-logout-text">
       密码
     </div>
-    <user-center-input
+    <base-input
       ref="passwordInput"
       :placeholder="'请输入密码'"
       :type="'password'"
       v-model="password"
       :showPassword="true"
       @enter="passwordEnter"
-    ></user-center-input>
+    ></base-input>
     <template #footer>
       <div class="user-center-account-logout-footer">
         <div
@@ -58,7 +58,7 @@ import { defineComponent, computed, ref, reactive } from 'vue';
 import { getUserInfo } from '@/network/api/user';
 import { mapState } from '@/util/store';
 import { useDialog, useMessage } from 'naive-ui';
-import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput.vue';
+import BaseInput from '@/components/content/baseInput/BaseInput.vue';
 import { authLogoff } from '@/network/api/auth';
 import { clearToken } from '@/network/token';
 import router from '@/router';
@@ -69,7 +69,7 @@ import router from '@/router';
 export default defineComponent({
   name: 'UserCenterAccountLogout',
   components: {
-    UserCenterInput,
+    BaseInput,
   },
   props: {
     isShow: {

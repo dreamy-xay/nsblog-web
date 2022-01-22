@@ -4,18 +4,21 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-09 21:34:55
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-19 12:53:56
+ * @LastEditTime: 2022-01-21 22:03:02
  */
 
 import { Application, Request, Response } from 'express';
 import select, { DataBaseOperator } from '../data/index';
-import { createToken, clearToken, getToken, verifyToken } from './util';
+import { print, createToken, clearToken, getToken, verifyToken } from './util';
 
 export default function(baseUrl: string, app: Application) {
   // 登录
   app.post(baseUrl + '/auth/login', (req: Request, res: Response) => {
     const { username, password } = req.body;
     const users: DataBaseOperator = select('users');
+
+    print('login', { username, password });
+
     let ans: Record<string, unknown> = users.findOne({ username });
     if (!ans) ans = users.findOne({ email: username });
     if (!ans) return res.status(401).json({ error: 'Password or username error' });
@@ -26,6 +29,10 @@ export default function(baseUrl: string, app: Application) {
 
   // 登出
   app.post(baseUrl + '/auth/logout', (req: Request, res: Response) => {
+    const username: string = getToken(req.headers).username;
+
+    print('logout', { username });
+
     clearToken(req.headers);
     return res.status(200);
   });
@@ -37,11 +44,13 @@ export default function(baseUrl: string, app: Application) {
     const { password } = req.body;
     const user: Record<string, unknown> = select('users').findOne({ username });
     if (user && user.password === password) {
-      console.log(`--------${username} logoff success`);
+      print('logoff', { username });
+
       select('users').modifyOne({ username }, { isActive: false });
       return res.status(200);
     } else {
-      console.log(`--------${username} logoff fail, password error`);
+      print('logoff(password error)', { username }, 'fail!');
+
       res.status(401).json({ error: 'Password error' });
     }
   });

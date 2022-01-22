@@ -4,12 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-10 14:25:47
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 14:47:16
+ * @LastEditTime: 2022-01-21 22:00:50
  */
 
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { getToken, randomUsers, verifyToken, RandomUser, int } from './util';
+import { print, getToken, randomUsers, verifyToken, RandomUser, int } from './util';
 import select from '../data/index';
 
 export default function(baseUrl: string, app: Application) {
@@ -18,7 +18,7 @@ export default function(baseUrl: string, app: Application) {
     const { username, limit, offset } = req.query;
     if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
 
-    console.log(`--------${username} getAttentions...`);
+    print('get attentions', { username, limit, offset });
 
     const RUsers = randomUsers();
     function getRandom(limit: number): Record<string, unknown>[] {
@@ -44,7 +44,9 @@ export default function(baseUrl: string, app: Application) {
   app.post(baseUrl + '/attentions', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const { username } = req.body;
-    console.log(`--------${getToken(req.headers).username} succeeded in adding attention ${username}`);
+
+    print(`${getToken(req.headers).username} add attention`, { username });
+
     return res.send();
   });
 
@@ -52,17 +54,18 @@ export default function(baseUrl: string, app: Application) {
   app.delete(baseUrl + '/attentions', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const { username } = req.body;
-    console.log(`---------${getToken(req.headers).username} successfully canceled attention ${username}`);
+
+    print(`${getToken(req.headers).username} cancel attention`, { username });
+
     return res.send();
   });
 
   // 获取粉丝情况
   app.get(baseUrl + '/attentions/fans', (req: Request, res: Response) => {
     const { username, limit, offset } = req.query;
-
     if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
 
-    console.log(`--------${username} getFans...`);
+    print('get fans', { username });
 
     const RUsers = randomUsers(username as string);
     function getRandom(limit: number): Record<string, unknown>[] {
