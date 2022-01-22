@@ -4,15 +4,15 @@
  * @Autor: xiao
  * @Date: 2022-01-20 15:53:19
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-20 21:50:53
+ * @LastEditTime: 2022-01-22 15:37:04
 -->
 <template>
   <n-modal
     display-directive="show"
-    :show="isShow"
+    :show="modelValue"
   >
-    <div class="studygroup-create-studygroup">
-      <div class="studygroup-create-studygroup-head">
+    <div class="group-popover">
+      <div class="group-popover-head">
         <div class="head-title">创建学习小组</div>
         <div
           class="top-icon"
@@ -20,39 +20,39 @@
           @click="close"
         ><i class="iconfont blog-close"></i></div>
       </div>
-      <hr class="studygroup-create-studygroup-hr">
-      <div class="studygroup-create-studygroup-body">
+      <hr class="group-popover-hr">
+      <div class="group-popover-body">
         <div class="body-title">小组名称</div>
-        <user-center-input
+        <base-input
           class="body-input"
           v-model="inputName"
           type="text"
           :show-Close="true"
           :maxlength="20"
         >
-        </user-center-input>
+        </base-input>
         <div class="body-title">小组简介</div>
-        <user-center-input
+        <base-input
           class="body-input"
           v-model="inputIntroduce"
           type="text"
           :show-Close="true"
           :maxlength="20"
         >
-        </user-center-input>
+        </base-input>
         <div class="body-title">小组专题</div>
         <div class="body-select">
-          <user-center-select
+          <base-select
             :swidth="356"
             :sdata="selectProject"
             :showText="select"
             @changeItem="changeSelect($event)"
           >
-          </user-center-select>
+          </base-select>
         </div>
       </div>
-      <hr class="studygroup-create-studygroup-hr">
-      <div class="studygroup-create-studygroup-foot">
+      <hr class="group-popover-hr">
+      <div class="group-popover-foot">
         <div
           class="button"
           role="button"
@@ -60,37 +60,36 @@
         >申请创建</div>
       </div>
     </div>
-
   </n-modal>
-
 </template>
 
 <script>
 import { defineComponent, ref, reactive } from 'vue';
-import UserCenterInput from '@/views/userCenter/childComps/UserCenterInput';
-import UserCenterSelect from '@/views/userCenter/childComps/UserCenterSelect.vue';
+import BaseSelect from '@/components/content/baseSelect/BaseSelect.vue';
+import BaseInput from '@/components/content/baseInput/BaseInput.vue';
 import { getGroups } from '@/network/api/groups';
 import { useMessage } from 'naive-ui';
+import { createGroups } from '@/network/api/groups';
 
 /**
  * @description:创建学习小组
- * @param {Boolean} isShow 是否显示收藏夹界面 `默认为false`
+ * @param {Boolean} modelValue 是否显示收藏夹界面 `默认为false`
  * @author: xiao
  */
 
 export default defineComponent({
-  name: 'studygroupCreateStudygroup',
+  name: 'groupPopover',
   components: {
-    UserCenterInput,
-    UserCenterSelect,
+    BaseSelect,
+    BaseInput,
   },
   props: {
-    isShow: {
+    modelValue: {
       type: Boolean,
       default: false,
     },
   },
-  setup() {
+  setup(_, context) {
     const inputName = ref(''); //输入的小组名称
     const inputIntroduce = ref(''); //输入的小组介绍
     const select = ref(''); //选择的数据
@@ -117,20 +116,27 @@ export default defineComponent({
      * @description: 点击关闭触发函数
      * @author: xiao
      */
-    function close(context) {
-      context.emit('update:isShow', false);
+    function close() {
+      context.emit('update:modelValue', false);
     }
 
     /**
-     * @description:
+     * @description:点击创建小组
      * @return {void}
      * @author: xiao
      */
-    function commit(context) {
+    function commit() {
       console.log(inputName.value);
       console.log(inputIntroduce.value);
       console.log(select.value);
-      context.emit('update:isShow', false);
+      //创建学习小组
+      createGroups(inputName.value, inputIntroduce.value, select.value)
+        .then()
+        .catch((error) => {
+          console.log(error);
+          msg.error('创建学习小组失败', { duration: 2000, closable: true });
+        });
+      context.emit('update:modelValue', false);
     }
 
     /**
@@ -158,21 +164,21 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.studygroup-create-studygroup {
+.group-popover {
   width: 420px;
   height: 387px;
   background: $grey-0;
   border-radius: $border-radius-0;
   box-shadow: $shadow-0;
 
-  .studygroup-create-studygroup-hr {
+  .group-popover-hr {
     height: 1px;
     border: none;
     border-top: 1px;
     background: $grey-2;
   }
 
-  .studygroup-create-studygroup-head {
+  .group-popover-head {
     @include flex(center, center, column);
     height: 52px;
     position: relative;
@@ -199,7 +205,7 @@ export default defineComponent({
     }
   }
 
-  .studygroup-create-studygroup-body {
+  .group-popover-body {
     .body-input {
       border-radius: $border-radius-1;
       box-shadow: 0 0 6px 0 $green-0;
@@ -223,7 +229,7 @@ export default defineComponent({
     }
   }
 
-  .studygroup-create-studygroup-foot {
+  .group-popover-foot {
     @include flex(center, center);
     height: 64px;
     width: 100%;
