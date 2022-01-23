@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2022-01-21 23:15:38
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-22 18:23:47
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-23 16:00:05
 -->
 <template>
   <base-view
@@ -19,10 +19,9 @@
         <resource-left />
       </div>
       <div class="right">
-        <base-ranking-list
-          :Lefttext="Lefttext"
-          :rankinglist="rankinglist"
-          :showTopright=false
+        <base-rank-card
+          title="下载排行"
+          :data="rankinglist"
         />
       </div>
     </div>
@@ -31,7 +30,7 @@
 <script>
 import { defineComponent, reactive } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
-import BaseRankingList from '@/components/common/baseRankingList/BaseRankingList.vue';
+import BaseRankCard from '@/components/common/baseRankCard/BaseRankCard.vue';
 import ResourceLeft from '@/views/resource/childComps/ResourceLeft.vue';
 
 /**
@@ -43,12 +42,10 @@ export default defineComponent({
   name: 'Resource',
   components: {
     BaseView,
-    BaseRankingList,
+    BaseRankCard,
     ResourceLeft,
   },
   setup() {
-    const Lefttext = '下载排行';
-
     const rankinglist = reactive([
       {
         title: 'react有tab页，如何实现未选中的tab页隐藏但不销毁在JavaScript中一组数据如何进行关联呢',
@@ -89,7 +86,6 @@ export default defineComponent({
       },
     ]);
     return {
-      Lefttext,
       rankinglist,
     };
   },
