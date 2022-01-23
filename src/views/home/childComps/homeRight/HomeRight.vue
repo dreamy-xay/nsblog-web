@@ -1,113 +1,107 @@
 <!--
- * @Description:
+ * @Description: 主页面(home)右侧
  * @Version:
  * @Autor: continue-hs
  * @Date: 2022-01-17 10:18:37
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-21 21:46:26
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-23 15:48:38
 -->
 <template>
   <div class="home-right">
-    <home-bulletin :bulletinData="bulletinData"></home-bulletin>
-    <home-activity :activityData="activityData"></home-activity>
-    <base-ranking-list
-      :rankinglist="rankinglist"
-      :Lefttext="Lefttext"
-      :showTopright=false
-      :rightList="rightList"
-    ></base-ranking-list>
-    <base-hot-tag
-      :hotTags="hottags"
-      :text="hottext"
-    ></base-hot-tag>
+    <home-bulletin :bulletinData="bulletinData" />
+    <home-activity :activityData="activityData" />
+    <base-rank-card
+      :data="rankingList"
+      title="热门文章"
+      :menu-list="['综合', '点赞', '评论']"
+      :style="{marginTop: '16px'}"
+      @clickMenuItem="rankCardClickMenuItem"
+    />
+    <base-tag-card
+      title="热门标签"
+      :tags="hotTags"
+      :style="{marginTop: '16px'}"
+    />
   </div>
 </template>
 
 <script>
 import { defineComponent, reactive } from 'vue';
-import BaseHotTag from '@/components/common/baseHotTag/BaseHotTag.vue';
-import BaseRankingList from '@/components/common/baseRankingList/BaseRankingList.vue';
-import HomeActivity from '@/views/home/childComps/homeRight/childComps/HomeActivity.vue';
 import HomeBulletin from '@/views/home/childComps/homeRight/childComps/HomeBulletin.vue';
-import { mapGetters, mapState } from '@/util/store';
-import getArticles from '@/network/api/articles';
+import HomeActivity from '@/views/home/childComps/homeRight/childComps/HomeActivity.vue';
+import BaseRankCard from '@/components/common/baseRankCard/BaseRankCard.vue';
+import BaseTagCard from '@/components/common/baseTagCard/BaseTagCard.vue';
+
+/**
+ * @description: 主页面(home)右侧
+ * @author: dreamy-xay
+ */
 
 export default defineComponent({
   name: 'homeRight',
   components: {
-    BaseHotTag,
-    BaseRankingList,
-    HomeActivity,
     HomeBulletin,
+    HomeActivity,
+    BaseRankCard,
+    BaseTagCard,
   },
   setup() {
-    const Lefttext = '热门排行榜';
-    const hottext = '热门标签';
-    const rightList = reactive([
-      {
-        name: '综合',
-      },
-      {
-        name: '点赞',
-      },
-      {
-        name: '评论',
-      },
-    ]);
-    const rankinglist = reactive([
+    const rankingList = reactive([
       {
         title: 'react有tab页，如何实现未选中的tab页隐藏但不销毁在JavaScript中一组数据如何进行关联呢',
+        url: '#',
       },
       {
         title: '在JavaScript中一组数据如何进行关联呢',
+        url: '#',
       },
       {
         title: '在JavaScript中一组数据如何进行关联呢',
+        url: '#',
       },
       {
         title: '在JavaScript中一组数据如何进行关联呢',
-      },
-
-      {
-        title: '在JavaScript中一组数据如何进行关联呢',
+        url: '#',
       },
       {
         title: 'react有tab页，如何实现未选中的tab页隐藏但不销毁',
-      },
-      {
-        title: 'react有tab页，如何实现未选中的tab页隐藏但不销毁',
-      },
-      {
-        title: '如何给一个html字符串添加锚点',
+        url: '#',
       },
       {
         title: '如何给一个html字符串添加锚点',
-      },
-      {
-        title: '如何给一个html字符串添加锚点',
-      },
-      {
-        title: 'react有tab页，如何实现未选中的tab页隐藏但不销毁',
-      },
-      {
-        title: '在JavaScript中一组数据如何进行关联呢',
+        url: '#',
       },
     ]);
-    const hottags = reactive([
+
+    // 热门标签
+    const hotTags = reactive([
       {
         name: 'Java',
+        url: `/tag/Java`,
       },
       {
         name: 'Python',
+        url: `/tag/Python`,
       },
       {
-        name: 'C#',
+        name: 'Csharp',
+        url: `/tag/Csharp`,
       },
       {
         name: 'Cpp',
+        url: `/tag/Cpp`,
       },
       {
         name: 'Vscode',
+        url: `/tag/Vscode`,
+      },
+      {
+        name: '自然科学',
+        url: `/tag/自然科学`,
+      },
+      {
+        name: '人工智能',
+        url: `/tag/人工智能`,
       },
     ]);
 
@@ -116,21 +110,36 @@ export default defineComponent({
       { text: '123', href: '#' },
       { text: '123', href: '#' },
     ]);
-    const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
-    const username = tokenInfo.value.username; // 登录用户名
 
-    // getArticles(username,'','',0,7,0,1)
-    // .then((data) => {
+    /**
+     * @description: 排行卡卡片中点击菜单
+     * @param {number} index 点击的菜单索引 `必传参数`
+     * @param {string} item 点击菜单菜单项名 `必传参数`
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function rankCardClickMenuItem(index, item) {
+      // console.log(index, item);
+      // 模拟
+      const data = rankingList[rankingList.length - 1];
+      rankingList.splice(rankingList.length - 1, 1);
+      rankingList.splice(0, 0, data);
+    }
 
-    // })
-
-    return { Lefttext, hottext, rightList, rankinglist, hottags, activityData, bulletinData };
+    return {
+      rankingList,
+      hotTags,
+      activityData,
+      bulletinData,
+      rankCardClickMenuItem,
+    };
   },
 });
 </script>
 
 <style lang="scss" scoped>
 .home-right {
-  width: 384px;
+  width: 284px;
+  @include flex(center, center, column);
 }
 </style>
