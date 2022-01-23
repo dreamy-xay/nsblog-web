@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 11:59:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-21 22:10:25
+ * @LastEditTime: 2022-01-23 16:26:42
  */
 
 import { Application, Request, Response } from 'express';
@@ -25,8 +25,8 @@ export default function(baseUrl: string, app: Application) {
       for (let i: number = 0; i < limit; ++i) {
         const type: Record<string, unknown> = hasType ? { type: Random.natural(1, 3) } : {};
         ans.push({
-          collection_id: Random.id(),
-          content_id: Random.id(),
+          collection_id: Random.increment(Random.integer(1, 10)),
+          content_id: Random.increment(Random.integer(1, 10)),
           title: Random.natural(0, 3) ? Random.ctitle(7, 15) : Random.title(7, 12),
           ...type
         });
@@ -51,7 +51,7 @@ export default function(baseUrl: string, app: Application) {
           ? { remark: Random.integer(0, 1) ? Random.paragraph(1, 1) : Random.cparagraph(1, 2), time: Random.datetime() }
           : {};
         ans.push({
-          favorite_id: Random.id(),
+          favorite_id: Random.increment(Random.integer(1, 10)),
           name: Random.natural(0, 2) ? Random.cword(1, 8) : Random.word(2, 15),
           count: Random.integer(1, 99),
           is_private: Random.integer(0, 1) ? true : false,

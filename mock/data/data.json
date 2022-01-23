@@ -3,8 +3,9 @@
 		{
 			"username": "dreamy",
 			"password": "Abcd1234",
+			"nickname": "启航~ o(*￣▽￣*)o",
 			"email": "dreamy@qq.com",
-			"token": null,
+			"token": "a21974577bed87c04cf70317597e0a6d24614bd516320fdaad79cea5ea2988e45739011993445c0417e88e903845a943c74bbb363bffcd49ed18fa7a8dcd9afe",
 			"isActive": true,
 			"isSuper": true
 		},
