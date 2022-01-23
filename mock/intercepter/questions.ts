@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 20:59:37
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-21 22:44:02
+ * @LastEditTime: 2022-01-22 15:56:16
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -15,7 +15,7 @@ export default function(baseUrl: string, app: Application) {
   // 获取发布的提问
   app.get(baseUrl + '/questions', (req: Request, res: Response) => {
     const { username, limit, offset, release_time, browsing_count, topic_name, tag_name, type } = req.query;
-    if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
+    if (username && !select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
 
     print('get questions', { username, limit, offset, release_time, browsing_count, topic_name, tag_name, type });
 

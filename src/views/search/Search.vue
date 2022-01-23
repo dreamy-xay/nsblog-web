@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-20 13:10:17
+ * @LastEditTime: 2022-01-22 12:40:24
 -->
 
 <template>
@@ -34,16 +34,19 @@
     </template>
     <div class="search-content">
       <div class="search-content-left">
-        <base-content-loading v-if="!loadingState[topicActiveIndex]"></base-content-loading>
+        <div
+          class="loading"
+          v-if="!loadingState[topicActiveIndex]"
+        >
+          <base-content-loading>
+          </base-content-loading>
+        </div>
+
         <router-view
-          v-slot="{ Component }"
+          v-show="loadingState[topicActiveIndex]"
           @changeLoadingState="changeLoadingState"
           @changeAcitiveIndex="changeAcitiveIndex"
         >
-          <!-- 将页面数据缓存 -->
-          <keep-alive>
-            <component :is="Component" />
-          </keep-alive>
         </router-view>
 
       </div>
@@ -53,7 +56,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, reactive, ref, watch } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import router from '@/router';
 import { useRoute } from 'vue-router';
@@ -72,6 +75,7 @@ export default defineComponent({
   },
   setup() {
     const loadingState = reactive([false, false, false, false, false, false, false]); // 数据获取状态
+
     const topics = [
       // 专题列表
       {
@@ -99,8 +103,9 @@ export default defineComponent({
         path: 'user',
       },
     ];
-    const topicActiveIndex = ref(5); // 专题激活
+    const topicActiveIndex = ref(6); // 专题激活
     const route = useRoute();
+    const key = ref(route.query.value);
 
     /**
      * @description: 点击专题
@@ -111,6 +116,7 @@ export default defineComponent({
     function clickTopic(index) {
       topicActiveIndex.value = index;
       router.push({ path: `/search/${topics[index].path}`, query: route.query });
+      loadingState[index] = false;
     }
 
     /**
@@ -127,10 +133,8 @@ export default defineComponent({
      * @param {Number} index `索引`
      * @author: Ban
      */
-    function changeLoadingState(index) {
-      loadingState[index] = true;
-      console.log('change' + index);
-      console.log(loadingState[index]);
+    function changeLoadingState(index, state) {
+      loadingState[index] = state;
     }
 
     return {
@@ -140,6 +144,7 @@ export default defineComponent({
       loadingState,
       changeLoadingState,
       changeAcitiveIndex,
+      key,
     };
   },
 });
@@ -188,10 +193,8 @@ export default defineComponent({
   }
 }
 
-.search {
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
+:deep(.search) {
+  @include flex(center, center, column);
 
   .search-content {
     height: 100%;
@@ -201,6 +204,12 @@ export default defineComponent({
 
     .search-content-left {
       width: 700px;
+
+      .loading {
+        box-sizing: border-box;
+        padding: 16px 24px;
+        background: $grey-0;
+      }
     }
 
     .search-content-right {

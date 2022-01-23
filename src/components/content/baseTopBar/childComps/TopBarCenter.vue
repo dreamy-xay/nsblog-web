@@ -5,7 +5,7 @@
  * @Autor: continue-hs
  * @Date: 2021-07-22 17:52:26
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-18 21:38:43
+ * @LastEditTime: 2022-01-22 13:07:21
 -->
 <template>
   <div
@@ -80,7 +80,7 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import { mapState, mapMutations } from '@/util/store';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 
 /**
  * @description: 首页顶部之中间部分组件
@@ -95,6 +95,7 @@ export default defineComponent({
     const { List } = mapState('globalStore', { List: 'searchHistory' });
     const { set, del } = mapMutations('globalStore', { set: 'setSearchHistory', del: 'deleteSearchHistory' });
     const router = useRouter();
+    const route = useRoute();
 
     /**
      * @description: 显示历史记录框
@@ -134,7 +135,8 @@ export default defineComponent({
         visible.value = false;
         set(value);
         // console.log(`search: ${value}`);
-        router.push({ path: `/search`, query: { value: value } });
+        if (route.path.split('/')[1] != 'search') router.push({ path: `/search`, query: { keyword: value } });
+        else router.push({ path: route.path, query: { keyword: value } });
       }
     }
 
