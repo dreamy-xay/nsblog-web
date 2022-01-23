@@ -3,11 +3,11 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-09-16 10:05:10
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 10:12:49
+ * @LastEditors: xiao
+ * @LastEditTime: 2022-01-22 15:22:24
  */
 
-import { get, RequestLifeCycle } from '@/network/request';
+import { get, post, RequestLifeCycle } from '@/network/request';
 
 /**
  * @description: 获取学习小组
@@ -32,6 +32,32 @@ export function getGroups(
       username,
       limit,
       offset
+    }
+  });
+}
+
+/**
+ * @description: 创建学习小组
+ * @param {string} group_name 小组名 '必传'
+ * @param {string} remark 小组备注 `必传`
+ * @param {string } topic_name 主题名 `必传`
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: xiao
+ */
+export function createGroups(
+  group_name: string,
+  remark: string,
+  topic_name: string,
+  RLC: RequestLifeCycle = {}
+): Promise<unknown> {
+  return post({
+    url: '/groups',
+    ...RLC,
+    params: {
+      group_name,
+      remark,
+      topic_name
     }
   });
 }

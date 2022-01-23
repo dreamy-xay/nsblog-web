@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2022-01-16 12:55:29
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-20 12:22:31
+ * @LastEditTime: 2022-01-22 11:56:51
 -->
 <template>
   <div
@@ -12,7 +12,7 @@
     v-show="show"
     role="button"
   >
-    {{ title }}
+    <slot>{{ title }}</slot>
   </div>
 </template>
 
@@ -25,6 +25,7 @@ import { defineComponent } from 'vue';
  * @param {String} bindClass 绑定类
  * @param {String} onClick 点击后的回调 `默认无`
  * @param {String} title 标题 `默认为加载更多...`
+ * @slot 全局内容插槽
  * @author: Ban
  */
 

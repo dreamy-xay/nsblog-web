@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-20 20:52:19
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-21 17:04:16
+ * @LastEditTime: 2022-01-22 20:56:21
 -->
 <template>
   <div
@@ -125,7 +125,7 @@ export default defineComponent({
       if (index === 0) {
         context.emit('selectTopic', currentTopic.value);
         router.push({
-          name: 'home',
+          name: route.name,
           query: {
             topic: currentTopic.value,
           },
@@ -133,7 +133,7 @@ export default defineComponent({
       } else {
         context.emit('selectTag', currentTags.value[index]);
         router.push({
-          name: 'home',
+          name: route.name,
           query: {
             topic: currentTopic.value,
             tag: currentTags.value[index],

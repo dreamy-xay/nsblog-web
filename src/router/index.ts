@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:02:59
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-21 23:18:33
+ * @LastEditTime: 2022-01-23 13:58:36
  */
 import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 import loginRouter from './modules/login';
@@ -38,6 +38,12 @@ const routes: Array<RouteRecordRaw> = [
     path: '/question',
     name: 'question',
     component: () => import('@/views/question/Question.vue')
+  },
+  //学习小组页面
+  {
+    path: '/group',
+    name: 'group',
+    component: () => import('@/views/group/Group.vue')
   },
   // 历史记录页面
   {

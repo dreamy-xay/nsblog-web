@@ -4,15 +4,15 @@
  * @Autor: continue-hs
  * @Date: 2022-01-17 10:18:37
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-23 13:57:02
+ * @LastEditTime: 2022-01-23 14:55:31
 -->
 <template>
   <div class="home-right">
     <base-bulletin
-      :bulletinData="bulletinData"
+      :bulletin-data="bulletinData"
       :type="true"
     ></base-bulletin>
-    <home-activity :activityData="activityData"></home-activity>
+    <home-activity :activity-data="activityData"></home-activity>
     <base-ranking-list
       :rankinglist="rankinglist"
       :Lefttext="Lefttext"
