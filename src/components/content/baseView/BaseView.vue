@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 11:51:03
- * @LastEditors: xiao
- * @LastEditTime: 2022-01-20 21:54:15
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-23 15:35:33
 -->
 <template>
   <div
@@ -18,18 +18,16 @@
     >
       <div class="base-view-container">
         <base-background v-if="background" />
-        <div class="container-top-bar">
-          <div
-            class="top-bar-inner"
-            v-resize="resizeListener"
-            :style="{transform: 'translateY(' + topBarTop + 'px)'}"
-          >
-            <base-top-bar
-              v-if="topBar"
-              ref="topBarRef"
-            />
-            <slot name="top-bar-bottom"></slot>
-          </div>
+        <div
+          class="container-top-bar"
+          v-resize="resizeListener"
+          :style="{top: topBarTop + 'px'}"
+        >
+          <base-top-bar
+            v-if="topBar"
+            ref="topBarRef"
+          />
+          <slot name="top-bar-bottom"></slot>
         </div>
         <div
           class="base-view-inner"
@@ -234,10 +232,7 @@ export default defineComponent({
     }
 
     let scrollCache = 0; // 滚动缓存高度
-    // 5s 情况一次滚动缓存高度
-    setInterval(() => {
-      scrollCache = 0;
-    }, 1000 * 5);
+    let scrollCacheClearTimer = null; // 滚动缓存清除器
     /**
      * @description: 监听滚动行为，并做出相应答复
      * @param {Number} scrollValue 本次滚动滚动距离（矢量）`必传参数`
@@ -246,6 +241,17 @@ export default defineComponent({
      */
     function listenrTopBarScroll(scrollValue) {
       if (props.topBarScroll) {
+        // 2s 清空一次滚动缓存高度
+        if (scrollCacheClearTimer) {
+          clearTimeout(scrollCacheClearTimer);
+          scrollCacheClearTimer = null;
+        }
+        scrollCacheClearTimer = setTimeout(() => {
+          scrollCache = 0;
+          clearTimeout(scrollCacheClearTimer);
+          scrollCacheClearTimer = null;
+        }, 1000 * 2);
+
         scrollCache += scrollValue;
         if (Math.abs(scrollCache) >= props.topBarScrollLimitHeight) {
           if (scrollCache > 0) {
@@ -330,16 +336,10 @@ export default defineComponent({
 
     .container-top-bar {
       width: 100%;
-      display: inline-block;
       z-index: 2000;
       position: fixed;
-
-      .top-bar-inner {
-        width: 100%;
-        @include flex(center, center, column);
-        transition: 0.2s;
-        transform: translateY(0);
-      }
+      @include flex(center, center, column);
+      transition: 0.2s;
     }
 
     .base-view-inner {
