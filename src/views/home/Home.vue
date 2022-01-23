@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-21 21:49:35
+ * @LastEditors: continue-hs
+ * @LastEditTime: 2022-01-23 15:17:38
 -->
 <template>
   <base-view
@@ -26,7 +26,10 @@
     />
     <div class="home-container">
       <div class="left">
-        <home-left />
+        <home-left
+          :topic="topicSelect"
+          :tag="tagSelect"
+        />
       </div>
       <div class="right">
         <home-right />
@@ -41,9 +44,8 @@ import BaseView from '@/components/content/baseView/BaseView.vue';
 import BaseTopicBar from '@/components/common/baseTopicBar/BaseTopicBar.vue';
 import BaseTopicTags from '@/components/common/baseTopicBar/BaseTopicTags.vue';
 // import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
-import HomeLeft from '@/views/home/childComps/HomeLeft';
+import HomeLeft from '@/views/home/childComps/homeLeft/HomeLeft.vue';
 import HomeRight from '@/views/home/childComps/homeRight/HomeRight.vue';
-import router from '@/router';
 
 /**
  * @description: 博客主页
@@ -60,6 +62,9 @@ export default defineComponent({
     HomeRight,
   },
   setup() {
+    const topicSelect = ref('');
+    const tagSelect = ref('');
+
     /**
      * @description: 选择了专题
      * @param {string} topic 专题名
@@ -67,6 +72,7 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function selectTopic(topic) {
+      topicSelect.value = topic;
       console.log(`select Topic: ${topic}`);
     }
 
@@ -77,12 +83,15 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function selectTag(tag) {
+      tagSelect.value = tag;
       console.log(`select Tag: ${tag}`);
     }
 
     return {
       selectTopic,
       selectTag,
+      topicSelect,
+      tagSelect,
     };
   },
 });

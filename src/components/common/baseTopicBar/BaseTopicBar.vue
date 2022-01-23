@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-17 20:58:36
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-21 17:40:33
+ * @LastEditTime: 2022-01-22 21:04:40
 -->
 <template>
   <div class="base-topic-bar">
@@ -16,7 +16,7 @@
             :key="topic"
             placement="bottom-start"
             trigger="hover"
-            :disabled="index < 2"
+            :disabled="index < (isLogin ? 2 : 1)"
             :width="null"
             :show-after="200"
             :show-arrow="false"
@@ -127,6 +127,7 @@ export default defineComponent({
   setup(props, context) {
     const route = useRoute(); // route
     const topicsLimit = 8;
+    const { isLogin } = mapGetters('global', ['isLogin']); // 获取是否登录
     const topicActiveName = ref(props.firstItem); // 专题激活
     const topicActivePage = ref(0); // 专题激活页面
     const topics = reactive([]); // 专题列表
@@ -155,7 +156,7 @@ export default defineComponent({
     // 计算当前topic
     const currentTopics = computed(() => [
       props.firstItem,
-      '关注',
+      ...(isLogin.value ? ['关注'] : []),
       ...topics.slice(topicActivePage.value * topicsLimit, (topicActivePage.value + 1) * topicsLimit),
     ]);
 
@@ -172,7 +173,7 @@ export default defineComponent({
       else if (currentTopic === 'attention') topicActiveName.value = '关注';
       else {
         const index = topics.indexOf(currentTopic);
-        if (index == -1) router.replace({ name: 'home' });
+        if (index == -1) router.replace({ name: route.name });
         else {
           topicActiveName.value = currentTopic;
           topicActivePage.value = parseInt(Math.ceil((index + 1) / topicsLimit)) - 1;
@@ -189,24 +190,23 @@ export default defineComponent({
     function clickTopic(topic_name) {
       if (topic_name === topicActiveName.value) return;
       context.emit('selectTopic', topic_name);
-      if (topic_name === props.firstItem) router.push({ name: 'home' });
+      if (topic_name === props.firstItem) router.push({ name: route.name });
       else if (topic_name === '关注')
         router.push({
-          name: 'home',
+          name: route.name,
           query: {
             attention: null,
           },
         });
       else
         router.push({
-          name: 'home',
+          name: route.name,
           query: {
             topic: topic_name,
           },
         });
     }
 
-    const { isLogin } = mapGetters('global', ['isLogin']); // 获取是否登录
     /**
      * @description: 标签管理点击
      * @return {void}
@@ -246,7 +246,7 @@ export default defineComponent({
       if (tag_name === tagActiveName.value) return;
       context.emit('selectTag', tag_name);
       router.push({
-        name: 'home',
+        name: route.name,
         query: {
           topic: topic_name,
           tag: tag_name,
@@ -279,6 +279,7 @@ export default defineComponent({
       currentTopics,
       allTopicTags,
       tagActiveName,
+      isLogin,
       clickTopic,
       tagManageClick,
       getTags,
