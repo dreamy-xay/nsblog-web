@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:25:27
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-19 17:24:27
+ * @LastEditTime: 2022-01-23 13:47:48
 -->
 
 <template>
@@ -37,7 +37,7 @@
               @click.stop="changePages('/user/' + item.content.username)"
             >{{item.content.nickname}}</span>
             <div
-              @click="changePages('/article/'+item.message_id)"
+              @click="changePages((item.content.type===1||item.content.type===3 ? '/article/' : '/question/')+item.message_id)"
               role="button"
             >
               <span v-if="item.content.type===1">回复我的文章</span>
@@ -172,6 +172,7 @@ export default defineComponent({
             deleteTag.value = false;
           }
           replyData.splice(replyData.length, 0, ...data.messages);
+          console.log(data);
         })
         .catch((error) => {
           console.log(error);
