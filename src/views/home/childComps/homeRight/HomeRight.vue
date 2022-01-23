@@ -4,11 +4,14 @@
  * @Autor: continue-hs
  * @Date: 2022-01-17 10:18:37
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-21 21:46:26
+ * @LastEditTime: 2022-01-23 13:57:02
 -->
 <template>
   <div class="home-right">
-    <home-bulletin :bulletinData="bulletinData"></home-bulletin>
+    <base-bulletin
+      :bulletinData="bulletinData"
+      :type="true"
+    ></base-bulletin>
     <home-activity :activityData="activityData"></home-activity>
     <base-ranking-list
       :rankinglist="rankinglist"
@@ -28,7 +31,7 @@ import { defineComponent, reactive } from 'vue';
 import BaseHotTag from '@/components/common/baseHotTag/BaseHotTag.vue';
 import BaseRankingList from '@/components/common/baseRankingList/BaseRankingList.vue';
 import HomeActivity from '@/views/home/childComps/homeRight/childComps/HomeActivity.vue';
-import HomeBulletin from '@/views/home/childComps/homeRight/childComps/HomeBulletin.vue';
+import BaseBulletin from '@/components/content/baseBulletin/BaseBulletin.vue';
 import { mapGetters, mapState } from '@/util/store';
 import getArticles from '@/network/api/articles';
 
@@ -38,7 +41,7 @@ export default defineComponent({
     BaseHotTag,
     BaseRankingList,
     HomeActivity,
-    HomeBulletin,
+    BaseBulletin,
   },
   setup() {
     const Lefttext = '热门排行榜';
