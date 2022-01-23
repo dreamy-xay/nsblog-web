@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-15 13:19:14
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-23 13:54:24
+ * @LastEditTime: 2022-01-23 15:52:40
 -->
 <template>
   <div class="home-bulletin">
@@ -68,7 +68,6 @@ export default defineComponent({
   border-radius: $border-radius-0;
   background-color: $grey-0;
   box-shadow: $shadow-0;
-  margin-bottom: 16px;
 
   .home-bulletin-top {
     height: 24px;
