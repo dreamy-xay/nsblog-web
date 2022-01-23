@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-21 21:49:35
+ * @LastEditors: xiao
+ * @LastEditTime: 2022-01-23 15:32:02
 -->
 <template>
   <base-view
@@ -32,6 +32,7 @@
         <home-right />
       </div>
     </div>
+    <QuesitionDetailInvitation></QuesitionDetailInvitation>
   </base-view>
 </template>
 
@@ -44,6 +45,7 @@ import BaseTopicTags from '@/components/common/baseTopicBar/BaseTopicTags.vue';
 import HomeLeft from '@/views/home/childComps/HomeLeft';
 import HomeRight from '@/views/home/childComps/homeRight/HomeRight.vue';
 import router from '@/router';
+import QuesitionDetailInvitation from '@/views/question/chldComps/QuesitionDetailInvitation';
 
 /**
  * @description: 博客主页
@@ -58,6 +60,7 @@ export default defineComponent({
     BaseTopicTags,
     HomeLeft,
     HomeRight,
+    QuesitionDetailInvitation,
   },
   setup() {
     /**

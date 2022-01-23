@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2022-01-21 19:42:59
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-22 15:39:56
+ * @LastEditTime: 2022-01-23 16:55:20
 -->
 <template>
   <base-view
@@ -14,7 +14,10 @@
     bind-class="group"
   >
     <template #top-bar-bottom>
-      <base-topic-bar />
+      <base-topic-bar
+        :details="true"
+        :firstItem="全部"
+      />
     </template>
 
     <div class="group-container">
@@ -38,7 +41,7 @@
 import { defineComponent, ref } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import BaseTopicBar from '@/components/common/baseTopicBar/BaseTopicBar.vue';
-import SearchPageStudygroup from '@/views/search/childComps/pages/SearchPageStudygroup.vue';
+import SearchPageStudygroup from '@/views/search/childComps/pages/SearchPageStudygroup';
 import GroupPopover from '@/views/group/childComps/GroupPopover.vue';
 
 /**
