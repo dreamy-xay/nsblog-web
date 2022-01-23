@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-18 20:50:36
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 10:12:29
+ * @LastEditTime: 2022-01-22 17:25:23
  */
 
 import { get, del, RequestLifeCycle, put } from '@/network/request';
@@ -37,28 +37,28 @@ export function getDialogue(
 
 /**
  * @description: 清零未读对话记录数量
- * @param {string | number} friendId 删除历史记录的id `必传参数`
+ * @param {string | number} dialogueId 对话记录的id `必传参数`
  * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
  * @return {Promise<unknown>} 请求返回promise
  * @author: dreamy-xay
  */
-export function clearDialogue(friendId: string | number, RLC: RequestLifeCycle = {}) {
+export function clearDialogue(dialogueId: string | number, RLC: RequestLifeCycle = {}) {
   return put({
-    url: `/dialogues/${friendId}`,
+    url: `/dialogues/${dialogueId}`,
     ...RLC
   });
 }
 
 /**
  * @description: 删除对话记录
- * @param {string | number} friendId 删除历史记录的id `必传参数`
+ * @param {string | number} dialogueId 对话记录的id `必传参数`
  * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
  * @return {Promise<unknown>} 请求返回promise
  * @author: dreamy-xay
  */
-export function deleteDialogue(friendId: string | number, RLC: RequestLifeCycle = {}) {
+export function deleteDialogue(dialogueId: string | number, RLC: RequestLifeCycle = {}) {
   return del({
-    url: `/dialogues/${friendId}`,
+    url: `/dialogues/${dialogueId}`,
     ...RLC
   });
 }

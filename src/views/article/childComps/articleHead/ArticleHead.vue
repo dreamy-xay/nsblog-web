@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 17:51:15
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-19 12:11:46
+ * @LastEditTime: 2022-01-22 20:00:44
 -->
 <template>
   <div class="article-head">
@@ -244,7 +244,6 @@ export default defineComponent({
       margin-top: 7.5px;
       @include flex(center, center);
       flex-flow: row wrap;
-      font-family: Arial, 'Microsoft YaHei', '微软雅黑', sans-serif;
 
       & > div {
         margin: 2.5px 0;

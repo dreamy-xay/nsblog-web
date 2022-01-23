@@ -4,13 +4,13 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-15 13:19:14
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-21 21:43:46
+ * @LastEditTime: 2022-01-23 13:54:24
 -->
 <template>
   <div class="home-bulletin">
     <div class="home-bulletin-top">
-      <div class="icon"> <i class="iconfont blog-gonggao"></i> </div>
-      <div class="text">公告牌</div>
+      <div class="icon"> <i :class="type ? 'iconfont blog-gonggao':'iconfont blog-zhaomu'"></i> </div>
+      <div class="text">{{type ? '公告牌':'征集令'}}</div>
     </div>
 
     <div
@@ -19,7 +19,7 @@
       v-for="(item , index) in bulletinData"
       :key="index"
     >
-      <div class="icon"> <i class="iconfont blog-gonggao1"></i> </div>
+      <div class="icon"> <i :class="type ? 'iconfont blog-gonggao1':'iconfont blog-zhiling'"></i> </div>
       <a
         class="text"
         :href="item.href"
@@ -39,6 +39,7 @@ import { defineComponent } from 'vue';
 /**
  * @description:公告牌
  * @param {Array} bulletinData 公告牌告示text和连接href `默认[]`
+ * @param {Boolean} type true为公告牌false为征集令 `默认为false`
  * @author: Z_Y_C
  */
 
@@ -48,6 +49,10 @@ export default defineComponent({
     bulletinData: {
       type: Array,
       default: () => [],
+    },
+    type: {
+      type: Boolean,
+      default: false,
     },
   },
   setup() {
