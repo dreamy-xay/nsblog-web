@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-22 15:56:36
+ * @LastEditTime: 2022-01-23 16:25:32
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -49,7 +49,7 @@ export default function(baseUrl: string, app: Application) {
         ans.push({
           username: user.username,
           nickname: user.nickname,
-          id: Random.increment(),
+          id: Random.increment(Random.integer(1, 10)),
           title: Random.integer(0, 1) ? Random.title(3, 100) : Random.ctitle(3, 50),
           content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
           topic_tag: tag_name ? tag_name : Random.integer(0, 1) ? Random.word(2, 8) : Random.cword(2, 5),
@@ -88,7 +88,7 @@ export default function(baseUrl: string, app: Application) {
       const ans: Record<string, unknown>[] = [];
       for (let i: number = 0; i < limit; ++i)
         ans.push({
-          id: Random.id(),
+          id: Random.increment(Random.integer(1, 10)),
           name: Random.integer(0, 1) ? Random.word() : Random.cword(),
           count: Random.integer(1, 100)
         });
@@ -109,7 +109,7 @@ export default function(baseUrl: string, app: Application) {
       const ans: Record<string, unknown>[] = [];
       for (let i: number = 0; i < limit; ++i)
         ans.push({
-          id: Random.id(),
+          id: Random.increment(Random.integer(1, 10)),
           name: Random.integer(0, 1) ? Random.word() : Random.cword(),
           count: Random.integer(1, 100)
         });
@@ -133,7 +133,7 @@ export default function(baseUrl: string, app: Application) {
         if (isRecent)
           ans.push({
             title: Random.integer(0, 1) ? Random.title() : Random.ctitle(),
-            article_id: Random.id()
+            article_id: Random.increment(Random.integer(1, 10))
           });
         else
           ans.push({
@@ -190,7 +190,7 @@ export default function(baseUrl: string, app: Application) {
             const user: RandomUser = RUsers.random();
             const params: Record<string, unknown> = username !== '' ? { evaluation: Random.integer(0, 2) } : {};
             (ans.child_comments as any).push({
-              comment_id: Random.id(),
+              comment_id: Random.increment(Random.integer(1, 10)),
               username: user.username,
               avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
               time: Random.time(),
@@ -209,7 +209,7 @@ export default function(baseUrl: string, app: Application) {
         const user: RandomUser = RUsers.random();
         const params: Record<string, unknown> = username !== '' ? { evaluation: Random.integer(0, 2) } : {};
         ans.push({
-          comment_id: Random.id(),
+          comment_id: Random.increment(Random.integer(1, 10)),
           username: user.username,
           avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
           time: Random.time(),
@@ -261,7 +261,10 @@ export default function(baseUrl: string, app: Application) {
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = [];
       for (let i: number = 0; i < limit; ++i)
-        ans.push({ id: Random.id(), name: Random.integer(0, 1) ? Random.word() : Random.cword() });
+        ans.push({
+          id: Random.increment(Random.integer(1, 10)),
+          name: Random.integer(0, 1) ? Random.word() : Random.cword()
+        });
       return ans;
     }
 
@@ -329,11 +332,11 @@ export default function(baseUrl: string, app: Application) {
       },
       ...params,
       last_article: {
-        article_id: Random.id(),
+        article_id: Random.increment(Random.integer(1, 10)),
         title: Random.integer(0, 1) ? Random.title() : Random.ctitle()
       },
       next_article: {
-        article_id: Random.id(),
+        article_id: Random.increment(Random.integer(1, 10)),
         title: Random.integer(0, 1) ? Random.title() : Random.ctitle()
       }
     };

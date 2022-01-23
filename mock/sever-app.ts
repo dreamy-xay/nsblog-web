@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-11 21:28:05
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-23 13:47:42
+ * @LastEditTime: 2022-01-23 17:08:55
  */
 import { Application } from 'express';
 import { Server } from 'http';
@@ -33,7 +33,12 @@ export default function sever(app: Application) {
     // 打印请求状态
     app.use((req, res, next) => {
       if (new RegExp(process.env.VUE_APP_APIROUTER).test(req.url) && req.method.toLowerCase() !== 'options')
-        console.log(`request invoke: ${req.method} ${req.url}`);
+        console.log(
+          '\x1B[45m\x1B[1m%s\x1b[0m\x1B[34m%s\x1b[0m%s',
+          ' request invoke: ',
+          ` ${req.method} `,
+          `${req.url}`
+        );
       next();
     });
 

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-28 00:28:11
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-22 11:54:51
+ * @LastEditTime: 2022-01-23 17:08:32
  */
 
 import { Base64 } from 'js-base64';
@@ -42,7 +42,7 @@ export function print(
   preText: string,
   params: Record<string, unknown> | undefined = undefined,
   endText: string = 'success!',
-  prefix: string = '--------'
+  prefix: string = '\t'
 ): void {
   let str: string = prefix + preText + (params ? ':' : '');
   if (params)
@@ -50,7 +50,7 @@ export function print(
       const value: string = typeof params[key];
       str += `${value !== 'null' && value !== 'undefined' && params[key] ? `  ${key}=>${params[key]}` : ''}`;
     }
-  str += '  ' + endText;
+  str += '  ' + endText + '\n';
   console.log(str);
 }
 

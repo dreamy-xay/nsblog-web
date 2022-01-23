@@ -16,7 +16,7 @@
             :key="topic"
             placement="bottom-start"
             trigger="hover"
-            :disabled="index < 2"
+            :disabled="index < (isLogin ? 2 : 1)"
             :width="null"
             :show-after="200"
             :show-arrow="false"
@@ -279,6 +279,7 @@ export default defineComponent({
       currentTopics,
       allTopicTags,
       tagActiveName,
+      isLogin,
       clickTopic,
       tagManageClick,
       getTags,
