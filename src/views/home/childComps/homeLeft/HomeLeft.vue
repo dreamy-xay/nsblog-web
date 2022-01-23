@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2022-01-17 10:18:16
  * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-23 16:40:57
+ * @LastEditTime: 2022-01-23 17:00:17
 -->
 <template>
   <div class="home-left">
@@ -22,11 +22,11 @@
       <base-select
         v-if="listIndex === 2"
         :swidth="74"
-        :spaddingTop="4"
+        :spaddingTop="8"
+        :spaddingLeft="10"
         :showText="selectTag"
-        :selectTag="timeList[timeIndex]"
         :sdata="timeList"
-        @changeItem="changeTime(index)"
+        @changeItem="changeTime($event)"
       />
     </div>
 
@@ -134,9 +134,9 @@ export default defineComponent({
       listIndex.value = index;
     }
 
-    function changeTime(index) {
-      timeIndex.value = index;
-      selectTag.value = timeList[index];
+    function changeTime($event) {
+      timeIndex.value = $event;
+      selectTag.value = timeList[$event];
     }
 
     function clickTopic(topic) {
