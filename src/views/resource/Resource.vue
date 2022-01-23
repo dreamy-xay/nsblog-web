@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-21 23:15:38
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-22 12:59:33
+ * @LastEditTime: 2022-01-22 18:23:47
 -->
 <template>
   <base-view
@@ -107,9 +107,11 @@ export default defineComponent({
     @include flex(initial, space-between);
 
     .left {
+      width: 700px;
     }
 
     .right {
+      width: 284px;
     }
   }
 }

@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-22 12:12:35
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-22 13:02:33
+ * @LastEditTime: 2022-01-22 19:55:42
 -->
 <template>
   <div class="resource-left">
@@ -30,6 +30,10 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .resource-left {
-  width: 700px;
+  width: 100%;
+  border-radius: $border-radius-0;
+  box-shadow: $shadow-0;
+  background-color: $grey-0;
+  height: 100px;
 }
 </style>

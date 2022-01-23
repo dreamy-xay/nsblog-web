@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-19 16:50:17
+ * @LastEditTime: 2022-01-22 15:20:21
 -->
 <template>
   <div
@@ -16,7 +16,26 @@
       :key="index"
       class="user-group-context"
     >
-      <div class="top">{{item.name}}</div>
+      <div class="top">
+        <div
+          class="name"
+          role="button"
+        >{{item.name}}</div>
+        <div
+          :class="item.join==0 ? 'no':'yes'"
+          role="button"
+          @click="changeJoin(index)"
+        >
+          <div
+            v-if="item.join==0"
+            class="join"
+          >
+            <div class="icon"><i class="iconfont blog-daochu1024-29"></i></div>
+            <div>加入</div>
+          </div>
+          <div v-else>已加入</div>
+        </div>
+      </div>
       <div class="center">{{item.remark}}</div>
       <div class="bottom">
         <div class="info">
@@ -91,6 +110,7 @@ export default defineComponent({
     // 首次获取数据
     getGroups(username, 0, limit)
       .then((data) => {
+        console.log(data);
         loading.value = data.groups.length === limit;
         groupData.splice(0, 0, ...data.groups);
       })
@@ -111,7 +131,24 @@ export default defineComponent({
         });
     }
 
-    return { styles, groupData, dateFormat, addGroupData, loading };
+    /**
+     * @description: 退出或加入学习小组
+     * @param {Number} index 数据下标
+     * @return {Void}
+     * @author: Z_Y_C
+     */
+    function changeJoin(index) {
+      groupData[index].join = !groupData[index].join;
+    }
+
+    return {
+      styles,
+      groupData,
+      dateFormat,
+      addGroupData,
+      loading,
+      changeJoin,
+    };
   },
 });
 </script>
@@ -131,14 +168,60 @@ export default defineComponent({
     margin-bottom: 16px;
 
     .top {
-      font-size: 16px;
-      color: $grey-11;
-      height: 21px;
-      line-height: 21px;
-      margin-bottom: 5px;
+      @include flex(center, space-between);
+
+      .name {
+        font-size: 16px;
+        color: $grey-11;
+        height: 21px;
+        line-height: 21px;
+        font-weight: 700;
+      }
+
+      .yes {
+        height: 24px;
+        width: 42px;
+        padding: 0 12px;
+        @include flex(center, center);
+        border-radius: $border-radius-1;
+        border: 1px solid $green-1;
+        font-size: 14px;
+        color: $green-1;
+
+        &:hover {
+          box-shadow: $shadow-2;
+        }
+      }
+
+      .no {
+        height: 24px;
+        width: 42px;
+        padding: 0 12px;
+        @include flex(center, center);
+        border-radius: $border-radius-1;
+        border: 1px solid $grey-7;
+        font-size: 14px;
+        color: $grey-7;
+
+        .join {
+          @include flex(center, space-between);
+
+          .icon {
+            .iconfont {
+              font-size: 10px;
+            }
+          }
+        }
+
+        &:hover {
+          color: $green-0;
+          border: 1px solid $green-0;
+        }
+      }
     }
 
     .center {
+      margin-top: 5px;
       font-size: 14px;
       color: $grey-7;
       @include ellipsis(2);
