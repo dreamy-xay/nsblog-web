@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 18:22:23
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-14 16:47:06
+ * @LastEditors: clq
+ * @LastEditTime: 2022-01-22 16:49:50
  */
 import { RouteRecordRaw } from 'vue-router';
 
@@ -35,7 +35,7 @@ const blogRouter: RouteRecordRaw = {
     {
       path: 'categories',
       name: 'blogCategories',
-      component: () => import('@/views/blog/childComps/pages/BlogCategories.vue'),
+      component: () => import('@/views/blog/childComps/pages/blogCategories/BlogCategories.vue'),
       meta: {
         title: '用户博客全部分类'
       }

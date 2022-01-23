@@ -4,23 +4,24 @@
  * @Autor: clq
  * @Date: 2022-01-17 17:50:48
  * @LastEditors: clq
- * @LastEditTime: 2022-01-18 12:57:21
+ * @LastEditTime: 2022-01-23 20:22:05
 -->
 <template>
   <div class="search-page-resource-item">
     <div class="search-page-resource-item-header">{{resource.name}}</div>
-    <div class="search-page-resource-item-body">{{resource.content}}</div>
+    <div class="search-page-resource-item-body">{{resource.remark}}</div>
     <div class="search-page-resource-item-footer">
       <div
         class="left"
         role="button"
+        @click="toResourcePage(resource.link)"
       >
         <i class="iconfont blog-xiazai" />
         前往下载
       </div>
       <div class="right">
-        <div class="author">{{resource.author}}</div>
-        <div class="upload-time">{{resource.uploadTime}}</div>
+        <div class="author">{{resource.nickname}}</div>
+        <div class="upload-time">{{resource.upload_time}}</div>
       </div>
     </div>
   </div>
@@ -44,6 +45,21 @@ export default defineComponent({
       required: true,
       default: null,
     },
+  },
+  setup() {
+    /**
+     * @description: 前往下载页面
+     * @param {string} link 资源链接
+     * @return {void}
+     * @author: clq
+     */
+    function toResourcePage(link) {
+      console.log('resourceLink: ' + link);
+      window.open(link);
+    }
+    return {
+      toResourcePage,
+    };
   },
 });
 </script>
@@ -94,7 +110,11 @@ export default defineComponent({
 
     .right {
       @include flex(center, space-between);
-      width: 150px;
+      // width: 150px;
+
+      .upload-time {
+        margin-left: 20px;
+      }
     }
   }
 }

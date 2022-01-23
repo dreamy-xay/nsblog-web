@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-16 18:28:08
  * @LastEditors: clq
- * @LastEditTime: 2022-01-20 17:26:02
+ * @LastEditTime: 2022-01-22 17:43:28
 -->
 <template>
   <base-view
@@ -14,13 +14,19 @@
     bind-class="question"
   >
     <template #top-bar-bottom>
-      <base-topic-bar />
+      <base-topic-bar
+        @selectTopic="changeTpoic"
+        @selectTag="changeTag"
+      />
     </template>
 
     <div class="question-container">
       <div class="container-left">
         <div class="left-top">
-          <question-header @changeFilterRule="changeFilterRule" />
+          <question-header
+            :activeIndex="activeFilterRuleIndex"
+            @changeFilterRule="changeFilterRule"
+          />
           <question-item
             v-for="(item, index) in questions"
             :key="index"
@@ -75,80 +81,40 @@ export default defineComponent({
   },
   setup() {
     const msg = useMessage(); // naive-ui 消息组件
-    // 问答
-    const questions = reactive([
-      {
-        id: 10,
-        title: 'hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh',
-        content:
-          'jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj',
-        reply_count: 0,
-        solution: 0,
-        browsing_count: 100,
-        username: 'dexteryu',
-        nickname: 'dexteryu1',
-        release_time: '2022-01-16 10:01',
-        tags: [
-          {
-            id: 12,
-            name: 'Java',
-          },
-          {
-            id: 13,
-            name: 'Java',
-          },
-          {
-            id: 14,
-            name: 'Java',
-          },
-        ],
-      },
-      {
-        id: 11,
-        title: 'hhhhhh',
-        content: 'jjjjj',
-        reply_count: 1,
-        solution: 0,
-        browsing_count: 99,
-        username: 'dexteryu',
-        nickname: 'dexteryu1',
-        release_time: '2022-01-16 10:01',
-        tags: [
-          {
-            id: 12,
-            name: 'Java',
-          },
-        ],
-      },
-      {
-        id: 12,
-        title: 'hhhhhh',
-        content: 'jjjjj',
-        reply_count: 123,
-        solution: 1,
-        browsing_count: 12,
-        username: 'dexteryu',
-        nickname: 'dexteryu1',
-        release_time: '2022-01-16 10:01',
-        tags: [
-          {
-            id: 12,
-            name: 'Java',
-          },
-        ],
-      },
-    ]);
+    const questions = reactive([]); // 问答数据
+    let activeFilterRuleIndex = ref(0); // 当前有效的过滤规则 `{0:'最热', 1:'最新', 2:'待回答', 3:'周榜', 4:'月榜'}`
+    let topicName = ref(''); // 主体
+    let tagName = ref(''); // 标签
+    let limit = ref(10); // 单次获取问答条数
+    let offset = ref(0); // 问答记录起始偏移量
 
-    // 获取问答
-    // getQuestions('us1')
-    //   .then((data) => {
-    //     console.log('getQuestions');
-    //     console.log(data);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //     msg.error('获取问答失败', { duration: 2000, closable: true });
-    //   });
+    /**
+     * @description: 跟新问答数据
+     * @param {boolean} flag 是否清空原数组
+     * @return {void}
+     * @author: clq
+     */
+    function updateQuestions(flag) {
+      // 获取问答
+      getQuestions('', 0, 0, activeFilterRuleIndex.value, topicName.value, tagName.value, limit.value, offset.value)
+        .then((data) => {
+          console.log('getQuestions');
+          console.log(data);
+          if (flag == true) questions.splice(0, questions.length);
+          // console.log('questions');
+          // console.log(questions);
+          for (let i of data.questions) {
+            questions.splice(questions.length, 0, i);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('获取问答失败', { duration: 2000, closable: true });
+        });
+    }
+
+    //初始化数据
+    updateQuestions(true);
 
     /**
      * @description: 加载更多问答信息
@@ -157,22 +123,56 @@ export default defineComponent({
      */
     function loadMoreQuestions() {
       console.log('loadMoreQuestions()');
+      offset.value += limit.value;
+      updateQuestions(false);
     }
 
     /**
      * @description: 更改过滤规则
-     * @param {number} newIndex 新规则对应索引 {0:'最新', 1:'最热', 2:'待回答', 3:'周榜', 4:'月榜'}
+     * @param {number} newFilterRuleIndex 新规则对应索引 {0:'最热', 1:'最新', 2:'待回答', 3:'周榜', 4:'月榜'}
      * @return {void}
      * @author: clq
      */
-    function changeFilterRule(newIndex) {
-      console.log('newIndex: ' + newIndex);
+    function changeFilterRule(newFilterRuleIndex) {
+      console.log('newFilterRuleIndex: ' + newFilterRuleIndex);
+      activeFilterRuleIndex.value = newFilterRuleIndex;
+      offset.value = 0;
+      updateQuestions(true);
+    }
+
+    /**
+     * @description: 改变topic
+     * @param {string} newTopic
+     * @return {void}
+     * @author: clq
+     */
+    function changeTpoic(newTopic) {
+      topicName.value = newTopic;
+      // 清空tag
+      tagName.value = '';
+      console.log('newTopic: ' + newTopic);
+      updateQuestions(true);
+    }
+
+    /**
+     * @description: 改变tag
+     * @param {string} newTag 新tag
+     * @return {void}
+     * @author: clq
+     */
+    function changeTag(newTag) {
+      tagName.value = newTag;
+      console.log('newTag: ' + newTag);
+      updateQuestions(true);
     }
 
     return {
       questions,
+      activeFilterRuleIndex,
       loadMoreQuestions,
       changeFilterRule,
+      changeTpoic,
+      changeTag,
     };
   },
 });
@@ -183,6 +183,7 @@ export default defineComponent({
   .question-container {
     @include flex();
     margin: 16px 0px 3px 75px;
+    padding-bottom: 40px;
 
     .container-left {
       @include flex(center, initial, column);
