@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-28 00:28:11
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-21 21:47:12
+ * @LastEditTime: 2022-01-22 11:54:51
  */
 
 import { Base64 } from 'js-base64';
@@ -45,7 +45,11 @@ export function print(
   prefix: string = '--------'
 ): void {
   let str: string = prefix + preText + (params ? ':' : '');
-  if (params) for (const key in params) str += `${params[key] ? `  ${key}=>${params[key]}` : ''}`;
+  if (params)
+    for (const key in params) {
+      const value: string = typeof params[key];
+      str += `${value !== 'null' && value !== 'undefined' && params[key] ? `  ${key}=>${params[key]}` : ''}`;
+    }
   str += '  ' + endText;
   console.log(str);
 }

@@ -4,7 +4,7 @@
 			"username": "dreamy",
 			"password": "Abcd1234",
 			"email": "dreamy@qq.com",
-			"token": "0a05aea276db9b8701dee7084626e747400af6cf388fdd2df924205898440a0d025ac7a7b1ab2ac51e70eefb3cbf051764f27b2d417c62389c160abad364daf3",
+			"token": null,
 			"isActive": true,
 			"isSuper": true
 		},
