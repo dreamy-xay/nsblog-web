@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 10:10:43
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-19 12:17:30
+ * @LastEditors: continue-hs
+ * @LastEditTime: 2022-01-22 17:59:02
  */
 import { get, post, put, RequestLifeCycle } from '@/network/request';
 
@@ -32,8 +32,8 @@ export function getArticleComments(
       article_id: articleId,
       comment_id: commentId,
       limit,
-      offset
-    }
+      offset,
+    },
   });
 }
 
@@ -61,8 +61,8 @@ export function postArticleComments(
       article_id,
       content,
       parent_id,
-      reply_username
-    }
+      reply_username,
+    },
   });
 }
 
@@ -84,8 +84,8 @@ export function modifyArticleCommentEvaluation(
     ...RLC,
     params: {
       comment_id,
-      type
-    }
+      type,
+    },
   });
 }
 
@@ -101,8 +101,8 @@ export function getTags(username: string, RLC: RequestLifeCycle = {}): Promise<u
     url: '/articles/tags',
     ...RLC,
     params: {
-      username
-    }
+      username,
+    },
   });
 }
 
@@ -118,32 +118,38 @@ export function getCategories(username: string, RLC: RequestLifeCycle = {}): Pro
     url: '/articles/categories',
     ...RLC,
     params: {
-      username
-    }
+      username,
+    },
   });
 }
 
 /**
  * @description: 获取发布的文章列表
- * @param {string} username 用户名 `必传参数`
+ * @param {string} username 用户名 `默认为''`
  * @param {string} category 过滤分类名 `默认为 ''`
  * @param {string} tag 过滤标签名 `默认为 ''`
  * @param {number} offset 起始位置 `默认为0`
  * @param {number} limit 限制条数 `默认为10`
  * @param {1 | -1 | 0} release_time 按发布时间排序，为 0 表示不排序 `默认为 0`
  * @param {1 | -1 | 0} browsing_count 按浏览量排序，为 0 表示不排序 `默认为 0`
+ * @param {string } topic_name 文章专题 `默认为''`
+ * @param {string} tag_name 文章标签 `默认为''`
+ * @param {0 | 1 | 2|3|4|5} type 热门排序类型 `默认为0`
  * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
  * @return {Promise<unknown>} 请求返回promise
  * @author: dreamy-xay
  */
 export function getArticles(
-  username: string,
+  username: string = '',
   category: string | number = '',
   tag: string = '',
   offset: number = 0,
   limit: number = 10,
   release_time: 1 | -1 | 0 = 0,
   browsing_count: 1 | -1 | 0 = 0,
+  topic_name: string = '',
+  tag_name: string = '',
+  type: 0 | 1 | 2 | 3 | 4 | 5 = 0,
   RLC: RequestLifeCycle = {}
 ): Promise<unknown> {
   return get({
@@ -156,8 +162,11 @@ export function getArticles(
       release_time,
       browsing_count,
       offset,
-      limit
-    }
+      limit,
+      topic_name,
+      tag_name,
+      type,
+    },
   });
 }
 
@@ -170,7 +179,7 @@ export function getArticles(
  */
 export function getArticleInfo(article_id: number, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return get({
-    url: `/articles/${article_id}`
+    url: `/articles/${article_id}`,
   });
 }
 
@@ -187,7 +196,7 @@ export function getArticlesUser(username: string, RLC: RequestLifeCycle = {}): P
     url: '/articles/user',
     ...RLC,
     params: {
-      username
-    }
+      username,
+    },
   });
 }

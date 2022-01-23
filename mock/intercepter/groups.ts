@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-21 21:33:20
+ * @LastEditTime: 2022-01-22 16:00:02
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -15,7 +15,7 @@ export default function(baseUrl: string, app: Application) {
   // 获取学习小组
   app.get(baseUrl + '/groups', (req: Request, res: Response) => {
     const { username, topic_name, limit, offset } = req.query;
-    if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
+    if (username && !select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
 
     print('get study groups', { username, topic_name, limit, offset });
 
