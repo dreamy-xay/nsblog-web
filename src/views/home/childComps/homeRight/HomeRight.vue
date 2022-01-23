@@ -3,13 +3,13 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2022-01-17 10:18:37
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-23 15:48:38
+ * @LastEditors: continue-hs
+ * @LastEditTime: 2022-01-23 16:43:51
 -->
 <template>
   <div class="home-right">
-    <home-bulletin :bulletinData="bulletinData" />
-    <home-activity :activityData="activityData" />
+    <base-bulletin :bulletin-data="bulletinData" />
+    <home-activity :activity-data="activityData" />
     <base-rank-card
       :data="rankingList"
       title="热门文章"
@@ -27,7 +27,7 @@
 
 <script>
 import { defineComponent, reactive } from 'vue';
-import HomeBulletin from '@/views/home/childComps/homeRight/childComps/HomeBulletin.vue';
+import BaseBulletin from '@/components/common/baseBulletin/BaseBulletin.vue';
 import HomeActivity from '@/views/home/childComps/homeRight/childComps/HomeActivity.vue';
 import BaseRankCard from '@/components/common/baseRankCard/BaseRankCard.vue';
 import BaseTagCard from '@/components/common/baseTagCard/BaseTagCard.vue';
@@ -40,7 +40,7 @@ import BaseTagCard from '@/components/common/baseTagCard/BaseTagCard.vue';
 export default defineComponent({
   name: 'homeRight',
   components: {
-    HomeBulletin,
+    BaseBulletin,
     HomeActivity,
     BaseRankCard,
     BaseTagCard,
