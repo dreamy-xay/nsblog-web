@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-17 17:46:10
  * @LastEditors: clq
- * @LastEditTime: 2022-01-18 14:14:42
+ * @LastEditTime: 2022-01-23 20:35:25
 -->
 <template>
   <div class="search-page-resource">
@@ -13,21 +13,26 @@
         <div class="left">
           <div
             role="button"
-            @click="sortByAll"
+            :class="{'active': resourceType==0}"
+            @click="filterByAll"
           >综合</div>
           <div
             role="button"
-            @click="sortByTime"
+            :class="{'active': resourceType==1}"
+            @click="filterByTime"
           >最新</div>
           <div
             role="button"
-            @click="sortByHot"
+            :class="{'active': resourceType==2}"
+            @click="filterByHot"
           >热门</div>
         </div>
         <n-popover
           placement="bottom"
           trigger="hover"
           ref="npopoverRef"
+          :show-arrow="false"
+          :style="{ marginTop: '1px' }"
         >
           <el-scrollbar max-height="160px">
             <div
@@ -60,16 +65,21 @@
         />
       </div>
     </div>
-    <search-page-to-load-more class="search-page-resource-btn" />
+    <search-page-to-load-more
+      class="search-page-resource-btn"
+      @onButtonClick="loadMoreResource"
+    />
   </div>
 </template>
 
 <script>
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, reactive, ref, renderList } from 'vue';
 import SearchPageToLoadMore from '@/views/search/childComps/SearchPageToLoadMore.vue';
 import SearchPageResourceItem from '@/views/search/childComps/pages/searchPageResource/childComps/SearchPageResourceItem.vue';
-import { getResources } from '@/network/api/resources';
+import { search } from '@/network/api/search';
+import { useRoute } from 'vue-router';
 import { useMessage } from 'naive-ui';
+
 /**
  * @description:
  * @author: clq
@@ -81,93 +91,63 @@ export default defineComponent({
     SearchPageToLoadMore,
     SearchPageResourceItem,
   },
-  setup() {
+  setup(props, context) {
+    const route = useRoute(); //route
     const msg = useMessage(); // naive-ui 消息组件
     const selectOptions = reactive(['时间不限', '最近一天', '最近一周', '最近三月']);
     const npopoverRef = ref(null); //n-popover引用对象
+    let resourceType = ref(0); // 0为综合，1为最新，2为热门
     let currentIndex = ref(0); //当前选定项索引
     let currentOption = ref('时间不限'); //当前选定项的值
-    let resourceList = reactive([
-      {
-        id: 1,
-        name: '健康和生产效率管理PPT健康和生产效率管理PPT健康和生产效率管理PPT健康和生产效率管理PPT健康和生产效率管理PPT健康和生产效率管理PPT',
-        content:
-          '日常生活休闲中，相信不少小伙伴可能需要健康和生产效率管理，在这里，为大家整理发布了健康和为大家整理发布了健康和为大家整理发布了健康和...',
-        author: 'Biutty',
-        link: 'http://www.xxx',
-        uploadTime: '2022-01-01',
-      },
-      {
-        id: 2,
-        name: '健康和生产效率管理PPT',
-        content: '日常生活休闲中，相信不少小伙伴可能需要健康和生产效率管理，在这里，为大家整理发布了健康和...',
-        author: 'Biutty',
-        link: 'http://www.xxx',
-        uploadTime: '2022-01-01',
-      },
-      {
-        id: 3,
-        name: '健康和生产效率管理PPT',
-        content: '日常生活休闲中，相信不少小伙伴可能需要健康和生产效率管理，在这里，为大家整理发布了健康和...',
-        author: 'Biutty',
-        link: 'http://www.xxx',
-        uploadTime: '2022-01-01',
-      },
-      {
-        id: 4,
-        name: '健康和生产效率管理PPT',
-        content: '日常生活休闲中，相信不少小伙伴可能需要健康和生产效率管理，在这里，为大家整理发布了健康和...',
-        author: 'Biutty',
-        uploadTime: '2022-01-01',
-      },
-      {
-        id: 5,
-        name: '健康和生产效率管理PPT',
-        content: '日常生活休闲中，相信不少小伙伴可能需要健康和生产效率管理，在这里，为大家整理发布了健康和...',
-        author: 'Biutty',
-        link: 'http://www.xxx',
-        uploadTime: '2022-01-01',
-      },
-      {
-        id: 6,
-        name: '健康和生产效率管理PPT',
-        content: '日常生活休闲中，相信不少小伙伴可能需要健康和生产效率管理，在这里，为大家整理发布了健康和...',
-        author: 'Biutty',
-        uploadTime: '2022-01-01',
-      },
-      {
-        id: 7,
-        name: '健康和生产效率管理PPT',
-        content: '日常生活休闲中，相信不少小伙伴可能需要健康和生产效率管理，在这里，为大家整理发布了健康和...',
-        author: 'Biutty',
-        uploadTime: '2022-01-01',
-      },
-      {
-        id: 8,
-        name: '健康和生产效率管理PPT',
-        content: '日常生活休闲中，相信不少小伙伴可能需要健康和生产效率管理，在这里，为大家整理发布了健康和...',
-        author: 'Biutty',
-        uploadTime: '2022-01-01',
-      },
-    ]);
+    let limit = ref(10);
+    let offset = ref(0);
+    let resourceList = reactive([]);
 
-    getResources('us1', 0, 10)
-      .then((data) => {
-        console.log('resourcesData');
-        console.log(data);
-      })
-      .catch((error) => {
-        console.log(error);
-        msg.error('获取标签失败', { duration: 2000, closable: true });
-      });
+    // console.log(route.query.keyword);
+
+    //获取初始数据
+    getResource(true);
+
+    /**
+     * @description: 获取资源
+     * @param {boolean} clean 是否清空原始数据
+     * @return {void}
+     * @author: clq
+     */
+    function getResource(clean) {
+      search(route.query.keyword, 4, resourceType.value, currentIndex.value, limit.value, offset.value)
+        .then((data) => {
+          // console.log('getResource');
+          // console.log(data);
+          //清空初始数据
+          if (clean == true) resourceList.splice(0, resourceList.length);
+          // console.log(resourceList);
+          for (let resource of data.resources) {
+            resource.upload_time = resource.upload_time.split(' ')[0];
+            resourceList.splice(resourceList.length, 0, resource);
+          }
+          // console.log(resourceList);
+          context.emit('changeLoadingState', 4, true);
+          context.emit('changeAcitiveIndex', 4);
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('获取资源失败', { duration: 2000, closable: true });
+        });
+    }
 
     /**
      * @description: 综合排序
      * @return {void}
      * @author: clq
      */
-    function sortByAll() {
-      console.log('sortByAll');
+    function filterByAll() {
+      // console.log('filterByAll');
+      if (resourceType.value != 0) {
+        resourceType.value = 0;
+        offset.value = 0;
+        getResource(true);
+      }
     }
 
     /**
@@ -175,8 +155,13 @@ export default defineComponent({
      * @return {void}
      * @author: clq
      */
-    function sortByTime() {
-      console.log('sortByTime');
+    function filterByTime() {
+      // console.log('filterByTime');
+      if (resourceType.value != 1) {
+        resourceType.value = 1;
+        offset.value = 0;
+        getResource(true);
+      }
     }
 
     /**
@@ -184,8 +169,13 @@ export default defineComponent({
      * @return {void}
      * @author: clq
      */
-    function sortByHot() {
-      console.log('sortByHot');
+    function filterByHot() {
+      // console.log('filterByHot');
+      if (resourceType.value != 2) {
+        resourceType.value = 2;
+        offset.value = 0;
+        getResource(true);
+      }
     }
 
     /**
@@ -195,23 +185,39 @@ export default defineComponent({
      * @author: clq
      */
     function changeSelect(newIndex) {
-      currentIndex = newIndex;
-      currentOption.value = selectOptions[currentIndex];
-      console.log('currentOption: ' + currentOption.value);
-      console.log('newIndex: ' + newIndex);
-      npopoverRef.value.setShow(false); // 不显示 popover
+      if (currentIndex.value != newIndex) {
+        currentIndex.value = newIndex;
+        currentOption.value = selectOptions[currentIndex.value];
+        // console.log('currentOption: ' + currentOption.value);
+        // console.log('newIndex: ' + newIndex);
+        npopoverRef.value.setShow(false); // 不显示 popover
+        offset.value = 0;
+        getResource(true);
+      }
+    }
+
+    /**
+     * @description: 加载更多资源
+     * @return {void}
+     * @author: clq
+     */
+    function loadMoreResource() {
+      offset.value = resourceList.length;
+      getResource(false);
     }
 
     return {
       selectOptions,
+      resourceType,
       currentIndex,
       currentOption,
       npopoverRef,
       resourceList,
-      sortByAll,
-      sortByTime,
-      sortByHot,
+      filterByAll,
+      filterByTime,
+      filterByHot,
       changeSelect,
+      loadMoreResource,
     };
   },
 });
@@ -252,6 +258,10 @@ export default defineComponent({
           &:hover {
             color: $green-1;
           }
+        }
+
+        .active {
+          color: $green-1;
         }
       }
 

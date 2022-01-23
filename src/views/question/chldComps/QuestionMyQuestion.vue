@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-19 19:24:33
  * @LastEditors: clq
- * @LastEditTime: 2022-01-20 20:17:21
+ * @LastEditTime: 2022-01-22 17:45:42
 -->
 <template>
   <div class="question-my-question">
@@ -114,7 +114,7 @@ export default defineComponent({
       .middle-item {
         @include flex(center, space-between);
         height: 22px;
-        width: 110px;
+        width: 115px;
         margin-bottom: 10px;
 
         .item-left {
@@ -132,6 +132,7 @@ export default defineComponent({
 
         .item-right {
           height: 18px;
+          padding: 0px 4px;
           opacity: 0.4;
           background: $grey-5;
           border-radius: $border-radius-1;

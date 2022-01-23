@@ -4,16 +4,20 @@
  * @Autor: clq
  * @Date: 2022-01-19 19:21:05
  * @LastEditors: clq
- * @LastEditTime: 2022-01-19 22:03:45
+ * @LastEditTime: 2022-01-22 20:46:09
 -->
 <template>
-  <div class="question-item">
+  <div
+    class="question-item"
+    role="button"
+    @click="changeRouter(question.id)"
+  >
     <div
       class="question-item-left"
       :class="{'question-item-border': question.reply_count>0, 'question-item-bgc':question.solution>0}"
     >
       <div class="left-top">
-        {{question.reply_count}}
+        {{numberFormat(question.reply_count)}}
       </div>
       <div class="left-bottom">
         {{question.solution? "解决":"回答"}}
@@ -23,7 +27,7 @@
       class="question-item-middle"
       :class="{'question-item-color': question.browsing_count >= 100}"
     >
-      <div class="middle-top">{{question.browsing_count}}</div>
+      <div class="middle-top">{{numberFormat(question.browsing_count)}}</div>
       <div class="middle-bottom">阅读</div>
     </div>
     <div class="question-item-right">
@@ -50,6 +54,7 @@
 
 <script>
 import { defineComponent } from 'vue';
+import { useRoute } from 'vue-router';
 
 /**
  * @description: 问答条目组件
@@ -66,17 +71,57 @@ export default defineComponent({
       default: null,
     },
   },
+  setup() {
+    const route = useRoute(); //route
+
+    /**
+     * @description: 将大于1000的数转化为以k为单位的字符串
+     * @param {number} num 待处理的数据
+     * @return {void}
+     * @author: clq
+     */
+    function numberFormat(num) {
+      if (num > 1000) {
+        return `${Math.floor(num / 1000)}.${Math.floor((num % 1000) / 100)}k`;
+      } else {
+        return num;
+      }
+    }
+
+    /**
+     * @description: 路由跳转
+     * @param {number} questionId 问答id
+     * @return {void}
+     * @author: clq
+     */
+    function changeRouter(questionId) {
+      console.log('questionId: ' + questionId);
+      this.$router.push({ name: 'question', query: { id: questionId } });
+    }
+
+    return {
+      changeRouter,
+      numberFormat,
+    };
+  },
 });
 </script>
 
 <style lang="scss" scoped>
 .question-item {
   @include flex(center, space-between);
-  width: 660px;
-  height: 80px;
+  box-sizing: border-box;
+  // width: 660px;
+  width: 100%;
+  // height: 80px;
   margin: 0px auto;
-  padding: 12px 0px 11px;
+  padding: 12px 18px 11px;
   border-bottom: 1px solid $grey-4;
+  transition: 0.25s;
+
+  &:hover {
+    background-color: $grey-1;
+  }
 
   .question-item-left {
     box-sizing: border-box;
