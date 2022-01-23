@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:31:44
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-12 12:54:07
+ * @LastEditTime: 2022-01-23 13:47:29
 -->
 <template>
   <el-scrollbar max-height="calc(100vh - 108px)">
@@ -36,7 +36,7 @@
               @click.stop="changePages('/user/' + item.content.username)"
             >{{item.content.nickname}}</span>
             <div
-              @click="changePages('/article/'+item.content.id)"
+              @click="changePages((item.content.type===1||item.content.type===3 ? '/article/' : '/question/')+item.content.id)"
               role="button"
             >
               <span v-if="item.content.type === 1">赞了我的文章</span>
