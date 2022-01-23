@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-23 16:25:32
+ * @LastEditTime: 2022-01-23 17:14:46
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -26,7 +26,8 @@ export default function(baseUrl: string, app: Application) {
       tag_name,
       type
     } = req.query;
-    if (username && !select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
+    if (username !== '' && !select('users').findOne({ username }))
+      return res.status(410).json({ error: 'User name error' });
 
     print('get articles', {
       username,
