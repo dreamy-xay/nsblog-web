@@ -4,10 +4,13 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-15 14:15:21
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-23 15:51:11
+ * @LastEditTime: 2022-01-23 16:17:48
 -->
 <template>
-  <div class="home-activity">
+  <div
+    class="home-activity"
+    :style="style"
+  >
     <div
       class="home-activity-image"
       v-for="(item , index) in activityData"
@@ -31,6 +34,7 @@ import BaseImage from '@/components/content/baseImage/BaseImage.vue';
 /**
  * @description: 活动栏
  * @param {Array} activityData 显示活动图片image以及跳转连接href `默认[]`
+ * @param {Object} style 最外层样式 `默认为 null`
  * @author: Z_Y_C
  */
 
@@ -43,6 +47,10 @@ export default defineComponent({
     activityData: {
       type: Array,
       default: () => [],
+    },
+    style: {
+      type: Object,
+      default: null,
     },
   },
   setup() {
