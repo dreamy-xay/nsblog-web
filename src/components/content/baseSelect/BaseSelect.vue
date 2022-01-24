@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-08-23 19:01:15
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-16 11:21:49
+ * @LastEditTime: 2022-01-23 23:21:51
 -->
 <template>
   <n-popover
@@ -13,18 +13,18 @@
     :disabled="disabled"
     :raw="true"
     :show="visible"
-    :offset="10"
     placement="bottom"
-    class="user-center-select"
+    class="base-select"
+    :style="{ marginTop: '10px' }"
   >
 
     <el-scrollbar max-height="300px">
 
       <div
-        class="user-center-select-content"
+        class="base-select-content"
         v-for="(item,index) in sdata"
         :key="index"
-        :class="item === selectTag ? 'user-center-select-content-ok' : ''"
+        :class="item === selectTag ? 'base-select-content-ok' : ''"
         @click="changeSelect(index)"
         :style="selectStyle"
         role="button"
@@ -33,20 +33,20 @@
     </el-scrollbar>
     <template #trigger>
       <div
-        :class="disabled ? 'user-center-select-buttontrue' : 'user-center-select-buttonfalse'"
+        :class="disabled ? 'base-select-buttontrue' : 'base-select-buttonfalse'"
         :style="selectStyle"
         role="button"
         @click="computedPages"
         v-click-outside="computedPosFalse"
       >
         <div
-          class="user-center-select-button-text"
+          class="base-select-button-text"
           v-text="selectTag === '' ? showText : selectTag"
         >
         </div>
         <div
-          class='iconfont blog-arrow-down user-center-select-button-iconfont'
-          :class="rotate ? 'user-center-select-button-iconfont-rotate' : ''"
+          class='iconfont blog-arrow-down base-select-button-iconfont'
+          :class="rotate ? 'base-select-button-iconfont-rotate' : ''"
         ></div>
       </div>
     </template>
@@ -69,7 +69,7 @@ import { computed, defineComponent, ref } from 'vue';
  */
 
 export default defineComponent({
-  name: 'userCenterSelect',
+  name: 'baseSelect',
   emits: ['changeItem'],
   props: {
     swidth: {
@@ -160,7 +160,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.user-center-select-content {
+.base-select-content {
   display: flex;
   border-radius: $border-radius-1;
   transition: all 0.25s;
@@ -173,12 +173,12 @@ export default defineComponent({
   }
 }
 
-.user-center-select-content-ok {
+.base-select-content-ok {
   background-color: $green-1;
   color: $grey-0;
 }
 
-.user-center-select-buttontrue {
+.base-select-buttontrue {
   width: 100%;
   display: flex;
   align-items: center;
@@ -194,14 +194,14 @@ export default defineComponent({
     cursor: not-allowed;
   }
 
-  .user-center-select-button-text {
+  .base-select-button-text {
     align-items: center;
     width: calc(100% - 23px);
     height: 20px;
     @include ellipsis(1);
   }
 
-  .user-center-select-button-iconfont {
+  .base-select-button-iconfont {
     display: flex;
     align-items: center;
     margin-left: 5px;
@@ -210,7 +210,7 @@ export default defineComponent({
   }
 }
 
-.user-center-select-buttonfalse {
+.base-select-buttonfalse {
   width: 100%;
   display: flex;
   align-items: center;
@@ -227,14 +227,14 @@ export default defineComponent({
     color: $green-1;
   }
 
-  .user-center-select-button-text {
+  .base-select-button-text {
     align-items: center;
     width: calc(100% - 23px);
     height: 20px;
     @include ellipsis(1);
   }
 
-  .user-center-select-button-iconfont {
+  .base-select-button-iconfont {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -243,14 +243,14 @@ export default defineComponent({
     height: 20px;
   }
 
-  .user-center-select-button-iconfont-rotate {
+  .base-select-button-iconfont-rotate {
     transform: rotate(180deg);
   }
 }
 </style>
 
 <style lang="scss">
-.user-center-select {
+.base-select {
   box-shadow: $shadow-0;
   border-radius: $border-radius-0;
   background-color: $grey-0;
