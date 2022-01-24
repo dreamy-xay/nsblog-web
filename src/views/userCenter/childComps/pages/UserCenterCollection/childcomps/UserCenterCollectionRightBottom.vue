@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-23 20:34:57
  * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-24 22:06:01
+ * @LastEditTime: 2022-01-24 23:41:41
 -->
 <template>
   <div class="user-center-collection-right-bottom">
@@ -201,11 +201,11 @@ export default defineComponent({
 }
 
 .user-center-collection-right-bottom {
-  @include size(746px, 488px);
+  @include size(746px, 504px);
 
   .user-center-collection-right-bottom-typelist {
-    @include size(746px, 21px);
-    margin: 0 0 0 35px;
+    @include size(711px, 21px);
+    margin: 9px 0 0 35px;
 
     .Type {
       @include size(38px, 21px);
@@ -216,6 +216,7 @@ export default defineComponent({
       border-bottom: 2px solid $grey-0;
 
       &.Choice {
+        transition: 0.25s;
         border-bottom: 2px solid $green-0;
       }
 
@@ -228,7 +229,7 @@ export default defineComponent({
 
   .user-center-collection-right-bottom-collectionlist {
     margin-top: 15px;
-    @include size(746px, 420px);
+    @include size(746px, 440px);
 
     :deep(.el-scrollbar__thumb) {
       background-color: $grey-7 !important;
@@ -236,12 +237,12 @@ export default defineComponent({
 
     .user-center-collection-right-bottom-blank {
       @include flex(center, center);
-      @include size(746px, 420px);
+      @include size(746px, 440px);
     }
 
     .user-center-collection-right-bottom-collections {
       @include size(726px, 53px);
-      margin: 16px 0 0 9px;
+      margin: 15px 0 1px 9px;
       background: $grey-0;
       border-radius: 8px;
       box-shadow: $shadow-0;
