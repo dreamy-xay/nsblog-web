@@ -77,7 +77,7 @@ export default defineComponent({
       };
     });
     const msg = useMessage();
-    const limit = ref(20);
+    const limit = ref(13);  //每次拿多少数据
     if (tokenInfo.value.status) {
       getFavorites(tokenInfo.value.username, limit.value, 0, 0, 1)
         .then((res) => {
