@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 20:59:37
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-22 15:56:16
+ * @LastEditTime: 2022-01-23 16:26:56
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -31,7 +31,7 @@ export default function(baseUrl: string, app: Application) {
             tags.push(Random.integer(0, 1) ? Random.word(2, 8) : Random.cword(2, 5));
         }
         ans.push({
-          id: Random.increment(),
+          id: Random.increment(Random.integer(1, 10)),
           title: Random.integer(0, 1) ? Random.title(1, 40) : Random.ctitle(1, 40),
           content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
           release_time: Random.datetime(),
@@ -75,9 +75,9 @@ export default function(baseUrl: string, app: Application) {
       const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
       for (let i: number = 0; i < limit; ++i) {
         ans.push({
-          id: Random.increment(),
+          id: Random.increment(Random.integer(1, 10)),
           content: Random.integer(0, 1) ? Random.paragraph(0, 3) : Random.cparagraph(0, 3),
-          question_id: Random.integer(0, 10000),
+          question_id: Random.increment(Random.integer(1, 10)),
           question_title: Random.integer(0, 1) ? Random.title(3, 100) : Random.ctitle(3, 50),
           reply_time: Random.datetime()
         });
