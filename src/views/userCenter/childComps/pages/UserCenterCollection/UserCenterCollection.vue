@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-18 15:25:00
  * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-24 23:23:20
+ * @LastEditTime: 2022-01-24 23:45:00
 -->
 <template>
   <div class="user-center-collection">
@@ -82,7 +82,6 @@ export default defineComponent({
       getFavorites(tokenInfo.value.username, limit.value, 0, 0, 1)
         .then((res) => {
           const len = res.favorites.length;
-          console.log(res.favorites);
           for (var i = 0; i < len; i++) {
             let typeList = reactive([]); //收藏夹分类收藏列表
             typeList.push({ List: [] }, { List: [] }, { List: [] }, { List: [] });
@@ -291,7 +290,6 @@ export default defineComponent({
             offset: 0,
           });
           chooseActive(0);
-          console.log(favorites);
         })
         .catch((error) => {
           console.log(error);
