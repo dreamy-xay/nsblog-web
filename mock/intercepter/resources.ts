@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 19:55:56
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-21 21:31:55
+ * @LastEditTime: 2022-01-23 16:27:00
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -23,7 +23,7 @@ export default function(baseUrl: string, app: Application) {
       const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
       for (let i: number = 0; i < limit; ++i) {
         ans.push({
-          id: Random.increment(),
+          id: Random.increment(Random.integer(1, 10)),
           name: Random.integer(0, 1) ? Random.word(2, 10) : Random.cword(2, 10),
           link: Random.url(),
           remark: Random.integer(0, 1) ? Random.paragraph(1, 2) : Random.cparagraph(1, 2),
