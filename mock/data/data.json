@@ -59,7 +59,11 @@
 			"nickname": "清幽兰",
 			"password": "Abcd1234",
 			"email": "6@qq.com",
+<<<<<<< HEAD
 			"token": "0ab82daed304cf1a7806210ede8da5ebabd3687b17f94adfdd8795abfde69afa5c6d61c64e75dee491be91e7c975a51881a9a7ced48e5b04e9e4aa6f831458b3",
+=======
+			"token": "af7f89815f9071e19eddedbe61ef25ddf170354125bf1eaaa653a7622884a12452b7e185d667eb81ef67c4b033f07e2f277745fc909d5dadff1b995f92ad9acc",
+>>>>>>> 1638ab1d929430efa036c7baf2469bc58bfe81f0
 			"isActive": true,
 			"isSuper": false
 		},
