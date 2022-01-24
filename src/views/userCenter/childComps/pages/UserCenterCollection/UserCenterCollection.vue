@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-18 15:25:00
  * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-24 22:08:52
+ * @LastEditTime: 2022-01-24 23:23:20
 -->
 <template>
   <div class="user-center-collection">
@@ -78,7 +78,6 @@ export default defineComponent({
     });
     const msg = useMessage();
     const limit = ref(20);
-
     if (tokenInfo.value.status) {
       getFavorites(tokenInfo.value.username, limit.value, 0, 0, 1)
         .then((res) => {
