@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 20:59:37
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-23 16:26:56
+ * @LastEditTime: 2022-01-23 22:08:37
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -25,7 +25,7 @@ export default function(baseUrl: string, app: Application) {
       for (let i: number = 0; i < limit; ++i) {
         const user: RandomUser = RUsers.random();
         const tags: string[] = [];
-        if (username) {
+        if (!username) {
           const sum: number = Random.integer(1, 3);
           for (let j: number = 0; j < sum; ++j)
             tags.push(Random.integer(0, 1) ? Random.word(2, 8) : Random.cword(2, 5));
