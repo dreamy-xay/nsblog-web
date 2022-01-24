@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2021-09-01 16:41:52
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-21 19:10:52
+ * @LastEditors: continue-hs
+ * @LastEditTime: 2022-01-24 19:10:18
 -->
 <template>
   <div class="user-center-collection-right-top">
@@ -13,13 +13,15 @@
         class="user-center-collection-right-top-name"
         role="button"
         v-show="!isEditName"
-        @click="editName"
       >
-        {{data.name ? data.name : '编辑收藏夹标题~ o(*￣▽￣*)o'}}
-        <i
-          class="iconfont blog-bianji1"
-          role="button"
-        ></i>
+        <div class="user-center-collection-right-top-name-text">
+          {{data.name ? data.name : '编辑收藏夹标题~ o(*￣▽￣*)o'}}
+          <i
+            class="iconfont blog-bianji1"
+            role="button"
+            @click="editName"
+          ></i>
+        </div>
       </div>
       <base-input
         v-show="isEditName"
@@ -163,7 +165,7 @@ export default defineComponent({
     }
 
     /**
-     * @description: 更新删除收藏夹标题及确认框的显示
+     * @description: 更新收藏夹标题及确认框的显示
      * @return {void}
      * @author: continue-hs
      */
@@ -194,7 +196,7 @@ export default defineComponent({
     }
 
     /**
-     * @description: 更新删除收藏夹描述及确认框的显示
+     * @description: 更新收藏夹描述及确认框的显示
      * @return {void}
      * @author: continue-hs
      */
@@ -213,7 +215,7 @@ export default defineComponent({
     }
 
     /**
-     * @description: 更新删除收藏夹类型及确认框的显示
+     * @description: 更新收藏夹类型及确认框的显示
      * @return {void}
      * @author: continue-hs
      */
@@ -281,15 +283,19 @@ export default defineComponent({
     margin: 17px 0 0 30px;
 
     .user-center-collection-right-top-name {
-      color: $grey-8;
-      padding: 6px 0 6px 8px;
-      height: 20px;
-    }
+      @include flex(center);
 
-    i {
-      margin-left: 14px;
-    }
+      .user-center-collection-right-top-name-text {
+        color: $grey-8;
+        padding: 6px 0 6px 8px;
+        height: 20px;
 
+        i {
+          margin-left: 14px;
+          height: 16px;
+        }
+      }
+    }
     .user-center-collection-right-top-remark {
       color: $grey-8;
       padding: 6px 25px 6px 8px;
