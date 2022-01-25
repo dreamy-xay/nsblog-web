@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-18 15:25:00
  * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-24 23:45:00
+ * @LastEditTime: 2022-01-25 13:31:48
 -->
 <template>
   <div class="user-center-collection">
@@ -77,7 +77,8 @@ export default defineComponent({
       };
     });
     const msg = useMessage();
-    const limit = ref(13);  //每次拿多少数据
+    const limit = ref(13); //每次拿多少数据
+
     if (tokenInfo.value.status) {
       getFavorites(tokenInfo.value.username, limit.value, 0, 0, 1)
         .then((res) => {
