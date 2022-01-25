@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2022-01-23 15:06:34
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-23 16:37:30
+ * @LastEditTime: 2022-01-25 18:56:39
 -->
 <template>
   <n-modal
@@ -53,7 +53,7 @@ import BaseImage from '@/components/content/baseImage/BaseImage';
 
 /**
  * @description:邀请回答
- * @param {Boolean} isShow 是否显示收藏夹界面 `默认为false`
+ * @param {Boolean} isShow 是否显示邀请回答界面 `默认为false`
  * @author: xiao
  */
 
@@ -65,7 +65,7 @@ export default defineComponent({
   props: {
     isShow: {
       type: Boolean,
-      default: false,
+      default: true,
     },
   },
   setup(_, context) {
