@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-24 15:52:14
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-25 23:12:43
+ * @LastEditTime: 2022-01-25 23:31:31
 -->
 <template>
   <div class="resource-detail">
