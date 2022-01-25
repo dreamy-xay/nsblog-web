@@ -4,11 +4,15 @@
  * @Autor: clq
  * @Date: 2022-01-17 17:50:48
  * @LastEditors: clq
- * @LastEditTime: 2022-01-23 20:22:05
+ * @LastEditTime: 2022-01-25 21:07:31
 -->
 <template>
   <div class="search-page-resource-item">
-    <div class="search-page-resource-item-header">{{resource.name}}</div>
+    <div
+      class="search-page-resource-item-header"
+      role="button"
+      @click="toResourceDetail(resource.id)"
+    >{{resource.name}}</div>
     <div class="search-page-resource-item-body">{{resource.remark}}</div>
     <div class="search-page-resource-item-footer">
       <div
@@ -20,7 +24,11 @@
         前往下载
       </div>
       <div class="right">
-        <div class="author">{{resource.nickname}}</div>
+        <div
+          class="author"
+          role="button"
+          @click="touserCenter(resource.username)"
+        >{{resource.nickname}}</div>
         <div class="upload-time">{{resource.upload_time}}</div>
       </div>
     </div>
@@ -57,8 +65,30 @@ export default defineComponent({
       console.log('resourceLink: ' + link);
       window.open(link);
     }
+
+    /**
+     * @description: 跳转到用户主页
+     * @param {string} username
+     * @return {void}
+     * @author: clq
+     */
+    function touserCenter(username) {
+      window.open(`/user/${username}`);
+    }
+
+    /**
+     * @description: 跳转到资源详情页面
+     * @param {number} id 资源id
+     * @return {void}
+     * @author: clq
+     */
+    function toResourceDetail(id) {
+      window.open(`/resource/${id}`);
+    }
     return {
       toResourcePage,
+      touserCenter,
+      toResourceDetail,
     };
   },
 });
@@ -75,6 +105,11 @@ export default defineComponent({
     font-size: 16px;
     font-weight: 700;
     color: $grey-10;
+    transition: 0.25s;
+
+    &:hover {
+      color: $green-1;
+    }
   }
 
   .search-page-resource-item-body {
@@ -111,6 +146,14 @@ export default defineComponent({
     .right {
       @include flex(center, space-between);
       // width: 150px;
+
+      .author {
+        transition: 0.25s;
+
+        &:hover {
+          color: $green-1;
+        }
+      }
 
       .upload-time {
         margin-left: 20px;

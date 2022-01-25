@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-24 22:56:49
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-25 20:38:38
+ * @LastEditTime: 2022-01-25 23:06:37
 -->
 <template>
   <div class="resource-detail-bottom">
@@ -14,7 +14,7 @@
 </template>
 <script>
 import { defineComponent } from 'vue';
-import ResourceBody from '@/views/resource/childComps/resourceLeft/ResourceBody.vue';
+import ResourceBody from '@/views/resource/childComps/pages/resourceHome/childComps/resourceLeft/ResourceBody.vue';
 
 /**
  * @description: 资源详细信息页面bottom

@@ -4,14 +4,10 @@
  * @Autor: clq
  * @Date: 2022-01-19 19:21:05
  * @LastEditors: clq
- * @LastEditTime: 2022-01-22 20:46:09
+ * @LastEditTime: 2022-01-25 21:21:31
 -->
 <template>
-  <div
-    class="question-item"
-    role="button"
-    @click="changeRouter(question.id)"
-  >
+  <div class="question-item">
     <div
       class="question-item-left"
       :class="{'question-item-border': question.reply_count>0, 'question-item-bgc':question.solution>0}"
@@ -31,19 +27,27 @@
       <div class="middle-bottom">阅读</div>
     </div>
     <div class="question-item-right">
-      <div class="right-top">{{question.title}}</div>
+      <div
+        class="right-top"
+        role="button"
+        @click="toResourceDetailPage(question.id)"
+      >{{question.title}}</div>
       <div class="right-middle">{{question.content}}</div>
       <div class="right-bottom">
         <div class="bottom-left">
           <div
             class="tag"
             v-for="(item) in question.tags"
-            :key="item.id"
+            :key="item"
             role="button"
-          >{{item.name}}</div>
+          >{{item}}</div>
         </div>
         <div class="bottom-right">
-          <div class="nickname">{{question.nickname}}</div>
+          <div
+            class="nickname"
+            role="button"
+            @click="toUserPage(question.username)"
+          >{{question.nickname}}</div>
           <div class="point"></div>
           <div class="release-time">{{question.release_time}}</div>
         </div>
@@ -89,19 +93,32 @@ export default defineComponent({
     }
 
     /**
-     * @description: 路由跳转
+     * @description: 跳转到问答详情页面
      * @param {number} questionId 问答id
      * @return {void}
      * @author: clq
      */
-    function changeRouter(questionId) {
+    function toResourceDetailPage(questionId) {
       console.log('questionId: ' + questionId);
-      this.$router.push({ name: 'question', query: { id: questionId } });
+      window.open(`/question/${questionId}`);
+    }
+
+    /**
+     * @description: 跳转到用户主页
+     * @param {string} username
+     * @return {void}
+     * @author: clq
+     */
+    function toUserPage(username) {
+      console.log('username: ' + username);
+      // this.$router.push({ name: 'question', params: { username: username } });
+      window.open(`/user/${username}`);
     }
 
     return {
-      changeRouter,
       numberFormat,
+      toResourceDetailPage,
+      toUserPage,
     };
   },
 });
@@ -119,9 +136,9 @@ export default defineComponent({
   border-bottom: 1px solid $grey-4;
   transition: 0.25s;
 
-  &:hover {
-    background-color: $grey-1;
-  }
+  // &:hover {
+  //   background-color: $grey-1;
+  // }
 
   .question-item-left {
     box-sizing: border-box;
@@ -210,11 +227,17 @@ export default defineComponent({
       text-align: left;
       line-height: 24px;
       color: $grey-10;
+      transition: 0.25s;
+
+      &:hover {
+        color: $green-0;
+      }
     }
 
     .right-middle {
       @include ellipsis(1);
       height: 17px;
+      margin-bottom: 7px;
       font-size: 13px;
       font-weight: 400;
       text-align: left;
@@ -259,6 +282,10 @@ export default defineComponent({
           text-align: center;
           line-height: 14px;
           color: $grey-7;
+
+          &:hover {
+            color: $green-0;
+          }
         }
 
         .point {

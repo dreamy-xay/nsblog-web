@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-08-28 23:20:26
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-25 21:45:58
+ * @LastEditTime: 2022-01-25 23:23:16
 -->
 
 <template>
@@ -69,7 +69,6 @@
           :swidth="80"
           :disabled="birthdayDisabled[index]"
           @changeItem="changeBirthday($event,index)"
-          :buttonStyle="{boxShadow:' 0 0 6px #4bd8aa'}"
         >
         </base-select>
       </div>

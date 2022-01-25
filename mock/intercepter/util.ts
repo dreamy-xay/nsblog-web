@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-28 00:28:11
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-23 17:08:32
+ * @LastEditTime: 2022-01-24 16:29:20
  */
 
 import { Base64 } from 'js-base64';
@@ -34,7 +34,7 @@ export function int(value: unknown): number {
  * @param {string} preText 参数前文本 `必传参数`
  * @param {Record<string, unknown> | undefined} params 打印的参数 `默认为 undefined`
  * @param {string} endText 参数后文本 `默认为 'success!'`
- * @param {string} prefix 打印文字的前缀 `默认为 '--------'`
+ * @param {string} prefix 打印文字的前缀 `默认为 '\x1B[32m>\x1b[0m '`
  * @return {void}
  * @author: dreamy-xay
  */
@@ -42,7 +42,7 @@ export function print(
   preText: string,
   params: Record<string, unknown> | undefined = undefined,
   endText: string = 'success!',
-  prefix: string = '\t'
+  prefix: string = '\x1B[32m>\x1b[0m '
 ): void {
   let str: string = prefix + preText + (params ? ':' : '');
   if (params)
