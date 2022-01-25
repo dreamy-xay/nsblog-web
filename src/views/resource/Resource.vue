@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-21 23:15:38
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-25 23:13:45
+ * @LastEditTime: 2022-01-25 23:34:05
 -->
 <template>
   <base-view
@@ -38,7 +38,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.resource {
-  width: 1000px;
+:deep(.resource) {
+  @include flex(center, center, column);
 }
 </style>
