@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:02:59
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-23 13:58:36
+ * @LastEditors: clq
+ * @LastEditTime: 2022-01-25 10:27:55
  */
 import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 import loginRouter from './modules/login';
@@ -13,6 +13,7 @@ import userCenterRouter from './modules/userCenter';
 import userRouter from './modules/user';
 import blogRouter from './modules/blog';
 import searchRouter from './modules/search';
+import questionRouter from './modules/question';
 
 const routes: Array<RouteRecordRaw> = [
   // 登录页面
@@ -27,6 +28,8 @@ const routes: Array<RouteRecordRaw> = [
   blogRouter,
   // 搜索主页页面
   searchRouter,
+  // 问答页面
+  questionRouter,
   // 主页
   {
     path: '/',
@@ -34,11 +37,11 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/home/Home.vue')
   },
   // 问答页面
-  {
-    path: '/question',
-    name: 'question',
-    component: () => import('@/views/question/Question.vue')
-  },
+  // {
+  //   path: '/question',
+  //   name: 'question',
+  //   component: () => import('@/views/question/Question.vue')
+  // },
   //学习小组页面
   {
     path: '/group',
