@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-23 15:17:38
+ * @LastEditTime: 2022-01-25 15:23:24
 -->
 <template>
   <base-view
@@ -29,6 +29,7 @@
         <home-left
           :topic="topicSelect"
           :tag="tagSelect"
+          :isclick="isClick"
         />
       </div>
       <div class="right">
@@ -44,8 +45,8 @@ import BaseView from '@/components/content/baseView/BaseView.vue';
 import BaseTopicBar from '@/components/common/baseTopicBar/BaseTopicBar.vue';
 import BaseTopicTags from '@/components/common/baseTopicBar/BaseTopicTags.vue';
 // import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
-import HomeLeft from '@/views/home/childComps/homeLeft/HomeLeft.vue';
 import HomeRight from '@/views/home/childComps/homeRight/HomeRight.vue';
+import HomeLeft from '@/views/home/childComps/HomeLeft.vue';
 
 /**
  * @description: 博客主页
@@ -64,7 +65,7 @@ export default defineComponent({
   setup() {
     const topicSelect = ref('');
     const tagSelect = ref('');
-
+    const isClick = ref(false);
     /**
      * @description: 选择了专题
      * @param {string} topic 专题名
@@ -72,7 +73,11 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function selectTopic(topic) {
-      topicSelect.value = topic;
+      if (topicSelect.value === topic) isClick.value = true;
+      else {
+        topicSelect.value = topic;
+        isClick.value = false;
+      }
       console.log(`select Topic: ${topic}`);
     }
 
@@ -84,6 +89,7 @@ export default defineComponent({
      */
     function selectTag(tag) {
       tagSelect.value = tag;
+      isClick.value = false;
       console.log(`select Tag: ${tag}`);
     }
 
@@ -92,6 +98,7 @@ export default defineComponent({
       selectTag,
       topicSelect,
       tagSelect,
+      isClick,
     };
   },
 });

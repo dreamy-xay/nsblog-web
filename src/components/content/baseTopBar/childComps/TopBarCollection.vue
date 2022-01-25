@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2021-08-05 18:50:30
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-16 17:20:53
+ * @LastEditors: continue-hs
+ * @LastEditTime: 2022-01-25 13:26:25
 -->
 
 <template>
@@ -43,8 +43,8 @@
           :key="index"
         >
           <a
-            :href="(value.type === 1 ? '/article/' : '/question/') + value.content_id"
-            :target="(value.type === 1 ? '/article/' : '/question/') + value.content_id"
+            :href="(value.type === 1 ? '/article/' : (value.type === 2 ? '/question/' : '/resource/') )+ value.content_id"
+            :target="(value.type === 1 ? '/article/' : (value.type === 2 ? '/question/' : '/resource/') )+ value.content_id"
           >
             <div class="collections-content">
               <base-tag
@@ -106,6 +106,7 @@ export default defineComponent({
     if (tokenInfo.value.status)
       getFavorites(tokenInfo.value.username)
         .then((res) => {
+          console.log(res.favorites);
           favorites.splice(0, 0, ...res.favorites);
         })
         .catch((error) => {

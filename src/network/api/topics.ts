@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-09-02 14:19:10
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-20 21:50:41
+ * @LastEditors: continue-hs
+ * @LastEditTime: 2022-01-25 08:56:34
  */
 import { get, RequestLifeCycle } from '@/network/request';
 
@@ -17,7 +17,7 @@ import { get, RequestLifeCycle } from '@/network/request';
 export function getTopics(RLC: RequestLifeCycle = {}): Promise<unknown> {
   return get({
     url: '/topics',
-    ...RLC
+    ...RLC,
   });
 }
 
@@ -33,7 +33,20 @@ export function getTopicTags(topic_name: string, RLC: RequestLifeCycle = {}): Pr
     url: '/topics/tags',
     ...RLC,
     params: {
-      topic_name
-    }
+      topic_name,
+    },
+  });
+}
+
+/**
+ * @description: 获取专题标签详细信息
+ * @param {string} tag_name 标签名 `必传参数`
+ * @param {RequestLifeCycle} RLC  请求生命周期 `默认值为 {}`
+ * @return {Promise<unknSown>} 请求返回promise
+ * @author: continue-hs
+ */
+export function getTagDetails(tag_name: string, RLC: RequestLifeCycle = {}): Promise<unknown> {
+  return get({
+    url: `/tag/${tag_name}`,
   });
 }

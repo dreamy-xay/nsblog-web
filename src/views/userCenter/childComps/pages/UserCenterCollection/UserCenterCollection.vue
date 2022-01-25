@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-18 15:25:00
  * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-15 21:26:10
+ * @LastEditTime: 2022-01-25 13:31:48
 -->
 <template>
   <div class="user-center-collection">
@@ -13,17 +13,16 @@
       :activeIndex="activeIndex"
       @change-index="chooseActive($event)"
       @new-fav="newfavorites($event)"
-    ></user-center-collection-list>
+    />
     <div class="user-center-collection-line"></div>
     <div class="user-center-collection-right">
       <user-center-collection-right-top
         :data="display"
         @updateName="changeName"
         @updateRemark="changeRemark"
-        @cancelf="deleteFav(activeIndex)"
+        @cancelf="deleteFav"
         @updatePrivate="changePrivate($event)"
-      >
-      </user-center-collection-right-top>
+      />
       <div class="right-line"></div>
       <user-center-collection-right-bottom
         :choiceIndex="choiceIndex"
@@ -33,7 +32,7 @@
         @changeChoice="chooseChoice($event)"
         @cancel-col="cancelCol($event)"
         @update="getList"
-      ></user-center-collection-right-bottom>
+      />
     </div>
   </div>
 </template>
@@ -78,13 +77,12 @@ export default defineComponent({
       };
     });
     const msg = useMessage();
-    const limit = ref(20);
+    const limit = ref(13); //每次拿多少数据
 
     if (tokenInfo.value.status) {
       getFavorites(tokenInfo.value.username, limit.value, 0, 0, 1)
         .then((res) => {
           const len = res.favorites.length;
-          console.log(res.favorites);
           for (var i = 0; i < len; i++) {
             let typeList = reactive([]); //收藏夹分类收藏列表
             typeList.push({ List: [] }, { List: [] }, { List: [] }, { List: [] });
@@ -143,7 +141,7 @@ export default defineComponent({
      * @author: continue-hs
      */
     function changePrivate(isPrivate) {
-      modifyPrivate(isPrivate, favorites[activeIndex.value].id)
+      modifyPrivate(isPrivate, favorites[activeIndex.value].favorite_id)
         .then(() => {
           favorites[activeIndex.value].is_private = isPrivate;
           msg.success('修改收藏夹类型成功');
@@ -167,7 +165,7 @@ export default defineComponent({
           favorites[activeIndex.value].offset,
           0,
           1,
-          favorites[activeIndex.value].id
+          favorites[activeIndex.value].favorite_id
         )
           .then((res) => {
             const lens = favorites[activeIndex.value].typeList[0].List.length;
@@ -195,7 +193,7 @@ export default defineComponent({
      * @author: continue-hs
      */
     function changeName(name, error) {
-      modifyName(name, favorites[activeIndex.value].id)
+      modifyName(name, favorites[activeIndex.value].favorite_id)
         .then(() => {
           favorites[activeIndex.value].name = name;
           msg.success('修改收藏夹标题成功');
@@ -213,7 +211,7 @@ export default defineComponent({
      * @author: continue-hs
      */
     function changeRemark(remark, error) {
-      modifyRemark(remark, favorites[activeIndex.value].id)
+      modifyRemark(remark, favorites[activeIndex.value].favorite_id)
         .then(() => {
           favorites[activeIndex.value].remark = remark;
           msg.success('修改收藏夹描述成功');
@@ -225,17 +223,15 @@ export default defineComponent({
     }
     /**
      * @description: 删除收藏夹
-     * @param {number} index 删除收藏夹索引 `v-for索引`
      * @return {void}
      * @author: continue-hs
      */
-    function deleteFav(index) {
-      deleteFavorites(favorites[index].id)
+    function deleteFav() {
+      deleteFavorites(favorites[activeIndex.value].favorite_id)
         .then(() => {
-          favorites.splice(index, 1);
+          favorites.splice(activeIndex.value, 1);
           msg.success('删除收藏夹成功');
-          if (index === favorites.length) chooseActive(index - 1);
-          else chooseActive(activeIndex.value);
+          chooseActive(0);
         })
         .catch((error) => {
           console.log(error);
@@ -283,7 +279,7 @@ export default defineComponent({
       newFavorites(tokenInfo.value.username, id, e[0], e[1], e[2])
         .then(() => {
           favorites.unshift({
-            id: id,
+            favorite_id: id,
             name: e[0],
             count: 0,
             remark: e[1],
@@ -295,7 +291,6 @@ export default defineComponent({
             offset: 0,
           });
           chooseActive(0);
-          console.log(favorites);
         })
         .catch((error) => {
           console.log(error);
@@ -341,11 +336,11 @@ export default defineComponent({
   }
 
   .user-center-collection-right {
-    @include size(736px, 626px);
-    margin-right: 10px;
+    @include size(746px, 626px);
+    overflow: hidden;
 
     .right-line {
-      @include size(736px, 1px);
+      @include size(747px, 1px);
       background: $grey-4;
     }
   }
