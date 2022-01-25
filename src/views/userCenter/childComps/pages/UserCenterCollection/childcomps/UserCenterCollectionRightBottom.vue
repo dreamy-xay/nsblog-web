@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-23 20:34:57
  * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-24 23:41:41
+ * @LastEditTime: 2022-01-25 13:30:16
 -->
 <template>
   <div class="user-center-collection-right-bottom">
@@ -242,7 +242,7 @@ export default defineComponent({
 
     .user-center-collection-right-bottom-collections {
       @include size(726px, 53px);
-      margin: 15px 0 1px 9px;
+      margin: 16px 0 1px 9px;
       background: $grey-0;
       border-radius: 8px;
       box-shadow: $shadow-0;
