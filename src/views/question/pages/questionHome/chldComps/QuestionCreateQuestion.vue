@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-20 17:15:26
  * @LastEditors: clq
- * @LastEditTime: 2022-01-25 18:05:32
+ * @LastEditTime: 2022-01-25 21:29:30
 -->
 <template>
   <n-modal
@@ -356,24 +356,24 @@ export default defineComponent({
         @include flex(center);
         width: 664px;
         height: 36px;
-        border-bottom: 1px solid #707070;
+        border-bottom: 1px solid $grey-8;
         font-size: 14px;
         font-weight: 400;
         text-align: center;
         line-height: 36px;
-        color: #bfbfbf;
+        color: $grey-6;
 
         .tag-item {
           @include flex(center);
           padding: 0px 10px;
           height: 25px;
           margin-right: 9px;
-          background: #85e8c7;
+          background: $green-0;
           border-radius: 13px;
-          box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.16);
+          box-shadow: $shadow-0;
           font-size: 14px;
           line-height: 25px;
-          color: #37aa84;
+          color: $green-2;
 
           .icon {
             width: 24px;
@@ -386,8 +386,8 @@ export default defineComponent({
             transition: 0.25s;
 
             &:hover {
-              background-color: #37aa84;
-              color: #85e8c7;
+              background-color: $green-2;
+              color: $green-0;
             }
           }
         }
