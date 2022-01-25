@@ -3,19 +3,29 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
- * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-22 18:50:14
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-24 16:30:45
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
 import { int, print, verifyToken, getToken, RandomUser, randomUsers } from './util';
 import select from '../data/index';
 
-export default function (baseUrl: string, app: Application) {
+export default function(baseUrl: string, app: Application) {
   // 获取文章
   app.get(baseUrl + '/articles', (req: Request, res: Response) => {
-    const { username, limit, offset, release_time, browsing_count, tag, category, topic_name, tag_name, type } =
-      req.query;
+    const {
+      username,
+      limit,
+      offset,
+      release_time,
+      browsing_count,
+      tag,
+      category,
+      topic_name,
+      tag_name,
+      type
+    } = req.query;
     if (username !== '' && !select('users').findOne({ username }))
       return res.status(410).json({ error: 'User name error' });
 
@@ -29,7 +39,7 @@ export default function (baseUrl: string, app: Application) {
       category,
       topic_name,
       tag_name,
-      type,
+      type
     });
 
     const RUsers = randomUsers();
@@ -40,7 +50,7 @@ export default function (baseUrl: string, app: Application) {
         ans.push({
           username: user.username,
           nickname: user.nickname,
-          id: Random.increment(),
+          id: Random.increment(Random.integer(1, 10)),
           title: Random.integer(0, 1) ? Random.title(3, 100) : Random.ctitle(3, 50),
           content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
           topic_tag: tag_name ? tag_name : Random.integer(0, 1) ? Random.word(2, 8) : Random.cword(2, 5),
@@ -59,8 +69,8 @@ export default function (baseUrl: string, app: Application) {
                   'png',
                   Random.integer(0, 1) ? Random.word(2, 8) : Random.cword(2, 5)
                 ),
-                recommend: Random.integer(0, 1),
-              }),
+                recommend: Random.integer(0, 1)
+              })
         });
       }
       return ans;
@@ -79,9 +89,9 @@ export default function (baseUrl: string, app: Application) {
       const ans: Record<string, unknown>[] = [];
       for (let i: number = 0; i < limit; ++i)
         ans.push({
-          id: Random.id(),
+          id: Random.increment(Random.integer(1, 10)),
           name: Random.integer(0, 1) ? Random.word() : Random.cword(),
-          count: Random.integer(1, 100),
+          count: Random.integer(1, 100)
         });
       return ans;
     }
@@ -100,9 +110,9 @@ export default function (baseUrl: string, app: Application) {
       const ans: Record<string, unknown>[] = [];
       for (let i: number = 0; i < limit; ++i)
         ans.push({
-          id: Random.id(),
+          id: Random.increment(Random.integer(1, 10)),
           name: Random.integer(0, 1) ? Random.word() : Random.cword(),
-          count: Random.integer(1, 100),
+          count: Random.integer(1, 100)
         });
       return ans;
     }
@@ -124,12 +134,12 @@ export default function (baseUrl: string, app: Application) {
         if (isRecent)
           ans.push({
             title: Random.integer(0, 1) ? Random.title() : Random.ctitle(),
-            article_id: Random.id(),
+            article_id: Random.increment(Random.integer(1, 10))
           });
         else
           ans.push({
             title: Random.integer(0, 1) ? Random.title() : Random.ctitle(),
-            link: Random.url(),
+            link: Random.url()
           });
       return ans;
     }
@@ -143,7 +153,7 @@ export default function (baseUrl: string, app: Application) {
       category_count: Random.integer(0, 40),
       tag_count: Random.integer(0, 40),
       recent_article: getRandom(Random.integer(0, 10)),
-      friend_chain: getRandom(Random.integer(0, 40), false),
+      friend_chain: getRandom(Random.integer(0, 40), false)
     };
 
     return res.json(ans);
@@ -181,7 +191,7 @@ export default function (baseUrl: string, app: Application) {
             const user: RandomUser = RUsers.random();
             const params: Record<string, unknown> = username !== '' ? { evaluation: Random.integer(0, 2) } : {};
             (ans.child_comments as any).push({
-              comment_id: Random.id(),
+              comment_id: Random.increment(Random.integer(1, 10)),
               username: user.username,
               avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
               time: Random.time(),
@@ -189,7 +199,7 @@ export default function (baseUrl: string, app: Application) {
               content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
               support_count: Random.integer(0, 9999),
               oppose_count: Random.integer(0, 9999),
-              ...params,
+              ...params
             });
           }
         }
@@ -200,7 +210,7 @@ export default function (baseUrl: string, app: Application) {
         const user: RandomUser = RUsers.random();
         const params: Record<string, unknown> = username !== '' ? { evaluation: Random.integer(0, 2) } : {};
         ans.push({
-          comment_id: Random.id(),
+          comment_id: Random.increment(Random.integer(1, 10)),
           username: user.username,
           avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
           time: Random.time(),
@@ -208,7 +218,7 @@ export default function (baseUrl: string, app: Application) {
           support_count: Random.integer(0, 9999),
           oppose_count: Random.integer(0, 9999),
           ...params,
-          ...getComments(),
+          ...getComments()
         });
       }
 
@@ -252,7 +262,10 @@ export default function (baseUrl: string, app: Application) {
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = [];
       for (let i: number = 0; i < limit; ++i)
-        ans.push({ id: Random.id(), name: Random.integer(0, 1) ? Random.word() : Random.cword() });
+        ans.push({
+          id: Random.increment(Random.integer(1, 10)),
+          name: Random.integer(0, 1) ? Random.word() : Random.cword()
+        });
       return ans;
     }
 
@@ -262,7 +275,7 @@ export default function (baseUrl: string, app: Application) {
         ? {
             evaluation: Random.integer(0, 2),
             attention: Random.integer(0, 1),
-            ...collection,
+            ...collection
           }
         : {};
 
@@ -310,23 +323,23 @@ export default function (baseUrl: string, app: Application) {
         'https://s3.bmp.ovh/imgs/2021/09/fd25f71e808f3f23.jpg',
         'https://s3.bmp.ovh/imgs/2021/09/8bcf34ab186f752c.jpg',
         'https://s3.bmp.ovh/imgs/2021/09/040fbcab0802511e.jpg',
-        'https://s3.bmp.ovh/imgs/2021/09/7fc65c1d3e881ea5.jpg',
+        'https://s3.bmp.ovh/imgs/2021/09/7fc65c1d3e881ea5.jpg'
       ][Random.integer(0, 4)],
       license: 'CC BY 4.0',
       sponsors: {
         paypal: Random.integer(0, 1) ? Random.image('150x150', '#234567', '#FFFFFF', 'png', 'paypal') : null,
         alipay: Random.integer(0, 2) ? 'https://s3.bmp.ovh/imgs/2021/10/c706c0cc3da4d493.jpg' : null,
-        weixin: Random.integer(0, 2) ? 'https://s3.bmp.ovh/imgs/2021/10/2b9296f39cbbd91e.jpg' : null,
+        weixin: Random.integer(0, 2) ? 'https://s3.bmp.ovh/imgs/2021/10/2b9296f39cbbd91e.jpg' : null
       },
       ...params,
       last_article: {
-        article_id: Random.id(),
-        title: Random.integer(0, 1) ? Random.title() : Random.ctitle(),
+        article_id: Random.increment(Random.integer(1, 10)),
+        title: Random.integer(0, 1) ? Random.title() : Random.ctitle()
       },
       next_article: {
-        article_id: Random.id(),
-        title: Random.integer(0, 1) ? Random.title() : Random.ctitle(),
-      },
+        article_id: Random.increment(Random.integer(1, 10)),
+        title: Random.integer(0, 1) ? Random.title() : Random.ctitle()
+      }
     };
 
     return res.json(ans);
@@ -858,5 +871,5 @@ const templateArticles: string[] = [
 
   ### Customize configuration
   See [Configuration Reference](https://cli.vuejs.org/config/).
-  `,
+  `
 ];

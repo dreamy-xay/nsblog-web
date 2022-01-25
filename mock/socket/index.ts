@@ -4,11 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-10 21:44:12
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-26 17:28:34
+ * @LastEditTime: 2022-01-24 16:33:44
  */
 import { Random } from 'better-mock';
 import { Server } from 'http';
 import * as socketIo from 'socket.io';
+import { print } from '../intercepter/util';
 
 class OnlineUser {
   private users: Map<string, Set<string>>;
@@ -75,8 +76,8 @@ export default (server: Server) => {
       onlineUsers.online(username, socket.id);
 
       //建立连接后 用户点击不同通讯录都是建立同样的socket对象
-      console.log('--------在线人数：', onlineUsers.count());
-      console.log('--------', onlineUsers.getUsers());
+      print(`在线人数: ${onlineUsers.count()}`);
+      console.log('\x1B[32m>\x1b[0m ', onlineUsers.getUsers(), '\n');
 
       socket.on('sendMessage', (content: string, to: string, time: string, from: string) => {
         if (from === username && from !== to && onlineUsers.hasUser(to))
@@ -91,8 +92,8 @@ export default (server: Server) => {
 
       function offline() {
         onlineUsers.offline(username, socket.id);
-        console.log('--------离开一人(' + username + ' ' + socket.id + ')，在线人数：', onlineUsers.count());
-        console.log('--------', onlineUsers.getUsers());
+        print(`离开一人(${username} ${socket.id}，在线人数: ${onlineUsers.count()}`);
+        console.log('\x1B[32m>\x1b[0m ', onlineUsers.getUsers(), '\n');
       }
 
       // 随机发送消息
@@ -101,7 +102,7 @@ export default (server: Server) => {
           clearTimeout(timer);
           const type: number = Random.natural(1, 5);
           if (onlineUsers.emit(username, 'notice', type)) {
-            console.log(`--------messageNotice:  type: ${type}`);
+            print('message notice', { type });
             messageNotice();
           }
         }, timeout);

@@ -2,6 +2,7 @@
 	"users": [
 		{
 			"username": "dreamy",
+			"nickname": "启航~ o(*￣▽￣*)o",
 			"password": "Abcd1234",
 			"email": "dreamy@qq.com",
 			"token": "7e688c9e1c0095735a486668e7fae02e024553a30cba3f4b250c7952f1d35e753e38c050e43b096eb3be544ed976a9480dfffa8b5b6fa41b4a6d0c1b396b4464",
@@ -58,7 +59,7 @@
 			"nickname": "清幽兰",
 			"password": "Abcd1234",
 			"email": "6@qq.com",
-			"token": "af7f89815f9071e19eddedbe61ef25ddf170354125bf1eaaa653a7622884a12452b7e185d667eb81ef67c4b033f07e2f277745fc909d5dadff1b995f92ad9acc",
+			"token": "0ab82daed304cf1a7806210ede8da5ebabd3687b17f94adfdd8795abfde69afa5c6d61c64e75dee491be91e7c975a51881a9a7ced48e5b04e9e4aa6f831458b3",
 			"isActive": true,
 			"isSuper": false
 		},

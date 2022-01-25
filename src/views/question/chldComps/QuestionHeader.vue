@@ -4,13 +4,14 @@
  * @Autor: clq
  * @Date: 2022-01-19 19:24:08
  * @LastEditors: clq
- * @LastEditTime: 2022-01-19 21:58:51
+ * @LastEditTime: 2022-01-22 15:22:36
 -->
 <template>
   <div class="question-header">
     <div
       v-for="(item,index) in filterRules"
       :key="index"
+      :class="{'active': activeIndex == index}"
       role="button"
       @click="changeFilterRule(index)"
     >{{item}}</div>
@@ -28,8 +29,14 @@ import { defineComponent, reactive } from 'vue';
 
 export default defineComponent({
   name: 'questionHeader',
+  props: {
+    activeIndex: {
+      type: Number,
+      default: 0,
+    },
+  },
   setup(props, context) {
-    const filterRules = reactive(['最新', '最热', '待回答', '周榜', '月榜']); //问答过滤规则
+    const filterRules = reactive(['最热', '最新', '待回答', '周榜', '月榜']); //问答过滤规则
 
     /**
      * @description: 更改过滤规则
@@ -71,6 +78,10 @@ export default defineComponent({
     &:hover {
       color: $green-1;
     }
+  }
+
+  .active {
+    color: $green-1;
   }
 
   div:last-child {

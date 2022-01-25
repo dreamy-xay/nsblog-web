@@ -3,14 +3,15 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2022-01-16 12:55:29
- * @LastEditors: Ban
- * @LastEditTime: 2022-01-22 11:56:51
+ * @LastEditors: clq
+ * @LastEditTime: 2022-01-23 20:36:48
 -->
 <template>
   <div
     :class="bindClass === null ? 'search-page-to-load-more' : bindClass"
     v-show="show"
     role="button"
+    @click="onButtonClick"
   >
     <slot>{{ title }}</slot>
   </div>
@@ -25,6 +26,7 @@ import { defineComponent } from 'vue';
  * @param {String} bindClass 绑定类
  * @param {String} onClick 点击后的回调 `默认无`
  * @param {String} title 标题 `默认为加载更多...`
+ * @event onButtonClick 按钮被点击
  * @slot 全局内容插槽
  * @author: Ban
  */
@@ -49,8 +51,17 @@ export default defineComponent({
       default: '加载更多...',
     },
   },
-  setup() {
-    return {};
+  setup(props, context) {
+    /**
+     * @description: 按钮被点击
+     * @return {void}
+     * @author: clq
+     */
+    function onButtonClick() {
+      console.log('onButtonClick');
+      context.emit('onButtonClick');
+    }
+    return { onButtonClick };
   },
 });
 </script>

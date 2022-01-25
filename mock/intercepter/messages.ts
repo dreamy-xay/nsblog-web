@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-10 19:45:44
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-21 21:40:30
+ * @LastEditTime: 2022-01-23 16:26:53
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -44,7 +44,7 @@ export default function(baseUrl: string, app: Application) {
             nickname: user.nickname,
             avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
             type: Random.natural(1, 2),
-            id: Random.id()
+            id: Random.increment(Random.integer(1, 10))
           };
         else
           content = {

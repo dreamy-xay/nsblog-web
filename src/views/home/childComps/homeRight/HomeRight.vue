@@ -3,13 +3,16 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2022-01-17 10:18:37
- * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-23 16:49:32
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-01-23 20:50:41
 -->
 <template>
   <div class="home-right">
     <base-bulletin :bulletin-data="bulletinData" />
-    <home-activity :activity-data="activityData" />
+    <home-activity
+      :activity-data="activityData"
+      :style="{marginTop: '16px'}"
+    />
     <base-rank-card
       :data="rankingList"
       title="热门文章"
