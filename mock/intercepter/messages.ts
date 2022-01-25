@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-10 19:45:44
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-23 16:26:53
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-01-24 14:11:06
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -36,7 +36,8 @@ export default function(baseUrl: string, app: Application) {
             type: Random.natural(1, 2),
             reply_username: RUsers.random().username,
             reply_content: Random.integer(0, 1) ? Random.cparagraph(1, 10) : Random.paragraph(1, 10),
-            evaluation: Random.integer(0, 2)
+            evaluation: Random.integer(0, 2),
+            id: Random.increment(Random.integer(1, 10))
           };
         else if (int(type) === 3)
           content = {

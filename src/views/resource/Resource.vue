@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-21 23:15:38
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-24 00:27:45
+ * @LastEditTime: 2022-01-25 13:20:59
 -->
 <template>
   <base-view
@@ -31,7 +31,7 @@
 import { defineComponent, reactive } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import BaseRankCard from '@/components/common/baseRankCard/BaseRankCard.vue';
-import ResourceLeft from '@/views/resource/childComps/ResourceLeft.vue';
+import ResourceLeft from '@/views/resource/childComps/resourceLeft/ResourceLeft.vue';
 
 /**
  * @description:资源页面
