@@ -5,7 +5,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-22 12:12:35
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-25 22:13:20
+ * @LastEditTime: 2022-01-25 23:05:42
 -->
 <template>
   <div class="resource-left">
@@ -16,7 +16,7 @@
 <script>
 import { defineComponent } from 'vue';
 import BaseSelectHead from '@/components/common/baseSelectHead/BaseSelectHead.vue';
-import ResourceBody from '@/views/resource/childComps/resourceLeft/ResourceBody.vue';
+import ResourceBody from '@/views/resource/childComps/pages/resourceHome/childComps/resourceLeft/ResourceBody.vue';
 
 /**
  * @description:资源页面左边

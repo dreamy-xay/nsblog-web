@@ -4,13 +4,13 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-31 12:03:49
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-09 16:48:40
+ * @LastEditTime: 2022-01-24 16:10:19
  */
 import { App } from 'vue';
-import installElementPlus from './element';
-import installNative from './native-ui';
-import installMdEdit from './md-edit';
-import installEcharts from './echarts';
+import installElementPlus from './modules/element';
+import installNative from './modules/native-ui';
+import installMdEdit from './modules/md-edit';
+import installEcharts from './modules/echarts';
 
 export default (app: App): void => {
   // 安装注册ElementPlus

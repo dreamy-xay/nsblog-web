@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-02 11:13:42
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-03 16:50:01
+ * @LastEditTime: 2022-01-24 16:08:40
  */
 /**
  * @description: 通过图片url 获取图片file对象
@@ -80,6 +80,26 @@ export function getSplitNum(num: string | number, count: number = 3, split: stri
   }
   if (str.length % count === 0) ans = ans.slice(0, ans.length - 1);
   return reverse(ans);
+}
+
+/**
+ * @description: 获取格式化之后的字符串
+ * @param {string ｜ number} num 需要格式化的数字 `必传参数`
+ * @param {number} fixed 保留的小数位数 `默认为 1`
+ * @param {number} divisor 一倍数 `默认为 1000`
+ * @param {string} endStr 结尾添加字符串 `默认为 (divisor === 1000 ? 'K' : '')`
+ * @return {string} 返回格式化之后的字符串
+ * @author: dreamy-xay
+ */
+export function getDivisionFormatNum(
+  num: string | number,
+  fixed: number = 1,
+  divisor: number = 1000,
+  endStr: string = divisor === 1000 ? 'K' : ''
+): string {
+  num = parseInt(num as string);
+  if (<number>num < divisor) return String(num);
+  else return (<number>num / divisor).toFixed(fixed) + endStr;
 }
 
 /**
