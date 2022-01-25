@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 12:55:44
- * @LastEditors: xiao
- * @LastEditTime: 2022-01-13 14:56:05
+ * @LastEditors: continue-hs
+ * @LastEditTime: 2022-01-25 21:24:11
  */
 
 import { get, RequestLifeCycle, del, put, post } from '@/network/request';
@@ -39,73 +39,62 @@ export function getFavorites(
       offset,
       type,
       is_all,
-      favorite_id
-    }
+      favorite_id,
+    },
   });
 }
 
 /**
  * @description: 新建收藏夹
- * @data {string} username 用户名 `必传参数`
- * @data {number} id 新建收藏夹的id `默认为''`
- * @data {name} name 新建文件夹的名字 `默认为''`
- * @data {number | string} remark 新建文件夹的描述 `默认为''`
- * @data {number} is_private 新建文件夹是否私有 `默认为0(公有)`
+ * @param {string} name 收藏夹名称 `必传参数`
+ * @param {number} is_private 收藏夹是否私有 `默认为0（公开）`
+ * @param {string}  remark 收藏夹描述 `默认为''`
  * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
  * @return {Promise<unknown>} 请求返回promise
  * @author: continue-hs
  */
 export function newFavorites(
-  username: string,
-  id: number | string = '',
-  name: string = '',
-  remark: number | string = '',
+  name: string,
   is_private: number = 0,
+  remark: string = '',
   RLC: RequestLifeCycle = {}
 ): Promise<unknown> {
   return post({
     url: `/favorites`,
     ...RLC,
     data: {
-      username,
-      id,
       name,
       remark,
-      is_private
-    }
+      is_private,
+    },
   });
 }
 
 /**
  * @description: 删除收藏夹
- * @param {number | string} id 删除收藏夹的id `必传参数`
+ * @param {number | string} favorite_id 删除收藏夹的id `必传参数`
  * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
  * @return {Promise<unknown>} 请求返回promise
  * @author: continue-hs
  */
-export function deleteFavorites(fid: number | string, RLC: RequestLifeCycle = {}): Promise<unknown> {
+export function deleteFavorites(favorite_id: number | string, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return del({
-    url: `/favorites/${fid}`,
-    ...RLC
+    url: `/favorites/${favorite_id}`,
+    ...RLC,
   });
 }
 
 /**
  * @description: 取消收藏
- * @param {number | string} cid 取消收藏的id `默认为''，删除第一个收藏`
- * @param {number | string} fid 取消收藏的id `默认为''，删除第一个收藏`
- * @param {number} type 删除历史记录类型的列表，0为全部，1为文章，2为问答，3为资源 `默认为0`
+ * @param {number | string} collection_id 取消收藏的id `必传值`
  * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
  * @return {Promise<unknown>} 请求返回promise
  * @author: continue-hs
  */
-export function cancelCollections(cid: number | string = '', RLC: RequestLifeCycle = {}): Promise<unknown> {
+export function cancelCollections(collection_id: number | string, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return del({
-    url: `/favorites/collections/${cid}`,
+    url: `/favorites/collections/${collection_id}`,
     ...RLC,
-    data: {
-      conllection_id: cid
-    }
   });
 }
 
@@ -123,64 +112,72 @@ export function addCollections(cid: number | string = '', RLC: RequestLifeCycle 
     url: `/favorites/collections/${cid}`,
     ...RLC,
     data: {
-      collection_id: cid
-    }
+      collection_id: cid,
+    },
   });
 }
 
 /**
  * @description: 修改收藏夹标题
- * @param {string} name 需要修改的信息类型 `必传参数`
- * @param {string | number} id 收藏夹id `必传参数`
+ * @param {string} name 修改后的收藏夹标题 `必传参数`
+ * @param {string | number} favorite_id 收藏夹id `必传参数`
  * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
  * @return {Promise<unknown>} 请求返回promise
  * @author: continue-hs
  */
-export function modifyName(name: string, fid: string | number, RLC: RequestLifeCycle = {}): Promise<unknown> {
+export function modifyName(name: string, favorite_id: string | number, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return put({
     url: `/favorites/name`,
     ...RLC,
     data: {
       name,
-      favorite_id: fid
-    }
+      favorite_id,
+    },
   });
 }
 
 /**
  * @description: 修改收藏夹描述
- * @param {string} remark 需要修改的信息内容 `必传参数`
- * @param {string | number} id 收藏夹id `必传参数`
+ * @param {string} remark 修改后的收藏夹描述 `必传参数`
+ * @param {string | number} favorite_id 收藏夹id `必传参数`
  * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
  * @return {Promise<unknown>} 请求返回promise
  * @author: continue-hs
  */
-export function modifyRemark(remark: string, fid: string | number, RLC: RequestLifeCycle = {}): Promise<unknown> {
+export function modifyRemark(
+  remark: string,
+  favorite_id: string | number,
+  RLC: RequestLifeCycle = {}
+): Promise<unknown> {
   return put({
     url: `/favorites/remark`,
     ...RLC,
     data: {
       remark,
-      favorite_id: fid
-    }
+      favorite_id,
+    },
   });
 }
 
 /**
  * @description: 修改收藏夹类型
- * @param {string} is_private 需要修改的信息内容 `必传参数`
- * @param {string | number} id 收藏夹id `必传参数`
+ * @param {string} is_private 修改后的收藏夹类型 `必传参数,0为公开，1为私有`
+ * @param {string | number} favorite_id 收藏夹id `必传参数`
  * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
  * @return {Promise<unknown>} 请求返回promise
  * @author: continue-hs
  */
-export function modifyPrivate(is_private: number, fid: string | number, RLC: RequestLifeCycle = {}): Promise<unknown> {
+export function modifyPrivate(
+  is_private: number,
+  favorite_id: string | number,
+  RLC: RequestLifeCycle = {}
+): Promise<unknown> {
   return put({
     url: `/favorites/private`,
     ...RLC,
     data: {
       is_private,
-      favorite_id: fid
-    }
+      favorite_id,
+    },
   });
 }

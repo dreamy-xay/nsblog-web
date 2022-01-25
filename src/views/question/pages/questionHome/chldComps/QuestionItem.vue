@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-19 19:21:05
  * @LastEditors: clq
- * @LastEditTime: 2022-01-25 12:41:13
+ * @LastEditTime: 2022-01-25 21:21:31
 -->
 <template>
   <div class="question-item">
@@ -38,9 +38,9 @@
           <div
             class="tag"
             v-for="(item) in question.tags"
-            :key="item.id"
+            :key="item"
             role="button"
-          >{{item.name}}</div>
+          >{{item}}</div>
         </div>
         <div class="bottom-right">
           <div
@@ -100,9 +100,7 @@ export default defineComponent({
      */
     function toResourceDetailPage(questionId) {
       console.log('questionId: ' + questionId);
-      // this.$router.push({ name: 'questionDetail', query: { id: questionId } });
-      window.open(`/question/detail?id=${questionId}`);
-      // window.open(`/question/${questionId}`);
+      window.open(`/question/${questionId}`);
     }
 
     /**
@@ -229,6 +227,7 @@ export default defineComponent({
       text-align: left;
       line-height: 24px;
       color: $grey-10;
+      transition: 0.25s;
 
       &:hover {
         color: $green-0;
@@ -238,6 +237,7 @@ export default defineComponent({
     .right-middle {
       @include ellipsis(1);
       height: 17px;
+      margin-bottom: 7px;
       font-size: 13px;
       font-weight: 400;
       text-align: left;
