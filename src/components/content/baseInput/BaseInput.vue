@@ -3,12 +3,12 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-31 16:34:22
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-15 12:48:40
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-01-23 21:39:22
 -->
 <template>
   <div
-    class="user-center-input"
+    class="base-input"
     :style="{width: style.width, height: style.height}"
   >
     <input
@@ -26,7 +26,7 @@
     >
     <i
       v-if="showPassword"
-      class="user-center-input-eye iconfont"
+      class="base-input-eye iconfont"
       role="button"
       @click.stop="toggleType"
       :class="inputType ? 'blog-eyehidden' : 'blog-eyeshow'"
@@ -35,7 +35,7 @@
       v-if="showClose"
       v-show="modelValue !== ''"
       role="button"
-      class="iconfont blog-close-circle user-center-input-close"
+      class="iconfont blog-close-circle base-input-close"
       :class="{'right-has': showPassword}"
       @click.stop="clearInputValue"
     ></i>
@@ -68,7 +68,7 @@ import { useMessage } from 'naive-ui';
  */
 
 export default defineComponent({
-  name: 'userCenterInput',
+  name: 'baseInput',
   props: {
     type: {
       type: String,
@@ -129,7 +129,7 @@ export default defineComponent({
         'mousedown',
         (e) => {
           const domClass = e.target.getAttribute('class');
-          if (domClass && (domClass.includes('user-center-input-close') || domClass.includes('user-center-input-eye')))
+          if (domClass && (domClass.includes('base-input-close') || domClass.includes('base-input-eye')))
             e.preventDefault();
         },
         false
@@ -138,11 +138,7 @@ export default defineComponent({
 
     // 计算属性
     const inputClass = computed(() => {
-      return (
-        props.bindClass +
-        (efficient.value ? '' : ' user-center-input-warn') +
-        (error.value ? ' user-center-input-error' : '')
-      );
+      return props.bindClass + (efficient.value ? '' : ' base-input-warn') + (error.value ? ' base-input-error' : '');
     });
 
     /**
@@ -260,7 +256,7 @@ $success-shadow: $shadow-2;
 $warn-shadow: 0 0 6px $warn;
 $error-shadow: 0 0 6px $error;
 
-.user-center-input {
+.base-input {
   @include flex();
   width: 100%;
   position: relative;
@@ -275,13 +271,13 @@ $error-shadow: 0 0 6px $error;
     transition: 0.25s;
   }
 
-  .user-center-input-eye {
+  .base-input-eye {
     font-size: 18px;
     right: 5px;
     bottom: calc(50% - 9px);
   }
 
-  .user-center-input-close {
+  .base-input-close {
     font-size: 16px;
     right: 6px;
     bottom: calc(50% - 10px);
@@ -319,12 +315,12 @@ $error-shadow: 0 0 6px $error;
         color: $success;
       }
 
-      & ~ .user-center-input-eye,
-      & ~ .user-center-input-close {
+      & ~ .base-input-eye,
+      & ~ .base-input-close {
         color: $success;
       }
 
-      &.user-center-input-warn {
+      &.base-input-warn {
         color: $warn;
         box-shadow: $warn-shadow;
 
@@ -332,14 +328,14 @@ $error-shadow: 0 0 6px $error;
           color: $warn;
         }
 
-        & ~ .user-center-input-eye,
-        & ~ .user-center-input-close {
+        & ~ .base-input-eye,
+        & ~ .base-input-close {
           color: $warn;
         }
       }
     }
 
-    &.user-center-input-error {
+    &.base-input-error {
       color: $error;
       box-shadow: $error-shadow;
 
@@ -347,8 +343,8 @@ $error-shadow: 0 0 6px $error;
         color: $error;
       }
 
-      & ~ .user-center-input-eye,
-      & ~ .user-center-input-close {
+      & ~ .base-input-eye,
+      & ~ .base-input-close {
         color: $error;
       }
     }

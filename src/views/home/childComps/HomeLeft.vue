@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2022-01-17 10:18:16
  * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-23 16:40:57
+ * @LastEditTime: 2022-01-25 15:22:38
 -->
 <template>
   <div class="home-left">
@@ -22,19 +22,22 @@
       <base-select
         v-if="listIndex === 2"
         :swidth="74"
-        :spaddingTop="4"
+        :spaddingTop="8"
+        :spaddingLeft="10"
         :showText="selectTag"
-        :selectTag="timeList[timeIndex]"
         :sdata="timeList"
-        @changeItem="changeTime(index)"
+        @changeItem="changeTime($event)"
       />
     </div>
+    <div class="home-left-line"></div>
 
     <div class="home-left-middle">
-      <home-left-item
+      <home-item
         v-for="article in allArticles[typeIndex]"
         :key="article"
         :articleItem="article"
+        :swidth="660"
+        @change-like="changeLike(article)"
       />
     </div>
 
@@ -58,7 +61,8 @@ import { defineComponent, reactive, ref, watch } from 'vue';
 import { getArticles } from '@/network/api/articles';
 import BaseSelect from '@/components/content/baseSelect/BaseSelect.vue';
 import router from '@/router';
-import HomeLeftItem from '@/views/home/childComps/homeLeft/childComps/HomeLeftItem.vue';
+import HomeItem from '@/views/home/childComps/HomeItem.vue';
+import { modifyArticleRecommendEvaluation } from '@/network/api/articles';
 
 export default defineComponent({
   name: 'homeLeft',
@@ -71,10 +75,14 @@ export default defineComponent({
       type: String,
       default: '',
     },
+    isclick: {
+      type: Boolean,
+      default: false,
+    },
   },
   components: {
     BaseSelect,
-    HomeLeftItem,
+    HomeItem,
   },
   setup(props) {
     const topList = reactive(['热门', '最新', '排行']);
@@ -89,12 +97,16 @@ export default defineComponent({
     const offset = ref(0);
     const limit = ref(7);
     const typeIndex = ref(0);
+
     initArticlesHome('', '', '', offset.value, limit.value, 0, 0, topic.value, tag.value, typeIndex.value);
+
     watch(
       () => props.topic,
       (data) => {
-        if (data === '推荐' || data === '关注') tag.value = '';
+        console.log(data + 'xx');
+        limit.value = 7;
         topic.value = data;
+        tag.value = '';
         initArticlesHome('', '', '', offset.value, limit.value, 0, 0, topic.value, tag.value, typeIndex.value);
       }
     );
@@ -102,9 +114,18 @@ export default defineComponent({
     watch(
       () => props.tag,
       (data) => {
-        if (data === '全部') tag.value = '';
-        else tag.value = data;
+        console.log(data + 'xx');
+        limit.value = 7;
+        tag.value = data;
         initArticlesHome('', '', '', offset.value, limit.value, 0, 0, topic.value, tag.value, typeIndex.value);
+      }
+    );
+
+    watch(
+      () => props.isclick,
+      (data) => {
+        if (data === true)
+          initArticlesHome('', '', '', offset.value, limit.value, 0, 0, topic.value, '', typeIndex.value);
       }
     );
 
@@ -134,28 +155,9 @@ export default defineComponent({
       listIndex.value = index;
     }
 
-    function changeTime(index) {
-      timeIndex.value = index;
-      selectTag.value = timeList[index];
-    }
-
-    function clickTopic(topic) {
-      router.push({
-        name: router.name,
-        query: {
-          topic: topic,
-        },
-      });
-    }
-
-    function clickTag(tag) {
-      router.push({
-        name: router.name,
-        query: {
-          topic: topic,
-          tag: tag,
-        },
-      });
+    function changeTime($event) {
+      timeIndex.value = $event;
+      selectTag.value = timeList[$event];
     }
 
     function initArticlesHome(
@@ -184,6 +186,27 @@ export default defineComponent({
       initArticlesHome('', '', '', offset.value, limit.value, 0, 0, topic.value, tag.value, typeIndex.value);
     }
 
+    function changeLike(article) {
+      if (article.recommend === 0)
+        modifyArticleRecommendEvaluation(article.id, 1)
+          .then(() => {
+            article.recommend = 1;
+            article.recommend_count++;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      else if (article.recommend === 1)
+        modifyArticleRecommendEvaluation(article.id, 0)
+          .then(() => {
+            article.recommend = 0;
+            article.recommend_count--;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    }
+
     return {
       topList,
       listIndex,
@@ -195,8 +218,7 @@ export default defineComponent({
       allArticles,
       typeIndex,
       uploadMore,
-      clickTopic,
-      clickTag,
+      changeLike,
     };
   },
 });
@@ -221,13 +243,19 @@ export default defineComponent({
     }
   }
 
+  .home-left-line {
+    height: 1px;
+    border: 1px solid #f4f4f4;
+  }
+
   .home-left-middle {
-    margin: 20px;
+    margin: 12px 20px 16px;
   }
 
   .home-left-bottom {
     width: 100%;
     @include flex(center, center);
+
     .home-left-bottom-load {
       width: 300px;
       height: 32px;
@@ -235,6 +263,7 @@ export default defineComponent({
       border-radius: 8px;
       box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.16);
       @include flex(cneter, center);
+
       .home-left-bottom-load-text {
         width: 68px;
         height: 19px;

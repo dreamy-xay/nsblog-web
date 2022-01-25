@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-23 20:34:57
  * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-16 10:02:34
+ * @LastEditTime: 2022-01-25 13:30:16
 -->
 <template>
   <div class="user-center-collection-right-bottom">
@@ -42,8 +42,8 @@
               :key="index"
             >
               <a
-                :href="(item3.type === 1 ? '/article' : (item3.type === 2 ? '/question' : '/resource') )+ item3.content_id"
-                :target="(item3.type === 1 ? '/article' : (item3.type === 2 ? '/question' : '/resource') )+ item3.content_id"
+                :href="(item3.type === 1 ? '/article/' : (item3.type === 2 ? '/question/' : '/resource/') )+ item3.content_id"
+                :target="(item3.type === 1 ? '/article/' : (item3.type === 2 ? '/question/' : '/resource/') )+ item3.content_id"
               >
                 <base-tag
                   :text="item3.type === 1 ? '文章' : (item3.type === 2 ? '问答' : '资源')"
@@ -64,7 +64,13 @@
               v-if="item1.typeList[choiceIndex].List.length != 0 && item1.isBottom == false"
               @click="upload"
               role="button"
-            >加载更多...</div>
+            >
+              <div class="more">
+                <div class="more-text">
+                  加载更多...
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </el-scrollbar>
@@ -195,11 +201,11 @@ export default defineComponent({
 }
 
 .user-center-collection-right-bottom {
-  @include size(736px, 488px);
-  overflow: hidden;
+  @include size(746px, 504px);
+
   .user-center-collection-right-bottom-typelist {
-    @include size(736px, 21px);
-    margin: 10px 0 0 35px;
+    @include size(711px, 21px);
+    margin: 9px 0 0 35px;
 
     .Type {
       @include size(38px, 21px);
@@ -210,6 +216,7 @@ export default defineComponent({
       border-bottom: 2px solid $grey-0;
 
       &.Choice {
+        transition: 0.25s;
         border-bottom: 2px solid $green-0;
       }
 
@@ -222,28 +229,26 @@ export default defineComponent({
 
   .user-center-collection-right-bottom-collectionlist {
     margin-top: 15px;
-    @include size(736px, 442px);
+    @include size(746px, 440px);
 
     :deep(.el-scrollbar__thumb) {
       background-color: $grey-7 !important;
     }
-    :deep(.el-scrollbar) {
-      width: 742px;
-    }
 
     .user-center-collection-right-bottom-blank {
       @include flex(center, center);
-      @include size(736px, 442px);
+      @include size(746px, 440px);
     }
 
     .user-center-collection-right-bottom-collections {
       @include size(726px, 53px);
-      margin: 16px 0 0 9px;
+      margin: 16px 0 1px 9px;
       background: $grey-0;
       border-radius: 8px;
       box-shadow: $shadow-0;
-      overflow: hidden;
+
       &:hover {
+        transition: 0.25s;
         background-color: $grey-1;
       }
 
@@ -269,12 +274,26 @@ export default defineComponent({
         font-size: 20px;
       }
     }
+
     .user-center-collection-right-bottom-more {
-      height: 20px;
+      width: 100%;
       @include flex(center, center);
-      background: $grey-0;
-      border-radius: 8px;
-      box-shadow: $shadow-0;
+      margin-top: 10px;
+
+      .more {
+        @include size(300px, 20px);
+        background: $grey-0;
+        border-radius: 8px;
+        box-shadow: $shadow-0;
+        @include flex(cneter, center);
+
+        .more-text {
+          @include size(68px, 19px);
+          font-size: 14px;
+          font-weight: 400;
+          color: $grey-9;
+        }
+      }
     }
   }
 }
