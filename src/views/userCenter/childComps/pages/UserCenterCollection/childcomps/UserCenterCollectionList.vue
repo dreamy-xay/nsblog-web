@@ -3,20 +3,18 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2021-08-24 10:18:28
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-21 21:50:19
+ * @LastEditors: continue-hs
+ * @LastEditTime: 2022-01-25 13:29:47
 -->
 <template>
   <div class="user-center-collection-list">
     <div
       class="user-center-collection-list-new"
       role="button"
+      @click="isVisible = true"
     >
       <i class="iconfont blog-wenjianjia"></i>
-      <div
-        class="newcollection"
-        @click="isVisible = true"
-      >新建文件夹</div>
+      <div class="newcollection">新建文件夹</div>
     </div>
     <div class="user-center-collection-list-other">
       <el-scrollbar>
@@ -194,6 +192,7 @@ export default defineComponent({
 .user-center-collection-list {
   @include size(180px, 626px);
   overflow: hidden;
+
   .user-center-collection-list-new {
     @include size(180px, 60px);
     color: $grey-7;
