@@ -4,11 +4,11 @@
  * @Autor: clq
  * @Date: 2022-01-25 13:54:46
  * @LastEditors: clq
- * @LastEditTime: 2022-01-25 19:20:50
+ * @LastEditTime: 2022-01-25 19:29:34
 -->
 <template>
   <div class="question-detail-answers">
-
+    questionDetailAnswers
   </div>
 </template>
 
@@ -27,5 +27,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .question-detail-answers {
+  height: 100px;
 }
 </style>

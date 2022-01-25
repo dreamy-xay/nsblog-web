@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-17 20:17:15
  * @LastEditors: clq
- * @LastEditTime: 2022-01-25 17:16:25
+ * @LastEditTime: 2022-01-25 20:54:55
  */
 import { get, post, RequestLifeCycle } from '@/network/request';
 
@@ -86,7 +86,7 @@ export function getReplies(
  * @param {string} username 用户名
  * @param {string} title 文章标题
  * @param {string} content 文章内容
- * @param {Array} topic_tag 主题及标签
+ * @param {Array} tags 主题及标签
  * @return {Promise<unknown>} 请求返回promise
  * @author: clq
  */
@@ -94,17 +94,17 @@ export function releaseQuestion(
   username: string = '',
   title: string = '',
   content: string = '',
-  topic_tag: Array<unknown> = [],
+  tags: Array<unknown> = [],
   RLC: RequestLifeCycle = {}
 ): Promise<unknown> {
   return post({
     url: '/questions',
     ...RLC,
-    params: {
+    data: {
       username,
       title,
       content,
-      topic_tag
+      tags
     }
   });
 }

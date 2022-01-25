@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-25 10:25:30
  * @LastEditors: clq
- * @LastEditTime: 2022-01-25 12:58:51
+ * @LastEditTime: 2022-01-25 19:28:22
 -->
 <template>
   <base-view
@@ -17,9 +17,11 @@
       <div class="container-top">
         <question-detail-info />
       </div>
-      <div class="container-middle"></div>
+      <div class="container-middle">
+        <question-detail-answers />
+      </div>
       <div class="container-bottom">
-
+        <question-detail-write-answer />
       </div>
     </div>
   </base-view>
@@ -29,8 +31,11 @@
 import { defineComponent, reactive } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import QuestionDetailInfo from '@/views/question/pages/questionDetail/childComps/QuestionDetailInfo.vue';
+import QuestionDetailAnswers from '@/views/question/pages/questionDetail/childComps/QuestionDetailAnswers.vue';
+import QuestionDetailWriteAnswer from '@/views/question/pages/questionDetail/childComps/QuestionDetailWriteAnswer.vue';
+
 /**
- * @description:
+ * @description: 问答详情页面
  * @author: clq
  */
 
@@ -39,6 +44,8 @@ export default defineComponent({
   components: {
     BaseView,
     QuestionDetailInfo,
+    QuestionDetailAnswers,
+    QuestionDetailWriteAnswer,
   },
   setup() {
     let comments = reactive([

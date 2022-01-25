@@ -4,26 +4,25 @@
  * @Autor: clq
  * @Date: 2022-01-25 10:19:33
  * @LastEditors: clq
- * @LastEditTime: 2022-01-25 11:13:28
+ * @LastEditTime: 2022-01-25 21:20:40
  */
 import { RouteRecordRaw } from 'vue-router';
 
 const questionRouter: RouteRecordRaw = {
   path: '/question',
   name: 'question',
-  redirect: '/question/home',
   component: () => import('@/views/question/Question.vue'),
   meta: {
     title: '问答'
   },
   children: [
     {
-      path: 'home',
+      path: '',
       name: 'questionHome',
       component: () => import('@/views/question/pages/questionHome/QuestionHome.vue')
     },
     {
-      path: 'detail',
+      path: ':questionId',
       name: 'questionDetail',
       meta: {
         title: '问答详情'
