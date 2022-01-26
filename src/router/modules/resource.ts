@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-25 21:23:05
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-25 23:08:04
+ * @LastEditTime: 2022-01-26 11:16:44
  */
 import { RouteRecordRaw } from 'vue-router';
 
@@ -28,7 +28,7 @@ const resourceRouter: RouteRecordRaw = {
 
     {
       path: ':resourceId',
-      name: 'resourceId',
+      name: 'resourceDetail',
       component: () => import('@/views/resource/childComps/pages/resourceDetail/ResourceDetail.vue'),
       meta: {
         title: '资源详细信息页面'

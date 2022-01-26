@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-23 21:16:25
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-25 22:12:57
+ * @LastEditTime: 2022-01-26 12:48:06
 -->
 <template>
   <div
@@ -56,6 +56,7 @@
                 class="select-button"
                 :class="type ? '' : 'select-button-false'"
                 role="button"
+                v-show="type ? true : (selectTag == 2 ? true : false )"
                 @click="computedPages"
               >
                 <div
