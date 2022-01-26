@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-20 19:56:13
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-26 22:14:30
+ * @LastEditTime: 2022-01-26 22:26:08
 -->
 <template>
   <div class="article-bottom-comp">
@@ -203,7 +203,7 @@ export default defineComponent({
      */
     function onCollect() {
       if (!isUserLogin()) return;
-      console.log('onCollect', props.data.collection);
+      console.log('onCollect');
       if (props.data.collection == null) {
         show.value = true;
       } else {

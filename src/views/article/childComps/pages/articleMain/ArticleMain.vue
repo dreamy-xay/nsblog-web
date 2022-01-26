@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 16:32:13
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-26 18:53:04
+ * @LastEditors: xiao
+ * @LastEditTime: 2022-01-26 22:22:34
  * @LastEditors: dreamy-xay
  * @LastEditTime: 2021-10-02 10:14:24
 -->
@@ -85,7 +85,7 @@ export default defineComponent({
       license: null,
       recommend_count: 0,
       evaluation: undefined, //0:反对 1:推荐 2:不反对,不推荐
-      collection: undefined, //0:未收藏 1:已收藏
+      collection: undefined, //null:未收藏 收藏夹id:已收藏
       attention: undefined, //0:未关注 1:已关注
       last_article: {
         article_id: null,
@@ -195,13 +195,26 @@ export default defineComponent({
       })
       .on('ArticleBottomComp-changeCollection', (newValue) => {
         console.log('newCollection:' + newValue);
-        (newValue ? addCollections : cancelCollections)(articleData.article_id)
+        addCollections(articleData.article_id)
           .then(() => {
+            msg.success(`收藏成功`);
             articleData.collection = newValue;
           })
           .catch((err) => {
             console.log(err);
-            msg.error(`${newValue ? '' : '取消'}收藏失败`, { duration: 2000, closable: true });
+            msg.error(`收藏失败`, { duration: 2000, closable: true });
+          });
+      })
+      .on('ArticleBottomComp-cacelCollection', (newValue) => {
+        console.log('cancelCollection:' + newValue);
+        cancelCollections(newValue)
+          .then(() => {
+            msg.success(`取消收藏成功`);
+            articleData.collection = null;
+          })
+          .catch((err) => {
+            console.log(err);
+            msg.error(`取消收藏失败`, { duration: 2000, closable: true });
           });
       })
       .on('ArticleBottomComp-changeEvaluation', (newValue) => {
