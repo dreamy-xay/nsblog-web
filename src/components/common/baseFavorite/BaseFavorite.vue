@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2021-09-27 17:17:24
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-25 18:49:21
+ * @LastEditTime: 2022-01-26 20:59:02
 -->
 <template>
   <n-modal
@@ -75,6 +75,7 @@ export default defineComponent({
     const msg = useMessage(); // naive-ui 组件
     const favorites = reactive([]); // 收藏夹数据
     const id = ref(null);
+    const cancel = ref(null);
 
     // 获取收藏夹数据
     getFavorites('dreamy', 0)
@@ -113,16 +114,8 @@ export default defineComponent({
      * @author: xiao
      */
     function addCollection() {
-      addCollections()
-        .then(() => {
-          console.log('添加收藏成功');
-          events.emit('ArticleBottomComp-changeCollection', id.value); //收藏
-          context.emit('update:isShow', false);
-        })
-        .catch((error) => {
-          console.log(error);
-          msg.error('添加收藏失败', { duration: 2000, closable: true });
-        });
+      events.emit('ArticleBottomComp-changeCollection', id.value); //收藏
+      context.emit('update:isShow', false);
     }
 
     /**
@@ -131,16 +124,8 @@ export default defineComponent({
      * @return {Void}
      * @author: xiao
      */
-    function delCollection(e) {
-      cancelCollections(e)
-        .then(() => {
-          console.log('取消收藏成功');
-          events.emit('ArticleBottomComp-changeCollection', null); //取消收藏
-        })
-        .catch((error) => {
-          console.log(error);
-          msg.error('取消收藏失败', { duration: 2000, closable: true });
-        });
+    function delCollection(favoriteId) {
+      events.emit('ArticleBottomComp-cacelCollection', favoriteId); //取消收藏
     }
 
     /**
@@ -155,8 +140,14 @@ export default defineComponent({
         if (favorites[i].name == e) f = 0;
       }
       if (f) {
-        let num = Number(Math.random().toString().substr(2, 0) + Date.now()).toString(36);
-        favorites.splice(favorites.length, 0, { collections: [], id: num, name: e, count: 0, is_private: false });
+        let num = Math.floor(Math.random() * (9999 - 1000)) + 1000;
+        favorites.splice(favorites.length, 0, {
+          collections: [],
+          favorite_id: num,
+          name: e,
+          count: 0,
+          is_private: false,
+        });
       } else {
         msg.error('不能重名', { duration: 2000, closable: true });
       }

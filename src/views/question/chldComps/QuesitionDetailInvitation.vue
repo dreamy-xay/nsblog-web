@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2022-01-23 15:06:34
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-25 18:56:39
+ * @LastEditTime: 2022-01-26 15:53:59
 -->
 <template>
   <n-modal
@@ -28,10 +28,11 @@
           :key="index"
         >
           <div class="item-left">
-            <base-image
-              class="imag"
+            <base-avatar
+              :size="40"
               :src="'../public/blog/none.jpg'"
             />
+
             <div class="name">{{user.username}}</div>
           </div>
           <div
@@ -49,7 +50,7 @@
 
 <script>
 import { defineComponent, reactive } from 'vue';
-import BaseImage from '@/components/content/baseImage/BaseImage';
+import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar';
 
 /**
  * @description:邀请回答
@@ -60,12 +61,12 @@ import BaseImage from '@/components/content/baseImage/BaseImage';
 export default defineComponent({
   name: 'quesitionDetailInvitation',
   components: {
-    BaseImage,
+    BaseAvatar,
   },
   props: {
     isShow: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
   setup(_, context) {
@@ -169,19 +170,13 @@ export default defineComponent({
         @include flex(center, flex-start);
         margin-left: 24px;
 
-        .imag {
-          width: 40px;
-          height: 40px;
-          background: rgba(0, 0, 0, 0);
-          border-radius: 50%;
-        }
-
         .name {
           width: 28px;
           height: 19px;
           font-size: 14px;
           font-weight: 700;
           color: $grey-10;
+          margin-left: 12px;
         }
       }
 
