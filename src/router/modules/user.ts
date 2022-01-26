@@ -1,10 +1,10 @@
 /*
- * @Description: user route
+ * @Description: 用户主页路由
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:06:39
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-17 19:33:02
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-25 21:19:57
  */
 import { RouteRecordRaw } from 'vue-router';
 

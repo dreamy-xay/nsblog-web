@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 20:59:37
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-23 22:08:37
+ * @LastEditTime: 2022-01-26 13:49:48
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -63,27 +63,121 @@ export default function(baseUrl: string, app: Application) {
     return res.send();
   });
 
-  // @待定
+  // 获取发布的提问
+  app.get(baseUrl + '/questions/:question_id(\\d+)', (req: Request, res: Response) => {
+    const { question_id } = req.params;
+    const username: string = verifyToken(req.headers) ? getToken(req.headers).username : '';
+
+    print('get questions detail', { username, question_id });
+
+    const user: RandomUser = randomUsers().random();
+
+    const tags: string[] = [];
+    const sum: number = Random.integer(1, 3);
+    for (let j: number = 0; j < sum; ++j) tags.push(Random.integer(0, 1) ? Random.word(2, 8) : Random.cword(2, 5));
+
+    const data: Record<string, unknown> = {
+      ...(Random.integer(0, 1) ? { collection: Random.increment(Random.integer(1, 10)) } : {}),
+      evaluation: Random.integer(0, 1),
+      ...(Random.integer(0, 1) ? { solution: 1 } : {})
+    };
+
+    return res.json({
+      id: Random.increment(Random.integer(1, 10)),
+      title: Random.integer(0, 1) ? Random.title(1, 40) : Random.ctitle(1, 40),
+      content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
+      username: user.username,
+      nickname: user.nickname,
+      avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
+      release_time: Random.datetime(),
+      tags,
+      evaluation_count: Random.integer(0, 100),
+      browsing_count: Random.integer(0, 10000),
+      reply_count: Random.integer(0, 100),
+      ...data
+    });
+  });
+
   // 获取发布的提问的回答
   app.get(baseUrl + '/questions/replies', (req: Request, res: Response) => {
-    const { username, limit, offset, release_time, browsing_count } = req.query;
-    if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
+    const { question_id, type, reply_id, limit, offset } = req.query;
+    const username: string = verifyToken(req.headers) ? getToken(req.headers).username : '';
 
-    print('get replay questions', { username, limit, offset, release_time, browsing_count });
+    print('get replay questions', { username, question_id, type, reply_id, limit, offset });
 
+    const RUsers = randomUsers(username);
     function getRandom(limit: number): Record<string, unknown>[] {
-      const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
+      const ans: Record<string, unknown>[] = [];
+
+      function getComments(): Record<string, unknown> {
+        let ans: Record<string, unknown> = {};
+        if (!(question_id && reply_id)) {
+          ans = { child_comments: [] };
+          const sum = Random.integer(0, 5);
+          for (let i: number = 0; i < sum; ++i) {
+            const user: RandomUser = RUsers.random();
+            const replyUser: RandomUser = RUsers.random();
+            const params: Record<string, unknown> = username !== '' ? { evaluation: Random.integer(0, 2) } : {};
+            (ans.child_comments as any).push({
+              comment_id: Random.increment(Random.integer(1, 10)),
+              username: user.username,
+              nickname: user.nickname,
+              avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
+              time: Random.time(),
+              reply_username: replyUser.username,
+              reply_nickname: replyUser.nickname,
+              content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
+              support_count: Random.integer(0, 9999),
+              oppose_count: Random.integer(0, 9999),
+              ...params
+            });
+          }
+        }
+        return ans;
+      }
+
       for (let i: number = 0; i < limit; ++i) {
+        const user: RandomUser = RUsers.random();
+        const params: Record<string, unknown> = username !== '' ? { evaluation: Random.integer(0, 2) } : {};
         ans.push({
-          id: Random.increment(Random.integer(1, 10)),
-          content: Random.integer(0, 1) ? Random.paragraph(0, 3) : Random.cparagraph(0, 3),
-          question_id: Random.increment(Random.integer(1, 10)),
-          question_title: Random.integer(0, 1) ? Random.title(3, 100) : Random.ctitle(3, 50),
-          reply_time: Random.datetime()
+          comment_id: i ? Random.increment(Random.integer(1, 10)) : 1,
+          username: user.username,
+          nickname: user.nickname,
+          avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
+          time: Random.time(),
+          content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
+          support_count: Random.integer(0, 9999),
+          oppose_count: Random.integer(0, 9999),
+          ...params,
+          ...getComments()
         });
       }
+
       return ans;
     }
-    return res.json({ replies: getRandom(int(offset) >= 44 ? 0 : Math.min(int(limit), 44 - int(offset))) });
+
+    return res.json({ replies: getRandom(int(offset) >= 25 ? 0 : Math.min(int(limit), 25 - int(offset))) });
+  });
+
+  // 发表提问回答
+  app.post(baseUrl + '/questions/replies', (req: Request, res: Response) => {
+    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
+    const username: string = getToken(req.headers).username;
+    const { question_id, content, parent_id, reply_username } = req.body;
+
+    print('release questions replies', { username, question_id, content, parent_id, reply_username });
+
+    return res.send();
+  });
+
+  // 修改文章评论状态，推荐反对还是不操作
+  app.put(baseUrl + '/questions/replies/evaluation', (req: Request, res: Response) => {
+    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
+    const username: string = getToken(req.headers).username;
+    const { type, reply_id } = req.body;
+
+    print('modify questions replies evaluation', { username, type, reply_id });
+
+    return res.send();
   });
 }
