@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2022-01-25 14:25:23
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-25 20:29:27
+ * @LastEditTime: 2022-01-26 12:15:12
 -->
 <template>
   <div class="search-page-comprehensive">
@@ -36,10 +36,10 @@
                 class="count"
                 :class="item.like ? 'like' : ''"
               >
-                <span class="iconfont blog-dianzan1"></span>{{ item.like_count }}
+                <span class="iconfont blog-dianzan1"></span>{{ item.like_count > 0 ? item.like_count : "点赞"}}
               </div>
               <div class="count">
-                <span class="iconfont blog-c-comment"></span>{{ item.reply_count }}
+                <span class="iconfont blog-c-comment"></span>{{ item.reply_count > 0 ? item.reply_count : "评论"}}
               </div>
             </div>
             <div class="right">
