@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-29 17:08:41
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-15 16:12:01
+ * @LastEditTime: 2022-01-26 20:18:58
 -->
 
 <template>
@@ -18,7 +18,7 @@
       <div class="image">
         <base-image
           class="image-inner"
-          src="https://s3.bmp.ovh/imgs/2021/09/fd25f71e808f3f23.jpg"
+          :src="item.cover_image"
           :loading="2"
         />
       </div>
@@ -26,11 +26,11 @@
         <div class="context-top">
           <div class="time">
             <div class="time-icon"><i class="iconfont blog-time"></i></div>
-            <div class="time-text">{{new Date()}}</div>
+            <div class="time-text">{{item.release_time}}</div>
           </div>
 
           <div class="title">
-            王耀武额ui为u五额为u七月
+            {{item.title}}
           </div>
 
           <div class="number">
@@ -40,11 +40,11 @@
               class="number-context"
             >
               <div class="number-context-icon"><i :class="'iconfont blog-'+icon"></i></div>
-              <div class="number-context-text">{{12312}}</div>
+              <div class="number-context-text">{{i==0 ? item.page_view : i==1 ? item.comment_count : item.comment_count}}</div>
             </div>
           </div>
 
-          <div class="abstract">摘要：钱钱钱钱钱撒对于噶似的有噶四处干撒检查钱钱钱钱钱钱钱钱钱钱钱钱钱钱钱钱钱钱钱 </div>
+          <div class="abstract">摘要：{{item.content}} </div>
 
         </div>
         <a
