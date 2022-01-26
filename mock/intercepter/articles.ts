@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-26 14:39:54
+ * @LastEditTime: 2022-01-26 16:20:57
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -259,6 +259,8 @@ export default function(baseUrl: string, app: Application) {
 
   // 获取文章详情
   app.get(baseUrl + '/articles/:article_id(\\d+)', (req: Request, res: Response) => {
+    if (!Random.integer(0, 3) && req.query.password !== '123') return res.status(403).json({ error: 'Password error' }); // 模拟需要密码
+
     const username: string = verifyToken(req.headers) ? getToken(req.headers).username : '';
 
     const { article_id } = req.params;
@@ -395,6 +397,16 @@ export default function(baseUrl: string, app: Application) {
       articles: getRandom(int(page) === 12 ? Random.integer(1, 10) : 10),
       ...data
     });
+  });
+
+  // 验证文章密码
+  app.post(baseUrl + '/articles/password', (req: Request, res: Response) => {
+    const { password } = req.body;
+
+    print('verify the article password', { password });
+
+    if (password === '123') return res.send();
+    else return res.status(403).json({ error: 'Password error' });
   });
 }
 
