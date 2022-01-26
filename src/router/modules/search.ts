@@ -1,10 +1,10 @@
 /*
- * @Description: 搜索主页路由
+ * @Description: 搜索页面路由
  * @Version:
  * @Autor: Ban
  * @Date: 2022-01-15 17:29:49
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-25 14:28:36
+ * @LastEditTime: 2022-01-26 12:09:31
  */
 import { RouteRecordRaw } from 'vue-router';
 

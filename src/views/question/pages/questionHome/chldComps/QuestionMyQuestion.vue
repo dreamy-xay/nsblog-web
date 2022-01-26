@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-19 19:24:33
  * @LastEditors: clq
- * @LastEditTime: 2022-01-22 17:45:42
+ * @LastEditTime: 2022-01-25 11:17:16
 -->
 <template>
   <div class="question-my-question">
@@ -51,7 +51,7 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import { mapGetters } from '@/util/store';
-import QuestionCreateQuestion from '@/views/question/chldComps/QuestionCreateQuestion.vue';
+import QuestionCreateQuestion from '@/views/question/pages/questionHome/chldComps/QuestionCreateQuestion.vue';
 
 /**
  * @description:

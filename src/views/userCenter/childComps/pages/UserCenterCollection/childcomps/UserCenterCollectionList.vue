@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-24 10:18:28
  * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-24 18:42:50
+ * @LastEditTime: 2022-01-25 13:29:47
 -->
 <template>
   <div class="user-center-collection-list">
@@ -192,6 +192,7 @@ export default defineComponent({
 .user-center-collection-list {
   @include size(180px, 626px);
   overflow: hidden;
+
   .user-center-collection-list-new {
     @include size(180px, 60px);
     color: $grey-7;

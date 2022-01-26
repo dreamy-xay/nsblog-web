@@ -1,10 +1,10 @@
 /*
- * @Description: login page router
+ * @Description: 登录页面路由
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 19:06:09
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-07-30 16:05:14
+ * @LastEditTime: 2022-01-25 21:19:28
  */
 
 import { RouteRecordRaw } from 'vue-router';

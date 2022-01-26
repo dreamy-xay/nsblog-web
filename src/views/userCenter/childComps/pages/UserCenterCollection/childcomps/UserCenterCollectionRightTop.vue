@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-09-01 16:41:52
  * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-24 19:10:18
+ * @LastEditTime: 2022-01-25 13:30:55
 -->
 <template>
   <div class="user-center-collection-right-top">
@@ -277,7 +277,7 @@ export default defineComponent({
 }
 
 .user-center-collection-right-top {
-  @include size(736px, 136px);
+  @include size(736px, 120px);
 
   .user-center-collection-right-top-text {
     margin: 17px 0 0 30px;

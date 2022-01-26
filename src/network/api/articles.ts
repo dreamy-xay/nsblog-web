@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 10:10:43
  * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-22 17:59:02
+ * @LastEditTime: 2022-01-25 10:07:34
  */
 import { get, post, put, RequestLifeCycle } from '@/network/request';
 
@@ -84,6 +84,29 @@ export function modifyArticleCommentEvaluation(
     ...RLC,
     params: {
       comment_id,
+      type,
+    },
+  });
+}
+
+/**
+ * @description: 修改文章评价
+ * @param {string | number} article_id 文章id `必传参数`
+ * @param {number} type 修改类型 `必传参数`
+ * @param {RequestLifeCycle} RLC
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: continus-hs
+ */
+export function modifyArticleRecommendEvaluation(
+  article_id: string | number,
+  type: number,
+  RLC: RequestLifeCycle = {}
+): Promise<unknown> {
+  return put({
+    url: '/articles/evaluation',
+    ...RLC,
+    params: {
+      article_id,
       type,
     },
   });
