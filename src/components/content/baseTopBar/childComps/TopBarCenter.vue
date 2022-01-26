@@ -4,8 +4,8 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2021-07-22 17:52:26
- * @LastEditors: Ban
- * @LastEditTime: 2022-01-22 13:07:21
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-26 16:40:07
 -->
 <template>
   <div
@@ -44,7 +44,7 @@
         <div
           class="delect"
           role="button"
-          @click="del()"
+          @click="del"
         >清空</div>
       </div>
       <div class="history-line"></div>
@@ -80,7 +80,8 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import { mapState, mapMutations } from '@/util/store';
-import { useRouter, useRoute } from 'vue-router';
+import { useRoute } from 'vue-router';
+import router from '@/router';
 
 /**
  * @description: 首页顶部之中间部分组件
@@ -90,12 +91,11 @@ import { useRouter, useRoute } from 'vue-router';
 export default defineComponent({
   name: 'topBarCenter',
   setup() {
+    const route = useRoute();
     const visible = ref(false);
-    const inputText = ref('');
+    const inputText = ref(/\/search\/.*/.test(route.path) ? route.query.keyword : '');
     const { List } = mapState('globalStore', { List: 'searchHistory' });
     const { set, del } = mapMutations('globalStore', { set: 'setSearchHistory', del: 'deleteSearchHistory' });
-    const router = useRouter();
-    const route = useRoute();
 
     /**
      * @description: 显示历史记录框
