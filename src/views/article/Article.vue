@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 16:32:13
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-19 12:10:42
+ * @LastEditors: xiao
+ * @LastEditTime: 2022-01-26 18:30:37
  * @LastEditors: dreamy-xay
  * @LastEditTime: 2021-10-02 10:14:24
 -->
@@ -192,13 +192,24 @@ export default defineComponent({
       })
       .on('ArticleBottomComp-changeCollection', (newValue) => {
         console.log('newCollection:' + newValue);
-        (newValue ? addCollections : cancelCollections)(articleData.article_id)
+        (newValue != null ? addCollections : cancelCollections)(articleData.article_id)
           .then(() => {
             articleData.collection = newValue;
           })
           .catch((err) => {
             console.log(err);
-            msg.error(`${newValue ? '' : '取消'}收藏失败`, { duration: 2000, closable: true });
+            msg.error(`${newValue != null ? '' : '取消'}收藏失败`, { duration: 2000, closable: true });
+          });
+      })
+      .on('ArticleBottomComp-cacelCollection', (newValue) => {
+        console.log('cancelCollection:' + newValue);
+        cancelCollections(newValue)
+          .then(() => {
+            articleData.collection = null;
+          })
+          .catch((err) => {
+            console.log(err);
+            msg.error(`取消收藏失败`, { duration: 2000, closable: true });
           });
       })
       .on('ArticleBottomComp-changeEvaluation', (newValue) => {

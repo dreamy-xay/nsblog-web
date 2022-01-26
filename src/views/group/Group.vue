@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2022-01-21 19:42:59
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-24 01:34:49
+ * @LastEditTime: 2022-01-26 21:58:52
 -->
 <template>
   <base-view
@@ -15,15 +15,17 @@
   >
     <template #top-bar-bottom>
       <base-topic-bar
-        :details="true"
-        :firstItem="全部"
+        :details="false"
+        :firstItem="'全部'"
         @selectTopic="selectTopic"
-        @selectTag="selectTag"
       />
     </template>
 
     <div class="group-container">
-      <search-page-studygroup class="group-search" />
+      <group-list
+        class="group-search"
+        :studyGroups="groups"
+      />
       <div class="group-right">
         <div class="group-create">
           <div
@@ -35,7 +37,10 @@
             创建学习小组
           </div>
         </div>
-        <base-bulletin :bulletin-data="bulletinData" />
+        <base-bulletin
+          :bulletin-data="bulletinData"
+          style="margin-bottom: 16px"
+        />
         <base-rank-card
           :data="rankingList"
           title="活跃排行榜"
@@ -52,10 +57,12 @@
 import { defineComponent, ref, reactive } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import BaseTopicBar from '@/components/common/baseTopicBar/BaseTopicBar.vue';
-import SearchPageStudygroup from '@/views/search/childComps/pages/SearchPageStudygroup';
+import GroupList from '@/views/group/childComps/GroupList';
 import GroupPopover from '@/views/group/childComps/GroupPopover.vue';
 import BaseBulletin from '@/components/common/baseBulletin/BaseBulletin';
 import BaseRankCard from '@/components/common/baseRankCard/BaseRankCard';
+import { getGroups } from '@/network/api/groups';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description: 学习小组页面
@@ -67,7 +74,7 @@ export default defineComponent({
   components: {
     BaseView,
     BaseTopicBar,
-    SearchPageStudygroup,
+    GroupList,
     GroupPopover,
     BaseBulletin,
     BaseRankCard,
@@ -77,6 +84,8 @@ export default defineComponent({
     const isShow = ref(false); //是否显示创建小组页面
     const topicSelect = ref(''); //选择的专题
     const tagSelect = ref(''); //选择的标签
+    const groups = reactive([]); //学习小组数据
+    const msg = useMessage(); // naive-ui 消息组件
     const rankingList = reactive([
       {
         title: 'react有tab页，如何实现未选中的tab页隐藏但不销毁在JavaScript中一组数据如何进行关联呢',
@@ -110,6 +119,33 @@ export default defineComponent({
     ]);
 
     /**
+     * @description: 跟新学习小组数据
+     * @param {boolean} flag 是否清空原数组
+     * @return {void}
+     * @author: clq
+     */
+    function updateGroups(flag) {
+      // 获取小组
+      getGroups('dreamy', topicSelect.value, 0, 10)
+        .then((data) => {
+          console.log('getgroups');
+          console.log(data);
+          if (flag == true) groups.splice(0, groups.length);
+          console.log('groups', groups);
+          for (let i of data.groups) {
+            groups.splice(groups.length, 0, i);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('获取小组失败', { duration: 2000, closable: true });
+        });
+    }
+
+    //初始化数据
+    updateGroups(true);
+
+    /**
      * @description: 点击创建学习小组
      * @return {*}
      * @author: xiao
@@ -127,26 +163,17 @@ export default defineComponent({
     function selectTopic(topic) {
       topicSelect.value = topic;
       console.log(`select Topic: ${topic}`);
-    }
-
-    /**
-     * @description: 选择了标签
-     * @param {string} topic 专题名
-     * @return {void}
-     * @author: dreamy-xay
-     */
-    function selectTag(tag) {
-      tagSelect.value = tag;
-      console.log(`select Tag: ${tag}`);
+      updateGroups(true);
     }
 
     return {
       createGroup,
       isShow,
+      groups,
       rankingList,
       bulletinData,
       selectTopic,
-      selectTag,
+      updateGroups,
     };
   },
 });
@@ -157,6 +184,7 @@ export default defineComponent({
   .group-container {
     @include flex();
     margin: 16px 0px 16px 75px;
+    padding-bottom: 50px;
 
     .group-search {
       margin-right: 16px;

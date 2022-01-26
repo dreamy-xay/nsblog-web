@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2022-01-20 15:53:19
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-22 15:37:04
+ * @LastEditTime: 2022-01-26 21:45:17
 -->
 <template>
   <n-modal
@@ -67,9 +67,9 @@
 import { defineComponent, ref, reactive } from 'vue';
 import BaseSelect from '@/components/content/baseSelect/BaseSelect.vue';
 import BaseInput from '@/components/content/baseInput/BaseInput.vue';
-import { getGroups } from '@/network/api/groups';
 import { useMessage } from 'naive-ui';
 import { createGroups } from '@/network/api/groups';
+import { getTopics } from '@/network/api/topics';
 
 /**
  * @description:创建学习小组
@@ -94,22 +94,22 @@ export default defineComponent({
     const inputIntroduce = ref(''); //输入的小组介绍
     const select = ref(''); //选择的数据
     const selectProject = []; //小组专题
-    const studyGroups = reactive([]); //学习小组数据
+    const topics = reactive([]); //学习小组数据
     const msg = useMessage(); // naive-ui 组件
 
-    //获取学习小组信息
-    getGroups('dreamy')
+    //获取专题名
+    getTopics()
       .then((data) => {
         console.log(data);
-        studyGroups.splice(0, 0, ...data.groups);
-        for (let i = 0; i < studyGroups.length; i++) {
-          selectProject[i] = studyGroups[i].topic_name;
+        topics.splice(0, 0, ...data.topics);
+        for (let i = 0; i < topics.length; i++) {
+          selectProject[i] = topics[i];
         }
         select.value = selectProject[0];
       })
       .catch((error) => {
         console.log(error);
-        msg.error('获取登录日志失败', { duration: 2000, closable: true });
+        msg.error('获取专题失败', { duration: 2000, closable: true });
       });
 
     /**
@@ -129,14 +129,21 @@ export default defineComponent({
       console.log(inputName.value);
       console.log(inputIntroduce.value);
       console.log(select.value);
-      //创建学习小组
-      createGroups(inputName.value, inputIntroduce.value, select.value)
-        .then()
-        .catch((error) => {
-          console.log(error);
-          msg.error('创建学习小组失败', { duration: 2000, closable: true });
-        });
-      context.emit('update:modelValue', false);
+      if (inputName.value == '' || inputIntroduce.value == '') {
+        msg.error('输入内容不能为空', { duration: 2000, closable: true });
+      } else {
+        //创建学习小组
+        createGroups(inputName.value, inputIntroduce.value, select.value)
+          .then(() => {
+            inputName.value = '';
+            inputIntroduce.value = '';
+            context.emit('update:modelValue', false);
+          })
+          .catch((error) => {
+            console.log(error);
+            msg.error('创建学习小组失败', { duration: 2000, closable: true });
+          });
+      }
     }
 
     /**

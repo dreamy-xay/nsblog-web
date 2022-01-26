@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-20 19:56:13
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-25 18:55:19
+ * @LastEditTime: 2022-01-26 20:51:09
 -->
 <template>
   <div class="article-bottom-comp">
@@ -217,6 +217,7 @@ export default defineComponent({
      * @author: xiao
      */
     function delCollection() {
+      modalShow.value = false;
       b.value.delCollection(props.data.collection);
     }
 
