@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2022-01-15 17:32:07
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-22 13:10:45
+ * @LastEditTime: 2022-01-25 20:37:30
 -->
 <template>
   <div class="search-page-tag">
@@ -26,6 +26,7 @@
             <div
               class="username-content"
               role="button"
+              @click="changePages('/user/' + item.nickname)"
             >
               {{ item.nickname }}
             </div>
@@ -98,7 +99,6 @@ export default defineComponent({
         .then((data) => {
           if (userData.length == 0) {
             context.emit('changeLoadingState', 6, true);
-            context.emit('changeAcitiveIndex', 6);
           }
           data.users.forEach((item) => {
             userData.push(item);
@@ -108,9 +108,16 @@ export default defineComponent({
           console.log(error);
         });
     }
+
     onMounted(() => {
+      context.emit('changeActiveIndex', 6);
       getUser();
     });
+
+    /**
+     * @description: 监听路由query
+     * @author: Ban
+     */
 
     watch(
       () => route.query.keyword,
@@ -121,11 +128,22 @@ export default defineComponent({
       }
     );
 
+    /**
+     * @description: 跳转页面
+     * @param {string} path
+     * @author: Ban
+     */
+
+    function changePages(path) {
+      window.open(path, path);
+    }
+
     return {
       userData,
       focus,
       cancel,
       getUser,
+      changePages,
     };
   },
 });
@@ -138,7 +156,7 @@ export default defineComponent({
 
   .search-page-tag-list {
     box-shadow: $shadow-0;
-    border-radius: 8px;
+    border-radius: $border-radius-0;
     overflow: hidden;
     margin-bottom: 10px;
     width: 100%;
@@ -150,6 +168,10 @@ export default defineComponent({
       box-sizing: content-box;
       padding: 0 24px;
       border-bottom: 1px solid $grey-4;
+
+      &:last-child {
+        border-bottom: 0;
+      }
 
       .center {
         width: 484px;
