@@ -4,13 +4,18 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-21 23:15:38
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-25 23:13:29
+ * @LastEditTime: 2022-01-26 20:37:47
 -->
 <template>
   <div class="resource-home">
     <div class="resource-home-center">
       <div class="left">
         <resource-left />
+        <div
+          class="button"
+          role="button"
+        >加载更多...</div>
+
       </div>
       <div class="right">
         <base-rank-card
@@ -77,6 +82,7 @@ export default defineComponent({
         title: '在JavaScript中一组数据如何进行关联呢',
       },
     ]);
+
     return {
       rankinglist,
     };
@@ -96,6 +102,23 @@ export default defineComponent({
 
     .left {
       width: 700px;
+      @include flex(center, initial, column);
+
+      .button {
+        @include flex(center, center);
+        height: 32px;
+        margin-top: 10px;
+        width: 300px;
+        border-radius: $border-radius-0;
+        box-shadow: $shadow-0;
+        background-color: $grey-0;
+
+        transition: 0.25s;
+
+        &:hover {
+          background: $grey-1;
+        }
+      }
     }
 
     .right {

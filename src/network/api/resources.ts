@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-09-17 11:13:57
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-24 10:13:35
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-01-26 20:37:34
  */
 import { get, RequestLifeCycle } from '@/network/request';
 
@@ -35,6 +35,24 @@ export function getResources(
       offset,
       release_time,
       browsing_count
+    }
+  });
+}
+
+/**
+ * @description: 获取获取资源详情信息
+ * @param {string | number} resource_id 资源id
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: Z_Y_C
+ */
+
+export function getResourceDetail(resource_id: string | number, RLC: RequestLifeCycle = {}): Promise<unknown> {
+  return get({
+    url: `/resources/${resource_id}`,
+    ...RLC,
+    params: {
+      resource_id
     }
   });
 }

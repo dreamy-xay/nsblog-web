@@ -4,28 +4,28 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-24 21:42:19
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-25 20:11:34
+ * @LastEditTime: 2022-01-26 21:54:38
 -->
 <template>
   <div class="resource-detail-top">
-    <div class="title">springboot中如何设置pagehelper-spring-boot-starter分页时，若该页面无内容，则返回空？</div>
+    <div class="title">{{data.name}}</div>
     <div class="user">
       <base-avatar
         role="button"
-        :src="'https://s3.bmp.ovh/imgs/2021/09/7fc65c1d3e881ea5.jpg'"
+        :src="data.avatar"
         :size="32"
-        :href="'http://localhost:8888/user/dreamy'"
-        :target="'http://localhost:8888/user/dreamy'"
+        :href="'/user/'+data.username"
+        :target="'/user/'+data.username"
       />
-      <div class="name">梦幻</div>
-      <div class="time">{{new Date()+' 上架'}}</div>
+      <div class="name">{{data.nickname}}</div>
+      <div class="time">{{data.upload_time+' 上架'}}</div>
     </div>
-    <div class="text">springboot中如何设置pagehelper-spring-boot-starter分页时，若该页面无内容，则返回空？springboot中如何设置子pgaehelper-spring
-      -boot-starter分页时，若该页面无内容，则返回空？</div>
+    <div class="text">{{data.remark}}</div>
     <div class="button">
       <div
         class="download"
         role="button"
+        @click="clickButton(0)"
       >
         <div class="download-icon"><i class="iconfont blog-xiazai"></i></div>
         <div class="download-text">下载</div>
@@ -34,6 +34,7 @@
       <div
         class="collect"
         role="button"
+        @click="clickButton(1)"
       >
         <div class="collect-icon"><i class="iconfont blog-shoucang21"></i></div>
         <div class="collect-text">收藏</div>
@@ -42,6 +43,7 @@
       <div
         class="collect"
         role="button"
+        @click="clickButton(2)"
       >
         <div class="collect-icon"><i class="iconfont blog-fenxiang"></i></div>
         <div class="collect-text">分享</div>
@@ -49,10 +51,11 @@
     </div>
 
     <div class="bottom">
-      <div>下载量 • {{251}} 下载</div>
+      <div>下载量 • {{data.download_count}} 下载</div>
       <div
         role="button"
         class="bottom-button"
+        @click="clickButton(3)"
       >举报</div>
     </div>
   </div>
@@ -63,12 +66,31 @@ import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 
 /**
  * @description: 资源详细信息页面top
+ * @param {Object} data 显示数据 `默认为null`
  * @author: Z_Y_C
  */
 
 export default defineComponent({
   name: 'resourceDetailTop',
   components: { BaseAvatar },
+  props: {
+    data: {
+      type: Object,
+      default: null,
+    },
+  },
+  setup(props) {
+    /**
+     * @description: 按钮跳转
+     * @param {Number} index 0:下载,1:收藏,2:分享,3:举报
+     * @return {Void}
+     * @author: Z_Y_C
+     */
+    function clickButton(index) {
+      if (index == 0) window.open(props.data.link, props.data.link);
+    }
+    return { clickButton };
+  },
 });
 </script>
 
