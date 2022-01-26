@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 11:51:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-23 15:35:33
+ * @LastEditTime: 2022-01-26 14:43:03
 -->
 <template>
   <div
@@ -186,7 +186,7 @@ export default defineComponent({
     function resizeListener() {
       width.value = document.body.offsetWidth;
       height.value = document.body.offsetHeight;
-      containerTopBarHeight.value = topBarRef.value.$el.parentNode.offsetHeight;
+      containerTopBarHeight.value = topBarRef.value.$el.parentNode.offsetHeight - topBarHeight;
       innerHeight.value = height.value - containerTopBarHeight.value;
       nextTick(() => {
         // 更新滚动条
