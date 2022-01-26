@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:25:27
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-23 13:47:48
+ * @LastEditTime: 2022-01-24 14:15:33
 -->
 
 <template>
@@ -37,7 +37,7 @@
               @click.stop="changePages('/user/' + item.content.username)"
             >{{item.content.nickname}}</span>
             <div
-              @click="changePages((item.content.type===1||item.content.type===3 ? '/article/' : '/question/')+item.message_id)"
+              @click="changePages((item.content.type===1||item.content.type===3 ? '/article/' : '/question/')+item.content.id)"
               role="button"
             >
               <span v-if="item.content.type===1">回复我的文章</span>
@@ -69,6 +69,7 @@
             <div
               class="message-reply-right-bottom-reply"
               role="button"
+              @click="changePages((item.content.type===1||item.content.type===3 ? '/article/' : '/question/')+item.content.id)"
             >
               <i class="iconfont blog-huifu1"></i>
               <span>回复</span>

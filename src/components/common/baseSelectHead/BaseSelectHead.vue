@@ -3,15 +3,18 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2022-01-23 21:16:25
- * @LastEditors: Ban
- * @LastEditTime: 2022-01-25 14:52:52
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-01-25 22:12:57
 -->
 <template>
   <div
     class="base-select-head"
     :style="style"
   >
-    <div class="base-select-head-context">
+    <div
+      class="base-select-head-context"
+      :class="type ? 'space-between':'initial'"
+    >
       <div class="context-context-left">
         <div
           class="box"
@@ -40,7 +43,8 @@
             <el-scrollbar max-height="300px">
               <div
                 class="select-menu"
-                v-for="(item , index) in selectMenu"
+                :class="type ? '' : 'select-menu-false'"
+                v-for="(item , index) in (type ? selectMenu : rankMenu)"
                 :key="index"
                 @click="changeSelect(index)"
                 role="button"
@@ -50,12 +54,13 @@
             <template #trigger>
               <div
                 class="select-button"
+                :class="type ? '' : 'select-button-false'"
                 role="button"
                 @click="computedPages"
               >
                 <div
                   class="select-button-text"
-                  v-text="selectMenu[selectTime]"
+                  v-text="type ? selectMenu[selectTime] : rankMenu[selectTime]"
                 >
                 </div>
                 <div class="icon"><i class='iconfont blog-down'></i></div>
@@ -75,6 +80,7 @@ import { defineComponent } from 'vue';
  * @param {Number} selectTag 选择 0:'综合', 1:'最新', 2:'热门'标签 `默认为0`
  * @param {Number} selectTime 选择 0:'时间不限', 1:'最近一天', 2:'最近一周', 3:'最近三月'时间筛选 `默认为0`
  * @param {Object} style 最外层样式 `默认为 null`
+ * @param {Boolean} type 类型true下拉框在最后，false下拉框在旁边 `默认为 true`
  * @event changeTag 改变标签，传回标签下标
  * @event changeSelect 改变时间筛选，传回时间筛选下标
  * @author: Z_Y_C
@@ -95,10 +101,15 @@ export default defineComponent({
       type: Object,
       default: null,
     },
+    type: {
+      type: Boolean,
+      default: true,
+    },
   },
   setup(props, context) {
     const menu = ['综合', '最新', '热门']; // 0 1 2
     const selectMenu = ['时间不限', '最近一天', '最近一周', '最近三月'];
+    const rankMenu = ['3天内', '7天内', '30天内', '全部'];
 
     /**
      * @description: 改变标签
@@ -121,6 +132,7 @@ export default defineComponent({
     }
     return {
       menu,
+      rankMenu,
       selectMenu,
       changeTag,
       changeSelect,
@@ -138,9 +150,16 @@ export default defineComponent({
   border-bottom: 1px solid $grey-2;
   padding: 0 12px;
 
+  .space-between {
+    @include flex(center, space-between);
+  }
+
+  .initial {
+    @include flex(center);
+  }
+
   .base-select-head-context {
     width: 100%;
-    @include flex(center, space-between);
     height: 14px;
 
     .context-context-left {
@@ -196,6 +215,10 @@ export default defineComponent({
   }
 }
 
+.select-menu-false {
+  width: 64px;
+}
+
 .select-button {
   @include flex(center, space-between);
   width: 62px;
@@ -221,6 +244,10 @@ export default defineComponent({
   &:hover {
     color: $green-1;
   }
+}
+
+.select-button-false {
+  width: 52px;
 }
 </style>
 

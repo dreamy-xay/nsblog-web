@@ -1,17 +1,18 @@
-
 <!--
- * @Description:资源页面左边
+ * @Description: 资源body样式
  * @Version:
  * @Autor: Z_Y_C
- * @Date: 2022-01-22 12:12:35
+ * @Date: 2022-01-25 13:17:52
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-24 00:28:42
+ * @LastEditTime: 2022-01-25 13:52:05
 -->
 <template>
-  <div class="resource-left">
-    <base-select-head />
+  <div
+    class="resource-body"
+    :style="bodyStyle"
+  >
     <div
-      class="resource-left-context"
+      class="resource-body-context"
       v-for="(item , index) in [1,2,3]"
       :key="index"
     >
@@ -40,53 +41,46 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 <script>
 import { defineComponent } from 'vue';
-import BaseSelectHead from '@/components/common/baseSelectHead/BaseSelectHead.vue';
 
 /**
- * @description:资源页面左边
+ * @description: 资源body样式
+ * @param {Array} resourceData 显示数据 `默认为[]`
+ * @param {Object} bodyStyle 最外层样式 `默认为null`
  * @author: Z_Y_C
  */
 
 export default defineComponent({
-  name: 'resourceLeft',
-  components: { BaseSelectHead },
+  name: 'resourceBody',
   props: {
     resourceData: {
       type: Array,
       defaule: () => [],
     },
-  },
-  setup(props) {
-    return {};
+    bodyStyle: {
+      type: Object,
+      defaule: null,
+    },
   },
 });
 </script>
 
 <style lang="scss" scoped>
-.resource-left {
-  width: 100%;
-  border-radius: $border-radius-0;
-  box-shadow: $shadow-0;
-  background-color: $grey-0;
-  margin-bottom: 4px;
+.resource-body {
+  padding: 0 20px;
 
-  .resource-left-context {
-    height: 108px;
-    width: calc(100% - 40px);
-    margin: 0 20px;
+  .resource-body-context {
+    padding: 12px 0;
     border-top: 1px solid $grey-4;
 
-    &:nth-child(2) {
-      border-top: 0;
+    &:first-child {
+      border-top: none;
     }
 
     .context-top {
-      margin-top: 12px;
       height: 24px;
       color: $grey-10;
       font-weight: 700;

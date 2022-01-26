@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-17 17:46:10
  * @LastEditors: clq
- * @LastEditTime: 2022-01-23 20:35:25
+ * @LastEditTime: 2022-01-25 20:36:43
 -->
 <template>
   <div class="search-page-resource">
@@ -117,8 +117,8 @@ export default defineComponent({
     function getResource(clean) {
       search(route.query.keyword, 4, resourceType.value, currentIndex.value, limit.value, offset.value)
         .then((data) => {
-          // console.log('getResource');
-          // console.log(data);
+          console.log('getResource');
+          console.log(data);
           //清空初始数据
           if (clean == true) resourceList.splice(0, resourceList.length);
           // console.log(resourceList);

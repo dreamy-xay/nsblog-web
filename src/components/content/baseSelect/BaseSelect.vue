@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-08-23 19:01:15
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-23 23:21:51
+ * @LastEditTime: 2022-01-25 21:55:51
 -->
 <template>
   <n-popover
@@ -33,8 +33,8 @@
     </el-scrollbar>
     <template #trigger>
       <div
-        :class="disabled ? 'base-select-buttontrue' : 'base-select-buttonfalse'"
-        :style="selectStyle"
+        :class="disabled ?  'base-select-buttontrue' : (visible ? 'base-select-buttonfalse selcect-click' : 'base-select-buttonfalse')"
+        :style="butStyle"
         role="button"
         @click="computedPages"
         v-click-outside="computedPosFalse"
@@ -64,6 +64,7 @@ import { computed, defineComponent, ref } from 'vue';
  * @param {String} selectTag 选择的数据 `默认为''`
  * @param {Arrey} sdata 可供选择的数据 `默认为[]`
  * @param {Boolean} disabled 是否禁用 `默认为false`
+ * @param {Object} buttonStyle 按钮样式 `默认为{}`
  * @event changeItem 改变选择数据
  * @author: Z_Y_C
  */
@@ -100,6 +101,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    buttonStyle: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   setup(props, context) {
     const rotate = ref(false); // 旋转
@@ -111,6 +116,11 @@ export default defineComponent({
         width: props.swidth + 'px',
         padding: `${props.spaddingTop}px ${props.spaddingLeft}px`,
       };
+    });
+
+    // 按钮样式
+    const butStyle = computed(() => {
+      return Object.assign(props.buttonStyle, selectStyle.value);
     });
 
     /**
@@ -154,6 +164,7 @@ export default defineComponent({
       computedPosFalse,
       computedPages,
       changeSelect,
+      butStyle,
     };
   },
 });
@@ -246,6 +257,11 @@ export default defineComponent({
   .base-select-button-iconfont-rotate {
     transform: rotate(180deg);
   }
+}
+
+.selcect-click {
+  box-shadow: $shadow-2;
+  color: $green-1;
 }
 </style>
 
