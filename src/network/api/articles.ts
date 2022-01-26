@@ -3,14 +3,14 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 10:10:43
- * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-25 10:07:34
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-26 18:57:51
  */
 import { get, post, put, RequestLifeCycle } from '@/network/request';
 
 /**
  * @description: 获取文章评论
- * @param {string} articleId 文章id `必传参数`
+ * @param {string} article_id 文章id `必传参数`
  * @param {string} commentId 评论id `默认为空`
  * @param {number} offset 起始位置 `默认为0`
  * @param {number} limit 数量限制 `默认为5`
@@ -19,7 +19,7 @@ import { get, post, put, RequestLifeCycle } from '@/network/request';
  * @author: clq
  */
 export function getArticleComments(
-  articleId: string,
+  article_id: string,
   commentId: string = '',
   offset: number = 0,
   limit: number = 5,
@@ -29,11 +29,11 @@ export function getArticleComments(
     url: '/articles/comments',
     ...RLC,
     params: {
-      article_id: articleId,
+      article_id: article_id,
       comment_id: commentId,
       limit,
-      offset,
-    },
+      offset
+    }
   });
 }
 
@@ -61,8 +61,8 @@ export function postArticleComments(
       article_id,
       content,
       parent_id,
-      reply_username,
-    },
+      reply_username
+    }
   });
 }
 
@@ -84,8 +84,8 @@ export function modifyArticleCommentEvaluation(
     ...RLC,
     params: {
       comment_id,
-      type,
-    },
+      type
+    }
   });
 }
 
@@ -107,8 +107,8 @@ export function modifyArticleRecommendEvaluation(
     ...RLC,
     params: {
       article_id,
-      type,
-    },
+      type
+    }
   });
 }
 
@@ -124,8 +124,8 @@ export function getTags(username: string, RLC: RequestLifeCycle = {}): Promise<u
     url: '/articles/tags',
     ...RLC,
     params: {
-      username,
-    },
+      username
+    }
   });
 }
 
@@ -141,8 +141,8 @@ export function getCategories(username: string, RLC: RequestLifeCycle = {}): Pro
     url: '/articles/categories',
     ...RLC,
     params: {
-      username,
-    },
+      username
+    }
   });
 }
 
@@ -188,21 +188,30 @@ export function getArticles(
       limit,
       topic_name,
       tag_name,
-      type,
-    },
+      type
+    }
   });
 }
 
 /**
  * @description: 获取文章详细信息
  * @param {number} article_id 文章id `必传参数`
+ * @param {string} password 文章密码 `默认为 ''`
  * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
  * @return {Promise<unknown>} 请求返回promise
  * @author: dreamy-xay
  */
-export function getArticleInfo(article_id: number, RLC: RequestLifeCycle = {}): Promise<unknown> {
+export function getArticleInfo(
+  article_id: number,
+  password: string = '',
+  RLC: RequestLifeCycle = {}
+): Promise<unknown> {
   return get({
     url: `/articles/${article_id}`,
+    ...RLC,
+    data: {
+      password
+    }
   });
 }
 
@@ -213,13 +222,35 @@ export function getArticleInfo(article_id: number, RLC: RequestLifeCycle = {}): 
  * @return {Promise<unknown>} 请求返回promise
  * @author: Z_Y_C
  */
-
 export function getArticlesUser(username: string, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return get({
     url: '/articles/user',
     ...RLC,
     params: {
-      username,
-    },
+      username
+    }
+  });
+}
+
+/**
+ * @description: 验证文章密码
+ * @param {string | number} article_id 文章id `必传参数`
+ * @param {string} password 文章密码 `必传参数`
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: dreamy-xay
+ */
+export function verifyArticlePassword(
+  article_id: number | string,
+  password: string,
+  RLC: RequestLifeCycle = {}
+): Promise<unknown> {
+  return post({
+    url: '/articles/password',
+    ...RLC,
+    data: {
+      article_id,
+      password
+    }
   });
 }
