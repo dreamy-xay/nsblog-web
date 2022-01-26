@@ -1,10 +1,10 @@
 /*
- * @Description: 搜索主页路由
+ * @Description: 搜索页面路由
  * @Version:
  * @Autor: Ban
  * @Date: 2022-01-15 17:29:49
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-20 12:51:27
+ * @LastEditTime: 2022-01-26 12:09:31
  */
 import { RouteRecordRaw } from 'vue-router';
 
@@ -41,6 +41,22 @@ const searchRouter: RouteRecordRaw = {
         title: '用户'
       },
       component: () => import('@/views/search/childComps/pages/SearchPageUser.vue')
+    },
+    {
+      path: 'comprehensive',
+      name: 'searchPageComprehensive',
+      meta: {
+        title: '综合'
+      },
+      component: () => import('@/views/search/childComps/pages/SearchPageComprehensive.vue')
+    },
+    {
+      path: 'article',
+      name: 'searchPageArticle',
+      meta: {
+        title: '文章'
+      },
+      component: () => import('@/views/search/childComps/pages/SearchPageArticle.vue')
     }
   ]
 };

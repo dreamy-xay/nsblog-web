@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:02:59
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-23 13:58:36
+ * @LastEditTime: 2022-01-25 22:48:41
  */
 import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 import loginRouter from './modules/login';
@@ -13,8 +13,19 @@ import userCenterRouter from './modules/userCenter';
 import userRouter from './modules/user';
 import blogRouter from './modules/blog';
 import searchRouter from './modules/search';
+import questionRouter from './modules/question';
+import homeRouter from './modules/home';
+import historyRouter from './modules/history';
+import articleRouter from './modules/article';
+import groupRouter from './modules/group';
+import resourceRouter from './modules/resource';
+import tagRouter from './modules/tag';
 
 const routes: Array<RouteRecordRaw> = [
+  // 主页
+  homeRouter,
+  // 专题标签页面
+  tagRouter,
   // 登录页面
   loginRouter,
   // 消息页面
@@ -27,42 +38,16 @@ const routes: Array<RouteRecordRaw> = [
   blogRouter,
   // 搜索主页页面
   searchRouter,
-  // 主页
-  {
-    path: '/',
-    name: 'home',
-    component: () => import('@/views/home/Home.vue')
-  },
   // 问答页面
-  {
-    path: '/question',
-    name: 'question',
-    component: () => import('@/views/question/Question.vue')
-  },
-  //学习小组页面
-  {
-    path: '/group',
-    name: 'group',
-    component: () => import('@/views/group/Group.vue')
-  },
+  questionRouter,
+  // 学习小组页面
+  groupRouter,
   // 历史记录页面
-  {
-    path: '/history',
-    name: 'history',
-    component: () => import('@/views/history/History.vue')
-  },
+  historyRouter,
   // 文章页面
-  {
-    path: '/article/:articleId',
-    name: 'article',
-    component: () => import('@/views/article/Article.vue')
-  },
-  //资源页面
-  {
-    path: '/resource',
-    name: 'resource',
-    component: () => import('@/views/resource/Resource.vue')
-  },
+  articleRouter,
+  // 资源页面
+  resourceRouter,
   // 404 not find pages
   {
     path: '/404',

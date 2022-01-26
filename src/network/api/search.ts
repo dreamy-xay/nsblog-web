@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2022-01-19 18:53:18
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-22 12:02:54
+ * @LastEditTime: 2022-01-24 11:17:24
  */
 import { get, del, RequestLifeCycle } from '@/network/request';
 
@@ -26,8 +26,8 @@ export function search(
   option: number,
   type?: number,
   time?: number,
-  limit = 10,
-  offset = 0,
+  limit: number = 10,
+  offset: number = 0,
   RLC: RequestLifeCycle = {}
 ): Promise<unknown> {
   return get({

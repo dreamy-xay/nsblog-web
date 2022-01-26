@@ -4,9 +4,9 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-17 20:17:15
  * @LastEditors: clq
- * @LastEditTime: 2022-01-22 17:21:22
+ * @LastEditTime: 2022-01-25 20:54:55
  */
-import { get, RequestLifeCycle } from '@/network/request';
+import { get, post, RequestLifeCycle } from '@/network/request';
 
 /**
  * @description: 获取问答
@@ -77,6 +77,34 @@ export function getReplies(
       limit,
       release_time,
       browsing_count
+    }
+  });
+}
+
+/**
+ * @description: 发布问答
+ * @param {string} username 用户名
+ * @param {string} title 文章标题
+ * @param {string} content 文章内容
+ * @param {Array} tags 主题及标签
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: clq
+ */
+export function releaseQuestion(
+  username: string = '',
+  title: string = '',
+  content: string = '',
+  tags: Array<unknown> = [],
+  RLC: RequestLifeCycle = {}
+): Promise<unknown> {
+  return post({
+    url: '/questions',
+    ...RLC,
+    data: {
+      username,
+      title,
+      content,
+      tags
     }
   });
 }
