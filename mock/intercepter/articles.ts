@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-26 14:19:08
+ * @LastEditTime: 2022-01-26 14:39:54
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -359,20 +359,29 @@ export default function(baseUrl: string, app: Application) {
 
     print('get blog articles list', { tag, category, page });
 
+    const RUser = randomUsers();
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = [];
-      for (let i: number = 0; i < limit; ++i)
+      for (let i: number = 0; i < limit; ++i) {
+        const user: RandomUser = RUser.random();
         ans.push({
-          id: 10000,
-          title: '滑动窗口',
-          content: 'hhhhhhhhhhh',
-          cover_image: '',
-          page_view: 100,
-          comment_count: 200,
-          username: 'dexteryu',
-          nickname: 'dexteryu1',
-          release_time: ''
+          id: Random.increment(Random.integer(1, 10)),
+          title: Random.integer(0, 1) ? Random.title(3, 100) : Random.ctitle(3, 50),
+          content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
+          cover_image: [
+            null,
+            'https://s3.bmp.ovh/imgs/2021/09/fd25f71e808f3f23.jpg',
+            'https://s3.bmp.ovh/imgs/2021/09/8bcf34ab186f752c.jpg',
+            'https://s3.bmp.ovh/imgs/2021/09/040fbcab0802511e.jpg',
+            'https://s3.bmp.ovh/imgs/2021/09/7fc65c1d3e881ea5.jpg'
+          ][Random.integer(0, 4)],
+          username: user.username,
+          nickname: user.nickname,
+          page_view: Random.integer(0, 300),
+          comment_count: Random.integer(0, 200),
+          release_time: Random.datetime()
         });
+      }
       return ans;
     }
 
