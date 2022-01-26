@@ -28,7 +28,7 @@ const resourceRouter: RouteRecordRaw = {
 
     {
       path: ':resourceId(\\d+)',
-      name: 'resourceId',
+      name: 'resourceDetail',
       component: () => import('@/views/resource/childComps/pages/resourceDetail/ResourceDetail.vue'),
       meta: {
         title: '资源详细信息页面'
