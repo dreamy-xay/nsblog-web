@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 16:32:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-26 17:48:44
+ * @LastEditTime: 2022-01-26 18:53:04
  * @LastEditors: dreamy-xay
  * @LastEditTime: 2021-10-02 10:14:24
 -->
@@ -40,6 +40,7 @@ import { useRoute } from 'vue-router';
 import events from '@/events';
 import { useMessage } from 'naive-ui';
 import { appendHTML } from '@/util/dom';
+import router from '@/router';
 
 /**
  * @description: 文章主页面
@@ -58,6 +59,7 @@ export default defineComponent({
     ArticleFooter,
   },
   setup() {
+    const route = useRoute(); // route
     const msg = useMessage(); // naive-ui message
     const articlePage = ref(null); // article page ref
     const showLoadingPage = ref(true); // 显示加载页面
@@ -65,8 +67,8 @@ export default defineComponent({
     // 向子组件传递
     provide('articlePage', articlePage);
 
-    const route = useRoute(); // route
     const articleId = route.params.articleId; // 当前文章id
+    const articlePassword = route.params.articlePassword; // 文章密码
     const articleData = reactive({
       title: '',
       username: '',
@@ -97,7 +99,7 @@ export default defineComponent({
     });
 
     // 获取文章数据
-    getArticleInfo(articleId)
+    getArticleInfo(articleId, articlePassword)
       .then(async (data) => {
         articleData.title = data.title;
         articleData.username = data.username;
@@ -128,9 +130,7 @@ export default defineComponent({
       })
       .catch((error) => {
         console.log(error);
-        if (error.response.status === 403) {
-          // router.push();
-        }
+        if (error.response.status === 403) router.push({ name: 'articleProtection', params: { articleId } });
       });
 
     // 计算head data
