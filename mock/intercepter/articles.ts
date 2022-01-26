@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-24 16:30:45
+ * @LastEditTime: 2022-01-26 14:19:08
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -47,6 +47,22 @@ export default function(baseUrl: string, app: Application) {
       const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
       for (let i: number = 0; i < limit; ++i) {
         const user: RandomUser = RUsers.random();
+        let data: Record<string, unknown> = {};
+        if (!username) {
+          data = {
+            username: user.username,
+            nickname: user.nickname,
+            topic: topic_name ? topic_name : Random.integer(0, 1) ? Random.word(2, 8) : Random.cword(2, 5),
+            cover_image: Random.image(
+              '150x150',
+              '#234567',
+              '#FFFFFF',
+              'png',
+              Random.integer(0, 1) ? Random.word(2, 8) : Random.cword(2, 5)
+            ),
+            recommend: Random.integer(0, 1)
+          };
+        }
         ans.push({
           username: user.username,
           nickname: user.nickname,
@@ -58,19 +74,7 @@ export default function(baseUrl: string, app: Application) {
           comment_count: Random.integer(0, 200),
           recommend_count: Random.integer(0, 900),
           release_time: Random.datetime(),
-          ...(username
-            ? {}
-            : {
-                topic: topic_name ? topic_name : Random.integer(0, 1) ? Random.word(2, 8) : Random.cword(2, 5),
-                cover_image: Random.image(
-                  '150x150',
-                  '#234567',
-                  '#FFFFFF',
-                  'png',
-                  Random.integer(0, 1) ? Random.word(2, 8) : Random.cword(2, 5)
-                ),
-                recommend: Random.integer(0, 1)
-              })
+          ...data
         });
       }
       return ans;
@@ -172,8 +176,7 @@ export default function(baseUrl: string, app: Application) {
 
   // 获取文章评论
   app.get(baseUrl + '/articles/comments', (req: Request, res: Response) => {
-    let username: string = '';
-    if (verifyToken(req.headers)) username = getToken(req.headers).username;
+    const username: string = verifyToken(req.headers) ? getToken(req.headers).username : '';
     const { article_id, comment_id, limit, offset } = req.query;
 
     print('get articles comments', { username, article_id, comment_id, limit, offset });
@@ -189,13 +192,16 @@ export default function(baseUrl: string, app: Application) {
           const sum = Random.integer(0, 5);
           for (let i: number = 0; i < sum; ++i) {
             const user: RandomUser = RUsers.random();
+            const replyUser: RandomUser = RUsers.random();
             const params: Record<string, unknown> = username !== '' ? { evaluation: Random.integer(0, 2) } : {};
             (ans.child_comments as any).push({
               comment_id: Random.increment(Random.integer(1, 10)),
               username: user.username,
+              nickname: user.nickname,
               avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
               time: Random.time(),
-              reply_username: RUsers.random().username,
+              reply_username: replyUser.username,
+              reply_nickname: replyUser.nickname,
               content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
               support_count: Random.integer(0, 9999),
               oppose_count: Random.integer(0, 9999),
@@ -212,6 +218,7 @@ export default function(baseUrl: string, app: Application) {
         ans.push({
           comment_id: Random.increment(Random.integer(1, 10)),
           username: user.username,
+          nickname: user.nickname,
           avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
           time: Random.time(),
           content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
@@ -252,8 +259,7 @@ export default function(baseUrl: string, app: Application) {
 
   // 获取文章详情
   app.get(baseUrl + '/articles/:article_id(\\d+)', (req: Request, res: Response) => {
-    let username: string = '';
-    if (verifyToken(req.headers)) username = getToken(req.headers).username;
+    const username: string = verifyToken(req.headers) ? getToken(req.headers).username : '';
 
     const { article_id } = req.params;
 
@@ -269,7 +275,9 @@ export default function(baseUrl: string, app: Application) {
       return ans;
     }
 
-    const collection: Record<string, unknown> = Random.integer(0, 1) ? { collection: Random.id() } : {};
+    const collection: Record<string, unknown> = Random.integer(0, 1)
+      ? { collection: Random.increment(Random.integer(1, 10)) }
+      : {};
     const params: Record<string, unknown> =
       username !== ''
         ? {
@@ -343,6 +351,41 @@ export default function(baseUrl: string, app: Application) {
     };
 
     return res.json(ans);
+  });
+
+  // 获取博客文章
+  app.get(baseUrl + '/articles/blog', (req: Request, res: Response) => {
+    const { tag, category, page } = req.query;
+
+    print('get blog articles list', { tag, category, page });
+
+    function getRandom(limit: number): Record<string, unknown>[] {
+      const ans: Record<string, unknown>[] = [];
+      for (let i: number = 0; i < limit; ++i)
+        ans.push({
+          id: 10000,
+          title: '滑动窗口',
+          content: 'hhhhhhhhhhh',
+          cover_image: '',
+          page_view: 100,
+          comment_count: 200,
+          username: 'dexteryu',
+          nickname: 'dexteryu1',
+          release_time: ''
+        });
+      return ans;
+    }
+
+    const data: Record<string, unknown> = {
+      ...(tag || category ? { page_count: 12 } : {}),
+      ...(tag ? { tag_name: Random.integer(0, 1) ? Random.word(3, 8) : Random.cword(2, 5) } : {}),
+      ...(category ? { category_name: Random.integer(0, 1) ? Random.word(3, 8) : Random.cword(2, 5) } : {})
+    };
+
+    return res.json({
+      articles: getRandom(int(page) === 12 ? Random.integer(1, 10) : 10),
+      ...data
+    });
   });
 }
 
