@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2022-01-15 17:32:07
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-22 14:02:39
+ * @LastEditTime: 2022-01-26 12:08:01
 -->
 <template>
   <div class="search-page-tag">
@@ -69,7 +69,6 @@ export default defineComponent({
     /**
      * @description:关注事件
      * @param {number} 索引 `必传参数`
-     * @return {*}
      * @author: Ban
      */
     function focus(index) {
@@ -79,7 +78,6 @@ export default defineComponent({
     /**
      * @description:取消关注事件
      * @param {number} 索引 `必传参数`
-     * @return {*}
      * @author: Ban
      */
     function cancel(index) {
@@ -95,7 +93,6 @@ export default defineComponent({
         .then((data) => {
           if (tagData.length == 0) {
             context.emit('changeLoadingState', 5, true);
-            context.emit('changeAcitiveIndex', 5);
           }
           data.tags.forEach((item) => {
             tagData.push(item);
@@ -108,9 +105,13 @@ export default defineComponent({
 
     // 请求搜索结果
     onMounted(() => {
+      context.emit('changeActiveIndex', 5);
       getTag();
     });
-
+    /**
+     * @description: 监听路由query
+     * @author: Ban
+     */
     watch(
       () => route.query.keyword,
       () => {
@@ -137,7 +138,7 @@ export default defineComponent({
 
   .search-page-tag-list {
     box-shadow: $shadow-0;
-    border-radius: 8px;
+    border-radius: $border-radius-0;
     overflow: hidden;
     width: 700px;
     margin-bottom: 10px;
@@ -149,6 +150,10 @@ export default defineComponent({
       box-sizing: border-box;
       padding: 0 24px;
       border-bottom: 1px solid $grey-4;
+
+      &:last-child {
+        border-bottom: 0;
+      }
 
       .left {
         width: 546px;
@@ -167,7 +172,7 @@ export default defineComponent({
             padding: 5px 10px;
             background: rgba($green-0, 0.3);
             color: $green-1;
-            border-radius: 4px;
+            border-radius: $border-radius-1;
             transition: 0.2s;
             font-size: 16px;
           }
@@ -181,7 +186,7 @@ export default defineComponent({
 
             .point {
               font-size: 36px;
-              color: $grey-11;
+              color: $grey-8;
               margin: 0 16px;
             }
           }

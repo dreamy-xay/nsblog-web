@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-09-23 19:22:16
- * @LastEditors: clq
- * @LastEditTime: 2021-09-30 20:32:12
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-26 17:53:41
 -->
 <template>
   <div class="article-footer-comment-item">
@@ -99,7 +99,7 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
-import ArticleFooterEdit from '@/views/article/childComps/articleFooter/childComps/ArticleFooterEdit.vue';
+import ArticleFooterEdit from '@/views/article/childComps/pages/articleMain/childComps/articleFooter/childComps/ArticleFooterEdit.vue';
 import ArticleLink from '@/views/article/childComps/ArticleLink.vue';
 import { useMessage } from 'naive-ui';
 import { mapGetters } from '@/util/store';
