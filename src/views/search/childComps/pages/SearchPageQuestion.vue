@@ -4,11 +4,11 @@
  * @Autor: Ban
  * @Date: 2022-01-25 14:25:23
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-27 19:12:55
+ * @LastEditTime: 2022-01-27 19:10:13
 -->
 <template>
-  <div class="search-page-comprehensive">
-    <div class="search-page-comprehensive-content">
+  <div class="search-page-question">
+    <div class="search-page-question-content">
       <base-select-head
         :selectTag="selectTag"
         :selectTime="selectTime"
@@ -17,7 +17,7 @@
       >
       </base-select-head>
       <div
-        class="search-page-comprehensive-content-list"
+        class="search-page-question-content-list"
         v-for="item, index in results"
         :key="index"
         role="button"
@@ -75,7 +75,7 @@ import { useRoute } from 'vue-router';
  */
 
 export default defineComponent({
-  name: 'searchPageComprehensive',
+  name: 'searchPageQuestion',
   components: {
     BaseSelectHead,
     SearchPageToLoadMore,
@@ -91,13 +91,12 @@ export default defineComponent({
      * @author: Ban
      */
     function getData() {
-      search(route.query.keyword, 0, selectTag.value, selectTime.value)
+      search(route.query.keyword, 2, selectTag.value, selectTime.value)
         .then((data) => {
-          data.results.forEach((item) => {
+          data.questions.forEach((item) => {
             results.push(item);
-            context.emit('changeLoadingState', 0, true);
+            context.emit('changeLoadingState', 2, true);
           });
-          // console.log(results);
         })
         .catch((error) => {
           console.log(error);
@@ -105,7 +104,7 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      context.emit('changeActiveIndex', 0);
+      context.emit('changeActiveIndex', 2);
       getData();
     });
 
@@ -135,7 +134,7 @@ export default defineComponent({
     watch(
       () => [route.query.keyword, selectTag.value, selectTime.value],
       () => {
-        context.emit('changeLoadingState', 0, false); // 改变数据加载状态
+        context.emit('changeLoadingState', 2, false); // 改变数据加载状态
         results.splice(0, results.length); // 清空数组
         getData(); // 重新获取数据
       }
@@ -165,17 +164,17 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.search-page-comprehensive {
+.search-page-question {
   @include flex(center, initial, column);
 
-  .search-page-comprehensive-content {
+  .search-page-question-content {
     box-shadow: $shadow-0;
     border-radius: $border-radius-0;
     overflow: hidden;
     margin-bottom: 10px;
     width: 700px;
 
-    .search-page-comprehensive-content-list {
+    .search-page-question-content-list {
       height: 107px;
       background: $grey-0;
       transition: 0.2s;
