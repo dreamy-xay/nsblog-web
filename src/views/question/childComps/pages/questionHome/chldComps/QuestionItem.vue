@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2022-01-19 19:21:05
- * @LastEditors: clq
- * @LastEditTime: 2022-01-25 21:21:31
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-27 21:36:50
 -->
 <template>
   <div class="question-item">
@@ -230,7 +230,7 @@ export default defineComponent({
       transition: 0.25s;
 
       &:hover {
-        color: $green-0;
+        color: $grey-8;
       }
     }
 
