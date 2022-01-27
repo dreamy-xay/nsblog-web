@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 10:10:43
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-26 18:57:51
+ * @LastEditors: continue-hs
+ * @LastEditTime: 2022-01-27 17:45:21
  */
 import { get, post, put, RequestLifeCycle } from '@/network/request';
 
@@ -32,8 +32,8 @@ export function getArticleComments(
       article_id: article_id,
       comment_id: commentId,
       limit,
-      offset
-    }
+      offset,
+    },
   });
 }
 
@@ -61,8 +61,8 @@ export function postArticleComments(
       article_id,
       content,
       parent_id,
-      reply_username
-    }
+      reply_username,
+    },
   });
 }
 
@@ -84,21 +84,21 @@ export function modifyArticleCommentEvaluation(
     ...RLC,
     params: {
       comment_id,
-      type
-    }
+      type,
+    },
   });
 }
 
 /**
  * @description: 修改文章评价
- * @param {string | number} article_id 文章id `必传参数`
+ * @param {string} article_id 文章id `必传参数`
  * @param {number} type 修改类型 `必传参数`
  * @param {RequestLifeCycle} RLC
  * @return {Promise<unknown>} 请求返回promise
  * @author: continus-hs
  */
 export function modifyArticleRecommendEvaluation(
-  article_id: string | number,
+  article_id: string,
   type: number,
   RLC: RequestLifeCycle = {}
 ): Promise<unknown> {
@@ -107,8 +107,8 @@ export function modifyArticleRecommendEvaluation(
     ...RLC,
     params: {
       article_id,
-      type
-    }
+      type,
+    },
   });
 }
 
@@ -124,8 +124,8 @@ export function getTags(username: string, RLC: RequestLifeCycle = {}): Promise<u
     url: '/articles/tags',
     ...RLC,
     params: {
-      username
-    }
+      username,
+    },
   });
 }
 
@@ -141,8 +141,8 @@ export function getCategories(username: string, RLC: RequestLifeCycle = {}): Pro
     url: '/articles/categories',
     ...RLC,
     params: {
-      username
-    }
+      username,
+    },
   });
 }
 
@@ -188,8 +188,8 @@ export function getArticles(
       limit,
       topic_name,
       tag_name,
-      type
-    }
+      type,
+    },
   });
 }
 
@@ -210,8 +210,8 @@ export function getArticleInfo(
     url: `/articles/${article_id}`,
     ...RLC,
     data: {
-      password
-    }
+      password,
+    },
   });
 }
 
@@ -227,8 +227,8 @@ export function getArticlesUser(username: string, RLC: RequestLifeCycle = {}): P
     url: '/articles/user',
     ...RLC,
     params: {
-      username
-    }
+      username,
+    },
   });
 }
 
@@ -250,7 +250,7 @@ export function verifyArticlePassword(
     ...RLC,
     data: {
       article_id,
-      password
-    }
+      password,
+    },
   });
 }
