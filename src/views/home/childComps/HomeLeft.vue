@@ -4,35 +4,23 @@
  * @Autor: continue-hs
  * @Date: 2022-01-17 10:18:16
  * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-25 15:22:38
+ * @LastEditTime: 2022-01-27 11:20:48
 -->
 <template>
   <div class="home-left">
     <div class="home-left-top">
-      <div
-        class="home-left-top-list"
-        v-for="(item,index) in topList"
-        :key="index"
-        :class="{active:index === listIndex}"
-        role="button"
-        @click="changeList(index)"
-      >
-        {{item}}
-      </div>
-      <base-select
-        v-if="listIndex === 2"
-        :swidth="74"
-        :spaddingTop="8"
-        :spaddingLeft="10"
-        :showText="selectTag"
-        :sdata="timeList"
-        @changeItem="changeTime($event)"
+      <base-select-head
+        :selectTag="listIndex"
+        :selectTime="timeIndex"
+        :type=false
+        @changeTag="changeList"
+        @changeSelect="changeTime"
       />
     </div>
     <div class="home-left-line"></div>
 
     <div class="home-left-middle">
-      <home-item
+      <base-article-item
         v-for="article in allArticles[typeIndex]"
         :key="article"
         :articleItem="article"
@@ -45,12 +33,9 @@
       <div
         class="home-left-bottom-load"
         role="button"
+        @click="uploadMore"
       >
-        <div
-          class="home-left-bottom-load-text"
-          role="button"
-          @click="uploadMore"
-        >加载更多...</div>
+        <div class="home-left-bottom-load-text">加载更多...</div>
       </div>
     </div>
   </div>
@@ -59,10 +44,9 @@
 <script>
 import { defineComponent, reactive, ref, watch } from 'vue';
 import { getArticles } from '@/network/api/articles';
-import BaseSelect from '@/components/content/baseSelect/BaseSelect.vue';
-import router from '@/router';
-import HomeItem from '@/views/home/childComps/HomeItem.vue';
 import { modifyArticleRecommendEvaluation } from '@/network/api/articles';
+import BaseSelectHead from '@/components/common/baseSelectHead/BaseSelectHead.vue';
+import BaseArticleItem from '@/components/common/baseArticleItem/BaseArticleItem.vue';
 
 export default defineComponent({
   name: 'homeLeft',
@@ -81,51 +65,43 @@ export default defineComponent({
     },
   },
   components: {
-    BaseSelect,
-    HomeItem,
+    BaseSelectHead,
+    BaseArticleItem,
   },
   setup(props) {
-    const topList = reactive(['热门', '最新', '排行']);
     const listIndex = ref(0);
-    const timeList = reactive(['3天内', '7天内', '30天内', '全部']);
-    const selectTag = ref('3天内');
     const timeIndex = ref(0);
     const allArticles = reactive([[], [], [], [], [], []]);
-
     const topic = ref('推荐');
     const tag = ref('');
-    const offset = ref(0);
     const limit = ref(7);
     const typeIndex = ref(0);
 
-    initArticlesHome('', '', '', offset.value, limit.value, 0, 0, topic.value, tag.value, typeIndex.value);
+    initArticlesHome('', '', '', 0, limit.value, 0, 0, topic.value, tag.value, typeIndex.value);
 
     watch(
       () => props.topic,
       (data) => {
-        console.log(data + 'xx');
         limit.value = 7;
         topic.value = data;
         tag.value = '';
-        initArticlesHome('', '', '', offset.value, limit.value, 0, 0, topic.value, tag.value, typeIndex.value);
+        initArticlesHome('', '', '', 0, limit.value, 0, 0, topic.value, tag.value, typeIndex.value);
       }
     );
 
     watch(
       () => props.tag,
       (data) => {
-        console.log(data + 'xx');
         limit.value = 7;
         tag.value = data;
-        initArticlesHome('', '', '', offset.value, limit.value, 0, 0, topic.value, tag.value, typeIndex.value);
+        initArticlesHome('', '', '', 0, limit.value, 0, 0, topic.value, tag.value, typeIndex.value);
       }
     );
 
     watch(
       () => props.isclick,
       (data) => {
-        if (data === true)
-          initArticlesHome('', '', '', offset.value, limit.value, 0, 0, topic.value, '', typeIndex.value);
+        if (data === true) initArticlesHome('', '', '', 0, limit.value, 0, 0, topic.value, '', typeIndex.value);
       }
     );
 
@@ -147,17 +123,16 @@ export default defineComponent({
       () => typeIndex.value,
       (data) => {
         typeIndex.value = data;
-        initArticlesHome('', '', '', offset.value, limit.value, 0, 0, topic.value, tag.value, typeIndex.value);
+        initArticlesHome('', '', '', 0, limit.value, 0, 0, topic.value, tag.value, typeIndex.value);
       }
     );
 
     function changeList(index) {
-      listIndex.value = index;
+      listIndex.value = index.index;
     }
 
-    function changeTime($event) {
-      timeIndex.value = $event;
-      selectTag.value = timeList[$event];
+    function changeTime(index) {
+      timeIndex.value = index.index;
     }
 
     function initArticlesHome(
@@ -183,36 +158,26 @@ export default defineComponent({
 
     function uploadMore() {
       limit.value += 6;
-      initArticlesHome('', '', '', offset.value, limit.value, 0, 0, topic.value, tag.value, typeIndex.value);
+      initArticlesHome('', '', '', 0, limit.value, 0, 0, topic.value, tag.value, typeIndex.value);
     }
 
     function changeLike(article) {
-      if (article.recommend === 0)
-        modifyArticleRecommendEvaluation(article.id, 1)
-          .then(() => {
-            article.recommend = 1;
-            article.recommend_count++;
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      else if (article.recommend === 1)
-        modifyArticleRecommendEvaluation(article.id, 0)
-          .then(() => {
-            article.recommend = 0;
-            article.recommend_count--;
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+      const res = ref(0);
+      if (article.recommend === 0) res.value = 1;
+      modifyArticleRecommendEvaluation(article.id, res.value)
+        .then(() => {
+          article.recommend = res.value;
+          if (res.value === 1) article.recommend_count++;
+          else article.recommend_count--;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
 
     return {
-      topList,
       listIndex,
-      timeList,
       timeIndex,
-      selectTag,
       changeList,
       changeTime,
       allArticles,
@@ -238,14 +203,14 @@ export default defineComponent({
       font-weight: 400;
 
       &.active {
-        color: #4bd8aa;
+        color: $green-1;
       }
     }
   }
 
   .home-left-line {
     height: 1px;
-    border: 1px solid #f4f4f4;
+    border-bottom: 1px solid $grey-2;
   }
 
   .home-left-middle {
@@ -259,19 +224,19 @@ export default defineComponent({
     .home-left-bottom-load {
       width: 300px;
       height: 32px;
-      background: #ffffff;
+      background: $grey-0;
       border-radius: 8px;
-      box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.16);
+      box-shadow: $shadow-0;
       @include flex(cneter, center);
 
       .home-left-bottom-load-text {
+        margin-top: 7px;
         width: 68px;
         height: 19px;
         font-size: 14px;
-        font-family: Arial, Arial-Regular;
         font-weight: 400;
         text-align: center;
-        color: #595959;
+        color: $grey-9;
       }
     }
   }
