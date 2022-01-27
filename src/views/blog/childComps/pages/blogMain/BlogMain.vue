@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-29 16:58:46
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-27 13:08:12
+ * @LastEditTime: 2022-01-27 16:57:58
 -->
 <template>
   <div class="blog-main">
@@ -106,7 +106,6 @@ export default defineComponent({
      */
 
     function changePage(p) {
-      console.log(p);
       page.value = p.page;
       router.push(
         route.path +
