@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-24 21:42:19
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-27 22:22:46
+ * @LastEditTime: 2022-01-27 22:37:08
 -->
 <template>
   <div class="resource-detail-top">
@@ -44,7 +44,7 @@
       </div>
 
       <base-qr-code-popover
-        :value="`/resource/${data.id}`"
+        :value="path"
         title="扫一扫，分享网站"
       >
         <div
@@ -121,7 +121,7 @@ export default defineComponent({
         }
       }
     }
-    return { clickButton, isShow, id, type };
+    return { clickButton, isShow, id, type, path: window.location.href };
   },
 });
 </script>
