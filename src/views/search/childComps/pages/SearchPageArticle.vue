@@ -4,11 +4,11 @@
  * @Autor: Ban
  * @Date: 2022-01-25 14:25:23
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-26 12:16:26
+ * @LastEditTime: 2022-01-27 18:57:56
 -->
 <template>
-  <div class="search-page-comprehensive">
-    <div class="search-page-comprehensive-content">
+  <div class="search-page-article">
+    <div class="search-page-article-content">
       <base-select-head
         :selectTag="selectTag"
         :selectTime="selectTime"
@@ -17,7 +17,7 @@
       >
       </base-select-head>
       <div
-        class="search-page-comprehensive-content-list"
+        class="search-page-article-content-list"
         v-for="item, index in results"
         :key="index"
         role="button"
@@ -159,17 +159,17 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.search-page-comprehensive {
+.search-page-article {
   @include flex(center, initial, column);
 
-  .search-page-comprehensive-content {
+  .search-page-article-content {
     box-shadow: $shadow-0;
     border-radius: $border-radius-0;
     overflow: hidden;
     margin-bottom: 10px;
     width: 700px;
 
-    .search-page-comprehensive-content-list {
+    .search-page-article-content-list {
       height: 107px;
       background: $grey-0;
       transition: 0.2s;

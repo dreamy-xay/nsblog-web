@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2022-01-15 17:32:07
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-26 12:08:01
+ * @LastEditTime: 2022-01-27 19:36:53
 -->
 <template>
   <div class="search-page-tag">
@@ -19,6 +19,7 @@
             <div
               class="tag"
               role="button"
+              @click="changePage(`/tag/${item.name}`)"
             >
               {{ item.name }}
             </div>
@@ -121,11 +122,23 @@ export default defineComponent({
       }
     );
 
+    /**
+     * @description: 跳转页面
+     * @param {*}
+     * @return {*}
+     * @author: Ban
+     */
+    function changePage(url) {
+      router.push(url);
+      // console.log(route);
+    }
+
     return {
       tagData,
       focus,
       cancel,
       getTag,
+      changePage,
     };
   },
 });
@@ -175,6 +188,11 @@ export default defineComponent({
             border-radius: $border-radius-1;
             transition: 0.2s;
             font-size: 16px;
+
+            &:hover {
+              color: $green-2;
+              background: rgba($green-0, 0.7);
+            }
           }
 
           .center {

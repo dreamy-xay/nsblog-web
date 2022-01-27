@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2022-01-27 10:52:36
  * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-27 17:42:16
+ * @LastEditTime: 2022-01-27 20:58:25
 -->
 <template>
   <div class="tag-button">
@@ -41,7 +41,6 @@ export default defineComponent({
   },
   setup(_, context) {
     function clickAttention() {
-      console.log('click');
       context.emit('click-attention');
     }
     return { clickAttention };
@@ -64,6 +63,7 @@ export default defineComponent({
     @include flex(center, center);
 
     &:hover {
+      transition: 0.25s;
       border: 1px solid $green-1;
       background: $green-1;
     }
@@ -87,6 +87,7 @@ export default defineComponent({
     @include flex(center);
 
     &:hover {
+      transition: 0.25s;
       border: 1px solid $green-1;
       color: $green-1;
     }
