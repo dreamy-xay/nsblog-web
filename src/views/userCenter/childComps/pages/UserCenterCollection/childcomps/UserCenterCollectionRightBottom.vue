@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-23 20:34:57
  * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-25 13:30:16
+ * @LastEditTime: 2022-01-27 21:04:46
 -->
 <template>
   <div class="user-center-collection-right-bottom">
@@ -277,11 +277,11 @@ export default defineComponent({
 
     .user-center-collection-right-bottom-more {
       width: 100%;
-      @include flex(center, center);
-      margin-top: 10px;
+      @include flex(initial, center);
+      margin: 10px 0;
 
       .more {
-        @include size(300px, 20px);
+        @include size(300px, 32px);
         background: $grey-0;
         border-radius: 8px;
         box-shadow: $shadow-0;
@@ -292,6 +292,7 @@ export default defineComponent({
           font-size: 14px;
           font-weight: 400;
           color: $grey-9;
+          margin-top: 7px;
         }
       }
     }

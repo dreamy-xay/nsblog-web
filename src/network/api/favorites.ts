@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 12:55:44
- * @LastEditors: xiao
- * @LastEditTime: 2022-01-27 14:10:51
+ * @LastEditors: continue-hs
+ * @LastEditTime: 2022-01-27 17:46:29
  */
 
 import { get, RequestLifeCycle, del, put, post } from '@/network/request';
@@ -39,8 +39,8 @@ export function getFavorites(
       offset,
       type,
       is_all,
-      favorite_id
-    }
+      favorite_id,
+    },
   });
 }
 
@@ -65,8 +65,8 @@ export function newFavorites(
     data: {
       name,
       remark,
-      is_private
-    }
+      is_private,
+    },
   });
 }
 
@@ -80,7 +80,7 @@ export function newFavorites(
 export function deleteFavorites(favorite_id: number | string, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return del({
     url: `/favorites/${favorite_id}`,
-    ...RLC
+    ...RLC,
   });
 }
 
@@ -94,7 +94,7 @@ export function deleteFavorites(favorite_id: number | string, RLC: RequestLifeCy
 export function cancelCollections(collection_id: number | string, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return del({
     url: `/favorites/collections/${collection_id}`,
-    ...RLC
+    ...RLC,
   });
 }
 
@@ -119,8 +119,8 @@ export function addCollections(
     data: {
       type,
       cid,
-      fid
-    }
+      fid,
+    },
   });
 }
 
@@ -138,8 +138,8 @@ export function modifyName(name: string, favorite_id: string | number, RLC: Requ
     ...RLC,
     data: {
       name,
-      favorite_id
-    }
+      favorite_id,
+    },
   });
 }
 
@@ -161,8 +161,8 @@ export function modifyRemark(
     ...RLC,
     data: {
       remark,
-      favorite_id
-    }
+      favorite_id,
+    },
   });
 }
 
@@ -184,7 +184,7 @@ export function modifyPrivate(
     ...RLC,
     data: {
       is_private,
-      favorite_id
-    }
+      favorite_id,
+    },
   });
 }

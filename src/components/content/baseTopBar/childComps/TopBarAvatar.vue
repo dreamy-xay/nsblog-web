@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-19 18:32:43
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-20 20:12:23
+ * @LastEditTime: 2022-01-27 18:23:03
 -->
 <template>
   <div class="top-bar-avatar">
@@ -65,7 +65,7 @@
               <i class="iconfont blog-zan"></i>
               {{likeCount}}
             </div>
-            <a :href="`mailto:${username}`">
+            <a :href="`mailto:${email}`">
               <div
                 class="info-right"
                 role="button"
@@ -159,6 +159,7 @@ export default defineComponent({
     const avatar = ref('/home/avatarLoading.gif'); // 初始头像
     const username = ref(''); // 用户名
     const nickname = ref(''); // 昵称
+    const email = ref(''); // 邮箱
     const age = ref(0); // 学龄
     const remainDay = ref(0); // 多余学龄天数
     const likeCount = ref(0); // 点赞数
@@ -209,6 +210,7 @@ export default defineComponent({
           remainDay.value = diff % 365;
           age.value = Math.floor(diff / 365);
           avatar.value = data.avatar;
+          email.value = data.email;
         })
         .catch((error) => {
           console.log(error);
@@ -281,6 +283,7 @@ export default defineComponent({
       avatar,
       username,
       nickname,
+      email,
       age,
       remainDay,
       likeCount,

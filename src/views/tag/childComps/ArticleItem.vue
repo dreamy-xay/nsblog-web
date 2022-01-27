@@ -4,58 +4,58 @@
  * @Autor: continue-hs
  * @Date: 2022-01-23 15:06:03
  * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-25 15:19:39
+ * @LastEditTime: 2022-01-27 21:13:47
 -->
 <template>
   <div
-    class="home-item"
+    class="article-item"
     :style="styleSelect1"
   >
-    <div class="home-item-body">
-      <div class="home-item-body-top">
-        <div class="home-item-body-top-text">
+    <div class="article-item-body">
+      <div class="article-item-body-top">
+        <div class="article-item-body-top-text">
           <div
             class="name"
             role="button"
             @click="toUserHome"
           >{{articleItem.nickname}}</div>
-          <div class="home-item-body-top-line"></div>
+          <div class="article-item-body-top-line"></div>
           <div class="time">{{articleItem.release_time}}</div>
-          <div class="home-item-body-top-line"></div>
+          <div class="article-item-body-top-line"></div>
           <div
             class="topic"
             @click="clickTopic"
             role="button"
           >{{articleItem.topic}}</div>
-          <div class="home-item-body-top-dot"></div>
+          <div class="article-item-body-top-dot"></div>
           <div
             class="tag"
-            @click="clickTag(articleItem.topic_tag)"
+            @click="clickTag"
             role="button"
           >{{articleItem.topic_tag}}</div>
         </div>
       </div>
 
-      <div class="home-item-body-all">
+      <div class="article-item-body-all">
         <div
-          class="home-item-body-left"
+          class="article-item-body-left"
           :style="articleItem.cover_image ? styleSelect2 : styleSelect1"
         >
-          <div class="home-item-body-left-top">
+          <div class="article-item-body-left-top">
             <div
-              class="home-item-body-left-top-text"
+              class="article-item-body-left-top-text"
               @click="toArticles"
               role="button"
             >
               {{articleItem.title}}
             </div>
           </div>
-          <div class="home-item-body-left-middle">
-            <div class="home-item-body-left-middle-text">
+          <div class="article-item-body-left-middle">
+            <div class="article-item-body-left-middle-text">
               {{articleItem.content}}
             </div>
           </div>
-          <div class="home-item-body-left-bottom">
+          <div class="article-item-body-left-bottom">
             <div
               class="view"
               role="button"
@@ -104,25 +104,36 @@
         </div>
 
         <div
-          class="home-item-body-right"
+          class="article-item-body-right"
           v-if="articleItem.cover_image"
         >
           <base-image src="articleItem.cover_image" />
         </div>
 
       </div>
+      <div class="article-item-line"></div>
     </div>
-    <div class="home-item-line"></div>
   </div>
 </template>
+
 <script>
-import { computed, defineComponent, ref } from 'vue';
-import BaseImage from '@/components/content/baseImage/BaseImage.vue';
-import { useRoute, useRouter } from 'vue-router';
 import router from '@/router';
+import { computed, defineComponent } from 'vue';
+import BaseImage from '@/components/content/baseImage/BaseImage.vue';
+
+/**
+ * @description:文章列表单个文章框
+ * @param {Object} articleItem 框中内容 `默认null`
+ * @param {Number} 框的宽度 `默认为660`
+ * @event change-like 点击点赞的事件 `使用参照homeLeft`
+ * @author: continue-hs
+ */
 
 export default defineComponent({
-  name: 'homeItem',
+  name: 'ArticleItem',
+  components: {
+    BaseImage,
+  },
   props: {
     articleItem: {
       type: Object,
@@ -133,12 +144,7 @@ export default defineComponent({
       default: 660,
     },
   },
-  components: {
-    BaseImage,
-  },
   setup(props, context) {
-    const route = useRouter();
-
     const styleSelect1 = computed(() => {
       return {
         width: props.swidth + 'px',
@@ -151,29 +157,34 @@ export default defineComponent({
       };
     });
 
-    // function clickTopic(topic) {
-    //   router.push({
-    //     path: '/tag',
-    //     query: {
-    //       topic: topic,
-    //     },
-    //   });
-    // }
-
-    function clickTag(tagname) {
-      // console.log(tag);
+    /**
+     * @description: 跳转至标签详情页
+     * @return {void}
+     * @author: continue-hs
+     */
+    function clickTag() {
       router.push({
-        name: 'tagMain',
-        // params: {
-        //   tag_name: tagname,
-        // },
+        name: 'tag',
+        params: {
+          tagName: props.articleItem.topic_tag,
+        },
       });
     }
 
+    /**
+     * @description: 前往指定文章详情页
+     * @return {void}
+     * @author: continue-hs
+     */
     function toArticles() {
       window.open(`/article/${props.articleItem.id}`, `/article/${props.articleItem.id}`);
     }
 
+    /**
+     * @description: 前往指定用户主页
+     * @return {void}
+     * @author: continue-hs
+     */
     function toUserHome() {
       window.open(`/user/${props.articleItem.username}`, `/user/${props.articleItem.username}`);
     }
@@ -188,109 +199,117 @@ export default defineComponent({
       clickLike,
       styleSelect1,
       styleSelect2,
-      // clickTopic,
       clickTag,
     };
   },
 });
 </script>
 <style lang="scss" scoped>
-.home-item {
-  .home-item-body {
+.article-item {
+  .article-item-body {
     height: 129px;
+    margin-left: 20px;
 
-    .home-item-body-top {
+    .article-item-body-top {
       height: 22px;
       @include flex(center);
 
-      .home-item-body-top-text {
+      .article-item-body-top-text {
         @include flex(center);
         height: 17px;
         font-size: 13px;
         font-weight: 400;
         text-align: left;
-        color: #8c8c8c;
+        color: $grey-7;
 
         .name {
-          color: #262626;
+          color: $grey-10;
+          margin-right: 7px;
         }
 
         .topic {
           &:hover {
-            color: #4bd8aa;
+            transition: 0.25s;
+            color: $green-1;
           }
+        }
+
+        .time {
+          margin-right: 9px;
         }
 
         .tag {
           &:hover {
-            color: #4bd8aa;
+            transition: 0.25s;
+            color: $green-1;
           }
         }
 
-        .home-item-body-top-line {
+        .article-item-body-top-line {
           width: 1px;
+          border-right: 1px solid $grey-4;
           height: 14px;
-          border: 1px solid #e5e5e5;
-          margin: 0 8px 0 8px;
+          color: $grey-4;
+          margin-right: 9px;
         }
 
-        .home-item-body-top-dot {
+        .article-item-body-top-dot {
           width: 3px;
           height: 3px;
-          background: #8c8c8c;
-          border: 1px solid #707070;
+          background: $grey-7;
+          border: 1px solid $grey-8;
           border-radius: 50%;
           margin: 0 8px 0 8px;
         }
       }
     }
 
-    .home-item-body-all {
+    .article-item-body-all {
       @include flex();
       height: 84px;
 
-      .home-item-body-left {
-        .home-item-body-left-top {
+      .article-item-body-left {
+        .article-item-body-left-top {
           height: 24px;
           padding-top: 10px;
           @include flex(center);
 
-          .home-item-body-left-top-text {
+          .article-item-body-left-top-text {
             @include ellipsis(1);
             height: 21px;
             font-size: 16px;
             font-weight: 700;
             text-align: left;
-            color: #262626;
+            color: $grey-10;
           }
         }
 
-        .home-item-body-left-middle {
+        .article-item-body-left-middle {
           height: 22px;
           padding-top: 8px;
           @include flex(center);
 
-          .home-item-body-left-middle-text {
+          .article-item-body-left-middle-text {
             @include ellipsis(1);
             height: 17px;
             font-size: 13px;
             font-weight: 400;
             text-align: left;
-            color: #8c8c8c;
+            color: $grey-7;
           }
         }
 
-        .home-item-body-left-bottom {
+        .article-item-body-left-bottom {
           @include flex(center);
           height: 15px;
           font-size: 13px;
           font-weight: 400;
           text-align: left;
-          color: #8c8c8c;
+          color: $grey-7;
           padding-top: 10px;
 
           i {
-            color: #8c8c8c;
+            color: $grey-7;
             margin-right: 4px;
           }
 
@@ -299,9 +318,10 @@ export default defineComponent({
             margin-right: 20px;
 
             &:hover {
-              color: #4bd8aa;
+              transition: 0.25s;
+              color: $green-1;
               i {
-                color: #4bd8aa;
+                color: $green-1;
               }
             }
           }
@@ -311,16 +331,17 @@ export default defineComponent({
             margin-right: 20px;
 
             &.active {
-              color: #4bd8aa;
+              color: $green-1;
               i {
-                color: #4bd8aa;
+                color: $green-1;
               }
             }
 
             &:hover {
-              color: #4bd8aa;
+              transition: 0.25s;
+              color: $green-1;
               i {
-                color: #4bd8aa;
+                color: $green-1;
               }
             }
           }
@@ -329,27 +350,27 @@ export default defineComponent({
             @include flex();
 
             &:hover {
-              color: #4bd8aa;
+              transition: 0.25s;
+              color: $green-1;
               i {
-                color: #4bd8aa;
+                color: $green-1;
               }
             }
           }
         }
       }
 
-      .home-item-body-right {
+      .article-item-body-right {
         width: 120px;
         height: 80px;
       }
     }
-  }
 
-  .home-item-line {
-    width: 660px;
-    height: 1px;
-    border: 0.5px solid #e5e5e5;
-    margin-bottom: 12px;
+    .article-item-line {
+      height: 1px;
+      margin-top: 12px;
+      border-bottom: 0.5px solid $grey-4;
+    }
   }
 }
 </style>
