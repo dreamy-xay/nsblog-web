@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-24 10:18:28
  * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-25 13:29:47
+ * @LastEditTime: 2022-01-25 21:27:43
 -->
 <template>
   <div class="user-center-collection-list">
@@ -159,7 +159,7 @@ export default defineComponent({
     function newfavorites(name, remark, is_private, isConfirm, isConfirmModal = false) {
       if (isConfirm) {
         if (name !== '') {
-          context.emit('new-fav', [name, remark, is_private]);
+          context.emit('new-fav', [name, is_private, remark]);
           isVisible.value = false;
           inputTitle.value = '';
           inputRemark.value = '';

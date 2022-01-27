@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-24 16:30:45
+ * @LastEditTime: 2022-01-27 14:06:15
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -47,6 +47,22 @@ export default function(baseUrl: string, app: Application) {
       const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
       for (let i: number = 0; i < limit; ++i) {
         const user: RandomUser = RUsers.random();
+        let data: Record<string, unknown> = {};
+        if (!username) {
+          data = {
+            username: user.username,
+            nickname: user.nickname,
+            topic: topic_name ? topic_name : Random.integer(0, 1) ? Random.word(2, 8) : Random.cword(2, 5),
+            cover_image: Random.image(
+              '150x150',
+              '#234567',
+              '#FFFFFF',
+              'png',
+              Random.integer(0, 1) ? Random.word(2, 8) : Random.cword(2, 5)
+            ),
+            recommend: Random.integer(0, 1)
+          };
+        }
         ans.push({
           username: user.username,
           nickname: user.nickname,
@@ -58,19 +74,7 @@ export default function(baseUrl: string, app: Application) {
           comment_count: Random.integer(0, 200),
           recommend_count: Random.integer(0, 900),
           release_time: Random.datetime(),
-          ...(username
-            ? {}
-            : {
-                topic: topic_name ? topic_name : Random.integer(0, 1) ? Random.word(2, 8) : Random.cword(2, 5),
-                cover_image: Random.image(
-                  '150x150',
-                  '#234567',
-                  '#FFFFFF',
-                  'png',
-                  Random.integer(0, 1) ? Random.word(2, 8) : Random.cword(2, 5)
-                ),
-                recommend: Random.integer(0, 1)
-              })
+          ...data
         });
       }
       return ans;
@@ -172,8 +176,7 @@ export default function(baseUrl: string, app: Application) {
 
   // 获取文章评论
   app.get(baseUrl + '/articles/comments', (req: Request, res: Response) => {
-    let username: string = '';
-    if (verifyToken(req.headers)) username = getToken(req.headers).username;
+    const username: string = verifyToken(req.headers) ? getToken(req.headers).username : '';
     const { article_id, comment_id, limit, offset } = req.query;
 
     print('get articles comments', { username, article_id, comment_id, limit, offset });
@@ -189,13 +192,16 @@ export default function(baseUrl: string, app: Application) {
           const sum = Random.integer(0, 5);
           for (let i: number = 0; i < sum; ++i) {
             const user: RandomUser = RUsers.random();
+            const replyUser: RandomUser = RUsers.random();
             const params: Record<string, unknown> = username !== '' ? { evaluation: Random.integer(0, 2) } : {};
             (ans.child_comments as any).push({
               comment_id: Random.increment(Random.integer(1, 10)),
               username: user.username,
+              nickname: user.nickname,
               avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
               time: Random.time(),
-              reply_username: RUsers.random().username,
+              reply_username: replyUser.username,
+              reply_nickname: replyUser.nickname,
               content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
               support_count: Random.integer(0, 9999),
               oppose_count: Random.integer(0, 9999),
@@ -212,6 +218,7 @@ export default function(baseUrl: string, app: Application) {
         ans.push({
           comment_id: Random.increment(Random.integer(1, 10)),
           username: user.username,
+          nickname: user.nickname,
           avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
           time: Random.time(),
           content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
@@ -252,12 +259,14 @@ export default function(baseUrl: string, app: Application) {
 
   // 获取文章详情
   app.get(baseUrl + '/articles/:article_id(\\d+)', (req: Request, res: Response) => {
-    let username: string = '';
-    if (verifyToken(req.headers)) username = getToken(req.headers).username;
+    if (Random.integer(0, 1) && req.query.password !== '123') return res.status(403).json({ error: 'Password error' }); // 模拟需要密码
+
+    const username: string = verifyToken(req.headers) ? getToken(req.headers).username : '';
+    const { password } = req.body;
 
     const { article_id } = req.params;
 
-    print('get detail articles', { username, article_id });
+    print('get detail articles', { username, article_id, password });
 
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = [];
@@ -269,7 +278,9 @@ export default function(baseUrl: string, app: Application) {
       return ans;
     }
 
-    const collection: Record<string, unknown> = Random.integer(0, 1) ? { collection: Random.id() } : {};
+    const collection: Record<string, unknown> = Random.integer(0, 1)
+      ? { collection: Random.increment(Random.integer(1, 10)) }
+      : {};
     const params: Record<string, unknown> =
       username !== ''
         ? {
@@ -343,6 +354,60 @@ export default function(baseUrl: string, app: Application) {
     };
 
     return res.json(ans);
+  });
+
+  // 获取博客文章
+  app.get(baseUrl + '/articles/blog', (req: Request, res: Response) => {
+    const { tag, category, page } = req.query;
+
+    print('get blog articles list', { tag, category, page });
+
+    const RUser = randomUsers();
+    function getRandom(limit: number): Record<string, unknown>[] {
+      const ans: Record<string, unknown>[] = [];
+      for (let i: number = 0; i < limit; ++i) {
+        const user: RandomUser = RUser.random();
+        ans.push({
+          id: Random.increment(Random.integer(1, 10)),
+          title: Random.integer(0, 1) ? Random.title(3, 100) : Random.ctitle(3, 50),
+          content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
+          cover_image: [
+            null,
+            'https://s3.bmp.ovh/imgs/2021/09/fd25f71e808f3f23.jpg',
+            'https://s3.bmp.ovh/imgs/2021/09/8bcf34ab186f752c.jpg',
+            'https://s3.bmp.ovh/imgs/2021/09/040fbcab0802511e.jpg',
+            'https://s3.bmp.ovh/imgs/2021/09/7fc65c1d3e881ea5.jpg'
+          ][Random.integer(0, 4)],
+          username: user.username,
+          nickname: user.nickname,
+          page_view: Random.integer(0, 300),
+          comment_count: Random.integer(0, 200),
+          release_time: Random.datetime()
+        });
+      }
+      return ans;
+    }
+
+    const data: Record<string, unknown> = {
+      page_count: 12,
+      ...(tag ? { tag_name: Random.integer(0, 1) ? Random.word(3, 8) : Random.cword(2, 5) } : {}),
+      ...(category ? { category_name: Random.integer(0, 1) ? Random.word(3, 8) : Random.cword(2, 5) } : {})
+    };
+
+    return res.json({
+      articles: getRandom(int(page) === 12 ? Random.integer(1, 10) : 10),
+      ...data
+    });
+  });
+
+  // 验证文章密码
+  app.post(baseUrl + '/articles/password', (req: Request, res: Response) => {
+    const { article_id, password } = req.body;
+
+    print('verify the article password', { article_id, password });
+
+    if (password === '123') return res.send();
+    else return res.status(403).json({ error: 'Password error' });
   });
 }
 

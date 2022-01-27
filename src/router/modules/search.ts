@@ -3,8 +3,13 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2022-01-15 17:29:49
+<<<<<<< HEAD
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-27 18:54:53
+ * @LastEditTime: 2022-01-27 19:40:13
+=======
+ * @LastEditors: xiao
+ * @LastEditTime: 2022-01-27 15:14:52
+>>>>>>> 0fa487606d9a667514e3ffc7b325d17ebae474bd
  */
 import { RouteRecordRaw } from 'vue-router';
 
@@ -65,6 +70,14 @@ const searchRouter: RouteRecordRaw = {
         title: '问答'
       },
       component: () => import('@/views/search/childComps/pages/SearchPageQuestion.vue')
+    },
+    {
+      path: 'group',
+      name: 'searchPageStudygroup',
+      meta: {
+        title: '学习小组'
+      },
+      component: () => import('@/views/search/childComps/pages/SearchPageStudygroup.vue')
     }
   ]
 };

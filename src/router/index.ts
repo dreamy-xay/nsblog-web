@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:02:59
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-25 22:48:41
+ * @LastEditors: continue-hs
+ * @LastEditTime: 2022-01-26 14:11:38
  */
 import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 import loginRouter from './modules/login';
@@ -53,15 +53,15 @@ const routes: Array<RouteRecordRaw> = [
     path: '/404',
     name: '404',
     meta: {
-      title: '对不起！您访问的页面不存在'
+      title: '对不起！您访问的页面不存在',
     },
-    component: () => import('@/views/Error.vue')
+    component: () => import('@/views/Error.vue'),
   },
   // 路由匹配重定向 404
   {
     path: '/:catchAll(.*)',
-    redirect: '/404'
-  }
+    redirect: '/404',
+  },
 ];
 
 const router = createRouter({
@@ -69,7 +69,7 @@ const router = createRouter({
     process.env.VUE_APP_ROUTER_MODE !== 'false'
       ? createWebHistory(process.env.BASE_URL)
       : createWebHashHistory(process.env.BASE_URL),
-  routes
+  routes,
 });
 
 export default router;
