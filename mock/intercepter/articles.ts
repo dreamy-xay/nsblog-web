@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-26 18:56:37
+ * @LastEditTime: 2022-01-27 14:06:15
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -389,7 +389,7 @@ export default function(baseUrl: string, app: Application) {
     }
 
     const data: Record<string, unknown> = {
-      ...(tag || category ? { page_count: 12 } : {}),
+      page_count: 12,
       ...(tag ? { tag_name: Random.integer(0, 1) ? Random.word(3, 8) : Random.cword(2, 5) } : {}),
       ...(category ? { category_name: Random.integer(0, 1) ? Random.word(3, 8) : Random.cword(2, 5) } : {})
     };
