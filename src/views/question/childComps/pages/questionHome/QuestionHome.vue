@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-16 18:28:08
  * @LastEditors: clq
- * @LastEditTime: 2022-01-25 11:14:46
+ * @LastEditTime: 2022-01-27 10:01:44
 -->
 <template>
   <base-view
@@ -56,9 +56,9 @@
 import { defineComponent, reactive, ref } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import BaseTopicBar from '@/components/common/baseTopicBar/BaseTopicBar.vue';
-import QuestionHeader from '@/views/question/pages/questionHome/chldComps/QuestionHeader.vue';
-import QuestionItem from '@/views/question/pages/questionHome/chldComps/QuestionItem.vue';
-import QuestionMyQuestion from '@/views/question/pages/questionHome/chldComps/QuestionMyQuestion.vue';
+import QuestionHeader from '@/views/question/childComps/pages/questionHome/chldComps/QuestionHeader.vue';
+import QuestionItem from '@/views/question/childComps/pages/questionHome/chldComps/QuestionItem.vue';
+import QuestionMyQuestion from '@/views/question/childComps/pages/questionHome/chldComps/QuestionMyQuestion.vue';
 import { getQuestions } from '@/network/api/questions';
 import { useMessage } from 'naive-ui';
 

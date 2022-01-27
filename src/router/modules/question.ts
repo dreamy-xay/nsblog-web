@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-25 10:19:33
  * @LastEditors: clq
- * @LastEditTime: 2022-01-25 21:20:40
+ * @LastEditTime: 2022-01-27 10:01:06
  */
 import { RouteRecordRaw } from 'vue-router';
 
@@ -19,7 +19,7 @@ const questionRouter: RouteRecordRaw = {
     {
       path: '',
       name: 'questionHome',
-      component: () => import('@/views/question/pages/questionHome/QuestionHome.vue')
+      component: () => import('@/views/question/childComps/pages/questionHome/QuestionHome.vue')
     },
     {
       path: ':questionId',
@@ -27,7 +27,7 @@ const questionRouter: RouteRecordRaw = {
       meta: {
         title: '问答详情'
       },
-      component: () => import('@/views/question/pages/questionDetail/QuestionDetail.vue')
+      component: () => import('@/views/question/childComps/pages/questionDetail/QuestionDetail.vue')
     }
   ]
 };
