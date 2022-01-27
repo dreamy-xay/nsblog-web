@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2022-01-15 17:29:49
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-26 12:09:31
+ * @LastEditTime: 2022-01-27 18:54:53
  */
 import { RouteRecordRaw } from 'vue-router';
 
@@ -12,10 +12,10 @@ const searchRouter: RouteRecordRaw = {
   path: '/search',
   name: 'search',
   //刷新显示的第一个界面
-  redirect: '/search/tag',
+  redirect: '/search/comprehensive',
   component: () => import('@/views/search/Search.vue'),
   meta: {
-    title: '标签'
+    title: '综合'
   },
   children: [
     {
@@ -57,6 +57,14 @@ const searchRouter: RouteRecordRaw = {
         title: '文章'
       },
       component: () => import('@/views/search/childComps/pages/SearchPageArticle.vue')
+    },
+    {
+      path: 'question',
+      name: 'searchPageQuestion',
+      meta: {
+        title: '问答'
+      },
+      component: () => import('@/views/search/childComps/pages/SearchPageQuestion.vue')
     }
   ]
 };
