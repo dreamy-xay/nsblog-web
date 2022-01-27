@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-23 21:16:25
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-26 12:48:06
+ * @LastEditTime: 2022-01-27 16:25:51
 -->
 <template>
   <div
@@ -31,6 +31,7 @@
       <div class="context-context-right">
         <div class="select">
           <n-popover
+            ref="npopoverRef"
             trigger="hover"
             display-directive="show"
             :show-arrow="false"
@@ -57,7 +58,6 @@
                 :class="type ? '' : 'select-button-false'"
                 role="button"
                 v-show="type ? true : (selectTag == 2 ? true : false )"
-                @click="computedPages"
               >
                 <div
                   class="select-button-text"
@@ -74,7 +74,7 @@
   </div>
 </template>
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 /**
  * @description:部分页面头部组件
@@ -111,6 +111,7 @@ export default defineComponent({
     const menu = ['综合', '最新', '热门']; // 0 1 2
     const selectMenu = ['时间不限', '最近一天', '最近一周', '最近三月'];
     const rankMenu = ['3天内', '7天内', '30天内', '全部'];
+    const npopoverRef = ref(null); //n-popover引用对象
 
     /**
      * @description: 改变标签
@@ -130,11 +131,13 @@ export default defineComponent({
      */
     function changeSelect(index) {
       context.emit('changeSelect', { index: index });
+      npopoverRef.value.setShow(false); // 不显示 popover
     }
     return {
       menu,
       rankMenu,
       selectMenu,
+      npopoverRef,
       changeTag,
       changeSelect,
     };

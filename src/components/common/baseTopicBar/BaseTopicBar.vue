@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-17 20:58:36
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-22 21:04:40
+ * @LastEditTime: 2022-01-26 21:23:41
 -->
 <template>
   <div class="base-topic-bar">
@@ -55,6 +55,8 @@
         <template v-else>
           <div
             class="topic"
+            v-for="topic in currentTopics"
+            :key="topic"
             :class="{'topic-active': topicActiveName === topic}"
             role="button"
             @click="clickTopic(topic)"
@@ -117,7 +119,7 @@ export default defineComponent({
   props: {
     details: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     firstItem: {
       type: String,

@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-17 15:05:14
- * @LastEditors: clq
- * @LastEditTime: 2021-09-25 20:21:52
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-26 17:53:13
 -->
 <template>
   <div class="article-body">
@@ -18,8 +18,8 @@
 
 <script>
 import { defineComponent } from 'vue';
-import ArticleContent from '@/views/article/childComps/articleBody/childComps/ArticleContent.vue';
-import ArticleBottom from '@/views/article/childComps/articleBody/childComps/ArticleBottom.vue';
+import ArticleContent from '@/views/article/childComps/pages/articleMain/childComps/articleBody/childComps/ArticleContent.vue';
+import ArticleBottom from '@/views/article/childComps/pages/articleMain/childComps/articleBody/childComps/ArticleBottom.vue';
 
 /**
  * @description: 文章页面身体部分

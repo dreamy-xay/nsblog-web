@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-09-20 17:53:48
- * @LastEditors: clq
- * @LastEditTime: 2021-09-30 21:48:16
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-26 17:53:51
 -->
 <template>
   <div class="article-footer">
@@ -30,9 +30,9 @@
 
 <script>
 import { defineComponent, onMounted, reactive, ref } from 'vue';
-import ArticleFooterEdit from '@/views/article/childComps/articleFooter/childComps/ArticleFooterEdit.vue';
-import ArticleFooterComment from '@/views/article/childComps/articleFooter/childComps/ArticleFooterComment.vue';
-import ArticleFooterLoadMoreBtn from '@/views/article/childComps/articleFooter/childComps/ArticleFooterLoadMoreBtn.vue';
+import ArticleFooterEdit from '@/views/article/childComps/pages/articleMain/childComps/articleFooter/childComps/ArticleFooterEdit.vue';
+import ArticleFooterComment from '@/views/article/childComps/pages/articleMain/childComps/articleFooter/childComps/ArticleFooterComment.vue';
+import ArticleFooterLoadMoreBtn from '@/views/article/childComps/pages/articleMain/childComps/articleFooter/childComps/ArticleFooterLoadMoreBtn.vue';
 import { getArticleComments, postArticleComments, modifyArticleCommentEvaluation } from '@/network/api/articles';
 import { useMessage } from 'naive-ui';
 import events from '@/events';

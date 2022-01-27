@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-20 20:28:35
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-19 12:17:12
+ * @LastEditTime: 2022-01-26 17:54:05
 -->
 <template>
   <div
@@ -46,10 +46,10 @@
 <script>
 import { computed, defineComponent, inject, onMounted, reactive, ref, watch } from 'vue';
 import { getArticlesUser } from '@/network/api/articles';
-import ArticleMenuAvatar from '@/views/article/childComps/articleMenu/childComps/ArticleMenuAvatar.vue';
-import ArticleMenuNavigation from '@/views/article/childComps/articleMenu/childComps/ArticleMenuNavigation.vue';
-import ArticleMenuPublication from '@/views/article/childComps/articleMenu/childComps/ArticleMenuPublication.vue';
-import ArticleMenuFriend from '@/views/article/childComps/articleMenu/childComps/ArticleMenuFriend.vue';
+import ArticleMenuAvatar from '@/views/article/childComps/pages/articleMain/childComps/articleMenu/childComps/ArticleMenuAvatar.vue';
+import ArticleMenuNavigation from '@/views/article/childComps/pages/articleMain/childComps/articleMenu/childComps/ArticleMenuNavigation.vue';
+import ArticleMenuPublication from '@/views/article/childComps/pages/articleMain/childComps/articleMenu/childComps/ArticleMenuPublication.vue';
+import ArticleMenuFriend from '@/views/article/childComps/pages/articleMain/childComps/articleMenu/childComps/ArticleMenuFriend.vue';
 import { useMessage } from 'naive-ui';
 
 /**

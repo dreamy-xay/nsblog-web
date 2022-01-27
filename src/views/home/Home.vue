@@ -36,6 +36,7 @@
         <home-right />
       </div>
     </div>
+    <QuesitionDetailInvitation></QuesitionDetailInvitation>
   </base-view>
 </template>
 
@@ -46,6 +47,7 @@ import BaseTopicBar from '@/components/common/baseTopicBar/BaseTopicBar.vue';
 import BaseTopicTags from '@/components/common/baseTopicBar/BaseTopicTags.vue';
 // import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
 import HomeRight from '@/views/home/childComps/homeRight/HomeRight.vue';
+import QuesitionDetailInvitation from '@/views/question/chldComps/QuesitionDetailInvitation';
 import HomeLeft from '@/views/home/childComps/HomeLeft.vue';
 
 /**
@@ -61,6 +63,7 @@ export default defineComponent({
     BaseTopicTags,
     HomeLeft,
     HomeRight,
+    QuesitionDetailInvitation,
   },
   setup() {
     const topicSelect = ref('');

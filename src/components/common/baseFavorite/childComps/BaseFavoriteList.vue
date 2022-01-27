@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2021-09-27 18:00:46
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-19 20:17:13
+ * @LastEditTime: 2022-01-24 17:21:42
 -->
 <template>
   <div class="base-favorite-list">
@@ -122,7 +122,7 @@ export default defineComponent({
      * @author: xiao
      */
     function select(favorite, index) {
-      context.emit('childFavorite', favorite.id);
+      context.emit('childFavorite', favorite.favorite_id);
       activeIndex.value = index;
     }
 
