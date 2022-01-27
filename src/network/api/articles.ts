@@ -3,13 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 10:10:43
-<<<<<<< HEAD
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-26 21:57:40
-=======
- * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-27 17:45:21
->>>>>>> 1deab3dfa28f133899a36781804793bc86b1fe7b
+ * @LastEditTime: 2022-01-27 22:28:05
  */
 import { get, post, put, RequestLifeCycle } from '@/network/request';
 
@@ -37,8 +32,8 @@ export function getArticleComments(
       article_id: article_id,
       comment_id: commentId,
       limit,
-      offset,
-    },
+      offset
+    }
   });
 }
 
@@ -66,8 +61,8 @@ export function postArticleComments(
       article_id,
       content,
       parent_id,
-      reply_username,
-    },
+      reply_username
+    }
   });
 }
 
@@ -89,8 +84,8 @@ export function modifyArticleCommentEvaluation(
     ...RLC,
     params: {
       comment_id,
-      type,
-    },
+      type
+    }
   });
 }
 
@@ -112,8 +107,8 @@ export function modifyArticleRecommendEvaluation(
     ...RLC,
     params: {
       article_id,
-      type,
-    },
+      type
+    }
   });
 }
 
@@ -129,8 +124,8 @@ export function getTags(username: string, RLC: RequestLifeCycle = {}): Promise<u
     url: '/articles/tags',
     ...RLC,
     params: {
-      username,
-    },
+      username
+    }
   });
 }
 
@@ -146,8 +141,8 @@ export function getCategories(username: string, RLC: RequestLifeCycle = {}): Pro
     url: '/articles/categories',
     ...RLC,
     params: {
-      username,
-    },
+      username
+    }
   });
 }
 
@@ -193,8 +188,8 @@ export function getArticles(
       limit,
       topic_name,
       tag_name,
-      type,
-    },
+      type
+    }
   });
 }
 
@@ -215,8 +210,8 @@ export function getArticleInfo(
     url: `/articles/${article_id}`,
     ...RLC,
     data: {
-      password,
-    },
+      password
+    }
   });
 }
 
@@ -232,8 +227,8 @@ export function getArticlesUser(username: string, RLC: RequestLifeCycle = {}): P
     url: '/articles/user',
     ...RLC,
     params: {
-      username,
-    },
+      username
+    }
   });
 }
 
@@ -283,7 +278,7 @@ export function verifyArticlePassword(
     ...RLC,
     data: {
       article_id,
-      password,
-    },
+      password
+    }
   });
 }
