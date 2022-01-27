@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-20 19:56:13
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-27 15:03:35
+ * @LastEditTime: 2022-01-27 19:09:00
 -->
 <template>
   <div class="article-bottom-comp">
@@ -224,8 +224,7 @@ export default defineComponent({
 
     /**
      * @description: 关闭提示框
-     * @param {*}
-     * @return {*}
+     * @return {void}
      * @author: xiao
      */
     function close() {

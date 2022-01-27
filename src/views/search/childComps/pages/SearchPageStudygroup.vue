@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2022-01-14 18:52:17
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-27 16:54:02
+ * @LastEditTime: 2022-01-27 19:13:34
 -->
 <template>
   <div class="search-page-studygroup">
@@ -29,7 +29,7 @@
               v-show="group.join===1"
               class="join"
               role="button"
-              @click="exitGroup(group)"
+              @click="showExit(group)"
             >
               已加入
             </div>
@@ -54,6 +54,12 @@
     </div>
     <search-page-to-load-more @onButtonClick="getData"></search-page-to-load-more>
   </div>
+  <base-modal
+    content="确定要退出学习小组吗"
+    :show="modalShow"
+    @confirm="exitGroup"
+    @cancel="close"
+  />
 </template>
 
 <script>
@@ -62,6 +68,7 @@ import { useMessage } from 'naive-ui';
 import { search } from '@/network/api/search';
 import { useRoute } from 'vue-router';
 import SearchPageToLoadMore from '@/views/search/childComps/SearchPageToLoadMore.vue';
+import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 
 /**
  * @description:搜索学习小组
@@ -72,6 +79,7 @@ export default defineComponent({
   name: 'searchPageStudygroup',
   components: {
     SearchPageToLoadMore,
+    BaseModal,
   },
   setup(_, context) {
     const msg = useMessage(); // naive-ui 组件
@@ -79,6 +87,8 @@ export default defineComponent({
     const show = ref(false); //是否加载更多
     const change = ref(true); //是否加入
     const route = useRoute(); // route
+    const modalShow = ref(false); //是否显示退出提示
+    const selectGroup = ref(-1); //选择的小组下标
 
     /**
      * @description: 获取数据
@@ -119,17 +129,43 @@ export default defineComponent({
      * @author: xiao
      */
     function joinGroup(group) {
+      msg.success(`加入成功`);
       group.join = 1;
     }
 
     /**
-     * @description: 退出学习小组
-     * @param {*} index 选择点击的小组
+     * @description: 关闭提示框
      * @return {void}
      * @author: xiao
      */
-    function exitGroup(group) {
-      group.join = 0;
+    function close() {
+      modalShow.value = false;
+    }
+
+    /**
+     * @description: 显示提示框
+     * @param {object} group 选择的小组
+     * @return {void}
+     * @author: xiao
+     */
+    function showExit(group) {
+      for (let index = 0; index < groups.length; index++) {
+        if (groups[index] == group) {
+          selectGroup.value = index;
+        }
+      }
+      modalShow.value = true;
+    }
+
+    /**
+     * @description: 退出学习小组
+     * @return {void}
+     * @author: xiao
+     */
+    function exitGroup() {
+      msg.success(`退出成功`);
+      groups[selectGroup.value].join = 0;
+      modalShow.value = false;
     }
 
     return {
@@ -137,8 +173,11 @@ export default defineComponent({
       getData,
       joinGroup,
       exitGroup,
+      showExit,
+      close,
       show,
       change,
+      modalShow,
     };
   },
 });

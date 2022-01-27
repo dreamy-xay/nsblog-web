@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-25 19:44:48
+ * @LastEditTime: 2022-01-27 19:26:23
 -->
 
 <template>
@@ -51,8 +51,16 @@
 
       </div>
       <div class="search-content-right">
-        <base-rank-card title="热门搜索"></base-rank-card>
-        <base-tag-card title="相关搜索"></base-tag-card>
+        <base-rank-card
+          title="热门搜索"
+          :menu-list="['综合', '点赞', '评论']"
+          @clickMenuItem="rankCardClickMenuItem"
+          :data="rankingList"
+        ></base-rank-card>
+        <base-tag-card
+          title="相关搜索"
+          :tags="hotTags"
+        ></base-tag-card>
       </div>
     </div>
   </base-view>
@@ -82,6 +90,64 @@ export default defineComponent({
   },
   setup() {
     const loadingState = reactive([false, false, false, false, false, false, false]); // 数据获取状态
+    // 热门文章数据
+    const rankingList = reactive([
+      {
+        title: 'react有tab页，如何实现未选中的tab页隐藏但不销毁在JavaScript中一组数据如何进行关联呢',
+        url: '#',
+      },
+      {
+        title: '在JavaScript中一组数据如何进行关联呢',
+        url: '#',
+      },
+      {
+        title: '在JavaScript中一组数据如何进行关联呢',
+        url: '#',
+      },
+      {
+        title: '在JavaScript中一组数据如何进行关联呢',
+        url: '#',
+      },
+      {
+        title: 'react有tab页，如何实现未选中的tab页隐藏但不销毁',
+        url: '#',
+      },
+      {
+        title: '如何给一个html字符串添加锚点',
+        url: '#',
+      },
+    ]);
+    // 热门标签
+    const hotTags = reactive([
+      {
+        name: 'Java',
+        url: `/tag/Java`,
+      },
+      {
+        name: 'Python',
+        url: `/tag/Python`,
+      },
+      {
+        name: 'Csharp',
+        url: `/tag/Csharp`,
+      },
+      {
+        name: 'Cpp',
+        url: `/tag/Cpp`,
+      },
+      {
+        name: 'Vscode',
+        url: `/tag/Vscode`,
+      },
+      {
+        name: '自然科学',
+        url: `/tag/自然科学`,
+      },
+      {
+        name: '人工智能',
+        url: `/tag/人工智能`,
+      },
+    ]);
 
     const topics = [
       // 专题列表
@@ -156,6 +222,8 @@ export default defineComponent({
       changeLoadingState,
       changeActiveIndex,
       key,
+      rankingList,
+      hotTags,
     };
   },
 });
@@ -224,9 +292,9 @@ export default defineComponent({
     }
 
     .search-content-right {
-      width: 284px;
-      height: 366px;
-      background: #fff;
+      .base-rank-card {
+        margin-bottom: 16px;
+      }
     }
   }
 }

@@ -3,8 +3,13 @@
  * @Version:
  * @Autor: xiao
  * @Date: 2021-09-27 17:17:24
+<<<<<<< HEAD
  * @LastEditors: Z_Y_C
  * @LastEditTime: 2022-01-27 19:57:34
+=======
+ * @LastEditors: xiao
+ * @LastEditTime: 2022-01-27 19:35:58
+>>>>>>> 1deab3dfa28f133899a36781804793bc86b1fe7b
 -->
 <template>
   <n-modal
@@ -54,9 +59,8 @@ import { addCollections } from '@/network/api/favorites';
 /**
  * @description: 收藏夹界面
  * @param {Boolean} isShow 是否显示收藏夹界面 `默认为false`
- * @param {number} type 收藏的类型1为文章、2为问答、3为资源 `必传参数`
+ * @param {number | string} type 收藏的类型1为文章、2为问答、3为资源 `必传参数`
  * @param {number | string} cid 要收藏的内容的id `必传参数`
- * @event closeFavorite 关闭收藏夹界面事件
  * @author: xiao
  */
 

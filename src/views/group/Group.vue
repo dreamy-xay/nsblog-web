@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2022-01-21 19:42:59
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-26 21:58:52
+ * @LastEditTime: 2022-01-27 19:24:48
 -->
 <template>
   <base-view
@@ -25,6 +25,7 @@
       <group-list
         class="group-search"
         :studyGroups="groups"
+        @changeGroupJoin="changeGroupJoin"
       />
       <div class="group-right">
         <div class="group-create">
@@ -83,7 +84,6 @@ export default defineComponent({
   setup() {
     const isShow = ref(false); //是否显示创建小组页面
     const topicSelect = ref(''); //选择的专题
-    const tagSelect = ref(''); //选择的标签
     const groups = reactive([]); //学习小组数据
     const msg = useMessage(); // naive-ui 消息组件
     const rankingList = reactive([
@@ -155,6 +155,17 @@ export default defineComponent({
     }
 
     /**
+     * @description: 退出学习小组
+     * @param {join} 小组下标
+     * @return {void}
+     * @author: xiao
+     */
+    function changeGroupJoin(join) {
+      console.log('join', join);
+      groups[join].join = 0;
+    }
+
+    /**
      * @description: 选择了专题
      * @param {string} topic 专题名
      * @return {void}
@@ -174,6 +185,7 @@ export default defineComponent({
       bulletinData,
       selectTopic,
       updateGroups,
+      changeGroupJoin,
     };
   },
 });
@@ -187,7 +199,7 @@ export default defineComponent({
     padding-bottom: 50px;
 
     .group-search {
-      margin-right: 16px;
+      margin-right: 50px;
     }
 
     .group-right {

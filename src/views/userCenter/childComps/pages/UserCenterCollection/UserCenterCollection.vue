@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-18 15:25:00
  * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-25 13:31:48
+ * @LastEditTime: 2022-01-25 21:28:16
 -->
 <template>
   <div class="user-center-collection">
@@ -276,14 +276,14 @@ export default defineComponent({
       typeList.push({ List: [] }, { List: [] }, { List: [] }, { List: [] });
       let lenList = reactive([]);
       lenList.push({ lens: 0 }, { lens: 0 }, { lens: 0 }, { lens: 0 });
-      newFavorites(tokenInfo.value.username, id, e[0], e[1], e[2])
+      newFavorites(e[0], e[1], e[2])
         .then(() => {
           favorites.unshift({
             favorite_id: id,
             name: e[0],
             count: 0,
-            remark: e[1],
-            is_private: e[2],
+            remark: e[2],
+            is_private: e[1],
             collections: [],
             typeList,
             isBottom: false,
