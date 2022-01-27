@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-29 16:58:46
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-27 16:57:58
+ * @LastEditTime: 2022-01-27 21:35:21
 -->
 <template>
   <div class="blog-main">
@@ -21,7 +21,7 @@
   </div>
 </template>
 <script>
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, reactive, ref, inject, onMounted } from 'vue';
 import BlogMainArticle from '@/views/blog/childComps/pages/blogMain/childComps/BlogMainArticle.vue';
 import BlogPagination from '@/views/blog/childComps/pages/blogMain/childComps/BlogPagination.vue';
 import BlogMainText from '@/views/blog/childComps/pages/blogMain/childComps/BlogMainText.vue';
@@ -51,9 +51,13 @@ export default defineComponent({
     const text = ref(null); // 标签或分类Id
     const type = ref(true); // 判断是标签还是分类
     const articleData = reactive([]);
+    let blogPage = null; // 博客页面
+
+    onMounted(() => {
+      blogPage = document.getElementsByClassName('blog')[0];
+    });
 
     // 获取的文章数据
-
     if (route.query.category != null) {
       text.value = route.query.category;
       type.value = false;
@@ -107,6 +111,17 @@ export default defineComponent({
 
     function changePage(p) {
       page.value = p.page;
+
+      getBlogArticles(type.value == true ? text.value : null, type.value == false ? text.value : null, page.value)
+        .then((data) => {
+          articleData.splice(0, articleData.length);
+          articleData.splice(articleData.length, 0, ...data.articles);
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('获取文章信息失败，请重试', { duration: 2000, closable: true });
+        });
+
       router.push(
         route.path +
           '?' +
@@ -114,15 +129,8 @@ export default defineComponent({
           (route.query.tag ? 'tag=' + route.query.tag + '&' : '') +
           ('page=' + page.value)
       );
-      getBlogArticles(type.value == true ? text.value : null, type.value == false ? text.value : null, page.value)
-        .then((data) => {
-          console.log(data);
-          articleData.splice(articleData.length, 0, ...data.articles);
-        })
-        .catch((error) => {
-          console.log(error);
-          msg.error('获取文章信息失败，请重试', { duration: 2000, closable: true });
-        });
+
+      blogPage.scrollTo({ top: document.body.offsetHeight - 54 });
     }
 
     return {

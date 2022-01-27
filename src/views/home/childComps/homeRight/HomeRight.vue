@@ -4,11 +4,14 @@
  * @Autor: continue-hs
  * @Date: 2022-01-17 10:18:37
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-23 20:50:41
+ * @LastEditTime: 2022-01-27 20:05:29
 -->
 <template>
   <div class="home-right">
-    <base-bulletin :bulletin-data="bulletinData" />
+    <base-bulletin
+      :bulletin-data="bulletinData"
+      :type="true"
+    />
     <home-activity
       :activity-data="activityData"
       :style="{marginTop: '16px'}"

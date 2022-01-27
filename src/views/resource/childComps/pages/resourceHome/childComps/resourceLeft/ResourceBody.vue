@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-25 13:17:52
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-27 15:23:44
+ * @LastEditTime: 2022-01-27 21:40:11
 -->
 <template>
   <div
@@ -106,6 +106,10 @@ export default defineComponent({
       font-weight: 700;
       font-size: 16px;
       line-height: 24px;
+
+      &:hover {
+        color: $grey-8;
+      }
     }
 
     .context-center {

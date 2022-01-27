@@ -4,12 +4,15 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-24 15:52:14
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-26 21:22:24
+ * @LastEditTime: 2022-01-27 22:21:42
 -->
 <template>
   <div class="resource-detail">
-    <resource-detail-top :data="detailData"></resource-detail-top>
-    <resource-detail-bottom :data="detailData.recommend_resources"></resource-detail-bottom>
+    <resource-detail-top
+      :data="detailDataTop"
+      @change-collection="changeCollection"
+    />
+    <resource-detail-bottom :data="detailDataBottom" />
   </div>
 </template>
 <script>
@@ -35,18 +38,20 @@ export default defineComponent({
     const msg = useMessage();
     const route = useRoute(); // 路由
     const resourceId = route.params.resourceId; // 资源id
-    const detailData = reactive({
+    const detailDataTop = reactive({
       avatar: '',
+      collection: null,
       download_count: null,
       id: null,
       link: null,
       name: null,
       nickname: null,
-      recommend_resources: [],
       remark: null,
       upload_time: null,
       username: null,
     });
+
+    const detailDataBottom = reactive([]);
 
     /**
      * @description: 获取数据
@@ -56,18 +61,17 @@ export default defineComponent({
     function getMessage() {
       getResourceDetail(resourceId)
         .then((data) => {
-          console.log(data);
-          detailData.avatar = data.avatar;
-          detailData.download_count = data.download_count;
-          detailData.id = data.id;
-          detailData.link = data.link;
-          detailData.name = data.name;
-          detailData.nickname = data.nickname;
-          detailData.recommend_resources.splice(data.recommend_resources.length, 0, ...data.recommend_resources);
-          detailData.remark = data.remark;
-          detailData.upload_time = data.upload_time;
-          detailData.username = data.username;
-          console.log(detailData);
+          detailDataTop.avatar = data.avatar;
+          detailDataTop.download_count = data.download_count;
+          detailDataTop.collection = data.collection;
+          detailDataTop.id = data.id;
+          detailDataTop.link = data.link;
+          detailDataTop.name = data.name;
+          detailDataTop.nickname = data.nickname;
+          detailDataBottom.splice(0, 0, ...data.recommend_resources);
+          detailDataTop.remark = data.remark;
+          detailDataTop.upload_time = data.upload_time;
+          detailDataTop.username = data.username;
         })
         .catch((error) => {
           console.log(error);
@@ -77,8 +81,20 @@ export default defineComponent({
     // 获取数据
     getMessage();
 
+    /**
+     * @description: 改变收藏状态
+     * @param {Number} id 收藏夹id
+     * @return {Void}
+     * @author: Z_Y_C
+     */
+    function changeCollection(id) {
+      detailDataTop.collection = id;
+    }
+
     return {
-      detailData,
+      detailDataTop,
+      detailDataBottom,
+      changeCollection,
     };
   },
 });
