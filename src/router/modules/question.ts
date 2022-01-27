@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-25 10:19:33
  * @LastEditors: clq
- * @LastEditTime: 2022-01-27 10:01:06
+ * @LastEditTime: 2022-01-27 13:05:38
  */
 import { RouteRecordRaw } from 'vue-router';
 
@@ -22,7 +22,7 @@ const questionRouter: RouteRecordRaw = {
       component: () => import('@/views/question/childComps/pages/questionHome/QuestionHome.vue')
     },
     {
-      path: ':questionId',
+      path: ':questionId(\\d+)',
       name: 'questionDetail',
       meta: {
         title: '问答详情'

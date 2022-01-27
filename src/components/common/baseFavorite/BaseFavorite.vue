@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2021-09-27 17:17:24
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-19 20:33:04
+ * @LastEditTime: 2022-01-26 20:59:02
 -->
 <template>
   <n-modal
@@ -40,6 +40,7 @@
         </div>
       </div>
     </div>
+
   </n-modal>
 
 </template>
@@ -50,7 +51,8 @@ import BaseFavoriteList from '@/components/common/baseFavorite/childComps/BaseFa
 import { getFavorites } from '@/network/api/favorites';
 import { useMessage } from 'naive-ui';
 import events from '@/events';
-import { useRoute } from 'vue-router';
+import { cancelCollections } from '@/network/api/favorites';
+import { addCollections } from '@/network/api/favorites';
 
 /**
  * @description: 收藏夹界面
@@ -73,11 +75,10 @@ export default defineComponent({
     const msg = useMessage(); // naive-ui 组件
     const favorites = reactive([]); // 收藏夹数据
     const id = ref(null);
-    const route = useRoute(); // route
-    const username = route.params.username; // 获取博客用户名
+    const cancel = ref(null);
 
     // 获取收藏夹数据
-    getFavorites(username, 0)
+    getFavorites('dreamy', 0)
       .then((data) => {
         console.log(data);
         favorites.splice(0, 0, ...data.favorites);
@@ -103,42 +104,28 @@ export default defineComponent({
      */
     function childFavorite(e) {
       id.value = e;
+      console.log('id.value', id.value);
     }
 
     /**
      * @description: 添加收藏
+     * @param {number | string} id 添加收藏的id
      * @return {Void}
      * @author: xiao
      */
     function addCollection() {
+      events.emit('ArticleBottomComp-changeCollection', id.value); //收藏
       context.emit('update:isShow', false);
-      let d = -1;
-      for (var index in favorites) {
-        if (favorites[index].id === id.value) {
-          d = index;
-        }
-      }
-      favorites[d].count++;
-      if (d != -1) {
-        events.emit('ArticleBottomComp-changeCollection', 1); //收藏
-      }
     }
 
     /**
      * @description: 取消收藏
+     * @param {number | string} favoriteId 取消收藏的id
      * @return {Void}
      * @author: xiao
      */
-    function delCollection() {
-      let d = 0;
-      for (var index in favorites) {
-        if (favorites[index].id === id.value) {
-          d = index;
-        }
-      }
-      favorites[d].count--;
-      console.log(favorites);
-      events.emit('ArticleBottomComp-changeCollection', 0); //取消收藏
+    function delCollection(favoriteId) {
+      events.emit('ArticleBottomComp-cacelCollection', favoriteId); //取消收藏
     }
 
     /**
@@ -153,8 +140,14 @@ export default defineComponent({
         if (favorites[i].name == e) f = 0;
       }
       if (f) {
-        let num = Number(Math.random().toString().substr(2, 0) + Date.now()).toString(36);
-        favorites.splice(favorites.length, 0, { collections: [], id: num, name: e, count: 0, is_private: false });
+        let num = Math.floor(Math.random() * (9999 - 1000)) + 1000;
+        favorites.splice(favorites.length, 0, {
+          collections: [],
+          favorite_id: num,
+          name: e,
+          count: 0,
+          is_private: false,
+        });
       } else {
         msg.error('不能重名', { duration: 2000, closable: true });
       }

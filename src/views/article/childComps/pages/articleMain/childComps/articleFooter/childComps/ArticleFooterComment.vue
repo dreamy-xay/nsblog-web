@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-09-23 17:26:29
- * @LastEditors: clq
- * @LastEditTime: 2021-09-30 21:47:23
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-26 17:53:33
 -->
 <template>
   <div class="article-footer-comment">
@@ -35,8 +35,8 @@
 
 <script>
 import { defineComponent, ref } from 'vue';
-import ArticleFooterCommentItem from '@/views/article/childComps/articleFooter/childComps/ArticleFooterCommentItem.vue';
-import ArticleFooterLoadMoreBtn from '@/views/article/childComps/articleFooter/childComps/ArticleFooterLoadMoreBtn.vue';
+import ArticleFooterCommentItem from '@/views/article/childComps/pages/articleMain/childComps/articleFooter/childComps/ArticleFooterCommentItem.vue';
+import ArticleFooterLoadMoreBtn from '@/views/article/childComps/pages/articleMain/childComps/articleFooter/childComps/ArticleFooterLoadMoreBtn.vue';
 import events from '@/events';
 
 /**

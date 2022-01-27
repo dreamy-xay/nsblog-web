@@ -3,13 +3,13 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2022-01-24 18:20:31
- * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-25 13:54:07
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-25 21:33:51
 -->
 <template>
-  <div class="tag-main">
-    <div class="tag-main-top">
-      <div class="tag-main-top-text">
+  <div class="tag">
+    <!-- <div class="tag-top">
+      <div class="tag-top-text">
         <div class="tag">
           <div class="tag-text">SpringBoot</div>
         </div>
@@ -55,9 +55,7 @@
           :swidth="960"
         />
       </div>
-
-      <!-- <div class="" -->
-    </div>
+    </div> -->
 
   </div>
 </template>
@@ -65,19 +63,24 @@
 import { defineComponent, reactive, ref } from 'vue';
 import BaseSelect from '@/components/content/baseSelect/BaseSelect.vue';
 import HomeItem from '@/views/home/childComps/HomeItem.vue';
+import { useRoute } from 'vue-router';
 
 export default defineComponent({
-  name: 'tagMain',
+  name: 'tag',
   components: {
-    BaseSelect,
-    HomeItem,
+    // BaseSelect,
+    // HomeItem,
   },
   setup() {
+    const route = useRoute(); // route
+    const tagName = route.params.tagName;
     const topList = reactive(['热门', '最新', '排行']);
     const listIndex = ref(0);
     const timeList = reactive(['3天内', '7天内', '30天内', '全部']);
     const selectTag = ref('3天内');
     const timeIndex = ref(0);
+
+    console.log(tagName);
 
     function changeList(index) {
       listIndex.value = index;

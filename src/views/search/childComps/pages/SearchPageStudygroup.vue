@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2022-01-14 18:52:17
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-22 15:34:01
+ * @LastEditTime: 2022-01-26 21:04:27
 -->
 <template>
   <div class="search-page-studygroup">
@@ -41,7 +41,7 @@
           <div class="category-member-count">
             <div class="category">
               <i class="iconfont blog-zhu"></i>
-              {{group.category}}
+              {{group.topic_name}}
             </div>
             <div class="member-count">
               <i class="iconfont blog-xiaozu1"></i>
@@ -175,6 +175,10 @@ export default defineComponent({
           border: solid 1px $grey-7;
           @include flex(center, center);
           transition: 0.25s;
+
+          .iconfont {
+            margin-right: 4.78px;
+          }
 
           &:hover {
             border-color: $green-1;

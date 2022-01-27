@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-22 12:40:24
+ * @LastEditTime: 2022-01-25 19:44:48
 -->
 
 <template>
@@ -13,6 +13,7 @@
     :top-bar="true"
     :top-bar-scroll="true"
     bind-class="search"
+    :footer="true"
   >
     <template #top-bar-bottom>
       <div class="search-top-bar">
@@ -41,26 +42,30 @@
           <base-content-loading>
           </base-content-loading>
         </div>
-
         <router-view
           v-show="loadingState[topicActiveIndex]"
           @changeLoadingState="changeLoadingState"
-          @changeAcitiveIndex="changeAcitiveIndex"
+          @changeActiveIndex="changeActiveIndex"
         >
         </router-view>
 
       </div>
-      <div class="search-content-right"></div>
+      <div class="search-content-right">
+        <base-rank-card title="热门搜索"></base-rank-card>
+        <base-tag-card title="相关搜索"></base-tag-card>
+      </div>
     </div>
   </base-view>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent, reactive, ref, watch } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import router from '@/router';
 import { useRoute } from 'vue-router';
 import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
+import BaseRankCard from '@/components/common/baseRankCard/BaseRankCard.vue';
+import BaseTagCard from '@/components/common/baseTagCard/BaseTagCard.vue';
 
 /**
  * @description: 搜索主页
@@ -72,6 +77,8 @@ export default defineComponent({
   components: {
     BaseView,
     BaseContentLoading,
+    BaseRankCard,
+    BaseTagCard,
   },
   setup() {
     const loadingState = reactive([false, false, false, false, false, false, false]); // 数据获取状态
@@ -80,15 +87,19 @@ export default defineComponent({
       // 专题列表
       {
         name: '综合',
+        path: 'comprehensive',
       },
       {
         name: '文章',
+        path: 'article',
       },
       {
         name: '问答',
+        path: 'question',
       },
       {
         name: '学习小组',
+        path: 'group',
       },
       {
         name: '资源',
@@ -103,7 +114,7 @@ export default defineComponent({
         path: 'user',
       },
     ];
-    const topicActiveIndex = ref(6); // 专题激活
+    const topicActiveIndex = ref(0); // 专题激活
     const route = useRoute();
     const key = ref(route.query.value);
 
@@ -116,7 +127,6 @@ export default defineComponent({
     function clickTopic(index) {
       topicActiveIndex.value = index;
       router.push({ path: `/search/${topics[index].path}`, query: route.query });
-      loadingState[index] = false;
     }
 
     /**
@@ -124,7 +134,7 @@ export default defineComponent({
      * @param {Number} index `索引`
      * @author: Ban
      */
-    function changeAcitiveIndex(index) {
+    function changeActiveIndex(index) {
       topicActiveIndex.value = index;
     }
 
@@ -135,6 +145,7 @@ export default defineComponent({
      */
     function changeLoadingState(index, state) {
       loadingState[index] = state;
+      console.log(loadingState[index]);
     }
 
     return {
@@ -143,7 +154,7 @@ export default defineComponent({
       clickTopic,
       loadingState,
       changeLoadingState,
-      changeAcitiveIndex,
+      changeActiveIndex,
       key,
     };
   },

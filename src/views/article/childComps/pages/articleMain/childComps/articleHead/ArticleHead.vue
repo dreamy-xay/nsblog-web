@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 17:51:15
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-22 20:00:44
+ * @LastEditTime: 2022-01-26 17:53:57
 -->
 <template>
   <div class="article-head">
@@ -59,7 +59,7 @@
 
 <script>
 import { computed, defineComponent, onMounted, ref, watch } from 'vue';
-import ArticleHeadBackground from '@/views/article/childComps/articleHead/childComps/ArticleHeadBackground.vue';
+import ArticleHeadBackground from '@/views/article/childComps/pages/articleMain/childComps/articleHead/childComps/ArticleHeadBackground.vue';
 import BaseTag from '@/components/content/baseTag/BaseTag.vue';
 import { dateFormat } from '@/util/date';
 import { getSplitNum } from '@/util/util';
