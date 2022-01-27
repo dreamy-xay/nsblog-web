@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-25 15:23:24
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-27 13:00:57
 -->
 <template>
   <base-view
@@ -37,6 +37,12 @@
       </div>
     </div>
     <QuesitionDetailInvitation></QuesitionDetailInvitation>
+    <base-qr-code-popover
+      value="https://www.baidu.com"
+      title="扫一扫，分享网站"
+    >
+      <button>二维码显示 百度</button>
+    </base-qr-code-popover>
   </base-view>
 </template>
 
@@ -48,6 +54,7 @@ import BaseTopicTags from '@/components/common/baseTopicBar/BaseTopicTags.vue';
 // import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
 import HomeRight from '@/views/home/childComps/homeRight/HomeRight.vue';
 import QuesitionDetailInvitation from '@/views/question/chldComps/QuesitionDetailInvitation';
+import BaseQrCodePopover from '@/components/content/baseQrCodePopover/BaseQrCodePopover.vue';
 import HomeLeft from '@/views/home/childComps/HomeLeft.vue';
 
 /**
@@ -64,6 +71,7 @@ export default defineComponent({
     HomeLeft,
     HomeRight,
     QuesitionDetailInvitation,
+    BaseQrCodePopover,
   },
   setup() {
     const topicSelect = ref('');
