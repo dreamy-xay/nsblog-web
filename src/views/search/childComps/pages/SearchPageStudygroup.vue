@@ -4,19 +4,16 @@
  * @Autor: xiao
  * @Date: 2022-01-14 18:52:17
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-26 21:04:27
+ * @LastEditTime: 2022-01-27 16:54:02
 -->
 <template>
   <div class="search-page-studygroup">
     <div class="search-page-studygroup-less">
       <div
-        v-for="(group,index) in studyGroups"
+        v-for="(group,index) in groups"
         :key="index"
       >
-        <div
-          class="groups"
-          v-if="index<6 || show"
-        >
+        <div class="groups">
           <div class="name">
             {{group.name}}
             <div
@@ -55,21 +52,16 @@
         </div>
       </div>
     </div>
-    <div
-      class="search-page-studygroup-more"
-      role="button"
-      @click="moreGroup"
-      v-if="!show"
-    >
-      加载更多...
-    </div>
+    <search-page-to-load-more @onButtonClick="getData"></search-page-to-load-more>
   </div>
 </template>
 
 <script>
-import { defineComponent, reactive, ref } from 'vue';
-import { getGroups } from '@/network/api/groups';
+import { defineComponent, reactive, ref, onMounted, watch } from 'vue';
 import { useMessage } from 'naive-ui';
+import { search } from '@/network/api/search';
+import { useRoute } from 'vue-router';
+import SearchPageToLoadMore from '@/views/search/childComps/SearchPageToLoadMore.vue';
 
 /**
  * @description:搜索学习小组
@@ -78,31 +70,47 @@ import { useMessage } from 'naive-ui';
 
 export default defineComponent({
   name: 'searchPageStudygroup',
-  setup() {
+  components: {
+    SearchPageToLoadMore,
+  },
+  setup(_, context) {
     const msg = useMessage(); // naive-ui 组件
-    const studyGroups = reactive([]); //学习小组数据
+    const groups = reactive([]); //学习小组数据
     const show = ref(false); //是否加载更多
     const change = ref(true); //是否加入
-
-    //获取学习小组信息
-    getGroups('dreamy')
-      .then((data) => {
-        console.log(data);
-        studyGroups.splice(0, 0, ...data.groups);
-      })
-      .catch((error) => {
-        console.log(error);
-        msg.error('获取登录日志失败', { duration: 2000, closable: true });
-      });
+    const route = useRoute(); // route
 
     /**
-     * @description: 加载更多
-     * @return {void}
-     * @author: xiao
+     * @description: 获取数据
+     * @author: Ban
      */
-    function moreGroup() {
-      show.value = !show.value;
+    function getData() {
+      search(route.query.keyword, 3)
+        .then((data) => {
+          console.log('data', data);
+          data.gropus.forEach((item) => {
+            groups.push(item);
+            context.emit('changeLoadingState', 3, true);
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
+
+    onMounted(() => {
+      context.emit('changeActiveIndex', 3);
+      getData();
+    });
+
+    watch(
+      () => route.query.keyword,
+      () => {
+        context.emit('changeLoadingState', 3, false); // 改变数据加载状态
+        groups.splice(0, groups.length); // 清空数组
+        getData(); // 重新获取数据
+      }
+    );
 
     /**
      * @description: 加入学习小组
@@ -125,8 +133,8 @@ export default defineComponent({
     }
 
     return {
-      studyGroups,
-      moreGroup,
+      groups,
+      getData,
       joinGroup,
       exitGroup,
       show,
@@ -139,6 +147,8 @@ export default defineComponent({
 <style lang="scss" scoped>
 .search-page-studygroup {
   @include flex(center, center, column);
+  margin-bottom: 40px;
+
   .search-page-studygroup-less {
     width: 660px;
     height: 100%;
@@ -146,7 +156,7 @@ export default defineComponent({
     border-radius: $border-radius-0; //圆角
     box-shadow: $shadow-0;
     padding: 16px 20px;
-
+    margin-bottom: 10px;
     & > div {
       &:nth-child(1) div {
         margin-top: 0px;
@@ -216,22 +226,6 @@ export default defineComponent({
           color: $grey-7;
         }
       }
-    }
-  }
-
-  .search-page-studygroup-more {
-    @include flex(center, center);
-    width: 300px;
-    height: 32px;
-    border-radius: $border-radius-0; //圆角
-    box-shadow: $shadow-0;
-    margin-top: 10px;
-    color: $grey-9;
-    font-size: 14px;
-    transition: 0.25s;
-
-    &:hover {
-      color: $green-1;
     }
   }
 }

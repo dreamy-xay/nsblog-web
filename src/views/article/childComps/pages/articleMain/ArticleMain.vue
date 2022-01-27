@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 16:32:13
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-26 22:22:34
+ * @LastEditTime: 2022-01-27 15:03:54
  * @LastEditors: dreamy-xay
  * @LastEditTime: 2021-10-02 10:14:24
 -->
@@ -195,15 +195,7 @@ export default defineComponent({
       })
       .on('ArticleBottomComp-changeCollection', (newValue) => {
         console.log('newCollection:' + newValue);
-        addCollections(articleData.article_id)
-          .then(() => {
-            msg.success(`收藏成功`);
-            articleData.collection = newValue;
-          })
-          .catch((err) => {
-            console.log(err);
-            msg.error(`收藏失败`, { duration: 2000, closable: true });
-          });
+        articleData.collection = newValue;
       })
       .on('ArticleBottomComp-cacelCollection', (newValue) => {
         console.log('cancelCollection:' + newValue);

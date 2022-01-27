@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2022-01-15 17:29:49
- * @LastEditors: Ban
- * @LastEditTime: 2022-01-26 12:09:31
+ * @LastEditors: xiao
+ * @LastEditTime: 2022-01-27 15:14:52
  */
 import { RouteRecordRaw } from 'vue-router';
 
@@ -57,6 +57,14 @@ const searchRouter: RouteRecordRaw = {
         title: '文章'
       },
       component: () => import('@/views/search/childComps/pages/SearchPageArticle.vue')
+    },
+    {
+      path: 'group',
+      name: 'searchPageStudygroup',
+      meta: {
+        title: '学习小组'
+      },
+      component: () => import('@/views/search/childComps/pages/SearchPageStudygroup.vue')
     }
   ]
 };
