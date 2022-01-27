@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-09-02 14:19:10
  * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-25 08:56:34
+ * @LastEditTime: 2022-01-27 12:49:29
  */
 import { get, RequestLifeCycle } from '@/network/request';
 
@@ -47,6 +47,7 @@ export function getTopicTags(topic_name: string, RLC: RequestLifeCycle = {}): Pr
  */
 export function getTagDetails(tag_name: string, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return get({
-    url: `/tag/${tag_name}`,
+    url: `/topics/tags/${tag_name}`,
+    ...RLC,
   });
 }
