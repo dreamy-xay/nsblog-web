@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 11:51:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-23 15:35:33
+ * @LastEditTime: 2022-01-27 18:25:14
 -->
 <template>
   <div
@@ -48,7 +48,10 @@
                 </div>
               </div>
             </div>
-            <base-footer v-if="footer" />
+            <base-footer
+              v-if="footer"
+              :show-all="footerShowAll"
+            />
           </el-scrollbar>
         </div>
       </div>
@@ -84,6 +87,7 @@ import BaseFooter from '@/components/content/baseFooter/BaseFooter.vue';
  * @param {Number} backTopVisibilityHeight 滚动高度达到此参数值才出现 `默认为200`
  * @param {Boolean} topBarScroll topBar 是否跟随页面滚动而滚动（配合插槽【top-bar-bottom】使用）`默认为false,不启用`
  * @param {Number} topBarScrollLimitHeight topBar 触发滚动的极限高度 `默认为50`
+ * @param {Boolean} footerShowAll footer  是否显示全部内容 `默认为true`
  * @event scroll 滚动监听事件，回调参数{scrollTop, scrollLeft}
  * @event scrollToBottom 滚动到底部触发事件，无回调参数
  * @method setScrollTop 设置滚动条到顶部的距离,类型为boolean时:true为滚动到顶部,false为滚动到底部;类型为number时则直接设置高度  (value: boolean | number) => void
@@ -146,6 +150,10 @@ export default defineComponent({
     topBarScrollLimitHeight: {
       type: Number,
       default: 50,
+    },
+    footerShowAll: {
+      type: Boolean,
+      default: true,
     },
   },
   components: {

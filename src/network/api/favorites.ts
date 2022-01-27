@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 12:55:44
  * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-25 21:24:11
+ * @LastEditTime: 2022-01-27 17:46:29
  */
 
 import { get, RequestLifeCycle, del, put, post } from '@/network/request';
@@ -99,20 +99,27 @@ export function cancelCollections(collection_id: number | string, RLC: RequestLi
 }
 
 /**
- * @description: 添加收藏
- * @param {number | string} cid 取消收藏的id `默认为''，添加第一个收藏`
- * @param {number | string} fid 取消收藏的id `默认为''，添加第一个收藏`
- * @param {number} type 删除历史记录类型的列表，0为全部，1为文章，2为问答，3为资源 `默认为0`
+ * @description: 新建收藏
+ * @param {number | string} type 删除历史记录类型的列表，0为全部，1为文章，2为问答，3为资源 `默认为0`
+ * @param {number | string} cid 添加收藏的内容id `必传值`
+ * @param {number | string} fid 添加收藏的收藏夹id `必传值`
  * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
  * @return {Promise<unknown>} 请求返回promise
  * @author: xiao
  */
-export function addCollections(cid: number | string = '', RLC: RequestLifeCycle = {}) {
+export function addCollections(
+  type: number | string = '',
+  cid: number | string = '',
+  fid: number | string = '',
+  RLC: RequestLifeCycle = {}
+) {
   return post({
-    url: `/favorites/collections/${cid}`,
+    url: `/favorites/collections`,
     ...RLC,
     data: {
-      collection_id: cid,
+      type,
+      cid,
+      fid,
     },
   });
 }
