@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-25 10:25:30
  * @LastEditors: clq
- * @LastEditTime: 2022-01-25 19:28:22
+ * @LastEditTime: 2022-01-27 10:02:16
 -->
 <template>
   <base-view
@@ -30,9 +30,9 @@
 <script>
 import { defineComponent, reactive } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
-import QuestionDetailInfo from '@/views/question/pages/questionDetail/childComps/QuestionDetailInfo.vue';
-import QuestionDetailAnswers from '@/views/question/pages/questionDetail/childComps/QuestionDetailAnswers.vue';
-import QuestionDetailWriteAnswer from '@/views/question/pages/questionDetail/childComps/QuestionDetailWriteAnswer.vue';
+import QuestionDetailInfo from '@/views/question/childComps/pages/questionDetail/childComps/QuestionDetailInfo.vue';
+import QuestionDetailAnswers from '@/views/question/childComps/pages/questionDetail/childComps/QuestionDetailAnswers.vue';
+import QuestionDetailWriteAnswer from '@/views/question/childComps/pages/questionDetail/childComps/QuestionDetailWriteAnswer.vue';
 
 /**
  * @description: 问答详情页面
