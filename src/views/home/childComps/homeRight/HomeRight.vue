@@ -3,13 +3,8 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2022-01-17 10:18:37
-<<<<<<< HEAD
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-27 20:05:29
-=======
- * @LastEditors: Ban
- * @LastEditTime: 2022-01-27 19:24:06
->>>>>>> 1deab3dfa28f133899a36781804793bc86b1fe7b
+ * @LastEditTime: 2022-01-27 22:28:15
 -->
 <template>
   <div class="home-right">

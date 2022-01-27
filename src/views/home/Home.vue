@@ -3,13 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
-<<<<<<< HEAD
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-27 17:04:06
-=======
  * @LastEditors: continue-hs
  * @LastEditTime: 2022-01-27 17:47:35
->>>>>>> 1deab3dfa28f133899a36781804793bc86b1fe7b
 -->
 <template>
   <base-view
