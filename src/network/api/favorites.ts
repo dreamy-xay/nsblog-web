@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 12:55:44
- * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-25 21:24:11
+ * @LastEditors: xiao
+ * @LastEditTime: 2022-01-27 14:10:51
  */
 
 import { get, RequestLifeCycle, del, put, post } from '@/network/request';
@@ -39,8 +39,8 @@ export function getFavorites(
       offset,
       type,
       is_all,
-      favorite_id,
-    },
+      favorite_id
+    }
   });
 }
 
@@ -65,8 +65,8 @@ export function newFavorites(
     data: {
       name,
       remark,
-      is_private,
-    },
+      is_private
+    }
   });
 }
 
@@ -80,7 +80,7 @@ export function newFavorites(
 export function deleteFavorites(favorite_id: number | string, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return del({
     url: `/favorites/${favorite_id}`,
-    ...RLC,
+    ...RLC
   });
 }
 
@@ -94,26 +94,33 @@ export function deleteFavorites(favorite_id: number | string, RLC: RequestLifeCy
 export function cancelCollections(collection_id: number | string, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return del({
     url: `/favorites/collections/${collection_id}`,
-    ...RLC,
+    ...RLC
   });
 }
 
 /**
- * @description: 添加收藏
- * @param {number | string} cid 取消收藏的id `默认为''，添加第一个收藏`
- * @param {number | string} fid 取消收藏的id `默认为''，添加第一个收藏`
- * @param {number} type 删除历史记录类型的列表，0为全部，1为文章，2为问答，3为资源 `默认为0`
+ * @description: 新建收藏
+ * @param {number | string} type 删除历史记录类型的列表，0为全部，1为文章，2为问答，3为资源 `默认为0`
+ * @param {number | string} cid 添加收藏的内容id `必传值`
+ * @param {number | string} fid 添加收藏的收藏夹id `必传值`
  * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
  * @return {Promise<unknown>} 请求返回promise
  * @author: xiao
  */
-export function addCollections(cid: number | string = '', RLC: RequestLifeCycle = {}) {
+export function addCollections(
+  type: number | string = '',
+  cid: number | string = '',
+  fid: number | string = '',
+  RLC: RequestLifeCycle = {}
+) {
   return post({
-    url: `/favorites/collections/${cid}`,
+    url: `/favorites/collections`,
     ...RLC,
     data: {
-      collection_id: cid,
-    },
+      type,
+      cid,
+      fid
+    }
   });
 }
 
@@ -131,8 +138,8 @@ export function modifyName(name: string, favorite_id: string | number, RLC: Requ
     ...RLC,
     data: {
       name,
-      favorite_id,
-    },
+      favorite_id
+    }
   });
 }
 
@@ -154,8 +161,8 @@ export function modifyRemark(
     ...RLC,
     data: {
       remark,
-      favorite_id,
-    },
+      favorite_id
+    }
   });
 }
 
@@ -177,7 +184,7 @@ export function modifyPrivate(
     ...RLC,
     data: {
       is_private,
-      favorite_id,
-    },
+      favorite_id
+    }
   });
 }

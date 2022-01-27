@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-23 21:16:25
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-27 16:25:51
+ * @LastEditTime: 2022-01-27 20:20:14
 -->
 <template>
   <div
@@ -109,7 +109,7 @@ export default defineComponent({
   },
   setup(props, context) {
     const menu = ['综合', '最新', '热门']; // 0 1 2
-    const selectMenu = ['时间不限', '最近一天', '最近一周', '最近三月'];
+    const selectMenu = ['时间不限', '最近一天', '最近一周', '最近一月'];
     const rankMenu = ['3天内', '7天内', '30天内', '全部'];
     const npopoverRef = ref(null); //n-popover引用对象
 

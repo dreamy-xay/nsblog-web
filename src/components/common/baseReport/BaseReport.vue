@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2022-01-19 22:18:34
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-20 21:09:33
+ * @LastEditTime: 2022-01-27 13:35:39
 -->
 <template>
   <n-modal
@@ -72,7 +72,7 @@ import { defineComponent, ref } from 'vue';
 
 /**
  * @description:举报页面
- * @param {Boolean} isShow 是否显示收藏夹界面 `默认为false`
+ * @param {Boolean} isShow 是否显示举报界面 `默认为false`
  * @author: xiao
  */
 
