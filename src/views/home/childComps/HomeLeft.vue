@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2022-01-17 10:18:16
  * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-27 11:20:48
+ * @LastEditTime: 2022-01-27 21:13:04
 -->
 <template>
   <div class="home-left">
@@ -17,10 +17,9 @@
         @changeSelect="changeTime"
       />
     </div>
-    <div class="home-left-line"></div>
 
     <div class="home-left-middle">
-      <base-article-item
+      <article-item
         v-for="article in allArticles[typeIndex]"
         :key="article"
         :articleItem="article"
@@ -42,11 +41,13 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref, watch } from 'vue';
+import { useMessage } from 'naive-ui';
+import { mapGetters } from '@/util/store';
 import { getArticles } from '@/network/api/articles';
+import { defineComponent, reactive, ref, watch } from 'vue';
+import ArticleItem from '@/views/tag/childComps/ArticleItem.vue';
 import { modifyArticleRecommendEvaluation } from '@/network/api/articles';
 import BaseSelectHead from '@/components/common/baseSelectHead/BaseSelectHead.vue';
-import BaseArticleItem from '@/components/common/baseArticleItem/BaseArticleItem.vue';
 
 export default defineComponent({
   name: 'homeLeft',
@@ -65,10 +66,11 @@ export default defineComponent({
     },
   },
   components: {
+    ArticleItem,
     BaseSelectHead,
-    BaseArticleItem,
   },
   setup(props) {
+    const msg = useMessage();
     const listIndex = ref(0);
     const timeIndex = ref(0);
     const allArticles = reactive([[], [], [], [], [], []]);
@@ -76,6 +78,7 @@ export default defineComponent({
     const tag = ref('');
     const limit = ref(7);
     const typeIndex = ref(0);
+    const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
 
     initArticlesHome('', '', '', 0, limit.value, 0, 0, topic.value, tag.value, typeIndex.value);
 
@@ -162,17 +165,21 @@ export default defineComponent({
     }
 
     function changeLike(article) {
-      const res = ref(0);
-      if (article.recommend === 0) res.value = 1;
-      modifyArticleRecommendEvaluation(article.id, res.value)
-        .then(() => {
-          article.recommend = res.value;
-          if (res.value === 1) article.recommend_count++;
-          else article.recommend_count--;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      if (isLogin.value) {
+        const res = ref(0);
+        if (article.recommend === 0) res.value = 1;
+        modifyArticleRecommendEvaluation(article.id, res.value)
+          .then(() => {
+            article.recommend = res.value;
+            if (res.value === 1) article.recommend_count++;
+            else article.recommend_count--;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        msg.error('请先登录');
+      }
     }
 
     return {
@@ -214,7 +221,7 @@ export default defineComponent({
   }
 
   .home-left-middle {
-    margin: 12px 20px 16px;
+    margin: 12px 0 16px;
   }
 
   .home-left-bottom {

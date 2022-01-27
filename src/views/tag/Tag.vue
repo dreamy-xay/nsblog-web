@@ -4,12 +4,13 @@
  * @Autor: continue-hs
  * @Date: 2022-01-24 18:20:31
  * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-27 17:44:07
+ * @LastEditTime: 2022-01-27 21:11:46
 -->
 <template>
   <base-view
     :background="true"
     :top-bar="true"
+    :footer="true"
     bind-class="tag"
   >
     <div class="tag-container">
@@ -35,13 +36,12 @@
             />
           </div>
         </div>
-        <div class="middle-line"></div>
         <div class="middle-article">
-          <base-article-item
+          <article-item
             v-for="article in tagArticles[typeIndex]"
             :key="article"
             :articleItem="article"
-            :swidth="1000"
+            :swidth="960"
             @change-like="changeLike(article)"
           />
         </div>
@@ -63,6 +63,7 @@
 </template>
 
 <script>
+import { useMessage } from 'naive-ui';
 import { useRoute } from 'vue-router';
 import { mapGetters } from '@/util/store';
 import { getTagDetails } from '@/network/api/topics';
@@ -71,10 +72,10 @@ import TagTop from '@/views/tag/childComps/TagTop.vue';
 import { addUserTag, delUserTag } from '@/network/api/user';
 import { defineComponent, reactive, ref, watch } from 'vue';
 import TagButton from '@/views/tag/childComps/TagButton.vue';
+import ArticleItem from '@/views/tag/childComps/ArticleItem.vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import { modifyArticleRecommendEvaluation } from '@/network/api/articles';
 import BaseSelectHead from '@/components/common/baseSelectHead/BaseSelectHead.vue';
-import BaseArticleItem from '@/components/common/baseArticleItem/BaseArticleItem.vue';
 
 export default defineComponent({
   name: 'tag',
@@ -82,10 +83,11 @@ export default defineComponent({
     TagTop,
     BaseView,
     TagButton,
+    ArticleItem,
     BaseSelectHead,
-    BaseArticleItem,
   },
   setup() {
+    const msg = useMessage();
     const route = useRoute(); // route
     const tagName = route.params.tagName;
     const listIndex = ref(0);
@@ -198,17 +200,21 @@ export default defineComponent({
      * @author: continue-hs
      */
     function changeLike(article) {
-      const res = ref(0);
-      if (article.recommend === 0) res.value = 1;
-      modifyArticleRecommendEvaluation(article.id, res.value)
-        .then(() => {
-          article.recommend = res.value;
-          if (res.value === 1) article.recommend_count++;
-          else article.recommend_count--;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      if (isLogin.value) {
+        const res = ref(0);
+        if (article.recommend === 0) res.value = 1;
+        modifyArticleRecommendEvaluation(article.id, res.value)
+          .then(() => {
+            article.recommend = res.value;
+            if (res.value === 1) article.recommend_count++;
+            else article.recommend_count--;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        msg.error('请先登录');
+      }
     }
 
     /**
@@ -289,17 +295,12 @@ export default defineComponent({
         @include flex(center);
 
         .middle-top-button {
-          margin-left: 525px;
+          margin-left: 650px;
         }
       }
 
-      .middle-line {
-        height: 1px;
-        border-bottom: 1px solid $grey-2;
-      }
-
       .middle-article {
-        margin: 12px 20px 16px;
+        margin: 12px 0 16px;
       }
     }
 
