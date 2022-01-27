@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: xiao
- * @LastEditTime: 2022-01-27 16:58:02
+ * @LastEditors: continue-hs
+ * @LastEditTime: 2022-01-27 17:47:35
 -->
 <template>
   <base-view
@@ -47,13 +47,13 @@
 
 <script>
 import { defineComponent, reactive, ref } from 'vue';
+import HomeLeft from '@/views/home/childComps/HomeLeft.vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
+import HomeRight from '@/views/home/childComps/homeRight/HomeRight.vue';
 import BaseTopicBar from '@/components/common/baseTopicBar/BaseTopicBar.vue';
 import BaseTopicTags from '@/components/common/baseTopicBar/BaseTopicTags.vue';
 // import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
-import HomeRight from '@/views/home/childComps/homeRight/HomeRight.vue';
 import BaseQrCodePopover from '@/components/content/baseQrCodePopover/BaseQrCodePopover.vue';
-import HomeLeft from '@/views/home/childComps/HomeLeft.vue';
 
 /**
  * @description: 博客主页
@@ -61,7 +61,7 @@ import HomeLeft from '@/views/home/childComps/HomeLeft.vue';
  */
 
 export default defineComponent({
-  name: 'Home',
+  name: 'home',
   components: {
     BaseView,
     BaseTopicBar,
