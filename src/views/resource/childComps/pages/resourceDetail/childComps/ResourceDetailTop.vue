@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-24 21:42:19
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-26 21:54:38
+ * @LastEditTime: 2022-01-27 06:28:24
 -->
 <template>
   <div class="resource-detail-top">
@@ -63,6 +63,8 @@
 <script>
 import { defineComponent } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
+import BaseReport from '@/components/common/baseReport/BaseReport.vue';
+import BaseFavorite from '@/components/common/baseFavorite/BaseFavorite.vue';
 
 /**
  * @description: 资源详细信息页面top

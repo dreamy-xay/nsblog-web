@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-26 14:39:54
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-01-27 13:12:30
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -259,11 +259,14 @@ export default function(baseUrl: string, app: Application) {
 
   // 获取文章详情
   app.get(baseUrl + '/articles/:article_id(\\d+)', (req: Request, res: Response) => {
+    if (Random.integer(0, 1) && req.query.password !== '123') return res.status(403).json({ error: 'Password error' }); // 模拟需要密码
+
     const username: string = verifyToken(req.headers) ? getToken(req.headers).username : '';
+    const { password } = req.body;
 
     const { article_id } = req.params;
 
-    print('get detail articles', { username, article_id });
+    print('get detail articles', { username, article_id, password });
 
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = [];
@@ -386,7 +389,7 @@ export default function(baseUrl: string, app: Application) {
     }
 
     const data: Record<string, unknown> = {
-      ...(tag || category ? { page_count: 12 } : {}),
+      ...{ page_count: 12 },
       ...(tag ? { tag_name: Random.integer(0, 1) ? Random.word(3, 8) : Random.cword(2, 5) } : {}),
       ...(category ? { category_name: Random.integer(0, 1) ? Random.word(3, 8) : Random.cword(2, 5) } : {})
     };
@@ -395,6 +398,16 @@ export default function(baseUrl: string, app: Application) {
       articles: getRandom(int(page) === 12 ? Random.integer(1, 10) : 10),
       ...data
     });
+  });
+
+  // 验证文章密码
+  app.post(baseUrl + '/articles/password', (req: Request, res: Response) => {
+    const { article_id, password } = req.body;
+
+    print('verify the article password', { article_id, password });
+
+    if (password === '123') return res.send();
+    else return res.status(403).json({ error: 'Password error' });
   });
 }
 

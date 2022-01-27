@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-25 13:17:52
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-26 21:51:41
+ * @LastEditTime: 2022-01-27 15:23:44
 -->
 <template>
   <div
@@ -39,7 +39,7 @@
             class="name"
             role="button"
             @click="clickButton(2,index)"
-          >Build</div>
+          >{{item.nickname}}</div>
           <div class="time">{{item.upload_time}}</div>
         </div>
       </div>

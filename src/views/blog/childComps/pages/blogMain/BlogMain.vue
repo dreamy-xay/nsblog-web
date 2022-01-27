@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-29 16:58:46
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-26 20:11:12
+ * @LastEditTime: 2022-01-27 13:08:12
 -->
 <template>
   <div class="blog-main">
@@ -70,11 +70,17 @@ export default defineComponent({
         .then((data) => {
           console.log(data);
           if (route.query.page != null) {
-            parseInt(data.page_count) >= route.query.page
-              ? route.query.page > 0
-                ? (page.value = parseInt(route.query.page))
-                : (page.value = 1)
-              : (page.value = parseInt(data.page_count));
+            if (parseInt(data.page_count) >= route.query.page) {
+              if (route.query.page > 0) {
+                page.value = parseInt(route.query.page);
+              } else {
+                page.value = 1;
+                changePage({ page: page.value });
+              }
+            } else {
+              page.value = parseInt(data.page_count);
+              changePage({ page: page.value });
+            }
           }
           pageCount.value = parseInt(data.page_count);
           if (text.value != null)

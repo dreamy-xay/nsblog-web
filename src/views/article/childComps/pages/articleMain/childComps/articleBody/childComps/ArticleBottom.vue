@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-09-20 12:06:41
- * @LastEditors: clq
- * @LastEditTime: 2021-09-28 18:06:14
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-26 17:56:25
 -->
 <template>
   <div class="article-bottom">
@@ -126,7 +126,7 @@
 import { defineComponent, onMounted } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import ArticleLink from '@/views/article/childComps/ArticleLink.vue';
-import ArticleBottomComp from '@/views/article/childComps/articleBody/childComps/ArticleBottomComp.vue';
+import ArticleBottomComp from '@/views/article/childComps/pages/articleMain/childComps/articleBody/childComps/ArticleBottomComp.vue';
 import styles from '@/assets/style/define.scss';
 
 /**

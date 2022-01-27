@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-16 10:05:10
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-22 15:22:24
+ * @LastEditTime: 2022-01-25 19:20:26
  */
 
 import { get, post, RequestLifeCycle } from '@/network/request';
@@ -12,6 +12,7 @@ import { get, post, RequestLifeCycle } from '@/network/request';
 /**
  * @description: 获取学习小组
  * @param {string} username 用户名 '必传'
+ * @param {string} topic_name 专栏名称 `默认为空`
  * @param {number} offset 数据库历史记录偏移量 `默认为0`
  * @param {number} limit 返回学习小组的最大数量 `默认位10`
  * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
@@ -21,6 +22,7 @@ import { get, post, RequestLifeCycle } from '@/network/request';
 
 export function getGroups(
   username: string,
+  topic_name: string = '',
   offset: number = 0,
   limit: number = 10,
   RLC: RequestLifeCycle = {}
@@ -30,6 +32,7 @@ export function getGroups(
     ...RLC,
     params: {
       username,
+      topic_name,
       limit,
       offset
     }

@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-09-20 19:56:13
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-14 15:28:42
+ * @LastEditors: xiao
+ * @LastEditTime: 2022-01-26 22:26:08
 -->
 <template>
   <div class="article-bottom-comp">
@@ -80,7 +80,7 @@
           role="button"
           @click="onCollect"
         >
-          {{data.collection === 1 ? "已收藏" : "收藏"}}
+          {{data.collection != null ? "已收藏" : "收藏"}}
         </div>
         <div
           class="btn"
@@ -115,18 +115,25 @@
       </div>
     </div>
   </div>
+  <base-modal
+    content="确定要取消收藏嘛"
+    :show="modalShow"
+    @confirm="delCollection"
+    @cancel="close"
+  />
 </template>
 
 <script>
 import { defineComponent, ref } from 'vue';
 import BaseTag from '@/components/content/baseTag/BaseTag.vue';
 import ArticleLink from '@/views/article/childComps/ArticleLink.vue';
-import ArticleBottomSponsor from '@/views/article/childComps/articleBody/childComps/ArticleBottomSponsor.vue';
+import ArticleBottomSponsor from '@/views/article/childComps/pages/articleMain/childComps/articleBody/childComps/ArticleBottomSponsor.vue';
 import styles from '@/assets/style/define.scss';
 import { useMessage } from 'naive-ui';
 import { mapGetters } from '@/util/store';
 import events from '@/events';
 import BaseFavorite from '@/components/common/baseFavorite/BaseFavorite.vue';
+import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 
 /**
  * @description: 文章底部子组件
@@ -144,6 +151,7 @@ export default defineComponent({
     ArticleLink,
     ArticleBottomSponsor,
     BaseFavorite,
+    BaseModal,
   },
   props: {
     data: {
@@ -156,6 +164,7 @@ export default defineComponent({
     const { isLogin } = mapGetters('global', ['isLogin']);
     const show = ref(false);
     const b = ref(b);
+    const modalShow = ref(false); //取消收藏提示
 
     /**
      * @description: 判断用户是否登录
@@ -195,16 +204,31 @@ export default defineComponent({
     function onCollect() {
       if (!isUserLogin()) return;
       console.log('onCollect');
-      if (props.data.collection === 0) {
-        console.log(props.data.collection);
+      if (props.data.collection == null) {
         show.value = true;
       } else {
-        //收藏夹数量减一
-        console.log('bbb', b.value);
-        b.value.delCollection();
-        console.log(props.data.collection);
-        // events.emit('ArticleBottomComp-changeCollection', 0); //取消收藏
+        modalShow.value = true;
       }
+    }
+
+    /**
+     * @description: 取消收藏
+     * @return {void}
+     * @author: xiao
+     */
+    function delCollection() {
+      modalShow.value = false;
+      b.value.delCollection(props.data.collection);
+    }
+
+    /**
+     * @description: 关闭提示框
+     * @param {*}
+     * @return {*}
+     * @author: xiao
+     */
+    function close() {
+      modalShow.value = false;
     }
 
     /**
@@ -245,6 +269,9 @@ export default defineComponent({
       onOppose,
       show,
       b,
+      modalShow,
+      delCollection,
+      close,
     };
   },
 });
