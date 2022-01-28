@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-21 23:15:38
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-27 16:47:11
+ * @LastEditTime: 2022-01-28 13:02:28
 -->
 <template>
   <div class="resource-home">
@@ -126,6 +126,7 @@ export default defineComponent({
       () => {
         resourceData.splice(0, offest.value);
         offest.value = 0;
+        showButton.value = true;
         getMessage();
       }
     );
