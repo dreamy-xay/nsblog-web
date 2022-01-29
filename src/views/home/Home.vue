@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-25 15:23:24
+ * @LastEditTime: 2022-01-27 17:47:35
 -->
 <template>
   <base-view
@@ -36,19 +36,24 @@
         <home-right />
       </div>
     </div>
-    <QuesitionDetailInvitation></QuesitionDetailInvitation>
+    <base-qr-code-popover
+      value="https://www.baidu.com"
+      title="扫一扫，分享网站"
+    >
+      <button>二维码显示 百度</button>
+    </base-qr-code-popover>
   </base-view>
 </template>
 
 <script>
 import { defineComponent, reactive, ref } from 'vue';
+import HomeLeft from '@/views/home/childComps/HomeLeft.vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
+import HomeRight from '@/views/home/childComps/homeRight/HomeRight.vue';
 import BaseTopicBar from '@/components/common/baseTopicBar/BaseTopicBar.vue';
 import BaseTopicTags from '@/components/common/baseTopicBar/BaseTopicTags.vue';
 // import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
-import HomeRight from '@/views/home/childComps/homeRight/HomeRight.vue';
-import QuesitionDetailInvitation from '@/views/question/chldComps/QuesitionDetailInvitation';
-import HomeLeft from '@/views/home/childComps/HomeLeft.vue';
+import BaseQrCodePopover from '@/components/content/baseQrCodePopover/BaseQrCodePopover.vue';
 
 /**
  * @description: 博客主页
@@ -56,14 +61,14 @@ import HomeLeft from '@/views/home/childComps/HomeLeft.vue';
  */
 
 export default defineComponent({
-  name: 'Home',
+  name: 'home',
   components: {
     BaseView,
     BaseTopicBar,
     BaseTopicTags,
     HomeLeft,
     HomeRight,
-    QuesitionDetailInvitation,
+    BaseQrCodePopover,
   },
   setup() {
     const topicSelect = ref('');

@@ -4,35 +4,48 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-10 20:39:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-21 17:19:34
+ * @LastEditTime: 2022-01-29 15:19:58
 -->
 
 <template>
-  <div class="base-footer">
-    <div v-if="isShow">
+  <div
+    class="base-footer"
+    :style="{height: showAll ? '122px' : '50px'}"
+  >
+    <div v-if="showAll">
       <div class="base-footer-first">
         <a
           v-for="(content, index) in contents"
           :key="index"
           :href="content.url"
+          :target="content.url"
+          role="button"
         >
           {{content.name}}
         </a>
       </div>
       <div class="base-footer-second">
         <a
+          v-for="(title, index) in titles"
           :href="title.url"
-          v-for="(title,index) in titles"
+          :target="title.url"
           :key="index"
+          role="button"
         >
           <i :class="title.icon"></i>
         </a>
       </div>
     </div>
 
-    <div class="base-footer-third">
+    <div
+      class="base-footer-third"
+      :style="{marginBottom: showAll ? '12px' : null}"
+    >
       <div>© 2021 ·</div>
-      <a href="/">笔记分享部落阁</a>
+      <a
+        href="/"
+        target="/"
+      >笔记分享部落阁</a>
       <div>· ALL RIGHTS RESERVED</div>
     </div>
   </div>
@@ -40,18 +53,18 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 
 /**
  * @description: 页脚
- * @param {Boolean} isShow 是否显示前两行 `默认为true`
+ * @param {Boolean} showAll 是否全部 `默认为true`
  * @author: dreamy-xay
  */
 
 export default defineComponent({
   name: 'baseFooter',
   props: {
-    isShow: {
+    showAll: {
       type: Boolean,
       default: true,
     },
@@ -66,7 +79,7 @@ export default defineComponent({
       },
       {
         name: '邮箱',
-        url: '',
+        url: 'mailto:nsblog@163.com',
         icon: 'iconfont blog-email',
       },
     ];
@@ -74,15 +87,15 @@ export default defineComponent({
       //第一行文字
       {
         name: '关于',
-        url: '',
+        url: '/user/nsblog',
       },
       {
         name: '博客',
-        url: '',
+        url: '/blog/nsblog',
       },
       {
         name: '网站',
-        url: '',
+        url: '/',
       },
     ];
 
@@ -97,7 +110,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 .base-footer {
   width: 100%;
-  height: 122px;
   background: $grey-0;
   box-shadow: $shadow-0;
   margin-top: 20px;
@@ -139,11 +151,15 @@ export default defineComponent({
     font-size: 14px;
     color: $grey-7;
     height: 20px;
-    margin-bottom: 14px;
 
     a {
       color: $grey-7;
       margin: 0px 5px;
+      transition: 0.25s;
+
+      &:hover {
+        color: $grey-10;
+      }
     }
   }
 }

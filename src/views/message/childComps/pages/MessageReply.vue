@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:25:27
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-24 14:15:33
+ * @LastEditTime: 2022-01-26 16:43:05
 -->
 
 <template>
@@ -124,6 +124,7 @@ import { dateFormat } from '@/util/date.ts';
 import { mapMutations, mapState } from '@/util/store';
 import { useMessage } from 'naive-ui';
 import { useRoute } from 'vue-router';
+import { modifyArticleCommentEvaluation } from '@/network/api/articles';
 
 /**
  * @description: 回复我的页面
@@ -254,8 +255,15 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function changeEvaluation(index, num) {
-      if (replyData[index].content.evaluation == num) replyData[index].content.evaluation = 2;
-      else replyData[index].content.evaluation = num;
+      modifyArticleCommentEvaluation(replyData[index].message_id, replyData[index].content.evaluation == num ? 2 : num)
+        .then(() => {
+          if (replyData[index].content.evaluation == num) replyData[index].content.evaluation = 2;
+          else replyData[index].content.evaluation = num;
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('评论失败，请重试', { duration: 2000, closable: true });
+        });
     }
 
     return {

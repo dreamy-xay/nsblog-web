@@ -1,10 +1,10 @@
 <!--
- * @Description:资源页面
+ * @Description: 资源页面
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2022-01-21 23:15:38
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-25 23:34:05
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-29 15:42:01
 -->
 <template>
   <base-view

@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-20 19:56:13
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-26 22:26:08
+ * @LastEditTime: 2022-01-27 19:09:00
 -->
 <template>
   <div class="article-bottom-comp">
@@ -57,6 +57,8 @@
 
       <base-favorite
         v-model:isShow="show"
+        :cid="data.article_id"
+        :type="1"
         ref="b"
       >
       </base-favorite>
@@ -203,7 +205,6 @@ export default defineComponent({
      */
     function onCollect() {
       if (!isUserLogin()) return;
-      console.log('onCollect');
       if (props.data.collection == null) {
         show.value = true;
       } else {
@@ -218,13 +219,12 @@ export default defineComponent({
      */
     function delCollection() {
       modalShow.value = false;
-      b.value.delCollection(props.data.collection);
+      events.emit('ArticleBottomComp-cacelCollection', props.data.collection); //取消收藏
     }
 
     /**
      * @description: 关闭提示框
-     * @param {*}
-     * @return {*}
+     * @return {void}
      * @author: xiao
      */
     function close() {

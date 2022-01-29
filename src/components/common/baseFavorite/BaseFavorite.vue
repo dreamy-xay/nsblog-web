@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2021-09-27 17:17:24
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-26 20:59:02
+ * @LastEditTime: 2022-01-27 19:35:58
 -->
 <template>
   <n-modal
@@ -34,15 +34,13 @@
         <div
           class="bottom-button"
           role="button"
-          @click="addCollection"
+          @click="addCollection(id)"
         >
           <div class="buttom-button-text">确定</div>
         </div>
       </div>
     </div>
-
   </n-modal>
-
 </template>
 
 <script>
@@ -51,14 +49,13 @@ import BaseFavoriteList from '@/components/common/baseFavorite/childComps/BaseFa
 import { getFavorites } from '@/network/api/favorites';
 import { useMessage } from 'naive-ui';
 import events from '@/events';
-import { cancelCollections } from '@/network/api/favorites';
 import { addCollections } from '@/network/api/favorites';
 
 /**
  * @description: 收藏夹界面
  * @param {Boolean} isShow 是否显示收藏夹界面 `默认为false`
- * @event closeFavorite 关闭收藏夹界面事件
- * @event ArticleBottomComp-changeCollection 添加或取消收藏
+ * @param {number | string} type 收藏的类型1为文章、2为问答、3为资源 `必传参数`
+ * @param {number | string} cid 要收藏的内容的id `必传参数`
  * @author: xiao
  */
 
@@ -70,12 +67,19 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    type: {
+      type: String,
+      default: '',
+    },
+    cid: {
+      type: String,
+      default: '',
+    },
   },
-  setup(_, context) {
+  setup(props, context) {
     const msg = useMessage(); // naive-ui 组件
     const favorites = reactive([]); // 收藏夹数据
     const id = ref(null);
-    const cancel = ref(null);
 
     // 获取收藏夹数据
     getFavorites('dreamy', 0)
@@ -85,7 +89,7 @@ export default defineComponent({
       })
       .catch((error) => {
         console.log(error);
-        msg.error('获取登录日志失败', { duration: 2000, closable: true });
+        msg.error('获取收藏夹数据失败', { duration: 2000, closable: true });
       });
 
     /**
@@ -109,23 +113,23 @@ export default defineComponent({
 
     /**
      * @description: 添加收藏
-     * @param {number | string} id 添加收藏的id
+     * @param {number | string} fid 收藏夹的id
      * @return {Void}
      * @author: xiao
      */
-    function addCollection() {
-      events.emit('ArticleBottomComp-changeCollection', id.value); //收藏
+    function addCollection(fid) {
+      addCollections(props.type, props.cid, fid)
+        .then(() => {
+          msg.success(`收藏成功`);
+          if (props.type === 1) {
+            events.emit('ArticleBottomComp-changeCollection', fid); //收藏
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          msg.error(`收藏失败`, { duration: 2000, closable: true });
+        });
       context.emit('update:isShow', false);
-    }
-
-    /**
-     * @description: 取消收藏
-     * @param {number | string} favoriteId 取消收藏的id
-     * @return {Void}
-     * @author: xiao
-     */
-    function delCollection(favoriteId) {
-      events.emit('ArticleBottomComp-cacelCollection', favoriteId); //取消收藏
     }
 
     /**
@@ -156,10 +160,10 @@ export default defineComponent({
     return {
       favorites,
       close,
+      id,
       addCollection,
       childFavorite,
       newFavorite,
-      delCollection,
     };
   },
 });

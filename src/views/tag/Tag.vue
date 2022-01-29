@@ -3,155 +3,327 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2022-01-24 18:20:31
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-25 21:33:51
+ * @LastEditors: continue-hs
+ * @LastEditTime: 2022-01-27 21:11:46
 -->
 <template>
-  <div class="tag">
-    <!-- <div class="tag-top">
-      <div class="tag-top-text">
-        <div class="tag">
-          <div class="tag-text">SpringBoot</div>
+  <base-view
+    :background="true"
+    :top-bar="true"
+    :footer="true"
+    bind-class="tag"
+  >
+    <div class="tag-container">
+      <div class="top">
+        <tag-top :detail="detail" />
+      </div>
+      <div class="middle">
+        <div class="middle-top">
+          <base-select-head
+            :selectTag="listIndex"
+            :selectTime="timeIndex"
+            :type=false
+            @changeTag="changeList"
+            @changeSelect="changeTime"
+          />
+          <div
+            class="middle-top-button"
+            v-if="isLogin"
+          >
+            <tag-button
+              :detail="detail"
+              @click-attention="clickAttention"
+            />
+          </div>
         </div>
-        <div class="content">
-          <div class="content-text">Web前端开发是从网页制作演变而来的，名称上有很明显的时代特征。在互联网的演化进程中，网页制作是Web 1.0时代在互联网的演化进程中，网页制作是Web 1.0时代 </div>
+        <div class="middle-article">
+          <article-item
+            v-for="article in tagArticles[typeIndex]"
+            :key="article"
+            :articleItem="article"
+            :swidth="960"
+            @change-like="changeLike(article)"
+          />
         </div>
       </div>
-      <div class="message">
-        <div class="attention">13600关注</div>
-        <div class="dot"></div>
-        <div class="article">122文章</div>
+      <div class="bottom">
+        <div
+          class="bottom-load"
+          role="button"
+          @click="uploadMore"
+        >
+          <div class="bottom-load-text">
+            加载更多...
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="home-page-tag-bottom">
-      <div class="home-page-tag-bottom-top">
-        <div
-          class="home-page-tag-bottom-top-list"
-          v-for="(item,index) in topList"
-          :key="index"
-          :class="{active:index === listIndex}"
-          role="button"
-          @click="changeList(index)"
-        >
-          {{item}}
-        </div>
-        <base-select
-          v-if="listIndex === 2"
-          :swidth="74"
-          :spaddingTop="8"
-          :spaddingLeft="10"
-          :showText="selectTag"
-          :sdata="timeList"
-          @changeItem="changeTime($event)"
-        />
-      </div>
-
-      <div class="home-page-tag-bottom-middle">
-        <home-item
-          v-for="article in articles[typeIndex]"
-          :key="article"
-          :articleItem="article"
-          :swidth="960"
-        />
-      </div>
-    </div> -->
-
-  </div>
+  </base-view>
 </template>
+
 <script>
-import { defineComponent, reactive, ref } from 'vue';
-import BaseSelect from '@/components/content/baseSelect/BaseSelect.vue';
-import HomeItem from '@/views/home/childComps/HomeItem.vue';
+import { useMessage } from 'naive-ui';
 import { useRoute } from 'vue-router';
+import { mapGetters } from '@/util/store';
+import { getTagDetails } from '@/network/api/topics';
+import { getArticles } from '@/network/api/articles';
+import TagTop from '@/views/tag/childComps/TagTop.vue';
+import { addUserTag, delUserTag } from '@/network/api/user';
+import { defineComponent, reactive, ref, watch } from 'vue';
+import TagButton from '@/views/tag/childComps/TagButton.vue';
+import ArticleItem from '@/views/tag/childComps/ArticleItem.vue';
+import BaseView from '@/components/content/baseView/BaseView.vue';
+import { modifyArticleRecommendEvaluation } from '@/network/api/articles';
+import BaseSelectHead from '@/components/common/baseSelectHead/BaseSelectHead.vue';
 
 export default defineComponent({
   name: 'tag',
   components: {
-    // BaseSelect,
-    // HomeItem,
+    TagTop,
+    BaseView,
+    TagButton,
+    ArticleItem,
+    BaseSelectHead,
   },
   setup() {
+    const msg = useMessage();
     const route = useRoute(); // route
     const tagName = route.params.tagName;
-    const topList = reactive(['热门', '最新', '排行']);
     const listIndex = ref(0);
-    const timeList = reactive(['3天内', '7天内', '30天内', '全部']);
-    const selectTag = ref('3天内');
     const timeIndex = ref(0);
+    const tagArticles = reactive([[], [], [], [], [], []]);
+    const limit = ref(7);
+    const typeIndex = ref(0);
+    const detail = reactive({
+      name: '',
+      remark: '',
+      article_count: 0,
+      attention_count: 0,
+      attention: 0,
+    });
+    const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
 
-    console.log(tagName);
+    initArticlesTag('', '', '', 0, limit.value, 0, 0, '', tagName, typeIndex.value);
 
+    // 监听列表下标变化
+    watch(
+      () => listIndex.value,
+      (data) => {
+        typeIndex.value = data + timeIndex.value;
+      }
+    );
+
+    // 监听下拉框下标变化
+    watch(
+      () => timeIndex.value,
+      (data) => {
+        typeIndex.value = data + listIndex.value;
+      }
+    );
+
+    // 监听文章类型列表下标变化
+    watch(
+      () => typeIndex.value,
+      (data) => {
+        typeIndex.value = data;
+        limit.value = 7;
+        initArticlesTag('', '', '', 0, limit.value, 0, 0, '', tagName, typeIndex.value);
+      }
+    );
+
+    /**
+     * @description: 获取文章详情
+     * @return {void}
+     * @author: continue-hs
+     */
+    getTagDetails(tagName)
+      .then((res) => {
+        detail.name = res.name;
+        detail.remark = res.remark;
+        detail.article_count = res.article_count;
+        detail.attention_count = res.attention_count;
+        detail.attention = res.attention;
+        console.log(detail);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    /**
+     * @description: 初始化文章列表
+     * @return {void}
+     * @author: continue-hs
+     */
+    function initArticlesTag(
+      username,
+      category,
+      tag,
+      offset,
+      limit,
+      release_time,
+      browsing_count,
+      topic_name,
+      tag_name,
+      type
+    ) {
+      getArticles(username, category, tag, offset, limit, release_time, browsing_count, topic_name, tag_name, type)
+        .then((res) => {
+          tagArticles[type].splice(0, tagArticles[type].length, ...res.articles);
+        })
+        .catch((error) => {
+          console.log('initArticlesHomeError: ' + error);
+        });
+    }
+
+    /**
+     * @description: 改变列表下标
+     * @return {void}
+     * @author: continue-hs
+     */
     function changeList(index) {
-      listIndex.value = index;
+      listIndex.value = index.index;
     }
 
-    function changeTime($event) {
-      timeIndex.value = $event;
-      selectTag.value = timeList[$event];
+    /**
+     * @description: 改变下拉框下标
+     * @return {void}
+     * @author: continue-hs
+     */
+    function changeTime(index) {
+      timeIndex.value = index.index;
     }
 
+    /**
+     * @description: 改变文章点赞情况
+     * @return {void}
+     * @author: continue-hs
+     */
+    function changeLike(article) {
+      if (isLogin.value) {
+        const res = ref(0);
+        if (article.recommend === 0) res.value = 1;
+        modifyArticleRecommendEvaluation(article.id, res.value)
+          .then(() => {
+            article.recommend = res.value;
+            if (res.value === 1) article.recommend_count++;
+            else article.recommend_count--;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        msg.error('请先登录');
+      }
+    }
+
+    /**
+     * @description: 加载更多
+     * @return {void}
+     * @author: continue-hs
+     */
+    function uploadMore() {
+      limit.value += 7;
+      initArticlesTag('', '', '', 0, limit.value, 0, 0, '', tagName, typeIndex.value);
+    }
+
+    /**
+     * @description: 改变标签关注情况
+     * @return {void}
+     * @author: continue-hs
+     */
+    function clickAttention() {
+      if (detail.attention === 1) {
+        delUserTag(tagName)
+          .then(() => {
+            detail.attention = 0;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        addUserTag(tagName)
+          .then(() => {
+            detail.attention = 1;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    }
     return {
-      topList,
+      detail,
+      isLogin,
       listIndex,
-      timeList,
-      selectTag,
       timeIndex,
+      typeIndex,
+      tagArticles,
       changeList,
       changeTime,
+      changeLike,
+      uploadMore,
+      clickAttention,
     };
   },
 });
 </script>
 
 <style lang="scss" scoped>
-.home-page-tag {
-  .home-page-tag-top {
-    .home-page-tag-top-text {
-      .tag {
-        .tag-text {
-          height: 30px;
-          font-size: 26px;
-          font-weight: 700;
-          text-align: left;
-          color: #595959;
+:deep(.tag) {
+  @include flex(center, center, column);
+
+  .tag-container {
+    width: 1000px;
+    margin-bottom: 6px;
+
+    .top {
+      height: 162px;
+      background: $grey-0;
+      border-radius: 8px;
+      margin-top: 16px;
+      box-shadow: $shadow-0;
+      @include flex(initial, center);
+    }
+
+    .middle {
+      margin-top: 16px;
+      background: $grey-0;
+      border-radius: 8px;
+      box-shadow: $shadow-0;
+
+      .middle-top {
+        @include flex(center);
+
+        .middle-top-button {
+          margin-left: 650px;
         }
       }
 
-      .content {
-        .content-text {
-          width: 800px;
-          height: 18px;
-          font-size: 15px;
-          font-weight: Narrow;
-          text-align: left;
-          color: #8c8c8c;
-          line-height: 18px;
-        }
-      }
-
-      .message {
-        height: 19px;
-        font-size: 14px;
-        font-weight: 400;
-        text-align: left;
-        color: #707070;
+      .middle-article {
+        margin: 12px 0 16px;
       }
     }
-  }
 
-  .home-page-tag-bottom {
-    width: 700px;
-    .home-page-tag-bottom-top {
-      height: 46px;
-      @include flex(center);
-      .home-page-tag-bottom-top-list {
-        margin: 16px;
-        font-size: 14px;
-        font-weight: 400;
+    .bottom {
+      width: 100%;
+      @include flex(initial, center);
 
-        &.active {
-          color: #4bd8aa;
+      .bottom-load {
+        width: 300px;
+        height: 32px;
+        background: $grey-0;
+        border-radius: 8px;
+        box-shadow: $shadow-0;
+        @include flex(cneter, center);
+
+        .bottom-load-text {
+          width: 68px;
+          height: 19px;
+          font-size: 14px;
+          font-weight: 400;
+          text-align: center;
+          color: $grey-9;
+          margin-top: 7px;
         }
       }
     }
