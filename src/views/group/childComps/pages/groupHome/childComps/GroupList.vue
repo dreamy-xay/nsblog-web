@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: xiao
  * @Date: 2022-01-14 18:52:17
- * @LastEditors: xiao
- * @LastEditTime: 2022-01-27 19:34:49
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-29 15:54:25
 -->
 <template>
   <div class="group-list">
@@ -91,7 +91,6 @@ export default defineComponent({
     studyGroups: {
       type: Array,
       required: true,
-      default: null,
     },
   },
 

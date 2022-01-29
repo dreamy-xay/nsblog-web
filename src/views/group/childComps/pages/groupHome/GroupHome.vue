@@ -4,31 +4,31 @@
  * @Autor: xiao
  * @Date: 2022-01-21 19:42:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-29 14:38:59
+ * @LastEditTime: 2022-01-29 15:52:40
 -->
 <template>
   <base-view
     :background="true"
     :top-bar="true"
     :top-bar-scroll="true"
-    bind-class="group"
+    bind-class="group-home"
   >
     <template #top-bar-bottom>
       <base-topic-bar
         :details="false"
-        :firstItem="'全部'"
+        first-item="全部"
         @selectTopic="selectTopic"
       />
     </template>
 
-    <div class="group-container">
+    <div class="group-home-container">
       <group-list
-        class="group-search"
-        :studyGroups="groups"
+        class="group-home-search"
+        :study-groups="groups"
         @changeGroupJoin="changeGroupJoin"
       />
-      <div class="group-right">
-        <div class="group-create">
+      <div class="group-home-right">
+        <div class="group-home-create">
           <div
             class="create-button"
             role="button"
@@ -45,7 +45,6 @@
         <base-rank-card
           :data="rankingList"
           title="活跃排行榜"
-          @clickMenuItem="rankCardClickMenuItem"
         />
       </div>
     </div>
@@ -58,8 +57,8 @@
 import { defineComponent, ref, reactive } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import BaseTopicBar from '@/components/common/baseTopicBar/BaseTopicBar.vue';
-import GroupList from '@/views/group/childComps/pages/groupHome/childComps/GroupList.vue'
-import GroupPopover from '@/views/group/childComps/pages/groupHome/childComps/GroupPopover.vue'
+import GroupList from '@/views/group/childComps/pages/groupHome/childComps/GroupList.vue';
+import GroupPopover from '@/views/group/childComps/pages/groupHome/childComps/GroupPopover.vue';
 import BaseBulletin from '@/components/common/baseBulletin/BaseBulletin';
 import BaseRankCard from '@/components/common/baseRankCard/BaseRankCard';
 import { getGroups } from '@/network/api/groups';
@@ -131,10 +130,7 @@ export default defineComponent({
           console.log('getgroups');
           console.log(data);
           if (flag == true) groups.splice(0, groups.length);
-          console.log('groups', groups);
-          for (let i of data.groups) {
-            groups.splice(groups.length, 0, i);
-          }
+          groups.splice(groups.length, 0, ...data.groups);
         })
         .catch((error) => {
           console.log(error);
@@ -192,19 +188,19 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.group {
-  .group-container {
+.group-home {
+  .group-home-container {
     @include flex();
     margin: 16px 0px 16px 75px;
     padding-bottom: 50px;
 
-    .group-search {
+    .group-home-search {
       margin-right: 50px;
     }
 
-    .group-right {
+    .group-home-right {
       @include flex(center, flex-start, column);
-      .group-create {
+      .group-home-create {
         width: 284px;
         height: 72px;
         background: $grey-0;
