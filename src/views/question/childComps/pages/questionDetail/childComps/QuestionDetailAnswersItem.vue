@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-25 19:18:14
  * @LastEditors: clq
- * @LastEditTime: 2022-01-27 12:58:30
+ * @LastEditTime: 2022-01-29 15:55:58
 -->
 <template>
   <div class="question-detail-answers-item">
@@ -21,10 +21,21 @@
           role="button"
           @click="toUserCenter(answer.username)"
         >{{answer.nickname}}</div>
+        <div
+          v-show="answer.reply_nickname"
+          class="reply"
+        >
+          <div class="text">回复</div>
+          <div
+            class="reply-name"
+            role="button"
+            @click="toUserCenter(answer.reply_nickname)"
+          >{{answer.reply_nickname}}</div>
+        </div>
         <div class="release-time">{{answer.child_replies ? '发布于': '回复于'}} {{answer.time}}</div>
       </div>
       <div
-        v-show="answer.child_replies"
+        v-show="parentId==-1"
         class="right"
         role="button"
       >
@@ -80,7 +91,8 @@
       <div
         class="btn"
         role="button"
-      >提交回答</div>
+        @click="releaseReply()"
+      >提交回复</div>
     </div>
   </div>
 </template>
@@ -88,32 +100,41 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
-import { number } from 'echarts/core';
+import { releaseQuestionReply, changeEvaluationOnReply } from '@/network/api/questions';
+import { useRoute } from 'vue-router';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description: 问答回答条目组件
+ * @param parentId 上级回复id
  * @param {Object} answer 问答回答
+ * @event addReply 添加回复 {praentId:一级回复id, replyId:回复对象id, text:回复文本信息}
  * @author: clq
  */
 
 export default defineComponent({
   name: 'questionDetailAnswersItem',
   components: { BaseAvatar },
+  emits: ['addReply'],
   props: {
     parentId: {
-      type: number,
+      type: Number,
+      default: -1,
     },
     answer: {
       type: Object,
       required: true,
     },
   },
-  setup(props) {
+  setup(props, context) {
+    const msg = useMessage();
+    const route = useRoute(); //route
+    const questionId = route.params.questionId;
     let isShowEdit = ref(false); // 编辑框显示标志 `true:显示, false:不显示`
     let text = ref(''); // 回答内容
     let standpoint = ref(0); // 当前用户对回答的态度 `0为无操作，1为推荐，2为反对`
-    console.log('props.answer');
-    console.log(props.answer);
+    // console.log('props.answer');
+    // console.log(props.answer);
 
     /**
      * @description: 跳转到用户zhuye
@@ -132,9 +153,15 @@ export default defineComponent({
      * @author: clq
      */
     function changeStandpoint(newpoint) {
-      if (standpoint.value == newpoint) standpoint.value = 0;
-      else standpoint.value = newpoint;
-      // console.log('standpoint: ' + standpoint.value);
+      let type = standpoint.value == newpoint ? 0 : newpoint;
+      changeEvaluationOnReply(props.answer.id, type)
+        .then(() => {
+          standpoint.value = type;
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('评价修改失败', { duration: 2000, closable: true });
+        });
     }
 
     /**
@@ -144,7 +171,36 @@ export default defineComponent({
      */
     function ShowEdit() {
       isShowEdit.value = !isShowEdit.value;
-      console.log('isShowEdit: ' + isShowEdit.value);
+      // console.log('isShowEdit: ' + isShowEdit.value);
+    }
+
+    /**
+     * @description: 回复
+     * @return {void}
+     * @author: clq
+     */
+    function releaseReply() {
+      // console.log('releaseReply');
+      // console.log(questionId);
+      // console.log(props.answer.id);
+      // console.log(props.answer.username);
+      // console.log(text.value);
+      releaseQuestionReply(questionId, props.answer.id, props.answer.username, text.value)
+        .then(() => {
+          context.emit(
+            'addReply',
+            props.parentId == -1 ? props.answer.id : props.parentId,
+            props.parentId == -1 ? -1 : props.answer.id,
+            text.value
+          );
+          text.value = '';
+          isShowEdit.value = false;
+          msg.success('发布成功', { duration: 2000, closable: true });
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('发布失败', { duration: 2000, closable: true });
+        });
     }
 
     return {
@@ -154,6 +210,7 @@ export default defineComponent({
       toUserCenter,
       changeStandpoint,
       ShowEdit,
+      releaseReply,
     };
   },
 });
@@ -172,17 +229,38 @@ export default defineComponent({
       @include flex(center);
 
       .nickname {
-        margin: 0px 30px 0px 10px;
+        margin-left: 10px;
         font-size: 14px;
         font-weight: 400;
-        color: #4bd8aa;
+        color: $green-1;
         line-height: 32px;
       }
 
+      .reply {
+        @include flex(center);
+
+        .text {
+          margin: 0px 6px;
+          font-size: 14px;
+          color: $grey-6;
+        }
+
+        .reply-name {
+          font-size: 14px;
+          color: $grey-7;
+          transition: 0.25s;
+
+          &:hover {
+            color: $green-1;
+          }
+        }
+      }
+
       .release-time {
+        margin-left: 20px;
         font-size: 14px;
         text-align: left;
-        color: #707070;
+        color: $grey-8;
         line-height: 32px;
       }
     }
@@ -190,13 +268,19 @@ export default defineComponent({
     .right {
       height: 24px;
       padding: 0px 12px;
-      background: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.16);
+      background: $grey-0;
+      border-radius: $shadow-0;
+      box-shadow: $shadow-0;
       font-size: 14px;
       text-align: center;
-      color: #707070;
+      color: $grey-8;
       line-height: 24px;
+      transition: 0.25s;
+
+      &:hover {
+        background-color: $green-1;
+        color: $grey-0;
+      }
     }
   }
 
@@ -204,7 +288,7 @@ export default defineComponent({
     width: 100%;
     margin: 16px 0px;
     font-size: 14px;
-    color: #8c8c8c;
+    color: $grey-7;
   }
 
   .question-detail-answers-item-footer {
@@ -234,7 +318,7 @@ export default defineComponent({
         @include flex(center);
         font-size: 14px;
         line-height: 20px;
-        color: #8c8c8c;
+        color: $grey-7;
         transition: 0.25s;
       }
 

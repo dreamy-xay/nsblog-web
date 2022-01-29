@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-17 17:50:48
  * @LastEditors: clq
- * @LastEditTime: 2022-01-25 21:07:31
+ * @LastEditTime: 2022-01-29 13:02:01
 -->
 <template>
   <div class="search-page-resource-item">
@@ -108,7 +108,7 @@ export default defineComponent({
     transition: 0.25s;
 
     &:hover {
-      color: $green-1;
+      color: $grey-8;
     }
   }
 
