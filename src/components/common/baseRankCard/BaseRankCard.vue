@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-15 09:05:31
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-23 15:42:13
+ * @LastEditTime: 2022-01-29 22:20:32
 -->
 <template>
   <div
@@ -35,8 +35,8 @@
       <a
         class="info-item"
         v-for="(item, index) in data"
-        :href="item.url"
-        :target="item.url"
+        :href="isUser ? `/user/${item[dataKey[0]]}` : item[dataKey[0]]"
+        :target="isUser ? `/user/${item[dataKey[0]]}` : item[dataKey[0]]"
         :key="index"
         role="button"
       >
@@ -44,8 +44,29 @@
           <div class="number">
             {{ index + 1 }}
           </div>
-          <div class="content">
-            {{ item.title }}
+          <div
+            class="user"
+            v-if="isUser"
+          >
+            <base-avatar
+              :src="item[dataKey[2]]"
+              :alt="item[dataKey[1]]"
+              :size="22"
+            />
+            <div class="user-info">
+              <div class="nickname">
+                {{ item[dataKey[1]] }}
+              </div>
+              <div class="count">
+                {{ item[dataKey[3]] }}
+              </div>
+            </div>
+          </div>
+          <div
+            class="content"
+            v-else
+          >
+            {{ item[dataKey[1]] }}
           </div>
         </div>
       </a>
@@ -56,12 +77,15 @@
 
 <script>
 import { defineComponent, ref } from 'vue';
+import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 
 /**
  * @description: 基础排行榜小组件
  * @param {String} title 小组件标题 `默认为 ''`
  * @param {Array} menuList 小组件菜单列表，为空时表示没有菜单 `默认为 []`
  * @param {Array} data 排行数据 `默认为 []`
+ * @param {Array} dataKey 数据对象的key列表 1=>[obj.url, obj.title](内容排行) 2=>['obj.username, obj.nickname, obj.avatar, obj.count'](用户排行) `默认为 ['url', 'title']`
+ * @param {Boolean} isUser 是否为用户列表模式 `默认为false`
  * @param {Object} style 最外层样式 `默认为 null`
  * @event clickMenuItem 选择某一项菜单时触发 (index: number, item: string) => void
  * @author: dreamy-xay
@@ -69,6 +93,9 @@ import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'baseRankingList',
+  components: {
+    BaseAvatar,
+  },
   props: {
     title: {
       type: String,
@@ -81,6 +108,14 @@ export default defineComponent({
     data: {
       type: Array,
       default: () => [],
+    },
+    dataKey: {
+      type: Array,
+      default: () => ['url', 'title'],
+    },
+    isUser: {
+      type: Boolean,
+      default: false,
     },
     style: {
       type: Object,
@@ -196,6 +231,35 @@ export default defineComponent({
           @include ellipsis;
           font-size: 14px;
           color: $grey-10;
+        }
+
+        .user {
+          width: 234px;
+          height: 22px;
+          @include flex(center, space-between);
+
+          .user-info {
+            width: 204px;
+            height: 100%;
+            @include flex(center, space-between);
+
+            & > div {
+              height: 100%;
+              line-height: 22px;
+              color: $grey-10;
+            }
+
+            .nickname {
+              width: 144px;
+              font-size: 14px;
+              @include ellipsis(1);
+            }
+
+            .count {
+              font-size: 15px;
+              font-weight: 700;
+            }
+          }
         }
       }
 
