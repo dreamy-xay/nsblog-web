@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-19 13:30:35
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-23 16:27:06
+ * @LastEditTime: 2022-01-29 14:27:41
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -33,7 +33,7 @@ export default function(baseUrl: string, app: Application) {
             browsing_count: 12,
             username: user.username,
             nickname: user.nickname,
-            release_time: Random.time(),
+            release_time: Random.datetime(),
             ...(type === 1
               ? {
                   recommend: Random.integer(0, 1),
