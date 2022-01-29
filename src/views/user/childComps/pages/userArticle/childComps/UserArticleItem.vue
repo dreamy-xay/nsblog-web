@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clqf
  * @Date: 2021-09-14 17:32:49
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-29 15:28:08
+ * @LastEditors: clq
+ * @LastEditTime: 2022-01-29 16:18:57
 -->
 <template>
   <div class="user-article-item">
@@ -105,7 +105,7 @@ export default defineComponent({
       @include ellipsis(1);
 
       &:hover {
-        color: $green-0;
+        color: $grey-8;
       }
     }
 

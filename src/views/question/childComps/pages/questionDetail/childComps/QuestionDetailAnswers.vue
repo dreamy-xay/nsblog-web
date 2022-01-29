@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-25 13:54:46
  * @LastEditors: clq
- * @LastEditTime: 2022-01-29 15:52:19
+ * @LastEditTime: 2022-01-29 16:27:52
 -->
 <template>
   <div class="question-detail-answers">
@@ -203,7 +203,7 @@ export default defineComponent({
       @include flex(center, space-between);
       box-sizing: border-box;
       width: 100%;
-      height: 52px;
+      height: 53px;
       padding: 7px 16px 15px;
       border-bottom: 1px solid $grey-3;
 
