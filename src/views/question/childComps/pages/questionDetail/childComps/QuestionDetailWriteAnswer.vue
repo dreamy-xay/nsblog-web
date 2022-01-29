@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-25 18:58:26
  * @LastEditors: clq
- * @LastEditTime: 2022-01-25 19:56:47
+ * @LastEditTime: 2022-01-29 16:08:45
 -->
 <template>
   <div class="question-detail-write-answer">
@@ -14,11 +14,12 @@
         <div
           class="right"
           role="button"
+          @click="showInvitation"
         >邀请回答</div>
       </div>
       <div class="body">
         <v-md-editor
-          v-model="answer"
+          v-model="answerText"
           mode="edit"
           left-toolbar="undo redo clear| bold link code quote"
           height="200px"
@@ -31,11 +32,13 @@
         >提交回答</div>
       </div>
     </div>
+    <quesition-detail-invitation v-model:isShow="isShowIncitation" />
   </div>
 </template>
 
 <script>
 import { defineComponent, ref } from 'vue';
+import QuesitionDetailInvitation from '@/views/question/childComps/pages/questionDetail/childComps/QuesitionDetailInvitation.vue';
 
 /**
  * @description:
@@ -44,10 +47,27 @@ import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'questionDetailWriteAnswer',
+  components: {
+    QuesitionDetailInvitation,
+  },
   setup() {
-    let answer = ref(''); //回答信息
+    let answerText = ref(''); //回答内容
+    let isShowIncitation = ref(false); // 邀请回答页面显示控制 `true：显示，false：不显示`
+
+    /**
+     * @description: 显示邀请回答页面
+     * @param {*}
+     * @return {*}
+     * @author: clq
+     */
+    function showInvitation() {
+      isShowIncitation.value = true;
+    }
+
     return {
-      answer,
+      answerText,
+      isShowIncitation,
+      showInvitation,
     };
   },
 });
@@ -56,6 +76,10 @@ export default defineComponent({
 <style lang="scss" scoped>
 .question-detail-write-answer {
   width: 100%;
+  margin-bottom: 16px;
+  background-color: $grey-0;
+  border-radius: $border-radius-0;
+  box-shadow: $shadow-0;
 
   .question-detail-write-answer-container {
     width: 100%;

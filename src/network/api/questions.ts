@@ -4,9 +4,103 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-17 20:17:15
  * @LastEditors: clq
- * @LastEditTime: 2022-01-25 20:54:55
+ * @LastEditTime: 2022-01-29 13:17:33
  */
-import { get, post, RequestLifeCycle } from '@/network/request';
+import { get, post, put, RequestLifeCycle } from '@/network/request';
+
+/**
+ * @description: 修改回答评价
+ * @param {number} replyId 回答id
+ * @param {number} type 评价类型 `0为无操作，1为推荐，2为反对`
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: clq
+ */
+export function changeEvaluationOnReply(replyId: number, type: number, RLC: RequestLifeCycle = {}): Promise<unknown> {
+  return put({
+    url: 'questions/replies/evaluation',
+    ...RLC,
+    data: {
+      replyId,
+      type
+    }
+  });
+}
+
+/**
+ * @description: 发表提问的回答
+ * @param {number} questionId 问答id
+ * @param {number} parentId 上级回复id
+ * @param {strig} replyUsername 回复的用户名
+ * @param {string} content 回答内容
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: clq
+ */
+export function releaseQuestionReply(
+  questionId: number,
+  parentId: number,
+  replyUsername: string,
+  content: string,
+  RLC: RequestLifeCycle = {}
+): Promise<unknown> {
+  return post({
+    url: 'questions/replies',
+    ...RLC,
+    data: {
+      questionId,
+      parentId,
+      replyUsername,
+      content
+    }
+  });
+}
+
+/**
+ * @description: 获取问答回答
+ * @param {number} questionId 问答id
+ * @param {number} type 回复类型 `0为综合，1为最新，默认为0`
+ * @param {number} replyId 上级回答的id
+ * @param {number} limit 返回提问回答的最大数量 `默认位10`
+ * @param {number} offset 数据库提问回答偏移量 `默认为0`
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: clq
+ */
+export function getQuestionReplies(
+  questionId: number,
+  type: number = 0,
+  replyId: number,
+  limit: number = 10,
+  offset: number = 0,
+  RLC: RequestLifeCycle = {}
+): Promise<unknown> {
+  return get({
+    url: 'questions/replies',
+    ...RLC,
+    params: {
+      questionId,
+      type,
+      replyId,
+      limit,
+      offset
+    }
+  });
+}
+
+/**
+ * @description: 获取问答详情
+ * @param {number} questionId 问答id
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: clq
+ */
+export function getQuestionDetail(questionId: number, RLC: RequestLifeCycle = {}): Promise<unknown> {
+  return get({
+    url: `/questions/${questionId}`,
+    ...RLC
+  });
+}
 
 /**
  * @description: 获取问答
