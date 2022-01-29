@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-09-23 19:22:16
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-26 17:53:41
+ * @LastEditors: clq
+ * @LastEditTime: 2022-01-27 18:41:35
 -->
 <template>
   <div class="article-footer-comment-item">
@@ -23,7 +23,7 @@
             <article-link
               :href="`/blog/${comment.username}`"
               :target="`/blog/${comment.username}`"
-            >{{comment.username}}
+            >{{comment.nickname}}
             </article-link>
             <span
               v-if="comment.reply_username"
@@ -32,7 +32,7 @@
             <article-link
               :href="`/blog/${comment.reply_username}`"
               :target="`/blog/${comment.reply_username}`"
-            >{{comment.reply_username}}
+            >{{comment.reply_nickname}}
             </article-link>
           </span>
         </div>
