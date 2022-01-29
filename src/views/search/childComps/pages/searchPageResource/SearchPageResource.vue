@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-17 17:46:10
  * @LastEditors: clq
- * @LastEditTime: 2022-01-25 20:36:43
+ * @LastEditTime: 2022-01-29 13:03:23
 -->
 <template>
   <div class="search-page-resource">
@@ -94,7 +94,7 @@ export default defineComponent({
   setup(props, context) {
     const route = useRoute(); //route
     const msg = useMessage(); // naive-ui 消息组件
-    const selectOptions = reactive(['时间不限', '最近一天', '最近一周', '最近三月']);
+    const selectOptions = reactive(['时间不限', '最近一天', '最近一周', '最近一月']);
     const npopoverRef = ref(null); //n-popover引用对象
     let resourceType = ref(0); // 0为综合，1为最新，2为热门
     let currentIndex = ref(0); //当前选定项索引

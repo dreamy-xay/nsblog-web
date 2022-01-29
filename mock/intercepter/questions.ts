@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 20:59:37
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-29 14:27:44
+ * @LastEditors: clq
+ * @LastEditTime: 2022-01-29 16:10:33
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -119,7 +119,7 @@ export default function(baseUrl: string, app: Application) {
             const replyUser: RandomUser = RUsers.random();
             const params: Record<string, unknown> = username !== '' ? { evaluation: Random.integer(0, 2) } : {};
             (ans.child_replies as any).push({
-              comment_id: Random.increment(Random.integer(1, 10)),
+              id: Random.increment(Random.integer(1, 10)),
               username: user.username,
               nickname: user.nickname,
               avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
@@ -140,7 +140,7 @@ export default function(baseUrl: string, app: Application) {
         const user: RandomUser = RUsers.random();
         const params: Record<string, unknown> = username !== '' ? { evaluation: Random.integer(0, 2) } : {};
         ans.push({
-          comment_id: i ? Random.increment(Random.integer(1, 10)) : 1,
+          id: i ? Random.increment(Random.integer(1, 10)) : 1,
           username: user.username,
           nickname: user.nickname,
           avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
