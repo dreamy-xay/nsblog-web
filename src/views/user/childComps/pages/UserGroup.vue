@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-22 15:20:21
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-29 15:37:00
 -->
 <template>
   <div
@@ -22,12 +22,12 @@
           role="button"
         >{{item.name}}</div>
         <div
-          :class="item.join==0 ? 'no':'yes'"
+          :class="item.join === 0 ? 'no' : 'yes'"
           role="button"
           @click="changeJoin(index)"
         >
           <div
-            v-if="item.join==0"
+            v-if="item.join === 0"
             class="join"
           >
             <div class="icon"><i class="iconfont blog-daochu1024-29"></i></div>
@@ -44,6 +44,8 @@
             :hollow="true"
             :size="20"
             :color="styles.orange0"
+            :href="`/group?topic=${item.topic_name}`"
+            :target="`/group?topic=${item.topic_name}`"
           >
             <template #text-pre>
               <i class="iconfont blog-zhu"></i>
@@ -187,6 +189,7 @@ export default defineComponent({
         border: 1px solid $green-1;
         font-size: 14px;
         color: $green-1;
+        transition: 0.25s;
 
         &:hover {
           box-shadow: $shadow-2;
@@ -195,20 +198,27 @@ export default defineComponent({
 
       .no {
         height: 24px;
-        width: 42px;
+        width: 44px;
         padding: 0 12px;
         @include flex(center, center);
         border-radius: $border-radius-1;
         border: 1px solid $grey-7;
         font-size: 14px;
         color: $grey-7;
+        transition: 0.25s;
 
         .join {
+          height: 100%;
           @include flex(center, space-between);
 
           .icon {
+            width: 12px;
+            height: 100%;
+            margin-right: 4px;
+            @include flex(center, center);
+
             .iconfont {
-              font-size: 10px;
+              font-size: 12px;
             }
           }
         }

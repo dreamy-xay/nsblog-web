@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-12 17:09:45
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-15 16:13:53
+ * @LastEditTime: 2022-01-29 15:25:32
 -->
 <template>
   <div class="top-bar-history">
@@ -52,6 +52,8 @@
             :color="styles.orange0"
             :hover-color="styles.orange1"
             :hollow="true"
+            :href="`/tag/${item.topic_tag[0]}`"
+            :target="`/tag/${item.topic_tag[0]}`"
           ></base-tag>
           <div
             class="bottom-item-text"

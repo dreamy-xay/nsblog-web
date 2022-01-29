@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 15:56:58
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-15 16:11:15
+ * @LastEditTime: 2022-01-29 15:21:29
 -->
 <template>
   <div
@@ -39,11 +39,13 @@
         <div class="other-left">
           <base-tag
             class="tag"
-            v-for="(item, index) in data.topic_tag.slice(0, 3)"
+            v-for="(item, index) in data.topic_tag"
             :key="index"
             :text="item"
             :color="styles.orange0"
             :hover-color="styles.orange1"
+            :href="`/tag/${item}`"
+            :target="`/tag/${item}`"
             :style="{borderRadius: '6px'}"
           />
         </div>
@@ -64,7 +66,7 @@
 </template>
 
 <script>
-import { defineComponent, reactive } from 'vue';
+import { defineComponent } from 'vue';
 import { dateFormat } from '@/util/date';
 import BaseTag from '@/components/content/baseTag/BaseTag.vue';
 import styles from '@/assets/style/define.scss';
