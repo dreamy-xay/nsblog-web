@@ -4,13 +4,24 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-21 23:15:38
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-25 23:13:29
+ * @LastEditTime: 2022-01-28 13:02:28
 -->
 <template>
   <div class="resource-home">
     <div class="resource-home-center">
       <div class="left">
-        <resource-left />
+        <resource-left
+          :resource-data="resourceData"
+          v-model:select-tag="selectTag"
+          v-model:select-time="selectTime"
+        />
+        <div
+          class="button"
+          role="button"
+          v-show="showButton"
+          @click="getMessage()"
+        >加载更多...</div>
+
       </div>
       <div class="right">
         <base-rank-card
@@ -22,9 +33,11 @@
   </div>
 </template>
 <script>
-import { defineComponent, reactive } from 'vue';
+import { defineComponent, reactive, ref, watch } from 'vue';
 import BaseRankCard from '@/components/common/baseRankCard/BaseRankCard.vue';
 import ResourceLeft from '@/views/resource/childComps/pages/resourceHome/childComps/resourceLeft/ResourceLeft.vue';
+import { getResources } from '@/network/api/resources';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description:资源页面
@@ -38,6 +51,13 @@ export default defineComponent({
     ResourceLeft,
   },
   setup() {
+    const msg = useMessage(); // naive-ui组件
+    const selectTag = ref(0); // 0为综合，1为最新，2为热门
+    const selectTime = ref(0); // 0为不限时间，1为最近一天，2为最近一周，3为最近一个月
+    const limit = 10; // 获取信息条数
+    const offest = ref(0); // 获取信息起点
+    const showButton = ref(true); // 显示按钮
+    const resourceData = reactive([]); // 资源数据
     const rankinglist = reactive([
       {
         title: 'react有tab页，如何实现未选中的tab页隐藏但不销毁在JavaScript中一组数据如何进行关联呢',
@@ -77,8 +97,47 @@ export default defineComponent({
         title: '在JavaScript中一组数据如何进行关联呢',
       },
     ]);
+
+    /**
+     * @description: 加载数据函数
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function getMessage() {
+      if (showButton.value == true)
+        getResources(null, offest.value, limit, selectTime.value, selectTag.value)
+          .then((data) => {
+            resourceData.splice(offest.value, 0, ...data.resources);
+            offest.value += data.resources.length;
+            if (data.resources.length < limit) showButton.value = false;
+          })
+          .catch((error) => {
+            console.log(error);
+            msg.error('获取资源信息失败，请重试', { duration: 2000, closable: true });
+          });
+    }
+
+    // 获取数据
+    getMessage();
+
+    // 监听标签，标签改变重新获取数据
+    watch(
+      () => [selectTag.value, selectTime.value],
+      () => {
+        resourceData.splice(0, offest.value);
+        offest.value = 0;
+        showButton.value = true;
+        getMessage();
+      }
+    );
+
     return {
       rankinglist,
+      showButton,
+      resourceData,
+      selectTag,
+      selectTime,
+      getMessage,
     };
   },
 });
@@ -96,6 +155,23 @@ export default defineComponent({
 
     .left {
       width: 700px;
+      @include flex(center, initial, column);
+
+      .button {
+        @include flex(center, center);
+        height: 32px;
+        margin-top: 10px;
+        width: 300px;
+        border-radius: $border-radius-0;
+        box-shadow: $shadow-0;
+        background-color: $grey-0;
+
+        transition: 0.25s;
+
+        &:hover {
+          background: $grey-1;
+        }
+      }
     }
 
     .right {

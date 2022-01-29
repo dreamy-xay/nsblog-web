@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-26 18:56:37
+ * @LastEditTime: 2022-01-29 14:27:47
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -199,7 +199,7 @@ export default function(baseUrl: string, app: Application) {
               username: user.username,
               nickname: user.nickname,
               avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
-              time: Random.time(),
+              time: Random.datetime(),
               reply_username: replyUser.username,
               reply_nickname: replyUser.nickname,
               content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
@@ -220,7 +220,7 @@ export default function(baseUrl: string, app: Application) {
           username: user.username,
           nickname: user.nickname,
           avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
-          time: Random.time(),
+          time: Random.datetime(),
           content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
           support_count: Random.integer(0, 9999),
           oppose_count: Random.integer(0, 9999),
@@ -389,7 +389,7 @@ export default function(baseUrl: string, app: Application) {
     }
 
     const data: Record<string, unknown> = {
-      ...(tag || category ? { page_count: 12 } : {}),
+      page_count: 12,
       ...(tag ? { tag_name: Random.integer(0, 1) ? Random.word(3, 8) : Random.cword(2, 5) } : {}),
       ...(category ? { category_name: Random.integer(0, 1) ? Random.word(3, 8) : Random.cword(2, 5) } : {})
     };

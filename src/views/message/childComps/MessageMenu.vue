@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 22:48:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-29 16:37:22
+ * @LastEditTime: 2022-01-27 15:45:34
 -->
 <template>
   <div class="message-left">
@@ -68,8 +68,7 @@ import styles from '@/assets/style/define.scss';
  * @param {Array} menus 左侧菜单目录 `默认为[]`
  * @param {Object} menu 左侧菜单目录 `默认为{}`
  * @param {String} messagetag 当前页面名称 `默认为''`
- * @param {Function} changeColor 改变当前选中页面目录颜色 `默认为null`
- * @param {Array} menuData 菜单目录未读消息 `默认为[]`
+ * @event changeColor 改变当前选中页面目录颜色
  * @author: Z_Y_C
  */
 

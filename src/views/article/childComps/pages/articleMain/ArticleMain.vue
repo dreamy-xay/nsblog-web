@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 16:32:13
- * @LastEditors: xiao
- * @LastEditTime: 2022-01-26 22:22:34
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-27 20:10:56
  * @LastEditors: dreamy-xay
  * @LastEditTime: 2021-10-02 10:14:24
 -->
@@ -130,7 +130,8 @@ export default defineComponent({
       })
       .catch((error) => {
         console.log(error);
-        if (error.response.status === 403) router.push({ name: 'articleProtection', params: { articleId } });
+        if (error.response.status === 403) router.replace({ name: 'articleProtection', params: { articleId } });
+        else  console.log(error);
       });
 
     // 计算head data
@@ -195,15 +196,7 @@ export default defineComponent({
       })
       .on('ArticleBottomComp-changeCollection', (newValue) => {
         console.log('newCollection:' + newValue);
-        addCollections(articleData.article_id)
-          .then(() => {
-            msg.success(`收藏成功`);
-            articleData.collection = newValue;
-          })
-          .catch((err) => {
-            console.log(err);
-            msg.error(`收藏失败`, { duration: 2000, closable: true });
-          });
+        articleData.collection = newValue;
       })
       .on('ArticleBottomComp-cacelCollection', (newValue) => {
         console.log('cancelCollection:' + newValue);

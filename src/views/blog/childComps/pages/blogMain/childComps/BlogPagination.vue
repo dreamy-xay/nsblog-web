@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-12 16:07:55
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-18 20:12:20
+ * @LastEditTime: 2022-01-26 20:20:10
 -->
 <template>
   <div class="blog-pagination">
@@ -21,7 +21,7 @@
       class="blog-pagination-center"
       v-for="item in pageShow"
       :key="item"
-      :class="page==item ? 'select':''"
+      :class="page == item ? 'select':''"
       @click="selectPage(item)"
       role="button"
     >
@@ -39,7 +39,7 @@
   </div>
 </template>
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, reactive, ref, watch } from 'vue';
 
 /**
  * @description:分页组件
@@ -58,39 +58,46 @@ export default defineComponent({
     },
     pageCount: {
       type: Number,
-      default: 3,
+      default: 1,
     },
   },
   setup(props, context) {
-    const pageShow = ref([]); // 显示的页数
+    const pageShow = reactive([]); // 显示的页数
     const leftButton = ref(false); // 左按钮可用
     const rightButton = ref(true); // 右按钮可用
 
-    if (props.page != 1) leftButton.value = true;
+    watch(
+      () => props.pageCount,
+      () => {
+        pageShow.splice(0, pageShow.length);
+        leftButton.value = false; // 左按钮可用
+        rightButton.value = true; // 右按钮可用
 
-    if (props.page == props.pageCount) rightButton.value = false;
+        if (props.page != 1) leftButton.value = true;
+        if (props.page == props.pageCount) rightButton.value = false;
 
-    // 初始显示页数
-    if (props.pageCount <= 3) {
-      for (let i = 1; i <= props.pageCount; i++) {
-        pageShow.value.splice(pageShow.value.length, 0, i);
-      }
-    } else {
-      if (props.page === 1)
-        for (let i = 1; i <= 3; i++) {
-          pageShow.value.splice(pageShow.value.length, 0, i);
-        }
-      else {
-        pageShow.value.splice(0, 0, props.page);
-        if (props.pageCount !== props.page) {
-          pageShow.value.splice(0, 0, props.page - 1);
-          pageShow.value.splice(pageShow.value.length, 0, props.page + 1);
+        if (props.pageCount <= 3) {
+          for (let i = 1; i <= props.pageCount; i++) {
+            pageShow.splice(pageShow.length, 0, i);
+          }
         } else {
-          pageShow.value.splice(0, 0, props.page - 1);
-          pageShow.value.splice(0, 0, props.page - 2);
+          if (props.page === 1)
+            for (let i = 1; i <= 3; i++) {
+              pageShow.splice(pageShow.length, 0, i);
+            }
+          else {
+            pageShow.splice(0, 0, props.page);
+            if (props.pageCount !== props.page) {
+              pageShow.splice(0, 0, props.page - 1);
+              pageShow.splice(pageShow.length, 0, props.page + 1);
+            } else {
+              pageShow.splice(0, 0, props.page - 1);
+              pageShow.splice(0, 0, props.page - 2);
+            }
+          }
         }
       }
-    }
+    );
 
     /**
      * @description: 点击上一页
@@ -101,11 +108,12 @@ export default defineComponent({
       if (props.page !== 1) {
         rightButton.value = true;
         if (props.page - 1 == 1) leftButton.value = false;
+
         context.emit('changePage', { page: props.page - 1 });
-        if (pageShow.value[0] !== 1) {
-          if (pageShow.value[1] === props.page) {
-            pageShow.value.splice(2, 1);
-            pageShow.value.splice(0, 0, pageShow.value[0] - 1);
+        if (pageShow[0] !== 1) {
+          if (pageShow[1] === props.page) {
+            pageShow.splice(2, 1);
+            pageShow.splice(0, 0, pageShow[0] - 1);
           }
         }
       } else {
@@ -125,10 +133,10 @@ export default defineComponent({
 
         //还未到最后一页
         context.emit('changePage', { page: props.page + 1 });
-        if (pageShow.value[pageShow.value.length - 1] !== props.pageCount) {
-          if (pageShow.value[1] === props.page) {
-            pageShow.value.splice(0, 1);
-            pageShow.value.splice(pageShow.value.length, 0, pageShow.value[pageShow.value.length - 1] + 1);
+        if (pageShow[pageShow.length - 1] !== props.pageCount) {
+          if (pageShow[1] === props.page) {
+            pageShow.splice(0, 1);
+            pageShow.splice(pageShow.length, 0, pageShow[pageShow.length - 1] + 1);
           }
         }
       } else {
@@ -148,9 +156,9 @@ export default defineComponent({
           leftButton.value = true;
           context.emit('changePage', { page: page });
           if (page !== props.pageCount) {
-            if (pageShow.value[1] !== page) {
-              pageShow.value.splice(0, 1);
-              pageShow.value.splice(pageShow.value.length, 0, pageShow.value[pageShow.value.length - 1] + 1);
+            if (pageShow[1] !== page) {
+              pageShow.splice(0, 1);
+              pageShow.splice(pageShow.length, 0, pageShow[pageShow.length - 1] + 1);
             }
           } else {
             rightButton.value = false;
@@ -160,9 +168,9 @@ export default defineComponent({
           rightButton.value = true;
           context.emit('changePage', { page: page });
           if (page !== 1) {
-            if (pageShow.value[1] !== page) {
-              pageShow.value.splice(2, 1);
-              pageShow.value.splice(0, 0, pageShow.value[0] - 1);
+            if (pageShow[1] !== page) {
+              pageShow.splice(2, 1);
+              pageShow.splice(0, 0, pageShow[0] - 1);
             }
           } else {
             rightButton.value = true;

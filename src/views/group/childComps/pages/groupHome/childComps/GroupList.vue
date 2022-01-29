@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: xiao
  * @Date: 2022-01-14 18:52:17
- * @LastEditors: xiao
- * @LastEditTime: 2022-01-26 21:28:20
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-29 15:54:25
 -->
 <template>
   <div class="group-list">
@@ -32,7 +32,7 @@
               v-show="group.join===1"
               class="join"
               role="button"
-              @click="exitGroup(group)"
+              @click="showExit(group)"
             >
               已加入
             </div>
@@ -64,10 +64,18 @@
       加载更多...
     </div>
   </div>
+  <base-modal
+    content="确定要退出学习小组吗"
+    :show="modalShow"
+    @confirm="exitGroup"
+    @cancel="close"
+  />
 </template>
 
 <script>
 import { defineComponent, ref } from 'vue';
+import BaseModal from '@/components/content/baseModal/BaseModal.vue';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description:学习小组列表
@@ -76,17 +84,22 @@ import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'searchPageStudygroup',
+  components: {
+    BaseModal,
+  },
   props: {
     studyGroups: {
-      type: Object,
+      type: Array,
       required: true,
-      default: null,
     },
   },
 
-  setup() {
+  setup(props, context) {
     const show = ref(false); //是否加载更多
     const change = ref(true); //是否加入
+    const msg = useMessage(); // naive-ui 组件
+    const modalShow = ref(false); //是否显示退出提示
+    const selectGroup = ref(-1); //选择的小组下标
 
     /**
      * @description: 加载更多
@@ -104,23 +117,53 @@ export default defineComponent({
      * @author: xiao
      */
     function joinGroup(group) {
+      msg.success(`加入成功`);
       group.join = 1;
     }
 
     /**
      * @description: 退出学习小组
-     * @param {*} index 选择点击的小组
      * @return {void}
      * @author: xiao
      */
-    function exitGroup(group) {
-      group.join = 0;
+    function exitGroup() {
+      msg.success(`退出成功`);
+      // props.studyGroups[selectGroup.value].join = 0;
+      context.emit('changeGroupJoin', selectGroup.value);
+      modalShow.value = false;
+    }
+
+    /**
+     * @description: 关闭提示框
+     * @return {void}
+     * @author: xiao
+     */
+    function close() {
+      modalShow.value = false;
+    }
+
+    /**
+     * @description: 显示提示框
+     * @param {object} group 选择的小组
+     * @return {void}
+     * @author: xiao
+     */
+    function showExit(group) {
+      for (let index = 0; index < props.studyGroups.length; index++) {
+        if (props.studyGroups[index] == group) {
+          selectGroup.value = index;
+        }
+      }
+      modalShow.value = true;
     }
 
     return {
       moreGroup,
       joinGroup,
       exitGroup,
+      modalShow,
+      showExit,
+      close,
       show,
       change,
     };
@@ -131,6 +174,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .group-list {
   @include flex(center, center, column);
+  margin-right: 16px;
 
   .group-list-less {
     width: 660px;

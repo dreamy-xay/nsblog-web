@@ -4,11 +4,14 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-29 17:08:41
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-15 16:12:01
+ * @LastEditTime: 2022-01-27 21:11:19
 -->
 
 <template>
-  <div class="blog-main-article">
+  <div
+    class="blog-main-article"
+    id="aaaaaa"
+  >
     <div
       class="blog-main-article-context"
       v-for="(item, index) in data"
@@ -18,7 +21,7 @@
       <div class="image">
         <base-image
           class="image-inner"
-          src="https://s3.bmp.ovh/imgs/2021/09/fd25f71e808f3f23.jpg"
+          :src="item.cover_image"
           :loading="2"
         />
       </div>
@@ -26,11 +29,15 @@
         <div class="context-top">
           <div class="time">
             <div class="time-icon"><i class="iconfont blog-time"></i></div>
-            <div class="time-text">{{new Date()}}</div>
+            <div class="time-text">{{item.release_time}}</div>
           </div>
 
-          <div class="title">
-            王耀武额ui为u五额为u七月
+          <div
+            class="title"
+            role="button"
+            @click="changePage(0,index)"
+          >
+            {{item.title}}
           </div>
 
           <div class="number">
@@ -38,18 +45,21 @@
               v-for="(icon, i) in iconData"
               :key="i"
               class="number-context"
+              @click="i==2 ? changePage(1,index):''"
+              :role="i==2 ? 'button' : ''"
             >
               <div class="number-context-icon"><i :class="'iconfont blog-'+icon"></i></div>
-              <div class="number-context-text">{{12312}}</div>
+              <div class="number-context-text">{{i==0 ? item.page_view + ' 热度' : i==1 ? item.comment_count+' 评论' : item.nickname}}</div>
             </div>
           </div>
 
-          <div class="abstract">摘要：钱钱钱钱钱撒对于噶似的有噶四处干撒检查钱钱钱钱钱钱钱钱钱钱钱钱钱钱钱钱钱钱钱 </div>
+          <div class="abstract">摘要：{{item.content}} </div>
 
         </div>
         <a
           class="context-bottom"
           role="button"
+          @click="changePage(0,index)"
         >
           <div class="text">阅读全文</div>
           <div class="icon"><i class="iconfont blog-kuaijin"></i></div>
@@ -62,6 +72,7 @@
 <script>
 import { defineComponent } from 'vue';
 import BaseImage from '@/components/content/baseImage/BaseImage.vue';
+import router from '@/router';
 
 /**
  * @description:
@@ -76,13 +87,28 @@ export default defineComponent({
     data: {
       type: Array,
       required: true,
+      default: () => [],
     },
   },
 
-  setup() {
+  setup(props) {
     const iconData = ['yulan', 'huifu1', 'ren'];
+
+    /**
+     * @description: 页面跳转
+     * @param {Number} type 跳转类型 0：跳转全文 1：跳转主页
+     * @param {Number} index 数据下标
+     * @return {Void}
+     * @author: Z_Y_C
+     */
+    function changePage(type, index) {
+      if (type == 0) router.push('/article/' + props.data[index].id);
+      else router.push('/user/' + props.data[index].username);
+    }
+
     return {
       iconData,
+      changePage,
     };
   },
 });

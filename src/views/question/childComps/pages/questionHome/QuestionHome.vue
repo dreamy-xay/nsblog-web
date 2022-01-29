@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-16 18:28:08
  * @LastEditors: clq
- * @LastEditTime: 2022-01-27 13:33:44
+ * @LastEditTime: 2022-01-29 16:11:13
 -->
 <template>
   <base-view
@@ -19,7 +19,10 @@
         @selectTag="changeTag"
       />
     </template>
-
+    <base-topic-tags
+      @selectTopic="changeTpoic"
+      @selectTag="changeTag"
+    />
     <div class="question-container">
       <div class="container-left">
         <div class="left-top">
@@ -68,6 +71,7 @@
 import { defineComponent, reactive, ref } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import BaseTopicBar from '@/components/common/baseTopicBar/BaseTopicBar.vue';
+import BaseTopicTags from '@/components/common/baseTopicBar/BaseTopicTags.vue';
 import QuestionHeader from '@/views/question/childComps/pages/questionHome/chldComps/QuestionHeader.vue';
 import QuestionItem from '@/views/question/childComps/pages/questionHome/chldComps/QuestionItem.vue';
 import QuestionMyQuestion from '@/views/question/childComps/pages/questionHome/chldComps/QuestionMyQuestion.vue';
@@ -86,6 +90,7 @@ export default defineComponent({
   components: {
     BaseView,
     BaseTopicBar,
+    BaseTopicTags,
     QuestionHeader,
     QuestionItem,
     QuestionMyQuestion,
