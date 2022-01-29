@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-25 19:18:14
  * @LastEditors: clq
- * @LastEditTime: 2022-01-29 15:55:58
+ * @LastEditTime: 2022-01-29 16:29:27
 -->
 <template>
   <div class="question-detail-answers-item">
@@ -269,7 +269,7 @@ export default defineComponent({
       height: 24px;
       padding: 0px 12px;
       background: $grey-0;
-      border-radius: $shadow-0;
+      border-radius: 12px;
       box-shadow: $shadow-0;
       font-size: 14px;
       text-align: center;
