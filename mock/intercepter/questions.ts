@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 20:59:37
- * @LastEditors: clq
- * @LastEditTime: 2022-01-29 16:10:33
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-31 19:30:21
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -167,7 +167,14 @@ export default function(baseUrl: string, app: Application) {
 
     print('release questions replies', { username, question_id, content, parent_id, reply_username });
 
-    return res.send();
+    const user: Record<string, unknown> = select('user').findOne({ username });
+
+    return res.json({
+      id: Random.increment(Random.integer(1, 10)),
+      nickname: user.nickname,
+      avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', username),
+      time: Random.datetime()
+    });
   });
 
   // 修改文章评论状态，推荐反对还是不操作
