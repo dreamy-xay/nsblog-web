@@ -4,20 +4,23 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-22 16:00:02
+ * @LastEditTime: 2022-01-31 17:49:56
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { int, print, verifyToken, getToken } from './util';
+import { int, print, verifyToken, getToken, randomUsers, RandomUser } from './util';
 import select from '../data/index';
 
 export default function(baseUrl: string, app: Application) {
-  // 获取学习小组
+  // 获取学习小组(包括详细信息)
   app.get(baseUrl + '/groups', (req: Request, res: Response) => {
-    const { username, topic_name, limit, offset } = req.query;
-    if (username && !select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
+    const { topic_name, group_name, limit, offset } = req.query;
+    let username: string = req.query.username as string;
+    if (username) {
+      if (!select('users').findOne({ username })) res.status(410).json({ error: 'User name error' });
+    } else if (group_name) username = verifyToken(req.headers) ? getToken(req.headers).username : '';
 
-    print('get study groups', { username, topic_name, limit, offset });
+    print(`get study groups${group_name ? ' detail' : ''}`, { username, topic_name, group_name, limit, offset });
 
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
@@ -33,7 +36,15 @@ export default function(baseUrl: string, app: Application) {
       }
       return ans;
     }
-    return res.json({ groups: getRandom(int(offset) >= 66 ? 0 : Math.min(int(limit), 66 - int(offset))) });
+
+    if (group_name)
+      return res.json({
+        member_count: Random.integer(0, 300),
+        solicitations_count: Random.integer(0, 1000),
+        remark: Random.integer(0, 1) ? Random.paragraph(1, 2) : Random.cparagraph(1, 2),
+        join: Random.integer(0, 1)
+      });
+    else return res.json({ groups: getRandom(int(offset) >= 66 ? 0 : Math.min(int(limit), 66 - int(offset))) });
   });
 
   // 创建学习小组
@@ -43,6 +54,88 @@ export default function(baseUrl: string, app: Application) {
     const { group_name, remark, topic_name } = req.body;
 
     print('new study groups', { username, group_name, remark, topic_name });
+
+    return res.send();
+  });
+
+  // 获取征集令
+  app.get(baseUrl + '/groups/solicitations', (req: Request, res: Response) => {
+    const { group_name, limit, offset } = req.query;
+
+    print('get solicitations', { group_name, limit, offset });
+
+    const RUser = randomUsers();
+    function getRandom(limit: number): Record<string, unknown>[] {
+      const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
+      for (let i: number = 0; i < limit; ++i) {
+        const user: RandomUser = RUser.random();
+        ans.push({
+          id: Random.increment(Random.integer(1, 10)),
+          title: Random.integer(0, 1) ? Random.title(3, 100) : Random.ctitle(3, 50),
+          ...(group_name
+            ? {
+                username: user.username,
+                nickname: user.username,
+                release_time: Random.datetime(),
+                deadline: Random.datetime(),
+                agree_count: Random.integer(0, 30)
+              }
+            : {})
+        });
+      }
+      return ans;
+    }
+
+    return res.json({ solicitations: getRandom(int(offset) >= 67 ? 0 : Math.min(int(limit), 67 - int(offset))) });
+  });
+
+  // 获取征集令详细信息
+  app.get(baseUrl + '/groups/solicitations/solicitation_id(\\d+)', (req: Request, res: Response) => {
+    const { solicitation_id } = req.params;
+    const username: string = verifyToken(req.headers) ? getToken(req.headers).username : '';
+
+    print('get solicitations detail', { solicitation_id, username });
+
+    const RUser = randomUsers(username);
+    function getRandom(limit: number): Record<string, unknown>[] {
+      const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
+      for (let i: number = 0; i < limit; ++i) {
+        const user: RandomUser = RUser.random();
+        ans.push({
+          username: user.username,
+          nickname: user.nickname,
+          avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
+          status: Random.integer(0, 1)
+        });
+      }
+      return ans;
+    }
+
+    const user: RandomUser = RUser.random();
+
+    return res.json({
+      id: Random.increment(Random.integer(1, 10)),
+      title: Random.integer(0, 1) ? Random.title(3, 100) : Random.ctitle(3, 50),
+      content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
+      username: user.username,
+      nickname: user.nickname,
+      avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
+      fans_count: Random.integer(0, 1000),
+      attention: Random.integer(0, 1),
+      release_time: Random.datetime(),
+      deadline: Random.datetime(),
+      users: getRandom(Random.integer(0, 27))
+    });
+  });
+
+  // 发布征集令
+  app.post(baseUrl + '/groups/solicitations', (req: Request, res: Response) => {
+    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
+    const username: string = getToken(req.headers).username;
+
+    const { title, content, deadline } = req.body;
+
+    print('release solicitations', { username, title, content, deadline });
 
     return res.send();
   });

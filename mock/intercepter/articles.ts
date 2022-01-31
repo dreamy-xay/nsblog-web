@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-29 14:27:47
+ * @LastEditTime: 2022-01-31 16:46:55
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -243,7 +243,14 @@ export default function(baseUrl: string, app: Application) {
 
     print('release articles comments', { username, article_id, content, parent_id, reply_username });
 
-    return res.send();
+    const user: Record<string, unknown> = select('user').findOne({ username });
+
+    return res.json({
+      id: Random.increment(Random.integer(1, 10)),
+      nickname: user.nickname,
+      avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', username),
+      time: Random.datetime()
+    });
   });
 
   // 修改文章评论状态，推荐反对还是不操作
