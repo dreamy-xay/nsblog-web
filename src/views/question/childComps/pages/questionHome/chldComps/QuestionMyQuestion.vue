@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-19 19:24:33
  * @LastEditors: clq
- * @LastEditTime: 2022-01-27 10:01:57
+ * @LastEditTime: 2022-01-27 13:27:14
 -->
 <template>
   <div class="question-my-question">
@@ -86,6 +86,9 @@ export default defineComponent({
 .question-my-question {
   box-sizing: border-box;
   padding: 16px;
+  background: $grey-0;
+  border-radius: $border-radius-0;
+  box-shadow: $shadow-0;
 
   .question-my-question-container {
     width: 100%;

@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-12 14:07:49
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-14 13:45:49
+ * @LastEditTime: 2022-01-27 14:06:16
 -->
 <template>
   <div
@@ -29,7 +29,7 @@ import { defineComponent } from 'vue';
 
 /**
  * @description:按分类或标签查询博客
- * @param {String} title 显示内容 `默认为null`
+ * @param {string} title 显示内容 `默认为null`
  * @param {Boolean} type 标签或分类类型 `默认为true 标签`
  * @author: Z_Y_C
  */

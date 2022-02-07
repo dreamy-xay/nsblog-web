@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 11:59:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-23 16:26:42
+ * @LastEditTime: 2022-01-31 16:47:02
  */
 
 import { Application, Request, Response } from 'express';
@@ -71,7 +71,9 @@ export default function(baseUrl: string, app: Application) {
 
     print('new favorites', { username, name, is_private, remark });
 
-    return res.send();
+    return res.json({
+      id: Random.increment(Random.integer(1, 10))
+    });
   });
 
   // 删除收藏夹
@@ -93,7 +95,9 @@ export default function(baseUrl: string, app: Application) {
 
     print('add favorites collections', { username, type, content_id, favorite_id });
 
-    return res.send();
+    return res.json({
+      id: Random.increment(Random.integer(1, 10))
+    });
   });
 
   // 取消收藏

@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-29 16:58:46
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-15 11:20:19
+ * @LastEditTime: 2022-01-27 21:35:21
 -->
 <template>
   <div class="blog-main">
@@ -14,19 +14,20 @@
     />
     <blog-main-article :data="articleData" />
     <blog-pagination
-      :page="page"
+      v-model:page="page"
       :pageCount="pageCount"
       @changePage="changePage"
     />
   </div>
 </template>
 <script>
-import { defineComponent, reactive, ref, watch } from 'vue';
+import { defineComponent, reactive, ref, inject, onMounted } from 'vue';
 import BlogMainArticle from '@/views/blog/childComps/pages/blogMain/childComps/BlogMainArticle.vue';
 import BlogPagination from '@/views/blog/childComps/pages/blogMain/childComps/BlogPagination.vue';
 import BlogMainText from '@/views/blog/childComps/pages/blogMain/childComps/BlogMainText.vue';
-
 import { useRoute, useRouter } from 'vue-router';
+import { getBlogArticles } from '@/network/api/articles';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description: 博客展示文章信息
@@ -41,130 +42,66 @@ export default defineComponent({
     BlogPagination,
   },
   setup(props) {
+    const msg = useMessage(); // naive-ui mssage
     const route = useRoute(); //路由
     const router = useRouter();
     const username = route.params.username; // 获取用户名
     const page = ref(1); // 当前页面页数
-    const pageCount = 5; // 总页数
-    const messageCount = 49; // 信息总条数
-    const limit = 10;
-    const text = ref(); // 标签或分类Id
+    const pageCount = ref(1); // 总页数
+    const text = ref(null); // 标签或分类Id
     const type = ref(true); // 判断是标签还是分类
+    const articleData = reactive([]);
+    let blogPage = null; // 博客页面
 
-    const data = [
-      {
-        title: '1234',
-        name: 'dreamy',
-      },
-      {
-        title: '1234',
-        name: 'dreamy',
-      },
-      {
-        title: '1234',
-        name: 'dreamy',
-      },
-      {
-        title: '1234',
-        name: 'dreamy',
-      },
-      {
-        title: '1234',
-        name: 'dreamy',
-      },
-      {
-        title: '1234',
-        name: 'dreamy',
-      },
-      {
-        title: '1234',
-        name: 'dreamy',
-      },
-      {
-        title: '1234',
-        name: 'dreamy',
-      },
-      {
-        title: '1234',
-        name: 'dreamy',
-      },
-      {
-        title: '1234',
-        name: 'dreamy',
-      },
-      {
-        title: '1234',
-        name: 'dreamy',
-      },
-      {
-        title: '1234',
-        name: 'dreamy',
-      },
-      {
-        title: '1234',
-        name: 'dreamy',
-      },
-      {
-        title: '1234',
-        name: 'dreamy',
-      },
-      {
-        title: '1234',
-        name: 'dreamy',
-      },
-      {
-        title: '1234',
-        name: 'dreamy',
-      },
-      {
-        title: '1234',
-        name: 'dreamy',
-      },
-      {
-        title: '1234',
-        name: 'dreamy',
-      },
-      {
-        title: '1234',
-        name: 'dreamy',
-      },
-      {
-        title: '1234',
-        name: 'dreamy',
-      },
-    ];
+    onMounted(() => {
+      blogPage = document.getElementsByClassName('blog')[0];
+    });
 
     // 获取的文章数据
-    const articleData = reactive([
-      {
-        title: '1234',
-        name: 'dreamy',
-      },
-      {
-        title: '1234',
-        name: 'dreamy',
-      },
-      {
-        title: '1234',
-        name: 'dreamy',
-      },
-    ]);
     if (route.query.category != null) {
       text.value = route.query.category;
       type.value = false;
     }
     if (route.query.tag != null) text.value = route.query.tag;
 
-    if (route.query.offest != null) page.value = parseInt(parseInt(route.query.offest) / 10) + 1;
-    console.log(parseInt(parseInt(route.query.offest) / 10) + 1);
+    /**
+     * @description: 获取基本信息
+     * @return {Void}
+     * @author: Z_Y_C
+     */
+    function getMeaaage() {
+      getBlogArticles(type.value == true ? text.value : null, type.value == false ? text.value : null, page.value)
+        .then((data) => {
+          console.log(data);
+          if (route.query.page != null) {
+            if (parseInt(data.page_count) >= route.query.page) {
+              if (route.query.page > 0) {
+                page.value = parseInt(route.query.page);
+              } else {
+                page.value = 1;
+                changePage({ page: page.value });
+              }
+            } else {
+              page.value = parseInt(data.page_count);
+              changePage({ page: page.value });
+            }
+          }
+          pageCount.value = parseInt(data.page_count);
+          if (text.value != null)
+            if (type.value == true) text.value = data.tag_name;
+            else text.value = data.category_name;
+          articleData.splice(0, articleData.length);
+          articleData.splice(0, 0, ...data.articles);
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('获取文章信息失败，请重试', { duration: 2000, closable: true });
+        });
+    }
 
-    // console.log(route.path);
-    // watch(
-    //   () => route.query,
-    //   () => {
-    //     console.log('++++++++++++++++++++++++++++++++++++++++');
-    //   }
-    // );
+    // 获取基本数据信息
+    getMeaaage();
+
     /**
      * @description: 页面改变后响应函数
      * @param {Number} p 页面页数改变页数
@@ -174,21 +111,26 @@ export default defineComponent({
 
     function changePage(p) {
       page.value = p.page;
+
+      getBlogArticles(type.value == true ? text.value : null, type.value == false ? text.value : null, page.value)
+        .then((data) => {
+          articleData.splice(0, articleData.length);
+          articleData.splice(articleData.length, 0, ...data.articles);
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('获取文章信息失败，请重试', { duration: 2000, closable: true });
+        });
+
       router.push(
         route.path +
           '?' +
           (route.query.category ? 'category=' + route.query.category + '&' : '') +
           (route.query.tag ? 'tag=' + route.query.tag + '&' : '') +
-          ('limit=' +
-            (limit < messageCount - (page.value - 1) * 10 ? limit : messageCount - (page.value - 1) * 10) +
-            '&') +
-          ('offest=' + (page.value - 1) * 10)
+          ('page=' + page.value)
       );
 
-      articleData.splice(0, articleData.length);
-      for (let i = 0; i < 10; ++i) {
-        articleData.splice(articleData.length, 0, data[i]);
-      }
+      blogPage.scrollTo({ top: document.body.offsetHeight - 54 });
     }
 
     return {

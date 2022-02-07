@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 11:51:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-27 18:25:14
+ * @LastEditTime: 2022-01-29 16:28:07
 -->
 <template>
   <div
@@ -266,7 +266,7 @@ export default defineComponent({
             // 向下滚的
             if (topBarTop.value === 0) {
               topBarTop.value = -topBarHeight;
-              containerTopBarHeight.value -= topBarHeight;
+              containerTopBarHeight.value = topBarRef.value.$el.parentNode.offsetHeight - topBarHeight;
               innerHeight.value = height.value - containerTopBarHeight.value;
               setTimeout(() => {
                 // 更新滚动条
@@ -277,7 +277,7 @@ export default defineComponent({
             // 向上滚的
             if (topBarTop.value !== 0) {
               topBarTop.value = 0;
-              containerTopBarHeight.value += topBarHeight;
+              containerTopBarHeight.value = topBarRef.value.$el.parentNode.offsetHeight;
               innerHeight.value = height.value - containerTopBarHeight.value;
               setTimeout(() => {
                 // 更新滚动条

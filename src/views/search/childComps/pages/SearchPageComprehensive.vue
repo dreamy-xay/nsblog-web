@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2022-01-25 14:25:23
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-26 12:15:12
+ * @LastEditTime: 2022-01-27 19:12:55
 -->
 <template>
   <div class="search-page-comprehensive">
@@ -24,7 +24,12 @@
         @click="changePages('/article/' + item.id)"
       >
         <div class="list">
-          <div class="title">{{ item.title }}</div>
+          <div class="title">
+            <div
+              class="iconfont blog-wenti1"
+              v-if="item.type == 1"
+            ></div>{{ item.title }}
+          </div>
           <div class="content">{{ item.content }}</div>
           <div class="bottom">
             <div class="left">
@@ -92,6 +97,7 @@ export default defineComponent({
             results.push(item);
             context.emit('changeLoadingState', 0, true);
           });
+          // console.log(results);
         })
         .catch((error) => {
           console.log(error);
@@ -197,6 +203,13 @@ export default defineComponent({
           font-weight: 700;
           font-size: 16px;
           color: $grey-10;
+
+          .blog-wenti1 {
+            display: inline-block;
+            height: 14px;
+            width: 14px;
+            margin-right: 8px;
+          }
         }
 
         .content {

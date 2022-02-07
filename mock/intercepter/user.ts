@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:15:05
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-21 22:25:10
+ * @LastEditTime: 2022-01-31 19:34:18
  */
 import { Random, mock } from 'better-mock';
 import { Application, Request, Response } from 'express';
@@ -382,5 +382,20 @@ export default function(baseUrl: string, app: Application) {
     print('get user profile', { username });
 
     return res.send({ profile: Random.integer(0, 1) ? Random.paragraph(1, 10) : Random.cparagraph(1, 10) });
+  });
+
+  // 获取我的问答
+  app.get(baseUrl + '/users/question', (req: Request, res: Response) => {
+    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
+    const username: string = getToken(req.headers).username;
+
+    print('get users question info', { username });
+
+    return res.json({
+      reply_count: Random.integer(0, 100),
+      question_count: Random.integer(0, 100),
+      like_count: Random.integer(0, 100),
+      accept_count: Random.integer(0, 100)
+    });
   });
 }

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 22:17:07
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-13 13:08:52
+ * @LastEditTime: 2022-01-29 14:34:26
  */
 
 /**
@@ -34,12 +34,15 @@ export function dateFormat(fmt: string, date: Date): string {
 /**
  * @description: 获取时间差文字描述
  * @param {Date} date 需计算差日期对象 `必传参数`
+ * @param {number} limit 是否超出限制原日期显示，限制毫秒数 `默认为 1296000`
+ * @param {string} fmt 在限制情况下，原日期格式化日期模式串 `默认为 'YY-mm-dd HH-MM-SS'`
  * @return {string} 返回时间差状态文字描述
  * @author: dreamy-xay
  */
-export function dateGetText(date: Date): string {
+export function dateGetText(date: Date, limit: number = 1296000, fmt: string = 'YY-mm-dd HH-MM-SS'): string {
   const timeDiff: number = parseInt((new Date().getTime() - date.getTime()) / 1000 + '');
-  if (timeDiff <= 1) return '刚刚';
+  if (limit && timeDiff >= limit) return dateFormat(fmt, date);
+  else if (timeDiff <= 1) return '刚刚';
   else if (timeDiff < 30) return timeDiff + '秒前';
   else if (timeDiff < 60) return '半分钟前';
   else if (timeDiff < 1800) return parseInt(timeDiff / 60 + '') + '分钟前';

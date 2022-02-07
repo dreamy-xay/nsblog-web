@@ -4,28 +4,28 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-24 21:42:19
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-25 20:11:34
+ * @LastEditTime: 2022-01-27 22:37:08
 -->
 <template>
   <div class="resource-detail-top">
-    <div class="title">springboot中如何设置pagehelper-spring-boot-starter分页时，若该页面无内容，则返回空？</div>
+    <div class="title">{{data.name}}</div>
     <div class="user">
       <base-avatar
         role="button"
-        :src="'https://s3.bmp.ovh/imgs/2021/09/7fc65c1d3e881ea5.jpg'"
+        :src="data.avatar"
         :size="32"
-        :href="'http://localhost:8888/user/dreamy'"
-        :target="'http://localhost:8888/user/dreamy'"
+        :href="'/user/'+data.username"
+        :target="'/user/'+data.username"
       />
-      <div class="name">梦幻</div>
-      <div class="time">{{new Date()+' 上架'}}</div>
+      <div class="name">{{data.nickname}}</div>
+      <div class="time">{{data.upload_time+' 上架'}}</div>
     </div>
-    <div class="text">springboot中如何设置pagehelper-spring-boot-starter分页时，若该页面无内容，则返回空？springboot中如何设置子pgaehelper-spring
-      -boot-starter分页时，若该页面无内容，则返回空？</div>
+    <div class="text">{{data.remark}}</div>
     <div class="button">
       <div
         class="download"
         role="button"
+        @click="clickButton(0)"
       >
         <div class="download-icon"><i class="iconfont blog-xiazai"></i></div>
         <div class="download-text">下载</div>
@@ -34,41 +34,95 @@
       <div
         class="collect"
         role="button"
+        @click="clickButton(1)"
       >
-        <div class="collect-icon"><i class="iconfont blog-shoucang21"></i></div>
-        <div class="collect-text">收藏</div>
+        <div
+          class="collect-icon"
+          v-if="!data.collection"
+        ><i class="iconfont blog-shoucang21"></i></div>
+        <div class="collect-text">{{data.collection ? '已收藏' : '收藏'}}</div>
       </div>
 
-      <div
-        class="collect"
-        role="button"
+      <base-qr-code-popover
+        :value="path"
+        title="扫一扫，分享网站"
       >
-        <div class="collect-icon"><i class="iconfont blog-fenxiang"></i></div>
-        <div class="collect-text">分享</div>
-      </div>
+        <div
+          class="collect"
+          role="button"
+        >
+          <div class="collect-icon"><i class="iconfont blog-fenxiang"></i></div>
+          <div class="collect-text">分享</div>
+        </div>
+      </base-qr-code-popover>
+
     </div>
 
     <div class="bottom">
-      <div>下载量 • {{251}} 下载</div>
+      <div>下载量 • {{data.download_count}} 下载</div>
       <div
         role="button"
         class="bottom-button"
+        @click="clickButton(2)"
       >举报</div>
     </div>
   </div>
+
+  <base-favorite
+    v-model:is-show="isShow"
+    :type="type"
+    :cid="id"
+  />
 </template>
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
+import BaseQrCodePopover from '@/components/content/baseQrCodePopover/BaseQrCodePopover.vue';
+import BaseReport from '@/components/common/baseReport/BaseReport.vue';
+import BaseFavorite from '@/components/common/baseFavorite/BaseFavorite.vue';
 
 /**
  * @description: 资源详细信息页面top
+ * @param {Object} data 显示数据 `默认为null`
+ * @event changeCollection 改变收藏状态
  * @author: Z_Y_C
  */
 
 export default defineComponent({
   name: 'resourceDetailTop',
-  components: { BaseAvatar },
+  components: { BaseAvatar, BaseQrCodePopover, BaseFavorite },
+  emits: ['changeCollection'],
+  props: {
+    data: {
+      type: Object,
+      default: null,
+    },
+  },
+  setup(props, context) {
+    const isShow = ref(false);
+    const id = ref(null);
+    const type = '3';
+
+    /**
+     * @description: 按钮跳转
+     * @param {Number} index 0:下载,1:收藏,2:举报
+     * @return {Void}
+     * @author: Z_Y_C
+     */
+    function clickButton(index) {
+      if (index == 0) window.open(props.data.link, props.data.link);
+      else if (index == 1) {
+        if (!props.data.collection) {
+          isShow.value = true;
+          id.value = props.data.id + '';
+          context.emit('changeCollection', 1234);
+        } else {
+          context.emit('changeCollection', 0);
+        }
+      }
+    }
+    return { clickButton, isShow, id, type, path: window.location.href };
+  },
 });
 </script>
 
@@ -160,6 +214,7 @@ export default defineComponent({
       }
 
       .collect-icon {
+        margin-right: 5px;
         .iconfont {
           font-size: 14px;
         }
@@ -167,7 +222,6 @@ export default defineComponent({
 
       .collect-text {
         font-size: 14px;
-        margin-left: 5px;
       }
     }
   }
@@ -181,7 +235,7 @@ export default defineComponent({
 
     .bottom-button {
       &:hover {
-        color: $grey-9;
+        color: $red-2;
       }
     }
   }

@@ -4,30 +4,30 @@
  * @Autor: continue-hs
  * @Date: 2022-01-23 15:06:03
  * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-27 17:35:13
+ * @LastEditTime: 2022-01-27 21:13:47
 -->
 <template>
   <div
-    class="base-article-item"
+    class="article-item"
     :style="styleSelect1"
   >
-    <div class="base-article-item-body">
-      <div class="base-article-item-body-top">
-        <div class="base-article-item-body-top-text">
+    <div class="article-item-body">
+      <div class="article-item-body-top">
+        <div class="article-item-body-top-text">
           <div
             class="name"
             role="button"
             @click="toUserHome"
           >{{articleItem.nickname}}</div>
-          <div class="base-article-item-body-top-line"></div>
+          <div class="article-item-body-top-line"></div>
           <div class="time">{{articleItem.release_time}}</div>
-          <div class="base-article-item-body-top-line"></div>
+          <div class="article-item-body-top-line"></div>
           <div
             class="topic"
             @click="clickTopic"
             role="button"
           >{{articleItem.topic}}</div>
-          <div class="base-article-item-body-top-dot"></div>
+          <div class="article-item-body-top-dot"></div>
           <div
             class="tag"
             @click="clickTag"
@@ -36,26 +36,26 @@
         </div>
       </div>
 
-      <div class="base-article-item-body-all">
+      <div class="article-item-body-all">
         <div
-          class="base-article-item-body-left"
+          class="article-item-body-left"
           :style="articleItem.cover_image ? styleSelect2 : styleSelect1"
         >
-          <div class="base-article-item-body-left-top">
+          <div class="article-item-body-left-top">
             <div
-              class="base-article-item-body-left-top-text"
+              class="article-item-body-left-top-text"
               @click="toArticles"
               role="button"
             >
               {{articleItem.title}}
             </div>
           </div>
-          <div class="base-article-item-body-left-middle">
-            <div class="base-article-item-body-left-middle-text">
+          <div class="article-item-body-left-middle">
+            <div class="article-item-body-left-middle-text">
               {{articleItem.content}}
             </div>
           </div>
-          <div class="base-article-item-body-left-bottom">
+          <div class="article-item-body-left-bottom">
             <div
               class="view"
               role="button"
@@ -104,15 +104,15 @@
         </div>
 
         <div
-          class="base-article-item-body-right"
+          class="article-item-body-right"
           v-if="articleItem.cover_image"
         >
           <base-image src="articleItem.cover_image" />
         </div>
 
       </div>
+      <div class="article-item-line"></div>
     </div>
-    <div class="base-article-item-line"></div>
   </div>
 </template>
 
@@ -130,7 +130,7 @@ import BaseImage from '@/components/content/baseImage/BaseImage.vue';
  */
 
 export default defineComponent({
-  name: 'baseArticleItem',
+  name: 'ArticleItem',
   components: {
     BaseImage,
   },
@@ -205,15 +205,16 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
-.base-article-item {
-  .base-article-item-body {
+.article-item {
+  .article-item-body {
     height: 129px;
+    margin-left: 20px;
 
-    .base-article-item-body-top {
+    .article-item-body-top {
       height: 22px;
       @include flex(center);
 
-      .base-article-item-body-top-text {
+      .article-item-body-top-text {
         @include flex(center);
         height: 17px;
         font-size: 13px;
@@ -244,7 +245,7 @@ export default defineComponent({
           }
         }
 
-        .base-article-item-body-top-line {
+        .article-item-body-top-line {
           width: 1px;
           border-right: 1px solid $grey-4;
           height: 14px;
@@ -252,7 +253,7 @@ export default defineComponent({
           margin-right: 9px;
         }
 
-        .base-article-item-body-top-dot {
+        .article-item-body-top-dot {
           width: 3px;
           height: 3px;
           background: $grey-7;
@@ -263,17 +264,17 @@ export default defineComponent({
       }
     }
 
-    .base-article-item-body-all {
+    .article-item-body-all {
       @include flex();
       height: 84px;
 
-      .base-article-item-body-left {
-        .base-article-item-body-left-top {
+      .article-item-body-left {
+        .article-item-body-left-top {
           height: 24px;
           padding-top: 10px;
           @include flex(center);
 
-          .base-article-item-body-left-top-text {
+          .article-item-body-left-top-text {
             @include ellipsis(1);
             height: 21px;
             font-size: 16px;
@@ -283,12 +284,12 @@ export default defineComponent({
           }
         }
 
-        .base-article-item-body-left-middle {
+        .article-item-body-left-middle {
           height: 22px;
           padding-top: 8px;
           @include flex(center);
 
-          .base-article-item-body-left-middle-text {
+          .article-item-body-left-middle-text {
             @include ellipsis(1);
             height: 17px;
             font-size: 13px;
@@ -298,7 +299,7 @@ export default defineComponent({
           }
         }
 
-        .base-article-item-body-left-bottom {
+        .article-item-body-left-bottom {
           @include flex(center);
           height: 15px;
           font-size: 13px;
@@ -359,17 +360,17 @@ export default defineComponent({
         }
       }
 
-      .base-article-item-body-right {
+      .article-item-body-right {
         width: 120px;
         height: 80px;
       }
     }
-  }
 
-  .base-article-item-line {
-    height: 1px;
-    margin-bottom: 12px;
-    border-bottom: 0.5px solid $grey-4;
+    .article-item-line {
+      height: 1px;
+      margin-top: 12px;
+      border-bottom: 0.5px solid $grey-4;
+    }
   }
 }
 </style>
