@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2022-01-21 19:42:59
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-27 19:24:48
+ * @LastEditTime: 2022-02-07 14:49:19
 -->
 <template>
   <base-view
@@ -45,11 +45,10 @@
         <base-rank-card
           :data="rankingList"
           title="活跃排行榜"
-          @clickMenuItem="rankCardClickMenuItem"
+          @clickMenuItem="rankCardClickMenuItem(index,item)"
         />
       </div>
     </div>
-
     <group-popover v-model:modelValue="isShow" />
   </base-view>
 </template>
@@ -177,6 +176,15 @@ export default defineComponent({
       updateGroups(true);
     }
 
+    /**
+     * @description: 点击活跃排行榜
+     * @return {void}
+     * @author: xiao
+     */
+    function rankCardClickMenuItem(index, item) {
+      console.log(index, item);
+    }
+
     return {
       createGroup,
       isShow,
@@ -186,6 +194,7 @@ export default defineComponent({
       selectTopic,
       updateGroups,
       changeGroupJoin,
+      rankCardClickMenuItem,
     };
   },
 });

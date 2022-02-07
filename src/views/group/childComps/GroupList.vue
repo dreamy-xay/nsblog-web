@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2022-01-14 18:52:17
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-27 19:34:49
+ * @LastEditTime: 2022-02-07 17:20:54
 -->
 <template>
   <div class="group-list">
@@ -79,6 +79,7 @@ import { useMessage } from 'naive-ui';
 
 /**
  * @description:学习小组列表
+ * @param {Array} studyGroups 学习小组数据
  * @author: xiao
  */
 
