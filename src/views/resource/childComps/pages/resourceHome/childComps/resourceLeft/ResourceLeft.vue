@@ -5,12 +5,17 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-22 12:12:35
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-26 12:56:26
+ * @LastEditTime: 2022-01-27 16:30:05
 -->
 <template>
   <div class="resource-left">
-    <base-select-head />
-    <resource-body></resource-body>
+    <base-select-head
+      :select-tag="selectTag"
+      :select-time="selectTime"
+      @change-tag="changeTag($event)"
+      @change-select="changeSelect($event)"
+    />
+    <resource-body :resource-data="resourceData"></resource-body>
   </div>
 </template>
 <script>
@@ -34,9 +39,36 @@ export default defineComponent({
       type: Array,
       defaule: () => [],
     },
+    selectTag: {
+      type: Number,
+      default: 0,
+    },
+    selectTime: {
+      type: Number,
+      default: 0,
+    },
   },
-  setup(props) {
-    return {};
+  setup(props, context) {
+    /**
+     * @description: 选择标签
+     * @param {Object} e e.index标签下标
+     * @return {Void}
+     * @author: Z_Y_C
+     */
+    function changeTag(e) {
+      context.emit('update:selectTag', e.index);
+    }
+
+    /**
+     * @description: 选择时间下拉框
+     * @param {Object} e e.index标签下标
+     * @return {Void}
+     * @author: Z_Y_C
+     */
+    function changeSelect(e) {
+      context.emit('update:selectTime', e.index);
+    }
+    return { changeTag, changeSelect };
   },
 });
 </script>

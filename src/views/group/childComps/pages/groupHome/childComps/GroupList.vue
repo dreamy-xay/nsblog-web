@@ -3,8 +3,13 @@
  * @Version:
  * @Autor: xiao
  * @Date: 2022-01-14 18:52:17
+<<<<<<< HEAD:src/views/group/childComps/GroupList.vue
  * @LastEditors: xiao
  * @LastEditTime: 2022-02-07 17:20:54
+=======
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-29 15:54:25
+>>>>>>> b493f229e44688e1a104dbc095934a19a0977e21:src/views/group/childComps/pages/groupHome/childComps/GroupList.vue
 -->
 <template>
   <div class="group-list">
@@ -92,7 +97,6 @@ export default defineComponent({
     studyGroups: {
       type: Array,
       required: true,
-      default: null,
     },
   },
 

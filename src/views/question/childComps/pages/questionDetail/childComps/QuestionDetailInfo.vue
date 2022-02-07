@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-25 12:46:18
  * @LastEditors: clq
- * @LastEditTime: 2022-01-25 13:53:08
+ * @LastEditTime: 2022-01-29 16:06:59
 -->
 <template>
   <div class="question-detail-info">
@@ -33,18 +33,20 @@
       </div>
       <div class="tags">
         <div
-          v-for="(item, index) in questionInfo.tags"
+          v-for="(tag, index) in questionInfo.tags"
           :key="index"
           class="tag-item"
           role="button"
+          @click="toTagPage(tag)"
         >
-          {{item}}
+          {{tag}}
         </div>
       </div>
       <div class="buttons">
         <div
           class="btn-style-1"
           role="button"
+          @click="toEdit"
         >
           <div><i class="iconfont blog-edit" /></div>写回答
         </div>
@@ -52,7 +54,7 @@
           class="btn-style-2"
           role="button"
         >
-          <div><i class="iconfont blog-dianzan1" /></div>点赞 {{questionInfo.likeCount}}
+          <div><i class="iconfont blog-dianzan1" /></div>点赞 {{questionInfo.evaluation_count}}
         </div>
         <div
           class="btn-style-2"
@@ -75,16 +77,21 @@
         <div
           class="right"
           role="button"
+          @click="showReport"
         >举报</div>
       </div>
     </div>
+    <base-report v-model:isShow="isShowReport" />
   </div>
 </template>
 
 <script>
-import { defineComponent, reactive } from 'vue';
+import { defineComponent, reactive, ref, inject } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
+import BaseReport from '@/components/common/baseReport/BaseReport.vue';
+import { getQuestionDetail } from '@/network/api/questions';
 import { useRoute } from 'vue-router';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description:
@@ -95,28 +102,40 @@ export default defineComponent({
   name: 'questionDetailInfo',
   components: {
     BaseAvatar,
+    BaseReport,
   },
   setup() {
+    const articlePage = inject('articlePage'); // 获取主页面 ref (dom)
+    const msg = useMessage(); // naive-ui 消息组件
     const route = useRoute(); //route
+    const questionId = route.params.questionId; // 问答id
+    let questionInfo = reactive({}); // 问答详情
+    let isShowReport = ref(false); // 举报页面显示控制
 
-    let questionInfo = reactive({
-      id: 12,
-      title:
-        '文章标题文章标题文章标题文章标题文章标题文章标题文章标题文章标题文章标题文章标题文章标题文章标题文章标题文章标题文章标题文章标题文章标题文章标题文章标题文章标题文章标题',
-      content:
-        '文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容',
-      solution: 1,
-      likeCount: 12,
-      browsing_count: 12,
-      username: 'us6',
-      nickname: 'dexteryu1',
-      avatar: 'https://ccc',
-      release_time: '2021-10-12',
-      tags: ['Java', 'C++'],
-    });
-
-    console.log('route');
-    console.log(route.query.id);
+    // 获取问答详情
+    getQuestionDetail(questionId)
+      .then((data) => {
+        // console.log('getQuestionDetail');
+        // console.log(data);
+        questionInfo.title = data.title;
+        questionInfo.avatar = data.avatar;
+        questionInfo.nickname = data.nickname;
+        questionInfo.username = data.username;
+        questionInfo.release_time = data.release_time;
+        questionInfo.content = data.content;
+        questionInfo.tags = data.tags;
+        questionInfo.evaluation = data.evaluation;
+        questionInfo.evaluation_count = data.evaluation_count;
+        questionInfo.collection = data.collection;
+        questionInfo.solution = data.solution;
+        questionInfo.browsing_count = data.browsing_count;
+        // console.log('questionInfo');
+        // console.log(questionInfo);
+      })
+      .catch((error) => {
+        console.log(error);
+        msg.error('获取问答失败', { duration: 2000, closable: true });
+      });
 
     /**
      * @description: 跳转到用户主页
@@ -127,9 +146,42 @@ export default defineComponent({
     function toUserCenter(username) {
       window.open(`/user/${username}`);
     }
+
+    /**
+     * @description: 显示举报页面
+     * @return {void}
+     * @author: clq
+     */
+    function showReport() {
+      isShowReport.value = true;
+    }
+
+    /**
+     * @description: 跳转至标签页面
+     * @param {string} tagName
+     * @return {void}
+     * @author: clq
+     */
+    function toTagPage(tagName) {
+      window.open(`/tag/${tagName}`);
+    }
+
+    /**
+     * @description: 跳转到编辑框
+     * @return {void}
+     * @author: clq
+     */
+    function toEdit() {
+      console.log('toEdit');
+    }
+
     return {
       questionInfo,
+      isShowReport,
       toUserCenter,
+      showReport,
+      toTagPage,
+      toEdit,
     };
   },
 });
@@ -138,6 +190,11 @@ export default defineComponent({
 <style lang="scss" scoped>
 .question-detail-info {
   width: 100%;
+  margin-bottom: 16px;
+  background-color: $grey-0;
+  border-radius: $border-radius-0;
+  box-shadow: $shadow-0;
+
   .question-detail-info-container {
     box-sizing: border-box;
     width: 100%;
@@ -151,7 +208,7 @@ export default defineComponent({
       @include ellipsis(2);
       font-size: 32px;
       font-weight: 400;
-      color: #262626;
+      color: $grey-10;
       line-height: 38px;
     }
 
@@ -172,7 +229,7 @@ export default defineComponent({
         font-size: 14px;
         font-weight: 400;
         text-align: center;
-        color: #4bd8aa;
+        color: $green-1;
         line-height: 32px;
         transition: 0.25s;
 
@@ -184,12 +241,9 @@ export default defineComponent({
       .release-time {
         font-size: 14px;
         font-weight: 400;
-        color: #707070;
+        color: $grey-8;
         line-height: 32px;
       }
-    }
-
-    .content {
     }
 
     .tags {
@@ -200,19 +254,18 @@ export default defineComponent({
       .tag-item {
         height: 100%;
         margin-right: 8px;
-        background: rgba(133, 232, 199, 0.3);
-        border-radius: 4px;
+        background-color: rgba(133, 232, 199, 0.3);
+        border-radius: $border-radius-1;
         padding: 0px 8px;
-        // padding-top: 5px;
         font-size: 14px;
         line-height: 24px;
         font-weight: 400;
-        color: #4bd8aa;
+        color: $green-1;
         transition: 0.25s;
 
         &:hover {
-          background-color: rgba(133, 232, 199, 0.7);
-          color: #37aa84;
+          background-color: $green-0;
+          color: $green-2;
         }
       }
     }
@@ -240,12 +293,12 @@ export default defineComponent({
 
       .btn-style-1 {
         margin-right: 20px;
-        background: #85e8c7;
-        border-radius: 16px;
-        box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.16);
-        color: #ffffff;
+        background: $green-0;
+        border-radius: $border-radius-1;
+        box-shadow: $shadow-0;
+        color: $grey-0;
         &:hover {
-          background-color: $green-2;
+          background-color: $green-1;
         }
         & > div {
           margin-right: 6px;
@@ -254,14 +307,14 @@ export default defineComponent({
 
       .btn-style-2 {
         margin-right: 10px;
-        background: #ffffff;
-        border: 1px solid #8c8c8c;
-        border-radius: 4px;
-        color: #8c8c8c;
+        background: $grey-0;
+        border: 1px solid $grey-7;
+        border-radius: $border-radius-1;
+        color: $grey-7;
 
         &:hover {
-          background-color: #707070;
-          color: #ffffff;
+          background-color: $grey-8;
+          color: $grey-0;
         }
       }
     }
@@ -271,7 +324,7 @@ export default defineComponent({
       height: 20px;
       font-size: 14px;
       line-height: 20px;
-      color: #8c8c8c;
+      color: $grey-7;
 
       .left {
         @include flex(center);
@@ -281,14 +334,14 @@ export default defineComponent({
           height: 4px;
           margin: 0px 6px;
           border-radius: 50%;
-          background-color: #707070;
+          background-color: $grey-8;
         }
       }
 
       .right {
         transition: 0.25s;
         &:hover {
-          color: red;
+          color: $red-2;
         }
       }
     }

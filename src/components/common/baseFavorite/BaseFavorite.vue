@@ -89,7 +89,7 @@ export default defineComponent({
       })
       .catch((error) => {
         console.log(error);
-        msg.error('获取登录日志失败', { duration: 2000, closable: true });
+        msg.error('获取收藏夹数据失败', { duration: 2000, closable: true });
       });
 
     /**

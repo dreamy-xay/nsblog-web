@@ -1,6 +1,7 @@
 <!--
- * @Description: 学习小组页面
+ * @Description: 学习小组模块
  * @Version:
+<<<<<<< HEAD
  * @Autor: xiao
  * @Date: 2022-01-21 19:42:59
  * @LastEditors: xiao
@@ -51,26 +52,30 @@
     </div>
     <group-popover v-model:modelValue="isShow" />
   </base-view>
+=======
+ * @Autor: dreamy-xay
+ * @Date: 2022-01-22 15:58:15
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-29 14:40:39
+-->
+<template>
+  <div class="group">
+    <router-view />
+  </div>
+>>>>>>> b493f229e44688e1a104dbc095934a19a0977e21
 </template>
 
 <script>
-import { defineComponent, ref, reactive } from 'vue';
-import BaseView from '@/components/content/baseView/BaseView.vue';
-import BaseTopicBar from '@/components/common/baseTopicBar/BaseTopicBar.vue';
-import GroupList from '@/views/group/childComps/GroupList';
-import GroupPopover from '@/views/group/childComps/GroupPopover.vue';
-import BaseBulletin from '@/components/common/baseBulletin/BaseBulletin';
-import BaseRankCard from '@/components/common/baseRankCard/BaseRankCard';
-import { getGroups } from '@/network/api/groups';
-import { useMessage } from 'naive-ui';
+import { defineComponent } from 'vue';
 
 /**
- * @description: 学习小组页面
- * @author: xiao
+ * @description: 学习小组模块
+ * @author: dreamy-xay
  */
 
 export default defineComponent({
   name: 'group',
+<<<<<<< HEAD
   components: {
     BaseView,
     BaseTopicBar,
@@ -197,57 +202,13 @@ export default defineComponent({
       rankCardClickMenuItem,
     };
   },
+=======
+>>>>>>> b493f229e44688e1a104dbc095934a19a0977e21
 });
 </script>
 
 <style lang="scss" scoped>
 .group {
-  .group-container {
-    @include flex();
-    margin: 16px 0px 16px 75px;
-    padding-bottom: 50px;
-
-    .group-search {
-      margin-right: 50px;
-    }
-
-    .group-right {
-      @include flex(center, flex-start, column);
-      .group-create {
-        width: 284px;
-        height: 72px;
-        background: $grey-0;
-        border-radius: $border-radius-0;
-        box-shadow: $shadow-0;
-        margin-bottom: 14px;
-        @include flex(center, center);
-
-        .create-button {
-          @include flex(center, center);
-          width: 252px;
-          height: 40px;
-          background: $grey-0;
-          border: 1px solid $green-1;
-          border-radius: $border-radius-1;
-          font-size: 14px;
-          font-weight: 700;
-          color: $green-1;
-          transition: 0.25s;
-
-          .iconfont {
-            font-size: 23px;
-            margin-right: 9.7px;
-            font-weight: normal;
-          }
-
-          &:hover {
-            border: 1px solid $green-1;
-            color: $grey-0;
-            background: $green-1;
-          }
-        }
-      }
-    }
-  }
+  width: 100%;
 }
 </style>

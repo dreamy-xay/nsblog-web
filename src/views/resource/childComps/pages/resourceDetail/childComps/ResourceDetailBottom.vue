@@ -4,12 +4,15 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-24 22:56:49
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-25 23:06:37
+ * @LastEditTime: 2022-01-26 21:21:33
 -->
 <template>
   <div class="resource-detail-bottom">
     <div class="title">相似资源</div>
-    <resource-body :body-style="{padding: '0 30px' }" />
+    <resource-body
+      :body-style="{padding: '0 30px' }"
+      :resource-data="data"
+    />
   </div>
 </template>
 <script>
@@ -18,6 +21,7 @@ import ResourceBody from '@/views/resource/childComps/pages/resourceHome/childCo
 
 /**
  * @description: 资源详细信息页面bottom
+ * @param {Array} data 显示数据 `默认为[]`
  * @author: Z_Y_C
  */
 
@@ -25,6 +29,12 @@ export default defineComponent({
   name: 'resourcDdetailBottom',
   components: {
     ResourceBody,
+  },
+  props: {
+    data: {
+      type: Array,
+      default: () => [],
+    },
   },
 });
 </script>

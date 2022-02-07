@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 10:01:23
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-23 16:26:48
+ * @LastEditTime: 2022-01-29 15:22:49
  */
 
 import { Application, Request, Response } from 'express';
@@ -30,7 +30,7 @@ export default function(baseUrl: string, app: Application) {
             }
           : {};
         const tagList: string[] = [];
-        let cs: number = Random.natural(1, 5);
+        let cs: number = Random.natural(1, 3);
         while (cs--) tagList.push(Random.natural(0, 2) ? Random.cword(4, 6) : Random.word(5, 7));
         const user: RandomUser = RUsers.random();
         ans.push({

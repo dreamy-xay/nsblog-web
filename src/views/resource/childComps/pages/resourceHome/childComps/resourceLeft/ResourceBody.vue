@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-25 13:17:52
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-25 13:52:05
+ * @LastEditTime: 2022-01-27 21:40:11
 -->
 <template>
   <div
@@ -13,21 +13,23 @@
   >
     <div
       class="resource-body-context"
-      v-for="(item , index) in [1,2,3]"
+      v-for="(item , index) in resourceData"
       :key="index"
     >
       <div
         class="context-top"
         role="button"
+        @click="clickButton(0,index)"
       >
-        健康和生产效率管理PPT
+        {{item.name}}
       </div>
-      <div class="context-center">接上文SpringBoot集成markdown实现文档管理，对于表格的支持markdown不是特别友好，同时内部文档管理需,接上文SpringBoot集成markdown实现文档管理，对于表格的支持markdown不是特别友好，同时内部文档管理需...</div>
+      <div class="context-center"> {{item.remark}}</div>
 
       <div class="context-bottom">
         <div
           class="bottom-left"
           role="button"
+          @click="clickButton(1,index)"
         >
           <div class="icon"><i class="iconfont blog-xiazai"></i></div>
           <div class="text">前往下载</div>
@@ -36,14 +38,16 @@
           <div
             class="name"
             role="button"
-          >Build</div>
-          <div class="time">{{new Date()}}</div>
+            @click="clickButton(2,index)"
+          >{{item.nickname}}</div>
+          <div class="time">{{item.upload_time}}</div>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+import router from '@/router';
 import { defineComponent } from 'vue';
 
 /**
@@ -64,6 +68,22 @@ export default defineComponent({
       type: Object,
       defaule: null,
     },
+  },
+  setup(props) {
+    /**
+     * @description: 按钮跳转
+     * @param {Number} type 0:标题,1:下载,2:名称
+     * @param {Number} index 下标
+     * @return {Void}
+     * @author: Z_Y_C
+     */
+    function clickButton(type, index) {
+      if (type == 0)
+        window.open('/resource/' + props.resourceData[index].id, '/resource/' + props.resourceData[index].id);
+      else if (type == 1) window.open(props.resourceData[index].link, props.resourceData[index].link);
+      else router.push('/user/' + props.resourceData[index].username);
+    }
+    return { clickButton };
   },
 });
 </script>
@@ -86,6 +106,10 @@ export default defineComponent({
       font-weight: 700;
       font-size: 16px;
       line-height: 24px;
+
+      &:hover {
+        color: $grey-8;
+      }
     }
 
     .context-center {

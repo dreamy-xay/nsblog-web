@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-19 19:21:05
  * @LastEditors: clq
- * @LastEditTime: 2022-01-25 21:21:31
+ * @LastEditTime: 2022-01-29 16:11:32
 -->
 <template>
   <div class="question-item">
@@ -37,10 +37,11 @@
         <div class="bottom-left">
           <div
             class="tag"
-            v-for="(item) in question.tags"
-            :key="item"
+            v-for="(tag) in question.tags"
+            :key="tag"
             role="button"
-          >{{item}}</div>
+            @click="toTagPage(tag)"
+          >{{tag}}</div>
         </div>
         <div class="bottom-right">
           <div
@@ -115,10 +116,23 @@ export default defineComponent({
       window.open(`/user/${username}`);
     }
 
+    /**
+     * @description: 跳转到用户主页
+     * @param {string} tagName
+     * @return {void}
+     * @author: clq
+     */
+    function toTagPage(tagName) {
+      // console.log('tagName: ' + tagName);
+      // this.$router.push({ name: 'question', params: { tagName: tagName } });
+      window.open(`/tag/${tagName}`);
+    }
+
     return {
       numberFormat,
       toResourceDetailPage,
       toUserPage,
+      toTagPage,
     };
   },
 });
@@ -230,7 +244,7 @@ export default defineComponent({
       transition: 0.25s;
 
       &:hover {
-        color: $green-0;
+        color: $grey-8;
       }
     }
 
@@ -282,6 +296,7 @@ export default defineComponent({
           text-align: center;
           line-height: 14px;
           color: $grey-7;
+          transition: 0.25s;
 
           &:hover {
             color: $green-0;

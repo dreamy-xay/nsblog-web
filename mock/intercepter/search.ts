@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-19 13:30:35
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-23 16:27:06
+ * @LastEditTime: 2022-01-31 20:04:45
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -33,7 +33,7 @@ export default function(baseUrl: string, app: Application) {
             browsing_count: 12,
             username: user.username,
             nickname: user.nickname,
-            release_time: Random.time(),
+            release_time: Random.datetime(),
             ...(type === 1
               ? {
                   recommend: Random.integer(0, 1),
@@ -119,5 +119,24 @@ export default function(baseUrl: string, app: Application) {
         users: getRandom(int(offset) >= 151 ? 0 : Math.min(int(limit), 151 - int(offset)), option)
       });
     else return res.status(403).json({ error: 'error' });
+  });
+
+  // 获取相关搜索
+  app.get(baseUrl + '/search/about', (req: Request, res: Response) => {
+    const { keyword } = req.query;
+
+    print('get about search');
+
+    const about: string[] = [];
+    const sum: number = Random.integer(0, 15);
+    for (let i: number = 0; i < sum; ++i) {
+      const word: string = Random.integer(0, 1) ? Random.word(3, 15) : Random.cword(2, 10);
+      const index: number = Random.integer(0, word.length - 1);
+      about.push(word.slice(0, index) + keyword + word.slice(index, word.length));
+    }
+
+    return res.json({
+      about
+    });
   });
 }

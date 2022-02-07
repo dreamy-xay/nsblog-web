@@ -1,10 +1,10 @@
 <!--
- * @Description:问答页面
+ * @Description: 问答模块
  * @Version:
  * @Autor: clq
  * @Date: 2022-01-25 11:07:59
- * @LastEditors: clq
- * @LastEditTime: 2022-01-25 11:17:59
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-01-29 15:42:22
 -->
 <template>
   <div class="question">
@@ -16,7 +16,7 @@
 import { defineComponent } from 'vue';
 
 /**
- * @description:
+ * @description: 问答模块
  * @author: clq
  */
 

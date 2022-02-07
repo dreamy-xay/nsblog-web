@@ -4,13 +4,13 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-10 20:39:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-27 18:23:26
+ * @LastEditTime: 2022-01-29 15:19:58
 -->
 
 <template>
   <div
     class="base-footer"
-    :style="{height: showAll ? '122px' : '30px'}"
+    :style="{height: showAll ? '122px' : '50px'}"
   >
     <div v-if="showAll">
       <div class="base-footer-first">
@@ -37,7 +37,10 @@
       </div>
     </div>
 
-    <div class="base-footer-third">
+    <div
+      class="base-footer-third"
+      :style="{marginBottom: showAll ? '12px' : null}"
+    >
       <div>© 2021 ·</div>
       <a
         href="/"
@@ -148,7 +151,6 @@ export default defineComponent({
     font-size: 14px;
     color: $grey-7;
     height: 20px;
-    margin-bottom: 14px;
 
     a {
       color: $grey-7;

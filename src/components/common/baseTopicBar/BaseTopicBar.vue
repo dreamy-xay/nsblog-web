@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-17 20:58:36
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-26 21:23:41
+ * @LastEditTime: 2022-01-29 14:20:00
 -->
 <template>
   <div class="base-topic-bar">
@@ -119,7 +119,7 @@ export default defineComponent({
   props: {
     details: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     firstItem: {
       type: String,

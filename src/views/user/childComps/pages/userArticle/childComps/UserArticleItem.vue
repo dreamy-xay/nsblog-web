@@ -4,7 +4,7 @@
  * @Autor: clqf
  * @Date: 2021-09-14 17:32:49
  * @LastEditors: clq
- * @LastEditTime: 2022-01-16 20:41:32
+ * @LastEditTime: 2022-01-29 16:18:57
 -->
 <template>
   <div class="user-article-item">
@@ -23,7 +23,8 @@
             :hollow="true"
             :hoverColor="style.orange1"
             :text="articleInfo.topic_tag"
-            @click="toTopicTag"
+            :href="`/tag/${articleInfo.topic_tag}`"
+            :target="`/tag/${articleInfo.topic_tag}`"
           />
           <div class="page-view">
             <div><i class="iconfont blog-eye"></i></div>
@@ -76,19 +77,9 @@ export default defineComponent({
       window.open(`/article/${props.articleInfo.id}`, `/article/${props.articleInfo.id}`);
     }
 
-    /**
-     * @description: 跳转至主题页面
-     * @return {void}
-     * @author: clq
-     */
-    function toTopicTag() {
-      console.log(`跳转至 ${props.articleInfo.topic_tag} 主题页面...`);
-    }
-
     return {
       style,
       toArticlePage,
-      toTopicTag,
     };
   },
 });
@@ -114,7 +105,7 @@ export default defineComponent({
       @include ellipsis(1);
 
       &:hover {
-        color: $green-0;
+        color: $grey-8;
       }
     }
 

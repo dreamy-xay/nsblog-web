@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-25 15:31:29
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-15 13:25:56
+ * @LastEditTime: 2022-01-27 14:28:07
 -->
 <template>
   <div class="article-menu-navigation">
@@ -50,7 +50,7 @@ export default defineComponent({
       //数据
       { icon: 'iconfont blog-zhuye', text: '主页', path: `/blog/${props.data}` },
       { icon: 'iconfont blog-dongtai1', text: '动态', path: `/user/${props.data}/dynamic` },
-      { icon: 'iconfont blog-guanyu', text: '关于', path: `/user/${props.data}` },
+      { icon: 'iconfont blog-guanyu', text: '关于', path: `/user/${props.data}/profile` },
       { icon: 'iconfont blog-zhifeiji', text: '开往', path: 'https://travellings.now.sh/' },
     ];
 

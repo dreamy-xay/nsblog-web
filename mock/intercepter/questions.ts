@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 20:59:37
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-26 13:49:48
+ * @LastEditTime: 2022-01-31 19:30:21
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -112,18 +112,18 @@ export default function(baseUrl: string, app: Application) {
       function getComments(): Record<string, unknown> {
         let ans: Record<string, unknown> = {};
         if (!(question_id && reply_id)) {
-          ans = { child_comments: [] };
+          ans = { child_replies: [] };
           const sum = Random.integer(0, 5);
           for (let i: number = 0; i < sum; ++i) {
             const user: RandomUser = RUsers.random();
             const replyUser: RandomUser = RUsers.random();
             const params: Record<string, unknown> = username !== '' ? { evaluation: Random.integer(0, 2) } : {};
-            (ans.child_comments as any).push({
-              comment_id: Random.increment(Random.integer(1, 10)),
+            (ans.child_replies as any).push({
+              id: Random.increment(Random.integer(1, 10)),
               username: user.username,
               nickname: user.nickname,
               avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
-              time: Random.time(),
+              time: Random.datetime(),
               reply_username: replyUser.username,
               reply_nickname: replyUser.nickname,
               content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
@@ -140,11 +140,11 @@ export default function(baseUrl: string, app: Application) {
         const user: RandomUser = RUsers.random();
         const params: Record<string, unknown> = username !== '' ? { evaluation: Random.integer(0, 2) } : {};
         ans.push({
-          comment_id: i ? Random.increment(Random.integer(1, 10)) : 1,
+          id: i ? Random.increment(Random.integer(1, 10)) : 1,
           username: user.username,
           nickname: user.nickname,
           avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
-          time: Random.time(),
+          time: Random.datetime(),
           content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
           support_count: Random.integer(0, 9999),
           oppose_count: Random.integer(0, 9999),
@@ -167,7 +167,14 @@ export default function(baseUrl: string, app: Application) {
 
     print('release questions replies', { username, question_id, content, parent_id, reply_username });
 
-    return res.send();
+    const user: Record<string, unknown> = select('user').findOne({ username });
+
+    return res.json({
+      id: Random.increment(Random.integer(1, 10)),
+      nickname: user.nickname,
+      avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', username),
+      time: Random.datetime()
+    });
   });
 
   // 修改文章评论状态，推荐反对还是不操作
