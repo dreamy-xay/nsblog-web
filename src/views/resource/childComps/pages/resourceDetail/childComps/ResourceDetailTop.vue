@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-24 21:42:19
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-27 22:37:08
+ * @LastEditTime: 2022-02-10 14:09:54
 -->
 <template>
   <div class="resource-detail-top">
@@ -18,7 +18,7 @@
         :target="'/user/'+data.username"
       />
       <div class="name">{{data.nickname}}</div>
-      <div class="time">{{data.upload_time+' 上架'}}</div>
+      <div class="time">{{getDate(data.upload_time)+' 上架'}}</div>
     </div>
     <div class="text">{{data.remark}}</div>
     <div class="button">
@@ -80,6 +80,7 @@ import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import BaseQrCodePopover from '@/components/content/baseQrCodePopover/BaseQrCodePopover.vue';
 import BaseReport from '@/components/common/baseReport/BaseReport.vue';
 import BaseFavorite from '@/components/common/baseFavorite/BaseFavorite.vue';
+import { dateFormat } from '@/util/date';
 
 /**
  * @description: 资源详细信息页面top
@@ -90,7 +91,11 @@ import BaseFavorite from '@/components/common/baseFavorite/BaseFavorite.vue';
 
 export default defineComponent({
   name: 'resourceDetailTop',
-  components: { BaseAvatar, BaseQrCodePopover, BaseFavorite },
+  components: {
+    BaseAvatar,
+    BaseQrCodePopover,
+    BaseFavorite,
+  },
   emits: ['changeCollection'],
   props: {
     data: {
@@ -121,7 +126,26 @@ export default defineComponent({
         }
       }
     }
-    return { clickButton, isShow, id, type, path: window.location.href };
+
+    /**
+     * @description: 改变日期格式
+     * @param {String} date 日期
+     * @return {String} 返回日期格式 `YY-mm-dd HH-MM-SS`
+     * @author: Z_Y_C
+     */
+
+    function getDate(date) {
+      date = new Date(date);
+      return dateFormat('YY-mm-dd HH-MM-SS', date);
+    }
+    return {
+      clickButton,
+      isShow,
+      id,
+      type,
+      path: window.location.href,
+      getDate,
+    };
   },
 });
 </script>
