@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-16 19:29:37
+ * @LastEditTime: 2022-02-10 14:17:05
 -->
 <template>
   <div
@@ -126,8 +126,10 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function addCollections(index) {
-      getFavorites(username, limit, collectionData[index].collections.length, 0, 0, collectionData[index].id)
+      getFavorites(username, limit, collectionData[index].collections.length, 0, 0, collectionData[index].favorite_id)
         .then((data) => {
+          // if (data.collections.length + collectionData[index].collections.length == collectionData[index].count)
+          //   loading[index] = false;
           if (data.collections.length < 10) loading[index] = false;
           collectionData[index].collections.splice(collectionData[index].collections.length, 0, ...data.collections);
         })

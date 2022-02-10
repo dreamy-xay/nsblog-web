@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-25 13:17:52
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-27 21:40:11
+ * @LastEditTime: 2022-02-10 14:09:41
 -->
 <template>
   <div
@@ -40,7 +40,7 @@
             role="button"
             @click="clickButton(2,index)"
           >{{item.nickname}}</div>
-          <div class="time">{{item.upload_time}}</div>
+          <div class="time">{{getDate(item.upload_time)}}</div>
         </div>
       </div>
     </div>
@@ -49,6 +49,7 @@
 <script>
 import router from '@/router';
 import { defineComponent } from 'vue';
+import { dateFormat } from '@/util/date';
 
 /**
  * @description: 资源body样式
@@ -83,7 +84,20 @@ export default defineComponent({
       else if (type == 1) window.open(props.resourceData[index].link, props.resourceData[index].link);
       else router.push('/user/' + props.resourceData[index].username);
     }
-    return { clickButton };
+
+    /**
+     * @description: 改变日期格式
+     * @param {String} date 日期
+     * @return {String} 返回日期格式 `YY-mm-dd`
+     * @author: Z_Y_C
+     */
+
+    function getDate(date) {
+      date = new Date(date);
+      return dateFormat('YY-mm-dd', date);
+    }
+
+    return { clickButton, getDate };
   },
 });
 </script>
