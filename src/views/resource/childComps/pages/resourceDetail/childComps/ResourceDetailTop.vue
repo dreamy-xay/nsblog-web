@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-24 21:42:19
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-10 14:09:54
+ * @LastEditTime: 2022-02-11 22:13:19
 -->
 <template>
   <div class="resource-detail-top">
@@ -72,6 +72,15 @@
     v-model:is-show="isShow"
     :type="type"
     :cid="id"
+    @add-collection="addCollection"
+  />
+
+  <!-- 确认取消收藏 -->
+  <base-modal
+    :show="modalShow"
+    content="取消后可就没有了哦~"
+    @confirm="sureCancelCollection"
+    @cancel="modalShow=!modalShow"
   />
 </template>
 <script>
@@ -80,6 +89,7 @@ import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import BaseQrCodePopover from '@/components/content/baseQrCodePopover/BaseQrCodePopover.vue';
 import BaseReport from '@/components/common/baseReport/BaseReport.vue';
 import BaseFavorite from '@/components/common/baseFavorite/BaseFavorite.vue';
+import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 import { dateFormat } from '@/util/date';
 
 /**
@@ -95,6 +105,7 @@ export default defineComponent({
     BaseAvatar,
     BaseQrCodePopover,
     BaseFavorite,
+    BaseModal,
   },
   emits: ['changeCollection'],
   props: {
@@ -104,9 +115,10 @@ export default defineComponent({
     },
   },
   setup(props, context) {
-    const isShow = ref(false);
-    const id = ref(null);
-    const type = '3';
+    const isShow = ref(false); // 显示收藏夹
+    const modalShow = ref(false); // 显示取消收藏
+    const id = ref(null); // 资源id
+    const type = '3'; // 收藏类型
 
     /**
      * @description: 按钮跳转
@@ -120,11 +132,26 @@ export default defineComponent({
         if (!props.data.collection) {
           isShow.value = true;
           id.value = props.data.id + '';
-          context.emit('changeCollection', 1234);
+          addCollection();
         } else {
-          context.emit('changeCollection', 0);
+          modalShow.value = true;
         }
       }
+    }
+
+    /**
+     * @description: 收藏
+     * @param {string} id 收藏id
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function addCollection(id) {
+      context.emit('changeCollection', id);
+    }
+
+    function sureCancelCollection() {
+      context.emit('changeCollection', 0);
+      modalShow.value = false;
     }
 
     /**
@@ -141,10 +168,13 @@ export default defineComponent({
     return {
       clickButton,
       isShow,
+      modalShow,
       id,
       type,
       path: window.location.href,
       getDate,
+      addCollection,
+      sureCancelCollection,
     };
   },
 });

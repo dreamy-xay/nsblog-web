@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-24 15:52:14
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-27 22:21:42
+ * @LastEditTime: 2022-02-11 22:01:41
 -->
 <template>
   <div class="resource-detail">
@@ -22,6 +22,7 @@ import ResourceDetailBottom from '@/views/resource/childComps/pages/resourceDeta
 import { getResourceDetail } from '@/network/api/resources';
 import { useRoute } from 'vue-router';
 import { useMessage } from 'naive-ui';
+import { cancelCollections } from '@/network/api/favorites';
 
 /**
  * @description:资源详细信息页面
@@ -88,7 +89,16 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function changeCollection(id) {
-      detailDataTop.collection = id;
+      if (detailDataTop.collection && !id) {
+        cancelCollections(detailDataTop.collection)
+          .then(() => {
+            detailDataTop.collection = 0;
+          })
+          .catch((error) => {
+            console.log(error);
+            msg.error('取消收藏失败，请重试', { duration: 2000, closable: true });
+          });
+      } else detailDataTop.collection = id;
     }
 
     return {
