@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2021-09-27 17:17:24
  * @LastEditors: xiao
- * @LastEditTime: 2022-02-11 18:11:24
+ * @LastEditTime: 2022-02-11 21:46:16
 -->
 <template>
   <n-modal
@@ -122,9 +122,9 @@ export default defineComponent({
     function addCollection() {
       if (id.value != null) {
         addCollections(props.type, props.cid, id.value)
-          .then(() => {
+          .then((data) => {
             msg.success(`收藏成功`);
-            context.emit('addCollection', id.value);
+            context.emit('addCollection', data.id);
           })
           .catch((err) => {
             console.log(err);
