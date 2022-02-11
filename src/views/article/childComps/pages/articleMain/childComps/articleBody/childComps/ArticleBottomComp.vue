@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-20 19:56:13
  * @LastEditors: xiao
- * @LastEditTime: 2022-02-11 14:28:19
+ * @LastEditTime: 2022-02-11 17:36:20
 -->
 <template>
   <div class="article-bottom-comp">
@@ -59,7 +59,7 @@
         v-model:isShow="show"
         :cid="data.article_id"
         :type="'1'"
-        ref="b"
+        @addCollection="addCollection"
       >
       </base-favorite>
       <div class="btn-container">
@@ -165,7 +165,6 @@ export default defineComponent({
     const msg = useMessage(); // naive-ui mssage
     const { isLogin } = mapGetters('global', ['isLogin']);
     const show = ref(false);
-    const b = ref(b);
     const modalShow = ref(false); //取消收藏提示
 
     /**
@@ -210,6 +209,16 @@ export default defineComponent({
       } else {
         modalShow.value = true;
       }
+    }
+
+    /**
+     * @description: 收藏成功
+     * @param {string} fid 收藏夹id
+     * @return {void}
+     * @author: xiao
+     */
+    function addCollection(fid) {
+      events.emit('ArticleBottomComp-changeCollection', fid); //收藏
     }
 
     /**
@@ -269,10 +278,10 @@ export default defineComponent({
       onCollect,
       onOppose,
       show,
-      b,
       modalShow,
       delCollection,
       close,
+      addCollection,
     };
   },
 });
