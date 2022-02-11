@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-08-28 23:20:26
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-25 23:23:16
+ * @LastEditTime: 2022-02-11 14:34:00
 -->
 
 <template>
@@ -488,6 +488,7 @@ export default defineComponent({
         z-index: 9999999999;
         box-shadow: $shadow-0;
         border-radius: $border-radius-0;
+        overflow: hidden;
         transition: 0.25s;
 
         &:focus-within {

@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-21 23:15:38
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-28 13:02:28
+ * @LastEditTime: 2022-02-11 16:45:51
 -->
 <template>
   <div class="resource-home">
@@ -37,6 +37,7 @@ import { defineComponent, reactive, ref, watch } from 'vue';
 import BaseRankCard from '@/components/common/baseRankCard/BaseRankCard.vue';
 import ResourceLeft from '@/views/resource/childComps/pages/resourceHome/childComps/resourceLeft/ResourceLeft.vue';
 import { getResources } from '@/network/api/resources';
+import { getListResources } from '@/network/api/list';
 import { useMessage } from 'naive-ui';
 
 /**
@@ -58,45 +59,7 @@ export default defineComponent({
     const offest = ref(0); // 获取信息起点
     const showButton = ref(true); // 显示按钮
     const resourceData = reactive([]); // 资源数据
-    const rankinglist = reactive([
-      {
-        title: 'react有tab页，如何实现未选中的tab页隐藏但不销毁在JavaScript中一组数据如何进行关联呢',
-      },
-      {
-        title: '在JavaScript中一组数据如何进行关联呢',
-      },
-      {
-        title: '在JavaScript中一组数据如何进行关联呢',
-      },
-      {
-        title: '在JavaScript中一组数据如何进行关联呢',
-      },
-
-      {
-        title: '在JavaScript中一组数据如何进行关联呢',
-      },
-      {
-        title: 'react有tab页，如何实现未选中的tab页隐藏但不销毁',
-      },
-      {
-        title: 'react有tab页，如何实现未选中的tab页隐藏但不销毁',
-      },
-      {
-        title: '如何给一个html字符串添加锚点',
-      },
-      {
-        title: '如何给一个html字符串添加锚点',
-      },
-      {
-        title: '如何给一个html字符串添加锚点',
-      },
-      {
-        title: 'react有tab页，如何实现未选中的tab页隐藏但不销毁',
-      },
-      {
-        title: '在JavaScript中一组数据如何进行关联呢',
-      },
-    ]);
+    const rankinglist = reactive([]);
 
     /**
      * @description: 加载数据函数
@@ -119,6 +82,23 @@ export default defineComponent({
 
     // 获取数据
     getMessage();
+
+    getListResources()
+      .then((data) => {
+        for (let i = 0; i < data.resources.length; i++) {
+          let arr = {
+            title: null,
+            url: `resource/`,
+          };
+          arr.title = data.resources[i].title;
+          arr.url += data.resources[i].id;
+          rankinglist.splice(rankinglist.length, 0, arr);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        msg.error('获取下载排行数据失败', { duration: 2000, closable: true });
+      });
 
     // 监听标签，标签改变重新获取数据
     watch(
