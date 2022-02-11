@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2021-09-27 17:17:24
  * @LastEditors: xiao
- * @LastEditTime: 2022-02-11 14:19:30
+ * @LastEditTime: 2022-02-11 18:11:24
 -->
 <template>
   <n-modal
@@ -34,7 +34,7 @@
         <div
           class="bottom-button"
           role="button"
-          @click="addCollection(id)"
+          @click="addCollection()"
         >
           <div class="buttom-button-text">确定</div>
         </div>
@@ -48,14 +48,15 @@ import { defineComponent, reactive, ref } from 'vue';
 import BaseFavoriteList from '@/components/common/baseFavorite/childComps/BaseFavoriteList.vue';
 import { getFavorites } from '@/network/api/favorites';
 import { useMessage } from 'naive-ui';
-import events from '@/events';
 import { addCollections } from '@/network/api/favorites';
+import { mapState } from '@/util/store';
 
 /**
  * @description: 收藏夹界面
  * @param {Boolean} isShow 是否显示收藏夹界面 `默认为false`
  * @param {number | string} type 收藏的类型1为文章、2为问答、3为资源 `必传参数`
  * @param {number | string} cid 要收藏的内容的id `必传参数`
+ * @event addCollection 添加收藏成功 (fid: string) => void
  * @author: xiao
  */
 
@@ -79,10 +80,12 @@ export default defineComponent({
   setup(props, context) {
     const msg = useMessage(); // naive-ui 组件
     const favorites = reactive([]); // 收藏夹数据
-    const id = ref(null);
+    const id = ref(null); // 收藏夹id
+    const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
+    const username = tokenInfo.value.username; // 登录用户名
 
     // 获取收藏夹数据
-    getFavorites('dreamy', 0)
+    getFavorites(username, 0)
       .then((data) => {
         console.log(data);
         favorites.splice(0, 0, ...data.favorites);
@@ -113,18 +116,15 @@ export default defineComponent({
 
     /**
      * @description: 添加收藏
-     * @param {number | string} fid 收藏夹的id
      * @return {Void}
      * @author: xiao
      */
-    function addCollection(fid) {
-      if (fid != null) {
-        addCollections(props.type, props.cid, fid)
+    function addCollection() {
+      if (id.value != null) {
+        addCollections(props.type, props.cid, id.value)
           .then(() => {
             msg.success(`收藏成功`);
-            if (props.type === 1) {
-              events.emit('ArticleBottomComp-changeCollection', fid); //收藏
-            }
+            context.emit('addCollection', id.value);
           })
           .catch((err) => {
             console.log(err);
