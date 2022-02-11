@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: xiao
  * @Date: 2022-01-14 18:52:17
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-29 15:54:25
+ * @LastEditors: xiao
+ * @LastEditTime: 2022-02-07 22:47:11
 -->
 <template>
   <div class="group-list">
@@ -79,6 +79,7 @@ import { useMessage } from 'naive-ui';
 
 /**
  * @description:学习小组列表
+ * @param {Array} studyGroups 学习小组数据
  * @author: xiao
  */
 
@@ -87,6 +88,7 @@ export default defineComponent({
   components: {
     BaseModal,
   },
+  emits: ['changeGroupJoin'],
   props: {
     studyGroups: {
       type: Array,
@@ -128,7 +130,6 @@ export default defineComponent({
      */
     function exitGroup() {
       msg.success(`退出成功`);
-      // props.studyGroups[selectGroup.value].join = 0;
       context.emit('changeGroupJoin', selectGroup.value);
       modalShow.value = false;
     }

@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2021-09-27 17:17:24
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-27 19:35:58
+ * @LastEditTime: 2022-02-11 14:19:30
 -->
 <template>
   <n-modal
@@ -118,17 +118,19 @@ export default defineComponent({
      * @author: xiao
      */
     function addCollection(fid) {
-      addCollections(props.type, props.cid, fid)
-        .then(() => {
-          msg.success(`收藏成功`);
-          if (props.type === 1) {
-            events.emit('ArticleBottomComp-changeCollection', fid); //收藏
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          msg.error(`收藏失败`, { duration: 2000, closable: true });
-        });
+      if (fid != null) {
+        addCollections(props.type, props.cid, fid)
+          .then(() => {
+            msg.success(`收藏成功`);
+            if (props.type === 1) {
+              events.emit('ArticleBottomComp-changeCollection', fid); //收藏
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            msg.error(`收藏失败`, { duration: 2000, closable: true });
+          });
+      }
       context.emit('update:isShow', false);
     }
 
