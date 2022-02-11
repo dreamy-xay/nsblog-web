@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2022-01-20 15:53:19
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-26 21:45:17
+ * @LastEditTime: 2022-02-11 14:31:53
 -->
 <template>
   <n-modal
@@ -126,9 +126,6 @@ export default defineComponent({
      * @author: xiao
      */
     function commit() {
-      console.log(inputName.value);
-      console.log(inputIntroduce.value);
-      console.log(select.value);
       if (inputName.value == '' || inputIntroduce.value == '') {
         msg.error('输入内容不能为空', { duration: 2000, closable: true });
       } else {
@@ -137,6 +134,7 @@ export default defineComponent({
           .then(() => {
             inputName.value = '';
             inputIntroduce.value = '';
+            msg.success(`创建学习小组成功`);
             context.emit('update:modelValue', false);
           })
           .catch((error) => {
