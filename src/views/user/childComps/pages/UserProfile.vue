@@ -4,14 +4,17 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-17 19:30:39
+ * @LastEditTime: 2022-02-10 13:45:41
 -->
 <template>
   <div
     class="user-profile"
     v-if="(privacySetting.view_profile || isSelf) && text"
   >
-    <v-md-preview :text="text" />
+    <v-md-preview
+      :text="text"
+      :style="style"
+    />
   </div>
   <user-null
     v-else
@@ -71,5 +74,9 @@ export default defineComponent({
   border-radius: $border-radius-0;
   background-color: $grey-0;
   @include word-break;
+
+  :deep(.github-markdown-body) {
+    padding: 16px 32px;
+  }
 }
 </style>

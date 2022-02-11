@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 18:09:18
- * @LastEditors: clq
- * @LastEditTime: 2021-09-16 11:42:03
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-10 12:47:18
 -->
 <template>
   <div class="user-info">
@@ -304,7 +304,7 @@ export default defineComponent({
       }
 
       .text {
-        width: 66px;
+        width: 56px;
         font-size: 14px;
         line-height: 20px;
         height: 20px;
@@ -312,7 +312,7 @@ export default defineComponent({
       }
 
       .context {
-        width: 110px;
+        width: 120px;
         color: $grey-9;
         @include ellipsis(1);
         text-align: right;

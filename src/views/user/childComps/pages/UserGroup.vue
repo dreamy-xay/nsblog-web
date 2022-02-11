@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-29 15:37:00
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-10 20:59:55
 -->
 <template>
   <div
@@ -22,17 +22,18 @@
           role="button"
         >{{item.name}}</div>
         <div
-          :class="item.join === 0 ? 'no' : 'yes'"
+          :class="item.join == 0 ? 'no' : 'yes'"
           role="button"
           @click="changeJoin(index)"
         >
           <div
-            v-if="item.join === 0"
+            v-if="item.join == 0"
             class="join"
           >
             <div class="icon"><i class="iconfont blog-daochu1024-29"></i></div>
             <div>加入</div>
           </div>
+
           <div v-else>已加入</div>
         </div>
       </div>
@@ -182,7 +183,7 @@ export default defineComponent({
 
       .yes {
         height: 24px;
-        width: 42px;
+        width: 44px;
         padding: 0 12px;
         @include flex(center, center);
         border-radius: $border-radius-1;
