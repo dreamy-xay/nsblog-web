@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2021-09-27 17:17:24
  * @LastEditors: xiao
- * @LastEditTime: 2022-02-11 21:46:16
+ * @LastEditTime: 2022-02-11 23:44:14
 -->
 <template>
   <n-modal
@@ -56,7 +56,7 @@ import { mapState } from '@/util/store';
  * @param {Boolean} isShow 是否显示收藏夹界面 `默认为false`
  * @param {number | string} type 收藏的类型1为文章、2为问答、3为资源 `必传参数`
  * @param {number | string} cid 要收藏的内容的id `必传参数`
- * @event addCollection 添加收藏成功 (fid: string) => void
+ * @event addCollection 添加收藏成功 (id: string) => void
  * @author: xiao
  */
 
@@ -137,19 +137,19 @@ export default defineComponent({
     /**
      * @description: 新建一个收藏夹
      * @param {String} e 收藏夹名称
+     * @param {String} id 收藏夹名称
      * @return {Void}
      * @author: xiao
      */
-    function newFavorite(e) {
+    function newFavorite(e, id) {
       let f = 1;
       for (let i = 0; i < favorites.length; i++) {
         if (favorites[i].name == e) f = 0;
       }
       if (f) {
-        let num = Math.floor(Math.random() * (9999 - 1000)) + 1000;
         favorites.splice(favorites.length, 0, {
           collections: [],
-          favorite_id: num,
+          favorite_id: id,
           name: e,
           count: 0,
           is_private: false,
