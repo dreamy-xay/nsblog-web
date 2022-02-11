@@ -3,13 +3,8 @@
  * @Version:
  * @Autor: xiao
  * @Date: 2022-01-14 18:52:17
-<<<<<<< HEAD:src/views/group/childComps/GroupList.vue
  * @LastEditors: xiao
- * @LastEditTime: 2022-02-07 17:20:54
-=======
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-29 15:54:25
->>>>>>> b493f229e44688e1a104dbc095934a19a0977e21:src/views/group/childComps/pages/groupHome/childComps/GroupList.vue
+ * @LastEditTime: 2022-02-07 22:47:11
 -->
 <template>
   <div class="group-list">
@@ -93,6 +88,7 @@ export default defineComponent({
   components: {
     BaseModal,
   },
+  emits: ['changeGroupJoin'],
   props: {
     studyGroups: {
       type: Array,
@@ -134,7 +130,6 @@ export default defineComponent({
      */
     function exitGroup() {
       msg.success(`退出成功`);
-      // props.studyGroups[selectGroup.value].join = 0;
       context.emit('changeGroupJoin', selectGroup.value);
       modalShow.value = false;
     }
