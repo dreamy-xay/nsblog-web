@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-10 09:23:58
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-13 19:47:06
+ * @LastEditTime: 2022-02-11 15:19:29
 -->
 <template>
   <div class="user-info-information">
@@ -40,6 +40,7 @@
           v-for="(tag, index) in informData[index]"
           :key="index"
           v-show="(index < 5 || tagsShow) && tag !== ''"
+          @click="jumpTagPage(tag)"
         >
           {{tag}}
         </div>
@@ -150,7 +151,17 @@ export default defineComponent({
       });
     }
 
-    return { icon1Data, informData, tagsShow, changeUserCenter };
+    /**
+     * @description: 跳转标签
+     * @param {string} tag 标签名
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function jumpTagPage(tag) {
+      router.push(`/tag/${tag}`);
+    }
+
+    return { icon1Data, informData, tagsShow, changeUserCenter, jumpTagPage };
   },
 });
 </script>

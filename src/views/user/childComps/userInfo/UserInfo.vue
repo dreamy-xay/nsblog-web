@@ -304,7 +304,7 @@ export default defineComponent({
       }
 
       .text {
-        width: 56px;
+        width: 61px;
         font-size: 14px;
         line-height: 20px;
         height: 20px;
@@ -312,7 +312,7 @@ export default defineComponent({
       }
 
       .context {
-        width: 120px;
+        width: 115px;
         color: $grey-9;
         @include ellipsis(1);
         text-align: right;
