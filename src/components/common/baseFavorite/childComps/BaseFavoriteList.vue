@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2021-09-27 18:00:46
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-24 17:21:42
+ * @LastEditTime: 2022-02-11 23:49:10
 -->
 <template>
   <div class="base-favorite-list">
@@ -55,7 +55,7 @@
       <div
         class="button"
         role="button"
-        @click="newFavorite"
+        @mousedown="newFavorite"
       >
         <div class="text">新建</div>
       </div>
@@ -108,10 +108,7 @@ export default defineComponent({
      * @author: xiao
      */
     function handleBlur() {
-      setTimeout(() => {
-        isEdit.value = !isEdit.value;
-        favoriteName.value = null;
-      }, 200);
+      isEdit.value = !isEdit.value;
     }
 
     /**
@@ -136,11 +133,12 @@ export default defineComponent({
       if (favoriteName.value === null || favoriteName.value == '') {
         msg.error('不能为空', { duration: 2000, closable: true });
       } else {
-        context.emit('newFavorite', favoriteName.value);
-        activeIndex.value = props.favorites.length - 1;
+        activeIndex.value = props.favorites.length;
         newFavorites(favoriteName.value)
-          .then(() => {
-            console.log('创建成功');
+          .then((data) => {
+            context.emit('newFavorite', favoriteName.value, data.id);
+            favoriteName.value = null;
+            console.log('创建收藏夹成功');
           })
           .catch((error) => {
             console.log(error);
