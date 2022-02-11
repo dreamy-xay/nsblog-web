@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 16:32:13
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-27 20:10:56
+ * @LastEditors: xiao
+ * @LastEditTime: 2022-02-11 14:04:33
  * @LastEditors: dreamy-xay
  * @LastEditTime: 2021-10-02 10:14:24
 -->
@@ -131,7 +131,7 @@ export default defineComponent({
       .catch((error) => {
         console.log(error);
         if (error.response.status === 403) router.replace({ name: 'articleProtection', params: { articleId } });
-        else  console.log(error);
+        else console.log(error);
       });
 
     // 计算head data
@@ -202,7 +202,6 @@ export default defineComponent({
         console.log('cancelCollection:' + newValue);
         cancelCollections(newValue)
           .then(() => {
-            msg.success(`取消收藏成功`);
             articleData.collection = null;
           })
           .catch((err) => {

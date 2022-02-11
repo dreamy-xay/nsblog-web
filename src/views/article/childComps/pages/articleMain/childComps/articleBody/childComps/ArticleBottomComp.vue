@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2021-09-20 19:56:13
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-27 19:09:00
+ * @LastEditTime: 2022-02-11 14:06:13
 -->
 <template>
   <div class="article-bottom-comp">
@@ -220,6 +220,7 @@ export default defineComponent({
     function delCollection() {
       modalShow.value = false;
       events.emit('ArticleBottomComp-cacelCollection', props.data.collection); //取消收藏
+      msg.success(`取消收藏成功`);
     }
 
     /**

@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: xiao
  * @Date: 2022-01-21 19:42:59
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-29 15:52:40
+ * @LastEditors: xiao
+ * @LastEditTime: 2022-02-07 22:48:28
 -->
 <template>
   <base-view
@@ -22,11 +22,12 @@
     </template>
 
     <div class="group-home-container">
-      <group-list
-        class="group-home-search"
-        :study-groups="groups"
-        @changeGroupJoin="changeGroupJoin"
-      />
+      <div>
+        <group-list
+          :study-groups="groups"
+          @changeGroupJoin="changeGroupJoin"
+        />
+      </div>
       <div class="group-home-right">
         <div class="group-home-create">
           <div
@@ -127,7 +128,6 @@ export default defineComponent({
       // 获取小组
       getGroups('dreamy', topicSelect.value, 0, 10)
         .then((data) => {
-          console.log('getgroups');
           console.log(data);
           if (flag == true) groups.splice(0, groups.length);
           groups.splice(groups.length, 0, ...data.groups);
@@ -169,7 +169,6 @@ export default defineComponent({
      */
     function selectTopic(topic) {
       topicSelect.value = topic;
-      console.log(`select Topic: ${topic}`);
       updateGroups(true);
     }
 
@@ -193,10 +192,6 @@ export default defineComponent({
     @include flex();
     margin: 16px 0px 16px 75px;
     padding-bottom: 50px;
-
-    .group-home-search {
-      margin-right: 50px;
-    }
 
     .group-home-right {
       @include flex(center, flex-start, column);
