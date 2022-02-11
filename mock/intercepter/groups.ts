@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-31 17:49:56
+ * @LastEditTime: 2022-02-09 15:35:01
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -138,5 +138,136 @@ export default function(baseUrl: string, app: Application) {
     print('release solicitations', { username, title, content, deadline });
 
     return res.send();
+  });
+
+  // 获取文章
+  app.get(baseUrl + '/groups/articles', (req: Request, res: Response) => {
+    const { limit, offset, release_time, browsing_count, tag, category, topic_name, tag_name, type } = req.query;
+
+    print('get groups articles', {
+      limit,
+      offset,
+      release_time,
+      browsing_count,
+      tag,
+      category,
+      topic_name,
+      tag_name,
+      type
+    });
+
+    const RUsers = randomUsers();
+    function getRandom(limit: number): Record<string, unknown>[] {
+      const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
+      for (let i: number = 0; i < limit; ++i) {
+        const user: RandomUser = RUsers.random();
+        ans.push({
+          username: user.username,
+          nickname: user.nickname,
+          id: Random.increment(Random.integer(1, 10)),
+          title: Random.integer(0, 1) ? Random.title(3, 100) : Random.ctitle(3, 50),
+          content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
+          topic_tag: tag_name ? tag_name : Random.integer(0, 1) ? Random.word(2, 8) : Random.cword(2, 5),
+          page_view: Random.integer(0, 300),
+          comment_count: Random.integer(0, 200),
+          recommend_count: Random.integer(0, 900),
+          release_time: Random.datetime(),
+          topic: topic_name ? topic_name : Random.integer(0, 1) ? Random.word(2, 8) : Random.cword(2, 5),
+          cover_image: Random.image(
+            '150x150',
+            '#234567',
+            '#FFFFFF',
+            'png',
+            Random.integer(0, 1) ? Random.word(2, 8) : Random.cword(2, 5)
+          ),
+          recommend: Random.integer(0, 1)
+        });
+      }
+      return ans;
+    }
+    return res.json({ articles: getRandom(int(offset) >= 78 ? 0 : Math.min(int(limit), 78 - int(offset))) });
+  });
+
+  // 获取问答
+  app.get(baseUrl + '/groups/questions', (req: Request, res: Response) => {
+    const { limit, offset, release_time, browsing_count, topic_name, tag_name, type } = req.query;
+
+    print('get groups questions', { limit, offset, release_time, browsing_count, topic_name, tag_name, type });
+
+    const RUsers = randomUsers();
+    function getRandom(limit: number): Record<string, unknown>[] {
+      const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
+      for (let i: number = 0; i < limit; ++i) {
+        const user: RandomUser = RUsers.random();
+        const tags: string[] = [];
+        const sum: number = Random.integer(1, 3);
+        for (let j: number = 0; j < sum; ++j) tags.push(Random.integer(0, 1) ? Random.word(2, 8) : Random.cword(2, 5));
+        ans.push({
+          id: Random.increment(Random.integer(1, 10)),
+          title: Random.integer(0, 1) ? Random.title(1, 40) : Random.ctitle(1, 40),
+          content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
+          release_time: Random.datetime(),
+          reply_count: Random.integer(0, 5) ? Random.integer(1, 10000) : 0,
+          solution: Random.integer(0, 1),
+          browsing_count: Random.integer(0, 5) ? Random.integer(1, 10000) : 0,
+          username: user.username,
+          nickname: user.nickname,
+          tags
+        });
+      }
+      return ans;
+    }
+    return res.json({ questions: getRandom(int(offset) >= 78 ? 0 : Math.min(int(limit), 78 - int(offset))) });
+  });
+
+  // 获取资源
+  app.get(baseUrl + '/groups/resources', (req: Request, res: Response) => {
+    const { type, time, limit, offset } = req.query;
+
+    print('get groups resources', { type, time, limit, offset });
+
+    const RUser = randomUsers();
+    function getRandom(limit: number): Record<string, unknown>[] {
+      const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
+      for (let i: number = 0; i < limit; ++i) {
+        const user: RandomUser = RUser.random();
+        ans.push({
+          id: Random.increment(Random.integer(1, 10)),
+          name: Random.integer(0, 1) ? Random.word(2, 10) : Random.cword(2, 10),
+          link: Random.url(),
+          remark: Random.integer(0, 1) ? Random.paragraph(1, 2) : Random.cparagraph(1, 2),
+          upload_time: Random.datetime(),
+          username: user.username,
+          nickname: user.nickname
+        });
+      }
+      return ans;
+    }
+    return res.json({ resources: getRandom(int(offset) >= 77 ? 0 : Math.min(int(limit), 77 - int(offset))) });
+  });
+
+  // 获取用户
+  app.get(baseUrl + '/groups/users', (req: Request, res: Response) => {
+    const { is_admin, limit, offset } = req.query;
+
+    print('get groups users', { is_admin, limit, offset });
+
+    const RUsers = randomUsers();
+    function getRandom(limit: number): Record<string, unknown>[] {
+      const ans: Record<string, unknown>[] = [];
+      for (let i: number = 0; i < limit; ++i) {
+        const user: RandomUser = RUsers.random();
+        ans.push({
+          username: user.username,
+          nickname: user.nickname,
+          avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
+          signature: (Random.integer(0, 1) ? Random.cparagraph(1, 1) : Random.paragraph(1, 1)).slice(0, 128),
+          attention: Random.integer(0, 1)
+        });
+      }
+      return ans;
+    }
+
+    return res.json({ users: getRandom(int(offset) >= 73 ? 0 : Math.min(int(limit), 73 - int(offset))) });
   });
 }

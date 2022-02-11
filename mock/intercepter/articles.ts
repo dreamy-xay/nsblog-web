@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-31 16:46:55
+ * @LastEditTime: 2022-02-09 15:27:44
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -50,8 +50,6 @@ export default function(baseUrl: string, app: Application) {
         let data: Record<string, unknown> = {};
         if (!username) {
           data = {
-            username: user.username,
-            nickname: user.nickname,
             topic: topic_name ? topic_name : Random.integer(0, 1) ? Random.word(2, 8) : Random.cword(2, 5),
             cover_image: Random.image(
               '150x150',
