@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2022-01-17 10:18:16
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 00:11:29
+ * @LastEditTime: 2022-02-13 00:24:06
 -->
 <template>
   <div class="home-left">
@@ -71,6 +71,9 @@ export default defineComponent({
 <style lang="scss" scoped>
 .home-left {
   width: 700px;
+  background: $grey-0;
+  border-radius: $border-radius-0;
+  box-shadow: $shadow-0;
 
   .home-left-top {
     height: 46px;

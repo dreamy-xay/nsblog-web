@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 00:12:27
+ * @LastEditTime: 2022-02-13 00:30:32
 -->
 <template>
   <base-view
@@ -26,24 +26,21 @@
     />
     <div class="home-container">
       <div class="left">
-        <div class="left-top">
-          <home-left
-            :all-articles="allArticles"
-            :list-index="listIndex"
-            :time-index="timeIndex"
-            @change-list="changeList($event)"
-            @change-time="changeTime($event)"
-          />
-        </div>
-        <div class="home-left-bottom">
-          <div
-            class="home-left-bottom-load"
-            role="button"
-            @click="uploadMore"
-          >
-            <div class="home-left-bottom-load-text">加载更多...</div>
-          </div>
-        </div>
+        <home-left
+          :all-articles="allArticles"
+          :list-index="listIndex"
+          :time-index="timeIndex"
+          @change-list="changeList($event)"
+          @change-time="changeTime($event)"
+        />
+
+        <div
+          class="button"
+          role="button"
+          v-show="true"
+          @click="uploadMore()"
+        >加载更多...</div>
+
       </div>
 
       <div class="right">
@@ -259,36 +256,21 @@ export default defineComponent({
 
     .left {
       width: 700px;
-      @include flex(initial, initial, column);
+      @include flex(center, initial, column);
 
-      .left-top {
-        background: $grey-0;
+      .button {
+        @include flex(center, center);
+        height: 32px;
+        margin-top: 10px;
+        width: 300px;
         border-radius: $border-radius-0;
         box-shadow: $shadow-0;
-        margin-bottom: 16px;
-      }
+        background-color: $grey-0;
 
-      .home-left-bottom {
-        width: 100%;
-        @include flex(center, center);
+        transition: 0.25s;
 
-        .home-left-bottom-load {
-          width: 300px;
-          height: 32px;
-          background: $grey-0;
-          border-radius: 8px;
-          box-shadow: $shadow-0;
-          @include flex(cneter, center);
-
-          .home-left-bottom-load-text {
-            margin-top: 7px;
-            width: 68px;
-            height: 19px;
-            font-size: 14px;
-            font-weight: 400;
-            text-align: center;
-            color: $grey-9;
-          }
+        &:hover {
+          background: $grey-1;
         }
       }
     }
