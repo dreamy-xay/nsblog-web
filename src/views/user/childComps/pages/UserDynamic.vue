@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-10 14:25:41
+ * @LastEditTime: 2022-02-12 14:01:53
 -->
 <template>
   <div
@@ -72,7 +72,7 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function getData() {
-      getDynamic(username, 0, limit)
+      getDynamic(username, dynamicData.length, limit)
         .then((data) => {
           loading.value = data.dynamic.length === limit;
           dynamicData.splice(dynamicData.length, 0, ...data.dynamic);
