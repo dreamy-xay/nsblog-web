@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 17:51:15
- * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-27 16:55:18
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-12 13:08:40
 -->
 <template>
   <div class="article-head">
@@ -168,7 +168,8 @@ export default defineComponent({
      */
     function clickInfoItem(index) {
       if (index === 0) window.open(`/user/${props.data.username}`, `/user/${props.data.username}`);
-      else if (index === infoList.value.length - 1) console.log('click topics tags' + props.data.topic_tag);
+      else if (index === infoList.value.length - 1)
+        window.open(`/tag/${props.data.topic_tag}`, `/tag/${props.data.topic_tag}`);
     }
 
     return {
