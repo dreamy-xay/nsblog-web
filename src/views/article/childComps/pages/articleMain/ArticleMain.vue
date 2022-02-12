@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 16:32:13
- * @LastEditors: xiao
- * @LastEditTime: 2022-02-11 14:04:33
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-12 14:04:50
  * @LastEditors: dreamy-xay
  * @LastEditTime: 2021-10-02 10:14:24
 -->
@@ -21,6 +21,7 @@
     <article-body :data="articleBodyData" />
     <article-footer :data="articleFooterData" />
     <base-loading-page :show="showLoadingPage" />
+    <base-footer :show-all="false" />
   </div>
 </template>
 
@@ -29,6 +30,7 @@ import { computed, defineComponent, provide, reactive, ref } from 'vue';
 import BaseBackground from '@/components/content/baseBackground/BaseBackground.vue';
 import BaseLoadingPage from '@/components/common/baseLoadingPage/BaseLoadingPage.vue';
 import BaseLoadingBar from '@/components/common/baseLoadingBar/BaseLoadingBar.vue';
+import BaseFooter from '@/components/content/baseFooter/BaseFooter.vue';
 import ArticleMenu from '@/views/article/childComps/pages/articleMain/childComps/articleMenu/ArticleMenu.vue';
 import ArticleHead from '@/views/article/childComps/pages/articleMain/childComps/articleHead/ArticleHead.vue';
 import ArticleBody from '@/views/article/childComps/pages/articleMain/childComps/articleBody/ArticleBody.vue';
@@ -53,6 +55,7 @@ export default defineComponent({
     BaseBackground,
     BaseLoadingBar,
     BaseLoadingPage,
+    BaseFooter,
     ArticleMenu,
     ArticleHead,
     ArticleBody,
