@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-09 15:27:44
+ * @LastEditTime: 2022-02-12 11:31:39
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -51,13 +51,15 @@ export default function(baseUrl: string, app: Application) {
         if (!username) {
           data = {
             topic: topic_name ? topic_name : Random.integer(0, 1) ? Random.word(2, 8) : Random.cword(2, 5),
-            cover_image: Random.image(
-              '150x150',
-              '#234567',
-              '#FFFFFF',
-              'png',
-              Random.integer(0, 1) ? Random.word(2, 8) : Random.cword(2, 5)
-            ),
+            cover_image: [
+              'https://s3.bmp.ovh/imgs/2021/09/fd25f71e808f3f23.jpg',
+              null,
+              'https://s3.bmp.ovh/imgs/2021/09/8bcf34ab186f752c.jpg',
+              null,
+              'https://s3.bmp.ovh/imgs/2021/09/040fbcab0802511e.jpg',
+              null,
+              'https://s3.bmp.ovh/imgs/2021/09/7fc65c1d3e881ea5.jpg'
+            ][Random.integer(0, 6)],
             recommend: Random.integer(0, 1)
           };
         }
