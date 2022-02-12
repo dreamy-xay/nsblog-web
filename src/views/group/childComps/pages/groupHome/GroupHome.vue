@@ -3,14 +3,15 @@
  * @Version:
  * @Autor: xiao
  * @Date: 2022-01-21 19:42:59
- * @LastEditors: xiao
- * @LastEditTime: 2022-02-07 22:48:28
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-12 14:07:21
 -->
 <template>
   <base-view
     :background="true"
     :top-bar="true"
     :top-bar-scroll="true"
+    :footer="true"
     bind-class="group-home"
   >
     <template #top-bar-bottom>
