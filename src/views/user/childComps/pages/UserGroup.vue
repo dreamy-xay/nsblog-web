@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-12 15:47:46
+ * @LastEditTime: 2022-02-12 15:52:17
 -->
 <template>
   <div
@@ -236,6 +236,10 @@ export default defineComponent({
         height: 21px;
         line-height: 21px;
         font-weight: 700;
+
+        &:hover {
+          color: $grey-8;
+        }
       }
 
       .join-box {

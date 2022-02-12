@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 10:10:43
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-27 22:28:05
+ * @LastEditTime: 2022-02-12 16:05:28
  */
 import { get, post, put, RequestLifeCycle } from '@/network/request';
 
@@ -57,7 +57,7 @@ export function postArticleComments(
   return post({
     url: '/articles/comments',
     ...RLC,
-    params: {
+    data: {
       article_id,
       content,
       parent_id,
@@ -82,7 +82,7 @@ export function modifyArticleCommentEvaluation(
   return put({
     url: '/articles/comments/evaluation',
     ...RLC,
-    params: {
+    data: {
       comment_id,
       type
     }
@@ -105,7 +105,7 @@ export function modifyArticleRecommendEvaluation(
   return put({
     url: '/articles/evaluation',
     ...RLC,
-    params: {
+    data: {
       article_id,
       type
     }

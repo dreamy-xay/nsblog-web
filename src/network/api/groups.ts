@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-16 10:05:10
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-12 15:19:01
+ * @LastEditTime: 2022-02-12 16:00:54
  */
 
 import { get, post, del, RequestLifeCycle } from '@/network/request';
@@ -57,7 +57,7 @@ export function createGroups(
   return post({
     url: '/groups',
     ...RLC,
-    params: {
+    data: {
       group_name,
       remark,
       topic_name
@@ -76,7 +76,7 @@ export function addGroup(group_name: string, RLC: RequestLifeCycle = {}): Promis
   return post({
     url: '/groups/users',
     ...RLC,
-    params: {
+    data: {
       group_name
     }
   });
