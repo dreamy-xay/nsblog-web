@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 11:59:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-31 16:47:02
+ * @LastEditTime: 2022-02-12 11:24:09
  */
 
 import { Application, Request, Response } from 'express';
@@ -52,7 +52,7 @@ export default function(baseUrl: string, app: Application) {
           : {};
         ans.push({
           favorite_id: Random.increment(Random.integer(1, 10)),
-          name: Random.natural(0, 2) ? Random.cword(1, 8) : Random.word(2, 15),
+          name: i ? (Random.natural(0, 2) ? Random.cword(1, 8) : Random.word(2, 15)) : '默认收藏夹',
           count: Random.integer(1, 99),
           is_private: Random.integer(0, 1) ? true : false,
           ...all,

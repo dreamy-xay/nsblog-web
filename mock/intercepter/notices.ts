@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 10:01:23
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-31 20:03:00
+ * @LastEditTime: 2022-02-12 11:36:51
  */
 
 import { Application, Request, Response } from 'express';
@@ -22,7 +22,12 @@ export default function(baseUrl: string, app: Application) {
       const activityCount: number = Random.integer(0, 3);
       for (let i: number = 0; i < activityCount; ++i)
         ans.push({
-          content: Random.integer(0, 1) ? Random.word(9, 20) : Random.cword(5, 14),
+          content: [
+            'https://s3.bmp.ovh/imgs/2021/09/fd25f71e808f3f23.jpg',
+            'https://s3.bmp.ovh/imgs/2021/09/8bcf34ab186f752c.jpg',
+            'https://s3.bmp.ovh/imgs/2021/09/040fbcab0802511e.jpg',
+            'https://s3.bmp.ovh/imgs/2021/09/7fc65c1d3e881ea5.jpg'
+          ][Random.integer(0, 3)],
           link: Random.url(),
           type: 1
         });
