@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2022-01-21 19:42:59
  * @LastEditors: xiao
- * @LastEditTime: 2022-02-12 16:08:31
+ * @LastEditTime: 2022-02-12 17:11:10
 -->
 <template>
   <base-view
@@ -62,9 +62,10 @@ import GroupList from '@/views/group/childComps/pages/groupHome/childComps/Group
 import GroupPopover from '@/views/group/childComps/pages/groupHome/childComps/GroupPopover.vue';
 import BaseBulletin from '@/components/common/baseBulletin/BaseBulletin';
 import BaseRankCard from '@/components/common/baseRankCard/BaseRankCard';
-import { getGroups } from '@/network/api/groups';
+import { getGroups, getSolicitations } from '@/network/api/groups';
 import { useMessage } from 'naive-ui';
 import { getListGroups } from '@/network/api/list';
+import { useRoute } from 'vue-router';
 
 /**
  * @description: 学习小组主页
@@ -87,6 +88,8 @@ export default defineComponent({
     const topicSelect = ref(''); //选择的专题
     const groups = reactive([]); //学习小组数据
     const msg = useMessage(); // naive-ui 消息组件
+    const route = useRoute(); // route
+    const username = route.params.username; // 获取用户名
     const rankingList = reactive([
       //   {
       //     title: 'react有tab页，如何实现未选中的tab页隐藏但不销毁在JavaScript中一组数据如何进行关联呢',
@@ -119,6 +122,17 @@ export default defineComponent({
       { text: '需要一些资源，请进组分享给大家...', href: '#' },
     ]);
 
+    //获取征集令
+    getSolicitations('123')
+      .then((data) => {
+        console.log('Solicitations', data);
+      })
+      .catch((error) => {
+        console.log(error);
+        msg.error('获取征集令失败', { duration: 2000, closable: true });
+      });
+
+    //获取学习小组活跃排行
     getListGroups()
       .then((data) => {
         console.log('getListGroups', data);
@@ -138,9 +152,9 @@ export default defineComponent({
      */
     function updateGroups(flag) {
       // 获取小组
-      getGroups('dreamy', topicSelect.value, 0, 10)
+      getGroups(username, topicSelect.value, 0, 10)
         .then((data) => {
-          console.log(data);
+          console.log('updateGroups', data);
           if (flag == true) groups.splice(0, groups.length);
           groups.splice(groups.length, 0, ...data.groups);
         })
