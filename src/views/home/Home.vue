@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-29 16:06:29
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-13 00:12:27
 -->
 <template>
   <base-view
@@ -26,12 +26,26 @@
     />
     <div class="home-container">
       <div class="left">
-        <home-left
-          :topic="topicSelect"
-          :tag="tagSelect"
-          :isclick="isClick"
-        />
+        <div class="left-top">
+          <home-left
+            :all-articles="allArticles"
+            :list-index="listIndex"
+            :time-index="timeIndex"
+            @change-list="changeList($event)"
+            @change-time="changeTime($event)"
+          />
+        </div>
+        <div class="home-left-bottom">
+          <div
+            class="home-left-bottom-load"
+            role="button"
+            @click="uploadMore"
+          >
+            <div class="home-left-bottom-load-text">加载更多...</div>
+          </div>
+        </div>
       </div>
+
       <div class="right">
         <home-right />
       </div>
@@ -40,12 +54,17 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, reactive, ref, watch } from 'vue';
 import HomeLeft from '@/views/home/childComps/HomeLeft.vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import HomeRight from '@/views/home/childComps/homeRight/HomeRight.vue';
 import BaseTopicBar from '@/components/common/baseTopicBar/BaseTopicBar.vue';
 import BaseTopicTags from '@/components/common/baseTopicBar/BaseTopicTags.vue';
+import { useMessage } from 'naive-ui';
+import { mapGetters } from '@/util/store';
+import { getArticles } from '@/network/api/articles';
+import { modifyArticleRecommendEvaluation } from '@/network/api/articles';
+
 // import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
 
 /**
@@ -66,6 +85,122 @@ export default defineComponent({
     const topicSelect = ref('');
     const tagSelect = ref('');
     const isClick = ref(false);
+    const msg = useMessage();
+    const listIndex = ref(0);
+    const timeIndex = ref(0);
+    const allArticles = reactive([]);
+    const topic = ref('推荐');
+    const tag = ref('');
+    const limit = ref(7);
+    const typeIndex = ref(0);
+    const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
+
+    initArticlesHome('', '', '', 0, limit.value, 0, 0, topic.value, tag.value, typeIndex.value);
+
+    watch(
+      () => topic.value,
+      (data) => {
+        topic.value = data;
+        tag.value = '';
+        allArticles.splice(0, allArticles.length);
+        initArticlesHome('', '', '', allArticles.length, limit.value, 0, 0, topic.value, tag.value, typeIndex.value);
+      }
+    );
+
+    watch(
+      () => tag.value,
+      (data) => {
+        tag.value = data;
+        topic.value = '';
+        allArticles.splice(0, allArticles.length);
+        initArticlesHome('', '', '', allArticles.length, limit.value, 0, 0, topic.value, tag.value, typeIndex.value);
+      }
+    );
+
+    watch(
+      () => isClick.value,
+      (data) => {
+        if (data === true) initArticlesHome('', '', '', 0, limit.value, 0, 0, topic.value, '', typeIndex.value);
+      }
+    );
+
+    watch(
+      () => listIndex.value,
+      () => {
+        allArticles.splice(0, allArticles.length);
+        typeIndex.value = listIndex.value;
+
+        initArticlesHome('', '', '', allArticles.length, limit.value, 0, 0, topic.value, tag.value, typeIndex.value);
+      }
+    );
+
+    watch(
+      () => timeIndex.value,
+      () => {
+        allArticles.splice(0, allArticles.length);
+        typeIndex.value = 2 + timeIndex.value;
+        initArticlesHome('', '', '', allArticles.length, limit.value, 0, 0, topic.value, tag.value, typeIndex.value);
+      }
+    );
+
+    function changeList(e) {
+      console.log(e.index);
+      listIndex.value = e.index;
+      console.log('ppppppppp' + listIndex.value);
+    }
+
+    function changeTime(e) {
+      timeIndex.value = e.index;
+      console.log('vvvvvv' + timeIndex.value);
+    }
+
+    function initArticlesHome(
+      username,
+      category,
+      tag,
+      offset,
+      limit,
+      release_time,
+      browsing_count,
+      topic_name,
+      tag_name,
+      type
+    ) {
+      getArticles(username, category, tag, offset, limit, release_time, browsing_count, topic_name, tag_name, type)
+        .then((res) => {
+          allArticles.splice(allArticles.length, 0, ...res.articles);
+        })
+        .catch((error) => {
+          console.log('initArticlesHomeError: ' + error);
+        });
+    }
+
+    function uploadMore() {
+      initArticlesHome('', '', '', allArticles.length, limit.value, 0, 0, topic.value, tag.value, typeIndex.value);
+    }
+
+    /**
+     * @description: 改变文章点赞情况
+     * @return {void}
+     * @author: continue-hs
+     */
+    function changeLike(e) {
+      if (isLogin.value) {
+        let res = allArticles[e.index].recommend ? 0 : 1;
+        modifyArticleRecommendEvaluation(allArticles[e.index].id, res)
+          .then(() => {
+            allArticles[e.index].recommend = res;
+            if (res === 1) allArticles[e.index].recommend_count++;
+            else allArticles[e.index].recommend_count--;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        msg.error('请先登录');
+      }
+    }
+
     /**
      * @description: 选择了专题
      * @param {string} topic 专题名
@@ -96,6 +231,14 @@ export default defineComponent({
     return {
       selectTopic,
       selectTag,
+      listIndex,
+      timeIndex,
+      changeList,
+      changeTime,
+      allArticles,
+      typeIndex,
+      uploadMore,
+      changeLike,
       topicSelect,
       tagSelect,
       isClick,
@@ -116,9 +259,38 @@ export default defineComponent({
 
     .left {
       width: 700px;
-      background: $grey-0;
-      border-radius: $border-radius-0;
-      box-shadow: $shadow-0;
+      @include flex(initial, initial, column);
+
+      .left-top {
+        background: $grey-0;
+        border-radius: $border-radius-0;
+        box-shadow: $shadow-0;
+        margin-bottom: 16px;
+      }
+
+      .home-left-bottom {
+        width: 100%;
+        @include flex(center, center);
+
+        .home-left-bottom-load {
+          width: 300px;
+          height: 32px;
+          background: $grey-0;
+          border-radius: 8px;
+          box-shadow: $shadow-0;
+          @include flex(cneter, center);
+
+          .home-left-bottom-load-text {
+            margin-top: 7px;
+            width: 68px;
+            height: 19px;
+            font-size: 14px;
+            font-weight: 400;
+            text-align: center;
+            color: $grey-9;
+          }
+        }
+      }
     }
 
     .right {

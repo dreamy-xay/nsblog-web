@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2022-01-24 18:20:31
- * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-27 21:11:46
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-12 23:32:42
 -->
 <template>
   <base-view
@@ -22,27 +22,25 @@
           <base-select-head
             :selectTag="listIndex"
             :selectTime="timeIndex"
-            :type=false
+            :type="false"
             @changeTag="changeList"
             @changeSelect="changeTime"
+            :style="{width : '100%'}"
           />
           <div
             class="middle-top-button"
             v-if="isLogin"
           >
             <tag-button
-              :detail="detail"
+              :attention="detail.attention"
               @click-attention="clickAttention"
             />
           </div>
         </div>
         <div class="middle-article">
           <article-item
-            v-for="article in tagArticles[typeIndex]"
-            :key="article"
-            :articleItem="article"
-            :swidth="960"
-            @change-like="changeLike(article)"
+            :articleItem="tagArticles"
+            @change-like="changeLike($event)"
           />
         </div>
       </div>
@@ -87,14 +85,14 @@ export default defineComponent({
     BaseSelectHead,
   },
   setup() {
-    const msg = useMessage();
+    const msg = useMessage(); // 'naive-ui'
     const route = useRoute(); // route
     const tagName = route.params.tagName;
-    const listIndex = ref(0);
-    const timeIndex = ref(0);
-    const tagArticles = reactive([[], [], [], [], [], []]);
-    const limit = ref(7);
-    const typeIndex = ref(0);
+    const listIndex = ref(0); //  选择 0:'综合', 1:'最新', 2:'热门'标签
+    const timeIndex = ref(0); // 选择 0:'时间不限', 1:'最近一天', 2:'最近一周', 3:'最近三月'时间筛选
+    const typeIndex = ref(0); // 记录类型，可点击加载更多
+    const tagArticles = reactive([]); // 保存数据
+    let limit = 7;
     const detail = reactive({
       name: '',
       remark: '',
@@ -104,31 +102,25 @@ export default defineComponent({
     });
     const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
 
-    initArticlesTag('', '', '', 0, limit.value, 0, 0, '', tagName, typeIndex.value);
+    initArticlesTag('', '', '', 0, limit, 0, 0, '', tagName, listIndex.value);
 
     // 监听列表下标变化
     watch(
       () => listIndex.value,
-      (data) => {
-        typeIndex.value = data + timeIndex.value;
+      () => {
+        tagArticles.splice(0, tagArticles.length);
+        typeIndex.value = listIndex.value;
+        initArticlesTag('', '', '', 0, limit, 0, 0, '', tagName, typeIndex.value);
       }
     );
 
     // 监听下拉框下标变化
     watch(
       () => timeIndex.value,
-      (data) => {
-        typeIndex.value = data + listIndex.value;
-      }
-    );
-
-    // 监听文章类型列表下标变化
-    watch(
-      () => typeIndex.value,
-      (data) => {
-        typeIndex.value = data;
-        limit.value = 7;
-        initArticlesTag('', '', '', 0, limit.value, 0, 0, '', tagName, typeIndex.value);
+      () => {
+        tagArticles.splice(0, tagArticles.length);
+        typeIndex.value = timeIndex.value + 2;
+        initArticlesTag('', '', '', 0, limit, 0, 0, '', tagName, typeIndex.value);
       }
     );
 
@@ -144,7 +136,6 @@ export default defineComponent({
         detail.article_count = res.article_count;
         detail.attention_count = res.attention_count;
         detail.attention = res.attention;
-        console.log(detail);
       })
       .catch((error) => {
         console.log(error);
@@ -169,7 +160,8 @@ export default defineComponent({
     ) {
       getArticles(username, category, tag, offset, limit, release_time, browsing_count, topic_name, tag_name, type)
         .then((res) => {
-          tagArticles[type].splice(0, tagArticles[type].length, ...res.articles);
+          console.log(res);
+          tagArticles.splice(tagArticles.length, 0, ...res.articles);
         })
         .catch((error) => {
           console.log('initArticlesHomeError: ' + error);
@@ -199,15 +191,14 @@ export default defineComponent({
      * @return {void}
      * @author: continue-hs
      */
-    function changeLike(article) {
+    function changeLike(e) {
       if (isLogin.value) {
-        const res = ref(0);
-        if (article.recommend === 0) res.value = 1;
-        modifyArticleRecommendEvaluation(article.id, res.value)
+        let res = tagArticles[e.index].recommend ? 0 : 1;
+        modifyArticleRecommendEvaluation(tagArticles[e.index].id, res)
           .then(() => {
-            article.recommend = res.value;
-            if (res.value === 1) article.recommend_count++;
-            else article.recommend_count--;
+            tagArticles[e.index].recommend = res;
+            if (res === 1) tagArticles[e.index].recommend_count++;
+            else tagArticles[e.index].recommend_count--;
           })
           .catch((error) => {
             console.log(error);
@@ -223,8 +214,7 @@ export default defineComponent({
      * @author: continue-hs
      */
     function uploadMore() {
-      limit.value += 7;
-      initArticlesTag('', '', '', 0, limit.value, 0, 0, '', tagName, typeIndex.value);
+      initArticlesTag('', '', '', tagArticles.length, limit, 0, 0, '', tagName, typeIndex.value);
     }
 
     /**
@@ -256,7 +246,6 @@ export default defineComponent({
       isLogin,
       listIndex,
       timeIndex,
-      typeIndex,
       tagArticles,
       changeList,
       changeTime,
@@ -277,7 +266,6 @@ export default defineComponent({
     margin-bottom: 6px;
 
     .top {
-      height: 162px;
       background: $grey-0;
       border-radius: 8px;
       margin-top: 16px;
@@ -293,14 +281,17 @@ export default defineComponent({
 
       .middle-top {
         @include flex(center);
+        position: relative;
 
         .middle-top-button {
-          margin-left: 650px;
+          position: absolute;
+          right: 20px;
         }
       }
 
       .middle-article {
-        margin: 12px 0 16px;
+        margin-bottom: 16px;
+        padding-bottom: 12px;
       }
     }
 

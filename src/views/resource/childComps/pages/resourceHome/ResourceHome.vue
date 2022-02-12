@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-21 23:15:38
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-11 16:45:51
+ * @LastEditTime: 2022-02-12 20:45:36
 -->
 <template>
   <div class="resource-home">
@@ -37,7 +37,7 @@ import { defineComponent, reactive, ref, watch } from 'vue';
 import BaseRankCard from '@/components/common/baseRankCard/BaseRankCard.vue';
 import ResourceLeft from '@/views/resource/childComps/pages/resourceHome/childComps/resourceLeft/ResourceLeft.vue';
 import { getResources } from '@/network/api/resources';
-import { getListResources } from '@/network/api/list';
+import { getResourcesList } from '@/network/api/list';
 import { useMessage } from 'naive-ui';
 
 /**
@@ -83,7 +83,7 @@ export default defineComponent({
     // 获取数据
     getMessage();
 
-    getListResources()
+    getResourcesList()
       .then((data) => {
         for (let i = 0; i < data.resources.length; i++) {
           let arr = {

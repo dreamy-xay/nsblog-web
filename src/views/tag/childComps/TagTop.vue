@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2022-01-25 13:51:50
- * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-27 17:40:49
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-12 17:05:45
 -->
 <template>
   <div class="tag-top">
@@ -13,20 +13,25 @@
         <div class="tag-text">{{detail.name}}</div>
       </div>
       <div class="tag-top-text-content">
-        <div class="content-text">{{detail.remark}}</div>
+        <div
+          class="content-text"
+          role="button"
+          :class="showAll ? '' : 'show-one'"
+          @click="showAll = !showAll"
+        >{{detail.remark}}</div>
       </div>
       <div class="tag-top-text-message">
         <div class="message-text">
-          <div class="attention">{{detail.attention_count}}关注</div>
-          <div class="dot">·</div>
-          <div class="article">{{detail.article_count}}文章</div>
+          <div>{{detail.attention_count}}关注</div>
+          <div class="dot">•</div>
+          <div>{{detail.article_count}}文章</div>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'tagTop',
@@ -37,15 +42,15 @@ export default defineComponent({
     },
   },
   setup() {
-    return {};
+    const showAll = ref(false); // 显示全部
+    return { showAll };
   },
 });
 </script>
 <style lang="scss" scoped>
 .tag-top {
   width: 800px;
-  height: 100px;
-  margin-top: 34px;
+  margin: 34px 0 28px 0;
 
   .tag-top-text {
     .tag-top-text-tag {
@@ -65,12 +70,14 @@ export default defineComponent({
       @include flex(center, center);
 
       .content-text {
-        height: 18px;
         font-size: 15px;
         font-weight: Narrow;
         text-align: left;
         color: $grey-7;
         line-height: 18px;
+      }
+
+      .show-one {
         @include ellipsis(1);
       }
     }
@@ -94,6 +101,7 @@ export default defineComponent({
           font-size: 16px;
           font-weight: 700;
           padding: 0 7px;
+          @include flex(center, center);
         }
       }
     }
