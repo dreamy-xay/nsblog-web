@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-10 20:59:55
+ * @LastEditTime: 2022-02-12 15:52:17
 -->
 <template>
   <div
@@ -20,9 +20,10 @@
         <div
           class="name"
           role="button"
+          @click="changePage(item.name)"
         >{{item.name}}</div>
         <div
-          :class="item.join == 0 ? 'no' : 'yes'"
+          class="join-box"
           role="button"
           @click="changeJoin(index)"
         >
@@ -79,17 +80,26 @@
     v-else
     :select="true"
   />
+
+  <base-modal
+    content="确定要退出学习小组吗"
+    :show="modalShow"
+    @confirm="delGroup()"
+    @cancel="modalShow = !modalShow"
+  />
 </template>
 
 <script>
 import { defineComponent, reactive, ref } from 'vue';
-import { getGroups } from '@/network/api/groups';
-import { useRoute } from 'vue-router';
+import { addGroup, getGroups, deleteGroup } from '@/network/api/groups';
+import { useRoute, useRouter } from 'vue-router';
 import BaseTag from '@/components/content/baseTag/BaseTag.vue';
 import styles from '@/assets/style/define.scss';
 import { dateFormat } from '@/util/date';
 import { useMessage } from 'naive-ui';
 import UserNull from '@/views/user/childComps/UserNull.vue';
+import BaseModal from '@/components/content/baseModal/BaseModal.vue';
+import { mapGetters } from '@/util/store';
 
 /**
  * @description: 用户主页学习小组记录
@@ -101,27 +111,28 @@ export default defineComponent({
   components: {
     BaseTag,
     UserNull,
+    BaseModal,
   },
   setup() {
     const msg = useMessage(); // naive-ui
     const route = useRoute();
+    const router = useRouter();
     const username = route.params.username; // 获取路由的username
     const groupData = reactive([]);
     const loading = ref(false); // 查看数据是否加载完
     const limit = 10; // 获取数据条数
+    const modalShow = ref(false); //是否显示退出提示
+    const indexTag = ref(null); // 记录下标
+    const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
 
     // 首次获取数据
-    getGroups(username, 0, limit)
-      .then((data) => {
-        console.log(data);
-        loading.value = data.groups.length === limit;
-        groupData.splice(0, 0, ...data.groups);
-      })
-      .catch((error) => {
-        console.log(error);
-        msg.error('获取学习小组信息失败', { duration: 2000, closable: true });
-      });
+    addGroupData();
 
+    /**
+     * @description: 加载更多数据
+     * @return {void}
+     * @author: Z_Y_C
+     */
     function addGroupData() {
       getGroups(username, groupData.length, limit)
         .then((data) => {
@@ -135,13 +146,56 @@ export default defineComponent({
     }
 
     /**
-     * @description: 退出或加入学习小组
+     * @description: 加入学习小组
      * @param {Number} index 数据下标
      * @return {Void}
      * @author: Z_Y_C
      */
     function changeJoin(index) {
-      groupData[index].join = !groupData[index].join;
+      if (isLogin.value) {
+        if (!groupData[index].join) {
+          addGroup(groupData[index].name)
+            .then(() => {
+              groupData[index].join = 1;
+            })
+            .catch((error) => {
+              console.log(error);
+              msg.error('加入学习小组失败', { duration: 2000, closable: true });
+            });
+        } else {
+          indexTag.value = index;
+          modalShow.value = true;
+        }
+      } else msg.error('请先登录', { duration: 2000, closable: true });
+    }
+
+    /**
+     * @description: 退出学习小组
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function delGroup() {
+      deleteGroup(groupData[indexTag.value].name)
+        .then(() => {
+          groupData[indexTag.value].join = 0;
+          msg.success('退出学习小组成功', { duration: 2000, closable: true });
+          indexTag.value = null;
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('退出学习小组失败', { duration: 2000, closable: true });
+        });
+      modalShow.value = false;
+    }
+
+    /**
+     * @description: 进入学习小组主页
+     * @param {string} name 学习小组名
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function changePage(name) {
+      router.push(`/group/${name}`);
     }
 
     return {
@@ -151,6 +205,9 @@ export default defineComponent({
       addGroupData,
       loading,
       changeJoin,
+      modalShow,
+      delGroup,
+      changePage,
     };
   },
 });
@@ -179,54 +236,42 @@ export default defineComponent({
         height: 21px;
         line-height: 21px;
         font-weight: 700;
-      }
-
-      .yes {
-        height: 24px;
-        width: 44px;
-        padding: 0 12px;
-        @include flex(center, center);
-        border-radius: $border-radius-1;
-        border: 1px solid $green-1;
-        font-size: 14px;
-        color: $green-1;
-        transition: 0.25s;
 
         &:hover {
-          box-shadow: $shadow-2;
+          color: $grey-8;
         }
       }
 
-      .no {
+      .join-box {
         height: 24px;
-        width: 44px;
-        padding: 0 12px;
+        width: 66px;
         @include flex(center, center);
         border-radius: $border-radius-1;
         border: 1px solid $grey-7;
         font-size: 14px;
         color: $grey-7;
         transition: 0.25s;
+        font-weight: bold;
 
         .join {
           height: 100%;
           @include flex(center, space-between);
 
           .icon {
-            width: 12px;
+            width: 10px;
             height: 100%;
             margin-right: 4px;
             @include flex(center, center);
 
             .iconfont {
-              font-size: 12px;
+              font-size: 14px;
             }
           }
         }
 
         &:hover {
-          color: $green-0;
-          border: 1px solid $green-0;
+          border-color: $green-1;
+          color: $green-1;
         }
       }
     }

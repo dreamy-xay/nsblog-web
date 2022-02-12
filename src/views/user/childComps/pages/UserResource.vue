@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-20 15:33:38
+ * @LastEditTime: 2022-02-12 16:17:01
 -->
 <template>
   <div
@@ -19,7 +19,7 @@
 
       <div
         class="top"
-        @click="changePages(index)"
+        @click="changePages(index,0)"
         role="button"
       >{{item.name}}</div>
       <div class="center">{{item.remark}}</div>
@@ -27,7 +27,7 @@
         <div
           class="download"
           role="button"
-          @click="changePages(index)"
+          @click="changePages(index,1)"
         >
           <div class="icon"><i class="iconfont blog-xiazai"></i></div>
           <div class="text">前往下载</div>
@@ -84,19 +84,17 @@ export default defineComponent({
     const limit = 10; // 获取数据条数
 
     // 首次获取数据
-    getResources(username, 0, limit)
-      .then((data) => {
-        loading.value = data.resources.length === limit;
-        resourceData.splice(0, 0, ...data.resources);
-      })
-      .catch((error) => {
-        console.log(error);
-        msg.error('获取资源共享失败', { duration: 2000, closable: true });
-      });
+    addResourceData();
 
+    /**
+     * @description: 加载更多数据
+     * @return {void}
+     * @author: Z_Y_C
+     */
     function addResourceData() {
       getResources(username, resourceData.length, limit)
         .then((data) => {
+          console.log();
           loading.value = data.resources.length === limit;
           resourceData.splice(resourceData.length, 0, ...data.resources);
         })
@@ -106,8 +104,16 @@ export default defineComponent({
         });
     }
 
-    function changePages(index) {
-      window.open(`/resource/${resourceData[index].id}`, `/resource/${resourceData[index].id}`);
+    /**
+     * @description: 跳转页面
+     * @param {number} index 数据下标
+     * @param {number} type 0:进入资源页面,1:进入直接下载页面
+     * @return {*}
+     * @author: Z_Y_C
+     */
+    function changePages(index, type) {
+      if (type === 0) window.open(`/resource/${resourceData[index].id}`, `/resource/${resourceData[index].id}`);
+      else window.open(resourceData[index].link, resourceData[index].link);
     }
 
     return { styles, resourceData, dateFormat, addResourceData, loading, changePages };
@@ -136,6 +142,10 @@ export default defineComponent({
       font-weight: 700;
       line-height: 21px;
       margin-bottom: 5px;
+
+      &:hover {
+        color: $grey-8;
+      }
     }
 
     .center {
