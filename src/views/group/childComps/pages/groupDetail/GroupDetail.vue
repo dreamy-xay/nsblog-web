@@ -4,14 +4,16 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-29 14:37:16
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-29 22:18:59
+ * @LastEditTime: 2022-02-12 20:11:59
 -->
 <template>
   <base-view
     :background="true"
     :top-bar="true"
     :top-bar-scroll="true"
+    :back-top="true"
     :footer="true"
+    :footer-show-all="false"
     bind-class="group-detail"
   >
     <template #top-bar-bottom>
@@ -64,7 +66,7 @@
           :menu-list="['最近', '长期']"
           title="活跃用户"
           :data="userRankingList"
-          :data-key="['username', 'nickname', 'avatar', 'count']"
+          :data-key="['username', 'nickname', 'avatar', 'activity']"
           :is-user="true"
           :style="{marginTop: '16px'}"
           @clickMenuItem="rankCardClickMenuItem"
@@ -81,6 +83,7 @@ import BaseRankCard from '@/components/common/baseRankCard/BaseRankCard.vue';
 import GroupSolicitationPopover from '@/views/group/childComps/pages/groupDetail/childComps/GroupSolicitationPopover.vue';
 import GroupDetailInfo from '@/views/group/childComps/pages/groupDetail/childComps/GroupDetailInfo.vue';
 import router from '@/router';
+import { getGroupsUsersList } from '@/network/api/list';
 
 /**
  * @description: 学习小组详情页
@@ -150,72 +153,30 @@ export default defineComponent({
     }
 
     // 用户活跃排名列表
-    const userRankingList = reactive([
-      {
-        username: 'dreamy',
-        nickname: '启航~ o(*￣▽￣*)o',
-        avatar: 'https://dummyimage.com/150x150/234567/FFFFFF.png?text=dreamy',
-        count: 1354,
-      },
-      {
-        username: 'us1',
-        nickname: '幻墨如烟',
-        avatar: 'https://dummyimage.com/150x150/234567/FFFFFF.png?text=us1',
-        count: 1210,
-      },
-      {
-        username: 'us2',
-        nickname: '红梅千雪',
-        avatar: 'https://dummyimage.com/150x150/234567/FFFFFF.png?text=us2',
-        count: 982,
-      },
-      {
-        username: 'us3',
-        nickname: 'ζ街挽',
-        avatar: 'https://dummyimage.com/150x150/234567/FFFFFF.png?text=us3',
-        count: 570,
-      },
-      {
-        username: 'us4',
-        nickname: '浊酒倾觞',
-        avatar: 'https://dummyimage.com/150x150/234567/FFFFFF.png?text=us4',
-        count: 113,
-      },
-      {
-        username: 'us5',
-        nickname: '宅男费纸',
-        avatar: 'https://dummyimage.com/150x150/234567/FFFFFF.png?text=us5',
-        count: 101,
-      },
-      {
-        username: 'us6',
-        nickname: '清幽兰',
-        avatar: 'https://dummyimage.com/150x150/234567/FFFFFF.png?text=us6',
-        count: 92,
-      },
-      {
-        username: 'us7',
-        nickname: '┉深jìē酒肆┈',
-        avatar: 'https://dummyimage.com/150x150/234567/FFFFFF.png?text=us7',
-        count: 38,
-      },
-      {
-        username: 'us8',
-        nickname: '茄子是我打紫哒！',
-        avatar: 'https://dummyimage.com/150x150/234567/FFFFFF.png?text=us8',
-        count: 9,
-      },
-    ]);
+    const userRankingList = reactive([]);
+    // 初始化列表数据
+    getGroupsUsersList()
+      .then((data) => {
+        userRankingList.splice(0, userRankingList.length, ...data.users);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
     /**
      * @description: 选择不同类型的用户排名
      * @param {number} index 选择菜单索引 `必传参数`
-     * @param {string} item 选择菜单名 `必传参数`
      * @return {void}
      * @author: dreamy-xay
      */
-    function rankCardClickMenuItem(index, item) {
-      // pass
+    function rankCardClickMenuItem(index) {
+      getGroupsUsersList(index)
+        .then((data) => {
+          userRankingList.splice(0, userRankingList.length, ...data.users);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
 
     return {
@@ -272,18 +233,20 @@ export default defineComponent({
   }
 }
 
-.group-detail {
+:deep(.group-detail) {
+  @include flex(flex-start, center);
+
   .group-detail-body {
-    width: 100%;
+    width: 1000px;
     margin-top: 16px;
-    @include flex(initial, space-between);
+    @include flex(flex-start, space-between);
     margin-bottom: 6px;
 
-    .left {
+    & > .left {
       width: 700px;
     }
 
-    .right {
+    & > .right {
       width: 284px;
       @include flex(center, center, column);
 

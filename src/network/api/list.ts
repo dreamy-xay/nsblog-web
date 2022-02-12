@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2022-02-11 15:15:47
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-11 16:34:18
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-12 18:20:56
  */
 import { get, RequestLifeCycle } from '@/network/request';
 
@@ -45,7 +45,7 @@ export function getListGroups(RLC: RequestLifeCycle = {}): Promise<unknown> {
  * @return {Promise<unknown>} 请求返回promise
  * @author: Z_Y_C
  */
-export function getListGroupsUsers(type: number = 0, RLC: RequestLifeCycle = {}): Promise<unknown> {
+export function getGroupsUsersList(type: number = 0, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return get({
     url: '/list/groups/users',
     ...RLC,

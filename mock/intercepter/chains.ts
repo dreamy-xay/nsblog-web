@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-12 13:41:17
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-12 13:47:23
+ * @LastEditTime: 2022-02-12 18:13:02
  */
 
 import { Random } from 'better-mock';
@@ -13,7 +13,7 @@ import { print, int } from './util';
 
 export default function(baseUrl: string, app: Application) {
   // 获取友链
-  app.get(baseUrl + '/dialogues', (req: Request, res: Response) => {
+  app.get(baseUrl + '/chains', (req: Request, res: Response) => {
     const { username, limit, offset } = req.query;
 
     print('get friends chains', { username, limit, offset });
