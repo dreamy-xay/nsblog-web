@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
- * @LastEditors: clq
- * @LastEditTime: 2022-01-16 20:41:21
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-12 14:24:22
 -->
 <template>
   <div class="user-article">
@@ -143,19 +143,30 @@ export default defineComponent({
 
     /**
      * @description: 获取文章
-     * @param {string} username
+     * @param {string} username 用户名
+     * @param {string} category 过滤分类名
+     * @param {string} tag 过滤标签名
+     * @param {number} offse 起始位置
+     * @param {number} limit 限制条数
+     * @param {1 | -1 | 0} release_time 按发布时间排序，为 0 表示不排序
+     * @param {1 | -1 | 0} browsing_count 按浏览量排序，为 0 表示不排序
+     * @param {string } topic_name 文章专题
+     * @param {string} tag_name 文章标签
+     * @param {0 | 1 | 2|3|4|5} type 热门排序类型
      * @return {void}
      * @author: clq
      */
-    function initArticles(username, categoryId, tagId, offset, limit, release_time, browsing_count) {
-      getArticles(username, categoryId, tagId, offset, limit, release_time, browsing_count)
+    function initArticles(username, categoryId, tagId, offse, limit, release_time, browsing_count) {
+      getArticles(username, categoryId, tagId, offse, limit, release_time, browsing_count)
         .then((res) => {
-          if (res.length < limit.value) {
+          console.log(res.articles.length);
+          if (res.articles.length < limit) {
             isShowLoadMore.value = false;
           } else {
             isShowLoadMore.value = true;
           }
-          articles.splice(0, articles.length, ...res.articles);
+          articles.splice(articles.length, 0, ...res.articles);
+          offset.value += res.articles.length;
         })
         .catch((err) => {
           console.log('initArticlesError: ' + err);
@@ -263,7 +274,6 @@ export default defineComponent({
      */
     function loadMore() {
       console.log('loadMore');
-      limit.value += 10;
       //更新文章
       initArticles(
         username,
