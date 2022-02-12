@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-12 13:39:56
+ * @LastEditTime: 2022-02-12 18:40:59
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -40,7 +40,7 @@ export default function(baseUrl: string, app: Application) {
     if (group_name)
       return res.json({
         member_count: Random.integer(0, 300),
-        solicitations_count: Random.integer(0, 1000),
+        content_count: Random.integer(0, 1000),
         remark: Random.integer(0, 1) ? Random.paragraph(1, 2) : Random.cparagraph(1, 2),
         join: Random.integer(0, 1)
       });
