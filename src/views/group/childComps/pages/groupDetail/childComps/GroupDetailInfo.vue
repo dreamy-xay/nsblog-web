@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-29 17:12:45
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-29 21:38:39
+ * @LastEditTime: 2022-02-12 18:43:22
 -->
 <template>
   <div class="group-detail-info">
@@ -22,7 +22,7 @@
         role="button"
         @click="joinClick"
       >
-        <template v-if="data.join">
+        <template v-if="groupData.join">
           已加入
         </template>
         <template v-else>
@@ -43,7 +43,7 @@
       <div class="info">
         <div class="info-left">
           <div class="count">
-            {{ data.member_count }}
+            {{ groupData.member_count }}
           </div>
           <div class="text">
             <div class="icon">
@@ -54,7 +54,7 @@
         </div>
         <div class="info-right">
           <div class="count">
-            {{ data.content_count }}
+            {{ groupData.content_count }}
           </div>
           <div class="text">
             <div class="icon">
@@ -65,7 +65,7 @@
         </div>
       </div>
       <div class="remark">
-        {{ data.remark }}
+        {{ groupData.remark }}
       </div>
     </div>
   </div>
@@ -77,6 +77,7 @@ import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 import { mapGetters } from '@/util/store';
 import { useRoute } from 'vue-router';
 import { useMessage } from 'naive-ui';
+import { getGroups, addGroup, deleteGroup } from '@/network/api/groups';
 
 /**
  * @description: 学习小组细节信息
@@ -93,13 +94,25 @@ export default defineComponent({
     const route = useRoute(); // route
     const groupName = route.params.groupName; // 学习组名
 
-    const data = reactive({
-      member_count: 8173,
-      content_count: 1496,
-      remark:
-        '创建由Python学习者和社区专家组成的国内最大的第三方Python中文社区，帮助社区成员更好地入门学习、职业成长和应用实践。',
+    // 学习小组信息
+    const groupData = reactive({
+      member_count: 0,
+      content_count: 0,
+      remark: '',
       join: 0, // 是否加入
     });
+    // 初始化获取学习小组信息
+    getGroups('', '', 0, 0, groupName)
+      .then((data) => {
+        console.log(data);
+        groupData.member_count = data.member_count;
+        groupData.content_count = data.content_count;
+        groupData.remark = data.remark;
+        groupData.join = data.join;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
     const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
     const showModal = ref(false); // 是否弹出模态框确认
@@ -111,11 +124,17 @@ export default defineComponent({
      */
     function joinClick() {
       if (isLogin.value) {
-        if (data.join) showModal.value = true;
-        else {
-          data.join = 1;
-          msg.success('加入学习小组成功', { duration: 2000, closable: true });
-        }
+        if (groupData.join) showModal.value = true;
+        else
+          addGroup(groupName)
+            .then(() => {
+              groupData.join = 1;
+              msg.success('加入学习小组成功', { duration: 2000, closable: true });
+            })
+            .catch((error) => {
+              console.log(error);
+              msg.error('加入学习小组失败', { duration: 2000, closable: true });
+            });
       } else msg.error('请先登录', { duration: 2000, closable: true });
     }
 
@@ -127,15 +146,21 @@ export default defineComponent({
      */
     function quitGroup(isConfirm) {
       showModal.value = false;
-      if (isConfirm) {
-        data.join = 0;
-        msg.success('已退出该学习小组', { duration: 2000, closable: true });
-      }
+      if (isConfirm)
+        deleteGroup(groupName)
+          .then(() => {
+            groupData.join = 0;
+            msg.success('已退出该学习小组', { duration: 2000, closable: true });
+          })
+          .catch((error) => {
+            console.log(error);
+            msg.success('退出学习小组失败', { duration: 2000, closable: true });
+          });
     }
 
     return {
       groupName,
-      data,
+      groupData,
       joinClick,
       showModal,
       quitGroup,
@@ -147,7 +172,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 .group-detail-info {
   width: 284px;
-  height: 208px;
   margin-top: 16px;
   background-color: $grey-0;
   border-radius: $border-radius-0;
@@ -216,8 +240,8 @@ export default defineComponent({
   }
 
   .group-detail-info-body {
-    height: 158px;
     width: 100%;
+    @include flex(center, center, column);
 
     .info {
       height: 48px;
@@ -272,7 +296,6 @@ export default defineComponent({
 
     .remark {
       width: 252px;
-      height: 66px;
       margin: 10px 16px 16px 16px;
       line-height: 22px;
       @include ellipsis(3);
