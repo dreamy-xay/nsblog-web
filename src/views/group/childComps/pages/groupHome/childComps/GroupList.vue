@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: xiao
  * @Date: 2022-01-14 18:52:17
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-12 14:49:11
+ * @LastEditors: xiao
+ * @LastEditTime: 2022-02-12 16:55:01
 -->
 <template>
   <div class="group-list">
@@ -39,7 +39,10 @@
           </div>
           <div class="remark">{{group.remark}}</div>
           <div class="category-member-count">
-            <div class="category">
+            <div
+              class="category"
+              role="button"
+            >
               <i class="iconfont blog-zhu"></i>
               {{group.topic_name}}
             </div>
@@ -76,6 +79,7 @@
 import { defineComponent, ref } from 'vue';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 import { useMessage } from 'naive-ui';
+import { addGroup, deleteGroup } from '@/network/api/groups';
 
 /**
  * @description:学习小组列表
@@ -118,8 +122,16 @@ export default defineComponent({
      * @author: xiao
      */
     function joinGroup(group) {
-      msg.success(`加入成功`);
-      group.join = 1;
+      //加入学习小组
+      addGroup(group.name)
+        .then(() => {
+          msg.success(`加入小组成功`);
+          group.join = 1;
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('加入小组失败', { duration: 2000, closable: true });
+        });
     }
 
     /**
@@ -128,9 +140,18 @@ export default defineComponent({
      * @author: xiao
      */
     function exitGroup() {
-      msg.success(`退出成功`);
-      context.emit('changeGroupJoin', selectGroup.value);
-      modalShow.value = false;
+      console.log('props.studyGroups[selectGroup.value].name', props.studyGroups[selectGroup.value].name);
+      //退出学习小组
+      deleteGroup(props.studyGroups[selectGroup.value].name)
+        .then(() => {
+          msg.success(`退出成功`);
+          context.emit('changeGroupJoin', selectGroup.value);
+          modalShow.value = false;
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('退出小组失败', { duration: 2000, closable: true });
+        });
     }
 
     /**

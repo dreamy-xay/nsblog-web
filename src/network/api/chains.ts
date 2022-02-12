@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2022-02-12 15:37:25
  * @LastEditors: xiao
- * @LastEditTime: 2022-02-12 16:16:37
+ * @LastEditTime: 2022-02-12 16:50:19
  */
 import { get, RequestLifeCycle } from '@/network/request';
 
@@ -23,7 +23,7 @@ export function getChains(
   RLC: RequestLifeCycle = {}
 ): Promise<unknown> {
   return get({
-    url: '/dialogues',
+    url: '/chains',
     ...RLC,
     params: {
       username,

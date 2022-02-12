@@ -5,11 +5,7 @@
 			"nickname": "启航~ o(*￣▽￣*)o",
 			"password": "Abcd1234",
 			"email": "dreamy@qq.com",
-<<<<<<< HEAD
-			"token": "c40929ab15ddc445340772c51883bf26908eaeeacff5c163d6f70e21806e4c60bcde6232e2fc9cc6dea0efb36350099d9435e3baca54f27dd90c4e154cb61f51",
-=======
-			"token": "a25724b8b59ced9d02df827df05aa507150c0b5c781114a2d3ac855caa4fbb70746fb2657f9d01b6f454623f5ca996bea5707615f2f208e847770991defc3cfb",
->>>>>>> b788b8ce1f78be499f58e3812fef2455bf899d6b
+			"token": "179ead78badcbe34c00866a910ebffdf1886decdbea5090f92c845ad08acef01fa9a6ecd11c2c7bd2b408303deb201931d7d4cfd8ad898c15b730e9e910e04ed",
 			"isActive": true,
 			"isSuper": true
 		},
