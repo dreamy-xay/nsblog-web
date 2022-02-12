@@ -3,14 +3,14 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2022-01-27 10:52:36
- * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-27 20:58:25
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-12 21:58:09
 -->
 <template>
   <div class="tag-button">
     <div
       class="tag-button-true"
-      v-if="detail.attention"
+      v-if="attention"
       role="button"
       @click="clickAttention"
     >
@@ -34,9 +34,9 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'tagButton',
   props: {
-    detail: {
-      type: Object,
-      default: null,
+    attention: {
+      type: Number,
+      default: 0,
     },
   },
   setup(_, context) {

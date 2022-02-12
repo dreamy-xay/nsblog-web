@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2022-01-17 10:18:37
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-11 15:49:48
+ * @LastEditTime: 2022-02-12 20:44:41
 -->
 <template>
   <div class="home-right">
@@ -38,7 +38,7 @@ import HomeActivity from '@/views/home/childComps/homeRight/childComps/HomeActiv
 import BaseRankCard from '@/components/common/baseRankCard/BaseRankCard.vue';
 import BaseTagCard from '@/components/common/baseTagCard/BaseTagCard.vue';
 import { getNotices } from '@/network/api/notices';
-import { getListArticles, getListTags } from '@/network/api/list';
+import { getArticlesList, getTagsList } from '@/network/api/list';
 import { useMessage } from 'naive-ui';
 
 /**
@@ -89,7 +89,7 @@ export default defineComponent({
       });
 
     // 获取热门文章数据
-    getListArticles(0)
+    getArticlesList(0)
       .then((data) => {
         for (let i = 0; i < data.articles.length; i++) {
           let arr = {
@@ -107,7 +107,7 @@ export default defineComponent({
       });
 
     // 获取热门标签数据
-    getListTags()
+    getTagsList()
       .then((data) => {
         console.log(data);
         for (let i = 0; i < data.tags.length; i++) {
@@ -133,7 +133,7 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function rankCardClickMenuItem(index, item) {
-      getListArticles(index)
+      getArticlesList(index)
         .then((data) => {
           rankingList.splice(0, rankingList.length);
           for (let i = 0; i < data.articles.length; i++) {

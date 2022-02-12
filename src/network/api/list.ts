@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-11 15:15:47
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-11 16:34:18
+ * @LastEditTime: 2022-02-12 20:43:18
  */
 import { get, RequestLifeCycle } from '@/network/request';
 
@@ -15,7 +15,7 @@ import { get, RequestLifeCycle } from '@/network/request';
  * @return {Promise<unknown>} 请求返回promise
  * @author: Z_Y_C
  */
-export function getListArticles(type: number = 0, RLC: RequestLifeCycle = {}): Promise<unknown> {
+export function getArticlesList(type: number = 0, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return get({
     url: '/list/articles',
     ...RLC,
@@ -31,7 +31,7 @@ export function getListArticles(type: number = 0, RLC: RequestLifeCycle = {}): P
  * @return {Promise<unknown>} 请求返回promise
  * @author: Z_Y_C
  */
-export function getListGroups(RLC: RequestLifeCycle = {}): Promise<unknown> {
+export function getGroupsList(RLC: RequestLifeCycle = {}): Promise<unknown> {
   return get({
     url: '/list/groups',
     ...RLC
@@ -45,7 +45,7 @@ export function getListGroups(RLC: RequestLifeCycle = {}): Promise<unknown> {
  * @return {Promise<unknown>} 请求返回promise
  * @author: Z_Y_C
  */
-export function getListGroupsUsers(type: number = 0, RLC: RequestLifeCycle = {}): Promise<unknown> {
+export function getGroupsUsersList(type: number = 0, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return get({
     url: '/list/groups/users',
     ...RLC,
@@ -62,7 +62,7 @@ export function getListGroupsUsers(type: number = 0, RLC: RequestLifeCycle = {})
  * @return {Promise<unknown>} 请求返回promise
  * @author: Z_Y_C
  */
-export function getListQuestions(type: number = 0, RLC: RequestLifeCycle = {}): Promise<unknown> {
+export function getQuestionsList(type: number = 0, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return get({
     url: '/list/questions',
     ...RLC,
@@ -78,7 +78,7 @@ export function getListQuestions(type: number = 0, RLC: RequestLifeCycle = {}): 
  * @return {Promise<unknown>} 请求返回promise
  * @author: Z_Y_C
  */
-export function getListResources(RLC: RequestLifeCycle = {}): Promise<unknown> {
+export function getResourcesList(RLC: RequestLifeCycle = {}): Promise<unknown> {
   return get({
     url: '/list/resources',
     ...RLC
@@ -91,7 +91,7 @@ export function getListResources(RLC: RequestLifeCycle = {}): Promise<unknown> {
  * @return {Promise<unknown>} 请求返回promise
  * @author: Z_Y_C
  */
-export function getListSearch(RLC: RequestLifeCycle = {}): Promise<unknown> {
+export function getSearchList(RLC: RequestLifeCycle = {}): Promise<unknown> {
   return get({
     url: '/list/search',
     ...RLC
@@ -104,7 +104,7 @@ export function getListSearch(RLC: RequestLifeCycle = {}): Promise<unknown> {
  * @return {Promise<unknown>} 请求返回promise
  * @author: Z_Y_C
  */
-export function getListTags(RLC: RequestLifeCycle = {}): Promise<unknown> {
+export function getTagsList(RLC: RequestLifeCycle = {}): Promise<unknown> {
   return get({
     url: '/list/tags',
     ...RLC
