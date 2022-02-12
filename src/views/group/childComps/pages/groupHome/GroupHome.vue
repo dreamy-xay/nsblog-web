@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2022-01-21 19:42:59
  * @LastEditors: xiao
- * @LastEditTime: 2022-02-07 22:48:28
+ * @LastEditTime: 2022-02-12 16:08:31
 -->
 <template>
   <base-view
@@ -64,6 +64,7 @@ import BaseBulletin from '@/components/common/baseBulletin/BaseBulletin';
 import BaseRankCard from '@/components/common/baseRankCard/BaseRankCard';
 import { getGroups } from '@/network/api/groups';
 import { useMessage } from 'naive-ui';
+import { getListGroups } from '@/network/api/list';
 
 /**
  * @description: 学习小组主页
@@ -87,36 +88,47 @@ export default defineComponent({
     const groups = reactive([]); //学习小组数据
     const msg = useMessage(); // naive-ui 消息组件
     const rankingList = reactive([
-      {
-        title: 'react有tab页，如何实现未选中的tab页隐藏但不销毁在JavaScript中一组数据如何进行关联呢',
-        url: '#',
-      },
-      {
-        title: '在JavaScript中一组数据如何进行关联呢',
-        url: '#',
-      },
-      {
-        title: '奇想宇宙',
-        url: '#',
-      },
-      {
-        title: '资源分享',
-        url: '#',
-      },
-      {
-        title: '新人大本营',
-        url: '#',
-      },
-      {
-        title: 'vue-cli3 打包加了时间戳，【偶尔】浏览器还是会有缓存，该如何杜绝？',
-        url: '#',
-      },
+      //   {
+      //     title: 'react有tab页，如何实现未选中的tab页隐藏但不销毁在JavaScript中一组数据如何进行关联呢',
+      //     url: '#',
+      //   },
+      //   {
+      //     title: '在JavaScript中一组数据如何进行关联呢',
+      //     url: '#',
+      //   },
+      //   {
+      //     title: '奇想宇宙',
+      //     url: '#',
+      //   },
+      //   {
+      //     title: '资源分享',
+      //     url: '#',
+      //   },
+      //   {
+      //     title: '新人大本营',
+      //     url: '#',
+      //   },
+      //   {
+      //     title: 'vue-cli3 打包加了时间戳，【偶尔】浏览器还是会有缓存，该如何杜绝？',
+      //     url: '#',
+      //   },
     ]);
     const bulletinData = reactive([
       { text: '需要精通Java大佬救命', href: '#' },
       { text: '需要大佬一位', href: '#' },
       { text: '需要一些资源，请进组分享给大家...', href: '#' },
     ]);
+
+    getListGroups()
+      .then((data) => {
+        console.log('getListGroups', data);
+        rankingList.splice(0, 0, ...data.groups);
+        console.log('rankingList', rankingList);
+      })
+      .catch((error) => {
+        console.log(error);
+        msg.error('获取小组排行失败', { duration: 2000, closable: true });
+      });
 
     /**
      * @description: 跟新学习小组数据

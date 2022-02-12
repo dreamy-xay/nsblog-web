@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 18:26:04
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-20 00:47:45
+ * @LastEditTime: 2022-02-12 16:09:23
 -->
 <template>
   <div class="blog-friends">
@@ -42,7 +42,7 @@
 
 <script>
 import { defineComponent, reactive } from 'vue';
-import { getArticlesUser } from '@/network/api/articles';
+import { getChains } from '@/network/api/chains';
 import { useMessage } from 'naive-ui';
 import { useRoute } from 'vue-router';
 
@@ -60,10 +60,11 @@ export default defineComponent({
     const username = route.params.username; // 获取博客用户名
 
     //获取友链信息
-    getArticlesUser(username)
+    getChains(username)
       .then((data) => {
-        friendChains.splice(0, 0, ...data.friend_chain);
-        console.log('friendChains', friendChains);
+        console.log(data);
+        // friendChains.splice(0, 0, ...data.friend_chain);
+        // console.log('friendChains', friendChains);
       })
       .catch((error) => {
         console.log(error);
@@ -115,7 +116,6 @@ export default defineComponent({
     flex-wrap: wrap;
     margin: 16px 16px;
     width: 784px;
-    min-height: 828px;
     height: auto !important;
     height: 828px;
     border-radius: $border-radius-0;
