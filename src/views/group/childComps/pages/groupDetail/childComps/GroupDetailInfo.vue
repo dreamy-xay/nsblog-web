@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-29 17:12:45
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-12 18:43:22
+ * @LastEditTime: 2022-02-12 19:32:13
 -->
 <template>
   <div class="group-detail-info">

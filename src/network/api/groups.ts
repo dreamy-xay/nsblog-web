@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-16 10:05:10
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-12 18:17:49
+ * @LastEditTime: 2022-02-12 19:11:49
  */
 
 import { get, post, del, RequestLifeCycle } from '@/network/request';
@@ -98,6 +98,32 @@ export function deleteGroup(group_name: string, RLC: RequestLifeCycle = {}): Pro
     ...RLC,
     data: {
       group_name
+    }
+  });
+}
+
+/**
+ * @description: 获取征集令
+ * @param {string} group_name 学习小组名(不传学习小组名则返回最新征集令列表) `默认为''`
+ * @param {number} offset 征集令列表偏移量 `默认为0`
+ * @param {number} limit 返回征集令列表最大数量 `默认为10`
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: dreamy-xay
+ */
+export function getGroupSolicitations(
+  group_name: string = '',
+  offset: number = 0,
+  limit: number = 10,
+  RLC: RequestLifeCycle = {}
+): Promise<unknown> {
+  return get({
+    url: '/groups/solicitations',
+    ...RLC,
+    params: {
+      group_name,
+      offset,
+      limit
     }
   });
 }

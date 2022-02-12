@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 11:51:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-29 16:28:07
+ * @LastEditTime: 2022-02-12 20:14:46
 -->
 <template>
   <div
@@ -137,7 +137,7 @@ export default defineComponent({
     },
     backTopBottom: {
       type: Number,
-      default: 40,
+      default: 60,
     },
     backTopVisibilityHeight: {
       type: Number,

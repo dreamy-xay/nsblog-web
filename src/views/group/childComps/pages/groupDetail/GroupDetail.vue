@@ -4,13 +4,14 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-29 14:37:16
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-12 18:26:38
+ * @LastEditTime: 2022-02-12 20:11:59
 -->
 <template>
   <base-view
     :background="true"
     :top-bar="true"
     :top-bar-scroll="true"
+    :back-top="true"
     :footer="true"
     :footer-show-all="false"
     bind-class="group-detail"
@@ -232,18 +233,20 @@ export default defineComponent({
   }
 }
 
-.group-detail {
+:deep(.group-detail) {
+  @include flex(flex-start, center);
+
   .group-detail-body {
-    width: 100%;
+    width: 1000px;
     margin-top: 16px;
-    @include flex(initial, space-between);
+    @include flex(flex-start, space-between);
     margin-bottom: 6px;
 
-    .left {
+    & > .left {
       width: 700px;
     }
 
-    .right {
+    & > .right {
       width: 284px;
       @include flex(center, center, column);
 
