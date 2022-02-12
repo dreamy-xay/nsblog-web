@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-15 09:05:31
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-29 22:20:32
+ * @LastEditTime: 2022-02-12 13:01:36
 -->
 <template>
   <div
@@ -34,7 +34,7 @@
     <div class="base-rank-card-body">
       <a
         class="info-item"
-        v-for="(item, index) in data"
+        v-for="(item, index) in rankData"
         :href="isUser ? `/user/${item[dataKey[0]]}` : item[dataKey[0]]"
         :target="isUser ? `/user/${item[dataKey[0]]}` : item[dataKey[0]]"
         :key="index"
@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, reactive, ref, watch } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 
 /**
@@ -87,6 +87,7 @@ import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
  * @param {Array} dataKey 数据对象的key列表 1=>[obj.url, obj.title](内容排行) 2=>['obj.username, obj.nickname, obj.avatar, obj.count'](用户排行) `默认为 ['url', 'title']`
  * @param {Boolean} isUser 是否为用户列表模式 `默认为false`
  * @param {Object} style 最外层样式 `默认为 null`
+ * @param {Boolean} dataCache 是否启用数据缓存 `默认为 true`
  * @event clickMenuItem 选择某一项菜单时触发 (index: number, item: string) => void
  * @author: dreamy-xay
  */
@@ -121,9 +122,41 @@ export default defineComponent({
       type: Object,
       default: null,
     },
+    dataCache: {
+      type: Boolean,
+      default: true,
+    },
   },
-  setup(_, context) {
+  setup(props, context) {
     const activeIndex = ref(0); // 菜单当前激活索引
+    const dataCache = reactive([]); // 数据缓存
+    const hasDataCache = props.dataCache && props.menuList.length; // 是否启用数据缓存
+
+    // 真正的排名数据
+    const rankData = computed(() => {
+      return hasDataCache ? dataCache[activeIndex.value] : props.data;
+    });
+
+    /**
+     * @description: 初始化动态缓存设置
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function initDataCache() {
+      if (!hasDataCache) return;
+      // 初始化缓存列表
+      for (let i = 0; i < props.menuList.length; ++i) dataCache.splice(dataCache.length, 0, null);
+      dataCache.splice(0, 0, props.data);
+
+      // 动态监听更新缓存
+      watch(
+        () => [...props.data],
+        (data) => {
+          dataCache.splice(activeIndex.value, 1, data);
+        }
+      );
+    }
+    initDataCache();
 
     /**
      * @description: 更新类型列表下标
@@ -135,11 +168,14 @@ export default defineComponent({
     function clickMenuItem(index, item) {
       if (index === activeIndex.value) return;
       activeIndex.value = index;
+      if (props.dataCache && dataCache[index]) return;
       context.emit('clickMenuItem', index, item);
+      if (props.dataCache && !dataCache[index]) dataCache.splice(index, 1, props.data); // 强制性赋值
     }
 
     return {
       activeIndex,
+      rankData,
       clickMenuItem,
     };
   },

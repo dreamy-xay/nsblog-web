@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: xiao
  * @Date: 2022-01-14 18:52:17
- * @LastEditors: xiao
- * @LastEditTime: 2022-02-07 22:47:11
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-12 14:49:11
 -->
 <template>
   <div class="group-list">
@@ -98,7 +98,6 @@ export default defineComponent({
 
   setup(props, context) {
     const show = ref(false); //是否加载更多
-    const change = ref(true); //是否加入
     const msg = useMessage(); // naive-ui 组件
     const modalShow = ref(false); //是否显示退出提示
     const selectGroup = ref(-1); //选择的小组下标
@@ -166,7 +165,6 @@ export default defineComponent({
       showExit,
       close,
       show,
-      change,
     };
   },
 });

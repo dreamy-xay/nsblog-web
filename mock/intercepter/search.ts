@@ -4,19 +4,20 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-19 13:30:35
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-31 20:04:45
+ * @LastEditTime: 2022-02-12 13:25:16
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { int, print, RandomUser, randomUsers } from './util';
+import { int, print, RandomUser, randomUsers, verifyToken, getToken } from './util';
 
 export default function(baseUrl: string, app: Application) {
   // 获取搜索标签
   app.get(baseUrl + '/search', (req: Request, res: Response) => {
     const { keyword, type, time, limit, offset } = req.query;
     const option: number = int(req.query.option);
+    const username: string = verifyToken(req.headers) ? getToken(req.headers).username : '';
 
-    print('search', { keyword, option, type, time, limit, offset });
+    print('search', { username, keyword, option, type, time, limit, offset });
 
     const RUsers = randomUsers();
     function getRandom(limit: number, type: number): Record<string, unknown>[] {
@@ -34,15 +35,17 @@ export default function(baseUrl: string, app: Application) {
             username: user.username,
             nickname: user.nickname,
             release_time: Random.datetime(),
-            ...(type === 1
-              ? {
-                  recommend: Random.integer(0, 1),
-                  recommend_count: Random.integer(0, 3000)
-                }
-              : {
-                  like: Random.integer(0, 1),
-                  like_count: Random.integer(0, 3000)
-                })
+            ...(username
+              ? type === 1
+                ? {
+                    recommend: Random.integer(0, 1),
+                    recommend_count: Random.integer(0, 3000)
+                  }
+                : {
+                    like: Random.integer(0, 1),
+                    like_count: Random.integer(0, 3000)
+                  }
+              : {})
           });
         }
       else if (type === 3)
@@ -125,7 +128,7 @@ export default function(baseUrl: string, app: Application) {
   app.get(baseUrl + '/search/about', (req: Request, res: Response) => {
     const { keyword } = req.query;
 
-    print('get about search');
+    print('get about search', { keyword });
 
     const about: string[] = [];
     const sum: number = Random.integer(0, 15);
