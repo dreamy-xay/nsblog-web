@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 18:20:47
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-14 16:49:09
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-12 13:16:23
 -->
 <template>
   <div
@@ -17,6 +17,7 @@
     <blog-head />
     <router-view></router-view>
     <base-loading-page :show="showLoadingPage" />
+    <base-footer :show-all="false" />
   </div>
 </template>
 
@@ -27,6 +28,7 @@ import BaseLoadingPage from '@/components/common/baseLoadingPage/BaseLoadingPage
 import BaseLoadingBar from '@/components/common/baseLoadingBar/BaseLoadingBar.vue';
 import BlogHead from '@/views/blog/childComps/BlogHead.vue';
 import BlogMenu from '@/views/blog/childComps/BlogMenu.vue';
+import BaseFooter from '@/components/content/baseFooter/BaseFooter.vue';
 import { useRoute } from 'vue-router';
 
 /**
@@ -42,6 +44,7 @@ export default defineComponent({
     BaseLoadingBar,
     BlogHead,
     BlogMenu,
+    BaseFooter,
   },
   setup() {
     const route = useRoute(); // route
