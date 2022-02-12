@@ -3,14 +3,16 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:04:40
- * @LastEditors: Ban
- * @LastEditTime: 2022-01-16 14:08:13
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-12 14:05:35
 -->
 <template>
   <base-view
     :top-bar="true"
     :background="true"
     :back-top="true"
+    :footer="true"
+    :footer-show-all="false"
     bind-class="user"
   >
     <div class="user-head">
