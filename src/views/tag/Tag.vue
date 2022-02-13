@@ -1,10 +1,10 @@
 <!--
- * @Description:
+ * @Description: 标签详细信息页面
  * @Version:
  * @Autor: continue-hs
  * @Date: 2022-01-24 18:20:31
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-12 23:32:42
+ * @LastEditTime: 2022-02-13 14:23:51
 -->
 <template>
   <base-view
@@ -44,7 +44,10 @@
           />
         </div>
       </div>
-      <div class="bottom">
+      <div
+        class="bottom"
+        v-if="showButton"
+      >
         <div
           class="bottom-load"
           role="button"
@@ -75,6 +78,10 @@ import BaseView from '@/components/content/baseView/BaseView.vue';
 import { modifyArticleRecommendEvaluation } from '@/network/api/articles';
 import BaseSelectHead from '@/components/common/baseSelectHead/BaseSelectHead.vue';
 
+/**
+ * @description: 标签详细信息页面
+ * @author: Z_Y_C
+ */
 export default defineComponent({
   name: 'tag',
   components: {
@@ -92,7 +99,8 @@ export default defineComponent({
     const timeIndex = ref(0); // 选择 0:'时间不限', 1:'最近一天', 2:'最近一周', 3:'最近三月'时间筛选
     const typeIndex = ref(0); // 记录类型，可点击加载更多
     const tagArticles = reactive([]); // 保存数据
-    let limit = 7;
+    const showButton = ref(false); // 显示加载更多按钮
+    const limit = 7;
     const detail = reactive({
       name: '',
       remark: '',
@@ -103,26 +111,6 @@ export default defineComponent({
     const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
 
     initArticlesTag('', '', '', 0, limit, 0, 0, '', tagName, listIndex.value);
-
-    // 监听列表下标变化
-    watch(
-      () => listIndex.value,
-      () => {
-        tagArticles.splice(0, tagArticles.length);
-        typeIndex.value = listIndex.value;
-        initArticlesTag('', '', '', 0, limit, 0, 0, '', tagName, typeIndex.value);
-      }
-    );
-
-    // 监听下拉框下标变化
-    watch(
-      () => timeIndex.value,
-      () => {
-        tagArticles.splice(0, tagArticles.length);
-        typeIndex.value = timeIndex.value + 2;
-        initArticlesTag('', '', '', 0, limit, 0, 0, '', tagName, typeIndex.value);
-      }
-    );
 
     /**
      * @description: 获取文章详情
@@ -158,9 +146,10 @@ export default defineComponent({
       tag_name,
       type
     ) {
+      showButton.value = true;
       getArticles(username, category, tag, offset, limit, release_time, browsing_count, topic_name, tag_name, type)
         .then((res) => {
-          console.log(res);
+          showButton.value = limit === res.articles.length;
           tagArticles.splice(tagArticles.length, 0, ...res.articles);
         })
         .catch((error) => {
@@ -175,6 +164,9 @@ export default defineComponent({
      */
     function changeList(index) {
       listIndex.value = index.index;
+      tagArticles.splice(0, tagArticles.length);
+      typeIndex.value = listIndex.value;
+      initArticlesTag('', '', '', 0, limit, 0, 0, '', tagName, typeIndex.value);
     }
 
     /**
@@ -184,6 +176,9 @@ export default defineComponent({
      */
     function changeTime(index) {
       timeIndex.value = index.index;
+      tagArticles.splice(0, tagArticles.length);
+      typeIndex.value = timeIndex.value + 2;
+      initArticlesTag('', '', '', 0, limit, 0, 0, '', tagName, typeIndex.value);
     }
 
     /**
@@ -252,6 +247,7 @@ export default defineComponent({
       changeLike,
       uploadMore,
       clickAttention,
+      showButton,
     };
   },
 });
@@ -315,6 +311,10 @@ export default defineComponent({
           text-align: center;
           color: $grey-9;
           margin-top: 7px;
+        }
+
+        &:hover {
+          background: $grey-1;
         }
       }
     }

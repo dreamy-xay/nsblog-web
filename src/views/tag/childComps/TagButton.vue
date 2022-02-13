@@ -1,10 +1,10 @@
 <!--
- * @Description:
+ * @Description: 关注按钮
  * @Version:
  * @Autor: continue-hs
  * @Date: 2022-01-27 10:52:36
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-12 21:58:09
+ * @LastEditTime: 2022-02-13 12:59:13
 -->
 <template>
   <div class="tag-button">
@@ -26,24 +26,63 @@
       <div class="false-text">关注</div>
     </div>
   </div>
+
+  <!-- 确认取消关注 -->
+  <base-modal
+    :show="modalShow"
+    content="取消后可就没有了哦~"
+    @confirm="sureCancelAttention"
+    @cancel="modalShow=!modalShow"
+  />
+
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
+import BaseModal from '@/components/content/baseModal/BaseModal.vue';
+
+/**
+ * @description: 关注按钮
+ * @param {number} attention 是否关注 `默认为 0`
+ * @event clickAttention 点击关注按钮触发事件
+ * @author: Z_Y_C
+ */
 
 export default defineComponent({
   name: 'tagButton',
+  components: {
+    BaseModal,
+  },
   props: {
     attention: {
       type: Number,
       default: 0,
     },
   },
-  setup(_, context) {
+  setup(props, context) {
+    const modalShow = ref(false); // 取消关注显示
+
+    /**
+     * @description: 点击关注
+     * @return {void}
+     * @author: Z_Y_C
+     */
     function clickAttention() {
-      context.emit('click-attention');
+      if (!props.attention) context.emit('click-attention');
+      else modalShow.value = true;
     }
-    return { clickAttention };
+
+    /**
+     * @description: 确定取消关注
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function sureCancelAttention() {
+      context.emit('click-attention');
+      modalShow.value = false;
+    }
+
+    return { clickAttention, modalShow, sureCancelAttention };
   },
 });
 </script>

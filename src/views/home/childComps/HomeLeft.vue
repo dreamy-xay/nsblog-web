@@ -1,10 +1,10 @@
 <!--
- * @Description:
+ * @Description: home左侧
  * @Version:
  * @Autor: continue-hs
  * @Date: 2022-01-17 10:18:16
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 00:24:06
+ * @LastEditTime: 2022-02-13 14:11:30
 -->
 <template>
   <div class="home-left">
@@ -33,6 +33,15 @@ import { defineComponent } from 'vue';
 import ArticleItem from '@/views/tag/childComps/ArticleItem.vue';
 import BaseSelectHead from '@/components/common/baseSelectHead/BaseSelectHead.vue';
 
+/**
+ * @description: home左侧
+ * @param {Array} allArticles 显示内容 `默认为 []`
+ * @param {number} listIndex 选择 0:'综合', 1:'最新', 2:'热门'标签 `默认为 0`
+ * @param {number} timeIndex 选择 0:'时间不限', 1:'最近一天', 2:'最近一周', 3:'最近三月'时间筛选 `默认为 0`
+ * @event changeList 改变listIndex
+ * @event changeTime 改变timeIndex
+ * @author: Z_Y_C
+ */
 export default defineComponent({
   name: 'homeLeft',
   props: {
@@ -46,7 +55,7 @@ export default defineComponent({
     },
     timeIndex: {
       type: Number,
-      default: 2,
+      default: 0,
     },
   },
   components: {
@@ -54,13 +63,24 @@ export default defineComponent({
     BaseSelectHead,
   },
   setup(_, content) {
+    /**
+     * @description: 修改 listIndex
+     * @param {Object} index 返回index
+     * @return {void}
+     * @author: Z_Y_C
+     */
     function changeList(index) {
-      console.log(index);
       content.emit('changeList', index);
     }
 
+    /**
+     * @description: 修改 timeIndex
+     * @param {Object} index 返回index
+     * @return {void}
+     * @author: Z_Y_C
+     */
+
     function changeTime(index) {
-      console.log(index);
       content.emit('changeTime', index);
     }
     return { changeTime, changeList };

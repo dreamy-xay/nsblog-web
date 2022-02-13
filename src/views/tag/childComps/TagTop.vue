@@ -1,10 +1,10 @@
 <!--
- * @Description:
+ * @Description: 标签页面头部
  * @Version:
  * @Autor: continue-hs
  * @Date: 2022-01-25 13:51:50
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-12 17:05:45
+ * @LastEditTime: 2022-02-13 13:00:07
 -->
 <template>
   <div class="tag-top">
@@ -33,6 +33,11 @@
 <script>
 import { defineComponent, ref } from 'vue';
 
+/**
+ * @description: 标签页面头部
+ * @param {Object} detail 内容
+ * @author: Z_Y_C
+ */
 export default defineComponent({
   name: 'tagTop',
   props: {
