@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:25:41
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-07 22:38:43
+ * @LastEditTime: 2022-02-13 11:51:45
  */
 
 const path = require('path');
@@ -25,6 +25,9 @@ module.exports = {
 
   // 是否开启eslint保存检测
   lintOnSave: true,
+
+  // 多线程
+  parallel: true,
 
   // 是否使用包含运行时编译器的 Vue 构建版本
   runtimeCompiler: true,

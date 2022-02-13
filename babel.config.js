@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-18 09:48:00
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-12 18:09:38
+ * @LastEditTime: 2022-02-13 11:48:51
  */
 // prismjs 代码渲染语言包加载
 const components = require('prismjs/components');
@@ -27,14 +27,16 @@ module.exports = {
       {
         languages: allLanguages,
       },
-    ]
+    ],
+    // 生产环境移除 console.log
+    ...(process.env.NODE_ENV === 'production' ? ['transform-remove-console'] : [])
   ],
-  // env: {
-  //   development: {
-  //     // babel-plugin-dynamic-import-node plugin only does one thing by converting all import() to require().
-  //     // This plugin can significantly increase the speed of hot updates, when you have a large number of pages.
-  //     // https://panjiachen.github.io/vue-element-admin-site/guide/advanced/lazy-loading.html
-  //     plugins: ['dynamic-import-node']
-  //   }
-  // }
+  env: {
+    development: {
+      // babel-plugin-dynamic-import-node plugin only does one thing by converting all import() to require().
+      // This plugin can significantly increase the speed of hot updates, when you have a large number of pages.
+      // https://panjiachen.github.io/vue-element-admin-site/guide/advanced/lazy-loading.html
+      plugins: ['dynamic-import-node']
+    }
+  }
 }
