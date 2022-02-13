@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 18:26:04
  * @LastEditors: xiao
- * @LastEditTime: 2022-02-12 16:09:23
+ * @LastEditTime: 2022-02-13 15:35:39
 -->
 <template>
   <div class="blog-friends">
@@ -60,15 +60,13 @@ export default defineComponent({
     const username = route.params.username; // 获取博客用户名
 
     //获取友链信息
-    getChains(username)
+    getChains('dreamy', 10, 0)
       .then((data) => {
-        console.log(data);
-        // friendChains.splice(0, 0, ...data.friend_chain);
-        // console.log('friendChains', friendChains);
+        console.log('getChains', data);
       })
       .catch((error) => {
         console.log(error);
-        msg.error('获取友链失败', { duration: 2000, closable: true });
+        msg.error('获取友链信息失败', { duration: 2000, closable: true });
       });
 
     return {
