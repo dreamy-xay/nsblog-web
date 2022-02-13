@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 11:51:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-12 20:14:46
+ * @LastEditTime: 2022-02-13 20:59:30
 -->
 <template>
   <div
@@ -20,7 +20,7 @@
         <base-background v-if="background" />
         <div
           class="container-top-bar"
-          v-resize="resizeListener"
+          v-resize="topBarResizeListener"
           :style="{top: topBarTop + 'px'}"
         >
           <base-top-bar
@@ -42,7 +42,7 @@
               class="inner"
               ref="innerRef"
             >
-              <div>
+              <div v-resize="innerResizeListener">
                 <div :class="bindClass">
                   <slot></slot>
                 </div>
@@ -51,6 +51,7 @@
             <base-footer
               v-if="footer"
               :show-all="footerShowAll"
+              ref="footerRef"
             />
           </el-scrollbar>
         </div>
@@ -191,7 +192,7 @@ export default defineComponent({
      * @return {void}
      * @author: dreamy-xay
      */
-    function resizeListener() {
+    function topBarResizeListener() {
       width.value = document.body.offsetWidth;
       height.value = document.body.offsetHeight;
       containerTopBarHeight.value = topBarRef.value.$el.parentNode.offsetHeight;
@@ -205,7 +206,7 @@ export default defineComponent({
 
     // 监听窗口变化
     window.onresize = function () {
-      resizeListener();
+      topBarResizeListener();
     };
 
     let scrollLeft = 0; // 滚动条位置
@@ -308,6 +309,16 @@ export default defineComponent({
       });
     }
 
+    const footerRef = ref(null); // footer组件
+    /**
+     * @description: 监听内部容器resize变化修改footer状态
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function innerResizeListener() {
+      footerRef.value.changeFooterStatus(); // 更新状态
+    }
+
     return {
       innerHeight,
       topBarRef,
@@ -322,7 +333,10 @@ export default defineComponent({
       setScrollTop,
       topBarTop,
       innerTransition,
-      resizeListener,
+      topBarResizeListener,
+
+      footerRef,
+      innerResizeListener,
     };
   },
 });
