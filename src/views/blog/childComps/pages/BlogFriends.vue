@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 18:26:04
  * @LastEditors: xiao
- * @LastEditTime: 2022-01-20 00:47:45
+ * @LastEditTime: 2022-02-13 16:04:20
 -->
 <template>
   <div class="blog-friends">
@@ -27,12 +27,11 @@
           <div class="back"></div>
           <img
             src="../../../../../public/blog/none.jpg"
-            alt=""
             class="img"
           >
           <div class="name">{{friendChain.title}}</div>
           <hr class="hr" />
-          <div class="describe">立flag-一个酷玩代码的网站</div>
+          <div class="describe">{{friendChain.describe}}</div>
         </a>
       </div>
     </div>
@@ -42,7 +41,7 @@
 
 <script>
 import { defineComponent, reactive } from 'vue';
-import { getArticlesUser } from '@/network/api/articles';
+import { getChains } from '@/network/api/chains';
 import { useMessage } from 'naive-ui';
 import { useRoute } from 'vue-router';
 
@@ -60,14 +59,13 @@ export default defineComponent({
     const username = route.params.username; // 获取博客用户名
 
     //获取友链信息
-    getArticlesUser(username)
+    getChains(username)
       .then((data) => {
-        friendChains.splice(0, 0, ...data.friend_chain);
-        console.log('friendChains', friendChains);
+        friendChains.splice(0, 0, ...data.chains);
       })
       .catch((error) => {
         console.log(error);
-        msg.error('获取友链失败', { duration: 2000, closable: true });
+        msg.error('获取友链信息失败', { duration: 2000, closable: true });
       });
 
     return {
@@ -115,7 +113,6 @@ export default defineComponent({
     flex-wrap: wrap;
     margin: 16px 16px;
     width: 784px;
-    min-height: 828px;
     height: auto !important;
     height: 828px;
     border-radius: $border-radius-0;
