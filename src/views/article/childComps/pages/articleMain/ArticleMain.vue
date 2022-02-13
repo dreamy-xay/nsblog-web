@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 16:32:13
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-12 14:04:50
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-13 12:24:42
  * @LastEditors: dreamy-xay
  * @LastEditTime: 2021-10-02 10:14:24
 -->
@@ -133,7 +133,8 @@ export default defineComponent({
       })
       .catch((error) => {
         console.log(error);
-        if (error.response.status === 403) router.replace({ name: 'articleProtection', params: { articleId } });
+        if (error.response.status === 403)
+          router.replace({ name: 'articleProtection', params: { articleId, back: route.fullPath } });
         else console.log(error);
       });
 

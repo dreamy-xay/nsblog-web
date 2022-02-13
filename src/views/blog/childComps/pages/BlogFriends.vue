@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 18:26:04
  * @LastEditors: xiao
- * @LastEditTime: 2022-02-13 15:35:39
+ * @LastEditTime: 2022-02-13 16:04:20
 -->
 <template>
   <div class="blog-friends">
@@ -27,12 +27,11 @@
           <div class="back"></div>
           <img
             src="../../../../../public/blog/none.jpg"
-            alt=""
             class="img"
           >
           <div class="name">{{friendChain.title}}</div>
           <hr class="hr" />
-          <div class="describe">立flag-一个酷玩代码的网站</div>
+          <div class="describe">{{friendChain.describe}}</div>
         </a>
       </div>
     </div>
@@ -60,9 +59,9 @@ export default defineComponent({
     const username = route.params.username; // 获取博客用户名
 
     //获取友链信息
-    getChains('dreamy', 10, 0)
+    getChains(username)
       .then((data) => {
-        console.log('getChains', data);
+        friendChains.splice(0, 0, ...data.chains);
       })
       .catch((error) => {
         console.log(error);

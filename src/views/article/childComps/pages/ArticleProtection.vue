@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2022-01-26 17:50:38
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-26 19:01:08
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-13 12:26:05
 -->
 <template>
   <div class="article-protection">
@@ -69,7 +69,7 @@ export default defineComponent({
         prePassword = password.value;
         verifyArticlePassword(articleId, password.value)
           .then(() => {
-            router.replace({ path: `/article/${articleId}`, params: { articlePassword: password.value } });
+            router.replace({ path: route.params.back, params: { articlePassword: password.value } });
           })
           .catch((error) => {
             console.log(error);

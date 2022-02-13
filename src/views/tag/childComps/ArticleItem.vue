@@ -1,58 +1,62 @@
 <!--
- * @Description:
+ * @Description: 文章列表单个文章框
  * @Version:
  * @Autor: continue-hs
  * @Date: 2022-01-23 15:06:03
- * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-27 21:13:47
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-13 13:10:01
 -->
 <template>
   <div
     class="article-item"
-    :style="styleSelect1"
+    v-if="articleItem.length"
   >
-    <div class="article-item-body">
+    <div
+      class="article-item-body"
+      v-for="(item , index) in articleItem"
+      :key="index"
+    >
       <div class="article-item-body-top">
         <div class="article-item-body-top-text">
           <div
             class="name"
             role="button"
-            @click="toUserHome"
-          >{{articleItem.nickname}}</div>
+            @click="toUserHome(item.username)"
+          >{{item.nickname}}</div>
           <div class="article-item-body-top-line"></div>
-          <div class="time">{{articleItem.release_time}}</div>
+          <div class="time">{{getDate(item.release_time)}}</div>
           <div class="article-item-body-top-line"></div>
           <div
             class="topic"
-            @click="clickTopic"
+            @click="clickTopic(item.topic)"
             role="button"
-          >{{articleItem.topic}}</div>
-          <div class="article-item-body-top-dot"></div>
+          >{{item.topic}}</div>
+          <div class="article-item-body-top-dot">•</div>
           <div
             class="tag"
-            @click="clickTag"
+            @click="clickTag(item.topic_tag)"
             role="button"
-          >{{articleItem.topic_tag}}</div>
+          >{{item.topic_tag}}</div>
         </div>
       </div>
 
       <div class="article-item-body-all">
         <div
           class="article-item-body-left"
-          :style="articleItem.cover_image ? styleSelect2 : styleSelect1"
+          :class="item.cover_image ? 'width1' : 'width2'"
         >
           <div class="article-item-body-left-top">
             <div
               class="article-item-body-left-top-text"
-              @click="toArticles"
+              @click="toArticles(item.id)"
               role="button"
             >
-              {{articleItem.title}}
+              {{item.title}}
             </div>
           </div>
           <div class="article-item-body-left-middle">
             <div class="article-item-body-left-middle-text">
-              {{articleItem.content}}
+              {{item.content}}
             </div>
           </div>
           <div class="article-item-body-left-bottom">
@@ -61,40 +65,36 @@
               role="button"
             >
               <i class="iconfont blog-browse" />
-              <div class="view-text">{{articleItem.page_view}}</div>
+              <div class="view-text">{{item.page_view}}</div>
             </div>
             <div
               class="support"
               role="button"
-              @click="clickLike"
-              :class="{active:articleItem.recommend === 1}"
+              @click="clickLike(index)"
+              :class="item.recommend === 1 ? 'active' : ''"
             >
-              <i
-                class="iconfont blog-tubiao73"
-                v-if="articleItem.recommend === 1"
-              />
-              <i
-                class="iconfont blog-dianzan1"
-                v-else
-              />
+
+              <i class="iconfont blog-dianzan1" />
               <div
                 class="support-text"
-                v-if="articleItem.recommend_count"
-              >{{articleItem.recommend_count}}</div>
+                v-if="item.recommend_count"
+              >{{item.recommend_count}}</div>
               <div
                 class="support-text"
                 v-else
               >点赞</div>
             </div>
+
             <div
               class="comment"
               role="button"
+              @click="toComment(item.id)"
             >
               <i class="iconfont blog-c-comment" />
               <div
                 class="comment-text"
-                v-if="articleItem.comment_count"
-              >{{articleItem.comment_count}}</div>
+                v-if="item.comment_count"
+              >{{item.comment_count}}</div>
               <div
                 class="comment-text"
                 v-else
@@ -105,27 +105,29 @@
 
         <div
           class="article-item-body-right"
-          v-if="articleItem.cover_image"
+          v-if="item.cover_image"
         >
-          <base-image src="articleItem.cover_image" />
+          <base-image :src="item.cover_image" />
         </div>
 
       </div>
-      <div class="article-item-line"></div>
     </div>
   </div>
+  <base-content-loading v-else />
+
 </template>
 
 <script>
 import router from '@/router';
-import { computed, defineComponent } from 'vue';
+import { defineComponent } from 'vue';
 import BaseImage from '@/components/content/baseImage/BaseImage.vue';
+import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
+import { dateGetText } from '@/util/date';
 
 /**
  * @description:文章列表单个文章框
- * @param {Object} articleItem 框中内容 `默认null`
- * @param {Number} 框的宽度 `默认为660`
- * @event change-like 点击点赞的事件 `使用参照homeLeft`
+ * @param {Array} articleItem 框中内容 `默认 []`
+ * @event change-like 点击点赞的事件 `使用参照 homeLeft`
  * @author: continue-hs
  */
 
@@ -133,85 +135,125 @@ export default defineComponent({
   name: 'ArticleItem',
   components: {
     BaseImage,
+    BaseContentLoading,
   },
   props: {
     articleItem: {
-      type: Object,
-      default: null,
-    },
-    swidth: {
-      type: Number,
-      default: 660,
+      type: Array,
+      default: () => [],
     },
   },
   setup(props, context) {
-    const styleSelect1 = computed(() => {
-      return {
-        width: props.swidth + 'px',
-      };
-    });
-
-    const styleSelect2 = computed(() => {
-      return {
-        width: props.swidth - 144 + 'px',
-      };
-    });
-
     /**
      * @description: 跳转至标签详情页
+     * @param {string} topic_tag 标签名
      * @return {void}
      * @author: continue-hs
      */
-    function clickTag() {
+    function clickTag(topic_tag) {
       router.push({
         name: 'tag',
         params: {
-          tagName: props.articleItem.topic_tag,
+          tagName: topic_tag,
+        },
+      });
+    }
+
+    /**
+     * @description: 跳转至专题详情页
+     * @param {string} topic 专题名
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function clickTopic(topic) {
+      router.push({
+        name: 'home',
+        params: {
+          topic: topic,
         },
       });
     }
 
     /**
      * @description: 前往指定文章详情页
+     * @param {number} id 文章id
      * @return {void}
      * @author: continue-hs
      */
-    function toArticles() {
-      window.open(`/article/${props.articleItem.id}`, `/article/${props.articleItem.id}`);
+    function toArticles(id) {
+      window.open(`/article/${id}`, `/article/${id}`);
     }
 
     /**
      * @description: 前往指定用户主页
+     * @param {string} 用户名
      * @return {void}
      * @author: continue-hs
      */
-    function toUserHome() {
-      window.open(`/user/${props.articleItem.username}`, `/user/${props.articleItem.username}`);
+    function toUserHome(username) {
+      window.open(`/user/${username}`, `/user/${username}`);
     }
 
-    function clickLike() {
-      context.emit('changeLike');
+    /**
+     * @description: 点赞
+     * @param {number} index 数据下标
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function clickLike(index) {
+      context.emit('changeLike', { index: index });
+    }
+
+    /**
+     * @description: 改变日期格式
+     * @param {String} date 日期
+     * @return {String} 返回时间差状态文字描述
+     * @author: Z_Y_C
+     */
+
+    function getDate(date) {
+      date = new Date(date);
+      return dateGetText(date, 3110400000, 'YY-mm-dd');
+    }
+
+    /**
+     * @description: 跳转评论
+     * @param {number} id 文章id
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function toComment(id) {
+      window.open(`/article/${id}#comment`, `/article/${id}#comment`);
     }
 
     return {
       toArticles,
       toUserHome,
       clickLike,
-      styleSelect1,
-      styleSelect2,
       clickTag,
+      getDate,
+      clickTopic,
+      toComment,
     };
   },
 });
 </script>
 <style lang="scss" scoped>
 .article-item {
+  width: calc(100% - 40px);
+  padding: 0 20px;
+
   .article-item-body {
-    height: 129px;
-    margin-left: 20px;
+    padding: 12px 0;
+    border-top: 1px solid $grey-4;
+
+    &:nth-child(1) {
+      border-top: none;
+    }
 
     .article-item-body-top {
       height: 22px;
+      margin-bottom: 10px;
       @include flex(center);
 
       .article-item-body-top-text {
@@ -228,8 +270,8 @@ export default defineComponent({
         }
 
         .topic {
+          transition: 0.25s;
           &:hover {
-            transition: 0.25s;
             color: $green-1;
           }
         }
@@ -239,8 +281,8 @@ export default defineComponent({
         }
 
         .tag {
+          transition: 0.25s;
           &:hover {
-            transition: 0.25s;
             color: $green-1;
           }
         }
@@ -256,22 +298,27 @@ export default defineComponent({
         .article-item-body-top-dot {
           width: 3px;
           height: 3px;
-          background: $grey-7;
-          border: 1px solid $grey-8;
-          border-radius: 50%;
-          margin: 0 8px 0 8px;
+          font-size: 16px;
+          font-weight: 700;
+          padding: 0 8px;
+          @include flex(center, center);
         }
       }
     }
 
     .article-item-body-all {
-      @include flex();
-      height: 84px;
+      @include flex(initial, space-between);
+      .width1 {
+        width: calc(100% - 144px);
+      }
+
+      .width2 {
+        width: calc(100%);
+      }
 
       .article-item-body-left {
         .article-item-body-left-top {
           height: 24px;
-          padding-top: 10px;
           @include flex(center);
 
           .article-item-body-left-top-text {
@@ -281,6 +328,11 @@ export default defineComponent({
             font-weight: 700;
             text-align: left;
             color: $grey-10;
+            transition: 0.25s;
+
+            &:hover {
+              color: $grey-8;
+            }
           }
         }
 
@@ -326,16 +378,16 @@ export default defineComponent({
             }
           }
 
+          .active {
+            color: $green-1;
+            i {
+              color: $green-1;
+            }
+          }
+
           .support {
             @include flex();
             margin-right: 20px;
-
-            &.active {
-              color: $green-1;
-              i {
-                color: $green-1;
-              }
-            }
 
             &:hover {
               transition: 0.25s;
@@ -364,12 +416,6 @@ export default defineComponent({
         width: 120px;
         height: 80px;
       }
-    }
-
-    .article-item-line {
-      height: 1px;
-      margin-top: 12px;
-      border-bottom: 0.5px solid $grey-4;
     }
   }
 }
