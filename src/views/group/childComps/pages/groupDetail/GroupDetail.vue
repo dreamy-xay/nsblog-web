@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-29 14:37:16
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-12 20:11:59
+ * @LastEditTime: 2022-02-13 16:02:12
 -->
 <template>
   <base-view
@@ -84,6 +84,7 @@ import GroupSolicitationPopover from '@/views/group/childComps/pages/groupDetail
 import GroupDetailInfo from '@/views/group/childComps/pages/groupDetail/childComps/GroupDetailInfo.vue';
 import router from '@/router';
 import { getGroupsUsersList } from '@/network/api/list';
+import { useRoute } from 'vue-router';
 
 /**
  * @description: 学习小组详情页
@@ -99,7 +100,7 @@ export default defineComponent({
     GroupDetailInfo,
   },
   setup() {
-    const activeIndex = ref(0); // 当前菜单激活索引
+    const route = useRoute(); // route
 
     const menuList = [
       // 菜单列表
@@ -129,6 +130,8 @@ export default defineComponent({
         routerName: 'groupDetailUser',
       },
     ];
+
+    const activeIndex = ref(menuList.findIndex((item) => item.routerName === route.name)); // 当前菜单激活索引
 
     /**
      * @description: 点击菜单切换
