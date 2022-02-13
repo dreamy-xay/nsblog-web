@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 12:55:44
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-12 14:57:35
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-13 14:50:32
  */
 
 import { get, RequestLifeCycle, del, put, post } from '@/network/request';
@@ -17,6 +17,7 @@ import { get, RequestLifeCycle, del, put, post } from '@/network/request';
  * @param {number} type 获取收藏列表的类型 `默认为0`
  * @param {0 | 1} is_all 是否获取全部信息，0为不获取全部信息 `默认为0`
  * @param {number} favorite_id 收藏夹id `默认为''，返回全部收藏夹及其内容，传入id则返回指定收藏夹id内容`
+ * @param {0 | 1} is_simple 是否收藏夹简易信息 `默认为 0`
  * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
  * @return {Promise<unknown>} 请求返回promise
  * @author: dreamy-xay
@@ -28,6 +29,7 @@ export function getFavorites(
   type: number = 0,
   is_all: 0 | 1 = 0,
   favorite_id: number | string = '',
+  is_simple: 0 | 1 = 1,
   RLC: RequestLifeCycle = {}
 ): Promise<unknown> {
   return get({
@@ -101,16 +103,16 @@ export function cancelCollections(collection_id: number | string, RLC: RequestLi
 /**
  * @description: 新建收藏
  * @param {number | string} type 删除历史记录类型的列表，0为全部，1为文章，2为问答，3为资源 `默认为0`
- * @param {number | string} cid 添加收藏的内容id `必传值`
- * @param {number | string} fid 添加收藏的收藏夹id `必传值`
+ * @param {number | string} content_id 添加收藏的内容id `必传值`
+ * @param {number | string} favorite_id 添加收藏的收藏夹id `必传值`
  * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
  * @return {Promise<unknown>} 请求返回promise
  * @author: xiao
  */
 export function addCollections(
   type: number | string = '',
-  cid: number | string = '',
-  fid: number | string = '',
+  content_id: number | string = '',
+  favorite_id: number | string = '',
   RLC: RequestLifeCycle = {}
 ) {
   return post({
@@ -118,8 +120,8 @@ export function addCollections(
     ...RLC,
     data: {
       type,
-      cid,
-      fid
+      content_id,
+      favorite_id
     }
   });
 }

@@ -4,13 +4,12 @@
  * @Autor: xiao
  * @Date: 2021-09-27 17:17:24
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-13 13:26:44
+ * @LastEditTime: 2022-02-13 14:52:58
 -->
 <template>
   <n-modal
     display-directive="show"
     :show="isShow"
-    @show="loadFavorite"
   >
     <div class="base-favorite">
       <div class="base-favorite-top">
@@ -45,7 +44,7 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, reactive, ref, watch } from 'vue';
 import BaseFavoriteList from '@/components/common/baseFavorite/childComps/BaseFavoriteList.vue';
 import { getFavorites } from '@/network/api/favorites';
 import { useMessage } from 'naive-ui';
@@ -85,17 +84,21 @@ export default defineComponent({
     const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
 
     // 初始化收藏夹数据
-    loadFavorite();
+    loadFavorite(props.isShow);
+
+    // 监听模态框显示
+    watch(() => props.isShow, loadFavorite);
 
     /**
      * @description: 加载收藏夹数据
+     * @param {boolean} show 模态框是否显示 `必传参数`
      * @return {void}
      * @author: dreamy-xay
      */
-    function loadFavorite() {
+    function loadFavorite(show) {
       // 获取收藏夹数据(在显示或者已登录状态)
-      if (props.isShow && tokenInfo.value.status && !favorites.length)
-        getFavorites(tokenInfo.value.username)
+      if (show && tokenInfo.value.status && !favorites.length)
+        getFavorites(tokenInfo.value.username, 0, 0, 0, 0, '', 1)
           .then((data) => {
             favorites.splice(0, 0, ...data.favorites);
             id.value = favorites[0].favorite_id;
@@ -116,12 +119,12 @@ export default defineComponent({
 
     /**
      * @description: 获取被点击的收藏夹id
-     * @param {string} id 被点击的收藏夹id `必传参数`
+     * @param {string} favoriteId 被点击的收藏夹id `必传参数`
      * @return {void}
      * @author: xiao
      */
-    function childFavorite(id) {
-      id.value = id;
+    function childFavorite(favoriteId) {
+      id.value = favoriteId;
     }
 
     /**
