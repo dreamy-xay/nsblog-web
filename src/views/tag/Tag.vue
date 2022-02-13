@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2022-01-24 18:20:31
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 14:23:51
+ * @LastEditTime: 2022-02-13 22:14:18
 -->
 <template>
   <base-view
@@ -42,11 +42,18 @@
             :articleItem="tagArticles"
             @change-like="changeLike($event)"
           />
+
+          <base-content-loading
+            v-show="showContentLoading"
+            :style="{padding: '16px 0'}"
+          />
         </div>
+
       </div>
+
       <div
         class="bottom"
-        v-if="showButton"
+        v-if="showButton && !showContentLoading"
       >
         <div
           class="bottom-load"
@@ -71,12 +78,13 @@ import { getTagDetails } from '@/network/api/topics';
 import { getArticles } from '@/network/api/articles';
 import TagTop from '@/views/tag/childComps/TagTop.vue';
 import { addUserTag, delUserTag } from '@/network/api/user';
-import { defineComponent, reactive, ref, watch } from 'vue';
+import { defineComponent, reactive, ref } from 'vue';
 import TagButton from '@/views/tag/childComps/TagButton.vue';
 import ArticleItem from '@/views/tag/childComps/ArticleItem.vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import { modifyArticleRecommendEvaluation } from '@/network/api/articles';
 import BaseSelectHead from '@/components/common/baseSelectHead/BaseSelectHead.vue';
+import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
 
 /**
  * @description: 标签详细信息页面
@@ -90,6 +98,7 @@ export default defineComponent({
     TagButton,
     ArticleItem,
     BaseSelectHead,
+    BaseContentLoading,
   },
   setup() {
     const msg = useMessage(); // 'naive-ui'
@@ -101,6 +110,7 @@ export default defineComponent({
     const tagArticles = reactive([]); // 保存数据
     const showButton = ref(false); // 显示加载更多按钮
     const limit = 7;
+    const showContentLoading = ref(false); // 是否显示加载内容过渡
     const detail = reactive({
       name: '',
       remark: '',
@@ -127,6 +137,7 @@ export default defineComponent({
       })
       .catch((error) => {
         console.log(error);
+        msg.error('获取文章详情失败', { duration: 2000, closable: true });
       });
 
     /**
@@ -147,13 +158,21 @@ export default defineComponent({
       type
     ) {
       showButton.value = true;
-      getArticles(username, category, tag, offset, limit, release_time, browsing_count, topic_name, tag_name, type)
+      getArticles(username, category, tag, offset, limit, release_time, browsing_count, topic_name, tag_name, type, {
+        beforeRequest() {
+          showContentLoading.value = true;
+        },
+        afterResopnse() {
+          showContentLoading.value = false;
+        },
+      })
         .then((res) => {
           showButton.value = limit === res.articles.length;
           tagArticles.splice(tagArticles.length, 0, ...res.articles);
         })
         .catch((error) => {
-          console.log('initArticlesHomeError: ' + error);
+          console.log(error);
+          msg.error('获取文章信息失败', { duration: 2000, closable: true });
         });
     }
 
@@ -197,9 +216,11 @@ export default defineComponent({
           })
           .catch((error) => {
             console.log(error);
+            if (res == 1) msg.success('点赞失败', { duration: 2000, closable: true });
+            else msg.error('取消失败', { duration: 2000, closable: true });
           });
       } else {
-        msg.error('请先登录');
+        msg.error('请先登录', { duration: 2000, closable: true });
       }
     }
 
@@ -218,13 +239,14 @@ export default defineComponent({
      * @author: continue-hs
      */
     function clickAttention() {
-      if (detail.attention === 1) {
+      if (detail.attention) {
         delUserTag(tagName)
           .then(() => {
             detail.attention = 0;
           })
           .catch((error) => {
             console.log(error);
+            msg.error('取消关注失败', { duration: 2000, closable: true });
           });
       } else {
         addUserTag(tagName)
@@ -233,6 +255,7 @@ export default defineComponent({
           })
           .catch((error) => {
             console.log(error);
+            msg.error('关注失败', { duration: 2000, closable: true });
           });
       }
     }
@@ -248,6 +271,7 @@ export default defineComponent({
       uploadMore,
       clickAttention,
       showButton,
+      showContentLoading,
     };
   },
 });
@@ -286,8 +310,8 @@ export default defineComponent({
       }
 
       .middle-article {
-        margin-bottom: 16px;
         padding-bottom: 12px;
+        margin: 0 20px;
       }
     }
 

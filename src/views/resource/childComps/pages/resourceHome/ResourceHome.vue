@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-21 23:15:38
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 18:56:20
+ * @LastEditTime: 2022-02-13 22:50:43
 -->
 <template>
   <div class="resource-home">
@@ -14,19 +14,21 @@
           :resource-data="resourceData"
           :select-tag="selectTag"
           :select-time="selectTime"
+          :show-content-loading="showContentLoading"
           @change-tag="changeTag($event)"
           @change-time="changeTime($event)"
         />
         <div
           class="button"
           role="button"
-          v-show="showButton"
+          v-show="showButton && !showContentLoading"
           @click="getMessage()"
         >加载更多...</div>
 
       </div>
       <div class="right">
         <base-rank-card
+          :loading="showRankCardLoading"
           title="下载排行"
           :data="rankinglist"
         />
@@ -62,6 +64,8 @@ export default defineComponent({
     const showButton = ref(true); // 显示按钮
     const resourceData = reactive([]); // 资源数据
     const rankinglist = reactive([]); // 下载排行
+    const showContentLoading = ref(false); // 是否显示加载内容过渡
+    const showRankCardLoading = ref(false); // rank-card 是否显示加载状态
 
     /**
      * @description: 加载数据函数
@@ -70,7 +74,14 @@ export default defineComponent({
      */
     function getMessage() {
       if (showButton.value == true)
-        getResources(null, offest.value, limit, selectTime.value, selectTag.value)
+        getResources(null, offest.value, limit, selectTime.value, selectTag.value, {
+          beforeRequest() {
+            showContentLoading.value = true;
+          },
+          afterResopnse() {
+            showContentLoading.value = false;
+          },
+        })
           .then((data) => {
             resourceData.splice(offest.value, 0, ...data.resources);
             offest.value += data.resources.length;
@@ -85,7 +96,14 @@ export default defineComponent({
     // 获取数据
     getMessage();
 
-    getResourcesList()
+    getResourcesList({
+      beforeRequest() {
+        showRankCardLoading.value = true;
+      },
+      afterResopnse() {
+        showRankCardLoading.value = false;
+      },
+    })
       .then((data) => {
         for (let i = 0; i < data.resources.length; i++) {
           let arr = {
@@ -143,6 +161,8 @@ export default defineComponent({
       getMessage,
       changeTag,
       changeTime,
+      showContentLoading,
+      showRankCardLoading,
     };
   },
 });

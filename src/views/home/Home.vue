@@ -3,13 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
-<<<<<<< HEAD
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-13 19:52:56
-=======
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 18:58:29
->>>>>>> 0e5e7bdb06a9202451d26390819f62fb77a386f5
+ * @LastEditTime: 2022-02-13 23:00:04
 -->
 <template>
   <base-view
@@ -36,15 +31,15 @@
           :all-articles="allArticles"
           :list-index="listIndex"
           :time-index="timeIndex"
+          :show-content-loading="showContentLoading"
           @change-list="changeList($event)"
           @change-time="changeTime($event)"
           @change-like="changeLike($event)"
         />
-
         <div
           class="button"
           role="button"
-          v-show="showButton"
+          v-show="showButton && !showContentLoading"
           @click="uploadMore()"
         >加载更多...</div>
 
@@ -52,7 +47,6 @@
 
       <div class="right">
         <home-right
-          :ranking-list="rankingList"
           :activity-data="activityData"
           :bulletin-data="bulletinData"
         />
@@ -73,7 +67,6 @@ import { mapGetters } from '@/util/store';
 import { getArticles } from '@/network/api/articles';
 import { modifyArticleRecommendEvaluation } from '@/network/api/articles';
 import { getNotices } from '@/network/api/notices';
-import { getArticlesList, getTagsList } from '@/network/api/list';
 import { useRoute, useRouter } from 'vue-router';
 
 /**
@@ -102,6 +95,7 @@ export default defineComponent({
     const limit = 7; // 获取信息长度
     const typeIndex = ref(0); // 获取信息类型
     const showButton = ref(false); // 显示加载更多按钮\
+    const showContentLoading = ref(false); // 是否显示加载内容过渡
 
     // 活动牌
     const activityData = reactive([]);
@@ -109,11 +103,8 @@ export default defineComponent({
     const bulletinData = reactive([]);
     const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
 
-    // topicSelect.value = route.query.topic;
-    // console.log(topicSelect.value);
-    // console.log(route.query.topic);
-    // router.push(route.path + '?topic=' + topicSelect.value);
-    // console.log('path:' + route.path + '?topic=' + topicSelect.value);
+    if (!route.query.topic) topicSelect.value = route.query.topic;
+    if (!route.query.tag) tagSelect.value = route.query.tag;
 
     // 获取公告牌数据
     getNotices()
@@ -169,7 +160,14 @@ export default defineComponent({
       type
     ) {
       showButton.value = true;
-      getArticles(username, category, tag, offset, limit, release_time, browsing_count, topic_name, tag_name, type)
+      getArticles(username, category, tag, offset, limit, release_time, browsing_count, topic_name, tag_name, type, {
+        beforeRequest() {
+          showContentLoading.value = true;
+        },
+        afterResopnse() {
+          showContentLoading.value = false;
+        },
+      })
         .then((res) => {
           showButton.value = res.articles.length === limit;
           allArticles.splice(allArticles.length, 0, ...res.articles);
@@ -337,6 +335,7 @@ export default defineComponent({
       showButton,
       activityData,
       bulletinData,
+      showContentLoading,
     };
   },
 });
