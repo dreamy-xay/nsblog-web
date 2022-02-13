@@ -4,10 +4,38 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-28 21:37:34
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-16 16:26:14
+ * @LastEditTime: 2022-02-13 20:43:39
  */
 import ResizeObserver from 'resize-observer-polyfill';
 import { debounce, throttle, shuffle } from 'lodash';
+
+/**
+ * @description: 获取元素相对于页面文档的位置
+ * @param {HTMLElement} el 元素节点 `必传参数`
+ * @return {{ left: number; top: number }} 返回一个对象，保护left和top
+ * @author: dreamy-xay
+ */
+export function getRelativeDocumentPosition(el: HTMLElement): { left: number; top: number } {
+  if (el.parentNode === null || el.style.display == 'none') return { left: 0, top: 0 };
+
+  if (el.getBoundingClientRect) {
+    //IE
+    const box: DOMRect = el.getBoundingClientRect();
+    const scrollTop: number = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
+    const scrollLeft: number = Math.max(document.documentElement.scrollLeft, document.body.scrollLeft);
+    return { left: box.left + scrollLeft, top: box.top + scrollTop };
+  } else {
+    const pos: [number, number] = [el.offsetLeft, el.offsetTop];
+    let parent: any = el.offsetParent;
+    if (parent != el)
+      while (parent) {
+        pos[0] += parent.offsetLeft;
+        pos[1] += parent.offsetTop;
+        parent = parent.offsetParent;
+      }
+    return { left: pos[0], top: pos[1] };
+  }
+}
 
 /**
  * @description: 向后动态添加dom元素
