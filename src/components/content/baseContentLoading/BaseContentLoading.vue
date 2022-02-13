@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-16 16:27:09
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-19 16:04:46
+ * @LastEditTime: 2022-02-13 19:36:48
 -->
 <template>
   <div
@@ -14,7 +14,7 @@
     <n-skeleton
       v-for="(width, index) in line"
       :key="index"
-      :style="{width, marginBottom: index !== line.length - 1 ? '10px' : 0, ...skeletonStyle}"
+      :style="{width, marginBottom: index !== line.length - 1 ? `${space}px` : 0, ...skeletonStyle}"
       :size="skeletonSize"
       :sharp="false"
       :text="type === 'text'"
@@ -32,6 +32,7 @@ import { defineComponent } from 'vue';
  * @param {Array} line 骨架条设置数组，[number(百分比宽度，width，也可以设置 px)] `默认为 ['40%', '100%', '80%', '60%']`
  * @param {String} type 骨架条类型，有['text', 'round', 'circle']三选一 `默认为text`
  * @param {Object} style 组件样式 `默认为 {}`
+ * @param {Number} space 间距 `默认为10`
  * @param {Object} skeletonStyle 骨架条样式 `默认为 {}`
  * @param {Number} skeletonSize 股价条大小 `默认为 undefined`
  * @author: dreamy-xay
@@ -50,6 +51,10 @@ export default defineComponent({
     style: {
       type: Object,
       default: () => ({}),
+    },
+    space: {
+      type: Number,
+      default: 10,
     },
     skeletonStyle: {
       type: Object,

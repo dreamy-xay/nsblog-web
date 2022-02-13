@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 15:23:22
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-13 19:52:56
 -->
 <template>
   <base-view
@@ -50,8 +50,6 @@
           :ranking-list="rankingList"
           :activity-data="activityData"
           :bulletin-data="bulletinData"
-          :hot-tags="hotTags"
-          @clickMenuItem="getArticlesLists($event)"
         />
       </div>
     </div>
@@ -95,12 +93,8 @@ export default defineComponent({
     const allArticles = reactive([]); // 记录数据
     const limit = 7; // 获取信息长度
     const typeIndex = ref(0); // 获取信息类型
-    const showButton = ref(false); // 显示加载更多按钮
-    // 热门文章
-    const rankingList = reactive([]);
+    const showButton = ref(false); // 显示加载更多按钮\
 
-    // 热门标签
-    const hotTags = reactive([]);
     // 活动牌
     const activityData = reactive([]);
     // 公告牌
@@ -130,56 +124,9 @@ export default defineComponent({
         msg.error('获取公告牌失败', { duration: 2000, closable: true });
       });
 
-    // 获取热门文章数据
-    getArticlesLists(0);
-
-    // 获取热门标签数据
-    getTagsList()
-      .then((data) => {
-        console.log(data);
-        for (let i = 0; i < data.tags.length; i++) {
-          let arr = {
-            name: null,
-            url: `tag/`,
-          };
-          arr.name = data.tags[i];
-          arr.url += data.tags[i];
-          hotTags.splice(hotTags.length, 0, arr);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        msg.error('获取热门标签数据失败', { duration: 2000, closable: true });
-      });
-
     // 获取初始数据
     initArticlesHome('', '', '', 0, limit, 0, 0, topicSelect.value, tagSelect.value, typeIndex.value);
 
-    /**
-     * @description: 获取热门文章
-     * @param {number} index 0:综合，1:点赞，2:评论
-     * @return {void}
-     * @author: Z_Y_C
-     */
-    function getArticlesLists(index) {
-      getArticlesList(index)
-        .then((data) => {
-          rankingList.splice(0, rankingList.length);
-          for (let i = 0; i < data.articles.length; i++) {
-            let arr = {
-              title: null,
-              url: 'article/',
-            };
-            arr.title = data.articles[i].title;
-            arr.url += data.articles[i].id;
-            rankingList.splice(rankingList.length, 0, arr);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          msg.error('获取热门文章数据失败', { duration: 2000, closable: true });
-        });
-    }
     /**
      * @description: 获取数据
      * @param {string} username 用户名
@@ -371,11 +318,8 @@ export default defineComponent({
       changeList,
       changeTime,
       showButton,
-      rankingList,
-      hotTags,
       activityData,
       bulletinData,
-      getArticlesLists,
     };
   },
 });

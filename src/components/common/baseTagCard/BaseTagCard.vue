@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-15 15:07:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-23 15:38:32
+ * @LastEditTime: 2022-02-13 19:58:11
 -->
 <template>
   <div
@@ -18,6 +18,7 @@
     </div>
     <div class="base-tag-card-bottom">
       <a
+        v-show="!loading"
         class="tag"
         v-for="(item, index) in tags"
         :href="item.url"
@@ -35,16 +36,25 @@
           <i class="iconfont blog-hot1"></i>
         </div>
       </a>
+      <base-content-loading
+        v-show="loading"
+        :line="['100%', '100%', '100%']"
+        :space="8"
+        :style="{padding: '0 12px 16px 0'}"
+        :skeleton-style="{height: '24px'}"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
+import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
 import styles from '@/assets/style/define.scss';
 
 /**
  * @description: 热门标签型小组件
+ * @param {Boolean} loading 是否处于加载状态 `默认为 false`
  * @param {String} title 小组件标题 `默认为 ''`
  * @param {Boolean} hotIcon 前三标签是否含热门图标 `默认为 true`
  * @param {Array} tags 内容列表 `默认为 []`
@@ -54,7 +64,14 @@ import styles from '@/assets/style/define.scss';
 
 export default defineComponent({
   name: 'baseTagCard',
+  components: {
+    BaseContentLoading,
+  },
   props: {
+    loading: {
+      type: Boolean,
+      default: false,
+    },
     title: {
       type: String,
       default: '',
