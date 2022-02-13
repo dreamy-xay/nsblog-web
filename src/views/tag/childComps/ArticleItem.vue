@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2022-01-23 15:06:03
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 13:10:01
+ * @LastEditTime: 2022-02-13 19:06:51
 -->
 <template>
   <div
@@ -74,7 +74,14 @@
               :class="item.recommend === 1 ? 'active' : ''"
             >
 
-              <i class="iconfont blog-dianzan1" />
+              <i
+                class="iconfont blog-dianzan"
+                v-if="item.recommend"
+              />
+              <i
+                class="iconfont blog-dianzan1"
+                v-else
+              />
               <div
                 class="support-text"
                 v-if="item.recommend_count"
@@ -113,7 +120,10 @@
       </div>
     </div>
   </div>
-  <base-content-loading v-else />
+  <base-content-loading
+    v-else
+    :style="{padding:'16px 20px',width:'calc(100% - 40px)'}"
+  />
 
 </template>
 
@@ -153,7 +163,7 @@ export default defineComponent({
     function clickTag(topic_tag) {
       router.push({
         name: 'tag',
-        params: {
+        query: {
           tagName: topic_tag,
         },
       });
@@ -168,7 +178,7 @@ export default defineComponent({
     function clickTopic(topic) {
       router.push({
         name: 'home',
-        params: {
+        query: {
           topic: topic,
         },
       });

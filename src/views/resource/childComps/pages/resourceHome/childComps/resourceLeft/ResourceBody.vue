@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-25 13:17:52
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 13:09:15
+ * @LastEditTime: 2022-02-13 18:48:48
 -->
 <template>
   <div
@@ -46,7 +46,10 @@
       </div>
     </div>
   </div>
-  <base-content-loading v-else />
+  <base-content-loading
+    v-else
+    :style="{padding:'16px 20px',width:'calc(100% - 40px)'}"
+  />
 
 </template>
 <script>
