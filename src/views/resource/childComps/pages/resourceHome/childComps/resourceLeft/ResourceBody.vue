@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-25 13:17:52
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 18:48:48
+ * @LastEditTime: 2022-02-13 22:41:30
 -->
 <template>
   <div
@@ -46,17 +46,11 @@
       </div>
     </div>
   </div>
-  <base-content-loading
-    v-else
-    :style="{padding:'16px 20px',width:'calc(100% - 40px)'}"
-  />
-
 </template>
 <script>
 import router from '@/router';
 import { defineComponent } from 'vue';
 import { dateFormat } from '@/util/date';
-import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
 
 /**
  * @description: 资源body样式
@@ -67,7 +61,6 @@ import BaseContentLoading from '@/components/content/baseContentLoading/BaseCont
 
 export default defineComponent({
   name: 'resourceBody',
-  components: { BaseContentLoading },
   props: {
     resourceData: {
       type: Array,
@@ -112,7 +105,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .resource-body {
-  padding: 0 20px;
+  width: 100%;
 
   .resource-body-context {
     padding: 12px 0;
