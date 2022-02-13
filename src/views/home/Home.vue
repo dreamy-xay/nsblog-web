@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 15:23:22
+ * @LastEditTime: 2022-02-13 23:00:04
 -->
 <template>
   <base-view
@@ -31,15 +31,15 @@
           :all-articles="allArticles"
           :list-index="listIndex"
           :time-index="timeIndex"
+          :show-content-loading="showContentLoading"
           @change-list="changeList($event)"
           @change-time="changeTime($event)"
           @change-like="changeLike($event)"
         />
-
         <div
           class="button"
           role="button"
-          v-show="showButton"
+          v-show="showButton && !showContentLoading"
           @click="uploadMore()"
         >加载更多...</div>
 
@@ -47,11 +47,8 @@
 
       <div class="right">
         <home-right
-          :ranking-list="rankingList"
           :activity-data="activityData"
           :bulletin-data="bulletinData"
-          :hot-tags="hotTags"
-          @clickMenuItem="getArticlesLists($event)"
         />
       </div>
     </div>
@@ -70,7 +67,7 @@ import { mapGetters } from '@/util/store';
 import { getArticles } from '@/network/api/articles';
 import { modifyArticleRecommendEvaluation } from '@/network/api/articles';
 import { getNotices } from '@/network/api/notices';
-import { getArticlesList, getTagsList } from '@/network/api/list';
+import { useRoute, useRouter } from 'vue-router';
 
 /**
  * @description: 博客主页
@@ -87,6 +84,8 @@ export default defineComponent({
     HomeRight,
   },
   setup() {
+    const route = useRoute();
+    const router = useRouter();
     const topicSelect = ref('推荐'); // 记录当前专题
     const tagSelect = ref(''); // 记录当前标签
     const msg = useMessage(); // 'naive-ui';
@@ -95,17 +94,17 @@ export default defineComponent({
     const allArticles = reactive([]); // 记录数据
     const limit = 7; // 获取信息长度
     const typeIndex = ref(0); // 获取信息类型
-    const showButton = ref(false); // 显示加载更多按钮
-    // 热门文章
-    const rankingList = reactive([]);
+    const showButton = ref(false); // 显示加载更多按钮\
+    const showContentLoading = ref(false); // 是否显示加载内容过渡
 
-    // 热门标签
-    const hotTags = reactive([]);
     // 活动牌
     const activityData = reactive([]);
     // 公告牌
     const bulletinData = reactive([]);
     const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
+
+    if (!route.query.topic) topicSelect.value = route.query.topic;
+    if (!route.query.tag) tagSelect.value = route.query.tag;
 
     // 获取公告牌数据
     getNotices()
@@ -130,56 +129,9 @@ export default defineComponent({
         msg.error('获取公告牌失败', { duration: 2000, closable: true });
       });
 
-    // 获取热门文章数据
-    getArticlesLists(0);
-
-    // 获取热门标签数据
-    getTagsList()
-      .then((data) => {
-        console.log(data);
-        for (let i = 0; i < data.tags.length; i++) {
-          let arr = {
-            name: null,
-            url: `tag/`,
-          };
-          arr.name = data.tags[i];
-          arr.url += data.tags[i];
-          hotTags.splice(hotTags.length, 0, arr);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        msg.error('获取热门标签数据失败', { duration: 2000, closable: true });
-      });
-
     // 获取初始数据
     initArticlesHome('', '', '', 0, limit, 0, 0, topicSelect.value, tagSelect.value, typeIndex.value);
 
-    /**
-     * @description: 获取热门文章
-     * @param {number} index 0:综合，1:点赞，2:评论
-     * @return {void}
-     * @author: Z_Y_C
-     */
-    function getArticlesLists(index) {
-      getArticlesList(index)
-        .then((data) => {
-          rankingList.splice(0, rankingList.length);
-          for (let i = 0; i < data.articles.length; i++) {
-            let arr = {
-              title: null,
-              url: 'article/',
-            };
-            arr.title = data.articles[i].title;
-            arr.url += data.articles[i].id;
-            rankingList.splice(rankingList.length, 0, arr);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          msg.error('获取热门文章数据失败', { duration: 2000, closable: true });
-        });
-    }
     /**
      * @description: 获取数据
      * @param {string} username 用户名
@@ -208,7 +160,14 @@ export default defineComponent({
       type
     ) {
       showButton.value = true;
-      getArticles(username, category, tag, offset, limit, release_time, browsing_count, topic_name, tag_name, type)
+      getArticles(username, category, tag, offset, limit, release_time, browsing_count, topic_name, tag_name, type, {
+        beforeRequest() {
+          showContentLoading.value = true;
+        },
+        afterResopnse() {
+          showContentLoading.value = false;
+        },
+      })
         .then((res) => {
           showButton.value = res.articles.length === limit;
           allArticles.splice(allArticles.length, 0, ...res.articles);
@@ -316,22 +275,23 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function changeList(e) {
-      console.log(e.index);
-      listIndex.value = e.index;
-      allArticles.splice(0, allArticles.length);
-      typeIndex.value = listIndex.value;
-      initArticlesHome(
-        '',
-        '',
-        '',
-        allArticles.length,
-        limit,
-        0,
-        0,
-        topicSelect.value,
-        tagSelect.value,
-        typeIndex.value
-      );
+      if (e.index !== listIndex.value) {
+        listIndex.value = e.index;
+        allArticles.splice(0, allArticles.length);
+        typeIndex.value = listIndex.value;
+        initArticlesHome(
+          '',
+          '',
+          '',
+          allArticles.length,
+          limit,
+          0,
+          0,
+          topicSelect.value,
+          tagSelect.value,
+          typeIndex.value
+        );
+      }
     }
 
     /**
@@ -341,21 +301,23 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function changeTime(e) {
-      timeIndex.value = e.index;
-      allArticles.splice(0, allArticles.length);
-      typeIndex.value = timeIndex.value + 2;
-      initArticlesHome(
-        '',
-        '',
-        '',
-        allArticles.length,
-        limit,
-        0,
-        0,
-        topicSelect.value,
-        tagSelect.value,
-        typeIndex.value
-      );
+      if (timeIndex.value !== e.index) {
+        timeIndex.value = e.index;
+        allArticles.splice(0, allArticles.length);
+        typeIndex.value = timeIndex.value + 2;
+        initArticlesHome(
+          '',
+          '',
+          '',
+          allArticles.length,
+          limit,
+          0,
+          0,
+          topicSelect.value,
+          tagSelect.value,
+          typeIndex.value
+        );
+      }
     }
 
     return {
@@ -371,11 +333,9 @@ export default defineComponent({
       changeList,
       changeTime,
       showButton,
-      rankingList,
-      hotTags,
       activityData,
       bulletinData,
-      getArticlesLists,
+      showContentLoading,
     };
   },
 });

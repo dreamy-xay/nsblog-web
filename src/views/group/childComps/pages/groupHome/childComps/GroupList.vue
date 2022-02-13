@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2022-01-14 18:52:17
  * @LastEditors: xiao
- * @LastEditTime: 2022-02-13 15:59:49
+ * @LastEditTime: 2022-02-14 00:16:47
 -->
 <template>
   <div class="group-list">
@@ -61,8 +61,13 @@
           <hr style="background-color: #e5e5e5;height:0.5px; border:none;">
         </div>
       </div>
+      <base-content-loading
+        v-show="showContentLoading"
+        :style="{padding: '16px 0'}"
+      />
     </div>
     <div
+      v-if="showLoading && !showContentLoading"
       class="group-list-more"
       role="button"
       @click="moreGroup"
@@ -86,10 +91,12 @@ import { addGroup, deleteGroup } from '@/network/api/groups';
 import { useRouter } from 'vue-router';
 import styles from '@/assets/style/define.scss';
 import BaseTag from '@/components/content/baseTag/BaseTag.vue';
-
+import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
 /**
  * @description:学习小组列表
  * @param {Array} studyGroups 学习小组数据
+ * @param {Boolean} showContentLoading 是否显示加载内容过渡
+ * @param {Boolean} showLoading 是否显示加载按钮
  * @author: xiao
  */
 
@@ -98,11 +105,20 @@ export default defineComponent({
   components: {
     BaseModal,
     BaseTag,
+    BaseContentLoading,
   },
   emits: ['changeGroupJoin', 'updateGroups'],
   props: {
     studyGroups: {
       type: Array,
+      required: true,
+    },
+    showContentLoading: {
+      type: Boolean,
+      required: true,
+    },
+    showLoading: {
+      type: Boolean,
       required: true,
     },
   },

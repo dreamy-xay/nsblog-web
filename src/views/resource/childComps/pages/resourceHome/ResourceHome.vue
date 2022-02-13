@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-21 23:15:38
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 14:37:53
+ * @LastEditTime: 2022-02-13 22:50:43
 -->
 <template>
   <div class="resource-home">
@@ -12,19 +12,23 @@
       <div class="left">
         <resource-left
           :resource-data="resourceData"
-          v-model:select-tag="selectTag"
-          v-model:select-time="selectTime"
+          :select-tag="selectTag"
+          :select-time="selectTime"
+          :show-content-loading="showContentLoading"
+          @change-tag="changeTag($event)"
+          @change-time="changeTime($event)"
         />
         <div
           class="button"
           role="button"
-          v-show="showButton"
+          v-show="showButton && !showContentLoading"
           @click="getMessage()"
         >加载更多...</div>
 
       </div>
       <div class="right">
         <base-rank-card
+          :loading="showRankCardLoading"
           title="下载排行"
           :data="rankinglist"
         />
@@ -60,6 +64,8 @@ export default defineComponent({
     const showButton = ref(true); // 显示按钮
     const resourceData = reactive([]); // 资源数据
     const rankinglist = reactive([]); // 下载排行
+    const showContentLoading = ref(false); // 是否显示加载内容过渡
+    const showRankCardLoading = ref(false); // rank-card 是否显示加载状态
 
     /**
      * @description: 加载数据函数
@@ -68,7 +74,14 @@ export default defineComponent({
      */
     function getMessage() {
       if (showButton.value == true)
-        getResources(null, offest.value, limit, selectTime.value, selectTag.value)
+        getResources(null, offest.value, limit, selectTime.value, selectTag.value, {
+          beforeRequest() {
+            showContentLoading.value = true;
+          },
+          afterResopnse() {
+            showContentLoading.value = false;
+          },
+        })
           .then((data) => {
             resourceData.splice(offest.value, 0, ...data.resources);
             offest.value += data.resources.length;
@@ -83,7 +96,14 @@ export default defineComponent({
     // 获取数据
     getMessage();
 
-    getResourcesList()
+    getResourcesList({
+      beforeRequest() {
+        showRankCardLoading.value = true;
+      },
+      afterResopnse() {
+        showRankCardLoading.value = false;
+      },
+    })
       .then((data) => {
         for (let i = 0; i < data.resources.length; i++) {
           let arr = {
@@ -100,16 +120,37 @@ export default defineComponent({
         msg.error('获取下载排行数据失败', { duration: 2000, closable: true });
       });
 
-    // 监听标签，标签改变重新获取数据
-    watch(
-      () => [selectTag.value, selectTime.value],
-      () => {
+    /**
+     * @description: 改变标签
+     * @param {number} e 几号标签 0为综合，1为最新，2为热门
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function changeTag(e) {
+      if (e !== selectTag.value) {
+        selectTag.value = e;
         resourceData.splice(0, offest.value);
         offest.value = 0;
         showButton.value = true;
         getMessage();
       }
-    );
+    }
+
+    /**
+     * @description: 改变时间
+     * @param {number} e 0为不限时间，1为最近一天，2为最近一周，3为最近一个月
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function changeTime(e) {
+      if (e !== selectTime.value) {
+        selectTime.value = e;
+        resourceData.splice(0, offest.value);
+        offest.value = 0;
+        showButton.value = true;
+        getMessage();
+      }
+    }
 
     return {
       rankinglist,
@@ -118,6 +159,10 @@ export default defineComponent({
       selectTag,
       selectTime,
       getMessage,
+      changeTag,
+      changeTime,
+      showContentLoading,
+      showRankCardLoading,
     };
   },
 });

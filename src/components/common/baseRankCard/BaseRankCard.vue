@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-15 09:05:31
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-12 13:01:36
+ * @LastEditTime: 2022-02-13 20:21:40
 -->
 <template>
   <div
@@ -33,6 +33,7 @@
     </div>
     <div class="base-rank-card-body">
       <a
+        v-show="!loading"
         class="info-item"
         v-for="(item, index) in rankData"
         :href="isUser ? `/user/${item[dataKey[0]]}` : item[dataKey[0]]"
@@ -70,17 +71,25 @@
           </div>
         </div>
       </a>
+      <base-content-loading
+        v-show="loading"
+        :line="['252px', '252px', '252px', '252px', '252px', '252px', '252px', '252px']"
+        :style="{padding: '0 12px', width: '252px'}"
+        :space="12"
+        :skeleton-style="{height: '22px'}"
+      />
     </div>
   </div>
-
 </template>
 
 <script>
 import { computed, defineComponent, reactive, ref, watch } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
+import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
 
 /**
  * @description: 基础排行榜小组件
+ * @param {Boolean} loading 是否处于加载状态 `默认为 false`
  * @param {String} title 小组件标题 `默认为 ''`
  * @param {Array} menuList 小组件菜单列表，为空时表示没有菜单 `默认为 []`
  * @param {Array} data 排行数据 `默认为 []`
@@ -96,8 +105,13 @@ export default defineComponent({
   name: 'baseRankingList',
   components: {
     BaseAvatar,
+    BaseContentLoading,
   },
   props: {
+    loading: {
+      type: Boolean,
+      default: false,
+    },
     title: {
       type: String,
       default: null,

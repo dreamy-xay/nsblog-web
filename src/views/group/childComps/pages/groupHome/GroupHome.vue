@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2022-01-21 19:42:59
  * @LastEditors: xiao
- * @LastEditTime: 2022-02-13 16:02:00
+ * @LastEditTime: 2022-02-14 00:18:52
 -->
 <template>
   <base-view
@@ -25,6 +25,8 @@
       <div>
         <group-list
           :study-groups="groups"
+          :showContentLoading="showContentLoading"
+          :showLoading="showLoading"
           @changeGroupJoin="changeGroupJoin"
           @updateGroups="updateGroups"
         />
@@ -91,6 +93,9 @@ export default defineComponent({
     const username = route.params.username; // 获取用户名
     const solicitationList = reactive([]); // 征集令列表
     const rankingList = reactive([]); //活跃排行榜
+    const showContentLoading = ref(true); // 是否显示加载内容过渡
+    const limit = 10; // 每次加载列表条数
+    const showLoading = ref(true); // 是否显示加载按钮
 
     //获取征集令
     getGroupSolicitations('')
@@ -137,9 +142,17 @@ export default defineComponent({
      */
     function updateGroups(flag) {
       // 获取小组
-      getGroups(username, topicSelect.value, 0, 6)
+      getGroups(username, topicSelect.value, 0, limit, '', {
+        beforeRequest() {
+          showContentLoading.value = true;
+        },
+        afterResopnse() {
+          showContentLoading.value = false;
+        },
+      })
         .then((data) => {
           if (flag == true) groups.splice(0, groups.length);
+          if (data.groups.length < limit) showLoading.value = false;
           groups.splice(groups.length, 0, ...data.groups);
         })
         .catch((error) => {
@@ -191,6 +204,8 @@ export default defineComponent({
       selectTopic,
       updateGroups,
       changeGroupJoin,
+      showContentLoading,
+      showLoading,
     };
   },
 });

@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2022-01-17 10:18:16
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 15:23:35
+ * @LastEditTime: 2022-02-13 22:30:27
 -->
 <template>
   <div class="home-left">
@@ -23,6 +23,10 @@
         :articleItem=" allArticles"
         @change-like="changeLike($event)"
       />
+      <base-content-loading
+        v-show="showContentLoading"
+        :style="{padding: '16px 0'}"
+      />
     </div>
   </div>
 
@@ -32,12 +36,14 @@
 import { defineComponent } from 'vue';
 import ArticleItem from '@/views/tag/childComps/ArticleItem.vue';
 import BaseSelectHead from '@/components/common/baseSelectHead/BaseSelectHead.vue';
+import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
 
 /**
  * @description: home左侧
  * @param {Array} allArticles 显示内容 `默认为 []`
- * @param {number} listIndex 选择 0:'综合', 1:'最新', 2:'热门'标签 `默认为 0`
- * @param {number} timeIndex 选择 0:'时间不限', 1:'最近一天', 2:'最近一周', 3:'最近三月'时间筛选 `默认为 0`
+ * @param {Number} listIndex 选择 0:'综合', 1:'最新', 2:'热门'标签 `默认为 0`
+ * @param {Number} timeIndex 选择 0:'时间不限', 1:'最近一天', 2:'最近一周', 3:'最近三月'时间筛选 `默认为 0`
+ * @param {Boolean} showContentLoading 是否显示加载内容过渡 `必传参数`
  * @event changeList 改变listIndex
  * @event changeTime 改变timeIndex
  * @author: Z_Y_C
@@ -57,10 +63,15 @@ export default defineComponent({
       type: Number,
       default: 0,
     },
+    showContentLoading: {
+      type: Boolean,
+      required: true,
+    },
   },
   components: {
     ArticleItem,
     BaseSelectHead,
+    BaseContentLoading,
   },
   setup(_, content) {
     /**
@@ -110,7 +121,7 @@ export default defineComponent({
     @include flex(center);
   }
   .home-left-middle {
-    margin-bottom: 12px;
+    margin: 0 20px 12px 20px;
   }
 }
 </style>

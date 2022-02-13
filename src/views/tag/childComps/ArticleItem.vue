@@ -4,13 +4,10 @@
  * @Autor: continue-hs
  * @Date: 2022-01-23 15:06:03
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 13:10:01
+ * @LastEditTime: 2022-02-13 22:41:16
 -->
 <template>
-  <div
-    class="article-item"
-    v-if="articleItem.length"
-  >
+  <div class="article-item">
     <div
       class="article-item-body"
       v-for="(item , index) in articleItem"
@@ -74,7 +71,14 @@
               :class="item.recommend === 1 ? 'active' : ''"
             >
 
-              <i class="iconfont blog-dianzan1" />
+              <i
+                class="iconfont blog-dianzan"
+                v-if="item.recommend"
+              />
+              <i
+                class="iconfont blog-dianzan1"
+                v-else
+              />
               <div
                 class="support-text"
                 v-if="item.recommend_count"
@@ -113,7 +117,6 @@
       </div>
     </div>
   </div>
-  <base-content-loading v-else />
 
 </template>
 
@@ -121,7 +124,6 @@
 import router from '@/router';
 import { defineComponent } from 'vue';
 import BaseImage from '@/components/content/baseImage/BaseImage.vue';
-import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
 import { dateGetText } from '@/util/date';
 
 /**
@@ -135,7 +137,6 @@ export default defineComponent({
   name: 'ArticleItem',
   components: {
     BaseImage,
-    BaseContentLoading,
   },
   props: {
     articleItem: {
@@ -168,7 +169,7 @@ export default defineComponent({
     function clickTopic(topic) {
       router.push({
         name: 'home',
-        params: {
+        query: {
           topic: topic,
         },
       });
@@ -240,8 +241,7 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 .article-item {
-  width: calc(100% - 40px);
-  padding: 0 20px;
+  width: 100%;
 
   .article-item-body {
     padding: 12px 0;
