@@ -3,13 +3,14 @@
  * @Version:
  * @Autor: xiao
  * @Date: 2021-09-27 17:17:24
- * @LastEditors: xiao
- * @LastEditTime: 2022-02-11 23:44:14
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-13 13:26:44
 -->
 <template>
   <n-modal
     display-directive="show"
     :show="isShow"
+    @show="loadFavorite"
   >
     <div class="base-favorite">
       <div class="base-favorite-top">
@@ -48,13 +49,13 @@ import { defineComponent, reactive, ref } from 'vue';
 import BaseFavoriteList from '@/components/common/baseFavorite/childComps/BaseFavoriteList.vue';
 import { getFavorites } from '@/network/api/favorites';
 import { useMessage } from 'naive-ui';
-import { addCollections } from '@/network/api/favorites';
+import { addCollections, newFavorites } from '@/network/api/favorites';
 import { mapState } from '@/util/store';
 
 /**
  * @description: 收藏夹界面
  * @param {Boolean} isShow 是否显示收藏夹界面 `默认为false`
- * @param {number | string} type 收藏的类型1为文章、2为问答、3为资源 `必传参数`
+ * @param {number} type 收藏的类型1为文章、2为问答、3为资源 `必传参数`
  * @param {number | string} cid 要收藏的内容的id `必传参数`
  * @event addCollection 添加收藏成功 (id: string) => void
  * @author: xiao
@@ -69,12 +70,12 @@ export default defineComponent({
       default: false,
     },
     type: {
-      type: String,
-      default: '',
+      type: Number,
+      default: null,
     },
     cid: {
-      type: String,
-      default: '',
+      type: [String, Number],
+      default: null,
     },
   },
   setup(props, context) {
@@ -82,18 +83,28 @@ export default defineComponent({
     const favorites = reactive([]); // 收藏夹数据
     const id = ref(null); // 收藏夹id
     const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
-    const username = tokenInfo.value.username; // 登录用户名
 
-    // 获取收藏夹数据
-    getFavorites(username, 0)
-      .then((data) => {
-        console.log(data);
-        favorites.splice(0, 0, ...data.favorites);
-      })
-      .catch((error) => {
-        console.log(error);
-        msg.error('获取收藏夹数据失败', { duration: 2000, closable: true });
-      });
+    // 初始化收藏夹数据
+    loadFavorite();
+
+    /**
+     * @description: 加载收藏夹数据
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function loadFavorite() {
+      // 获取收藏夹数据(在显示或者已登录状态)
+      if (props.isShow && tokenInfo.value.status && !favorites.length)
+        getFavorites(tokenInfo.value.username)
+          .then((data) => {
+            favorites.splice(0, 0, ...data.favorites);
+            id.value = favorites[0].favorite_id;
+          })
+          .catch((error) => {
+            console.log(error);
+            msg.error('获取收藏夹数据失败', { duration: 2000, closable: true });
+          });
+    }
 
     /**
      * @description: 点击关闭触发函数
@@ -105,30 +116,29 @@ export default defineComponent({
 
     /**
      * @description: 获取被点击的收藏夹id
-     * @param {String} e 被点击的收藏夹id
-     * @return {Void}
+     * @param {string} id 被点击的收藏夹id `必传参数`
+     * @return {void}
      * @author: xiao
      */
-    function childFavorite(e) {
-      id.value = e;
-      console.log('id.value', id.value);
+    function childFavorite(id) {
+      id.value = id;
     }
 
     /**
      * @description: 添加收藏
-     * @return {Void}
+     * @return {void}
      * @author: xiao
      */
     function addCollection() {
-      if (id.value != null) {
+      if (id.value && props.cid) {
         addCollections(props.type, props.cid, id.value)
           .then((data) => {
-            msg.success(`收藏成功`);
+            msg.success('收藏成功', { duration: 2000, closable: true });
             context.emit('addCollection', data.id);
           })
           .catch((err) => {
             console.log(err);
-            msg.error(`收藏失败`, { duration: 2000, closable: true });
+            msg.error('收藏失败', { duration: 2000, closable: true });
           });
       }
       context.emit('update:isShow', false);
@@ -136,27 +146,27 @@ export default defineComponent({
 
     /**
      * @description: 新建一个收藏夹
-     * @param {String} e 收藏夹名称
-     * @param {String} id 收藏夹名称
-     * @return {Void}
-     * @author: xiao
+     * @param {string} favoriteName 收藏夹名称 `必传参数`
+     * @param {function} next 创建收藏夹成功执行函数 `必传参数`
+     * @return {void}
+     * @author: dreamy-xay
      */
-    function newFavorite(e, id) {
-      let f = 1;
-      for (let i = 0; i < favorites.length; i++) {
-        if (favorites[i].name == e) f = 0;
-      }
-      if (f) {
-        favorites.splice(favorites.length, 0, {
-          collections: [],
-          favorite_id: id,
-          name: e,
-          count: 0,
-          is_private: false,
-        });
-      } else {
-        msg.error('不能重名', { duration: 2000, closable: true });
-      }
+    function newFavorite(favoriteName, next) {
+      if (favorites.findIndex((favorite) => favorite.name === favoriteName) !== -1)
+        msg.error('收藏夹已存在', { duration: 2000, closable: true });
+      else
+        newFavorites(favoriteName)
+          .then((data) => {
+            favorites.splice(favorites.length, 0, {
+              favorite_id: data.id,
+              name: favoriteName,
+            });
+            next();
+          })
+          .catch((error) => {
+            console.log(error);
+            msg.error('创建收藏夹失败', { duration: 2000, closable: true });
+          });
     }
 
     return {
@@ -166,6 +176,7 @@ export default defineComponent({
       addCollection,
       childFavorite,
       newFavorite,
+      loadFavorite,
     };
   },
 });
