@@ -4,13 +4,14 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-11 21:28:05
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-23 17:08:55
+ * @LastEditTime: 2022-02-13 18:44:50
  */
 import { Application } from 'express';
 import { Server } from 'http';
 import intercepter from './app';
 import socket from './socket';
 import * as bodyParser from 'body-parser';
+import { Random } from 'better-mock';
 
 export default function sever(app: Application) {
   if (process.env.VUE_APP_MOCK_SEVER === 'false' && process.env.VUE_APP_MOCK !== 'false') {
@@ -32,14 +33,19 @@ export default function sever(app: Application) {
 
     // 打印请求状态
     app.use((req, res, next) => {
-      if (new RegExp(process.env.VUE_APP_APIROUTER).test(req.url) && req.method.toLowerCase() !== 'options')
-        console.log(
-          '\x1B[45m\x1B[1m%s\x1b[0m\x1B[34m%s\x1b[0m%s',
-          ' request invoke: ',
-          ` ${req.method} `,
-          `${req.url}`
-        );
-      next();
+      if (new RegExp(process.env.VUE_APP_APIROUTER).test(req.url) && req.method.toLowerCase() !== 'options') {
+        // 请求延时模拟
+        const timer: NodeJS.Timeout = setTimeout(() => {
+          console.log(
+            '\x1B[45m\x1B[1m%s\x1b[0m\x1B[34m%s\x1b[0m%s',
+            ' request invoke: ',
+            ` ${req.method} `,
+            `${req.url}`
+          );
+          next();
+          clearTimeout(timer);
+        }, Random.integer(300, 900));
+      } else next();
     });
 
     // 拦截

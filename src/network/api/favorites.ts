@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 12:55:44
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-13 14:58:12
+ * @LastEditTime: 2022-02-13 16:12:52
  */
 
 import { get, RequestLifeCycle, del, put, post } from '@/network/request';
@@ -29,7 +29,7 @@ export function getFavorites(
   type: number = 0,
   is_all: 0 | 1 = 0,
   favorite_id: number | string = '',
-  is_simple: 0 | 1 = 1,
+  is_simple: 0 | 1 = 0,
   RLC: RequestLifeCycle = {}
 ): Promise<unknown> {
   return get({

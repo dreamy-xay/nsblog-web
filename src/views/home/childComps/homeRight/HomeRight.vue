@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2022-01-17 10:18:37
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 15:15:51
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-13 20:10:04
 -->
 <template>
   <div class="home-right">
@@ -17,13 +17,15 @@
       :style="{marginTop:activityData.length ? '16px' : ''}"
     />
     <base-rank-card
+      :loading="showRankCardLoading"
       :data="rankingList"
       title="热门文章"
       :menu-list="['综合', '点赞', '评论']"
       :style="{marginTop: '16px'}"
-      @click-menu-item="rankCardClickMenuItem"
+      @click-menu-item="getArticlesLists"
     />
     <base-tag-card
+      :loading="showTagCardLoading"
       title="热门标签"
       :tags="hotTags"
       :style="{marginTop: '16px'}"
@@ -32,11 +34,13 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, reactive, ref } from 'vue';
 import BaseBulletin from '@/components/common/baseBulletin/BaseBulletin.vue';
 import HomeActivity from '@/views/home/childComps/homeRight/childComps/HomeActivity.vue';
 import BaseRankCard from '@/components/common/baseRankCard/BaseRankCard.vue';
 import BaseTagCard from '@/components/common/baseTagCard/BaseTagCard.vue';
+import { getArticlesList, getTagsList } from '@/network/api/list';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description: 主页面(home)右侧
@@ -57,14 +61,6 @@ export default defineComponent({
     BaseTagCard,
   },
   props: {
-    rankingList: {
-      type: Array,
-      default: () => [],
-    },
-    hotTags: {
-      type: Array,
-      default: () => [],
-    },
     activityData: {
       type: Array,
       default: () => [],
@@ -74,20 +70,76 @@ export default defineComponent({
       default: () => [],
     },
   },
-  setup(_, content) {
+  setup() {
+    const msg = useMessage(); // naive-ui message
+    const showRankCardLoading = ref(false); // rank-card 是否显示加载状态
+    const showTagCardLoading = ref(false); // tag-card 是否显示加载状态
+
+    // 热门文章
+    const rankingList = reactive([]);
+    // 初始化获取热门文章数据
+    getArticlesLists(0);
+
     /**
-     * @description: 排行卡卡片中点击菜单
-     * @param {number} index 点击的菜单索引 `必传参数`
-     * @param {string} item 点击菜单菜单项名 `必传参数`
+     * @description: 获取热门文章
+     * @param {number} index 0:综合，1:点赞，2:评论
      * @return {void}
-     * @author: dreamy-xay
+     * @author: Z_Y_C
      */
-    function rankCardClickMenuItem(index, item) {
-      content.emit('clickMenuItem', index);
+    function getArticlesLists(index) {
+      getArticlesList(index, {
+        beforeRequest() {
+          showRankCardLoading.value = true;
+        },
+        afterResopnse() {
+          showRankCardLoading.value = false;
+        },
+      })
+        .then((data) => {
+          rankingList.splice(0, rankingList.length);
+          for (let article of data.articles)
+            rankingList.splice(rankingList.length, 0, {
+              title: article.title,
+              url: `/article/${article.id}`,
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('获取热门文章数据失败', { duration: 2000, closable: true });
+        });
     }
 
+    // 热门标签
+    const hotTags = reactive([]);
+
+    // 获取热门标签数据
+    getTagsList({
+      beforeRequest() {
+        showTagCardLoading.value = true;
+      },
+      afterResopnse() {
+        showTagCardLoading.value = false;
+      },
+    })
+      .then((data) => {
+        // console.log(data);
+        for (let name of data.tags)
+          hotTags.splice(hotTags.length, 0, {
+            name,
+            url: `tag${name}`,
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+        msg.error('获取热门标签数据失败', { duration: 2000, closable: true });
+      });
+
     return {
-      rankCardClickMenuItem,
+      showRankCardLoading,
+      showTagCardLoading,
+      hotTags,
+      rankingList,
+      getArticlesLists,
     };
   },
 });

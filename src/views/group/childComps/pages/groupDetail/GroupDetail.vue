@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-29 14:37:16
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-12 20:11:59
+ * @LastEditTime: 2022-02-13 20:13:49
 -->
 <template>
   <base-view
@@ -63,6 +63,7 @@
         <group-solicitation-popover v-model="showSolicitation" />
         <group-detail-info />
         <base-rank-card
+          :loading="showRankCardLoading"
           :menu-list="['最近', '长期']"
           title="活跃用户"
           :data="userRankingList"
@@ -84,6 +85,7 @@ import GroupSolicitationPopover from '@/views/group/childComps/pages/groupDetail
 import GroupDetailInfo from '@/views/group/childComps/pages/groupDetail/childComps/GroupDetailInfo.vue';
 import router from '@/router';
 import { getGroupsUsersList } from '@/network/api/list';
+import { useRoute } from 'vue-router';
 
 /**
  * @description: 学习小组详情页
@@ -99,7 +101,8 @@ export default defineComponent({
     GroupDetailInfo,
   },
   setup() {
-    const activeIndex = ref(0); // 当前菜单激活索引
+    const route = useRoute(); // route
+    const showRankCardLoading = ref(false); // rank-card 是否显示加载状态
 
     const menuList = [
       // 菜单列表
@@ -130,6 +133,8 @@ export default defineComponent({
       },
     ];
 
+    const activeIndex = ref(menuList.findIndex((item) => item.routerName === route.name)); // 当前菜单激活索引
+
     /**
      * @description: 点击菜单切换
      * @param {number} index 点击菜单列表索引 `必传参数`
@@ -155,13 +160,7 @@ export default defineComponent({
     // 用户活跃排名列表
     const userRankingList = reactive([]);
     // 初始化列表数据
-    getGroupsUsersList()
-      .then((data) => {
-        userRankingList.splice(0, userRankingList.length, ...data.users);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    rankCardClickMenuItem(0);
 
     /**
      * @description: 选择不同类型的用户排名
@@ -170,7 +169,14 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function rankCardClickMenuItem(index) {
-      getGroupsUsersList(index)
+      getGroupsUsersList(index, {
+        beforeRequest() {
+          showRankCardLoading.value = true;
+        },
+        afterResopnse() {
+          showRankCardLoading.value = false;
+        },
+      })
         .then((data) => {
           userRankingList.splice(0, userRankingList.length, ...data.users);
         })
@@ -180,6 +186,7 @@ export default defineComponent({
     }
 
     return {
+      showRankCardLoading,
       activeIndex,
       menuList,
       clickMenuItem,
