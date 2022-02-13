@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2022-01-21 19:42:59
  * @LastEditors: xiao
- * @LastEditTime: 2022-02-12 21:58:48
+ * @LastEditTime: 2022-02-13 15:24:06
 -->
 <template>
   <base-view
@@ -27,6 +27,7 @@
         <group-list
           :study-groups="groups"
           @changeGroupJoin="changeGroupJoin"
+          @updateGroups="updateGroups"
         />
       </div>
       <div class="group-home-right">
@@ -41,7 +42,7 @@
           </div>
         </div>
         <base-bulletin
-          :bulletin-data="bulletinData"
+          :bulletin-data="solicitationList"
           style="margin-bottom: 16px"
         />
         <base-rank-card
@@ -63,7 +64,7 @@ import GroupList from '@/views/group/childComps/pages/groupHome/childComps/Group
 import GroupPopover from '@/views/group/childComps/pages/groupHome/childComps/GroupPopover.vue';
 import BaseBulletin from '@/components/common/baseBulletin/BaseBulletin';
 import BaseRankCard from '@/components/common/baseRankCard/BaseRankCard';
-import { getGroups, getSolicitations } from '@/network/api/groups';
+import { getGroups, getGroupSolicitations } from '@/network/api/groups';
 import { useMessage } from 'naive-ui';
 import { getListGroups } from '@/network/api/list';
 import { useRoute } from 'vue-router';
@@ -91,42 +92,21 @@ export default defineComponent({
     const msg = useMessage(); // naive-ui 消息组件
     const route = useRoute(); // route
     const username = route.params.username; // 获取用户名
-    const rankingList = reactive([
-      //   {
-      //     title: 'react有tab页，如何实现未选中的tab页隐藏但不销毁在JavaScript中一组数据如何进行关联呢',
-      //     url: '#',
-      //   },
-      //   {
-      //     title: '在JavaScript中一组数据如何进行关联呢',
-      //     url: '#',
-      //   },
-      //   {
-      //     title: '奇想宇宙',
-      //     url: '#',
-      //   },
-      //   {
-      //     title: '资源分享',
-      //     url: '#',
-      //   },
-      //   {
-      //     title: '新人大本营',
-      //     url: '#',
-      //   },
-      //   {
-      //     title: 'vue-cli3 打包加了时间戳，【偶尔】浏览器还是会有缓存，该如何杜绝？',
-      //     url: '#',
-      //   },
-    ]);
-    const bulletinData = reactive([
-      { text: '需要精通Java大佬救命', href: '#' },
-      { text: '需要大佬一位', href: '#' },
-      { text: '需要一些资源，请进组分享给大家...', href: '#' },
-    ]);
+    const solicitationList = reactive([]); // 征集令列表
+    const rankingList = reactive([]); //活跃排行榜
 
     //获取征集令
-    getSolicitations('123')
+    getGroupSolicitations('')
       .then((data) => {
-        console.log('Solicitations', data);
+        for (let i = 0; i < data.solicitations.length; i++) {
+          let Solicitations = {
+            text: '',
+            href: `grouop/`,
+          };
+          Solicitations.text = data.solicitations[i].title;
+          Solicitations.href += data.solicitations[i].id;
+          solicitationList.push(Solicitations);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -136,8 +116,16 @@ export default defineComponent({
     //获取学习小组活跃排行
     getListGroups()
       .then((data) => {
-        console.log('getListGroups', data);
-        rankingList.splice(0, 0, ...data.groups);
+        console.log(data);
+        for (let i = 0; i < data.groups.length; i++) {
+          let rank = {
+            title: '',
+            url: `group/`,
+          };
+          rank.title = data.groups[i];
+          rank.url += data.groups[i];
+          rankingList.push(rank);
+        }
         console.log('rankingList', rankingList);
       })
       .catch((error) => {
@@ -153,7 +141,7 @@ export default defineComponent({
      */
     function updateGroups(flag) {
       // 获取小组
-      getGroups(username, topicSelect.value, 0, 10)
+      getGroups(username, topicSelect.value, 0, 6)
         .then((data) => {
           console.log('updateGroups', data);
           if (flag == true) groups.splice(0, groups.length);
@@ -204,7 +192,7 @@ export default defineComponent({
       isShow,
       groups,
       rankingList,
-      bulletinData,
+      solicitationList,
       selectTopic,
       updateGroups,
       changeGroupJoin,
