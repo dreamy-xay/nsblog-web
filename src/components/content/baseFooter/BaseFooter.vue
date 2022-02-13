@@ -4,16 +4,13 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-10 20:39:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-13 21:14:16
+ * @LastEditTime: 2022-02-13 21:23:40
 -->
 
 <template>
   <div
     class="base-footer"
-    :class="{'base-footer-fixed': fixedFooter}"
-    ref="footer"
     :style="{height: showAll ? '122px' : '50px'}"
-    v-resize="changeFooterStatus"
   >
     <div v-if="showAll">
       <div class="base-footer-first">
@@ -52,21 +49,15 @@
       <div>· ALL RIGHTS RESERVED</div>
     </div>
   </div>
-  <div
-    class="base-footer-empty"
-    :style="{height: showAll ? '122px' : '50px'}"
-    v-show="fixedFooter"
-  ></div>
+
 </template>
 
 <script>
-import { defineComponent, onMounted, ref } from 'vue';
-import { getRelativeDocumentPosition } from '@/util/dom';
+import { defineComponent } from 'vue';
 
 /**
  * @description: 页脚
  * @param {Boolean} showAll 是否全部 `默认为true`
- * @method changeFooterStatus 重新修改底部栏状态 () => {}
  * @author: dreamy-xay
  */
 
@@ -108,35 +99,9 @@ export default defineComponent({
       },
     ];
 
-    const footer = ref(null); // footer dom
-    const fixedFooter = ref(false); // 是否固定footer在底部
-
-    /**
-     * @description: 修改底部栏状态
-     * @return {void}
-     * @author: dreamy-xay
-     */
-    function changeFooterStatus() {
-      const windowHeight = document.body.clientHeight; // 窗口高度
-      const footerHeight = footer.value.offsetHeight; // 底部栏高度
-      console.log(getRelativeDocumentPosition(footer.value).top, windowHeight - footerHeight);
-      fixedFooter.value = Math.ceil(getRelativeDocumentPosition(footer.value).top) < windowHeight - footerHeight;
-    }
-
-    // 初始加载
-    onMounted(changeFooterStatus);
-
-    // 窗口修改改变
-    window.onresize = function () {
-      changeFooterStatus();
-    };
-
     return {
       titles,
       contents,
-      footer,
-      fixedFooter,
-      changeFooterStatus,
     };
   },
 });
@@ -149,16 +114,6 @@ export default defineComponent({
   box-shadow: $shadow-0;
   margin-top: 20px;
   @include flex(center, center, column);
-
-  &.base-footer-fixed {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-  }
-
-  .base-footer-empty {
-    width: 100%;
-  }
 
   .base-footer-first {
     font-size: 15px;
