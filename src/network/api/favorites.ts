@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 12:55:44
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-13 14:50:32
+ * @LastEditTime: 2022-02-13 14:58:12
  */
 
 import { get, RequestLifeCycle, del, put, post } from '@/network/request';
@@ -41,7 +41,8 @@ export function getFavorites(
       offset,
       type,
       is_all,
-      favorite_id
+      favorite_id,
+      is_simple
     }
   });
 }
