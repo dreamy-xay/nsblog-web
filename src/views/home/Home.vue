@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 15:03:33
+ * @LastEditTime: 2022-02-13 15:06:10
 -->
 <template>
   <base-view
@@ -12,6 +12,7 @@
     :top-bar="true"
     :top-bar-scroll="true"
     :footer="true"
+    :back-top="true"
     bind-class="home"
   >
     <template #top-bar-bottom>
