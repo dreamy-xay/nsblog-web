@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 17:24:49
+ * @LastEditTime: 2022-02-13 18:58:29
 -->
 <template>
   <base-view
@@ -325,22 +325,23 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function changeList(e) {
-      console.log(e.index);
-      listIndex.value = e.index;
-      allArticles.splice(0, allArticles.length);
-      typeIndex.value = listIndex.value;
-      initArticlesHome(
-        '',
-        '',
-        '',
-        allArticles.length,
-        limit,
-        0,
-        0,
-        topicSelect.value,
-        tagSelect.value,
-        typeIndex.value
-      );
+      if (e.index !== listIndex.value) {
+        listIndex.value = e.index;
+        allArticles.splice(0, allArticles.length);
+        typeIndex.value = listIndex.value;
+        initArticlesHome(
+          '',
+          '',
+          '',
+          allArticles.length,
+          limit,
+          0,
+          0,
+          topicSelect.value,
+          tagSelect.value,
+          typeIndex.value
+        );
+      }
     }
 
     /**
@@ -350,21 +351,23 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function changeTime(e) {
-      timeIndex.value = e.index;
-      allArticles.splice(0, allArticles.length);
-      typeIndex.value = timeIndex.value + 2;
-      initArticlesHome(
-        '',
-        '',
-        '',
-        allArticles.length,
-        limit,
-        0,
-        0,
-        topicSelect.value,
-        tagSelect.value,
-        typeIndex.value
-      );
+      if (timeIndex.value !== e.index) {
+        timeIndex.value = e.index;
+        allArticles.splice(0, allArticles.length);
+        typeIndex.value = timeIndex.value + 2;
+        initArticlesHome(
+          '',
+          '',
+          '',
+          allArticles.length,
+          limit,
+          0,
+          0,
+          topicSelect.value,
+          tagSelect.value,
+          typeIndex.value
+        );
+      }
     }
 
     return {

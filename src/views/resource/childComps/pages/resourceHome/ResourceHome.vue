@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-21 23:15:38
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 14:37:53
+ * @LastEditTime: 2022-02-13 18:56:20
 -->
 <template>
   <div class="resource-home">
@@ -12,8 +12,10 @@
       <div class="left">
         <resource-left
           :resource-data="resourceData"
-          v-model:select-tag="selectTag"
-          v-model:select-time="selectTime"
+          :select-tag="selectTag"
+          :select-time="selectTime"
+          @change-tag="changeTag($event)"
+          @change-time="changeTime($event)"
         />
         <div
           class="button"
@@ -100,16 +102,37 @@ export default defineComponent({
         msg.error('获取下载排行数据失败', { duration: 2000, closable: true });
       });
 
-    // 监听标签，标签改变重新获取数据
-    watch(
-      () => [selectTag.value, selectTime.value],
-      () => {
+    /**
+     * @description: 改变标签
+     * @param {number} e 几号标签 0为综合，1为最新，2为热门
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function changeTag(e) {
+      if (e !== selectTag.value) {
+        selectTag.value = e;
         resourceData.splice(0, offest.value);
         offest.value = 0;
         showButton.value = true;
         getMessage();
       }
-    );
+    }
+
+    /**
+     * @description: 改变时间
+     * @param {number} e 0为不限时间，1为最近一天，2为最近一周，3为最近一个月
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function changeTime(e) {
+      if (e !== selectTime.value) {
+        selectTime.value = e;
+        resourceData.splice(0, offest.value);
+        offest.value = 0;
+        showButton.value = true;
+        getMessage();
+      }
+    }
 
     return {
       rankinglist,
@@ -118,6 +141,8 @@ export default defineComponent({
       selectTag,
       selectTime,
       getMessage,
+      changeTag,
+      changeTime,
     };
   },
 });
