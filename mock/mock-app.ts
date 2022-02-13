@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-10 17:38:14
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-10-04 19:45:26
+ * @LastEditTime: 2022-02-13 18:39:41
  */
 
 import Mock, { MockCbOptions } from 'better-mock';
@@ -12,7 +12,7 @@ import intercepter from './app';
 
 /* mock请求延迟 */
 Mock.setup({
-  timeout: '200-500'
+  timeout: '300-700'
 });
 
 /**
