@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2022-01-23 15:06:03
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 13:10:01
+ * @LastEditTime: 2022-02-13 16:34:25
 -->
 <template>
   <div
@@ -74,7 +74,14 @@
               :class="item.recommend === 1 ? 'active' : ''"
             >
 
-              <i class="iconfont blog-dianzan1" />
+              <i
+                class="iconfont blog-dianzan"
+                v-if="item.recommend"
+              />
+              <i
+                class="iconfont blog-dianzan1"
+                v-else
+              />
               <div
                 class="support-text"
                 v-if="item.recommend_count"
