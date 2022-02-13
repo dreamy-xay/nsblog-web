@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-11 21:28:05
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-13 18:40:27
+ * @LastEditTime: 2022-02-13 18:44:50
  */
 import { Application } from 'express';
 import { Server } from 'http';
@@ -44,7 +44,7 @@ export default function sever(app: Application) {
           );
           next();
           clearTimeout(timer);
-        }, Random.integer(300, 700));
+        }, Random.integer(300, 900));
       } else next();
     });
 
