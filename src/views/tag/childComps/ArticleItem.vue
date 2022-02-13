@@ -1,13 +1,16 @@
 <!--
- * @Description:
+ * @Description: 文章列表单个文章框
  * @Version:
  * @Autor: continue-hs
  * @Date: 2022-01-23 15:06:03
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-12 23:02:19
+ * @LastEditTime: 2022-02-13 13:10:01
 -->
 <template>
-  <div class="article-item">
+  <div
+    class="article-item"
+    v-if="articleItem.length"
+  >
     <div
       class="article-item-body"
       v-for="(item , index) in articleItem"
@@ -110,18 +113,21 @@
       </div>
     </div>
   </div>
+  <base-content-loading v-else />
+
 </template>
 
 <script>
 import router from '@/router';
 import { defineComponent } from 'vue';
 import BaseImage from '@/components/content/baseImage/BaseImage.vue';
+import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
 import { dateGetText } from '@/util/date';
 
 /**
  * @description:文章列表单个文章框
- * @param {Array} articleItem 框中内容 `默认null`
- * @event change-like 点击点赞的事件 `使用参照homeLeft`
+ * @param {Array} articleItem 框中内容 `默认 []`
+ * @event change-like 点击点赞的事件 `使用参照 homeLeft`
  * @author: continue-hs
  */
 
@@ -129,6 +135,7 @@ export default defineComponent({
   name: 'ArticleItem',
   components: {
     BaseImage,
+    BaseContentLoading,
   },
   props: {
     articleItem: {
@@ -209,8 +216,14 @@ export default defineComponent({
       return dateGetText(date, 3110400000, 'YY-mm-dd');
     }
 
+    /**
+     * @description: 跳转评论
+     * @param {number} id 文章id
+     * @return {void}
+     * @author: Z_Y_C
+     */
     function toComment(id) {
-      router.push(`/article/${id}#comment`);
+      window.open(`/article/${id}#comment`, `/article/${id}#comment`);
     }
 
     return {

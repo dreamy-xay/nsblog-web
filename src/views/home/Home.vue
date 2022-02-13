@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 00:30:32
+ * @LastEditTime: 2022-02-13 15:03:33
 -->
 <template>
   <base-view
@@ -37,21 +37,27 @@
         <div
           class="button"
           role="button"
-          v-show="true"
+          v-show="showButton"
           @click="uploadMore()"
         >加载更多...</div>
 
       </div>
 
       <div class="right">
-        <home-right />
+        <home-right
+          :ranking-list="rankingList"
+          :activity-data="activityData"
+          :bulletin-data="bulletinData"
+          :hot-tags="hotTags"
+          @clickMenuItem="getArticlesLists($event)"
+        />
       </div>
     </div>
   </base-view>
 </template>
 
 <script>
-import { defineComponent, reactive, ref, watch } from 'vue';
+import { defineComponent, reactive, ref } from 'vue';
 import HomeLeft from '@/views/home/childComps/HomeLeft.vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import HomeRight from '@/views/home/childComps/homeRight/HomeRight.vue';
@@ -61,8 +67,8 @@ import { useMessage } from 'naive-ui';
 import { mapGetters } from '@/util/store';
 import { getArticles } from '@/network/api/articles';
 import { modifyArticleRecommendEvaluation } from '@/network/api/articles';
-
-// import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
+import { getNotices } from '@/network/api/notices';
+import { getArticlesList, getTagsList } from '@/network/api/list';
 
 /**
  * @description: 博客主页
@@ -79,78 +85,108 @@ export default defineComponent({
     HomeRight,
   },
   setup() {
-    const topicSelect = ref('');
-    const tagSelect = ref('');
-    const isClick = ref(false);
-    const msg = useMessage();
-    const listIndex = ref(0);
-    const timeIndex = ref(0);
-    const allArticles = reactive([]);
-    const topic = ref('推荐');
-    const tag = ref('');
-    const limit = ref(7);
-    const typeIndex = ref(0);
+    const topicSelect = ref('推荐'); // 记录当前专题
+    const tagSelect = ref(''); // 记录当前标签
+    const msg = useMessage(); // 'naive-ui';
+    const listIndex = ref(0); // 记录 0:'综合', 1:'最新', 2:'热门'标签
+    const timeIndex = ref(0); // 记录 0:'时间不限', 1:'最近一天', 2:'最近一周', 3:'最近三月'时间筛选
+    const allArticles = reactive([]); // 记录数据
+    const limit = 7; // 获取信息长度
+    const typeIndex = ref(0); // 获取信息类型
+    const showButton = ref(false); // 显示加载更多按钮
+    // 热门文章
+    const rankingList = reactive([]);
+
+    // 热门标签
+    const hotTags = reactive([]);
+    // 活动牌
+    const activityData = reactive([]);
+    // 公告牌
+    const bulletinData = reactive([]);
     const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
 
-    initArticlesHome('', '', '', 0, limit.value, 0, 0, topic.value, tag.value, typeIndex.value);
+    // 获取公告牌数据
+    getNotices()
+      .then((data) => {
+        // 0为网站通知，1为网站活动
+        for (let i = 0; i < data.notices.length; i++) {
+          if (data.notices[i].type == 0) {
+            let arr = { text: null, href: null };
+            arr.text = data.notices[i].content;
+            arr.href = data.notices[i].link;
+            bulletinData.splice(bulletinData.length, 0, arr);
+          } else {
+            let arr = { image: null, href: null };
+            arr.image = data.notices[i].content;
+            arr.href = data.notices[i].link;
+            activityData.splice(activityData.length, 0, arr);
+          }
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        msg.error('获取公告牌失败', { duration: 2000, closable: true });
+      });
 
-    watch(
-      () => topic.value,
-      (data) => {
-        topic.value = data;
-        tag.value = '';
-        allArticles.splice(0, allArticles.length);
-        initArticlesHome('', '', '', allArticles.length, limit.value, 0, 0, topic.value, tag.value, typeIndex.value);
-      }
-    );
+    // 获取热门文章数据
+    getArticlesLists(0);
 
-    watch(
-      () => tag.value,
-      (data) => {
-        tag.value = data;
-        topic.value = '';
-        allArticles.splice(0, allArticles.length);
-        initArticlesHome('', '', '', allArticles.length, limit.value, 0, 0, topic.value, tag.value, typeIndex.value);
-      }
-    );
+    // 获取热门标签数据
+    getTagsList()
+      .then((data) => {
+        console.log(data);
+        for (let i = 0; i < data.tags.length; i++) {
+          let arr = {
+            name: null,
+            url: `tag/`,
+          };
+          arr.name = data.tags[i];
+          arr.url += data.tags[i];
+          hotTags.splice(hotTags.length, 0, arr);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        msg.error('获取热门标签数据失败', { duration: 2000, closable: true });
+      });
 
-    watch(
-      () => isClick.value,
-      (data) => {
-        if (data === true) initArticlesHome('', '', '', 0, limit.value, 0, 0, topic.value, '', typeIndex.value);
-      }
-    );
+    // 获取初始数据
+    initArticlesHome('', '', '', 0, limit, 0, 0, topicSelect.value, tagSelect.value, typeIndex.value);
 
-    watch(
-      () => listIndex.value,
-      () => {
-        allArticles.splice(0, allArticles.length);
-        typeIndex.value = listIndex.value;
-
-        initArticlesHome('', '', '', allArticles.length, limit.value, 0, 0, topic.value, tag.value, typeIndex.value);
-      }
-    );
-
-    watch(
-      () => timeIndex.value,
-      () => {
-        allArticles.splice(0, allArticles.length);
-        typeIndex.value = 2 + timeIndex.value;
-        initArticlesHome('', '', '', allArticles.length, limit.value, 0, 0, topic.value, tag.value, typeIndex.value);
-      }
-    );
-
-    function changeList(e) {
-      console.log(e.index);
-      listIndex.value = e.index;
-      console.log('ppppppppp' + listIndex.value);
+    function getArticlesLists(index) {
+      getArticlesList(index)
+        .then((data) => {
+          rankingList.splice(0, rankingList.length);
+          for (let i = 0; i < data.articles.length; i++) {
+            let arr = {
+              title: null,
+              url: 'article/',
+            };
+            arr.title = data.articles[i].title;
+            arr.url += data.articles[i].id;
+            rankingList.splice(rankingList.length, 0, arr);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('获取热门文章数据失败', { duration: 2000, closable: true });
+        });
     }
-
-    function changeTime(e) {
-      timeIndex.value = e.index;
-      console.log('vvvvvv' + timeIndex.value);
-    }
-
+    /**
+     * @description: 获取数据
+     * @param {string} username 用户名
+     * @param {string} category 过滤分类名
+     * @param {string} tag 过滤标签名
+     * @param {number} offset 起始位置
+     * @param {number} limit 限制条数
+     * @param {1 | -1 | 0} release_time 按发布时间排序，为 0 表示不排序
+     * @param {1 | -1 | 0} browsing_count 按浏览量排序，为 0 表示不排序
+     * @param {string } topic_name 文章专题
+     * @param {string} tag_name 文章标签
+     * @param {0 | 1 | 2|3|4|5} type 热门排序类型
+     * @return {void}
+     * @author: Z_Y_C
+     */
     function initArticlesHome(
       username,
       category,
@@ -163,8 +199,10 @@ export default defineComponent({
       tag_name,
       type
     ) {
+      showButton.value = true;
       getArticles(username, category, tag, offset, limit, release_time, browsing_count, topic_name, tag_name, type)
         .then((res) => {
+          showButton.value = res.articles.length === limit;
           allArticles.splice(allArticles.length, 0, ...res.articles);
         })
         .catch((error) => {
@@ -172,12 +210,29 @@ export default defineComponent({
         });
     }
 
+    /**
+     * @description: 加载更多数据
+     * @return {void}
+     * @author: Z_Y_C
+     */
     function uploadMore() {
-      initArticlesHome('', '', '', allArticles.length, limit.value, 0, 0, topic.value, tag.value, typeIndex.value);
+      initArticlesHome(
+        '',
+        '',
+        '',
+        allArticles.length,
+        limit,
+        0,
+        0,
+        topicSelect.value,
+        tagSelect.value,
+        typeIndex.value
+      );
     }
 
     /**
      * @description: 改变文章点赞情况
+     * @param {object} e 数据下标e.index
      * @return {void}
      * @author: continue-hs
      */
@@ -205,12 +260,21 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function selectTopic(topic) {
-      if (topicSelect.value === topic) isClick.value = true;
-      else {
-        topicSelect.value = topic;
-        isClick.value = false;
-      }
-      console.log(`select Topic: ${topic}`);
+      tagSelect.value = '';
+      topicSelect.value = topic;
+      allArticles.splice(0, allArticles.length);
+      initArticlesHome(
+        '',
+        '',
+        '',
+        allArticles.length,
+        limit,
+        0,
+        0,
+        topicSelect.value,
+        tagSelect.value,
+        typeIndex.value
+      );
     }
 
     /**
@@ -221,8 +285,69 @@ export default defineComponent({
      */
     function selectTag(tag) {
       tagSelect.value = tag;
-      isClick.value = false;
-      console.log(`select Tag: ${tag}`);
+      topicSelect.value = '';
+      allArticles.splice(0, allArticles.length);
+      initArticlesHome(
+        '',
+        '',
+        '',
+        allArticles.length,
+        limit,
+        0,
+        0,
+        topicSelect.value,
+        tagSelect.value,
+        typeIndex.value
+      );
+    }
+
+    /**
+     * @description: 选择 0:'综合', 1:'最新', 2:'热门'标签
+     * @param {object} e e.index
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function changeList(e) {
+      console.log(e.index);
+      listIndex.value = e.index;
+      allArticles.splice(0, allArticles.length);
+      typeIndex.value = listIndex.value;
+      initArticlesHome(
+        '',
+        '',
+        '',
+        allArticles.length,
+        limit,
+        0,
+        0,
+        topicSelect.value,
+        tagSelect.value,
+        typeIndex.value
+      );
+    }
+
+    /**
+     * @description: 选择 0:'时间不限', 1:'最近一天', 2:'最近一周', 3:'最近三月'时间筛选
+     * @param {object} e e.index
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function changeTime(e) {
+      timeIndex.value = e.index;
+      allArticles.splice(0, allArticles.length);
+      typeIndex.value = timeIndex.value + 2;
+      initArticlesHome(
+        '',
+        '',
+        '',
+        allArticles.length,
+        limit,
+        0,
+        0,
+        topicSelect.value,
+        tagSelect.value,
+        typeIndex.value
+      );
     }
 
     return {
@@ -230,15 +355,19 @@ export default defineComponent({
       selectTag,
       listIndex,
       timeIndex,
-      changeList,
-      changeTime,
       allArticles,
-      typeIndex,
       uploadMore,
       changeLike,
       topicSelect,
       tagSelect,
-      isClick,
+      changeList,
+      changeTime,
+      showButton,
+      rankingList,
+      hotTags,
+      activityData,
+      bulletinData,
+      getArticlesLists,
     };
   },
 });

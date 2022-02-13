@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-15 13:19:14
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-23 21:41:16
+ * @LastEditTime: 2022-02-13 14:26:12
 -->
 <template>
   <div
@@ -33,7 +33,7 @@
     <div
       v-if="bulletinData.length<=0"
       class="base-bulletin-null"
-    >暂无公告哦~</div>
+    >{{type ? '暂无公告哦~':'暂无征集哦~'}}</div>
   </div>
 </template>
 <script>
