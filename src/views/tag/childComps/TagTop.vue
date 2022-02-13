@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2022-01-25 13:51:50
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 13:00:07
+ * @LastEditTime: 2022-02-13 15:11:54
 -->
 <template>
   <div class="tag-top">
@@ -35,7 +35,7 @@ import { defineComponent, ref } from 'vue';
 
 /**
  * @description: 标签页面头部
- * @param {Object} detail 内容
+ * @param {Object} detail 内容 `必传参数`
  * @author: Z_Y_C
  */
 export default defineComponent({
@@ -47,7 +47,7 @@ export default defineComponent({
     },
   },
   setup() {
-    const showAll = ref(false); // 显示全部
+    const showAll = ref(false); // 显示全部remark
     return { showAll };
   },
 });
