@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2022-01-17 10:18:16
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 14:11:30
+ * @LastEditTime: 2022-02-13 15:23:35
 -->
 <template>
   <div class="home-left">
@@ -83,7 +83,17 @@ export default defineComponent({
     function changeTime(index) {
       content.emit('changeTime', index);
     }
-    return { changeTime, changeList };
+
+    /**
+     * @description: 改变文章点赞情况
+     * @param {object} e 数据下标
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function changeLike(e) {
+      content.emit('changeLike', e);
+    }
+    return { changeTime, changeList, changeLike };
   },
 });
 </script>

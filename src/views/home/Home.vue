@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 15:09:18
+ * @LastEditTime: 2022-02-13 15:23:22
 -->
 <template>
   <base-view
@@ -33,6 +33,7 @@
           :time-index="timeIndex"
           @change-list="changeList($event)"
           @change-time="changeTime($event)"
+          @change-like="changeLike($event)"
         />
 
         <div
@@ -241,7 +242,7 @@ export default defineComponent({
      * @description: 改变文章点赞情况
      * @param {object} e 数据下标e.index
      * @return {void}
-     * @author: continue-hs
+     * @author: Z_Y_C
      */
     function changeLike(e) {
       if (isLogin.value) {
