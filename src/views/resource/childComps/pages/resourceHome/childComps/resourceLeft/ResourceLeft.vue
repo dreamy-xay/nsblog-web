@@ -5,7 +5,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-22 12:12:35
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-27 16:30:05
+ * @LastEditTime: 2022-02-13 18:51:04
 -->
 <template>
   <div class="resource-left">
@@ -56,7 +56,7 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function changeTag(e) {
-      context.emit('update:selectTag', e.index);
+      context.emit('changeTag', e.index);
     }
 
     /**
@@ -66,7 +66,7 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function changeSelect(e) {
-      context.emit('update:selectTime', e.index);
+      context.emit('changeTime', e.index);
     }
     return { changeTag, changeSelect };
   },

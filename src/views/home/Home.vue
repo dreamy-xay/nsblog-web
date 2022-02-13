@@ -3,8 +3,13 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
+<<<<<<< HEAD
  * @LastEditors: dreamy-xay
  * @LastEditTime: 2022-02-13 19:52:56
+=======
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-13 18:58:29
+>>>>>>> 0e5e7bdb06a9202451d26390819f62fb77a386f5
 -->
 <template>
   <base-view
@@ -69,6 +74,7 @@ import { getArticles } from '@/network/api/articles';
 import { modifyArticleRecommendEvaluation } from '@/network/api/articles';
 import { getNotices } from '@/network/api/notices';
 import { getArticlesList, getTagsList } from '@/network/api/list';
+import { useRoute, useRouter } from 'vue-router';
 
 /**
  * @description: 博客主页
@@ -85,6 +91,8 @@ export default defineComponent({
     HomeRight,
   },
   setup() {
+    const route = useRoute();
+    const router = useRouter();
     const topicSelect = ref('推荐'); // 记录当前专题
     const tagSelect = ref(''); // 记录当前标签
     const msg = useMessage(); // 'naive-ui';
@@ -100,6 +108,12 @@ export default defineComponent({
     // 公告牌
     const bulletinData = reactive([]);
     const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
+
+    // topicSelect.value = route.query.topic;
+    // console.log(topicSelect.value);
+    // console.log(route.query.topic);
+    // router.push(route.path + '?topic=' + topicSelect.value);
+    // console.log('path:' + route.path + '?topic=' + topicSelect.value);
 
     // 获取公告牌数据
     getNotices()
@@ -263,22 +277,23 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function changeList(e) {
-      console.log(e.index);
-      listIndex.value = e.index;
-      allArticles.splice(0, allArticles.length);
-      typeIndex.value = listIndex.value;
-      initArticlesHome(
-        '',
-        '',
-        '',
-        allArticles.length,
-        limit,
-        0,
-        0,
-        topicSelect.value,
-        tagSelect.value,
-        typeIndex.value
-      );
+      if (e.index !== listIndex.value) {
+        listIndex.value = e.index;
+        allArticles.splice(0, allArticles.length);
+        typeIndex.value = listIndex.value;
+        initArticlesHome(
+          '',
+          '',
+          '',
+          allArticles.length,
+          limit,
+          0,
+          0,
+          topicSelect.value,
+          tagSelect.value,
+          typeIndex.value
+        );
+      }
     }
 
     /**
@@ -288,21 +303,23 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function changeTime(e) {
-      timeIndex.value = e.index;
-      allArticles.splice(0, allArticles.length);
-      typeIndex.value = timeIndex.value + 2;
-      initArticlesHome(
-        '',
-        '',
-        '',
-        allArticles.length,
-        limit,
-        0,
-        0,
-        topicSelect.value,
-        tagSelect.value,
-        typeIndex.value
-      );
+      if (timeIndex.value !== e.index) {
+        timeIndex.value = e.index;
+        allArticles.splice(0, allArticles.length);
+        typeIndex.value = timeIndex.value + 2;
+        initArticlesHome(
+          '',
+          '',
+          '',
+          allArticles.length,
+          limit,
+          0,
+          0,
+          topicSelect.value,
+          tagSelect.value,
+          typeIndex.value
+        );
+      }
     }
 
     return {

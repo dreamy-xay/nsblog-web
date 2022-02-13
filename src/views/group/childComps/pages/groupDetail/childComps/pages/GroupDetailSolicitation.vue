@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2022-01-29 16:44:56
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-13 18:56:43
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-13 19:18:29
 -->
 <template>
   <div class="group-detail-solicitation">
@@ -58,6 +58,10 @@
           </div>
         </div>
       </div>
+      <base-content-loading
+        v-show="showContentLoading"
+        :style="{padding: '16px 0'}"
+      />
     </div>
     <div
       v-if="showLoading && !showContentLoading"
@@ -67,10 +71,6 @@
     >
       加载更多...
     </div>
-    <base-content-loading
-      v-show="showContentLoading"
-      :style="{padding: '16px 20px'}"
-    />
   </div>
 </template>
 
