@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 15:23:22
+ * @LastEditTime: 2022-02-13 17:24:49
 -->
 <template>
   <base-view
@@ -71,6 +71,7 @@ import { getArticles } from '@/network/api/articles';
 import { modifyArticleRecommendEvaluation } from '@/network/api/articles';
 import { getNotices } from '@/network/api/notices';
 import { getArticlesList, getTagsList } from '@/network/api/list';
+import { useRoute, useRouter } from 'vue-router';
 
 /**
  * @description: 博客主页
@@ -87,6 +88,8 @@ export default defineComponent({
     HomeRight,
   },
   setup() {
+    const route = useRoute();
+    const router = useRouter();
     const topicSelect = ref('推荐'); // 记录当前专题
     const tagSelect = ref(''); // 记录当前标签
     const msg = useMessage(); // 'naive-ui';
@@ -106,6 +109,12 @@ export default defineComponent({
     // 公告牌
     const bulletinData = reactive([]);
     const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
+
+    // topicSelect.value = route.query.topic;
+    // console.log(topicSelect.value);
+    // console.log(route.query.topic);
+    // router.push(route.path + '?topic=' + topicSelect.value);
+    // console.log('path:' + route.path + '?topic=' + topicSelect.value);
 
     // 获取公告牌数据
     getNotices()

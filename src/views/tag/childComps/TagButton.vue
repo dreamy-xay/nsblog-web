@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2022-01-27 10:52:36
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 12:59:13
+ * @LastEditTime: 2022-02-13 16:37:51
 -->
 <template>
   <div class="tag-button">
@@ -53,6 +53,7 @@ export default defineComponent({
   components: {
     BaseModal,
   },
+  emits: ['clickAttention'],
   props: {
     attention: {
       type: Number,
@@ -68,7 +69,7 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function clickAttention() {
-      if (!props.attention) context.emit('click-attention');
+      if (!props.attention) context.emit('clickAttention');
       else modalShow.value = true;
     }
 
@@ -78,7 +79,7 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function sureCancelAttention() {
-      context.emit('click-attention');
+      context.emit('clickAttention');
       modalShow.value = false;
     }
 
@@ -100,19 +101,19 @@ export default defineComponent({
     border-radius: 4px;
     background: $green-0;
     @include flex(center, center);
+    transition: 0.25s;
 
     &:hover {
-      transition: 0.25s;
       border: 1px solid $green-1;
       background: $green-1;
     }
 
     .true-text {
+      @include flex(center, center);
       width: 42px;
       height: 19px;
       font-size: 14px;
       font-weight: 400;
-      text-align: left;
       color: $grey-0;
     }
   }
@@ -123,26 +124,26 @@ export default defineComponent({
     border: 1px solid $green-0;
     border-radius: 4px;
     box-shadow: $shadow-0;
-    @include flex(center);
+    @include flex(center, center);
+    transition: 0.25s;
 
     &:hover {
-      transition: 0.25s;
       border: 1px solid $green-1;
       color: $green-1;
     }
 
     i {
-      margin: 0 4px 0 10px;
+      margin-right: 4px;
       font-size: 14px;
       color: $green-0;
     }
 
     .false-text {
+      @include flex(center, center);
       width: 28px;
       height: 19px;
       font-size: 14px;
       font-weight: 400;
-      text-align: left;
       color: $green-0;
     }
   }
