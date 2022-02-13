@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: xiao
  * @Date: 2022-01-14 18:52:17
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-12 14:49:11
+ * @LastEditors: xiao
+ * @LastEditTime: 2022-02-13 15:59:49
 -->
 <template>
   <div class="group-list">
@@ -13,12 +13,14 @@
         v-for="(group,index) in studyGroups"
         :key="index"
       >
-        <div
-          class="groups"
-          v-if="index<6 || show"
-        >
+        <div class="groups">
           <div class="name">
-            {{group.name}}
+            <div
+              role="button"
+              @click="changePage(group.name)"
+            >
+              {{group.name}}
+            </div>
             <div
               class="join"
               role="button"
@@ -39,19 +41,24 @@
           </div>
           <div class="remark">{{group.remark}}</div>
           <div class="category-member-count">
-            <div class="category">
-              <i class="iconfont blog-zhu"></i>
-              {{group.topic_name}}
-            </div>
+            <base-tag
+              :text="group.topic_name"
+              :hollow="true"
+              :size="20"
+              :color="styles.green1"
+              :href="`/group?topic=${group.topic_name}`"
+              :target="`/group?topic=${group.topic_name}`"
+            >
+              <template #text-pre>
+                <i class="iconfont blog-zhu"></i>
+              </template>
+            </base-tag>
             <div class="member-count">
               <i class="iconfont blog-xiaozu1"></i>
               {{group.member_count}}
             </div>
           </div>
-          <hr
-            v-if="show?index!=studyGroups.length-1:index!=5"
-            style="background-color: #e5e5e5;height:0.5px; border:none;"
-          >
+          <hr style="background-color: #e5e5e5;height:0.5px; border:none;">
         </div>
       </div>
     </div>
@@ -59,7 +66,6 @@
       class="group-list-more"
       role="button"
       @click="moreGroup"
-      v-if="!show"
     >
       加载更多...
     </div>
@@ -76,6 +82,10 @@
 import { defineComponent, ref } from 'vue';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 import { useMessage } from 'naive-ui';
+import { addGroup, deleteGroup } from '@/network/api/groups';
+import { useRouter } from 'vue-router';
+import styles from '@/assets/style/define.scss';
+import BaseTag from '@/components/content/baseTag/BaseTag.vue';
 
 /**
  * @description:学习小组列表
@@ -87,8 +97,9 @@ export default defineComponent({
   name: 'searchPageStudygroup',
   components: {
     BaseModal,
+    BaseTag,
   },
-  emits: ['changeGroupJoin'],
+  emits: ['changeGroupJoin', 'updateGroups'],
   props: {
     studyGroups: {
       type: Array,
@@ -97,10 +108,10 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    const show = ref(false); //是否加载更多
     const msg = useMessage(); // naive-ui 组件
     const modalShow = ref(false); //是否显示退出提示
     const selectGroup = ref(-1); //选择的小组下标
+    const router = useRouter();
 
     /**
      * @description: 加载更多
@@ -108,7 +119,7 @@ export default defineComponent({
      * @author: xiao
      */
     function moreGroup() {
-      show.value = !show.value;
+      context.emit('updateGroups', false); //更新学习小组
     }
 
     /**
@@ -118,8 +129,16 @@ export default defineComponent({
      * @author: xiao
      */
     function joinGroup(group) {
-      msg.success(`加入成功`);
-      group.join = 1;
+      //加入学习小组
+      addGroup(group.name)
+        .then(() => {
+          msg.success(`加入小组成功`);
+          group.join = 1;
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('加入小组失败', { duration: 2000, closable: true });
+        });
     }
 
     /**
@@ -128,9 +147,17 @@ export default defineComponent({
      * @author: xiao
      */
     function exitGroup() {
-      msg.success(`退出成功`);
-      context.emit('changeGroupJoin', selectGroup.value);
-      modalShow.value = false;
+      //退出学习小组
+      deleteGroup(props.studyGroups[selectGroup.value].name)
+        .then(() => {
+          msg.success(`退出成功`);
+          context.emit('changeGroupJoin', selectGroup.value);
+          modalShow.value = false;
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('退出小组失败', { duration: 2000, closable: true });
+        });
     }
 
     /**
@@ -157,6 +184,16 @@ export default defineComponent({
       modalShow.value = true;
     }
 
+    /**
+     * @description: 进入学习小组主页
+     * @param {string} name 学习小组名
+     * @return {void}
+     * @author: xiao
+     */
+    function changePage(name) {
+      router.push(`/group/${name}`);
+    }
+
     return {
       moreGroup,
       joinGroup,
@@ -164,7 +201,8 @@ export default defineComponent({
       modalShow,
       showExit,
       close,
-      show,
+      changePage,
+      styles,
     };
   },
 });
@@ -201,6 +239,11 @@ export default defineComponent({
         font-weight: bold;
         @include flex(center, center);
         justify-content: space-between;
+        transition: 0.25s;
+
+        &:hover {
+          color: $grey-8;
+        }
 
         .join {
           font-size: 14px;
@@ -213,7 +256,7 @@ export default defineComponent({
           transition: 0.25s;
 
           .iconfont {
-            margin-right: 4.78px;
+            font-size: 14px;
           }
 
           &:hover {
@@ -250,6 +293,7 @@ export default defineComponent({
         .member-count {
           font-size: 14px;
           color: $grey-7;
+          margin-left: 24px;
         }
       }
     }

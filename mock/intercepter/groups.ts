@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-12 18:40:59
+ * @LastEditTime: 2022-02-13 16:06:25
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -76,6 +76,7 @@ export default function(baseUrl: string, app: Application) {
             ? {
                 username: user.username,
                 nickname: user.username,
+                avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
                 release_time: Random.datetime(),
                 deadline: Random.datetime(),
                 agree_count: Random.integer(0, 30)
