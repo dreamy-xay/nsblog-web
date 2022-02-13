@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 11:59:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-12 11:24:09
+ * @LastEditTime: 2022-02-13 14:48:15
  */
 
 import { Application, Request, Response } from 'express';
@@ -15,10 +15,10 @@ import select from '../data/index';
 export default function(baseUrl: string, app: Application) {
   // 获取收藏夹或者收藏
   app.get(baseUrl + '/favorites', (req: Request, res: Response) => {
-    const { username, limit, offset, favorite_id, is_all, type } = req.query;
+    const { username, limit, offset, favorite_id, is_all, is_simple, type } = req.query;
     if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
 
-    print('get favorites', { username, limit, offset, favorite_id, is_all, type });
+    print('get favorites', { username, limit, offset, favorite_id, is_all, is_simple, type });
 
     function getRandom(limit: number, hasType: boolean = true): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
@@ -53,10 +53,14 @@ export default function(baseUrl: string, app: Application) {
         ans.push({
           favorite_id: Random.increment(Random.integer(1, 10)),
           name: i ? (Random.natural(0, 2) ? Random.cword(1, 8) : Random.word(2, 15)) : '默认收藏夹',
-          count: Random.integer(1, 99),
-          is_private: Random.integer(0, 1) ? true : false,
-          ...all,
-          collections
+          ...(int(is_simple)
+            ? {}
+            : {
+                count: Random.integer(1, 99),
+                is_private: Random.integer(0, 1) ? true : false,
+                ...all,
+                collections
+              })
         });
       }
       return res.json({ favorites: ans });

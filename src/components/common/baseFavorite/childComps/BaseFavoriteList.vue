@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: xiao
  * @Date: 2021-09-27 18:00:46
- * @LastEditors: xiao
- * @LastEditTime: 2022-02-11 23:49:10
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-13 13:29:07
 -->
 <template>
   <div class="base-favorite-list">
@@ -47,7 +47,7 @@
         ref="finput"
         class="base-favorite-list-input"
         placeholder="最多可输入20个字"
-        v-model="favoriteName"
+        v-model.trim="favoriteName"
         @blur="handleBlur"
         style="padding-left:15px"
         maxlength="20"
@@ -65,13 +65,14 @@
 </template>
 
 <script>
-import { newFavorites } from '@/network/api/favorites';
 import { ref, defineComponent, nextTick } from 'vue';
 import { useMessage } from 'naive-ui';
 
 /**
  * @description: 收藏夹列表
  * @param {Array} favorites 全部收藏夹信息
+ * @event childFavorite 选中收藏夹 (id: string | number) => void
+ * @event newFavorite 新建收藏夹，搜藏成功执行回调next (favotiteName: string, next: () => void) => void
  * @author: xiao
  */
 
@@ -80,19 +81,19 @@ export default defineComponent({
   props: {
     favorites: {
       type: Array,
-      default: undefined,
+      default: () => [],
     },
   },
   setup(props, context) {
     const isEdit = ref(true); // 是否被编辑
     const finput = ref(null); // 聚焦
-    const favoriteName = ref(null); // 文件夹名
-    const activeIndex = ref(-1); // 切换样式
+    const favoriteName = ref(''); // 文件夹名
+    const activeIndex = ref(0); // 切换样式
     const msg = useMessage(); // naive-ui 组件
 
     /**
      * @description: 点击切换为输入框并聚焦
-     * @return {Void}
+     * @return {void}
      * @author: xiao
      */
     function inputFavorite() {
@@ -104,7 +105,7 @@ export default defineComponent({
 
     /**
      * @description: 失焦切换
-     * @return {Void}
+     * @return {void}
      * @author: xiao
      */
     function handleBlur() {
@@ -113,9 +114,9 @@ export default defineComponent({
 
     /**
      * @description: 点击一个收藏夹
-     * @param {Arrys} favorite 收藏夹数据
-     * @param {Number} index 数据下标
-     * @return {Void}
+     * @param {Array} favorite 收藏夹数据
+     * @param {number} index 数据下标
+     * @return {void}
      * @author: xiao
      */
     function select(favorite, index) {
@@ -125,26 +126,17 @@ export default defineComponent({
 
     /**
      * @description: 新建一个收藏夹
-     * @return {Void}
+     * @return {void}
      * @author: xiao
      */
     function newFavorite() {
-      if (favoriteName.value != null) favoriteName.value = favoriteName.value.replace(/(^\s*)|(\s*$)/g, ''); //去除字符串前后的空格
-      if (favoriteName.value === null || favoriteName.value == '') {
-        msg.error('不能为空', { duration: 2000, closable: true });
-      } else {
-        activeIndex.value = props.favorites.length;
-        newFavorites(favoriteName.value)
-          .then((data) => {
-            context.emit('newFavorite', favoriteName.value, data.id);
-            favoriteName.value = null;
-            console.log('创建收藏夹成功');
-          })
-          .catch((error) => {
-            console.log(error);
-            msg.error('创建收藏夹失败', { duration: 2000, closable: true });
-          });
-      }
+      if (favoriteName.value)
+        context.emit('newFavorite', favoriteName.value, () => {
+          activeIndex.value = props.favorites.length;
+          favoriteName.value = '';
+          msg.success('创建收藏夹成功', { duration: 2000, closable: true });
+        });
+      else msg.error('不能为空', { duration: 2000, closable: true });
     }
 
     return {
