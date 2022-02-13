@@ -266,14 +266,14 @@ export default function(baseUrl: string, app: Application) {
 
   // 获取文章详情
   app.get(baseUrl + '/articles/:article_id(\\d+)', (req: Request, res: Response) => {
-    if (Random.integer(0, 1) && req.query.password !== '123') return res.status(403).json({ error: 'Password error' }); // 模拟需要密码
-
     const username: string = verifyToken(req.headers) ? getToken(req.headers).username : '';
     const { password } = req.body;
 
     const { article_id } = req.params;
 
     print('get detail articles', { username, article_id, password });
+
+    if (!Random.integer(0, 4) && req.query.password !== '123') return res.status(403).json({ error: 'Password error' }); // 模拟需要密码
 
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = [];

@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2022-01-21 19:42:59
  * @LastEditors: xiao
- * @LastEditTime: 2022-02-13 15:24:06
+ * @LastEditTime: 2022-02-13 16:02:00
 -->
 <template>
   <base-view
@@ -21,7 +21,6 @@
         @selectTopic="selectTopic"
       />
     </template>
-
     <div class="group-home-container">
       <div>
         <group-list
@@ -51,7 +50,6 @@
         />
       </div>
     </div>
-
     <group-popover v-model:modelValue="isShow" />
   </base-view>
 </template>
@@ -66,7 +64,7 @@ import BaseBulletin from '@/components/common/baseBulletin/BaseBulletin';
 import BaseRankCard from '@/components/common/baseRankCard/BaseRankCard';
 import { getGroups, getGroupSolicitations } from '@/network/api/groups';
 import { useMessage } from 'naive-ui';
-import { getListGroups } from '@/network/api/list';
+import { getGroupsList } from '@/network/api/list';
 import { useRoute } from 'vue-router';
 
 /**
@@ -84,7 +82,6 @@ export default defineComponent({
     BaseBulletin,
     BaseRankCard,
   },
-
   setup() {
     const isShow = ref(false); //是否显示创建小组页面
     const topicSelect = ref(''); //选择的专题
@@ -114,9 +111,8 @@ export default defineComponent({
       });
 
     //获取学习小组活跃排行
-    getListGroups()
+    getGroupsList()
       .then((data) => {
-        console.log(data);
         for (let i = 0; i < data.groups.length; i++) {
           let rank = {
             title: '',
@@ -143,7 +139,6 @@ export default defineComponent({
       // 获取小组
       getGroups(username, topicSelect.value, 0, 6)
         .then((data) => {
-          console.log('updateGroups', data);
           if (flag == true) groups.splice(0, groups.length);
           groups.splice(groups.length, 0, ...data.groups);
         })

@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2022-01-14 18:52:17
  * @LastEditors: xiao
- * @LastEditTime: 2022-02-13 14:12:08
+ * @LastEditTime: 2022-02-13 15:59:49
 -->
 <template>
   <div class="group-list">
@@ -119,8 +119,7 @@ export default defineComponent({
      * @author: xiao
      */
     function moreGroup() {
-      console.log('updateGroups');
-      context.emit('updateGroups', false);
+      context.emit('updateGroups', false); //更新学习小组
     }
 
     /**
@@ -148,7 +147,6 @@ export default defineComponent({
      * @author: xiao
      */
     function exitGroup() {
-      console.log('props.studyGroups[selectGroup.value].name', props.studyGroups[selectGroup.value].name);
       //退出学习小组
       deleteGroup(props.studyGroups[selectGroup.value].name)
         .then(() => {

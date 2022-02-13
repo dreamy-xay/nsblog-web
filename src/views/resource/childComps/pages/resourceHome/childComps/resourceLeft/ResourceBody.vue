@@ -4,12 +4,13 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-25 13:17:52
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-10 14:09:41
+ * @LastEditTime: 2022-02-13 13:09:15
 -->
 <template>
   <div
     class="resource-body"
     :style="bodyStyle"
+    v-if="resourceData.length"
   >
     <div
       class="resource-body-context"
@@ -45,11 +46,14 @@
       </div>
     </div>
   </div>
+  <base-content-loading v-else />
+
 </template>
 <script>
 import router from '@/router';
 import { defineComponent } from 'vue';
 import { dateFormat } from '@/util/date';
+import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
 
 /**
  * @description: 资源body样式
@@ -60,6 +64,7 @@ import { dateFormat } from '@/util/date';
 
 export default defineComponent({
   name: 'resourceBody',
+  components: { BaseContentLoading },
   props: {
     resourceData: {
       type: Array,

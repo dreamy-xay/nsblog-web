@@ -3,11 +3,14 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-09-20 17:53:48
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-26 17:53:51
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-13 11:57:02
 -->
 <template>
-  <div class="article-footer">
+  <div
+    class="article-footer"
+    id="comment"
+  >
     <div class="article-footer-title">
       发表评论
     </div>
