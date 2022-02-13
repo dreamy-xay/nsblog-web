@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2021-08-05 18:50:30
- * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-25 13:26:25
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-13 15:35:41
 -->
 
 <template>
@@ -106,7 +106,6 @@ export default defineComponent({
     if (tokenInfo.value.status)
       getFavorites(tokenInfo.value.username)
         .then((res) => {
-          console.log(res.favorites);
           favorites.splice(0, 0, ...res.favorites);
         })
         .catch((error) => {

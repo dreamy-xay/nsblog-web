@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-12 13:41:17
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-12 18:13:02
+ * @LastEditTime: 2022-02-13 15:39:33
  */
 
 import { Random } from 'better-mock';
@@ -30,6 +30,6 @@ export default function(baseUrl: string, app: Application) {
       return ans;
     }
 
-    return { chains: getRandom(int(offset) >= 17 ? 0 : Math.min(int(limit), 17 - int(offset))) };
+    return res.json({ chains: getRandom(int(offset) >= 17 ? 0 : Math.min(int(limit), 17 - int(offset))) });
   });
 }
