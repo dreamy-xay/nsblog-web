@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2022-01-17 10:18:37
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 15:00:58
+ * @LastEditTime: 2022-02-13 15:15:51
 -->
 <template>
   <div class="home-right">
@@ -40,6 +40,11 @@ import BaseTagCard from '@/components/common/baseTagCard/BaseTagCard.vue';
 
 /**
  * @description: 主页面(home)右侧
+ * @param {Array} rankingList 热门文章 `默认为 []`
+ * @param {Array} hotTags 热门标签 `默认为 []`
+ * @param {Array} activityData 活动 `默认为 []`
+ * @param {Array} bulletinData 公告牌 `默认为 []`
+ * @event clickMenuItem 切换热门文章标签
  * @author: dreamy-xay
  */
 
@@ -78,7 +83,6 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function rankCardClickMenuItem(index, item) {
-      // console.log(index, item);
       content.emit('clickMenuItem', index);
     }
 

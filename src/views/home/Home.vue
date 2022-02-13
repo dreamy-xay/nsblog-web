@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 15:06:10
+ * @LastEditTime: 2022-02-13 15:09:18
 -->
 <template>
   <base-view
@@ -154,6 +154,12 @@ export default defineComponent({
     // 获取初始数据
     initArticlesHome('', '', '', 0, limit, 0, 0, topicSelect.value, tagSelect.value, typeIndex.value);
 
+    /**
+     * @description: 获取热门文章
+     * @param {number} index 0:综合，1:点赞，2:评论
+     * @return {void}
+     * @author: Z_Y_C
+     */
     function getArticlesLists(index) {
       getArticlesList(index)
         .then((data) => {
