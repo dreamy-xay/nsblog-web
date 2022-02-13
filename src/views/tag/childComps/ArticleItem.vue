@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2022-01-23 15:06:03
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 16:34:25
+ * @LastEditTime: 2022-02-13 18:43:51
 -->
 <template>
   <div
@@ -120,7 +120,10 @@
       </div>
     </div>
   </div>
-  <base-content-loading v-else />
+  <base-content-loading
+    v-else
+    :style="{padding:'16px 0'}"
+  />
 
 </template>
 
