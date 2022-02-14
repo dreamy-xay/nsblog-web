@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 11:51:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-13 21:19:03
+ * @LastEditTime: 2022-02-14 11:38:56
 -->
 <template>
   <div
@@ -41,6 +41,7 @@
             <div
               class="inner"
               ref="innerRef"
+              :style="{minHeight: innerHeight - (footerShowAll ? 142 : 70) + 'px'}"
             >
               <div>
                 <div :class="bindClass">
