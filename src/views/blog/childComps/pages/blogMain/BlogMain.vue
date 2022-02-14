@@ -95,7 +95,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.log(error);
-          msg.error('获取文章信息失败，请重试', { duration: 2000, closable: true });
+          msg.error('获取文章信息失败，请重试');
         });
     }
 
@@ -119,7 +119,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.log(error);
-          msg.error('获取文章信息失败，请重试', { duration: 2000, closable: true });
+          msg.error('获取文章信息失败，请重试');
         });
 
       router.push(

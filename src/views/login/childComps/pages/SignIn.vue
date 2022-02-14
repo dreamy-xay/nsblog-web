@@ -173,9 +173,9 @@ export default defineComponent({
           .catch((error) => {
             console.log(error);
             clearToken();
-            msg.error('用户不存在或密码错误', { duration: 3000, closable: true });
+            msg.error('用户不存在或密码错误', { duration: 3000 });
           });
-      } else msg.error('用户不存在或密码错误', { duration: 3000, closable: true });
+      } else msg.error('用户不存在或密码错误', { duration: 3000 });
     }
 
     return {

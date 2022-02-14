@@ -134,9 +134,9 @@ export default defineComponent({
         context.emit('newFavorite', favoriteName.value, () => {
           activeIndex.value = props.favorites.length;
           favoriteName.value = '';
-          msg.success('创建收藏夹成功', { duration: 2000, closable: true });
+          msg.success('创建收藏夹成功');
         });
-      else msg.error('不能为空', { duration: 2000, closable: true });
+      else msg.error('不能为空');
     }
 
     return {

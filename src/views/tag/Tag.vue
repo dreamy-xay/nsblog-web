@@ -137,7 +137,7 @@ export default defineComponent({
       })
       .catch((error) => {
         console.log(error);
-        msg.error('获取文章详情失败', { duration: 2000, closable: true });
+        msg.error('获取文章详情失败');
       });
 
     /**
@@ -172,7 +172,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.log(error);
-          msg.error('获取文章信息失败', { duration: 2000, closable: true });
+          msg.error('获取文章信息失败');
         });
     }
 
@@ -216,11 +216,11 @@ export default defineComponent({
           })
           .catch((error) => {
             console.log(error);
-            if (res == 1) msg.success('点赞失败', { duration: 2000, closable: true });
-            else msg.error('取消失败', { duration: 2000, closable: true });
+            if (res == 1) msg.success('点赞失败');
+            else msg.error('取消失败');
           });
       } else {
-        msg.error('请先登录', { duration: 2000, closable: true });
+        msg.error('请先登录');
       }
     }
 
@@ -243,21 +243,21 @@ export default defineComponent({
         delUserTag(tagName)
           .then(() => {
             detail.attention = 0;
-            msg.success('取消关注成功', { duration: 2000, closable: true });
+            msg.success('取消关注成功');
           })
           .catch((error) => {
             console.log(error);
-            msg.error('取消关注失败', { duration: 2000, closable: true });
+            msg.error('取消关注失败');
           });
       } else {
         addUserTag(tagName)
           .then(() => {
             detail.attention = 1;
-            msg.success('关注成功', { duration: 2000, closable: true });
+            msg.success('关注成功');
           })
           .catch((error) => {
             console.log(error);
-            msg.error('关注失败', { duration: 2000, closable: true });
+            msg.error('关注失败');
           });
       }
     }

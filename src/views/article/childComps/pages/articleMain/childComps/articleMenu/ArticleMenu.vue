@@ -142,7 +142,7 @@ export default defineComponent({
           })
           .catch((error) => {
             console.log(error);
-            msg.error('获取菜单目录失败', { duration: 2000, closable: true });
+            msg.error('获取菜单目录失败');
           });
     }
 

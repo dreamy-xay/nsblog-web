@@ -114,7 +114,7 @@ export default defineComponent({
       })
       .catch((error) => {
         console.log(error);
-        msg.error('获取征集令失败', { duration: 2000, closable: true });
+        msg.error('获取征集令失败');
       });
 
     //获取学习小组活跃排行
@@ -139,7 +139,7 @@ export default defineComponent({
       })
       .catch((error) => {
         console.log(error);
-        msg.error('获取小组排行失败', { duration: 2000, closable: true });
+        msg.error('获取小组排行失败');
       });
 
     /**
@@ -165,7 +165,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.log(error);
-          msg.error('获取小组失败', { duration: 2000, closable: true });
+          msg.error('获取小组失败');
         });
     }
 

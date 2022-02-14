@@ -176,16 +176,16 @@ export default defineComponent({
           email: email.value,
         })
           .then((data) => {
-            if (data.usernameExist) msg.warning('该账户已被注册，请更换账户', { duration: 3000, closable: true });
+            if (data.usernameExist) msg.warning('该账户已被注册，请更换账户', { duration: 3000 });
 
             if (data.emailExist)
               setTimeout(() => {
-                msg.warning('该邮箱已被注册，请更换邮箱', { duration: 3000, closable: true });
+                msg.warning('该邮箱已被注册，请更换邮箱', { duration: 3000 });
               }, 0);
 
             if (!data.usernameExist && !data.emailExist) {
               // 显示发送验证码
-              let loading = msg.loading('验证码发送中', { duration: 0 });
+              let loading = msg.loading('验证码发送中', { duration: 0, closable: false });
 
               // 发送验证码
               emailSendVCode(email.value, {
@@ -230,14 +230,14 @@ export default defineComponent({
                       .catch((error) => {
                         console.log(error);
                         if (error.response && error.response.status === 403)
-                          msg.error('验证码错误，验证失败', { duration: 3000, closable: true });
-                        else msg.error('服务器错误，验证失败', { duration: 3000, closable: true });
+                          msg.error('验证码错误，验证失败', { duration: 3000 });
+                        else msg.error('服务器错误，验证失败', { duration: 3000 });
                       });
                   });
                 })
                 .catch((error) => {
                   console.log(error);
-                  msg.error('发送验证码失败', { duration: 3000, closable: true });
+                  msg.error('发送验证码失败', { duration: 3000 });
                 });
             }
           })

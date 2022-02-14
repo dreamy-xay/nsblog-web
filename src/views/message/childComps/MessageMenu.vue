@@ -118,7 +118,7 @@ export default defineComponent({
         }
       })
       .catch((error) => {
-        console.log(error), msg.error('获取未读消息条数，请重试', { duration: 2000, closable: true });
+        console.log(error), msg.error('获取未读消息条数，请重试');
       });
 
     function changeColor(menu) {

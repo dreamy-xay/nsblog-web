@@ -109,7 +109,7 @@ export default defineComponent({
       })
       .catch((error) => {
         console.log(error);
-        msg.error('获取专题失败', { duration: 2000, closable: true });
+        msg.error('获取专题失败');
       });
 
     /**
@@ -127,7 +127,7 @@ export default defineComponent({
      */
     function commit() {
       if (inputName.value == '' || inputIntroduce.value == '') {
-        msg.error('输入内容不能为空', { duration: 2000, closable: true });
+        msg.error('输入内容不能为空');
       } else {
         //创建学习小组
         createGroups(inputName.value, inputIntroduce.value, select.value)
@@ -139,7 +139,7 @@ export default defineComponent({
           })
           .catch((error) => {
             console.log(error);
-            msg.error('创建学习小组失败', { duration: 2000, closable: true });
+            msg.error('创建学习小组失败');
           });
       }
     }

@@ -166,7 +166,7 @@ export default defineComponent({
       })
       .catch((error) => {
         console.log(error);
-        msg.error('获取消息失败', { duration: 2000, closable: true });
+        msg.error('获取消息失败');
       });
 
     const userHeaderData = computed(() => {
@@ -246,7 +246,7 @@ export default defineComponent({
           })
           .catch((error) => {
             console.log(error);
-            msg.error('关注失败', { duration: 2000, closable: true });
+            msg.error('关注失败');
           });
       else
         deleteAttentions(username)
@@ -255,7 +255,7 @@ export default defineComponent({
           })
           .catch((error) => {
             console.log(error);
-            msg.error('取消关注失败', { duration: 2000, closable: true });
+            msg.error('取消关注失败');
           });
     }
 
@@ -267,7 +267,7 @@ export default defineComponent({
       })
       .catch((error) => {
         console.log(error);
-        msg.error('获取隐私设置失败', { duration: 2000, closable: true });
+        msg.error('获取隐私设置失败');
       });
 
     /**

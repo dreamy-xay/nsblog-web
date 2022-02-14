@@ -105,7 +105,7 @@ export default defineComponent({
           })
           .catch((error) => {
             console.log(error);
-            msg.error('获取收藏夹数据失败', { duration: 2000, closable: true });
+            msg.error('获取收藏夹数据失败');
           });
     }
 
@@ -136,12 +136,12 @@ export default defineComponent({
       if (id.value && props.cid) {
         addCollections(props.type, props.cid, id.value)
           .then((data) => {
-            msg.success('收藏成功', { duration: 2000, closable: true });
+            msg.success('收藏成功');
             context.emit('addCollection', data.id);
           })
           .catch((err) => {
             console.log(err);
-            msg.error('收藏失败', { duration: 2000, closable: true });
+            msg.error('收藏失败');
           });
       }
       context.emit('update:isShow', false);
@@ -155,8 +155,7 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function newFavorite(favoriteName, next) {
-      if (favorites.findIndex((favorite) => favorite.name === favoriteName) !== -1)
-        msg.error('收藏夹已存在', { duration: 2000, closable: true });
+      if (favorites.findIndex((favorite) => favorite.name === favoriteName) !== -1) msg.error('收藏夹已存在');
       else
         newFavorites(favoriteName)
           .then((data) => {
@@ -168,7 +167,7 @@ export default defineComponent({
           })
           .catch((error) => {
             console.log(error);
-            msg.error('创建收藏夹失败', { duration: 2000, closable: true });
+            msg.error('创建收藏夹失败');
           });
     }
 

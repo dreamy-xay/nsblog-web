@@ -141,7 +141,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.log(error);
-          msg.error('获取学习小组信息失败', { duration: 2000, closable: true });
+          msg.error('获取学习小组信息失败');
         });
     }
 
@@ -160,13 +160,13 @@ export default defineComponent({
             })
             .catch((error) => {
               console.log(error);
-              msg.error('加入学习小组失败', { duration: 2000, closable: true });
+              msg.error('加入学习小组失败');
             });
         } else {
           indexTag.value = index;
           modalShow.value = true;
         }
-      } else msg.error('请先登录', { duration: 2000, closable: true });
+      } else msg.error('请先登录');
     }
 
     /**
@@ -178,12 +178,12 @@ export default defineComponent({
       deleteGroup(groupData[indexTag.value].name)
         .then(() => {
           groupData[indexTag.value].join = 0;
-          msg.success('退出学习小组成功', { duration: 2000, closable: true });
+          msg.success('退出学习小组成功');
           indexTag.value = null;
         })
         .catch((error) => {
           console.log(error);
-          msg.error('退出学习小组失败', { duration: 2000, closable: true });
+          msg.error('退出学习小组失败');
         });
       modalShow.value = false;
     }

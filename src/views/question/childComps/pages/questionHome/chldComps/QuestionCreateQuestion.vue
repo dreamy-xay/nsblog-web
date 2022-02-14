@@ -147,7 +147,7 @@ export default defineComponent({
       })
       .catch((error) => {
         console.log(error);
-        msg.error('获取topic失败', { duration: 2000, closable: true });
+        msg.error('获取topic失败');
       });
 
     /**
@@ -177,7 +177,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.log(error);
-          msg.error('获取tag失败', { duration: 2000, closable: true });
+          msg.error('获取tag失败');
         });
     }
 
@@ -212,18 +212,18 @@ export default defineComponent({
       console.log('tags');
       console.log(selectTags);
       let flag = true;
-      if (!title.value) msg.error('标题不能为空', { duration: 2000, closable: true }), (flag = false);
-      if (!selectTags.length) msg.error('标签不能为空', { duration: 2000, closable: true }), (flag = false);
-      if (!text.value) msg.error('内容不能为空', { duration: 2000, closable: true }), (flag = false);
+      if (!title.value) msg.error('标题不能为空'), (flag = false);
+      if (!selectTags.length) msg.error('标签不能为空'), (flag = false);
+      if (!text.value) msg.error('内容不能为空'), (flag = false);
       if (flag)
         releaseQuestion(username, title.value, text.value, selectTags)
           .then(() => {
-            msg.success('发布成功', { duration: 2000, closable: true });
+            msg.success('发布成功');
             closeModel();
           })
           .catch((error) => {
             console.log(error);
-            msg.error('发布失败', { duration: 2000, closable: true });
+            msg.error('发布失败');
           });
     }
 
@@ -257,7 +257,7 @@ export default defineComponent({
         // 从可选项中删除tag
         topicTags.splice(newIndex, 1);
       } else {
-        msg.warning('最多选择三个标签', { duration: 2000, closable: true });
+        msg.warning('最多选择三个标签');
       }
     }
 

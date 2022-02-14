@@ -4,18 +4,21 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:02:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-14 15:53:45
+ * @LastEditTime: 2022-02-14 20:34:01
 -->
 <template>
   <n-config-provider
+    :abstract="true"
     :locale="zhCN"
     :date-locale="dateZhCN"
   >
-    <n-message-provider>
+    <n-message-provider
+      :closable="true"
+      :duration="2000"
+    >
       <n-dialog-provider>
         <router-view />
       </n-dialog-provider>
-
     </n-message-provider>
   </n-config-provider>
 </template>

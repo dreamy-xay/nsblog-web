@@ -153,7 +153,7 @@ export default defineComponent({
         forgotPasswordChange(tokenInfo.value.username, password.value, oldPassword.value)
           .then(() => {
             clearToken();
-            msg.loading('修改成功，正在跳转到登录界面', { duration: 2000, closable: true });
+            msg.loading('修改成功，正在跳转到登录界面');
             setTimeout(() => {
               router.push({ name: 'signIn' });
             }, 2000);
@@ -161,8 +161,8 @@ export default defineComponent({
           .catch((error) => {
             console.log(error);
             console.log(error.response.status);
-            if (error.response.status === 403) msg.error('原密码错误', { duration: 2000, closable: true });
-            else msg.error('重置密码失败', { duration: 2000, closable: true });
+            if (error.response.status === 403) msg.error('原密码错误');
+            else msg.error('重置密码失败');
           });
       }
     }
