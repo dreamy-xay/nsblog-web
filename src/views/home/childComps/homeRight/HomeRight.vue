@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2022-01-17 10:18:37
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-14 14:01:37
+ * @LastEditTime: 2022-02-14 16:44:28
 -->
 <template>
   <div class="home-right">
@@ -113,7 +113,7 @@ export default defineComponent({
         for (let name of data.tags)
           hotTags.splice(hotTags.length, 0, {
             name,
-            url: `tag${name}`,
+            url: `tag/${name}`,
           });
       })
       .catch((error) => {
