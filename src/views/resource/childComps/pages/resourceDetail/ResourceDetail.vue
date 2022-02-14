@@ -76,7 +76,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.log(error);
-          msg.error('获取资源信息失败，请重试', { duration: 2000, closable: true });
+          msg.error('获取资源信息失败，请重试');
         });
     }
     // 获取数据
@@ -96,7 +96,7 @@ export default defineComponent({
           })
           .catch((error) => {
             console.log(error);
-            msg.error('取消收藏失败，请重试', { duration: 2000, closable: true });
+            msg.error('取消收藏失败，请重试');
           });
       } else detailDataTop.collection = id;
     }

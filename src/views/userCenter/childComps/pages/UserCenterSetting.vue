@@ -88,7 +88,7 @@ export default defineComponent({
       })
       .catch((error) => {
         console.log(error);
-        msg.error('获取隐私设置失败', { duration: 2000, closable: true });
+        msg.error('获取隐私设置失败');
       });
 
     /**
@@ -105,7 +105,7 @@ export default defineComponent({
       ];
       modifySetting(data[index]).catch((error) => {
         console.log(error);
-        msg.error('修改设置失败,请重试', { duration: 2000, closable: true });
+        msg.error('修改设置失败,请重试');
       });
     }
     return {

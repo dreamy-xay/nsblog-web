@@ -97,7 +97,7 @@ export default defineComponent({
         settingData[4] = data.chat_message_prompt;
       })
       .catch((error) => {
-        console.log(error), msg.error('获取设置失败，请重试', { duration: 2000, closable: true });
+        console.log(error), msg.error('获取设置失败，请重试');
       });
 
     /**
@@ -115,7 +115,7 @@ export default defineComponent({
         { chat_message_prompt: settingData[index] },
       ];
       modifySetting(data[index]).catch((error) => {
-        console.log(error), msg.error('修改设置失败，请重试', { duration: 2000, closable: true });
+        console.log(error), msg.error('修改设置失败，请重试');
       });
     }
 

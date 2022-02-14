@@ -154,7 +154,7 @@ export default defineComponent({
      */
     function isShowEdit() {
       if (!isLogin.value) {
-        msg.error('登录后才可以回复', { duration: 2000, closable: true });
+        msg.error('登录后才可以回复');
         return;
       }
       showEdit.value = !showEdit.value;

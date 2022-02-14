@@ -93,7 +93,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.log(error);
-          msg.error('获取热门文章数据失败', { duration: 2000, closable: true });
+          msg.error('获取热门文章数据失败');
         });
     }
 
@@ -118,7 +118,7 @@ export default defineComponent({
       })
       .catch((error) => {
         console.log(error);
-        msg.error('获取热门标签数据失败', { duration: 2000, closable: true });
+        msg.error('获取热门标签数据失败');
       });
 
     // 公告牌
@@ -147,7 +147,7 @@ export default defineComponent({
       })
       .catch((error) => {
         console.log(error);
-        msg.error('获取公告牌失败', { duration: 2000, closable: true });
+        msg.error('获取公告牌失败');
       });
 
     return {

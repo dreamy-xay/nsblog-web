@@ -111,16 +111,16 @@ export default defineComponent({
             .then(() => {
               context.emit('update:attention', true);
               context.emit('updateCount', true); //增加关注或粉丝量
-              msg.success('关注成功', { duration: 2000, closable: true });
+              msg.success('关注成功');
               null;
             })
             .catch((error) => {
               console.log(error);
-              msg.error('关注失败,请重试', { duration: 2000, closable: true });
+              msg.error('关注失败,请重试');
             });
         }
       } else {
-        msg.error('请先登录', { duration: 2000, closable: true });
+        msg.error('请先登录');
       }
     }
 
@@ -134,16 +134,16 @@ export default defineComponent({
       if (isLogin.value) {
         deleteAttentions(props.username)
           .then(() => {
-            msg.success('取消关注成功', { duration: 2000, closable: true });
+            msg.success('取消关注成功');
             context.emit('update:attention', false);
             context.emit('updateCount', false); //减少关注或粉丝量
             modalShow.value = !modalShow.value;
           })
           .catch((error) => {
-            console.log(error), msg.error('取消关注失败，请重试', { duration: 2000, closable: true });
+            console.log(error), msg.error('取消关注失败，请重试');
           });
       } else {
-        msg.error('请先登录', { duration: 2000, closable: true });
+        msg.error('请先登录');
       }
     }
 

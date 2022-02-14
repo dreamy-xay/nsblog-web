@@ -129,13 +129,13 @@ export default defineComponent({
           addGroup(groupName)
             .then(() => {
               groupData.join = 1;
-              msg.success('加入学习小组成功', { duration: 2000, closable: true });
+              msg.success('加入学习小组成功');
             })
             .catch((error) => {
               console.log(error);
-              msg.error('加入学习小组失败', { duration: 2000, closable: true });
+              msg.error('加入学习小组失败');
             });
-      } else msg.error('请先登录', { duration: 2000, closable: true });
+      } else msg.error('请先登录');
     }
 
     /**
@@ -150,11 +150,11 @@ export default defineComponent({
         deleteGroup(groupName)
           .then(() => {
             groupData.join = 0;
-            msg.success('已退出该学习小组', { duration: 2000, closable: true });
+            msg.success('已退出该学习小组');
           })
           .catch((error) => {
             console.log(error);
-            msg.success('退出学习小组失败', { duration: 2000, closable: true });
+            msg.success('退出学习小组失败');
           });
     }
 

@@ -134,7 +134,7 @@ export default defineComponent({
       })
       .catch((error) => {
         console.log(error);
-        msg.error('获取问答失败', { duration: 2000, closable: true });
+        msg.error('获取问答失败');
       });
 
     /**

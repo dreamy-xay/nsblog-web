@@ -64,7 +64,7 @@ export default defineComponent({
      */
     function submit() {
       if (password.value === '') return;
-      if (prePassword === password.value) msg.info('请勿重复提交错误密码', { duration: 2000, closable: true });
+      if (prePassword === password.value) msg.info('请勿重复提交错误密码');
       else {
         prePassword = password.value;
         verifyArticlePassword(articleId, password.value)
@@ -73,8 +73,8 @@ export default defineComponent({
           })
           .catch((error) => {
             console.log(error);
-            if (error.response.status === 403) msg.error('文章密码错误', { duration: 2000, closable: true });
-            else msg.error('网路异常，请重试', { duration: 2000, closable: true });
+            if (error.response.status === 403) msg.error('文章密码错误');
+            else msg.error('网路异常，请重试');
           });
       }
     }

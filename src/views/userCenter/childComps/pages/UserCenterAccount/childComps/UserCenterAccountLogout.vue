@@ -111,7 +111,7 @@ export default defineComponent({
         authLogoff(password.value)
           .then(() => {
             clearToken();
-            msg.loading('注销成功，正在跳转到登录界面', { duration: 2000, closable: true });
+            msg.loading('注销成功，正在跳转到登录界面');
             setTimeout(() => {
               router.push({ name: 'signIn' });
             }, 2000);
@@ -119,7 +119,7 @@ export default defineComponent({
           .catch((error) => {
             console.log(error);
             console.log(error.response.status);
-            msg.error('注销失败', { duration: 2000, closable: true });
+            msg.error('注销失败');
           });
       }
     }

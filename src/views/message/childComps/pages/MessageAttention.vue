@@ -155,7 +155,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.log(error);
-          msg.error('获取消息失败，请重试', { duration: 2000, closable: true });
+          msg.error('获取消息失败，请重试');
         });
     }
 
@@ -176,7 +176,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.log(error);
-          msg.error('删除消息失败，请重试', { duration: 2000, closable: true });
+          msg.error('删除消息失败，请重试');
         });
     }
 
@@ -238,7 +238,7 @@ export default defineComponent({
             attentionData[index].content.attention = true;
           })
           .catch((error) => {
-            console.log(error), msg.error('关注失败，请重试', { duration: 2000, closable: true });
+            console.log(error), msg.error('关注失败，请重试');
           });
       } else {
         modalShow.value = !modalShow.value;
@@ -259,7 +259,7 @@ export default defineComponent({
           attentionData[sureCancel.value].content.attention = false;
         })
         .catch((error) => {
-          console.log(error), msg.error('取消关注失败，请重试', { duration: 2000, closable: true });
+          console.log(error), msg.error('取消关注失败，请重试');
         });
     }
 

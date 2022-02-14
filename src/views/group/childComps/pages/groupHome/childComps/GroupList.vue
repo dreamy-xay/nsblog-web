@@ -156,7 +156,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.log(error);
-          msg.error('加入学习小组失败', { duration: 2000, closable: true });
+          msg.error('加入学习小组失败');
         });
     }
 
@@ -175,7 +175,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.log(error);
-          msg.error('退出学习小组失败', { duration: 2000, closable: true });
+          msg.error('退出学习小组失败');
         });
     }
 

@@ -159,8 +159,8 @@ export default defineComponent({
     function fileChange(e) {
       if (!e.target.files || !e.target.files[0]) return;
       const file = e.target.files[0];
-      if (file.type.substr(0, 5) !== 'image') msg.warning('发送图片失败', { duration: 2000, closable: true });
-      else if (file.size > 1024 * 1024) msg.warning('发送图片大小不得超过1M', { duration: 2000, closable: true });
+      if (file.type.substr(0, 5) !== 'image') msg.warning('发送图片失败');
+      else if (file.size > 1024 * 1024) msg.warning('发送图片大小不得超过1M');
       else {
         const reader = new FileReader();
         reader.onload = (event) => {

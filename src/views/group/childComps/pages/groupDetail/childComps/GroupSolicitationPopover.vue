@@ -164,20 +164,20 @@ export default defineComponent({
       let success = true; // 是否验证成功
       if (!title.value) {
         success = false;
-        msg.error('请输入征集令标题－O－', { duration: 2000, closable: true });
+        msg.error('请输入征集令标题－O－');
       }
       if (!content.value) {
         success = false;
-        msg.error('请输入征集令内容－O－', { duration: 2000, closable: true });
+        msg.error('请输入征集令内容－O－');
       }
       if (!deadline.value) {
         success = false;
-        msg.error('请选择征集令截至日期－O－', { duration: 2000, closable: true });
+        msg.error('请选择征集令截至日期－O－');
       }
       if (success) {
         releaseGroupSolicitation(title.value, content.value, dateFormat('YY-mm-dd HH:MM:SS', new Date(deadline.value)))
           .then(() => {
-            msg.success('征集令发布成功(～￣▽￣)～', { duration: 2000, closable: true });
+            msg.success('征集令发布成功(～￣▽￣)～');
             // 清除内容
             title.value = '';
             content.value = '';
@@ -185,7 +185,7 @@ export default defineComponent({
           })
           .catch((error) => {
             console.log(error);
-            msg.success('征集令发布失败≧ ﹏ ≦', { duration: 2000, closable: true });
+            msg.success('征集令发布失败≧ ﹏ ≦');
           });
         closeModal();
       }

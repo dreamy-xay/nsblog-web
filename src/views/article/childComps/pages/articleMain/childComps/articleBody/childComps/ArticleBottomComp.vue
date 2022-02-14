@@ -177,7 +177,7 @@ export default defineComponent({
         console.log('isLogin');
         return true;
       } else {
-        msg.error('请先登录', { duration: 2000, closable: true });
+        msg.error('请先登录');
         return false;
       }
     }

@@ -159,7 +159,7 @@ export default defineComponent({
      */
     function releaseSolicitation() {
       if (isLogin.value) showSolicitation.value = true;
-      else msg.error('请先登录', { duration: 2000, closable: true });
+      else msg.error('请先登录');
     }
 
     // 用户活跃排名列表
