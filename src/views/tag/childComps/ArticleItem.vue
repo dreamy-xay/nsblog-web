@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2022-01-23 15:06:03
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 22:41:16
+ * @LastEditTime: 2022-02-14 14:41:48
 -->
 <template>
   <div class="article-item">
@@ -61,7 +61,9 @@
               class="view"
               role="button"
             >
-              <i class="iconfont blog-browse" />
+              <div class="icon">
+                <i class="iconfont blog-browse" />
+              </div>
               <div class="view-text">{{item.page_view}}</div>
             </div>
             <div
@@ -71,14 +73,19 @@
               :class="item.recommend === 1 ? 'active' : ''"
             >
 
-              <i
-                class="iconfont blog-dianzan"
+              <div
+                class="icon"
                 v-if="item.recommend"
-              />
-              <i
-                class="iconfont blog-dianzan1"
+              >
+                <i class="iconfont blog-dianzan" />
+              </div>
+
+              <div
+                class="icon"
                 v-else
-              />
+              >
+                <i class="iconfont blog-dianzan1" />
+              </div>
               <div
                 class="support-text"
                 v-if="item.recommend_count"
@@ -94,7 +101,9 @@
               role="button"
               @click="toComment(item.id)"
             >
-              <i class="iconfont blog-c-comment" />
+              <div class="icon">
+                <i class="iconfont blog-c-comment" />
+              </div>
               <div
                 class="comment-text"
                 v-if="item.comment_count"
@@ -111,7 +120,10 @@
           class="article-item-body-right"
           v-if="item.cover_image"
         >
-          <base-image :src="item.cover_image" />
+          <base-image
+            :src="item.cover_image"
+            :loadError="'/article/defaultCoverImage.jpg'"
+          />
         </div>
 
       </div>
@@ -353,60 +365,75 @@ export default defineComponent({
 
         .article-item-body-left-bottom {
           @include flex(center);
-          height: 15px;
           font-size: 13px;
-          font-weight: 400;
-          text-align: left;
           color: $grey-7;
           padding-top: 10px;
-
-          i {
-            color: $grey-7;
-            margin-right: 4px;
-          }
+          height: 20px;
 
           .view {
-            @include flex();
+            @include flex(center, center);
             margin-right: 20px;
+            color: $grey-7;
+            transition: 0.25s;
+            height: 16px;
 
-            &:hover {
-              transition: 0.25s;
-              color: $green-1;
-              i {
-                color: $green-1;
+            .icon {
+              height: 16px;
+              line-height: 16px;
+              margin-right: 4px;
+              .iconfont {
+                font-size: 16px;
               }
             }
-          }
 
-          .active {
-            color: $green-1;
-            i {
+            &:hover {
               color: $green-1;
             }
           }
 
           .support {
-            @include flex();
+            @include flex(center, center);
             margin-right: 20px;
+            color: $grey-7;
+            transition: 0.25s;
+            height: 16px;
+
+            .icon {
+              height: 16px;
+              line-height: 16px;
+              margin-right: 4px;
+              .iconfont {
+                font-size: 14px;
+              }
+            }
 
             &:hover {
-              transition: 0.25s;
               color: $green-1;
-              i {
-                color: $green-1;
-              }
             }
           }
 
+          .active {
+            color: $green-1;
+          }
+
           .comment {
-            @include flex();
+            @include flex(center, center);
+            color: $grey-7;
+            transition: 0.25s;
+            height: 16px;
+
+            .icon {
+              height: 16px;
+              line-height: 16px;
+              margin-right: 4px;
+              margin-top: 2px;
+              .iconfont {
+                font-size: 14px;
+              }
+            }
 
             &:hover {
-              transition: 0.25s;
               color: $green-1;
-              i {
-                color: $green-1;
-              }
             }
           }
         }
