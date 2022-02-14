@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2022-01-20 15:53:19
  * @LastEditors: xiao
- * @LastEditTime: 2022-02-11 14:31:53
+ * @LastEditTime: 2022-02-14 15:06:50
 -->
 <template>
   <n-modal
@@ -213,9 +213,13 @@ export default defineComponent({
   .group-popover-body {
     .body-input {
       border-radius: $border-radius-1;
-      box-shadow: 0 0 6px 0 $green-0;
       margin: 0px 24px;
       width: 372px;
+
+      &:hover {
+        background-color: $green-2;
+        color: $green-0;
+      }
     }
 
     .body-title {
@@ -230,7 +234,11 @@ export default defineComponent({
     .body-select {
       margin: 0px 24px 23px 24px;
       border-radius: $border-radius-1;
-      box-shadow: 0 0 6px 0 $green-0;
+
+      &:hover {
+        background-color: $green-2;
+        color: $green-0;
+      }
     }
   }
 
