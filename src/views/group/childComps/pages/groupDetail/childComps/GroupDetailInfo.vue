@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-29 17:12:45
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-12 19:32:13
+ * @LastEditTime: 2022-02-14 19:10:55
 -->
 <template>
   <div class="group-detail-info">
@@ -104,7 +104,7 @@ export default defineComponent({
     // 初始化获取学习小组信息
     getGroups('', '', 0, 0, groupName)
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         groupData.member_count = data.member_count;
         groupData.content_count = data.content_count;
         groupData.remark = data.remark;

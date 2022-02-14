@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-09-16 10:05:10
- * @LastEditors: xiao
- * @LastEditTime: 2022-02-12 21:58:59
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-14 19:40:57
  */
 
 import { get, post, del, RequestLifeCycle } from '@/network/request';
@@ -124,6 +124,32 @@ export function getGroupSolicitations(
       group_name,
       offset,
       limit
+    }
+  });
+}
+
+/**
+ * @description: 发布征集令
+ * @param {string} title 征集令标题 `必传参数`
+ * @param {string} content 征集令内容 `必传参数`
+ * @param {string} deadline 征集令截止日期 `必传参数`
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: dreamy-xay
+ */
+export function releaseGroupSolicitation(
+  title: string,
+  content: string,
+  deadline: string,
+  RLC: RequestLifeCycle = {}
+): Promise<unknown> {
+  return post({
+    url: '/groups/solicitations',
+    ...RLC,
+    data: {
+      title,
+      content,
+      deadline
     }
   });
 }

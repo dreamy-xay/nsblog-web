@@ -3,17 +3,42 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:02:59
- * @LastEditors: Ban
- * @LastEditTime: 2022-01-13 16:40:34
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-14 15:53:45
 -->
 <template>
-  <n-message-provider>
-    <n-dialog-provider>
-      <router-view />
-    </n-dialog-provider>
+  <n-config-provider
+    :locale="zhCN"
+    :date-locale="dateZhCN"
+  >
+    <n-message-provider>
+      <n-dialog-provider>
+        <router-view />
+      </n-dialog-provider>
 
-  </n-message-provider>
+    </n-message-provider>
+  </n-config-provider>
 </template>
+
+<script>
+import { defineComponent } from 'vue';
+import { zhCN, dateZhCN } from 'naive-ui';
+
+/**
+ * @description: app
+ * @author: dreamy-xay
+ */
+
+export default defineComponent({
+  name: 'app',
+  setup() {
+    return {
+      zhCN,
+      dateZhCN,
+    };
+  },
+});
+</script>
 
 <style lang="scss">
 @import 'assets/style/normalize';
