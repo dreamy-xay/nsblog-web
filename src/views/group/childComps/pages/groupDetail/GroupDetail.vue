@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-29 14:37:16
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-13 20:13:49
+ * @LastEditTime: 2022-02-14 19:48:49
 -->
 <template>
   <base-view
@@ -86,6 +86,8 @@ import GroupDetailInfo from '@/views/group/childComps/pages/groupDetail/childCom
 import router from '@/router';
 import { getGroupsUsersList } from '@/network/api/list';
 import { useRoute } from 'vue-router';
+import { mapGetters } from '@/util/store';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description: 学习小组详情页
@@ -101,6 +103,7 @@ export default defineComponent({
     GroupDetailInfo,
   },
   setup() {
+    const msg = useMessage(); //naive-ui message
     const route = useRoute(); // route
     const showRankCardLoading = ref(false); // rank-card 是否显示加载状态
 
@@ -147,6 +150,7 @@ export default defineComponent({
     }
 
     const showSolicitation = ref(false); // 是否显示发布征集令弹框
+    const { isLogin } = mapGetters('global', ['isLogin']);
 
     /**
      * @description: 点击弹出发布征集令的弹框
@@ -154,7 +158,8 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function releaseSolicitation() {
-      showSolicitation.value = true;
+      if (isLogin.value) showSolicitation.value = true;
+      else msg.error('请先登录', { duration: 2000, closable: true });
     }
 
     // 用户活跃排名列表
