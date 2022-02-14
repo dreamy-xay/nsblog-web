@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-24 22:56:49
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 22:46:19
+ * @LastEditTime: 2022-02-14 13:15:53
 -->
 <template>
   <div class="resource-detail-bottom">
@@ -13,7 +13,7 @@
       <resource-body :resource-data="data" />
       <base-content-loading
         v-show="!data.length"
-        :style="{padding: '16px 0'}"
+        :style="{padding: '16px 0 12px 0'}"
       />
     </div>
   </div>

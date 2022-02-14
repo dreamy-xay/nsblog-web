@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-10 21:44:12
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-24 16:33:44
+ * @LastEditTime: 2022-02-14 12:26:01
  */
 import { Random } from 'better-mock';
 import { Server } from 'http';
@@ -80,14 +80,18 @@ export default (server: Server) => {
       console.log('\x1B[32m>\x1b[0m ', onlineUsers.getUsers(), '\n');
 
       socket.on('sendMessage', (content: string, to: string, time: string, from: string) => {
-        if (from === username && from !== to && onlineUsers.hasUser(to))
+        print('send message', { from, to, content, time });
+
+        if (from === username && from !== to && onlineUsers.hasUser(to)) {
+          messageNotice(to, 0, false, 5); // 通知来了新消息
           onlineUsers.emit(to, 'receiveMessage', {
             username: from,
             nickname: Random.natural(0, 1000000) % 2 ? Random.cword(2, 4) : Random.word(4, 8),
-            avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', from.slice(0, 4)),
+            avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', from),
             content,
             time
           });
+        }
       });
 
       function offline() {
@@ -97,13 +101,17 @@ export default (server: Server) => {
       }
 
       // 随机发送消息
-      function messageNotice(timeout: number = Random.natural(100, 50000)) {
+      function messageNotice(
+        to: string = username,
+        timeout: number = Random.natural(100, 50000),
+        infinity: boolean = true,
+        type: number = Random.natural(1, 4)
+      ) {
         const timer: NodeJS.Timeout = setTimeout(() => {
           clearTimeout(timer);
-          const type: number = Random.natural(1, 5);
-          if (onlineUsers.emit(username, 'notice', type)) {
+          if (onlineUsers.emit(to, 'notice', type)) {
             print('message notice', { type });
-            messageNotice();
+            if (infinity) messageNotice();
           }
         }, timeout);
       }
