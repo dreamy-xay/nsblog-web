@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-15 15:07:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-13 19:58:11
+ * @LastEditTime: 2022-02-14 11:20:34
 -->
 <template>
   <div
@@ -38,7 +38,7 @@
       </a>
       <base-content-loading
         v-show="loading"
-        :line="['100%', '100%', '100%']"
+        :line="['100%', '70%', '80%']"
         :space="8"
         :style="{padding: '0 12px 16px 0'}"
         :skeleton-style="{height: '24px'}"

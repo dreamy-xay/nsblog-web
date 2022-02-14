@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 10:01:23
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-31 20:30:06
+ * @LastEditTime: 2022-02-14 11:17:15
  */
 
 import { Application, Request, Response } from 'express';
@@ -108,7 +108,7 @@ export default function(baseUrl: string, app: Application) {
     print('get tags list(hot)', { type });
 
     const tags: string[] = [];
-    const sum: number = Random.integer(6, 9);
+    const sum: number = Random.integer(10, 25);
     for (let i: number = 0; i < sum; ++i) tags.push(Random.integer(0, 1) ? Random.word() : Random.cword());
 
     return res.json({ tags });
