@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2022-01-14 18:52:17
  * @LastEditors: xiao
- * @LastEditTime: 2022-02-14 00:16:47
+ * @LastEditTime: 2022-02-14 16:33:00
 -->
 <template>
   <div class="group-list">
@@ -41,18 +41,21 @@
           </div>
           <div class="remark">{{group.remark}}</div>
           <div class="category-member-count">
-            <base-tag
-              :text="group.topic_name"
-              :hollow="true"
-              :size="20"
-              :color="styles.green1"
-              :href="`/group?topic=${group.topic_name}`"
-              :target="`/group?topic=${group.topic_name}`"
+            <div
+              role="button"
+              @click="onTag(group)"
             >
-              <template #text-pre>
-                <i class="iconfont blog-zhu"></i>
-              </template>
-            </base-tag>
+              <base-tag
+                :text="group.topic_name"
+                :hollow="true"
+                :size="20"
+                :color="styles.green1"
+              >
+                <template #text-pre>
+                  <i class="iconfont blog-zhu"></i>
+                </template>
+              </base-tag>
+            </div>
             <div class="member-count">
               <i class="iconfont blog-xiaozu1"></i>
               {{group.member_count}}
@@ -148,12 +151,12 @@ export default defineComponent({
       //加入学习小组
       addGroup(group.name)
         .then(() => {
-          msg.success(`加入小组成功`);
+          msg.success(`加入学习小组成功`);
           group.join = 1;
         })
         .catch((error) => {
           console.log(error);
-          msg.error('加入小组失败', { duration: 2000, closable: true });
+          msg.error('加入学习小组失败', { duration: 2000, closable: true });
         });
     }
 
@@ -166,13 +169,13 @@ export default defineComponent({
       //退出学习小组
       deleteGroup(props.studyGroups[selectGroup.value].name)
         .then(() => {
-          msg.success(`退出成功`);
+          msg.success(`退出学习小组成功`);
           context.emit('changeGroupJoin', selectGroup.value);
           modalShow.value = false;
         })
         .catch((error) => {
           console.log(error);
-          msg.error('退出小组失败', { duration: 2000, closable: true });
+          msg.error('退出学习小组失败', { duration: 2000, closable: true });
         });
     }
 
@@ -210,6 +213,19 @@ export default defineComponent({
       router.push(`/group/${name}`);
     }
 
+    /**
+     * @description: 点击标签
+     * @param {*} group 标签所属的小组
+     * @return {void}
+     * @author: xiao
+     */
+    function onTag(group) {
+      router.push({
+        name: 'groupHome',
+        query: { topic: group.topic_name },
+      });
+    }
+
     return {
       moreGroup,
       joinGroup,
@@ -219,6 +235,7 @@ export default defineComponent({
       close,
       changePage,
       styles,
+      onTag,
     };
   },
 });
@@ -266,10 +283,11 @@ export default defineComponent({
           color: $grey-7;
           height: 24px;
           width: 66px;
-          border-radius: 4px;
-          border: solid 1px $grey-7;
+          border-radius: $border-radius-1;
+          border: 1px solid $grey-7;
           @include flex(center, center);
           transition: 0.25s;
+          font-weight: bold;
 
           .iconfont {
             font-size: 14px;
@@ -295,6 +313,11 @@ export default defineComponent({
         height: 20px;
         margin-bottom: 11.8px;
         @include flex(center, flex-start);
+
+        .iconfont {
+          font-size: 12px;
+          margin-right: 5px;
+        }
 
         .category {
           border-radius: $border-radius-1; //圆角
