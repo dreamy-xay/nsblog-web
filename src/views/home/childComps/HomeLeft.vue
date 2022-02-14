@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2022-01-17 10:18:16
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 22:30:27
+ * @LastEditTime: 2022-02-14 13:02:10
 -->
 <template>
   <div class="home-left">
@@ -25,7 +25,7 @@
       />
       <base-content-loading
         v-show="showContentLoading"
-        :style="{padding: '16px 0'}"
+        :style="{padding: '16px  0 4px 0'}"
       />
     </div>
   </div>
