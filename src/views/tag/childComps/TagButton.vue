@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2022-01-27 10:52:36
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 16:37:51
+ * @LastEditTime: 2022-02-14 14:16:11
 -->
 <template>
   <div class="tag-button">
@@ -22,7 +22,9 @@
       role="button"
       @click="clickAttention"
     >
-      <i class="iconfont blog-daochu1024-29" />
+      <div class="icon">
+        <i class="iconfont blog-daochu1024-29" />
+      </div>
       <div class="false-text">关注</div>
     </div>
   </div>
@@ -96,7 +98,6 @@ export default defineComponent({
   .tag-button-true {
     width: 64px;
     height: 24px;
-    border: 1px solid $green-0;
     box-shadow: $shadow-0;
     border-radius: 4px;
     background: $green-0;
@@ -104,7 +105,6 @@ export default defineComponent({
     transition: 0.25s;
 
     &:hover {
-      border: 1px solid $green-1;
       background: $green-1;
     }
 
@@ -118,24 +118,25 @@ export default defineComponent({
     }
   }
   .tag-button-false {
-    width: 64px;
-    height: 24px;
+    color: $green-1;
+    width: 62px;
+    height: 22px;
     background: $grey-0;
-    border: 1px solid $green-0;
+    border: 1px solid $green-1;
     border-radius: 4px;
-    box-shadow: $shadow-0;
     @include flex(center, center);
     transition: 0.25s;
 
     &:hover {
-      border: 1px solid $green-1;
-      color: $green-1;
+      box-shadow: $shadow-0;
     }
 
-    i {
+    .icon {
       margin-right: 4px;
-      font-size: 14px;
       color: $green-0;
+      .iconfont {
+        font-size: 14px;
+      }
     }
 
     .false-text {

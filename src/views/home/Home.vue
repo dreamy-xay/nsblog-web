@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 23:00:04
+ * @LastEditTime: 2022-02-14 13:47:02
 -->
 <template>
   <base-view
@@ -46,10 +46,7 @@
       </div>
 
       <div class="right">
-        <home-right
-          :activity-data="activityData"
-          :bulletin-data="bulletinData"
-        />
+        <home-right />
       </div>
     </div>
   </base-view>
@@ -66,7 +63,6 @@ import { useMessage } from 'naive-ui';
 import { mapGetters } from '@/util/store';
 import { getArticles } from '@/network/api/articles';
 import { modifyArticleRecommendEvaluation } from '@/network/api/articles';
-import { getNotices } from '@/network/api/notices';
 import { useRoute, useRouter } from 'vue-router';
 
 /**
@@ -97,37 +93,10 @@ export default defineComponent({
     const showButton = ref(false); // 显示加载更多按钮\
     const showContentLoading = ref(false); // 是否显示加载内容过渡
 
-    // 活动牌
-    const activityData = reactive([]);
-    // 公告牌
-    const bulletinData = reactive([]);
     const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
 
     if (!route.query.topic) topicSelect.value = route.query.topic;
     if (!route.query.tag) tagSelect.value = route.query.tag;
-
-    // 获取公告牌数据
-    getNotices()
-      .then((data) => {
-        // 0为网站通知，1为网站活动
-        for (let i = 0; i < data.notices.length; i++) {
-          if (data.notices[i].type == 0) {
-            let arr = { text: null, href: null };
-            arr.text = data.notices[i].content;
-            arr.href = data.notices[i].link;
-            bulletinData.splice(bulletinData.length, 0, arr);
-          } else {
-            let arr = { image: null, href: null };
-            arr.image = data.notices[i].content;
-            arr.href = data.notices[i].link;
-            activityData.splice(activityData.length, 0, arr);
-          }
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        msg.error('获取公告牌失败', { duration: 2000, closable: true });
-      });
 
     // 获取初始数据
     initArticlesHome('', '', '', 0, limit, 0, 0, topicSelect.value, tagSelect.value, typeIndex.value);
@@ -333,8 +302,6 @@ export default defineComponent({
       changeList,
       changeTime,
       showButton,
-      activityData,
-      bulletinData,
       showContentLoading,
     };
   },
