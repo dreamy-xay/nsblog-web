@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2022-01-29 16:44:56
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 19:18:29
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-14 11:20:50
 -->
 <template>
   <div class="group-detail-solicitation">
