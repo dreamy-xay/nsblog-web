@@ -1,10 +1,10 @@
 <!--
- * @Description: 用户中心专用输入框
+ * @Description: 基础输入框
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-31 16:34:22
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-23 21:39:22
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-14 11:57:04
 -->
 <template>
   <div
@@ -47,7 +47,7 @@ import { defineComponent, ref, watch, computed, onMounted, nextTick } from 'vue'
 import { useMessage } from 'naive-ui';
 
 /**
- * @description: login路由下页面输入框
+ * @description: 基础输入框
  * @param {String} type 输入框类型 `默认为text`
  * @param {String} bindClass 输入框绑定类 `默认为null`
  * @param {String} modelValue 输入框绑定值，使用v-model指令即可 `默认为''`
