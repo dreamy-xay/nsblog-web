@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2022-01-21 19:42:59
  * @LastEditors: xiao
- * @LastEditTime: 2022-02-14 00:18:52
+ * @LastEditTime: 2022-02-14 15:27:09
 -->
 <template>
   <base-view
@@ -49,6 +49,7 @@
         <base-rank-card
           :data="rankingList"
           title="活跃排行榜"
+          :loading="showRankCardLoading"
         />
       </div>
     </div>
@@ -96,6 +97,7 @@ export default defineComponent({
     const showContentLoading = ref(true); // 是否显示加载内容过渡
     const limit = 10; // 每次加载列表条数
     const showLoading = ref(true); // 是否显示加载按钮
+    const showRankCardLoading = ref(false); // rank-card 是否显示加载状态
 
     //获取征集令
     getGroupSolicitations('')
@@ -116,7 +118,14 @@ export default defineComponent({
       });
 
     //获取学习小组活跃排行
-    getGroupsList()
+    getGroupsList(0, {
+      beforeRequest() {
+        showRankCardLoading.value = true;
+      },
+      afterResopnse() {
+        showRankCardLoading.value = false;
+      },
+    })
       .then((data) => {
         for (let i = 0; i < data.groups.length; i++) {
           let rank = {
@@ -127,7 +136,6 @@ export default defineComponent({
           rank.url += data.groups[i];
           rankingList.push(rank);
         }
-        console.log('rankingList', rankingList);
       })
       .catch((error) => {
         console.log(error);
@@ -206,6 +214,7 @@ export default defineComponent({
       changeGroupJoin,
       showContentLoading,
       showLoading,
+      showRankCardLoading,
     };
   },
 });
@@ -216,7 +225,6 @@ export default defineComponent({
   .group-home-container {
     @include flex();
     margin: 16px 0px 16px 75px;
-    padding-bottom: 50px;
 
     .group-home-right {
       @include flex(center, flex-start, column);
