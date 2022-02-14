@@ -3,12 +3,13 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2022-01-17 10:18:37
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-13 20:10:04
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-14 14:01:37
 -->
 <template>
   <div class="home-right">
     <base-bulletin
+      :loading="showBulletinLoading"
       :bulletin-data="bulletinData"
       :type="true"
     />
@@ -40,15 +41,11 @@ import HomeActivity from '@/views/home/childComps/homeRight/childComps/HomeActiv
 import BaseRankCard from '@/components/common/baseRankCard/BaseRankCard.vue';
 import BaseTagCard from '@/components/common/baseTagCard/BaseTagCard.vue';
 import { getArticlesList, getTagsList } from '@/network/api/list';
+import { getNotices } from '@/network/api/notices';
 import { useMessage } from 'naive-ui';
 
 /**
  * @description: 主页面(home)右侧
- * @param {Array} rankingList 热门文章 `默认为 []`
- * @param {Array} hotTags 热门标签 `默认为 []`
- * @param {Array} activityData 活动 `默认为 []`
- * @param {Array} bulletinData 公告牌 `默认为 []`
- * @event clickMenuItem 切换热门文章标签
  * @author: dreamy-xay
  */
 
@@ -60,20 +57,11 @@ export default defineComponent({
     BaseRankCard,
     BaseTagCard,
   },
-  props: {
-    activityData: {
-      type: Array,
-      default: () => [],
-    },
-    bulletinData: {
-      type: Array,
-      default: () => [],
-    },
-  },
   setup() {
     const msg = useMessage(); // naive-ui message
     const showRankCardLoading = ref(false); // rank-card 是否显示加载状态
     const showTagCardLoading = ref(false); // tag-card 是否显示加载状态
+    const showBulletinLoading = ref(false); // tag-card 是否显示加载状态
 
     // 热门文章
     const rankingList = reactive([]);
@@ -122,7 +110,6 @@ export default defineComponent({
       },
     })
       .then((data) => {
-        // console.log(data);
         for (let name of data.tags)
           hotTags.splice(hotTags.length, 0, {
             name,
@@ -134,11 +121,43 @@ export default defineComponent({
         msg.error('获取热门标签数据失败', { duration: 2000, closable: true });
       });
 
+    // 公告牌
+    const bulletinData = reactive([]);
+
+    // 活动牌
+    const activityData = reactive([]);
+    // 获取公告牌数据
+    getNotices({
+      beforeRequest() {
+        showBulletinLoading.value = true;
+      },
+      afterResopnse() {
+        showBulletinLoading.value = false;
+      },
+    })
+      .then((data) => {
+        // 0为网站通知，1为网站活动
+        for (let bulletin of data.notices) {
+          if (bulletin.type == 0) {
+            bulletinData.splice(bulletinData.length, 0, { text: bulletin.content, href: bulletin.link });
+          } else {
+            activityData.splice(activityData.length, 0, { image: bulletin.content, href: bulletin.link });
+          }
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        msg.error('获取公告牌失败', { duration: 2000, closable: true });
+      });
+
     return {
       showRankCardLoading,
       showTagCardLoading,
+      showBulletinLoading,
       hotTags,
       rankingList,
+      bulletinData,
+      activityData,
       getArticlesLists,
     };
   },

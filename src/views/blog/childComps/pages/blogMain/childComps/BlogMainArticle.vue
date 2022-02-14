@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-29 17:08:41
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-27 21:11:19
+ * @LastEditTime: 2022-02-14 13:43:13
 -->
 
 <template>
@@ -21,7 +21,8 @@
       <div class="image">
         <base-image
           class="image-inner"
-          :src="item.cover_image"
+          :src="item.cover_image ? item.cover_image :'/article/defaultCoverImage.jpg'"
+          :loadError="'/article/defaultCoverImage.jpg'"
           :loading="2"
         />
       </div>
