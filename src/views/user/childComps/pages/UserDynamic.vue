@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-15 16:09:20
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-15 18:09:36
 -->
 <template>
   <div
@@ -20,7 +20,7 @@
         <v-md-preview :text="item.content" />
       </div>
 
-      <div>{{getDate(item.time)}}</div>
+      <div>{{dateGetText(new Date(item.time),null,'YY-mm-dd')}}</div>
     </div>
 
     <div
@@ -76,7 +76,6 @@ export default defineComponent({
         .then((data) => {
           loading.value = data.dynamic.length === limit;
           dynamicData.splice(dynamicData.length, 0, ...data.dynamic);
-          console.log(dynamicData);
         })
         .catch((error) => {
           console.log(error);
@@ -96,19 +95,7 @@ export default defineComponent({
       getData();
     }
 
-    /**
-     * @description: 改变日期格式
-     * @param {String} date 日期
-     * @return {String} 返回时间差状态文字描述
-     * @author: Z_Y_C
-     */
-
-    function getDate(date) {
-      date = new Date(date);
-      return dateGetText(date, 3110400000, 'YY-mm-dd');
-    }
-
-    return { dynamicData, ...mapState('user', ['privacySetting']), isSelf, add, loading, getDate };
+    return { dynamicData, ...mapState('user', ['privacySetting']), isSelf, add, loading, dateGetText };
   },
 });
 </script>

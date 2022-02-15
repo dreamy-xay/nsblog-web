@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-25 13:17:52
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 22:41:30
+ * @LastEditTime: 2022-02-15 18:43:35
 -->
 <template>
   <div
@@ -41,7 +41,7 @@
             role="button"
             @click="clickButton(2,index)"
           >{{item.nickname}}</div>
-          <div class="time">{{getDate(item.upload_time)}}</div>
+          <div class="time">{{dateFormat('YY-mm-dd',new Date(item.upload_time))}}</div>
         </div>
       </div>
     </div>
@@ -86,19 +86,7 @@ export default defineComponent({
       else router.push('/user/' + props.resourceData[index].username);
     }
 
-    /**
-     * @description: 改变日期格式
-     * @param {String} date 日期
-     * @return {String} 返回日期格式 `YY-mm-dd`
-     * @author: Z_Y_C
-     */
-
-    function getDate(date) {
-      date = new Date(date);
-      return dateFormat('YY-mm-dd', date);
-    }
-
-    return { clickButton, getDate };
+    return { clickButton, dateFormat };
   },
 });
 </script>
