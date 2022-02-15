@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2022-01-19 22:18:34
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-15 16:34:07
+ * @LastEditTime: 2022-02-15 19:55:31
 -->
 <template>
   <n-modal
@@ -45,6 +45,8 @@
           v-model.trim="textarea"
           type="textarea"
           maxlength="128"
+          :show-word-limit="true"
+          :clearable="true"
           :rows="4"
         />
 
