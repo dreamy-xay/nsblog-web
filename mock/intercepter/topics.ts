@@ -4,21 +4,18 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-23 12:31:32
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-29 21:23:02
+ * @LastEditTime: 2022-02-15 21:04:43
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { print, verifyToken, getToken } from './util';
+import { print, verifyToken, getToken, getTopics, getTags } from './util';
 
 export default function(baseUrl: string, app: Application) {
   // 获取专题名
   app.get(baseUrl + '/topics', (req: Request, res: Response) => {
     print('get topics');
 
-    const topics: string[] = [];
-    const sum: number = Random.integer(8, 21);
-    for (let i: number = 0; i < sum; ++i) topics.push(Random.integer(0, 1) ? Random.word(5, 9) : Random.cword(2, 6));
-    return res.json({ topics });
+    return res.json({ topics: getTopics() });
   });
 
   // 获取专题标签名
@@ -27,10 +24,7 @@ export default function(baseUrl: string, app: Application) {
 
     print('get topic tags', { topic_name });
 
-    const tags: string[] = [];
-    const sum: number = Random.integer(1, 40);
-    for (let i: number = 0; i < sum; ++i) tags.push(Random.integer(0, 1) ? Random.word(5, 9) : Random.cword(2, 6));
-    return res.json({ tags });
+    return res.json({ tags: getTags(topic_name as string) });
   });
 
   // 获取专题标签详情信息

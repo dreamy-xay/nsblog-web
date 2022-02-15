@@ -4,11 +4,11 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-12 11:31:39
+ * @LastEditTime: 2022-02-15 21:10:45
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { int, print, verifyToken, getToken, RandomUser, randomUsers } from './util';
+import { int, print, verifyToken, getToken, RandomUser, randomUsers, getRandomTopic, getRandomTag } from './util';
 import select from '../data/index';
 
 export default function(baseUrl: string, app: Application) {
@@ -50,7 +50,7 @@ export default function(baseUrl: string, app: Application) {
         let data: Record<string, unknown> = {};
         if (!username) {
           data = {
-            topic: topic_name ? topic_name : Random.integer(0, 1) ? Random.word(2, 8) : Random.cword(2, 5),
+            topic: topic_name ? topic_name : getRandomTopic(),
             cover_image: [
               'https://s3.bmp.ovh/imgs/2021/09/fd25f71e808f3f23.jpg',
               null,
@@ -69,7 +69,7 @@ export default function(baseUrl: string, app: Application) {
           id: Random.increment(Random.integer(1, 10)),
           title: Random.integer(0, 1) ? Random.title(3, 100) : Random.ctitle(3, 50),
           content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
-          topic_tag: tag_name ? tag_name : Random.integer(0, 1) ? Random.word(2, 8) : Random.cword(2, 5),
+          topic_tag: tag_name ? tag_name : getRandomTag(),
           page_view: Random.integer(0, 300),
           comment_count: Random.integer(0, 200),
           recommend_count: Random.integer(0, 900),
@@ -103,7 +103,7 @@ export default function(baseUrl: string, app: Application) {
     return res.json({ categories: getRandom(Random.integer(0, 40)) });
   });
 
-  // 获取用户文章所有分类
+  // 获取用户文章所有标签
   app.get(baseUrl + '/articles/tags', (req: Request, res: Response) => {
     const { username } = req.query;
     if (!select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
@@ -308,7 +308,7 @@ export default function(baseUrl: string, app: Application) {
       page_view: Random.integer(0, 1000),
       comment_count: Random.integer(0, 1000),
       recommend_count: Random.integer(0, 1000),
-      topic_tag: Random.integer(0, 1) ? Random.word() : Random.cword(),
+      topic_tag: getRandomTag(),
       categories: getRandom(Random.integer(0, 2)),
       tags: getRandom(Random.integer(0, 3)),
       content: Random.integer(0, 3)
