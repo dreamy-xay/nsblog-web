@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-15 15:41:38
+ * @LastEditTime: 2022-02-15 16:41:02
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -137,6 +137,35 @@ export default function(baseUrl: string, app: Application) {
     const { title, content, deadline } = req.body;
 
     print('release solicitations', { username, title, content, deadline });
+
+    return res.send();
+  });
+
+  // 接取征集令
+  app.post(baseUrl + '/groups/solicitations/users', (req: Request, res: Response) => {
+    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
+    const username: string = getToken(req.headers).username;
+
+    const { solicitations_id } = req.body;
+
+    print('the user receives the solicitations', { username, solicitations_id });
+
+    const user: Record<string, unknown> = select('users').findOne({ username });
+
+    return res.json({
+      nickname: user.username,
+      avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username as string)
+    });
+  });
+
+  // 取消接取征集令
+  app.delete(baseUrl + '/groups/solicitations/users', (req: Request, res: Response) => {
+    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
+    const username: string = getToken(req.headers).username;
+
+    const { solicitations_id } = req.body;
+
+    print('the user cancelled the solicitations', { username, solicitations_id });
 
     return res.send();
   });

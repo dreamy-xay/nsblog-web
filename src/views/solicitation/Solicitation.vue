@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-15 12:27:49
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-15 14:32:52
+ * @LastEditTime: 2022-02-15 17:12:27
 -->
 <template>
   <base-view
@@ -15,7 +15,10 @@
     bind-class="solicitation"
   >
     <div class="solicitation-inner">
-      <solicitation-left :data="solicitationData" />
+      <solicitation-left
+        :data="solicitationData"
+        @changeSolicitationUsers="changeSolicitationUsers"
+      />
       <solicitation-right
         :data="solicitationData"
         @changeAttention="changeAttention"
@@ -92,9 +95,27 @@ export default defineComponent({
       solicitationData.attention = attention;
     }
 
+    /**
+     * @description: 接收征集令
+     * @param {boolean} isReceive 是否接收 `必传参数`
+     * @param {{username: string, nickname: string, avatar: string, status: number} | string} userData 用户数据 `必传参数`
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function changeSolicitationUsers(isReceive, userData) {
+      if (isReceive) solicitationData.users.splice(solicitationData.users.length, 0, userData);
+      else
+        solicitationData.users.splice(
+          solicitationData.users.findIndex((user) => user.username === userData),
+          1
+        );
+      // console.log(solicitationData.users);
+    }
+
     return {
       solicitationData,
       changeAttention,
+      changeSolicitationUsers,
     };
   },
 });

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-15 12:39:50
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-15 15:56:01
+ * @LastEditTime: 2022-02-15 17:12:00
 -->
 <template>
   <div class="solicitation-left">
@@ -38,6 +38,7 @@
         <div
           class="receive"
           role="button"
+          @click="changeSolicitation"
         >
           <div
             class="icon"
@@ -47,6 +48,12 @@
           </div>
           {{ receive ? '已接令' : '接令' }}
         </div>
+        <base-modal
+          :show="modalShow"
+          content="确认取消接取征集令？（*゜ー゜*）"
+          @confirm="modalClick(true)"
+          @cancel="modalClick(false)"
+        />
         <base-qr-code-popover
           title="扫一扫，分享令牌"
           :value="url"
@@ -74,9 +81,14 @@
         >
           举报
         </div>
-        <base-report v-model:show="reportShow" />
+        <base-report
+          v-model:show="reportShow"
+          :id="data.id"
+          :type="4"
+        />
       </div>
     </div>
+    <solicitation-user :users="data.users" />
   </div>
 </template>
 
@@ -85,11 +97,18 @@ import { computed, defineComponent, ref } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import BaseQrCodePopover from '@/components/content/baseQrCodePopover/BaseQrCodePopover.vue';
 import BaseReport from '@/components/common/baseReport/BaseReport.vue';
+import BaseModal from '@/components/content/baseModal/BaseModal.vue';
+import SolicitationUser from '@/views/solicitation/childComps/solicitationLeft/childComps/SolicitationUser.vue';
 import { dateGetText, dateFormat } from '@/util/date';
 import { mapState } from '@/util/store';
+import { receiveSolicitation, cancelSolicitation } from '@/network/api/groups';
+import { useRoute } from 'vue-router';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description: 征集令页面左侧
+ * @param {Object} data 征集令数据 `必传参数`
+ * @event changeSolicitationUsers 修改征集令接收用户状态 (isReceive: boolean, userData: {username: string, nickname: string, avatar: string, status: number} | string) => void
  * @author: dreamy-xay
  */
 
@@ -99,6 +118,8 @@ export default defineComponent({
     BaseAvatar,
     BaseQrCodePopover,
     BaseReport,
+    BaseModal,
+    SolicitationUser,
   },
   props: {
     data: {
@@ -106,7 +127,10 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  setup(props, context) {
+    const msg = useMessage(); // naive-ui message
+    const route = useRoute(); // route
+    const solicitationId = route.params.solicitationId; // 征集令id
     const url = window.location.href;
     const { tokenInfo } = mapState('global', ['tokenInfo']);
 
@@ -128,11 +152,62 @@ export default defineComponent({
       reportShow.value = true;
     }
 
+    const modalShow = ref(false); // 模态框是否显示
+    /**
+     * @description: 用户征集令状态改变
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function changeSolicitation() {
+      if (receive.value)
+        // 取消接取征集令
+        modalShow.value = true;
+      else
+        receiveSolicitation(solicitationId) // 接取征集令
+          .then((data) => {
+            msg.success('接取征集令成功(‾◡◝)');
+            context.emit('changeSolicitationUsers', true, {
+              username: tokenInfo.value.username,
+              status: 0,
+              ...data,
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+            msg.error('接取征集令失败＞︿＜');
+          });
+    }
+
+    /**
+     * @description: 模态框按钮点击
+     * @param {boolean} isConfirm 是否确认 `必传参数`
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function modalClick(isConfirm) {
+      if (isConfirm)
+        cancelSolicitation(solicitationId)
+          .then(() => {
+            msg.success('取消接取征集令成功(‾◡◝)');
+            context.emit('changeSolicitationUsers', false, tokenInfo.value.username);
+          })
+          .catch((error) => {
+            console.log(error);
+            msg.error('取消接取征集令失败＞︿＜');
+          });
+      modalShow.value = false;
+    }
+
     return {
       url,
       receive,
       reportShow,
       reportClick,
+
+      modalShow,
+      changeSolicitation,
+      modalClick,
+
       dateGetText,
       dateFormat,
     };
@@ -152,6 +227,7 @@ export default defineComponent({
     box-shadow: $shadow-0;
     background-color: $grey-0;
     border-radius: $border-radius-0;
+    margin-bottom: 16px;
 
     & > div {
       width: 100%;
