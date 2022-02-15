@@ -1,10 +1,10 @@
 <!--
- * @Description:举报页面
+ * @Description: 举报页面
  * @Version:
  * @Autor: xiao
  * @Date: 2022-01-19 22:18:34
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-15 16:05:11
+ * @LastEditTime: 2022-02-15 19:55:31
 -->
 <template>
   <n-modal
@@ -45,6 +45,8 @@
           v-model.trim="textarea"
           type="textarea"
           maxlength="128"
+          :show-word-limit="true"
+          :clearable="true"
           :rows="4"
         />
 
@@ -72,8 +74,10 @@ import { useMessage } from 'naive-ui';
 import { defineComponent, ref } from 'vue';
 
 /**
- * @description:举报页面
+ * @description: 举报页面
  * @param {Boolean} show 是否显示举报界面 `默认为false`
+ * @param {Number} type 举报类型，(1=>文章，2=>问答，3=>资源，4=>征集令) `必传参数`
+ * @param {String | Number} 举报id `必传参数`
  * @author: xiao
  */
 

@@ -4,11 +4,11 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 20:59:37
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-31 19:30:21
+ * @LastEditTime: 2022-02-15 21:13:40
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { int, print, randomUsers, RandomUser, verifyToken, getToken } from './util';
+import { int, print, randomUsers, RandomUser, verifyToken, getToken, getRandomTag } from './util';
 import select from '../data/index';
 
 export default function(baseUrl: string, app: Application) {
@@ -27,8 +27,7 @@ export default function(baseUrl: string, app: Application) {
         const tags: string[] = [];
         if (!username) {
           const sum: number = Random.integer(1, 3);
-          for (let j: number = 0; j < sum; ++j)
-            tags.push(Random.integer(0, 1) ? Random.word(2, 8) : Random.cword(2, 5));
+          for (let j: number = 0; j < sum; ++j) tags.push(getRandomTag());
         }
         ans.push({
           id: Random.increment(Random.integer(1, 10)),
@@ -74,7 +73,7 @@ export default function(baseUrl: string, app: Application) {
 
     const tags: string[] = [];
     const sum: number = Random.integer(1, 3);
-    for (let j: number = 0; j < sum; ++j) tags.push(Random.integer(0, 1) ? Random.word(2, 8) : Random.cword(2, 5));
+    for (let j: number = 0; j < sum; ++j) tags.push(getRandomTag());
 
     const data: Record<string, unknown> = {
       ...(Random.integer(0, 1) ? { collection: Random.increment(Random.integer(1, 10)) } : {}),

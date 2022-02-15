@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-24 13:14:19
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-11 18:15:27
+ * @LastEditTime: 2022-02-15 21:02:45
  */
 
 import * as fs from 'fs';
@@ -72,6 +72,7 @@ export interface DataBaseOperator {
   modifyOne: (match: Record<string, unknown>, data: Record<string, unknown>) => boolean;
   modifyAll: (match: Record<string, unknown>, data: Record<string, unknown>) => boolean;
   modify: (callback: (item: Record<string, unknown>) => boolean, data: Record<string, unknown>) => boolean;
+  all: () => Record<string, unknown>[];
 }
 
 /**
@@ -216,6 +217,10 @@ class DataBaseOp implements DataBaseOperator {
           if (Object.prototype.hasOwnProperty.call(this.table[i], key)) this.table[i][key] = data[key];
     this.database[this.tableKey] = this.table;
     return writeJson(this.filePath, this.database);
+  }
+
+  public all(): Record<string, unknown>[] {
+    return this.table;
   }
 }
 

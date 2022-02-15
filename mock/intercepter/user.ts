@@ -4,12 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:15:05
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-31 19:34:18
+ * @LastEditTime: 2022-02-15 21:17:15
  */
 import { Random, mock } from 'better-mock';
 import { Application, Request, Response } from 'express';
 import select, { DataBaseOperator } from '../data/index';
-import { print, verifyToken, getToken, int } from './util';
+import { print, verifyToken, getToken, int, getRandomTag } from './util';
 import * as location from '../../src/util/json/location.json';
 
 function randomAddress(): string {
@@ -41,8 +41,7 @@ export default function(baseUrl: string, app: Application) {
         const gender: number = Random.integer(0, 2);
         const tags: string[] = [];
         const sum: number = Random.integer(0, 20);
-        for (let i: number = 0; i < sum; ++i)
-          tags.push(Random.integer(0, 1) ? Random.word(2, 10) : Random.cword(2, 10));
+        for (let i: number = 0; i < sum; ++i) tags.push(getRandomTag());
         return res.json({
           username,
           nickname: user.nickname,
@@ -76,8 +75,7 @@ export default function(baseUrl: string, app: Application) {
         const gender: number = Random.integer(0, 2);
         const tags: string[] = [];
         const sum: number = Random.integer(0, 20);
-        for (let i: number = 0; i < sum; ++i)
-          tags.push(Random.integer(0, 1) ? Random.word(2, 10) : Random.cword(2, 10));
+        for (let i: number = 0; i < sum; ++i) tags.push(getRandomTag());
 
         let articleChartData: Record<string, unknown>[] = mock({
           'list|0-40': [
@@ -348,7 +346,7 @@ export default function(baseUrl: string, app: Application) {
 
     const tags: string[] = [];
     const sum: number = Random.integer(5, 10);
-    for (let i: number = 0; i < sum; ++i) tags.push(Random.integer(0, 1) ? Random.word(5, 9) : Random.cword(2, 6));
+    for (let i: number = 0; i < sum; ++i) tags.push(getRandomTag());
     return res.send({ tags });
   });
 

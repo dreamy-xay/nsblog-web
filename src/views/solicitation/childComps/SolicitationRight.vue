@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-15 12:39:50
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-15 15:37:57
+ * @LastEditTime: 2022-02-15 17:03:15
 -->
 <template>
   <div class="solicitation-right">
@@ -69,6 +69,8 @@ import router from '@/router';
 
 /**
  * @description: 征集令页面右侧
+ * @param {Object} data 征集令数据 `必传参数`
+ * @event changeAttention 修改关注状态 (attention: 0 | 1) => void
  * @author: dreamy-xay
  */
 

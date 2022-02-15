@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-17 20:58:36
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-29 14:20:00
+ * @LastEditTime: 2022-02-15 21:49:11
 -->
 <template>
   <div class="base-topic-bar">
@@ -64,7 +64,10 @@
             {{ topic }}
           </div>
         </template>
-        <div class="other">
+        <div
+          class="other"
+          v-if="showOther"
+        >
           其他
           <div
             class="topic-button"
@@ -110,6 +113,7 @@ import events from '@/events';
  * @param {String} firstItem 第一项文字 `默认为推荐`
  * @event selectTopic 选择了专题 (topic: string) => void
  * @event selectTag 选择了专题标签 (tag: string) => void
+ * @event selectTopicTag 专题标签都发生了改变 (topic: string, tag: string) => void
  * @emits BaseTopicBar-addTags 更新topic tags (topic_name: string, tags: string[]) => void
  * @author: dreamy-xay
  */
@@ -139,9 +143,16 @@ export default defineComponent({
     // 监听当前路由变化
     watch(
       () => route.query,
-      (args) => {
+      (args, oldArgs) => {
         tagActiveName.value = args.tag;
         updateCurrentTopic();
+
+        const tigger = { topic: false, tag: false }; // 测算谁发生了改变
+        if (oldArgs.topic !== args.topic) tigger.topic = true;
+        if (oldArgs.tag !== args.tag) tigger.tag = true;
+        if (tigger.topic && tigger.tag) context.emit('selectTopicTag', args.topic, args.tag);
+        else if (tigger.topic) context.emit('selectTopic', args.topic);
+        else if (tigger.tag) context.emit('selectTag', args.tag);
       }
     );
 
@@ -161,6 +172,11 @@ export default defineComponent({
       ...(isLogin.value ? ['关注'] : []),
       ...topics.slice(topicActivePage.value * topicsLimit, (topicActivePage.value + 1) * topicsLimit),
     ]);
+
+    // 计算是否显示其他
+    const showOther = computed(() => {
+      return topics.length > topicsLimit;
+    });
 
     /**
      * @description: 更新当前专题状态
@@ -282,6 +298,7 @@ export default defineComponent({
       allTopicTags,
       tagActiveName,
       isLogin,
+      showOther,
       clickTopic,
       tagManageClick,
       getTags,

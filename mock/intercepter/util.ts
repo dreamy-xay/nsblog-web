@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-28 00:28:11
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-24 16:29:20
+ * @LastEditTime: 2022-02-15 21:28:40
  */
 
 import { Base64 } from 'js-base64';
@@ -204,4 +204,66 @@ export interface RandomUser {
   password: string;
   email: string;
   token: string;
+}
+
+/**
+ * @description: 获取随机专题名
+ * @return {string[]} 返回专题列表
+ * @author: dreamy-xay
+ */
+export function getTopics(): string[] {
+  const topics: { topic: string; tags: string[] }[] = select('allTopicTags').all() as {
+    topic: string;
+    tags: string[];
+  }[];
+  const ans: string[] = [];
+  let limit: number = topics.length;
+  while (limit--) {
+    const index: number = Random.integer(0, topics.length - 1);
+    ans.push(topics[index].topic);
+    topics.splice(index, 1);
+  }
+  return ans;
+}
+
+/**
+ * @description: 获取指定专题的标签
+ * @param {string} topicName 专题名 `必传参数`
+ * @return {string[]} 返回标签列表
+ * @author: dreamy-xay
+ */
+export function getTags(topicName: string): string[] {
+  const allTopicTags: { topic: string; tags: string[] }[] = select('allTopicTags').all() as {
+    topic: string;
+    tags: string[];
+  }[];
+  const index: number = allTopicTags.findIndex(item => item.topic === topicName);
+  return index !== -1 ? allTopicTags[index].tags : [];
+}
+
+/**
+ * @description: 获取随机专题
+ * @return {string} 返回专题名
+ * @author: dreamy-xay
+ */
+export function getRandomTopic(): string {
+  const allTopicTags: { topic: string; tags: string[] }[] = select('allTopicTags').all() as {
+    topic: string;
+    tags: string[];
+  }[];
+  return allTopicTags[Random.integer(0, allTopicTags.length - 1)].topic;
+}
+
+/**
+ * @description: 获取随机标签
+ * @return {string} 返回标签名
+ * @author: dreamy-xay
+ */
+export function getRandomTag(): string {
+  const allTopicTags: { topic: string; tags: string[] }[] = select('allTopicTags').all() as {
+    topic: string;
+    tags: string[];
+  }[];
+  const randomTags: string[] = allTopicTags[Random.integer(0, allTopicTags.length - 1)].tags;
+  return randomTags[Random.integer(0, randomTags.length - 1)];
 }

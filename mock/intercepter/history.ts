@@ -4,12 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 10:01:23
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-29 15:22:49
+ * @LastEditTime: 2022-02-15 21:12:47
  */
 
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { print, verifyToken, getToken, randomUsers, RandomUser, int } from './util';
+import { print, verifyToken, getToken, randomUsers, RandomUser, int, getRandomTag } from './util';
 
 export default function(baseUrl: string, app: Application) {
   // 获取历史记录
@@ -31,7 +31,7 @@ export default function(baseUrl: string, app: Application) {
           : {};
         const tagList: string[] = [];
         let cs: number = Random.natural(1, 3);
-        while (cs--) tagList.push(Random.natural(0, 2) ? Random.cword(4, 6) : Random.word(5, 7));
+        while (cs--) tagList.push(getRandomTag());
         const user: RandomUser = RUsers.random();
         ans.push({
           history_id: Random.increment(Random.integer(1, 10)),
