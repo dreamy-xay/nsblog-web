@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-14 13:47:02
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-15 21:30:40
 -->
 <template>
   <base-view
@@ -129,14 +129,26 @@ export default defineComponent({
       type
     ) {
       showButton.value = true;
-      getArticles(username, category, tag, offset, limit, release_time, browsing_count, topic_name, tag_name, type, {
-        beforeRequest() {
-          showContentLoading.value = true;
-        },
-        afterResopnse() {
-          showContentLoading.value = false;
-        },
-      })
+      getArticles(
+        username,
+        category,
+        tag,
+        offset,
+        limit,
+        release_time,
+        browsing_count,
+        ['推荐', '关注'].includes(topic_name) ? null : topic_name,
+        tag_name,
+        type,
+        {
+          beforeRequest() {
+            showContentLoading.value = true;
+          },
+          afterResopnse() {
+            showContentLoading.value = false;
+          },
+        }
+      )
         .then((res) => {
           showButton.value = res.articles.length === limit;
           allArticles.splice(allArticles.length, 0, ...res.articles);

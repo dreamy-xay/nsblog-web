@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-16 10:05:10
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-15 12:53:05
+ * @LastEditTime: 2022-02-15 16:44:00
  */
 
 import { get, post, del, RequestLifeCycle } from '@/network/request';
@@ -165,5 +165,39 @@ export function releaseGroupSolicitation(
       content,
       deadline
     }
+  });
+}
+
+/**
+ * @description: 用户接取征集令
+ * @param {string} solicitation_id 征集令id `必传参数`
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: dreamy-xay
+ */
+export function receiveSolicitation(solicitation_id: string | number, RLC: RequestLifeCycle = {}): Promise<unknown> {
+  return post({
+    url: `/groups/solicitations/users`,
+    data: {
+      solicitation_id
+    },
+    ...RLC
+  });
+}
+
+/**
+ * @description: 用户取消接取征集令
+ * @param {string} solicitation_id 征集令id `必传参数`
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: dreamy-xay
+ */
+export function cancelSolicitation(solicitation_id: string | number, RLC: RequestLifeCycle = {}): Promise<unknown> {
+  return del({
+    url: `/groups/solicitations/users`,
+    data: {
+      solicitation_id
+    },
+    ...RLC
   });
 }

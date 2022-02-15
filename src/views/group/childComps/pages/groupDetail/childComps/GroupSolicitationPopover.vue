@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-29 16:58:20
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-14 19:45:27
+ * @LastEditTime: 2022-02-15 19:51:26
 -->
 <template>
   <n-modal
@@ -85,6 +85,7 @@ import { releaseGroupSolicitation } from '@/network/api/groups';
 
 /**
  * @description: 创发布征集令
+ * @param {Boolean} modelValue model是否显示，支持v-model `默认为false`
  * @author: dreamy-xay
  */
 
