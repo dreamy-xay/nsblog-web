@@ -4,48 +4,47 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-16 14:57:54
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-16 15:49:08
+ * @LastEditTime: 2022-02-15 16:48:05
 -->
 <template>
-  <div class="base-modal">
-    <n-modal
-      :display-directive="displayDirective"
-      :mask-closable="maskClosable"
-      :preset="preset !== 'default' ? preset : undefined"
-      :show="show"
-      @update="$emit($event)"
+  <n-modal
+    class="base-modal"
+    :display-directive="displayDirective"
+    :mask-closable="maskClosable"
+    :preset="preset !== 'default' ? preset : undefined"
+    :show="show"
+    @update="$emit($event)"
+  >
+    <div
+      class="base-modal-inner"
+      v-if="preset === 'default'"
     >
+      <slot name="default-inner"></slot>
       <div
-        class="base-modal-inner"
-        v-if="preset === 'default'"
+        class="base-modal-content"
+        v-if="content"
       >
-        <slot name="default-inner"></slot>
+        {{content}}
+      </div>
+      <div class="base-modal-button">
         <div
-          class="base-modal-content"
-          v-if="content"
+          class="confirm"
+          role="button"
+          @click="$emit('confirm')"
         >
-          {{content}}
+          {{confirmeText}}
         </div>
-        <div class="base-modal-button">
-          <div
-            class="confirm"
-            role="button"
-            @click="$emit('confirm')"
-          >
-            {{confirmeText}}
-          </div>
-          <div
-            class="cancel"
-            role="button"
-            @click="$emit('cancel')"
-          >
-            {{cancelText}}
-          </div>
+        <div
+          class="cancel"
+          role="button"
+          @click="$emit('cancel')"
+        >
+          {{cancelText}}
         </div>
       </div>
-      <slot v-else></slot>
-    </n-modal>
-  </div>
+    </div>
+    <slot v-else></slot>
+  </n-modal>
 </template>
 
 <script>
