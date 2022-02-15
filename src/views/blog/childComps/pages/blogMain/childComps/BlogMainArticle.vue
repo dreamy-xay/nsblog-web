@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-29 17:08:41
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-14 13:43:13
+ * @LastEditTime: 2022-02-15 23:38:10
 -->
 
 <template>
@@ -30,7 +30,7 @@
         <div class="context-top">
           <div class="time">
             <div class="time-icon"><i class="iconfont blog-time"></i></div>
-            <div class="time-text">{{item.release_time}}</div>
+            <div class="time-text">{{dateFormat("YY-mm-dd HH:MM",new Date(item.release_time))}}</div>
           </div>
 
           <div
@@ -74,6 +74,7 @@
 import { defineComponent } from 'vue';
 import BaseImage from '@/components/content/baseImage/BaseImage.vue';
 import router from '@/router';
+import { dateFormat } from '@/util/date';
 
 /**
  * @description:
@@ -110,6 +111,7 @@ export default defineComponent({
     return {
       iconData,
       changePage,
+      dateFormat,
     };
   },
 });

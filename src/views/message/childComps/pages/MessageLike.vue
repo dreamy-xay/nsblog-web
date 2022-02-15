@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:31:44
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-23 13:47:29
+ * @LastEditTime: 2022-02-15 23:44:14
 -->
 <template>
   <el-scrollbar max-height="calc(100vh - 108px)">
@@ -47,7 +47,7 @@
           </div>
 
           <div class="message-like-right-bottom">
-            <span class="message-like-right-bottom-time">{{getDate(item.time)}}</span>
+            <span class="message-like-right-bottom-time">{{dateFormat('Y年m月d日 HH:MM', Date(item.time))}}</span>
 
             <div
               class="message-like-right-bottom-delete"
@@ -100,18 +100,6 @@ export default defineComponent({
 
     // 进入计数清空
     updateMessageCount({ type: 3, count: 0 });
-
-    /**
-     * @description: 改变日期格式
-     * @param {String} date 日期
-     * @return {String} 返回日期格式 `Y年m月d日 HH:MM`
-     * @author: Z_Y_C
-     */
-
-    function getDate(date) {
-      date = new Date(date);
-      return dateFormat('Y年m月d日 HH:MM', date);
-    }
 
     /**
      * @description: element-ui无限滚动自动获取数据
@@ -202,8 +190,8 @@ export default defineComponent({
       likeData,
       changePages,
       deleteItem,
-      getDate,
       getMessagesList,
+      dateFormat,
     };
   },
 });
