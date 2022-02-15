@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-15 21:30:40
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-15 22:29:20
 -->
 <template>
   <base-view
@@ -14,6 +14,7 @@
     :footer="true"
     :back-top="true"
     bind-class="home"
+    ref="view"
   >
     <template #top-bar-bottom>
       <base-topic-bar
@@ -92,6 +93,7 @@ export default defineComponent({
     const typeIndex = ref(0); // 获取信息类型
     const showButton = ref(false); // 显示加载更多按钮\
     const showContentLoading = ref(false); // 是否显示加载内容过渡
+    const view = ref(null); // base-view
 
     const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
 
@@ -128,7 +130,6 @@ export default defineComponent({
       tag_name,
       type
     ) {
-      showButton.value = true;
       getArticles(
         username,
         category,
@@ -150,11 +151,14 @@ export default defineComponent({
         }
       )
         .then((res) => {
+          if (view.value) view.value.setScrollTop(true);
           showButton.value = res.articles.length === limit;
           allArticles.splice(allArticles.length, 0, ...res.articles);
+          showButton.value = true;
         })
         .catch((error) => {
-          console.log('initArticlesHomeError: ' + error);
+          console.log(error);
+          msg.error('获取文章信息失败');
         });
     }
 
@@ -315,6 +319,7 @@ export default defineComponent({
       changeTime,
       showButton,
       showContentLoading,
+      view,
     };
   },
 });
