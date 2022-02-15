@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: xiao
  * @Date: 2022-01-14 18:52:17
- * @LastEditors: xiao
- * @LastEditTime: 2022-02-14 16:33:00
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-15 23:26:52
 -->
 <template>
   <div class="group-list">
@@ -24,17 +24,19 @@
             <div
               class="join"
               role="button"
-              @click="joinGroup(group)"
+              @click="joinGroup(index)"
               v-show="group.join===0"
             >
-              <i class="iconfont blog-daochu1024-29"></i>
+              <div class="icon">
+                <i class="iconfont blog-daochu1024-29"></i>
+              </div>
               加入
             </div>
             <div
               v-show="group.join===1"
               class="join"
               role="button"
-              @click="showExit(group)"
+              @click="showExit(index)"
             >
               已加入
             </div>
@@ -57,7 +59,9 @@
               </base-tag>
             </div>
             <div class="member-count">
-              <i class="iconfont blog-xiaozu1"></i>
+              <div class="icon">
+                <i class="iconfont blog-xiaozu1"></i>
+              </div>
               {{group.member_count}}
             </div>
           </div>
@@ -66,7 +70,7 @@
       </div>
       <base-content-loading
         v-show="showContentLoading"
-        :style="{padding: '16px 0'}"
+        :style="{paddingTop: studyGroups.length ? '16px':'0'}"
       />
     </div>
     <div
@@ -89,12 +93,13 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
-import { useMessage } from 'naive-ui';
-import { addGroup, deleteGroup } from '@/network/api/groups';
 import { useRouter } from 'vue-router';
 import styles from '@/assets/style/define.scss';
 import BaseTag from '@/components/content/baseTag/BaseTag.vue';
 import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
+import { mapGetters } from '@/util/store';
+import { useMessage } from 'naive-ui';
+
 /**
  * @description:学习小组列表
  * @param {Array} studyGroups 学习小组数据
@@ -127,10 +132,11 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    const msg = useMessage(); // naive-ui 组件
+    const msg = useMessage(); // naive-ui 消息组件
     const modalShow = ref(false); //是否显示退出提示
     const selectGroup = ref(-1); //选择的小组下标
     const router = useRouter();
+    const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
 
     /**
      * @description: 加载更多
@@ -143,21 +149,12 @@ export default defineComponent({
 
     /**
      * @description: 加入学习小组
-     * @param {*} index 选择点击的小组
+     * @param {number} index 选择的小组下标
      * @return {void}
      * @author: xiao
      */
-    function joinGroup(group) {
-      //加入学习小组
-      addGroup(group.name)
-        .then(() => {
-          msg.success(`加入学习小组成功`);
-          group.join = 1;
-        })
-        .catch((error) => {
-          console.log(error);
-          msg.error('加入学习小组失败');
-        });
+    function joinGroup(index) {
+      context.emit('changeGroupJoin', index);
     }
 
     /**
@@ -166,17 +163,8 @@ export default defineComponent({
      * @author: xiao
      */
     function exitGroup() {
-      //退出学习小组
-      deleteGroup(props.studyGroups[selectGroup.value].name)
-        .then(() => {
-          msg.success(`退出学习小组成功`);
-          context.emit('changeGroupJoin', selectGroup.value);
-          modalShow.value = false;
-        })
-        .catch((error) => {
-          console.log(error);
-          msg.error('退出学习小组失败');
-        });
+      context.emit('changeGroupJoin', selectGroup.value);
+      modalShow.value = false;
     }
 
     /**
@@ -190,17 +178,15 @@ export default defineComponent({
 
     /**
      * @description: 显示提示框
-     * @param {object} group 选择的小组
+     * @param {number} index 选择的小组下标
      * @return {void}
      * @author: xiao
      */
-    function showExit(group) {
-      for (let index = 0; index < props.studyGroups.length; index++) {
-        if (props.studyGroups[index] == group) {
-          selectGroup.value = index;
-        }
-      }
-      modalShow.value = true;
+    function showExit(index) {
+      if (isLogin.value) {
+        selectGroup.value = index;
+        modalShow.value = true;
+      } else msg.error('请先登录');
     }
 
     /**
@@ -279,18 +265,24 @@ export default defineComponent({
         }
 
         .join {
-          font-size: 14px;
-          color: $grey-7;
-          height: 24px;
-          width: 66px;
+          height: 22px;
+          width: 64px;
+          @include flex(center, center);
           border-radius: $border-radius-1;
           border: 1px solid $grey-7;
-          @include flex(center, center);
+          font-size: 14px;
+          color: $grey-7;
           transition: 0.25s;
-          font-weight: bold;
+          font-weight: normal;
 
-          .iconfont {
-            font-size: 14px;
+          .icon {
+            height: 100%;
+            margin-right: 5px;
+            @include flex(center, center);
+
+            .iconfont {
+              font-size: 12px;
+            }
           }
 
           &:hover {
@@ -333,6 +325,14 @@ export default defineComponent({
           font-size: 14px;
           color: $grey-7;
           margin-left: 24px;
+          @include flex(center, center);
+
+          .icon {
+            line-height: 20px;
+            .iconfont {
+              font-size: 14px;
+            }
+          }
         }
       }
     }

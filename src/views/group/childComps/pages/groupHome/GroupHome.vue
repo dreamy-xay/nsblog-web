@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: xiao
  * @Date: 2022-01-21 19:42:59
- * @LastEditors: xiao
- * @LastEditTime: 2022-02-14 15:27:09
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-15 23:15:09
 -->
 <template>
   <base-view
@@ -43,6 +43,7 @@
           </div>
         </div>
         <base-bulletin
+          :loading="showSolicitationLoading"
           :bulletin-data="solicitationList"
           style="margin-bottom: 16px"
         />
@@ -63,12 +64,14 @@ import BaseView from '@/components/content/baseView/BaseView.vue';
 import BaseTopicBar from '@/components/common/baseTopicBar/BaseTopicBar.vue';
 import GroupList from '@/views/group/childComps/pages/groupHome/childComps/GroupList.vue';
 import GroupPopover from '@/views/group/childComps/pages/groupHome/childComps/GroupPopover.vue';
-import BaseBulletin from '@/components/common/baseBulletin/BaseBulletin';
-import BaseRankCard from '@/components/common/baseRankCard/BaseRankCard';
+import BaseBulletin from '@/components/common/baseBulletin/BaseBulletin.vue';
+import BaseRankCard from '@/components/common/baseRankCard/BaseRankCard.vue';
 import { getGroups, getGroupSolicitations } from '@/network/api/groups';
 import { useMessage } from 'naive-ui';
 import { getGroupsList } from '@/network/api/list';
 import { useRoute } from 'vue-router';
+import { mapGetters } from '@/util/store';
+import { addGroup, deleteGroup } from '@/network/api/groups';
 
 /**
  * @description: 学习小组主页
@@ -98,18 +101,26 @@ export default defineComponent({
     const limit = 10; // 每次加载列表条数
     const showLoading = ref(true); // 是否显示加载按钮
     const showRankCardLoading = ref(false); // rank-card 是否显示加载状态
+    const showSolicitationLoading = ref(false); // 征集令 是否显示加载状态
+
+    const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
 
     //获取征集令
-    getGroupSolicitations('')
+    getGroupSolicitations('', 0, 10, {
+      beforeRequest() {
+        showSolicitationLoading.value = true;
+      },
+      afterResopnse() {
+        showSolicitationLoading.value = false;
+      },
+    })
       .then((data) => {
-        for (let i = 0; i < data.solicitations.length; i++) {
-          let Solicitations = {
-            text: '',
-            href: `grouop/`,
-          };
-          Solicitations.text = data.solicitations[i].title;
-          Solicitations.href += data.solicitations[i].id;
-          solicitationList.push(Solicitations);
+        console.log(data);
+        for (let solicitation of data.solicitations) {
+          solicitationList.splice(solicitationList.length, 0, {
+            text: solicitation.title,
+            href: '/solicitation/' + solicitation.id,
+          });
         }
       })
       .catch((error) => {
@@ -118,7 +129,7 @@ export default defineComponent({
       });
 
     //获取学习小组活跃排行
-    getGroupsList(0, {
+    getGroupsList({
       beforeRequest() {
         showRankCardLoading.value = true;
       },
@@ -127,14 +138,8 @@ export default defineComponent({
       },
     })
       .then((data) => {
-        for (let i = 0; i < data.groups.length; i++) {
-          let rank = {
-            title: '',
-            url: `group/`,
-          };
-          rank.title = data.groups[i];
-          rank.url += data.groups[i];
-          rankingList.push(rank);
+        for (let group of data.groups) {
+          rankingList.splice(rankingList.length, 0, { title: group, url: '/group/' + group });
         }
       })
       .catch((error) => {
@@ -178,7 +183,8 @@ export default defineComponent({
      * @author: xiao
      */
     function createGroup() {
-      isShow.value = !isShow.value;
+      if (isLogin.value) isShow.value = !isShow.value;
+      else msg.error('请先登录');
     }
 
     /**
@@ -189,7 +195,31 @@ export default defineComponent({
      */
     function changeGroupJoin(join) {
       console.log('join', join);
-      groups[join].join = 0;
+      if (isLogin.value)
+        if (!groups[join].join)
+          //加入学习小组
+          addGroup(groups[join].name)
+            .then(() => {
+              msg.success(`加入学习小组成功`);
+              groups[join].join = 1;
+            })
+            .catch((error) => {
+              console.log(error);
+              msg.error('加入学习小组失败');
+            });
+        //退出学习小组
+        else
+          deleteGroup(groups[join].name)
+            .then(() => {
+              groups[join].join = 0;
+
+              msg.success(`退出学习小组成功`);
+            })
+            .catch((error) => {
+              console.log(error);
+              msg.error('退出学习小组失败');
+            });
+      else msg.error('请先登录');
     }
 
     /**
@@ -215,6 +245,7 @@ export default defineComponent({
       showContentLoading,
       showLoading,
       showRankCardLoading,
+      showSolicitationLoading,
     };
   },
 });
