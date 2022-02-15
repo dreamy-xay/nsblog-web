@@ -36,9 +36,8 @@
     >{{type ? '暂无公告哦~':'暂无征集哦~'}}</div>
     <base-content-loading
       v-show="loading"
-      :line="['252px', '252px', '252px', '252px','252px']"
       :style="{width: '252px'}"
-      :space="12"
+      :space="6"
       :skeleton-style="{height: '16px'}"
     />
   </div>

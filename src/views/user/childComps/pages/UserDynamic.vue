@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-12 14:01:53
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-15 16:09:20
 -->
 <template>
   <div
@@ -128,10 +128,10 @@ export default defineComponent({
 
     .markdown {
       width: 763px;
-      :deep(.github-markdown-body) {
+      :deep(.v-md-editor-preview > div) {
         padding: 0;
 
-        p {
+        & > p {
           margin-bottom: 0;
         }
       }

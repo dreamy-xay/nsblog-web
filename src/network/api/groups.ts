@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-16 10:05:10
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-14 19:40:57
+ * @LastEditTime: 2022-02-15 12:53:05
  */
 
 import { get, post, del, RequestLifeCycle } from '@/network/request';
@@ -125,6 +125,20 @@ export function getGroupSolicitations(
       offset,
       limit
     }
+  });
+}
+
+/**
+ * @description: 获取征集令详细信息
+ * @param {string} solicitation_id 征集令id `必传参数`
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: dreamy-xay
+ */
+export function getSolicitationInfo(solicitation_id: string | number, RLC: RequestLifeCycle = {}): Promise<unknown> {
+  return get({
+    url: `/groups/solicitations/${solicitation_id}`,
+    ...RLC
   });
 }
 
