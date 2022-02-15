@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-12 15:52:17
+ * @LastEditTime: 2022-02-15 18:29:00
 -->
 <template>
   <div
@@ -157,6 +157,7 @@ export default defineComponent({
           addGroup(groupData[index].name)
             .then(() => {
               groupData[index].join = 1;
+              msg.success('加入学习小组成功');
             })
             .catch((error) => {
               console.log(error);
@@ -243,28 +244,26 @@ export default defineComponent({
       }
 
       .join-box {
-        height: 24px;
-        width: 66px;
+        height: 22px;
+        width: 64px;
         @include flex(center, center);
         border-radius: $border-radius-1;
         border: 1px solid $grey-7;
         font-size: 14px;
         color: $grey-7;
         transition: 0.25s;
-        font-weight: bold;
 
         .join {
           height: 100%;
-          @include flex(center, space-between);
+          @include flex(center, center);
 
           .icon {
-            width: 10px;
             height: 100%;
-            margin-right: 4px;
+            margin-right: 5px;
             @include flex(center, center);
 
             .iconfont {
-              font-size: 14px;
+              font-size: 12px;
             }
           }
         }

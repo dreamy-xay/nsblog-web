@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2022-01-23 15:06:03
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-14 14:41:48
+ * @LastEditTime: 2022-02-15 21:02:51
 -->
 <template>
   <div class="article-item">
@@ -21,7 +21,7 @@
             @click="toUserHome(item.username)"
           >{{item.nickname}}</div>
           <div class="article-item-body-top-line"></div>
-          <div class="time">{{getDate(item.release_time)}}</div>
+          <div class="time">{{dateGetText(new Date(item.release_time),15552000)}}</div>
           <div class="article-item-body-top-line"></div>
           <div
             class="topic"
@@ -218,18 +218,6 @@ export default defineComponent({
     }
 
     /**
-     * @description: 改变日期格式
-     * @param {String} date 日期
-     * @return {String} 返回时间差状态文字描述
-     * @author: Z_Y_C
-     */
-
-    function getDate(date) {
-      date = new Date(date);
-      return dateGetText(date, 3110400000, 'YY-mm-dd');
-    }
-
-    /**
      * @description: 跳转评论
      * @param {number} id 文章id
      * @return {void}
@@ -244,9 +232,9 @@ export default defineComponent({
       toUserHome,
       clickLike,
       clickTag,
-      getDate,
       clickTopic,
       toComment,
+      dateGetText,
     };
   },
 });
