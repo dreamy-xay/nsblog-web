@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:34:31
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-15 20:36:47
+ * @LastEditTime: 2022-02-15 23:46:32
 -->
 <template>
   <el-scrollbar max-height="calc(100vh - 108px)">
@@ -25,7 +25,7 @@
         </div>
 
         <div class="message-system-bottom">
-          <span class="message-system-bottom-time">{{getDate(item.time)}}</span>
+          <span class="message-system-bottom-time">{{dateFormat('Y年m月d日 HH:MM',new Date(item.time))}}</span>
           <i
             class="iconfont blog-shanchu message-system-bottom-iconfont"
             @click="deleteItem(index)"
@@ -90,18 +90,6 @@ export default defineComponent({
     }
 
     /**
-     * @description: 改变日期格式
-     * @param {String} date 日期
-     * @return {String} 返回日期格式 `Y年m月d日 HH:MM`
-     * @author: Z_Y_C
-     */
-
-    function getDate(date) {
-      date = new Date(date);
-      return dateFormat('Y年m月d日 HH:MM', date);
-    }
-
-    /**
      * @description: 得到删除消息索引
      * @param {Number} index 该消息索引
      * @return {void}
@@ -128,7 +116,6 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function getSelfMessage(limit = 1) {
-      console.log('----------------------------------------------');
       updateMessageCount({ type: 1, count: 0 });
       getMessages(1, 0, limit)
         .then((data) => {
@@ -159,7 +146,7 @@ export default defineComponent({
     return {
       systemData,
       getMessagesList,
-      getDate,
+      dateFormat,
       deleteItem,
     };
   },

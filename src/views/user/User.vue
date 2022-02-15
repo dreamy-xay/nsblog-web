@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:04:40
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-12 14:05:35
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-15 23:53:08
 -->
 <template>
   <base-view
@@ -239,24 +239,26 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function changeAttention(data) {
-      if (data)
-        addAttentions(username)
-          .then(() => {
-            userData.attention = data;
-          })
-          .catch((error) => {
-            console.log(error);
-            msg.error('关注失败');
-          });
-      else
-        deleteAttentions(username)
-          .then(() => {
-            userData.attention = data;
-          })
-          .catch((error) => {
-            console.log(error);
-            msg.error('取消关注失败');
-          });
+      if (isSelf.value !== null)
+        if (data)
+          addAttentions(username)
+            .then(() => {
+              userData.attention = data;
+            })
+            .catch((error) => {
+              console.log(error);
+              msg.error('关注失败');
+            });
+        else
+          deleteAttentions(username)
+            .then(() => {
+              userData.attention = data;
+            })
+            .catch((error) => {
+              console.log(error);
+              msg.error('取消关注失败');
+            });
+      else msg.error('请先登录');
     }
 
     const { changePrivacySetting } = mapMutations('user', ['changePrivacySetting']); //修改隐私设置
