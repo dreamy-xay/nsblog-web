@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-10 13:45:41
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-15 16:09:44
 -->
 <template>
   <div
@@ -75,7 +75,7 @@ export default defineComponent({
   background-color: $grey-0;
   @include word-break;
 
-  :deep(.github-markdown-body) {
+  :deep(.v-md-editor-preview > div) {
     padding: 16px 32px;
   }
 }

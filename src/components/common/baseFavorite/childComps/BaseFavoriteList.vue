@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2021-09-27 18:00:46
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-13 13:29:07
+ * @LastEditTime: 2022-02-15 16:16:30
 -->
 <template>
   <div class="base-favorite-list">
@@ -132,7 +132,7 @@ export default defineComponent({
     function newFavorite() {
       if (favoriteName.value)
         context.emit('newFavorite', favoriteName.value, () => {
-          activeIndex.value = props.favorites.length;
+          activeIndex.value = props.favorites.length - 1;
           favoriteName.value = '';
           msg.success('创建收藏夹成功');
         });
