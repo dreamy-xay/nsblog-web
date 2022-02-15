@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-12 14:24:22
+ * @LastEditTime: 2022-02-16 00:00:51
 -->
 <template>
   <div class="user-article">
@@ -87,7 +87,7 @@ export default defineComponent({
     const releaseTimeSortType = ref(1); //发布时间排序规则
     const browsingCountSortType = ref(0); //访问量排序规则
     const offset = ref(0); //文章起始位置
-    const limit = ref(10); //文章数量
+    const limit = 10; //文章数量
     const route = useRoute(); //路由
     const username = route.params.username; //用户名
     const isShowLoadMore = ref(true); //是否显示`加载更多`按钮
@@ -100,7 +100,7 @@ export default defineComponent({
         categoryId.value,
         tagId.value,
         offset.value,
-        limit.value,
+        limit,
         releaseTimeSortType.value,
         browsingCountSortType.value
       );
@@ -110,7 +110,6 @@ export default defineComponent({
     watch(
       () => sortType.value,
       (newValue) => {
-        limit.value = 10;
         if (newValue === 1) {
           // console.log('发布时间升序');
           releaseTimeSortType.value = 1;
@@ -128,13 +127,15 @@ export default defineComponent({
           releaseTimeSortType.value = 0;
           browsingCountSortType.value = -1;
         }
+        offset.value = 0;
+        articles.splice(0, articles.length);
         //更新文章
         initArticles(
           username,
           categoryId.value,
           tagId.value,
           offset.value,
-          limit.value,
+          limit,
           releaseTimeSortType.value,
           browsingCountSortType.value
         );
@@ -214,7 +215,6 @@ export default defineComponent({
      */
     function handleSelector(type, id) {
       // message.info(`type:${type},id:${id} `);
-      limit.value = 10;
       let flag = true;
       // 判断选择器类型
       if (type) {
@@ -250,7 +250,7 @@ export default defineComponent({
           categoryId.value,
           tagId.value,
           offset.value,
-          limit.value,
+          limit,
           releaseTimeSortType.value,
           browsingCountSortType.value
         );
@@ -280,7 +280,7 @@ export default defineComponent({
         categoryId.value,
         tagId.value,
         offset.value,
-        limit.value,
+        limit,
         releaseTimeSortType.value,
         browsingCountSortType.value
       );
