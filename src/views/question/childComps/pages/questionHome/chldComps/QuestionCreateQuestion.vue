@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2022-01-20 17:15:26
- * @LastEditors: clq
- * @LastEditTime: 2022-02-16 14:23:14
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-16 20:54:10
 -->
 <template>
   <n-modal
@@ -25,7 +25,10 @@
       <div class="question-create-question-body">
         <div class="body-top">
           <base-input
+            :maxlength="128"
+            :show-close="true"
             v-model="title"
+            placeholder="提问标题"
             :style="{width: '100%',height: '36px'}"
           />
         </div>
@@ -220,6 +223,13 @@ export default defineComponent({
           .then(() => {
             msg.success('发布成功');
             closeModel();
+            title.value = '';
+            text.value = '';
+            selectTags.splice(0, selectTags.length);
+            topicIndex.value = 0;
+            topicShowText.value = '请选择';
+            tagShowText.value = '请选择';
+            tagdisable.value = true;
           })
           .catch((error) => {
             console.log(error);
@@ -356,7 +366,7 @@ export default defineComponent({
         @include flex(center);
         width: 664px;
         height: 36px;
-        border-bottom: 1px solid $grey-8;
+        border-bottom: 1px solid rgba($grey-7, 0.1);
         font-size: 14px;
         font-weight: 400;
         text-align: center;

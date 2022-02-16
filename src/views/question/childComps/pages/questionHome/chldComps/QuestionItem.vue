@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2022-01-19 19:21:05
- * @LastEditors: clq
- * @LastEditTime: 2022-01-29 16:11:32
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-16 20:10:42
 -->
 <template>
   <div class="question-item">
@@ -50,7 +50,7 @@
             @click="toUserPage(question.username)"
           >{{question.nickname}}</div>
           <div class="point"></div>
-          <div class="release-time">{{question.release_time}}</div>
+          <div class="release-time">{{dateFormat('YY-mm-dd HH:MM',new Date(question.release_time))}}</div>
         </div>
       </div>
     </div>
@@ -59,7 +59,8 @@
 
 <script>
 import { defineComponent } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
+import { dateFormat } from '@/util/date.ts';
 
 /**
  * @description: 问答条目组件
@@ -77,7 +78,7 @@ export default defineComponent({
     },
   },
   setup() {
-    const route = useRoute(); //route
+    const router = useRouter(); //route
 
     /**
      * @description: 将大于1000的数转化为以k为单位的字符串
@@ -125,7 +126,8 @@ export default defineComponent({
     function toTagPage(tagName) {
       // console.log('tagName: ' + tagName);
       // this.$router.push({ name: 'question', params: { tagName: tagName } });
-      window.open(`/tag/${tagName}`);
+      // window.open(`/tag/${tagName}`);
+      router.push({ name: 'question', query: { topic: '', tag: tagName } });
     }
 
     return {
@@ -133,6 +135,7 @@ export default defineComponent({
       toResourceDetailPage,
       toUserPage,
       toTagPage,
+      dateFormat,
     };
   },
 });
@@ -268,11 +271,13 @@ export default defineComponent({
         height: inherit;
 
         .tag {
+          max-width: 100px;
+          @include ellipsis(1);
           box-sizing: border-box;
           height: inherit;
           margin-right: 8px;
           padding: 3px 8px;
-          background: rgba(133, 232, 199, 0.3);
+          background: rgba($green-0, 0.3);
           border-radius: 4px;
           font-size: 14px;
           font-weight: 400;
@@ -281,7 +286,7 @@ export default defineComponent({
 
           &:hover {
             color: $green-2;
-            background-color: rgba(133, 232, 199, 0.7);
+            background-color: rgba($green-0, 0.7);
           }
         }
       }
@@ -304,8 +309,8 @@ export default defineComponent({
         }
 
         .point {
-          height: 3px;
-          width: 3px;
+          height: 2px;
+          width: 2px;
           margin: 0px 6px;
           background: $grey-7;
           border: 1px solid $grey-8;
