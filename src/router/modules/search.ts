@@ -40,7 +40,7 @@ const searchRouter: RouteRecordRaw = {
       meta: {
         title: '用户'
       },
-      component: () => import('@/views/search/childComps/pages/SearchPageUser.vue')
+      component: () => import('@/views/search/childComps/pages/searchPageUser/SearchPageUser.vue')
     },
     {
       path: 'comprehensive',
@@ -56,7 +56,7 @@ const searchRouter: RouteRecordRaw = {
       meta: {
         title: '文章'
       },
-      component: () => import('@/views/search/childComps/pages/SearchPageArticle.vue')
+      component: () => import('@/views/search/childComps/pages/searchPageArticle/SearchPageArticle.vue')
     },
     {
       path: 'question',
@@ -64,7 +64,7 @@ const searchRouter: RouteRecordRaw = {
       meta: {
         title: '问答'
       },
-      component: () => import('@/views/search/childComps/pages/SearchPageQuestion.vue')
+      component: () => import('@/views/search/childComps/pages/searchPageQuestion/SearchPageQuestion.vue')
     },
     {
       path: 'group',

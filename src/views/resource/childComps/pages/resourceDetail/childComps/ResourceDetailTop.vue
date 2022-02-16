@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2022-01-24 21:42:19
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-15 18:45:00
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-16 13:05:36
 -->
 <template>
   <div class="resource-detail-top">
@@ -297,9 +297,11 @@ export default defineComponent({
     font-size: 14px;
     color: $grey-7;
     @include flex(center, space-between);
-    transition: 0.25s;
 
     .bottom-button {
+      transition: 0.25s;
+      color: $grey-7;
+
       &:hover {
         color: $red-2;
       }

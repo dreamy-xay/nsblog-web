@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-15 22:29:20
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-16 12:01:39
 -->
 <template>
   <base-view
@@ -20,12 +20,10 @@
       <base-topic-bar
         @selectTag="selectTag"
         @selectTopic="selectTopic"
+        @selectTopicTag="selectTopicTag"
       />
     </template>
-    <base-topic-tags
-      @selectTag="selectTag"
-      @selectTopic="selectTopic"
-    />
+    <base-topic-tags />
     <div class="home-container">
       <div class="left">
         <home-left
@@ -41,7 +39,7 @@
           class="button"
           role="button"
           v-show="showButton && !showContentLoading"
-          @click="uploadMore()"
+          @click="uploadMore(false)"
         >加载更多...</div>
 
       </div>
@@ -64,7 +62,6 @@ import { useMessage } from 'naive-ui';
 import { mapGetters } from '@/util/store';
 import { getArticles } from '@/network/api/articles';
 import { modifyArticleRecommendEvaluation } from '@/network/api/articles';
-import { useRoute, useRouter } from 'vue-router';
 
 /**
  * @description: 博客主页
@@ -81,8 +78,6 @@ export default defineComponent({
     HomeRight,
   },
   setup() {
-    const route = useRoute();
-    const router = useRouter();
     const topicSelect = ref('推荐'); // 记录当前专题
     const tagSelect = ref(''); // 记录当前标签
     const msg = useMessage(); // 'naive-ui';
@@ -91,56 +86,31 @@ export default defineComponent({
     const allArticles = reactive([]); // 记录数据
     const limit = 7; // 获取信息长度
     const typeIndex = ref(0); // 获取信息类型
-    const showButton = ref(false); // 显示加载更多按钮\
-    const showContentLoading = ref(false); // 是否显示加载内容过渡
+    const showButton = ref(false); // 显示加载更多按钮
+    const showContentLoading = ref(true); // 是否显示加载内容过渡
     const view = ref(null); // base-view
 
     const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
 
-    if (!route.query.topic) topicSelect.value = route.query.topic;
-    if (!route.query.tag) tagSelect.value = route.query.tag;
-
-    // 获取初始数据
-    initArticlesHome('', '', '', 0, limit, 0, 0, topicSelect.value, tagSelect.value, typeIndex.value);
-
     /**
-     * @description: 获取数据
-     * @param {string} username 用户名
-     * @param {string} category 过滤分类名
-     * @param {string} tag 过滤标签名
-     * @param {number} offset 起始位置
-     * @param {number} limit 限制条数
-     * @param {1 | -1 | 0} release_time 按发布时间排序，为 0 表示不排序
-     * @param {1 | -1 | 0} browsing_count 按浏览量排序，为 0 表示不排序
-     * @param {string } topic_name 文章专题
-     * @param {string} tag_name 文章标签
-     * @param {0 | 1 | 2|3|4|5} type 热门排序类型
+     * @description: 加载更多数据
+     * @param {boolean} topTop 是否回顶部 `默认为true`
      * @return {void}
      * @author: Z_Y_C
      */
-    function initArticlesHome(
-      username,
-      category,
-      tag,
-      offset,
-      limit,
-      release_time,
-      browsing_count,
-      topic_name,
-      tag_name,
-      type
-    ) {
+    function uploadMore(topTop = true) {
+      if (view.value && topTop) view.value.setScrollTop(true);
       getArticles(
-        username,
-        category,
-        tag,
-        offset,
+        '',
+        '',
+        '',
+        allArticles.length,
         limit,
-        release_time,
-        browsing_count,
-        ['推荐', '关注'].includes(topic_name) ? null : topic_name,
-        tag_name,
-        type,
+        0,
+        0,
+        ['推荐', '关注'].includes(topicSelect.value) ? '' : topicSelect.value,
+        tagSelect.value,
+        typeIndex.value,
         {
           beforeRequest() {
             showContentLoading.value = true;
@@ -151,7 +121,6 @@ export default defineComponent({
         }
       )
         .then((res) => {
-          if (view.value) view.value.setScrollTop(true);
           showButton.value = res.articles.length === limit;
           allArticles.splice(allArticles.length, 0, ...res.articles);
           showButton.value = true;
@@ -160,26 +129,6 @@ export default defineComponent({
           console.log(error);
           msg.error('获取文章信息失败');
         });
-    }
-
-    /**
-     * @description: 加载更多数据
-     * @return {void}
-     * @author: Z_Y_C
-     */
-    function uploadMore() {
-      initArticlesHome(
-        '',
-        '',
-        '',
-        allArticles.length,
-        limit,
-        0,
-        0,
-        topicSelect.value,
-        tagSelect.value,
-        typeIndex.value
-      );
     }
 
     /**
@@ -215,18 +164,7 @@ export default defineComponent({
       tagSelect.value = '';
       topicSelect.value = topic;
       allArticles.splice(0, allArticles.length);
-      initArticlesHome(
-        '',
-        '',
-        '',
-        allArticles.length,
-        limit,
-        0,
-        0,
-        topicSelect.value,
-        tagSelect.value,
-        typeIndex.value
-      );
+      uploadMore();
     }
 
     /**
@@ -237,20 +175,22 @@ export default defineComponent({
      */
     function selectTag(tag) {
       tagSelect.value = tag;
-      topicSelect.value = '';
       allArticles.splice(0, allArticles.length);
-      initArticlesHome(
-        '',
-        '',
-        '',
-        allArticles.length,
-        limit,
-        0,
-        0,
-        topicSelect.value,
-        tagSelect.value,
-        typeIndex.value
-      );
+      uploadMore();
+    }
+
+    /**
+     * @description: 选择专题标签
+     * @param {string} topic 专题名 `必传参数`
+     * @param {string} tag 标签名 `必传参数`
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function selectTopicTag(topic, tag) {
+      tagSelect.value = tag;
+      topicSelect.value = topic;
+      allArticles.splice(0, allArticles.length);
+      uploadMore();
     }
 
     /**
@@ -264,18 +204,7 @@ export default defineComponent({
         listIndex.value = e.index;
         allArticles.splice(0, allArticles.length);
         typeIndex.value = listIndex.value;
-        initArticlesHome(
-          '',
-          '',
-          '',
-          allArticles.length,
-          limit,
-          0,
-          0,
-          topicSelect.value,
-          tagSelect.value,
-          typeIndex.value
-        );
+        uploadMore();
       }
     }
 
@@ -290,24 +219,14 @@ export default defineComponent({
         timeIndex.value = e.index;
         allArticles.splice(0, allArticles.length);
         typeIndex.value = timeIndex.value + 2;
-        initArticlesHome(
-          '',
-          '',
-          '',
-          allArticles.length,
-          limit,
-          0,
-          0,
-          topicSelect.value,
-          tagSelect.value,
-          typeIndex.value
-        );
+        uploadMore();
       }
     }
 
     return {
       selectTopic,
       selectTag,
+      selectTopicTag,
       listIndex,
       timeIndex,
       allArticles,

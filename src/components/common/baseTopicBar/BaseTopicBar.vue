@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-17 20:58:36
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-15 21:49:11
+ * @LastEditTime: 2022-02-16 11:54:51
 -->
 <template>
   <div class="base-topic-bar">
@@ -89,7 +89,7 @@
         </div>
       </div>
       <div
-        v-if="details"
+        v-if="details && isLogin"
         class="right"
         role="button"
         @click="tagManageClick"
@@ -145,14 +145,19 @@ export default defineComponent({
       () => route.query,
       (args, oldArgs) => {
         tagActiveName.value = args.tag;
-        updateCurrentTopic();
-
-        const tigger = { topic: false, tag: false }; // 测算谁发生了改变
-        if (oldArgs.topic !== args.topic) tigger.topic = true;
-        if (oldArgs.tag !== args.tag) tigger.tag = true;
-        if (tigger.topic && tigger.tag) context.emit('selectTopicTag', args.topic, args.tag);
-        else if (tigger.topic) context.emit('selectTopic', args.topic);
-        else if (tigger.tag) context.emit('selectTag', args.tag);
+        updateCurrentTopic(() => {
+          // update next
+          const tigger = { topic: false, tag: false }; // 测算谁发生了改变
+          const currentTopic = // 新专题
+            args.topic || (Object.prototype.hasOwnProperty.call(args, 'attention') ? '关注' : props.firstItem);
+          const oldTopic = // 旧专题
+            oldArgs.topic || (Object.prototype.hasOwnProperty.call(oldArgs, 'attention') ? '关注' : props.firstItem);
+          if (currentTopic !== oldTopic) tigger.topic = true;
+          if (args.topic && oldArgs.topic && args.tag !== oldArgs.tag) tigger.tag = true;
+          if (tigger.topic && tigger.tag) context.emit('selectTopicTag', currentTopic, args.tag);
+          else if (tigger.topic) context.emit('selectTopic', currentTopic);
+          else if (tigger.tag) context.emit('selectTag', args.tag);
+        });
       }
     );
 
@@ -160,7 +165,10 @@ export default defineComponent({
     getTopics()
       .then((data) => {
         topics.splice(0, 0, ...data.topics);
-        updateCurrentTopic();
+        updateCurrentTopic(() => {
+          if (route.query.topic && route.query.tag) context.emit('selectTopicTag', route.query.topic, route.query.tag);
+          else context.emit('selectTopic', topicActiveName.value);
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -180,10 +188,15 @@ export default defineComponent({
 
     /**
      * @description: 更新当前专题状态
+     * @param {() => void} next 接下执行函数 `默认为 () => {}`
      * @return {void}
      * @author: dreamy-xay
      */
-    function updateCurrentTopic() {
+    function updateCurrentTopic(
+      next = () => {
+        /* */
+      }
+    ) {
       const currentTopic =
         route.query.topic ||
         (Object.prototype.hasOwnProperty.call(route.query, 'attention') ? 'attention' : props.firstItem);
@@ -191,12 +204,15 @@ export default defineComponent({
       else if (currentTopic === 'attention') topicActiveName.value = '关注';
       else {
         const index = topics.indexOf(currentTopic);
-        if (index == -1) router.replace({ name: route.name });
-        else {
+        if (index == -1) {
+          router.replace({ name: route.name });
+          return;
+        } else {
           topicActiveName.value = currentTopic;
           topicActivePage.value = parseInt(Math.ceil((index + 1) / topicsLimit)) - 1;
         }
       }
+      next();
     }
 
     /**
@@ -207,7 +223,6 @@ export default defineComponent({
      */
     function clickTopic(topic_name) {
       if (topic_name === topicActiveName.value) return;
-      context.emit('selectTopic', topic_name);
       if (topic_name === props.firstItem) router.push({ name: route.name });
       else if (topic_name === '关注')
         router.push({
@@ -231,7 +246,7 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function tagManageClick() {
-      window.open(isLogin.value ? '/userCenter/profile#interest-topics-tags' : '/login/signIn?back', '_self');
+      window.open('/userCenter/profile#interest-topics-tags');
     }
 
     /**
@@ -262,7 +277,6 @@ export default defineComponent({
      */
     function clickTag(topic_name, tag_name) {
       if (tag_name === tagActiveName.value) return;
-      context.emit('selectTag', tag_name);
       router.push({
         name: route.name,
         query: {
