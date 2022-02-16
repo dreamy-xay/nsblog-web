@@ -3,15 +3,17 @@
  * @Version:
  * @Autor: xiao
  * @Date: 2022-01-21 19:42:59
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-15 23:15:09
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-16 13:02:17
 -->
 <template>
   <base-view
     :background="true"
     :top-bar="true"
     :top-bar-scroll="true"
+    :back-top="true"
     :footer="true"
+    ref="view"
     bind-class="group-home"
   >
     <template #top-bar-bottom>
@@ -25,10 +27,10 @@
       <div>
         <group-list
           :study-groups="groups"
-          :showContentLoading="showContentLoading"
-          :showLoading="showLoading"
-          @changeGroupJoin="changeGroupJoin"
-          @updateGroups="updateGroups"
+          :show-content-loading="showContentLoading"
+          :show-loading="showLoading"
+          @change-group-join="changeGroupJoin"
+          @update-groups="updateGroups"
         />
       </div>
       <div class="group-home-right">
@@ -115,7 +117,7 @@ export default defineComponent({
       },
     })
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         for (let solicitation of data.solicitations) {
           solicitationList.splice(solicitationList.length, 0, {
             text: solicitation.title,
@@ -138,15 +140,15 @@ export default defineComponent({
       },
     })
       .then((data) => {
-        for (let group of data.groups) {
+        for (let group of data.groups)
           rankingList.splice(rankingList.length, 0, { title: group, url: '/group/' + group });
-        }
       })
       .catch((error) => {
         console.log(error);
         msg.error('获取小组排行失败');
       });
 
+    const view = ref(null); // baseview视图 ref
     /**
      * @description: 跟新学习小组数据
      * @param {boolean} flag 是否清空原数组
@@ -154,6 +156,10 @@ export default defineComponent({
      * @author: clq
      */
     function updateGroups(flag) {
+      if (flag) {
+        groups.splice(0, groups.length);
+        view.value.setScrollTop(true); // 回顶部
+      }
       // 获取小组
       getGroups(username, topicSelect.value, 0, limit, '', {
         beforeRequest() {
@@ -164,7 +170,6 @@ export default defineComponent({
         },
       })
         .then((data) => {
-          if (flag == true) groups.splice(0, groups.length);
           if (data.groups.length < limit) showLoading.value = false;
           groups.splice(groups.length, 0, ...data.groups);
         })
@@ -174,12 +179,9 @@ export default defineComponent({
         });
     }
 
-    //初始化数据
-    updateGroups(true);
-
     /**
      * @description: 点击创建学习小组
-     * @return {*}
+     * @return {void}
      * @author: xiao
      */
     function createGroup() {
@@ -238,6 +240,7 @@ export default defineComponent({
       isShow,
       groups,
       rankingList,
+      view,
       solicitationList,
       selectTopic,
       updateGroups,
