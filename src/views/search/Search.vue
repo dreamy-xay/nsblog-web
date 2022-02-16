@@ -3,14 +3,15 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: Ban
- * @LastEditTime: 2022-02-15 13:47:56
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-16 16:23:45
 -->
 
 <template>
   <base-view
     :background="true"
     :top-bar="true"
+    :back-top="true"
     :top-bar-scroll="true"
     bind-class="search"
     :footer="true"
@@ -35,22 +36,9 @@
     </template>
     <div class="search-content">
       <div class="search-content-left">
-        <div
-          class="loading"
-          v-if="!loadingState[topicActiveIndex]"
-        >
-          <base-content-loading>
-          </base-content-loading>
-        </div>
-        <router-view
-          v-show="loadingState[topicActiveIndex]"
-          @changeLoadingState="changeLoadingState"
-          @changeActiveIndex="changeActiveIndex"
-          v-slot="{Component}"
-        >
+        <router-view v-slot="{Component}">
           <component :is="Component"></component>
         </router-view>
-
       </div>
       <div class="search-content-right">
         <base-rank-card
@@ -285,6 +273,7 @@ export default defineComponent({
 
     .search-content-left {
       width: 700px;
+      margin-bottom: 6px;
 
       .loading {
         box-sizing: border-box;
