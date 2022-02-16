@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-19 19:21:05
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-16 20:10:42
+ * @LastEditTime: 2022-02-16 22:05:26
 -->
 <template>
   <div class="question-item">
@@ -41,7 +41,7 @@
             :key="tag"
             role="button"
             @click="toTagPage(tag)"
-          >{{tag}}</div>
+          >{{tag.tag_name}}</div>
         </div>
         <div class="bottom-right">
           <div
@@ -101,7 +101,7 @@ export default defineComponent({
      * @author: clq
      */
     function toResourceDetailPage(questionId) {
-      console.log('questionId: ' + questionId);
+      // console.log('questionId: ' + questionId);
       window.open(`/question/${questionId}`);
     }
 
@@ -112,22 +112,28 @@ export default defineComponent({
      * @author: clq
      */
     function toUserPage(username) {
-      console.log('username: ' + username);
+      // console.log('username: ' + username);
       // this.$router.push({ name: 'question', params: { username: username } });
       window.open(`/user/${username}`);
     }
 
     /**
      * @description: 跳转到用户主页
-     * @param {string} tagName
+     * @param {object} tag // topic_name,tag_name
      * @return {void}
      * @author: clq
      */
-    function toTagPage(tagName) {
+    function toTagPage(tag) {
       // console.log('tagName: ' + tagName);
       // this.$router.push({ name: 'question', params: { tagName: tagName } });
       // window.open(`/tag/${tagName}`);
-      router.push({ name: 'question', query: { topic: '', tag: tagName } });
+      router.push({
+        name: 'questionHome',
+        query: {
+          topic: tag.topic_name,
+          tag: tag.tag_name,
+        },
+      });
     }
 
     return {
