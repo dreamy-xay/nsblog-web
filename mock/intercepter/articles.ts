@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-15 21:10:45
+ * @LastEditTime: 2022-02-16 20:58:30
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -69,7 +69,7 @@ export default function(baseUrl: string, app: Application) {
           id: Random.increment(Random.integer(1, 10)),
           title: Random.integer(0, 1) ? Random.title(3, 100) : Random.ctitle(3, 50),
           content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
-          topic_tag: tag_name ? tag_name : getRandomTag(),
+          topic_tag: tag_name ? tag_name : getRandomTag(data.topic as string),
           page_view: Random.integer(0, 300),
           comment_count: Random.integer(0, 200),
           recommend_count: Random.integer(0, 900),
