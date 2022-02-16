@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2022-01-16 18:28:08
- * @LastEditors: clq
- * @LastEditTime: 2022-02-16 14:21:31
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-16 16:04:32
 -->
 <template>
   <base-view
@@ -126,7 +126,7 @@ export default defineComponent({
     updateQuestionsList();
 
     // 初始化热门标签
-    getTagsList({
+    getTagsList(1, {
       beforeRequest() {
         showTagCardLoading.value = true;
       },
