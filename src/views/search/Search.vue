@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-27 19:26:23
+ * @LastEditTime: 2022-02-15 13:47:56
 -->
 
 <template>
@@ -46,7 +46,9 @@
           v-show="loadingState[topicActiveIndex]"
           @changeLoadingState="changeLoadingState"
           @changeActiveIndex="changeActiveIndex"
+          v-slot="{Component}"
         >
+          <component :is="Component"></component>
         </router-view>
 
       </div>
