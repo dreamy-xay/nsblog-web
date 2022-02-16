@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-16 11:35:49
+ * @LastEditTime: 2022-02-16 11:42:28
 -->
 <template>
   <base-view
@@ -119,6 +119,7 @@ export default defineComponent({
       tag_name,
       type
     ) {
+      if (view.value) view.value.setScrollTop(true);
       getArticles(
         username,
         category,
@@ -140,7 +141,6 @@ export default defineComponent({
         }
       )
         .then((res) => {
-          if (view.value) view.value.setScrollTop(true);
           showButton.value = res.articles.length === limit;
           allArticles.splice(allArticles.length, 0, ...res.articles);
           showButton.value = true;
