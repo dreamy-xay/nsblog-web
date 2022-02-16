@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2022-01-27 10:52:36
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-14 14:16:11
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-16 12:10:53
 -->
 <template>
   <div class="tag-button">
@@ -132,8 +132,12 @@ export default defineComponent({
     }
 
     .icon {
+      @include flex(center, center);
+      height: 100%;
+      width: 14px;
       margin-right: 4px;
       color: $green-0;
+
       .iconfont {
         font-size: 14px;
       }
@@ -142,9 +146,8 @@ export default defineComponent({
     .false-text {
       @include flex(center, center);
       width: 28px;
-      height: 19px;
+      height: 100%;
       font-size: 14px;
-      font-weight: 400;
       color: $green-0;
     }
   }
