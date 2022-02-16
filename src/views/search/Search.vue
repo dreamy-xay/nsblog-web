@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: Ban
- * @LastEditTime: 2022-02-15 13:47:56
+ * @LastEditTime: 2022-02-16 16:25:13
 -->
 
 <template>
@@ -35,16 +35,7 @@
     </template>
     <div class="search-content">
       <div class="search-content-left">
-        <div
-          class="loading"
-          v-if="!loadingState[topicActiveIndex]"
-        >
-          <base-content-loading>
-          </base-content-loading>
-        </div>
         <router-view
-          v-show="loadingState[topicActiveIndex]"
-          @changeLoadingState="changeLoadingState"
           @changeActiveIndex="changeActiveIndex"
           v-slot="{Component}"
         >
@@ -55,13 +46,12 @@
       <div class="search-content-right">
         <base-rank-card
           title="热门搜索"
-          :menu-list="['综合', '点赞', '评论']"
-          @clickMenuItem="rankCardClickMenuItem"
           :data="rankingList"
         ></base-rank-card>
         <base-tag-card
           title="相关搜索"
           :tags="hotTags"
+          :hotIcon="false"
         ></base-tag-card>
       </div>
     </div>
@@ -73,7 +63,6 @@ import { defineComponent, reactive, ref, watch } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import router from '@/router';
 import { useRoute } from 'vue-router';
-import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
 import BaseRankCard from '@/components/common/baseRankCard/BaseRankCard.vue';
 import BaseTagCard from '@/components/common/baseTagCard/BaseTagCard.vue';
 
@@ -86,70 +75,14 @@ export default defineComponent({
   name: 'search',
   components: {
     BaseView,
-    BaseContentLoading,
     BaseRankCard,
     BaseTagCard,
   },
   setup() {
-    const loadingState = reactive([false, false, false, false, false, false, false]); // 数据获取状态
     // 热门文章数据
-    const rankingList = reactive([
-      {
-        title: 'react有tab页，如何实现未选中的tab页隐藏但不销毁在JavaScript中一组数据如何进行关联呢',
-        url: '#',
-      },
-      {
-        title: '在JavaScript中一组数据如何进行关联呢',
-        url: '#',
-      },
-      {
-        title: '在JavaScript中一组数据如何进行关联呢',
-        url: '#',
-      },
-      {
-        title: '在JavaScript中一组数据如何进行关联呢',
-        url: '#',
-      },
-      {
-        title: 'react有tab页，如何实现未选中的tab页隐藏但不销毁',
-        url: '#',
-      },
-      {
-        title: '如何给一个html字符串添加锚点',
-        url: '#',
-      },
-    ]);
+    const rankingList = reactive([]);
     // 热门标签
-    const hotTags = reactive([
-      {
-        name: 'Java',
-        url: `/tag/Java`,
-      },
-      {
-        name: 'Python',
-        url: `/tag/Python`,
-      },
-      {
-        name: 'Csharp',
-        url: `/tag/Csharp`,
-      },
-      {
-        name: 'Cpp',
-        url: `/tag/Cpp`,
-      },
-      {
-        name: 'Vscode',
-        url: `/tag/Vscode`,
-      },
-      {
-        name: '自然科学',
-        url: `/tag/自然科学`,
-      },
-      {
-        name: '人工智能',
-        url: `/tag/人工智能`,
-      },
-    ]);
+    const hotTags = reactive([]);
 
     const topics = [
       // 专题列表
@@ -206,22 +139,10 @@ export default defineComponent({
       topicActiveIndex.value = index;
     }
 
-    /**
-     * @description: 改变数据加载状态
-     * @param {Number} index `索引`
-     * @author: Ban
-     */
-    function changeLoadingState(index, state) {
-      loadingState[index] = state;
-      console.log(loadingState[index]);
-    }
-
     return {
       topics,
       topicActiveIndex,
       clickTopic,
-      loadingState,
-      changeLoadingState,
       changeActiveIndex,
       key,
       rankingList,

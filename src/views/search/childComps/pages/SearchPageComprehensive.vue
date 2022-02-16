@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2022-01-25 14:25:23
  * @LastEditors: Ban
- * @LastEditTime: 2022-02-16 13:43:24
+ * @LastEditTime: 2022-02-16 16:10:47
 -->
 <template>
   <div class="search-page-comprehensive">
@@ -36,17 +36,29 @@
           <div class="content">{{ item.content }}</div>
           <div class="bottom">
             <div class="left">
-              <div class="count">
+              <div
+                class="count"
+                role="button"
+              >
                 <span class="iconfont blog-yulan"></span>
                 {{ item.browsing_count }}
               </div>
               <div
                 class="count"
                 :class="item.like ? 'like' : ''"
+                role="button"
+                @click="changeLike(index)"
               >
-                <span class="iconfont blog-dianzan1"></span>{{ item.like_count > 0 ? item.like_count : "点赞"}}
+                <span
+                  class="iconfont"
+                  :class="item.like ? 'blog-dianzan' : 'blog-dianzan1'"
+                ></span>{{ item.like_count > 0 ? item.like_count : "点赞"}}
               </div>
-              <div class="count">
+              <div
+                class="count"
+                role="button"
+                @click="changePages('/article/' + item.id + '#comment')"
+              >
                 <span class="iconfont blog-c-comment"></span>{{ item.reply_count > 0 ? item.reply_count : "评论"}}
               </div>
             </div>
@@ -60,8 +72,16 @@
           </div>
         </div>
       </div>
+      <base-content-loading
+        :style="{padding: '16px', boxSizing: 'border-box'}"
+        v-show="dataState"
+      ></base-content-loading>
     </div>
-    <search-page-to-load-more @onButtonClick="getData"></search-page-to-load-more>
+
+    <search-page-to-load-more
+      @onButtonClick="getData"
+      v-show="!dataState"
+    ></search-page-to-load-more>
   </div>
 </template>
 
@@ -71,6 +91,9 @@ import BaseSelectHead from '@/components/common/baseSelectHead/BaseSelectHead.vu
 import SearchPageToLoadMore from '@/views/search/childComps/SearchPageToLoadMore.vue';
 import { search } from '@/network/api/search';
 import { useRoute } from 'vue-router';
+import { modifyArticleRecommendEvaluation } from '@/network/api/articles';
+import { mapGetters } from '@/util/store';
+import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
 
 /**
  * @description: 搜索页面-综合
@@ -82,24 +105,29 @@ export default defineComponent({
   components: {
     BaseSelectHead,
     SearchPageToLoadMore,
+    BaseContentLoading,
   },
   setup(props, context) {
     const selectTag = ref(0); //选择 0:'综合', 1:'最新', 2:'热门'标签
     const selectTime = ref(0); //选择 0:'时间不限', 1:'最近一天', 2:'最近一周', 3:'最近三月'时间筛选
     const results = reactive([]); // 数据列表
     const route = useRoute(); // route
+    const dataState = ref(false); //是否在获取数据
+
+    const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
 
     /**
      * @description: 获取数据
      * @author: Ban
      */
     function getData() {
+      dataState.value = true;
       search(route.query.keyword, 0, selectTag.value, selectTime.value)
         .then((data) => {
           data.results.forEach((item) => {
             results.push(item);
-            context.emit('changeLoadingState', 0, true);
           });
+          dataState.value = false;
         })
         .catch((error) => {
           console.log(error);
@@ -137,7 +165,7 @@ export default defineComponent({
     watch(
       () => [route.query.keyword, selectTag.value, selectTime.value],
       () => {
-        context.emit('changeLoadingState', 0, false); // 改变数据加载状态
+        dataState.value = true; // 改变数据加载状态
         results.splice(0, results.length); // 清空数组
         getData(); // 重新获取数据
       }
@@ -153,6 +181,28 @@ export default defineComponent({
       window.open(path, path);
     }
 
+    /**
+     * @description: 修改文章评价
+     * @param {number} index 文章索引
+     * @author: Ban
+     */
+
+    function changeLike(index) {
+      if (isLogin.value) {
+        // 修改文章评价类型
+        let like = results[index].like ? 0 : 1;
+        modifyArticleRecommendEvaluation(results[index].id, like)
+          .then(() => {
+            results[index].like = like;
+            if (like) results[index].like_count++;
+            else results[index].like_count--;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    }
+
     return {
       selectTag,
       selectTime,
@@ -161,6 +211,8 @@ export default defineComponent({
       results,
       changePages,
       getData,
+      changeLike,
+      dataState,
     };
   },
 });
@@ -182,9 +234,9 @@ export default defineComponent({
       background: $grey-0;
       transition: 0.2s;
 
-      &:hover {
-        background: $grey-1;
-      }
+      // &:hover {
+      //   background: $grey-1;
+      // }
 
       &:last-child {
         .list {
@@ -204,7 +256,7 @@ export default defineComponent({
           font-weight: 700;
           font-size: 16px;
           color: $grey-10;
-          @include flex();
+          @include flex(center);
 
           .blog-wenti1 {
             display: inline-block;
