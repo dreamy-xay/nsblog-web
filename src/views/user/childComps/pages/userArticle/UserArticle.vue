@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-16 00:00:51
+ * @LastEditTime: 2022-02-16 12:03:59
 -->
 <template>
   <div class="user-article">
@@ -244,6 +244,8 @@ export default defineComponent({
       }
 
       if (flag) {
+        offset.value = 0;
+        articles.splice(0, articles.length);
         //更新文章
         initArticles(
           username,
