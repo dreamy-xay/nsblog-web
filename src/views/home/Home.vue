@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-15 22:29:20
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-16 11:35:49
 -->
 <template>
   <base-view
@@ -20,12 +20,10 @@
       <base-topic-bar
         @selectTag="selectTag"
         @selectTopic="selectTopic"
+        @selectTopicTag="selectTopicTag"
       />
     </template>
-    <base-topic-tags
-      @selectTag="selectTag"
-      @selectTopic="selectTopic"
-    />
+    <base-topic-tags />
     <div class="home-container">
       <div class="left">
         <home-left
@@ -64,7 +62,6 @@ import { useMessage } from 'naive-ui';
 import { mapGetters } from '@/util/store';
 import { getArticles } from '@/network/api/articles';
 import { modifyArticleRecommendEvaluation } from '@/network/api/articles';
-import { useRoute, useRouter } from 'vue-router';
 
 /**
  * @description: 博客主页
@@ -81,8 +78,6 @@ export default defineComponent({
     HomeRight,
   },
   setup() {
-    const route = useRoute();
-    const router = useRouter();
     const topicSelect = ref('推荐'); // 记录当前专题
     const tagSelect = ref(''); // 记录当前标签
     const msg = useMessage(); // 'naive-ui';
@@ -91,17 +86,11 @@ export default defineComponent({
     const allArticles = reactive([]); // 记录数据
     const limit = 7; // 获取信息长度
     const typeIndex = ref(0); // 获取信息类型
-    const showButton = ref(false); // 显示加载更多按钮\
-    const showContentLoading = ref(false); // 是否显示加载内容过渡
+    const showButton = ref(false); // 显示加载更多按钮
+    const showContentLoading = ref(true); // 是否显示加载内容过渡
     const view = ref(null); // base-view
 
     const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
-
-    if (!route.query.topic) topicSelect.value = route.query.topic;
-    if (!route.query.tag) tagSelect.value = route.query.tag;
-
-    // 获取初始数据
-    initArticlesHome('', '', '', 0, limit, 0, 0, topicSelect.value, tagSelect.value, typeIndex.value);
 
     /**
      * @description: 获取数据
@@ -138,7 +127,7 @@ export default defineComponent({
         limit,
         release_time,
         browsing_count,
-        ['推荐', '关注'].includes(topic_name) ? null : topic_name,
+        ['推荐', '关注'].includes(topic_name) ? '' : topic_name,
         tag_name,
         type,
         {
@@ -215,18 +204,7 @@ export default defineComponent({
       tagSelect.value = '';
       topicSelect.value = topic;
       allArticles.splice(0, allArticles.length);
-      initArticlesHome(
-        '',
-        '',
-        '',
-        allArticles.length,
-        limit,
-        0,
-        0,
-        topicSelect.value,
-        tagSelect.value,
-        typeIndex.value
-      );
+      uploadMore();
     }
 
     /**
@@ -237,20 +215,22 @@ export default defineComponent({
      */
     function selectTag(tag) {
       tagSelect.value = tag;
-      topicSelect.value = '';
       allArticles.splice(0, allArticles.length);
-      initArticlesHome(
-        '',
-        '',
-        '',
-        allArticles.length,
-        limit,
-        0,
-        0,
-        topicSelect.value,
-        tagSelect.value,
-        typeIndex.value
-      );
+      uploadMore();
+    }
+
+    /**
+     * @description: 选择专题标签
+     * @param {string} topic 专题名 `必传参数`
+     * @param {string} tag 标签名 `必传参数`
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function selectTopicTag(topic, tag) {
+      tagSelect.value = tag;
+      topicSelect.value = topic;
+      allArticles.splice(0, allArticles.length);
+      uploadMore();
     }
 
     /**
@@ -308,6 +288,7 @@ export default defineComponent({
     return {
       selectTopic,
       selectTag,
+      selectTopicTag,
       listIndex,
       timeIndex,
       allArticles,
