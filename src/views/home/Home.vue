@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-16 12:01:39
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-16 21:47:24
 -->
 <template>
   <base-view
@@ -169,7 +169,7 @@ export default defineComponent({
 
     /**
      * @description: 选择了标签
-     * @param {string} topic 专题名
+     * @param {string} top 标签名
      * @return {void}
      * @author: dreamy-xay
      */
