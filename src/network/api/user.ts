@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:38:31
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-19 16:36:22
+ * @LastEditors: clq
+ * @LastEditTime: 2022-02-16 14:16:38
  */
 import { post, get, put, RequestLifeCycle, del } from '@/network/request';
 import { encrypt } from '@/util/crypto';
@@ -297,5 +297,18 @@ export function changeEmail(email: string, code: string, RLC: RequestLifeCycle =
       email,
       code
     }
+  });
+}
+
+/**
+ * @description: 获取我的问答模块数据
+ * @param {RequestLifeCycle} RLC  请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: clq
+ */
+export function getMyQuestion(RLC: RequestLifeCycle = {}): Promise<unknown> {
+  return get({
+    url: '/users/question',
+    ...RLC
   });
 }
