@@ -172,7 +172,7 @@ export default defineComponent({
         })
         .catch((err) => {
           console.log(err);
-          msg.error('获取关注失败', { duration: 2000, closable: true });
+          msg.error('获取关注失败');
         });
     }
 
@@ -189,7 +189,7 @@ export default defineComponent({
         })
         .catch((err) => {
           console.log(err);
-          msg.error('获取粉丝失败', { duration: 2000, closable: true });
+          msg.error('获取粉丝失败');
         });
     }
 

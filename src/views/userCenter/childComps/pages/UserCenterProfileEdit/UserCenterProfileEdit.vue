@@ -86,7 +86,7 @@ export default defineComponent({
       })
       .catch((error) => {
         console.log(error);
-        msg.error('获取消息失败', { duration: 2000, closable: true });
+        msg.error('获取消息失败');
       });
 
     //头像和个性签名数据
@@ -136,7 +136,7 @@ export default defineComponent({
       success();
       userData.avatar = image;
       events.emit('gobal-updateAvatar', image);
-      msg.success('修改成功', { duration: 2000, closable: true });
+      msg.success('修改成功');
     }
 
     /**
@@ -153,12 +153,12 @@ export default defineComponent({
       modifySignature(signature)
         .then(() => {
           userData.signature = signature;
-          msg.success('修改成功', { duration: 2000, closable: true });
+          msg.success('修改成功');
         })
         .catch((err) => {
           console.log(err);
           error();
-          msg.error('修改个性签名失败', { duration: 2000, closable: true });
+          msg.error('修改个性签名失败');
         });
     }
 
@@ -176,11 +176,11 @@ export default defineComponent({
           userData.city = data.city;
           userData.birthday = data.birthday;
           userData.profile = data.profile;
-          msg.success('修改成功', { duration: 2000, closable: true });
+          msg.success('修改成功');
         })
         .catch((error) => {
           console.log(error);
-          msg.error('修改基本信息失败', { duration: 2000, closable: true });
+          msg.error('修改基本信息失败');
         });
     }
 
@@ -195,11 +195,11 @@ export default defineComponent({
         .then(() => {
           userData.profession = data.profile;
           userData.address = data.address;
-          msg.success('修改成功', { duration: 2000, closable: true });
+          msg.success('修改成功');
         })
         .catch((error) => {
           console.log(error);
-          msg.error('修改基本信息失败', { duration: 2000, closable: true });
+          msg.error('修改基本信息失败');
         });
     }
 

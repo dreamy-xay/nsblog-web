@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 16:13:02
- * @LastEditors: clq
- * @LastEditTime: 2022-01-20 19:38:06
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-14 15:55:11
  */
 import { App } from 'vue';
 import {
@@ -19,6 +19,8 @@ import {
   NTooltip,
   NDrawer,
   NDialogProvider,
+  NConfigProvider,
+  NDatePicker,
   NPagination,
   NSkeleton
 } from 'naive-ui';
@@ -34,6 +36,8 @@ const components = [
   NTooltip,
   NDrawer,
   NDialogProvider,
+  NConfigProvider,
+  NDatePicker,
   NPagination,
   NSkeleton
 ];

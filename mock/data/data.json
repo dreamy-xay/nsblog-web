@@ -5,7 +5,7 @@
 			"nickname": "启航~ o(*￣▽￣*)o",
 			"password": "Abcd1234",
 			"email": "dreamy@qq.com",
-			"token": "977c762c8a57c923b836bc89941150797ce0d53b063ea295cfe2bed2198a581fac7f3c990b6335024ab338f97e9a989c0d5a96c763025ddce665595fa14b6143",
+			"token": "2b1d275b250100d4033cde3da58abe752544916303d12913b98760d63228206fa317289b74247014e42b5194b1c952e8183da6e4f861f37e1f8a49ac20f5fd79",
 			"isActive": true,
 			"isSuper": true
 		},
@@ -1936,5 +1936,268 @@
 			"isSuper": false
 		}
 	],
-	"codes": []
+	"codes": [],
+	"allTopicTags": [
+		{
+			"topic": "后端",
+			"tags": [
+				"后端",
+				"Java",
+				"Python",
+				"算法",
+				"Go",
+				"LeetCode",
+				"MySQL",
+				"数据库",
+				"Spring Boot",
+				"Spring",
+				"Redis",
+				"架构",
+				"Kubernetes",
+				"面试",
+				"Linux"
+			]
+		},
+		{
+			"topic": "前端",
+			"tags": [
+				"前端",
+				"JavaScript",
+				"Vue.js",
+				"算法",
+				"React.js",
+				"CSS",
+				"LeetCode",
+				"面试",
+				"Node.js",
+				"TypeScript",
+				"Webpack",
+				"微信小程序",
+				"Flutter",
+				"前端框架"
+			]
+		},
+		{
+			"topic": "Android",
+			"tags": [
+				"Android",
+				"Flutter",
+				"Android Jetpack",
+				"Kotlin",
+				"源码",
+				"Android Studio",
+				"HarmonyOS",
+				"操作系统",
+				"gradle",
+				"音视频开发",
+				"OpenGL"
+			]
+		},
+		{
+			"topic": "iOS",
+			"tags": [
+				"iOS",
+				"Swift",
+				"Flutter",
+				"Objective-C",
+				"面试",
+				"SwiftUI",
+				"Xcode",
+				"架构",
+				"CocoaPods",
+				"macOS",
+				"Mac",
+				"音视频开发",
+				"Apple"
+			]
+		},
+		{
+			"topic": "人工智能",
+			"tags": [
+				"人工智能",
+				"机器学习",
+				"深度学习",
+				"算法",
+				"计算机视觉",
+				"Python",
+				"OpenCV",
+				"PyTorch",
+				"数据挖掘",
+				"NLP",
+				"数据分析",
+				"TensorFlow",
+				"pandas"
+			]
+		},
+		{
+			"topic": "开发利器",
+			"tags": [
+				"Linux",
+				"Git",
+				"开源",
+				"GitHub",
+				"Python",
+				"程序员",
+				"Visual Studio Code",
+				"云计算",
+				"运维",
+				"Shell",
+				"Java",
+				"JavaScript"
+			]
+		},
+		{
+			"topic": "代码人生",
+			"tags": [
+				"程序员",
+				"年终总结",
+				"算法",
+				"数据库",
+				"面试",
+				"架构",
+				"安全",
+				"代码规范"
+			]
+		},
+		{
+			"topic": "阅读",
+			"tags": [
+				"云原生",
+				"Kubernetes",
+				"笔记测评",
+				"测试",
+				"Serverless",
+				"容器",
+				"小说",
+				"同人",
+				"画报",
+				"期刊",
+				"文献"
+			]
+		},
+		{
+			"topic": "编程插件",
+			"tags": [
+				"职业",
+				"单位",
+				"框架",
+				"专业",
+				"地图",
+				"辅助",
+				"组件",
+				"美化",
+				"角色",
+				"浏览器",
+				"软件"
+			]
+		},
+		{
+			"topic": "设计",
+			"tags": [
+				"平面",
+				"网页",
+				"环境",
+				"GUI",
+				"插画",
+				"动漫",
+				"产品",
+				"建筑",
+				"工业",
+				"服装"
+			]
+		},
+		{
+			"topic": "经验人生",
+			"tags": [
+				"职场",
+				"学习",
+				"考公",
+				"四六级",
+				"大学",
+				"考研",
+				"管理"
+			]
+		},
+		{
+			"topic": "数学",
+			"tags": [
+				"基础数学",
+				"计算数学",
+				"概率论与数理统计",
+				"应用数学",
+				"运筹学与控制论",
+				"数学教育"
+			]
+		},
+		{
+			"topic": "自然学科",
+			"tags": [
+				"理学",
+				"工学",
+				"农学",
+				"医学",
+				"物理学",
+				"化学",
+				"生物科学",
+				"天文学",
+				"地质学类",
+				"地理科学",
+				"海洋科学",
+				"大气科学",
+				"力学",
+				"电子信息科学",
+				"材料科学",
+				"环境科学",
+				"心理学",
+				"统计学",
+				"生物学"
+			]
+		},
+		{
+			"topic": "工具",
+			"tags": [
+				"Smallpdf",
+				"Ezgif",
+				"waifu2x",
+				"办公利器",
+				"OfficePlus",
+				"ProcessOn",
+				"Atool",
+				"TAGUL",
+				"Akuziti",
+				"Utools",
+				"思维导图",
+				"格式工具"
+			]
+		},
+		{
+			"topic": "文学",
+			"tags": [
+				"诗歌",
+				"小说",
+				"散文",
+				"戏剧",
+				"寓言",
+				"笔记",
+				"传奇",
+				"话本",
+				"拟话本",
+				"民间故事",
+				"寓言",
+				"传说",
+				"传奇"
+			]
+		},
+		{
+			"topic": "科技前沿",
+			"tags": [
+				"量子信息",
+				"集成电路",
+				"基因与生物技术",
+				"脑科学与类脑研究",
+				"临床医学与健康",
+				"深空深地深海和极地探测"
+			]
+		}
+	]
 }

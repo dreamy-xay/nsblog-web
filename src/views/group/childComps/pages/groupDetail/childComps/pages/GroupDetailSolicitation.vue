@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-29 16:44:56
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-14 11:20:50
+ * @LastEditTime: 2022-02-15 12:34:16
 -->
 <template>
   <div class="group-detail-solicitation">
@@ -15,8 +15,8 @@
         :key="index"
       >
         <a
-          :href="`/solicitation/${item.id}}`"
-          :target="`/solicitation/${item.id}}`"
+          :href="`/solicitation/${item.id}`"
+          :target="`/solicitation/${item.id}`"
           class="title"
           role="button"
         >

@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2022-01-23 15:06:03
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 22:41:16
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-16 12:06:36
 -->
 <template>
   <div class="article-item">
@@ -21,19 +21,21 @@
             @click="toUserHome(item.username)"
           >{{item.nickname}}</div>
           <div class="article-item-body-top-line"></div>
-          <div class="time">{{getDate(item.release_time)}}</div>
+          <div class="time">
+            {{ dateGetText(new Date(item.release_time), 15552000) }}
+          </div>
           <div class="article-item-body-top-line"></div>
           <div
             class="topic"
             @click="clickTopic(item.topic)"
             role="button"
-          >{{item.topic}}</div>
+          >{{ item.topic }}</div>
           <div class="article-item-body-top-dot">•</div>
           <div
             class="tag"
             @click="clickTag(item.topic_tag)"
             role="button"
-          >{{item.topic_tag}}</div>
+          >{{ item.topic_tag }}</div>
         </div>
       </div>
 
@@ -61,7 +63,9 @@
               class="view"
               role="button"
             >
-              <i class="iconfont blog-browse" />
+              <div class="icon">
+                <i class="iconfont blog-browse" />
+              </div>
               <div class="view-text">{{item.page_view}}</div>
             </div>
             <div
@@ -71,14 +75,19 @@
               :class="item.recommend === 1 ? 'active' : ''"
             >
 
-              <i
-                class="iconfont blog-dianzan"
+              <div
+                class="icon"
                 v-if="item.recommend"
-              />
-              <i
-                class="iconfont blog-dianzan1"
+              >
+                <i class="iconfont blog-dianzan" />
+              </div>
+
+              <div
+                class="icon"
                 v-else
-              />
+              >
+                <i class="iconfont blog-dianzan1" />
+              </div>
               <div
                 class="support-text"
                 v-if="item.recommend_count"
@@ -94,7 +103,9 @@
               role="button"
               @click="toComment(item.id)"
             >
-              <i class="iconfont blog-c-comment" />
+              <div class="icon">
+                <i class="iconfont blog-c-comment" />
+              </div>
               <div
                 class="comment-text"
                 v-if="item.comment_count"
@@ -111,7 +122,10 @@
           class="article-item-body-right"
           v-if="item.cover_image"
         >
-          <base-image :src="item.cover_image" />
+          <base-image
+            :src="item.cover_image"
+            :loadError="'/article/defaultCoverImage.jpg'"
+          />
         </div>
 
       </div>
@@ -152,12 +166,7 @@ export default defineComponent({
      * @author: continue-hs
      */
     function clickTag(topic_tag) {
-      router.push({
-        name: 'tag',
-        params: {
-          tagName: topic_tag,
-        },
-      });
+      window.open(`/tag/${topic_tag}`, `/tag/${topic_tag}`);
     }
 
     /**
@@ -170,7 +179,7 @@ export default defineComponent({
       router.push({
         name: 'home',
         query: {
-          topic: topic,
+          topic,
         },
       });
     }
@@ -206,18 +215,6 @@ export default defineComponent({
     }
 
     /**
-     * @description: 改变日期格式
-     * @param {String} date 日期
-     * @return {String} 返回时间差状态文字描述
-     * @author: Z_Y_C
-     */
-
-    function getDate(date) {
-      date = new Date(date);
-      return dateGetText(date, 3110400000, 'YY-mm-dd');
-    }
-
-    /**
      * @description: 跳转评论
      * @param {number} id 文章id
      * @return {void}
@@ -232,9 +229,9 @@ export default defineComponent({
       toUserHome,
       clickLike,
       clickTag,
-      getDate,
       clickTopic,
       toComment,
+      dateGetText,
     };
   },
 });
@@ -353,60 +350,75 @@ export default defineComponent({
 
         .article-item-body-left-bottom {
           @include flex(center);
-          height: 15px;
           font-size: 13px;
-          font-weight: 400;
-          text-align: left;
           color: $grey-7;
           padding-top: 10px;
-
-          i {
-            color: $grey-7;
-            margin-right: 4px;
-          }
+          height: 20px;
 
           .view {
-            @include flex();
+            @include flex(center, center);
             margin-right: 20px;
+            color: $grey-7;
+            transition: 0.25s;
+            height: 16px;
 
-            &:hover {
-              transition: 0.25s;
-              color: $green-1;
-              i {
-                color: $green-1;
+            .icon {
+              height: 16px;
+              line-height: 16px;
+              margin-right: 4px;
+              .iconfont {
+                font-size: 16px;
               }
             }
-          }
 
-          .active {
-            color: $green-1;
-            i {
+            &:hover {
               color: $green-1;
             }
           }
 
           .support {
-            @include flex();
+            @include flex(center, center);
             margin-right: 20px;
+            color: $grey-7;
+            transition: 0.25s;
+            height: 16px;
+
+            .icon {
+              height: 16px;
+              line-height: 16px;
+              margin-right: 4px;
+              .iconfont {
+                font-size: 14px;
+              }
+            }
 
             &:hover {
-              transition: 0.25s;
               color: $green-1;
-              i {
-                color: $green-1;
-              }
             }
           }
 
+          .active {
+            color: $green-1;
+          }
+
           .comment {
-            @include flex();
+            @include flex(center, center);
+            color: $grey-7;
+            transition: 0.25s;
+            height: 16px;
+
+            .icon {
+              height: 16px;
+              line-height: 16px;
+              margin-right: 4px;
+              margin-top: 2px;
+              .iconfont {
+                font-size: 14px;
+              }
+            }
 
             &:hover {
-              transition: 0.25s;
               color: $green-1;
-              i {
-                color: $green-1;
-              }
             }
           }
         }

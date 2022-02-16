@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-28 13:02:11
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-15 19:28:16
+ * @LastEditTime: 2022-02-15 23:45:57
 -->
 <template>
   <div
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { computed, defineComponent, reactive } from 'vue';
+import { defineComponent, reactive } from 'vue';
 import { getMessageSetting, modifySetting } from '@/network/api/setting';
 import { useMessage } from 'naive-ui';
 
@@ -97,7 +97,7 @@ export default defineComponent({
         settingData[4] = data.chat_message_prompt;
       })
       .catch((error) => {
-        console.log(error), msg.error('获取设置失败，请重试', { duration: 2000, closable: true });
+        console.log(error), msg.error('获取设置失败，请重试');
       });
 
     /**
@@ -115,7 +115,7 @@ export default defineComponent({
         { chat_message_prompt: settingData[index] },
       ];
       modifySetting(data[index]).catch((error) => {
-        console.log(error), msg.error('修改设置失败，请重试', { duration: 2000, closable: true });
+        console.log(error), msg.error('修改设置失败，请重试');
       });
     }
 

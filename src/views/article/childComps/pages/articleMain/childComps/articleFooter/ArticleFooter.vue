@@ -99,7 +99,7 @@ export default defineComponent({
           })
           .catch((err) => {
             console.log(err);
-            msg.error('修改评价失败', { duration: 2000, closable: true });
+            msg.error('修改评价失败');
           });
       } else {
         // 修改二级评论评价
@@ -130,7 +130,7 @@ export default defineComponent({
           })
           .catch((err) => {
             console.log(err);
-            msg.error('修改评价失败', { duration: 2000, closable: true });
+            msg.error('修改评价失败');
           });
       }
     });
@@ -158,7 +158,7 @@ export default defineComponent({
             for (let i = 0; i < comments.length; i++) {
               if (comments[i].comment_id === commentId) {
                 if (res.comments.length < limit) {
-                  // msg.warning('没有更多评论可加载', { duration: 2000, closable: true });
+                  // msg.warning('没有更多评论可加载');
                   events.emit('articleFooter-delBtn', i);
                 }
                 comments[i].child_comments.splice(comments[i].child_comments.length, 0, ...res.comments);
@@ -169,7 +169,7 @@ export default defineComponent({
         })
         .catch((err) => {
           console.log(err);
-          msg.error('获取评论失败', { duration: 2000, closable: true });
+          msg.error('获取评论失败');
         });
     }
 
@@ -207,12 +207,12 @@ export default defineComponent({
       // );
       postArticleComments(articleId, content, parentId, replyUsername)
         .then(() => {
-          msg.success('成功发表评论', { duration: 2000, closable: true });
+          msg.success('成功发表评论');
           addComment('testUser', content, parentId, replyUsername);
         })
         .catch((err) => {
           console.log(err);
-          msg.error('发表评论失败', { duration: 2000, closable: true });
+          msg.error('发表评论失败');
         });
     }
 

@@ -167,7 +167,7 @@ export default defineComponent({
           })
           .catch((error) => {
             console.log(error);
-            msg.error('重置密码失败', { duration: 3000, closable: true });
+            msg.error('重置密码失败', { duration: 3000 });
           });
       }
     }

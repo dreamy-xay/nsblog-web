@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: xiao
  * @Date: 2022-01-14 18:52:17
- * @LastEditors: xiao
- * @LastEditTime: 2022-02-14 00:16:47
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-16 13:01:18
 -->
 <template>
   <div class="group-list">
@@ -24,46 +24,53 @@
             <div
               class="join"
               role="button"
-              @click="joinGroup(group)"
+              @click="joinGroup(index)"
               v-show="group.join===0"
             >
-              <i class="iconfont blog-daochu1024-29"></i>
+              <div class="icon">
+                <i class="iconfont blog-daochu1024-29"></i>
+              </div>
               加入
             </div>
             <div
               v-show="group.join===1"
               class="join"
               role="button"
-              @click="showExit(group)"
+              @click="showExit(index)"
             >
               已加入
             </div>
           </div>
           <div class="remark">{{group.remark}}</div>
           <div class="category-member-count">
-            <base-tag
-              :text="group.topic_name"
-              :hollow="true"
-              :size="20"
-              :color="styles.green1"
-              :href="`/group?topic=${group.topic_name}`"
-              :target="`/group?topic=${group.topic_name}`"
+            <div
+              role="button"
+              @click="onTag(group)"
             >
-              <template #text-pre>
-                <i class="iconfont blog-zhu"></i>
-              </template>
-            </base-tag>
+              <base-tag
+                :text="group.topic_name"
+                :hollow="true"
+                :size="20"
+                :color="styles.green1"
+              >
+                <template #text-pre>
+                  <i class="iconfont blog-zhu"></i>
+                </template>
+              </base-tag>
+            </div>
             <div class="member-count">
-              <i class="iconfont blog-xiaozu1"></i>
+              <div class="icon">
+                <i class="iconfont blog-xiaozu1"></i>
+              </div>
               {{group.member_count}}
             </div>
           </div>
-          <hr style="background-color: #e5e5e5;height:0.5px; border:none;">
+          <hr style="background-color: #e5e5e5; height:0.5px; border:none;">
         </div>
       </div>
       <base-content-loading
         v-show="showContentLoading"
-        :style="{padding: '16px 0'}"
+        :style="{paddingTop: studyGroups.length ? '16px':'0'}"
       />
     </div>
     <div
@@ -86,17 +93,20 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
-import { useMessage } from 'naive-ui';
-import { addGroup, deleteGroup } from '@/network/api/groups';
 import { useRouter } from 'vue-router';
 import styles from '@/assets/style/define.scss';
 import BaseTag from '@/components/content/baseTag/BaseTag.vue';
 import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
+import { mapGetters } from '@/util/store';
+import { useMessage } from 'naive-ui';
+
 /**
  * @description:学习小组列表
  * @param {Array} studyGroups 学习小组数据
  * @param {Boolean} showContentLoading 是否显示加载内容过渡
  * @param {Boolean} showLoading 是否显示加载按钮
+ * @event updateGroups 加载更多 (flag: boolean) => void
+ * @event changeGroupJoin 修改学习小组加入状态 (index: number) => void
  * @author: xiao
  */
 
@@ -107,7 +117,6 @@ export default defineComponent({
     BaseTag,
     BaseContentLoading,
   },
-  emits: ['changeGroupJoin', 'updateGroups'],
   props: {
     studyGroups: {
       type: Array,
@@ -123,11 +132,12 @@ export default defineComponent({
     },
   },
 
-  setup(props, context) {
-    const msg = useMessage(); // naive-ui 组件
+  setup(_, context) {
+    const msg = useMessage(); // naive-ui 消息组件
     const modalShow = ref(false); //是否显示退出提示
     const selectGroup = ref(-1); //选择的小组下标
     const router = useRouter();
+    const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
 
     /**
      * @description: 加载更多
@@ -140,21 +150,12 @@ export default defineComponent({
 
     /**
      * @description: 加入学习小组
-     * @param {*} index 选择点击的小组
+     * @param {number} index 选择的小组下标
      * @return {void}
      * @author: xiao
      */
-    function joinGroup(group) {
-      //加入学习小组
-      addGroup(group.name)
-        .then(() => {
-          msg.success(`加入小组成功`);
-          group.join = 1;
-        })
-        .catch((error) => {
-          console.log(error);
-          msg.error('加入小组失败', { duration: 2000, closable: true });
-        });
+    function joinGroup(index) {
+      context.emit('changeGroupJoin', index);
     }
 
     /**
@@ -163,17 +164,8 @@ export default defineComponent({
      * @author: xiao
      */
     function exitGroup() {
-      //退出学习小组
-      deleteGroup(props.studyGroups[selectGroup.value].name)
-        .then(() => {
-          msg.success(`退出成功`);
-          context.emit('changeGroupJoin', selectGroup.value);
-          modalShow.value = false;
-        })
-        .catch((error) => {
-          console.log(error);
-          msg.error('退出小组失败', { duration: 2000, closable: true });
-        });
+      context.emit('changeGroupJoin', selectGroup.value);
+      modalShow.value = false;
     }
 
     /**
@@ -187,17 +179,15 @@ export default defineComponent({
 
     /**
      * @description: 显示提示框
-     * @param {object} group 选择的小组
+     * @param {number} index 选择的小组下标
      * @return {void}
      * @author: xiao
      */
-    function showExit(group) {
-      for (let index = 0; index < props.studyGroups.length; index++) {
-        if (props.studyGroups[index] == group) {
-          selectGroup.value = index;
-        }
-      }
-      modalShow.value = true;
+    function showExit(index) {
+      if (isLogin.value) {
+        selectGroup.value = index;
+        modalShow.value = true;
+      } else msg.error('请先登录');
     }
 
     /**
@@ -210,6 +200,19 @@ export default defineComponent({
       router.push(`/group/${name}`);
     }
 
+    /**
+     * @description: 点击标签
+     * @param {*} group 标签所属的小组
+     * @return {void}
+     * @author: xiao
+     */
+    function onTag(group) {
+      router.push({
+        name: 'groupHome',
+        query: { topic: group.topic_name },
+      });
+    }
+
     return {
       moreGroup,
       joinGroup,
@@ -219,6 +222,7 @@ export default defineComponent({
       close,
       changePage,
       styles,
+      onTag,
     };
   },
 });
@@ -262,17 +266,24 @@ export default defineComponent({
         }
 
         .join {
+          height: 22px;
+          width: 64px;
+          @include flex(center, center);
+          border-radius: $border-radius-1;
+          border: 1px solid $grey-7;
           font-size: 14px;
           color: $grey-7;
-          height: 24px;
-          width: 66px;
-          border-radius: 4px;
-          border: solid 1px $grey-7;
-          @include flex(center, center);
           transition: 0.25s;
+          font-weight: normal;
 
-          .iconfont {
-            font-size: 14px;
+          .icon {
+            height: 100%;
+            margin-right: 5px;
+            @include flex(center, center);
+
+            .iconfont {
+              font-size: 12px;
+            }
           }
 
           &:hover {
@@ -296,6 +307,11 @@ export default defineComponent({
         margin-bottom: 11.8px;
         @include flex(center, flex-start);
 
+        .iconfont {
+          font-size: 12px;
+          margin-right: 5px;
+        }
+
         .category {
           border-radius: $border-radius-1; //圆角
           border: 1px solid $green-1;
@@ -310,6 +326,14 @@ export default defineComponent({
           font-size: 14px;
           color: $grey-7;
           margin-left: 24px;
+          @include flex(center, center);
+
+          .icon {
+            line-height: 20px;
+            .iconfont {
+              font-size: 14px;
+            }
+          }
         }
       }
     }
@@ -328,7 +352,7 @@ export default defineComponent({
     transition: 0.25s;
 
     &:hover {
-      color: $green-1;
+      background-color: $grey-1;
     }
   }
 }

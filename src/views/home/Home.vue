@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 23:00:04
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-16 12:01:39
 -->
 <template>
   <base-view
@@ -14,17 +14,16 @@
     :footer="true"
     :back-top="true"
     bind-class="home"
+    ref="view"
   >
     <template #top-bar-bottom>
       <base-topic-bar
         @selectTag="selectTag"
         @selectTopic="selectTopic"
+        @selectTopicTag="selectTopicTag"
       />
     </template>
-    <base-topic-tags
-      @selectTag="selectTag"
-      @selectTopic="selectTopic"
-    />
+    <base-topic-tags />
     <div class="home-container">
       <div class="left">
         <home-left
@@ -40,16 +39,13 @@
           class="button"
           role="button"
           v-show="showButton && !showContentLoading"
-          @click="uploadMore()"
+          @click="uploadMore(false)"
         >加载更多...</div>
 
       </div>
 
       <div class="right">
-        <home-right
-          :activity-data="activityData"
-          :bulletin-data="bulletinData"
-        />
+        <home-right />
       </div>
     </div>
   </base-view>
@@ -66,8 +62,6 @@ import { useMessage } from 'naive-ui';
 import { mapGetters } from '@/util/store';
 import { getArticles } from '@/network/api/articles';
 import { modifyArticleRecommendEvaluation } from '@/network/api/articles';
-import { getNotices } from '@/network/api/notices';
-import { useRoute, useRouter } from 'vue-router';
 
 /**
  * @description: 博客主页
@@ -84,8 +78,6 @@ export default defineComponent({
     HomeRight,
   },
   setup() {
-    const route = useRoute();
-    const router = useRouter();
     const topicSelect = ref('推荐'); // 记录当前专题
     const tagSelect = ref(''); // 记录当前标签
     const msg = useMessage(); // 'naive-ui';
@@ -94,96 +86,21 @@ export default defineComponent({
     const allArticles = reactive([]); // 记录数据
     const limit = 7; // 获取信息长度
     const typeIndex = ref(0); // 获取信息类型
-    const showButton = ref(false); // 显示加载更多按钮\
-    const showContentLoading = ref(false); // 是否显示加载内容过渡
+    const showButton = ref(false); // 显示加载更多按钮
+    const showContentLoading = ref(true); // 是否显示加载内容过渡
+    const view = ref(null); // base-view
 
-    // 活动牌
-    const activityData = reactive([]);
-    // 公告牌
-    const bulletinData = reactive([]);
     const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
-
-    if (!route.query.topic) topicSelect.value = route.query.topic;
-    if (!route.query.tag) tagSelect.value = route.query.tag;
-
-    // 获取公告牌数据
-    getNotices()
-      .then((data) => {
-        // 0为网站通知，1为网站活动
-        for (let i = 0; i < data.notices.length; i++) {
-          if (data.notices[i].type == 0) {
-            let arr = { text: null, href: null };
-            arr.text = data.notices[i].content;
-            arr.href = data.notices[i].link;
-            bulletinData.splice(bulletinData.length, 0, arr);
-          } else {
-            let arr = { image: null, href: null };
-            arr.image = data.notices[i].content;
-            arr.href = data.notices[i].link;
-            activityData.splice(activityData.length, 0, arr);
-          }
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        msg.error('获取公告牌失败', { duration: 2000, closable: true });
-      });
-
-    // 获取初始数据
-    initArticlesHome('', '', '', 0, limit, 0, 0, topicSelect.value, tagSelect.value, typeIndex.value);
-
-    /**
-     * @description: 获取数据
-     * @param {string} username 用户名
-     * @param {string} category 过滤分类名
-     * @param {string} tag 过滤标签名
-     * @param {number} offset 起始位置
-     * @param {number} limit 限制条数
-     * @param {1 | -1 | 0} release_time 按发布时间排序，为 0 表示不排序
-     * @param {1 | -1 | 0} browsing_count 按浏览量排序，为 0 表示不排序
-     * @param {string } topic_name 文章专题
-     * @param {string} tag_name 文章标签
-     * @param {0 | 1 | 2|3|4|5} type 热门排序类型
-     * @return {void}
-     * @author: Z_Y_C
-     */
-    function initArticlesHome(
-      username,
-      category,
-      tag,
-      offset,
-      limit,
-      release_time,
-      browsing_count,
-      topic_name,
-      tag_name,
-      type
-    ) {
-      showButton.value = true;
-      getArticles(username, category, tag, offset, limit, release_time, browsing_count, topic_name, tag_name, type, {
-        beforeRequest() {
-          showContentLoading.value = true;
-        },
-        afterResopnse() {
-          showContentLoading.value = false;
-        },
-      })
-        .then((res) => {
-          showButton.value = res.articles.length === limit;
-          allArticles.splice(allArticles.length, 0, ...res.articles);
-        })
-        .catch((error) => {
-          console.log('initArticlesHomeError: ' + error);
-        });
-    }
 
     /**
      * @description: 加载更多数据
+     * @param {boolean} topTop 是否回顶部 `默认为true`
      * @return {void}
      * @author: Z_Y_C
      */
-    function uploadMore() {
-      initArticlesHome(
+    function uploadMore(topTop = true) {
+      if (view.value && topTop) view.value.setScrollTop(true);
+      getArticles(
         '',
         '',
         '',
@@ -191,10 +108,27 @@ export default defineComponent({
         limit,
         0,
         0,
-        topicSelect.value,
+        ['推荐', '关注'].includes(topicSelect.value) ? '' : topicSelect.value,
         tagSelect.value,
-        typeIndex.value
-      );
+        typeIndex.value,
+        {
+          beforeRequest() {
+            showContentLoading.value = true;
+          },
+          afterResopnse() {
+            showContentLoading.value = false;
+          },
+        }
+      )
+        .then((res) => {
+          showButton.value = res.articles.length === limit;
+          allArticles.splice(allArticles.length, 0, ...res.articles);
+          showButton.value = true;
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('获取文章信息失败');
+        });
     }
 
     /**
@@ -230,18 +164,7 @@ export default defineComponent({
       tagSelect.value = '';
       topicSelect.value = topic;
       allArticles.splice(0, allArticles.length);
-      initArticlesHome(
-        '',
-        '',
-        '',
-        allArticles.length,
-        limit,
-        0,
-        0,
-        topicSelect.value,
-        tagSelect.value,
-        typeIndex.value
-      );
+      uploadMore();
     }
 
     /**
@@ -252,20 +175,22 @@ export default defineComponent({
      */
     function selectTag(tag) {
       tagSelect.value = tag;
-      topicSelect.value = '';
       allArticles.splice(0, allArticles.length);
-      initArticlesHome(
-        '',
-        '',
-        '',
-        allArticles.length,
-        limit,
-        0,
-        0,
-        topicSelect.value,
-        tagSelect.value,
-        typeIndex.value
-      );
+      uploadMore();
+    }
+
+    /**
+     * @description: 选择专题标签
+     * @param {string} topic 专题名 `必传参数`
+     * @param {string} tag 标签名 `必传参数`
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function selectTopicTag(topic, tag) {
+      tagSelect.value = tag;
+      topicSelect.value = topic;
+      allArticles.splice(0, allArticles.length);
+      uploadMore();
     }
 
     /**
@@ -279,18 +204,7 @@ export default defineComponent({
         listIndex.value = e.index;
         allArticles.splice(0, allArticles.length);
         typeIndex.value = listIndex.value;
-        initArticlesHome(
-          '',
-          '',
-          '',
-          allArticles.length,
-          limit,
-          0,
-          0,
-          topicSelect.value,
-          tagSelect.value,
-          typeIndex.value
-        );
+        uploadMore();
       }
     }
 
@@ -305,24 +219,14 @@ export default defineComponent({
         timeIndex.value = e.index;
         allArticles.splice(0, allArticles.length);
         typeIndex.value = timeIndex.value + 2;
-        initArticlesHome(
-          '',
-          '',
-          '',
-          allArticles.length,
-          limit,
-          0,
-          0,
-          topicSelect.value,
-          tagSelect.value,
-          typeIndex.value
-        );
+        uploadMore();
       }
     }
 
     return {
       selectTopic,
       selectTag,
+      selectTopicTag,
       listIndex,
       timeIndex,
       allArticles,
@@ -333,9 +237,8 @@ export default defineComponent({
       changeList,
       changeTime,
       showButton,
-      activityData,
-      bulletinData,
       showContentLoading,
+      view,
     };
   },
 });

@@ -114,15 +114,11 @@ export default defineComponent({
       if (key === 'paypal')
         props.sponsors['paypal']
           ? window.open(props.sponsors.paypal, '_blank')
-          : msg.info('博主忘记设置 PayPal 收款地址', { duration: 2000, closable: true });
+          : msg.info('博主忘记设置 PayPal 收款地址');
       else if (key === 'alipay')
-        props.sponsors['alipay']
-          ? showQRCode(props.sponsors.alipay)
-          : msg.info('博主忘记设置支付宝收款二维码', { duration: 2000, closable: true });
+        props.sponsors['alipay'] ? showQRCode(props.sponsors.alipay) : msg.info('博主忘记设置支付宝收款二维码');
       else if (key === 'weixin')
-        props.sponsors['weixin']
-          ? showQRCode(props.sponsors.weixin)
-          : msg.info('博主忘记设置微信收款二维码', { duration: 2000, closable: true });
+        props.sponsors['weixin'] ? showQRCode(props.sponsors.weixin) : msg.info('博主忘记设置微信收款二维码');
     }
 
     return {

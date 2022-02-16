@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 18:26:04
  * @LastEditors: xiao
- * @LastEditTime: 2022-02-13 16:04:20
+ * @LastEditTime: 2022-02-14 14:27:23
 -->
 <template>
   <div class="blog-friends">
@@ -57,15 +57,16 @@ export default defineComponent({
     const msg = useMessage(); // naive-ui
     const route = useRoute(); // route
     const username = route.params.username; // 获取博客用户名
+    const limit = 999999; //限制获取友链的数量
 
     //获取友链信息
-    getChains(username)
+    getChains(username, limit, 0)
       .then((data) => {
         friendChains.splice(0, 0, ...data.chains);
       })
       .catch((error) => {
         console.log(error);
-        msg.error('获取友链信息失败', { duration: 2000, closable: true });
+        msg.error('获取友链信息失败');
       });
 
     return {

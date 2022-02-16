@@ -79,7 +79,7 @@ export default defineComponent({
         exist({ email: email.value })
           .then((data) => {
             if (data.emailExist) {
-              const loading = msg.loading('邮箱验证成功，验证码发送中', { duration: 0 });
+              const loading = msg.loading('邮箱验证成功，验证码发送中', { duration: 0, closable: false });
               emailSendVCode(email.value, {
                 afterResopnse() {
                   loading.destroy();
@@ -112,14 +112,14 @@ export default defineComponent({
                 })
                 .catch((error) => {
                   console.log(error);
-                  msg.error('发送验证码失败', { duration: 3000, closable: true });
+                  msg.error('发送验证码失败', { duration: 3000 });
                 });
-            } else msg.warning('该邮箱未注册', { duration: 3000, closable: true });
+            } else msg.warning('该邮箱未注册', { duration: 3000 });
           })
           .catch((error) => {
             console.log(error);
           });
-      } else msg.error('邮箱格式不正确', { duration: 3000, closable: true });
+      } else msg.error('邮箱格式不正确', { duration: 3000 });
     }
 
     /**

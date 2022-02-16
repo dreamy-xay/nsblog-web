@@ -194,7 +194,7 @@ export default defineComponent({
             })
             .catch((error) => {
               console.log(error);
-              msg.error('删除对话失败，请重试', { duration: 2000, closable: true });
+              msg.error('删除对话失败，请重试');
             });
         else deleteSelectedDialogue();
 

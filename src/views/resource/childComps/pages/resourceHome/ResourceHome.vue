@@ -89,7 +89,7 @@ export default defineComponent({
           })
           .catch((error) => {
             console.log(error);
-            msg.error('获取资源信息失败，请重试', { duration: 2000, closable: true });
+            msg.error('获取资源信息失败，请重试');
           });
     }
 
@@ -117,7 +117,7 @@ export default defineComponent({
       })
       .catch((error) => {
         console.log(error);
-        msg.error('获取下载排行数据失败', { duration: 2000, closable: true });
+        msg.error('获取下载排行数据失败');
       });
 
     /**

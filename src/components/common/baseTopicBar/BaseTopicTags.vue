@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-20 20:52:19
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-22 20:56:21
+ * @LastEditTime: 2022-02-16 11:23:15
 -->
 <template>
   <div
@@ -46,15 +46,13 @@ import events from '@/events';
 
 /**
  * @description: 基础专题条对应的专题标签
- * @event selectTopic 选择了专题 (topic: string) => void
- * @event selectTag 选择了专题标签 (tag: string) => void
  * @emits BaseTopicTags-addTags 更新topic tags (topic_name: string, tags: string[]) => void
  * @author: dreamy-xay
  */
 
 export default defineComponent({
   name: 'baseTopicTags',
-  setup(_, context) {
+  setup() {
     const route = useRoute(); // route
     const tagsLimit = 10; // 最初tag限制显示数量
     const currentTopic = ref(route.query.topic || 'none'); // 选中专题
@@ -122,16 +120,14 @@ export default defineComponent({
      */
     function clickTag(index) {
       if (index === tagActiveIndex.value) return;
-      if (index === 0) {
-        context.emit('selectTopic', currentTopic.value);
+      if (index === 0)
         router.push({
           name: route.name,
           query: {
             topic: currentTopic.value,
           },
         });
-      } else {
-        context.emit('selectTag', currentTags.value[index]);
+      else
         router.push({
           name: route.name,
           query: {
@@ -139,7 +135,6 @@ export default defineComponent({
             tag: currentTags.value[index],
           },
         });
-      }
     }
 
     /**

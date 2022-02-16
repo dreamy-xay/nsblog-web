@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2021-09-20 17:16:11
+ * @LastEditTime: 2022-02-15 18:26:05
 -->
 <template>
   <div class="user-question">
@@ -110,7 +110,7 @@ export default defineComponent({
             })
             .catch((error) => {
               console.log(error);
-              msg.error('获取回答的问题失败', { duration: 2000, closable: true });
+              msg.error('获取回答的问题失败');
             });
         }
       } else {
@@ -123,7 +123,7 @@ export default defineComponent({
             })
             .catch((error) => {
               console.log(error);
-              msg.error('获取发布的提问失败', { duration: 2000, closable: true });
+              msg.error('获取发布的提问失败');
             });
         }
       }
@@ -156,7 +156,7 @@ export default defineComponent({
       })
       .catch((error) => {
         console.log(error);
-        msg.error('获取回答的问题失败', { duration: 2000, closable: true });
+        msg.error('获取回答的问题失败');
       });
 
     // 获取提问页面数据
@@ -167,7 +167,7 @@ export default defineComponent({
       })
       .catch((error) => {
         console.log(error);
-        msg.error('获取发布的提问失败', { duration: 2000, closable: true });
+        msg.error('获取发布的提问失败');
       });
 
     /**
@@ -185,7 +185,7 @@ export default defineComponent({
           })
           .catch((error) => {
             console.log(error);
-            msg.error('获取回答的问题失败', { duration: 2000, closable: true });
+            msg.error('获取回答的问题失败');
           });
       } else {
         getQuestions(username, questionData.length, limit, getSort(1, sorts[1]), getSort(2, sorts[1]))
@@ -196,7 +196,7 @@ export default defineComponent({
           })
           .catch((error) => {
             console.log(error);
-            msg.error('获取发布的提问失败', { duration: 2000, closable: true });
+            msg.error('获取发布的提问失败');
           });
       }
     }

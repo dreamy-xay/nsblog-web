@@ -180,7 +180,7 @@ export default defineComponent({
     function sendVerificationCode() {
       const emailStuts = emailInput.value.check({ message: '请输入有效邮箱' }); //邮箱是否有效
       if (emailStuts && verificationCodeCount.value === 0) {
-        let loading = msg.loading('验证码发送中', { duration: 0 });
+        let loading = msg.loading('验证码发送中', { duration: 0, closable: false });
         //发送验证码
         emailSendVCode(email.value, {
           afterResopnse() {
@@ -192,10 +192,10 @@ export default defineComponent({
           })
           .catch((error) => {
             console.log(error);
-            msg.error('发送失败', { duration: 3000, closable: true });
+            msg.error('发送失败', { duration: 3000 });
           });
       } else if (!emailStuts) emailInput.value.userCenterInput.focus();
-      else msg.error(`请${verificationCodeCount.value}秒后再试一次`, { duration: 3000, closable: true });
+      else msg.error(`请${verificationCodeCount.value}秒后再试一次`, { duration: 3000 });
     }
 
     /**
@@ -211,15 +211,14 @@ export default defineComponent({
       if (success) {
         changeEmail(email.value, verificationCode.value)
           .then(() => {
-            msg.success('修改成功', { duration: 3000, closable: true });
+            msg.success('修改成功', { duration: 3000 });
             context.emit('changeEmail', email.value);
             close();
           })
           .catch((error) => {
             console.log(error);
-            if (error.response && error.response.status === 403)
-              msg.error('验证码错误，验证失败', { duration: 3000, closable: true });
-            else msg.error('服务器错误，验证失败', { duration: 3000, closable: true });
+            if (error.response && error.response.status === 403) msg.error('验证码错误，验证失败', { duration: 3000 });
+            else msg.error('服务器错误，验证失败', { duration: 3000 });
           });
       }
     }

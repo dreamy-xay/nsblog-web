@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-29 14:37:16
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-13 20:13:49
+ * @LastEditTime: 2022-02-15 19:28:06
 -->
 <template>
   <base-view
@@ -19,22 +19,33 @@
     <template #top-bar-bottom>
       <div class="group-detail-top-bar">
         <div class="inner">
-          <div
-            class="item"
-            v-for="(item, index) in menuList"
-            :key="index"
-            :class="{'item-active': index === activeIndex}"
-            role="button"
-            @click="clickMenuItem(index)"
-          >
-            <div class="icon">
-              <i
-                class="iconfont"
-                :class="item.icon"
-              ></i>
+          <div class="inner-left">
+            <div
+              class="item"
+              v-for="(item, index) in menuList"
+              :key="index"
+              :class="{'item-active': index === activeIndex}"
+              role="button"
+              @click="clickMenuItem(index)"
+            >
+              <div class="icon">
+                <i
+                  class="iconfont"
+                  :class="item.icon"
+                ></i>
+              </div>
+              {{ item.name }}
             </div>
-            {{ item.name }}
           </div>
+          <div
+            class="inner-right"
+            role="button"
+            @click="applyAdmin"
+            v-if="isLogin"
+          >
+            申请管理员
+          </div>
+          <group-apply-admin v-model="showApplyAdmin" />
         </div>
       </div>
     </template>
@@ -83,9 +94,12 @@ import BaseView from '@/components/content/baseView/BaseView.vue';
 import BaseRankCard from '@/components/common/baseRankCard/BaseRankCard.vue';
 import GroupSolicitationPopover from '@/views/group/childComps/pages/groupDetail/childComps/GroupSolicitationPopover.vue';
 import GroupDetailInfo from '@/views/group/childComps/pages/groupDetail/childComps/GroupDetailInfo.vue';
+import GroupApplyAdmin from '@/views/group/childComps/pages/groupDetail/childComps/GroupApplyAdmin.vue';
 import router from '@/router';
 import { getGroupsUsersList } from '@/network/api/list';
 import { useRoute } from 'vue-router';
+import { mapGetters } from '@/util/store';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description: 学习小组详情页
@@ -99,8 +113,10 @@ export default defineComponent({
     BaseRankCard,
     GroupSolicitationPopover,
     GroupDetailInfo,
+    GroupApplyAdmin,
   },
   setup() {
+    const msg = useMessage(); //naive-ui message
     const route = useRoute(); // route
     const showRankCardLoading = ref(false); // rank-card 是否显示加载状态
 
@@ -147,6 +163,7 @@ export default defineComponent({
     }
 
     const showSolicitation = ref(false); // 是否显示发布征集令弹框
+    const { isLogin } = mapGetters('global', ['isLogin']);
 
     /**
      * @description: 点击弹出发布征集令的弹框
@@ -154,7 +171,8 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function releaseSolicitation() {
-      showSolicitation.value = true;
+      if (isLogin.value) showSolicitation.value = true;
+      else msg.error('请先登录');
     }
 
     // 用户活跃排名列表
@@ -185,15 +203,28 @@ export default defineComponent({
         });
     }
 
+    const showApplyAdmin = ref(false); // 是否显示申请管理员卡片
+    /**
+     * @description: 申请管理员
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function applyAdmin() {
+      showApplyAdmin.value = true;
+    }
+
     return {
       showRankCardLoading,
       activeIndex,
       menuList,
       clickMenuItem,
       showSolicitation,
+      isLogin,
       releaseSolicitation,
       userRankingList,
       rankCardClickMenuItem,
+      showApplyAdmin,
+      applyAdmin,
     };
   },
 });
@@ -211,30 +242,47 @@ export default defineComponent({
   .inner {
     width: 1000px;
     height: 100%;
-    @include flex(center);
+    @include flex(center, space-between);
 
-    .item {
-      margin-right: 30px;
-      @include flex(center, center);
+    .inner-left {
       height: 100%;
+      @include flex(center);
+
+      .item {
+        margin-right: 30px;
+        @include flex(center, center);
+        height: 100%;
+        font-size: 15px;
+        color: $grey-9;
+        transition: 0.25s;
+
+        &.item-active,
+        &:hover {
+          color: $green-1;
+        }
+
+        .icon {
+          width: 16px;
+          height: 16px;
+          @include flex(center, center);
+          margin-right: 6px;
+
+          .iconfont {
+            font-size: 16px;
+          }
+        }
+      }
+    }
+
+    .inner-right {
+      height: 100%;
+      @include flex(center);
       font-size: 15px;
       color: $grey-9;
       transition: 0.25s;
 
-      &.item-active,
       &:hover {
         color: $green-1;
-      }
-
-      .icon {
-        width: 16px;
-        height: 16px;
-        @include flex(center, center);
-        margin-right: 6px;
-
-        .iconfont {
-          font-size: 16px;
-        }
       }
     }
   }

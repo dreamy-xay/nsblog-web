@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-15 13:19:14
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 14:26:12
+ * @LastEditTime: 2022-02-14 14:05:41
 -->
 <template>
   <div
@@ -31,24 +31,35 @@
     </div>
 
     <div
-      v-if="bulletinData.length<=0"
+      v-if="bulletinData.length<=0 && !loading"
       class="base-bulletin-null"
     >{{type ? '暂无公告哦~':'暂无征集哦~'}}</div>
+    <base-content-loading
+      v-show="loading"
+      :style="{width: '252px'}"
+      :space="6"
+      :skeleton-style="{height: '16px'}"
+    />
   </div>
 </template>
 <script>
 import { defineComponent } from 'vue';
+import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
 
 /**
  * @description:公告牌
  * @param {Array} bulletinData 公告牌告示text和连接href `默认[]`
  * @param {Boolean} type true为公告牌false为征集令 `默认为false`
  * @param {Object} style 最外层样式 `默认为 null`
+ * @param {Boolean} loading 是否处于加载状态 `默认为 false`
  * @author: Z_Y_C
  */
 
 export default defineComponent({
   name: 'baseBulletin',
+  components: {
+    BaseContentLoading,
+  },
   props: {
     bulletinData: {
       type: Array,
@@ -61,6 +72,10 @@ export default defineComponent({
     style: {
       type: Object,
       default: null,
+    },
+    loading: {
+      type: Boolean,
+      default: false,
     },
   },
   setup() {
