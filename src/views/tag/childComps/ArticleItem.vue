@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2022-01-23 15:06:03
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-15 21:02:51
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-16 12:06:36
 -->
 <template>
   <div class="article-item">
@@ -21,19 +21,21 @@
             @click="toUserHome(item.username)"
           >{{item.nickname}}</div>
           <div class="article-item-body-top-line"></div>
-          <div class="time">{{dateGetText(new Date(item.release_time),15552000)}}</div>
+          <div class="time">
+            {{ dateGetText(new Date(item.release_time), 15552000) }}
+          </div>
           <div class="article-item-body-top-line"></div>
           <div
             class="topic"
             @click="clickTopic(item.topic)"
             role="button"
-          >{{item.topic}}</div>
+          >{{ item.topic }}</div>
           <div class="article-item-body-top-dot">•</div>
           <div
             class="tag"
             @click="clickTag(item.topic_tag)"
             role="button"
-          >{{item.topic_tag}}</div>
+          >{{ item.topic_tag }}</div>
         </div>
       </div>
 
@@ -164,12 +166,7 @@ export default defineComponent({
      * @author: continue-hs
      */
     function clickTag(topic_tag) {
-      router.push({
-        name: 'tag',
-        params: {
-          tagName: topic_tag,
-        },
-      });
+      window.open(`/tag/${topic_tag}`, `/tag/${topic_tag}`);
     }
 
     /**
@@ -182,7 +179,7 @@ export default defineComponent({
       router.push({
         name: 'home',
         query: {
-          topic: topic,
+          topic,
         },
       });
     }

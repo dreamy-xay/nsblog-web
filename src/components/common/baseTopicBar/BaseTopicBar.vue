@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-17 20:58:36
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-16 11:22:03
+ * @LastEditTime: 2022-02-16 11:54:51
 -->
 <template>
   <div class="base-topic-bar">
@@ -89,7 +89,7 @@
         </div>
       </div>
       <div
-        v-if="details"
+        v-if="details && isLogin"
         class="right"
         role="button"
         @click="tagManageClick"
@@ -246,7 +246,7 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function tagManageClick() {
-      window.open(isLogin.value ? '/userCenter/profile#interest-topics-tags' : '/login/signIn?back', '_self');
+      window.open('/userCenter/profile#interest-topics-tags');
     }
 
     /**
