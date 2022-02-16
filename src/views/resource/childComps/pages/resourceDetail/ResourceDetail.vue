@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-01-24 15:52:14
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-11 22:01:41
+ * @LastEditTime: 2022-02-15 17:59:27
 -->
 <template>
   <div class="resource-detail">
@@ -76,7 +76,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.log(error);
-          msg.error('获取资源信息失败，请重试', { duration: 2000, closable: true });
+          msg.error('获取资源信息失败，请重试');
         });
     }
     // 获取数据
@@ -93,10 +93,11 @@ export default defineComponent({
         cancelCollections(detailDataTop.collection)
           .then(() => {
             detailDataTop.collection = 0;
+            msg.success('取消收藏成功');
           })
           .catch((error) => {
             console.log(error);
-            msg.error('取消收藏失败，请重试', { duration: 2000, closable: true });
+            msg.error('取消收藏失败，请重试');
           });
       } else detailDataTop.collection = id;
     }

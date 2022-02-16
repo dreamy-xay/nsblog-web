@@ -1,15 +1,15 @@
 <!--
- * @Description:举报页面
+ * @Description: 举报页面
  * @Version:
  * @Autor: xiao
  * @Date: 2022-01-19 22:18:34
- * @LastEditors: xiao
- * @LastEditTime: 2022-01-27 13:35:39
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-15 19:55:31
 -->
 <template>
   <n-modal
     display-directive="show"
-    :show="isShow"
+    :show="show"
   >
     <div class="report">
       <div class="report-head">
@@ -42,9 +42,11 @@
         <div class="input-title">补充说明</div>
         <el-input
           class="input-remark"
-          v-model="textarea"
+          v-model.trim="textarea"
           type="textarea"
           maxlength="128"
+          :show-word-limit="true"
+          :clearable="true"
           :rows="4"
         />
 
@@ -68,23 +70,35 @@
 </template>
 
 <script>
+import { useMessage } from 'naive-ui';
 import { defineComponent, ref } from 'vue';
 
 /**
- * @description:举报页面
- * @param {Boolean} isShow 是否显示举报界面 `默认为false`
+ * @description: 举报页面
+ * @param {Boolean} show 是否显示举报界面 `默认为false`
+ * @param {Number} type 举报类型，(1=>文章，2=>问答，3=>资源，4=>征集令) `必传参数`
+ * @param {String | Number} 举报id `必传参数`
  * @author: xiao
  */
 
 export default defineComponent({
   name: 'Report',
   props: {
-    isShow: {
+    show: {
       type: Boolean,
       default: false,
     },
+    type: {
+      type: Number,
+      required: true,
+    },
+    id: {
+      type: [String, Number],
+      required: true,
+    },
   },
   setup(_, context) {
+    const msg = useMessage(); // naive-ui message
     const radio = ref(-1); //选择的内容
     const textarea = ref(''); //输入的内容
     const reports = [
@@ -125,7 +139,7 @@ export default defineComponent({
      * @author: xiao
      */
     function close() {
-      context.emit('update:isShow', false);
+      context.emit('update:show', false);
     }
 
     /**
@@ -134,9 +148,22 @@ export default defineComponent({
      * @author: xiao
      */
     function commit() {
-      console.log(reports[radio.value].title);
-      console.log(reports[radio.value].content);
-      console.log(textarea.value);
+      let success = true;
+      if (radio.value < 0) {
+        msg.error('请选择举报理由');
+        success = false;
+      }
+      if (!textarea.value) {
+        msg.error('请填写举报补充说明');
+        success = false;
+      }
+      if (success) {
+        // console.log(reports[radio.value].title);
+        // console.log(reports[radio.value].content);
+        // console.log(textarea.value);
+
+        close();
+      }
     }
     return {
       radio,

@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-29 16:58:46
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-27 21:35:21
+ * @LastEditTime: 2022-02-14 13:23:40
 -->
 <template>
   <div class="blog-main">
@@ -21,7 +21,7 @@
   </div>
 </template>
 <script>
-import { defineComponent, reactive, ref, inject, onMounted } from 'vue';
+import { defineComponent, reactive, ref, onMounted } from 'vue';
 import BlogMainArticle from '@/views/blog/childComps/pages/blogMain/childComps/BlogMainArticle.vue';
 import BlogPagination from '@/views/blog/childComps/pages/blogMain/childComps/BlogPagination.vue';
 import BlogMainText from '@/views/blog/childComps/pages/blogMain/childComps/BlogMainText.vue';
@@ -95,7 +95,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.log(error);
-          msg.error('获取文章信息失败，请重试', { duration: 2000, closable: true });
+          msg.error('获取文章信息失败，请重试');
         });
     }
 
@@ -119,7 +119,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.log(error);
-          msg.error('获取文章信息失败，请重试', { duration: 2000, closable: true });
+          msg.error('获取文章信息失败，请重试');
         });
 
       router.push(

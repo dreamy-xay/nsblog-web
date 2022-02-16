@@ -160,7 +160,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.log(error);
-          msg.error('评价修改失败', { duration: 2000, closable: true });
+          msg.error('评价修改失败');
         });
     }
 
@@ -195,11 +195,11 @@ export default defineComponent({
           );
           text.value = '';
           isShowEdit.value = false;
-          msg.success('发布成功', { duration: 2000, closable: true });
+          msg.success('发布成功');
         })
         .catch((error) => {
           console.log(error);
-          msg.error('发布失败', { duration: 2000, closable: true });
+          msg.error('发布失败');
         });
     }
 

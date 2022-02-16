@@ -119,7 +119,7 @@ export default defineComponent({
           .catch((error) => {
             console.log(error);
           });
-      else msg.error('请先登录再查看历史记录', { duration: 2000, closable: true });
+      else msg.error('请先登录再查看历史记录');
     }
 
     // 获取历史记录

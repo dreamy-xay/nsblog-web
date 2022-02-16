@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-08-05 10:41:38
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-14 16:11:34
+ * @LastEditTime: 2022-02-15 23:41:50
 -->
 
 <template>
@@ -40,7 +40,7 @@
           </div>
 
           <div class="message-attention-right-bottom ">
-            <span class="message-attention-right-bottom-time">{{getDate(item.time)}}</span>
+            <span class="message-attention-right-bottom-time">{{dateFormat('Y年m月d日 HH:MM', new Date(item.time))}}</span>
             <span class="message-attention-right-bottom-text">关注了你</span>
 
             <div
@@ -129,18 +129,6 @@ export default defineComponent({
     updateMessageCount({ type: 4, count: 0 });
 
     /**
-     * @description: 改变日期格式
-     * @param {String} date 日期
-     * @return {String} 返回日期格式 `Y年m月d日 HH:MM`
-     * @author: Z_Y_C
-     */
-
-    function getDate(date) {
-      date = new Date(date);
-      return dateFormat('Y年m月d日 HH:MM', date);
-    }
-
-    /**
      * @description: element-ui无限滚动自动获取数据
      * @return {void}
      * @author: Z_Y_C
@@ -155,7 +143,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.log(error);
-          msg.error('获取消息失败，请重试', { duration: 2000, closable: true });
+          msg.error('获取消息失败，请重试');
         });
     }
 
@@ -176,7 +164,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.log(error);
-          msg.error('删除消息失败，请重试', { duration: 2000, closable: true });
+          msg.error('删除消息失败，请重试');
         });
     }
 
@@ -238,7 +226,7 @@ export default defineComponent({
             attentionData[index].content.attention = true;
           })
           .catch((error) => {
-            console.log(error), msg.error('关注失败，请重试', { duration: 2000, closable: true });
+            console.log(error), msg.error('关注失败，请重试');
           });
       } else {
         modalShow.value = !modalShow.value;
@@ -259,7 +247,7 @@ export default defineComponent({
           attentionData[sureCancel.value].content.attention = false;
         })
         .catch((error) => {
-          console.log(error), msg.error('取消关注失败，请重试', { duration: 2000, closable: true });
+          console.log(error), msg.error('取消关注失败，请重试');
         });
     }
 
@@ -281,11 +269,11 @@ export default defineComponent({
       attentionData,
       getMessagesList,
       deleteItem,
-      getDate,
       changePages,
       cancelAttention,
       sureCancelAttention,
       gotoNewDialogue,
+      dateFormat,
     };
   },
 });

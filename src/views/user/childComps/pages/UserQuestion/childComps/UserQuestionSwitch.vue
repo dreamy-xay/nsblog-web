@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-17 19:34:19
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-14 18:46:25
+ * @LastEditTime: 2022-02-15 18:25:54
 -->
 
 <template>
@@ -49,7 +49,7 @@
 
         <div class="right">
           <div class="right-icon"><i class="iconfont blog-lishijilu-copy"></i></div>
-          <div class="right-text">{{question ? "回答于 " + dateFormat('YY-mm-dd HH:MM', new Date(item.reply_time)) : "发布于 " + dateFormat('YY-mm-dd HH:MM', new Date(item.release_time))}}</div>
+          <div class="right-text">{{question ? "回答于 " + dateFormat('YY-mm-dd HH:MM', new Date(item.time)) : "发布于 " + dateFormat('YY-mm-dd HH:MM', new Date(item.release_time))}}</div>
         </div>
       </div>
 

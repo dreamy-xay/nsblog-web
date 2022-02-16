@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-29 17:08:41
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-27 21:11:19
+ * @LastEditTime: 2022-02-15 23:38:10
 -->
 
 <template>
@@ -21,7 +21,8 @@
       <div class="image">
         <base-image
           class="image-inner"
-          :src="item.cover_image"
+          :src="item.cover_image ? item.cover_image :'/article/defaultCoverImage.jpg'"
+          :loadError="'/article/defaultCoverImage.jpg'"
           :loading="2"
         />
       </div>
@@ -29,7 +30,7 @@
         <div class="context-top">
           <div class="time">
             <div class="time-icon"><i class="iconfont blog-time"></i></div>
-            <div class="time-text">{{item.release_time}}</div>
+            <div class="time-text">{{dateFormat("YY-mm-dd HH:MM",new Date(item.release_time))}}</div>
           </div>
 
           <div
@@ -73,6 +74,7 @@
 import { defineComponent } from 'vue';
 import BaseImage from '@/components/content/baseImage/BaseImage.vue';
 import router from '@/router';
+import { dateFormat } from '@/util/date';
 
 /**
  * @description:
@@ -109,6 +111,7 @@ export default defineComponent({
     return {
       iconData,
       changePage,
+      dateFormat,
     };
   },
 });

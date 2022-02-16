@@ -195,7 +195,7 @@ export default defineComponent({
           })
           .catch((err) => {
             console.log(err);
-            msg.error(`${newValue ? '' : '取消'}关注失败`, { duration: 2000, closable: true });
+            msg.error(`${newValue ? '' : '取消'}关注失败`);
           });
       })
       .on('ArticleBottomComp-changeCollection', (newValue) => {
@@ -210,7 +210,7 @@ export default defineComponent({
           })
           .catch((err) => {
             console.log(err);
-            msg.error(`取消收藏失败`, { duration: 2000, closable: true });
+            msg.error(`取消收藏失败`);
           });
       })
       .on('ArticleBottomComp-changeEvaluation', (newValue) => {
@@ -221,7 +221,7 @@ export default defineComponent({
           })
           .catch((err) => {
             console.log(err);
-            msg.error('修改评价失败', { duration: 2000, closable: true });
+            msg.error('修改评价失败');
           });
       });
 

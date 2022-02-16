@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2022-01-24 21:42:19
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-11 22:13:19
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-16 13:05:36
 -->
 <template>
   <div class="resource-detail-top">
@@ -17,15 +17,19 @@
         :href="'/user/'+data.username"
         :target="'/user/'+data.username"
       />
-      <div class="name">{{data.nickname}}</div>
-      <div class="time">{{getDate(data.upload_time)+' 上架'}}</div>
+      <div
+        class="name"
+        role="button"
+        @click="clickButton(0)"
+      >{{data.nickname}}</div>
+      <div class="time">{{dateFormat('YY-mm-dd HH:MM:SS',new Date(data.upload_time))+' 上架'}}</div>
     </div>
     <div class="text">{{data.remark}}</div>
     <div class="button">
       <div
         class="download"
         role="button"
-        @click="clickButton(0)"
+        @click="clickButton(1)"
       >
         <div class="download-icon"><i class="iconfont blog-xiazai"></i></div>
         <div class="download-text">下载</div>
@@ -34,7 +38,7 @@
       <div
         class="collect"
         role="button"
-        @click="clickButton(1)"
+        @click="clickButton(2)"
       >
         <div
           class="collect-icon"
@@ -45,7 +49,8 @@
 
       <base-qr-code-popover
         :value="path"
-        title="扫一扫，分享网站"
+        :placement="'right'"
+        title="扫一扫，分享资源"
       >
         <div
           class="collect"
@@ -63,7 +68,7 @@
       <div
         role="button"
         class="bottom-button"
-        @click="clickButton(2)"
+        @click="clickButton(3)"
       >举报</div>
     </div>
   </div>
@@ -81,6 +86,12 @@
     content="取消后可就没有了哦~"
     @confirm="sureCancelCollection"
     @cancel="modalShow=!modalShow"
+  />
+
+  <base-report
+    v-model:show="showReport"
+    :type="3"
+    :id="id"
   />
 </template>
 <script>
@@ -106,6 +117,7 @@ export default defineComponent({
     BaseQrCodePopover,
     BaseFavorite,
     BaseModal,
+    BaseReport,
   },
   emits: ['changeCollection'],
   props: {
@@ -119,23 +131,27 @@ export default defineComponent({
     const modalShow = ref(false); // 显示取消收藏
     const id = ref(null); // 资源id
     const type = '3'; // 收藏类型
+    const showReport = ref(false);
 
     /**
      * @description: 按钮跳转
-     * @param {Number} index 0:下载,1:收藏,2:举报
+     * @param {Number} index 0:username, 1:下载,2:收藏,3:举报
      * @return {Void}
      * @author: Z_Y_C
      */
     function clickButton(index) {
-      if (index == 0) window.open(props.data.link, props.data.link);
-      else if (index == 1) {
+      id.value = props.data.id;
+      if (index == 0) window.open('/user/' + props.data.username, '/user/' + props.data.username);
+      else if (index == 1) window.open(props.data.link, props.data.link);
+      else if (index == 2) {
         if (!props.data.collection) {
           isShow.value = true;
-          id.value = props.data.id + '';
           addCollection();
         } else {
           modalShow.value = true;
         }
+      } else {
+        showReport.value = true;
       }
     }
 
@@ -154,17 +170,6 @@ export default defineComponent({
       modalShow.value = false;
     }
 
-    /**
-     * @description: 改变日期格式
-     * @param {String} date 日期
-     * @return {String} 返回日期格式 `YY-mm-dd HH-MM-SS`
-     * @author: Z_Y_C
-     */
-
-    function getDate(date) {
-      date = new Date(date);
-      return dateFormat('YY-mm-dd HH-MM-SS', date);
-    }
     return {
       clickButton,
       isShow,
@@ -172,9 +177,10 @@ export default defineComponent({
       id,
       type,
       path: window.location.href,
-      getDate,
       addCollection,
       sureCancelCollection,
+      dateFormat,
+      showReport,
     };
   },
 });
@@ -203,6 +209,11 @@ export default defineComponent({
       margin-left: 10px;
       font-size: 14px;
       color: $green-1;
+      transition: 0.25s;
+
+      &:hover {
+        color: $green-0;
+      }
     }
 
     .time {
@@ -288,6 +299,9 @@ export default defineComponent({
     @include flex(center, space-between);
 
     .bottom-button {
+      transition: 0.25s;
+      color: $grey-7;
+
       &:hover {
         color: $red-2;
       }

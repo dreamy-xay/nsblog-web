@@ -171,8 +171,8 @@ export default defineComponent({
             .catch((error) => {
               console.log(error);
               if (error.response && error.response.status === 403)
-                msg.error('验证码错误，验证失败', { duration: 3000, closable: true });
-              else msg.error('服务器错误，验证失败', { duration: 3000, closable: true });
+                msg.error('验证码错误，验证失败', { duration: 3000 });
+              else msg.error('服务器错误，验证失败', { duration: 3000 });
             });
         else if (info['eventId']) events.emit(info.eventId, code.value);
       }

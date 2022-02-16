@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2022-01-24 18:20:31
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 22:14:18
+ * @LastEditTime: 2022-02-14 14:09:12
 -->
 <template>
   <base-view
@@ -45,7 +45,7 @@
 
           <base-content-loading
             v-show="showContentLoading"
-            :style="{padding: '16px 0'}"
+            :style="{padding: '16px  0 4px 0'}"
           />
         </div>
 
@@ -137,7 +137,7 @@ export default defineComponent({
       })
       .catch((error) => {
         console.log(error);
-        msg.error('获取文章详情失败', { duration: 2000, closable: true });
+        msg.error('获取文章详情失败');
       });
 
     /**
@@ -172,7 +172,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.log(error);
-          msg.error('获取文章信息失败', { duration: 2000, closable: true });
+          msg.error('获取文章信息失败');
         });
     }
 
@@ -216,11 +216,11 @@ export default defineComponent({
           })
           .catch((error) => {
             console.log(error);
-            if (res == 1) msg.success('点赞失败', { duration: 2000, closable: true });
-            else msg.error('取消失败', { duration: 2000, closable: true });
+            if (res == 1) msg.success('点赞失败');
+            else msg.error('取消失败');
           });
       } else {
-        msg.error('请先登录', { duration: 2000, closable: true });
+        msg.error('请先登录');
       }
     }
 
@@ -243,19 +243,21 @@ export default defineComponent({
         delUserTag(tagName)
           .then(() => {
             detail.attention = 0;
+            msg.success('取消关注成功');
           })
           .catch((error) => {
             console.log(error);
-            msg.error('取消关注失败', { duration: 2000, closable: true });
+            msg.error('取消关注失败');
           });
       } else {
         addUserTag(tagName)
           .then(() => {
             detail.attention = 1;
+            msg.success('关注成功');
           })
           .catch((error) => {
             console.log(error);
-            msg.error('关注失败', { duration: 2000, closable: true });
+            msg.error('关注失败');
           });
       }
     }
@@ -311,7 +313,7 @@ export default defineComponent({
 
       .middle-article {
         padding-bottom: 12px;
-        margin: 0 20px;
+        margin: 0 20px 10px 20px;
       }
     }
 

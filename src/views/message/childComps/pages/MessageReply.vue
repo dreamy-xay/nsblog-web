@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:25:27
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-26 16:43:05
+ * @LastEditTime: 2022-02-15 23:45:38
 -->
 
 <template>
@@ -64,7 +64,7 @@
           </div>
 
           <div class="message-reply-right-bottom">
-            <span class="message-reply-right-bottom-time">{{getDate(item.time)}}</span>
+            <span class="message-reply-right-bottom-time">{{dateFormat('Y年m月d日 HH:MM', new Date(item.time))}}</span>
 
             <div
               class="message-reply-right-bottom-reply"
@@ -150,18 +150,6 @@ export default defineComponent({
     updateMessageCount({ type: 2, count: 0 });
 
     /**
-     * @description: 改变日期格式
-     * @param {String} date 日期
-     * @return {String} 返回日期格式 `Y年m月d日 HH:MM`
-     * @author: Z_Y_C
-     */
-
-    function getDate(date) {
-      date = new Date(date);
-      return dateFormat('Y年m月d日 HH:MM', date);
-    }
-
-    /**
      * @description: element-ui无限滚动自动获取数据
      * @return {void}
      * @author: Z_Y_C
@@ -178,7 +166,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.log(error);
-          msg.error('获取消息失败，请重试', { duration: 2000, closable: true });
+          msg.error('获取消息失败，请重试');
         });
     }
 
@@ -199,7 +187,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.log(error);
-          msg.error('删除消息失败，请重试', { duration: 2000, closable: true });
+          msg.error('删除消息失败，请重试');
         });
     }
 
@@ -262,7 +250,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.log(error);
-          msg.error('评论失败，请重试', { duration: 2000, closable: true });
+          msg.error('评论失败，请重试');
         });
     }
 
@@ -270,9 +258,9 @@ export default defineComponent({
       replyData,
       getMessagesList,
       deleteItem,
-      getDate,
       changePages,
       changeEvaluation,
+      dateFormat,
     };
   },
 });

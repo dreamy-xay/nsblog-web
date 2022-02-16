@@ -4,11 +4,11 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-13 16:06:25
+ * @LastEditTime: 2022-02-15 21:09:32
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { int, print, verifyToken, getToken, randomUsers, RandomUser } from './util';
+import { int, print, verifyToken, getToken, randomUsers, RandomUser, getRandomTopic } from './util';
 import select from '../data/index';
 
 export default function(baseUrl: string, app: Application) {
@@ -28,7 +28,7 @@ export default function(baseUrl: string, app: Application) {
         ans.push({
           name: Random.integer(0, 1) ? Random.word(2, 10) : Random.cword(2, 10),
           remark: Random.integer(0, 1) ? Random.paragraph(1, 2) : Random.cparagraph(1, 2),
-          topic_name: Random.integer(0, 1) ? Random.word(2, 10) : Random.cword(2, 10),
+          topic_name: getRandomTopic(),
           member_count: Random.integer(0, 300),
           join: Random.integer(0, 1),
           ...(username ? { time: Random.datetime() } : {})
@@ -91,7 +91,7 @@ export default function(baseUrl: string, app: Application) {
   });
 
   // 获取征集令详细信息
-  app.get(baseUrl + '/groups/solicitations/solicitation_id(\\d+)', (req: Request, res: Response) => {
+  app.get(baseUrl + '/groups/solicitations/:solicitation_id(\\d+)', (req: Request, res: Response) => {
     const { solicitation_id } = req.params;
     const username: string = verifyToken(req.headers) ? getToken(req.headers).username : '';
 
@@ -117,7 +117,7 @@ export default function(baseUrl: string, app: Application) {
     return res.json({
       id: Random.increment(Random.integer(1, 10)),
       title: Random.integer(0, 1) ? Random.title(3, 100) : Random.ctitle(3, 50),
-      content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
+      content: Random.integer(0, 1) ? Random.paragraph(3, 6) : Random.cparagraph(3, 6),
       username: user.username,
       nickname: user.nickname,
       avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
@@ -137,6 +137,35 @@ export default function(baseUrl: string, app: Application) {
     const { title, content, deadline } = req.body;
 
     print('release solicitations', { username, title, content, deadline });
+
+    return res.send();
+  });
+
+  // 接取征集令
+  app.post(baseUrl + '/groups/solicitations/users', (req: Request, res: Response) => {
+    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
+    const username: string = getToken(req.headers).username;
+
+    const { solicitations_id } = req.body;
+
+    print('the user receives the solicitations', { username, solicitations_id });
+
+    const user: Record<string, unknown> = select('users').findOne({ username });
+
+    return res.json({
+      nickname: user.username,
+      avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username as string)
+    });
+  });
+
+  // 取消接取征集令
+  app.delete(baseUrl + '/groups/solicitations/users', (req: Request, res: Response) => {
+    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
+    const username: string = getToken(req.headers).username;
+
+    const { solicitations_id } = req.body;
+
+    print('the user cancelled the solicitations', { username, solicitations_id });
 
     return res.send();
   });

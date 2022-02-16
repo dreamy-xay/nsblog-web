@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: xiao
  * @Date: 2022-01-20 15:53:19
- * @LastEditors: xiao
- * @LastEditTime: 2022-02-11 14:31:53
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-16 12:56:23
 -->
 <template>
   <n-modal
@@ -25,7 +25,7 @@
         <div class="body-title">小组名称</div>
         <base-input
           class="body-input"
-          v-model="inputName"
+          v-model.trim="inputName"
           type="text"
           :show-Close="true"
           :maxlength="20"
@@ -34,10 +34,10 @@
         <div class="body-title">小组简介</div>
         <base-input
           class="body-input"
-          v-model="inputIntroduce"
+          v-model.trim="inputIntroduce"
           type="text"
           :show-Close="true"
-          :maxlength="20"
+          :maxlength="128"
         >
         </base-input>
         <div class="body-title">小组专题</div>
@@ -46,7 +46,7 @@
             :swidth="356"
             :sdata="selectProject"
             :showText="select"
-            @changeItem="changeSelect($event)"
+            @changeItem="changeSelect"
           >
           </base-select>
         </div>
@@ -100,16 +100,13 @@ export default defineComponent({
     //获取专题名
     getTopics()
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         topics.splice(0, 0, ...data.topics);
-        for (let i = 0; i < topics.length; i++) {
-          selectProject[i] = topics[i];
-        }
-        select.value = selectProject[0];
+        for (let i = 0; i < topics.length; i++) selectProject[i] = topics[i];
       })
       .catch((error) => {
         console.log(error);
-        msg.error('获取专题失败', { duration: 2000, closable: true });
+        msg.error('获取专题失败');
       });
 
     /**
@@ -126,33 +123,44 @@ export default defineComponent({
      * @author: xiao
      */
     function commit() {
-      if (inputName.value == '' || inputIntroduce.value == '') {
-        msg.error('输入内容不能为空', { duration: 2000, closable: true });
-      } else {
+      let success = true;
+      if (!inputName.value) {
+        msg.error('学习小组名不能为空');
+        success = false;
+      }
+      if (!inputIntroduce.value) {
+        msg.error('学习小组简介不能为空');
+        success = false;
+      }
+      if (!select.value) {
+        msg.error('学习小组专题不能为空');
+        success = false;
+      }
+
+      if (success)
         //创建学习小组
         createGroups(inputName.value, inputIntroduce.value, select.value)
           .then(() => {
             inputName.value = '';
             inputIntroduce.value = '';
+            select.value = '';
             msg.success(`创建学习小组成功`);
             context.emit('update:modelValue', false);
           })
           .catch((error) => {
             console.log(error);
-            msg.error('创建学习小组失败', { duration: 2000, closable: true });
+            msg.error('创建学习小组失败');
           });
-      }
     }
 
     /**
-     * @description:
-     * @param {*} event 选择的项
+     * @description: 选择新的项
+     * @param {number} index 选择的项 `必传参数`
      * @return {void}
      * @author: xiao
      */
-    function changeSelect($event) {
-      console.log($event);
-      select.value = selectProject[$event];
+    function changeSelect(index) {
+      select.value = selectProject[index];
     }
 
     return {
@@ -171,7 +179,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .group-popover {
   width: 420px;
-  height: 387px;
+  height: 371px;
   background: $grey-0;
   border-radius: $border-radius-0;
   box-shadow: $shadow-0;
@@ -190,15 +198,20 @@ export default defineComponent({
 
     .head-title {
       font-size: 16px;
-      font-weight: bold;
+      font-weight: 700;
       color: $grey-10;
     }
 
     .top-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: $border-radius-1;
       color: $grey-7;
+      @include flex(center, center);
+      transition: all 0.25s;
       position: absolute;
-      right: 24px;
-      transition: 0.25s;
+      top: 13px;
+      right: 16px;
 
       .iconfont {
         font-size: 16px;
@@ -206,6 +219,7 @@ export default defineComponent({
 
       &:hover {
         color: $green-0;
+        background-color: $grey-2;
       }
     }
   }
@@ -213,9 +227,13 @@ export default defineComponent({
   .group-popover-body {
     .body-input {
       border-radius: $border-radius-1;
-      box-shadow: 0 0 6px 0 $green-0;
       margin: 0px 24px;
       width: 372px;
+
+      &:hover {
+        background-color: $green-2;
+        color: $green-0;
+      }
     }
 
     .body-title {
@@ -230,7 +248,11 @@ export default defineComponent({
     .body-select {
       margin: 0px 24px 23px 24px;
       border-radius: $border-radius-1;
-      box-shadow: 0 0 6px 0 $green-0;
+
+      &:hover {
+        background-color: $green-2;
+        color: $green-0;
+      }
     }
   }
 

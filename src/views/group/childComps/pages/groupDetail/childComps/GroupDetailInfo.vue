@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-29 17:12:45
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-12 19:32:13
+ * @LastEditTime: 2022-02-14 19:10:55
 -->
 <template>
   <div class="group-detail-info">
@@ -104,7 +104,7 @@ export default defineComponent({
     // 初始化获取学习小组信息
     getGroups('', '', 0, 0, groupName)
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         groupData.member_count = data.member_count;
         groupData.content_count = data.content_count;
         groupData.remark = data.remark;
@@ -129,13 +129,13 @@ export default defineComponent({
           addGroup(groupName)
             .then(() => {
               groupData.join = 1;
-              msg.success('加入学习小组成功', { duration: 2000, closable: true });
+              msg.success('加入学习小组成功');
             })
             .catch((error) => {
               console.log(error);
-              msg.error('加入学习小组失败', { duration: 2000, closable: true });
+              msg.error('加入学习小组失败');
             });
-      } else msg.error('请先登录', { duration: 2000, closable: true });
+      } else msg.error('请先登录');
     }
 
     /**
@@ -150,11 +150,11 @@ export default defineComponent({
         deleteGroup(groupName)
           .then(() => {
             groupData.join = 0;
-            msg.success('已退出该学习小组', { duration: 2000, closable: true });
+            msg.success('已退出该学习小组');
           })
           .catch((error) => {
             console.log(error);
-            msg.success('退出学习小组失败', { duration: 2000, closable: true });
+            msg.success('退出学习小组失败');
           });
     }
 

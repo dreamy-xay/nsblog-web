@@ -4,11 +4,11 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-19 13:30:35
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-12 13:25:16
+ * @LastEditTime: 2022-02-15 21:10:00
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { int, print, RandomUser, randomUsers, verifyToken, getToken } from './util';
+import { int, print, RandomUser, randomUsers, verifyToken, getToken, getRandomTopic } from './util';
 
 export default function(baseUrl: string, app: Application) {
   // 获取搜索标签
@@ -53,7 +53,7 @@ export default function(baseUrl: string, app: Application) {
           ans.push({
             name: Random.integer(0, 1) ? Random.word(2, 10) : Random.cword(2, 10),
             remark: Random.integer(0, 1) ? Random.paragraph(1, 2) : Random.cparagraph(1, 2),
-            topic_name: Random.integer(0, 1) ? Random.word(2, 10) : Random.cword(2, 10),
+            topic_name: getRandomTopic(),
             member_count: Random.integer(0, 300),
             join: Random.integer(0, 1)
           });
