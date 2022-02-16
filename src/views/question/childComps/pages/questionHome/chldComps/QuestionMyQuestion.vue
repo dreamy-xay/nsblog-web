@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2022-01-19 19:24:33
- * @LastEditors: clq
- * @LastEditTime: 2022-02-16 14:31:11
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-16 19:02:53
 -->
 <template>
   <div class="question-my-question">
@@ -13,25 +13,25 @@
       class="question-my-question-container"
     >
       <div class="top">
-        <i class="iconfont blog-interactive" />
+        <i class="iconfont blog-wenda" />
         我的问答
       </div>
       <div class="middle">
         <div class="middle-item">
           <div class="item-left"><i class="iconfont blog-tiwen1" />提问</div>
-          <div class="item-right">{{myQuestion.question_count}}</div>
+          <div class="item-right">{{getDivisionFormatNum(myQuestion.question_count)}}</div>
         </div>
         <div class="middle-item">
           <div class="item-left"><i class="iconfont blog-huida1" />问答</div>
-          <div class="item-right">{{myQuestion.reply_count}}</div>
+          <div class="item-right">{{getDivisionFormatNum(myQuestion.reply_count)}}</div>
         </div>
         <div class="middle-item">
           <div class="item-left"><i class="iconfont blog-dianzan1" />被点赞</div>
-          <div class="item-right">{{myQuestion.like_count}}</div>
+          <div class="item-right">{{getDivisionFormatNum(myQuestion.like_count)}}</div>
         </div>
         <div class="middle-item">
           <div class="item-left"><i class="iconfont blog-huida" />被采纳</div>
-          <div class="item-right">{{myQuestion.accept_count}}</div>
+          <div class="item-right">{{getDivisionFormatNum(myQuestion.accept_count)}}</div>
         </div>
       </div>
     </div>
@@ -54,6 +54,7 @@ import { mapGetters } from '@/util/store';
 import QuestionCreateQuestion from '@/views/question/childComps/pages/questionHome/chldComps/QuestionCreateQuestion.vue';
 import { getMyQuestion } from '@/network/api/user';
 import { useMessage } from 'naive-ui';
+import { getDivisionFormatNum } from '@/util/util';
 
 /**
  * @description:
@@ -93,8 +94,10 @@ export default defineComponent({
      * @author: clq
      */
     function showModal() {
-      isModalShow.value = !isModalShow.value;
-      console.log('isModalShow.value: ' + isModalShow.value);
+      if (isLogin.value) {
+        isModalShow.value = !isModalShow.value;
+        console.log('isModalShow.value: ' + isModalShow.value);
+      } else msg.error('请先登录');
     }
 
     return {
@@ -102,6 +105,7 @@ export default defineComponent({
       isLogin,
       isModalShow,
       showModal,
+      getDivisionFormatNum,
     };
   },
 });
@@ -161,8 +165,7 @@ export default defineComponent({
         .item-right {
           height: 18px;
           padding: 0px 4px;
-          opacity: 0.4;
-          background: $grey-5;
+          background: rgba($grey-5, 0.4);
           border-radius: $border-radius-1;
           font-size: 15px;
           line-height: 18px;

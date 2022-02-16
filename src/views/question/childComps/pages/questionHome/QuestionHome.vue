@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2022-01-16 18:28:08
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-16 16:04:32
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-16 17:59:15
 -->
 <template>
   <base-view
@@ -37,7 +37,7 @@
           />
           <base-content-loading
             v-show="showContentLoading"
-            :style="{width: '664px',padding: '16px'}"
+            :style="{width: '656px',padding: '16px 0',margin:' 0 20px'}"
           />
         </div>
         <div
@@ -195,6 +195,7 @@ export default defineComponent({
      * @author: clq
      */
     function updateQuestions(flag) {
+      if (flag == true) questions.splice(0, questions.length);
       // 获取问答
       getQuestions('', 0, 0, activeFilterRuleIndex.value, topicName.value, tagName.value, limit.value, offset.value, {
         beforeRequest() {
@@ -207,7 +208,6 @@ export default defineComponent({
         .then((data) => {
           // console.log('getQuestions');
           // console.log(data);
-          if (flag == true) questions.splice(0, questions.length);
           // console.log('questions');
           // console.log(questions);
           if (data.questions.length == limit.value) showLoadMore.value = true;
