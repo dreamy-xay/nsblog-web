@@ -3,13 +3,14 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2022-01-24 18:20:31
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-14 14:09:12
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-16 15:23:04
 -->
 <template>
   <base-view
     :background="true"
     :top-bar="true"
+    :back-top="true"
     :footer="true"
     bind-class="tag"
   >
@@ -45,7 +46,7 @@
 
           <base-content-loading
             v-show="showContentLoading"
-            :style="{padding: '16px  0 4px 0'}"
+            :style="{padding: '16px  0 4px 0', borderTop: tagArticles.length ? `1px solid ${styles.grey4}` : 0}"
           />
         </div>
 
@@ -85,6 +86,7 @@ import BaseView from '@/components/content/baseView/BaseView.vue';
 import { modifyArticleRecommendEvaluation } from '@/network/api/articles';
 import BaseSelectHead from '@/components/common/baseSelectHead/BaseSelectHead.vue';
 import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
+import styles from '@/assets/style/define.scss';
 
 /**
  * @description: 标签详细信息页面
@@ -262,6 +264,7 @@ export default defineComponent({
       }
     }
     return {
+      styles,
       detail,
       isLogin,
       listIndex,

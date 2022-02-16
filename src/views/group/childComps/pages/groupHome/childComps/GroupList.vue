@@ -4,16 +4,19 @@
  * @Autor: xiao
  * @Date: 2022-01-14 18:52:17
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-16 13:01:18
+ * @LastEditTime: 2022-02-16 15:18:09
 -->
 <template>
   <div class="group-list">
     <div class="group-list-less">
       <div
-        v-for="(group,index) in studyGroups"
+        v-for="(group, index) in studyGroups"
         :key="index"
       >
-        <div class="groups">
+        <div
+          class="groups"
+          :class="{'groups-last': index === studyGroups.length - 1}"
+        >
           <div class="name">
             <div
               role="button"
@@ -62,15 +65,15 @@
               <div class="icon">
                 <i class="iconfont blog-xiaozu1"></i>
               </div>
-              {{group.member_count}}
+              {{ group.member_count }}
             </div>
           </div>
-          <hr style="background-color: #e5e5e5; height:0.5px; border:none;">
+          <hr />
         </div>
       </div>
       <base-content-loading
         v-show="showContentLoading"
-        :style="{paddingTop: studyGroups.length ? '16px':'0'}"
+        :style="{paddingTop: studyGroups.length ? '12px' : 0, marginTop: studyGroups.length ? '16px' : 0, borderTop: studyGroups.length ? `1px solid ${styles.grey4}` : 0}"
       />
     </div>
     <div
@@ -251,6 +254,16 @@ export default defineComponent({
       widows: 660px;
       height: 84px;
       margin-top: 24px;
+
+      hr {
+        background-color: $grey-4;
+        height: 1px;
+        border: none;
+      }
+
+      &.groups-last hr {
+        background-color: transparent;
+      }
 
       .name {
         height: 24px;

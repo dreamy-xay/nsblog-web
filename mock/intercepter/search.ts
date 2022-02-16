@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-19 13:30:35
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-15 21:10:00
+ * @LastEditTime: 2022-02-16 14:37:00
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -26,7 +26,7 @@ export default function(baseUrl: string, app: Application) {
         for (let i: number = 0; i < limit; ++i) {
           const user: RandomUser = RUsers.random();
           ans.push({
-            type: Random.integer(0, 1), // 0为文章，1为问答
+            type: type ? type - 1 : Random.integer(0, 1), // 0为文章，1为问答
             id: Random.increment(Random.integer(1, 10)),
             title: Random.integer(0, 1) ? Random.title(3, 20) : Random.ctitle(3, 20),
             content: Random.integer(0, 1) ? Random.paragraph(1, 2) : Random.ctitle(1, 2),
