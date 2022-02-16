@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-28 00:28:11
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-15 21:28:40
+ * @LastEditTime: 2022-02-16 20:42:24
  */
 
 import { Base64 } from 'js-base64';
@@ -256,14 +256,16 @@ export function getRandomTopic(): string {
 
 /**
  * @description: 获取随机标签
+ * @param {string} topicName 专题名，获取指定专题下的随机标签，不传为全部 `默认为 ''`
  * @return {string} 返回标签名
  * @author: dreamy-xay
  */
-export function getRandomTag(): string {
+export function getRandomTag(topicName: string = ''): string {
   const allTopicTags: { topic: string; tags: string[] }[] = select('allTopicTags').all() as {
     topic: string;
     tags: string[];
   }[];
-  const randomTags: string[] = allTopicTags[Random.integer(0, allTopicTags.length - 1)].tags;
+  const tags: string[] = getTags(topicName);
+  const randomTags: string[] = tags.length ? tags : allTopicTags[Random.integer(0, allTopicTags.length - 1)].tags;
   return randomTags[Random.integer(0, randomTags.length - 1)];
 }

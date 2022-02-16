@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 20:59:37
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-16 16:47:01
+ * @LastEditTime: 2022-02-16 20:54:32
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -24,10 +24,16 @@ export default function(baseUrl: string, app: Application) {
       const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
       for (let i: number = 0; i < limit; ++i) {
         const user: RandomUser = RUsers.random();
-        const tags: string[] = [];
+        const tags: Record<string, unknown>[] = [];
         if (!username) {
           const sum: number = Random.integer(1, 3);
-          for (let j: number = 0; j < sum; ++j) tags.push(getRandomTag());
+          for (let j: number = 0; j < sum; ++j) {
+            const topic_name: string = getRandomTopic();
+            tags.push({
+              topic_name,
+              tag_name: getRandomTag(topic_name)
+            });
+          }
         }
         ans.push({
           id: Random.increment(Random.integer(1, 10)),
@@ -72,9 +78,15 @@ export default function(baseUrl: string, app: Application) {
 
     const user: RandomUser = randomUsers().random();
 
-    const tags: string[] = [];
+    const tags: Record<string, unknown>[] = [];
     const sum: number = Random.integer(1, 3);
-    for (let j: number = 0; j < sum; ++j) tags.push(getRandomTag());
+    for (let j: number = 0; j < sum; ++j) {
+      const topic_name: string = getRandomTopic();
+      tags.push({
+        topic_name,
+        tag_name: getRandomTag(topic_name)
+      });
+    }
 
     const data: Record<string, unknown> = {
       ...(Random.integer(0, 1) ? { collection: Random.increment(Random.integer(1, 10)) } : {}),
@@ -96,6 +108,17 @@ export default function(baseUrl: string, app: Application) {
       reply_count: Random.integer(0, 100),
       ...data
     });
+  });
+
+  // 修改问答状态，推荐还是不操作
+  app.put(baseUrl + '/questions/replies/evaluation', (req: Request, res: Response) => {
+    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
+    const username: string = getToken(req.headers).username;
+    const { type, reply_id } = req.body;
+
+    print('modify questions replies evaluation', { username, type, reply_id });
+
+    return res.send();
   });
 
   // 获取发布的提问的回答
@@ -177,7 +200,7 @@ export default function(baseUrl: string, app: Application) {
     });
   });
 
-  // 修改文章评论状态，推荐反对还是不操作
+  // 修改问答评论状态，推荐反对还是不操作
   app.put(baseUrl + '/questions/replies/evaluation', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
