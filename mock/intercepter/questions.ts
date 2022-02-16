@@ -4,11 +4,11 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 20:59:37
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-15 21:13:40
+ * @LastEditTime: 2022-02-16 16:47:01
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { int, print, randomUsers, RandomUser, verifyToken, getToken, getRandomTag } from './util';
+import { int, print, randomUsers, RandomUser, verifyToken, getToken, getRandomTag, getRandomTopic } from './util';
 import select from '../data/index';
 
 export default function(baseUrl: string, app: Application) {
@@ -42,6 +42,7 @@ export default function(baseUrl: string, app: Application) {
                 browsing_count: Random.integer(0, 5) ? Random.integer(1, 10000) : 0,
                 username: user.username,
                 nickname: user.nickname,
+                topic_name: getRandomTopic(),
                 tags
               })
         });
