@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2022-01-17 10:18:16
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-16 12:02:38
+ * @LastEditTime: 2022-02-16 15:21:20
 -->
 <template>
   <div class="home-left">
@@ -20,12 +20,12 @@
     </div>
     <div class="home-left-middle">
       <article-item
-        :articleItem=" allArticles"
+        :articleItem="allArticles"
         @change-like="changeLike"
       />
       <base-content-loading
         v-show="showContentLoading"
-        :style="{padding: '16px  0 4px 0'}"
+        :style="{padding: '16px 0 4px 0', borderTop: allArticles.length ? `1px solid ${styles.grey4}` : 0}"
       />
     </div>
   </div>
@@ -37,6 +37,7 @@ import { defineComponent } from 'vue';
 import ArticleItem from '@/views/tag/childComps/ArticleItem.vue';
 import BaseSelectHead from '@/components/common/baseSelectHead/BaseSelectHead.vue';
 import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
+import styles from '@/assets/style/define.scss';
 
 /**
  * @description: home左侧
@@ -104,7 +105,12 @@ export default defineComponent({
     function changeLike(e) {
       content.emit('changeLike', e);
     }
-    return { changeTime, changeList, changeLike };
+    return {
+      styles,
+      changeTime,
+      changeList,
+      changeLike,
+    };
   },
 });
 </script>
