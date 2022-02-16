@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2022-01-15 17:29:49
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-12 21:02:11
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-16 16:13:37
  */
 import { RouteRecordRaw } from 'vue-router';
 
@@ -24,7 +24,7 @@ const searchRouter: RouteRecordRaw = {
       meta: {
         title: '资源'
       },
-      component: () => import('@/views/search/childComps/pages/searchPageResource/SearchPageResource.vue')
+      component: () => import('@/views/search/childComps/pages/SearchPageResource.vue')
     },
     {
       path: 'tag',
@@ -40,7 +40,7 @@ const searchRouter: RouteRecordRaw = {
       meta: {
         title: '用户'
       },
-      component: () => import('@/views/search/childComps/pages/SearchPageUser.vue')
+      component: () => import('@/views/search/childComps/pages/searchPageUser/SearchPageUser.vue')
     },
     {
       path: 'comprehensive',
@@ -56,7 +56,7 @@ const searchRouter: RouteRecordRaw = {
       meta: {
         title: '文章'
       },
-      component: () => import('@/views/search/childComps/pages/SearchPageArticle.vue')
+      component: () => import('@/views/search/childComps/pages/searchPageArticle/SearchPageArticle.vue')
     },
     {
       path: 'question',
@@ -64,7 +64,7 @@ const searchRouter: RouteRecordRaw = {
       meta: {
         title: '问答'
       },
-      component: () => import('@/views/search/childComps/pages/SearchPageQuestion.vue')
+      component: () => import('@/views/search/childComps/pages/searchPageQuestion/SearchPageQuestion.vue')
     },
     {
       path: 'group',

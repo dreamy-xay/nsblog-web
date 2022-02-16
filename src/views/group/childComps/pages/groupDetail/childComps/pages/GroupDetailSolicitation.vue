@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-29 16:44:56
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-15 12:34:16
+ * @LastEditTime: 2022-02-16 15:00:28
 -->
 <template>
   <div class="group-detail-solicitation">
@@ -13,6 +13,7 @@
         class="solicitation-item"
         v-for="(item, index) in solicitationList"
         :key="index"
+        :class="{'solicitation-item-last': solicitationList.length - 1 === index}"
       >
         <a
           :href="`/solicitation/${item.id}`"
@@ -60,7 +61,7 @@
       </div>
       <base-content-loading
         v-show="showContentLoading"
-        :style="{padding: '16px 0'}"
+        :style="{padding: '16px 0', borderTop: solicitationList.length ? `1px solid ${styles.grey4}` : 0}"
       />
     </div>
     <div
@@ -81,6 +82,7 @@ import BaseContentLoading from '@/components/content/baseContentLoading/BaseCont
 import { dateFormat } from '@/util/date';
 import { getGroupSolicitations } from '@/network/api/groups';
 import { useRoute } from 'vue-router';
+import styles from '@/assets/style/define.scss';
 
 /**
  * @description: 学习小组征集令页面
@@ -133,6 +135,7 @@ export default defineComponent({
       showContentLoading,
       loadingSolicitationList,
       dateFormat,
+      styles,
     };
   },
 });
@@ -158,7 +161,7 @@ export default defineComponent({
       border-bottom: 1px solid $grey-4;
       box-sizing: border-box;
 
-      &:last-child {
+      &.solicitation-item-last {
         border: none;
       }
 

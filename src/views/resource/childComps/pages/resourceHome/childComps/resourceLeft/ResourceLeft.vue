@@ -4,22 +4,22 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2022-01-22 12:12:35
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-14 13:15:05
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-16 15:30:32
 -->
 <template>
   <div class="resource-left">
     <base-select-head
       :select-tag="selectTag"
       :select-time="selectTime"
-      @change-tag="changeTag($event)"
-      @change-select="changeSelect($event)"
+      @change-tag="changeTag"
+      @change-select="changeSelect"
     />
-    <div class="contont">
+    <div class="resource-left-contont">
       <resource-body :resource-data="resourceData" />
       <base-content-loading
         v-show="showContentLoading"
-        :style="{padding: '16px 0 12px 0'}"
+        :style="{padding: '16px 0 12px 0', borderTop: resourceData.length ? `1px solid ${styles.grey4}` : 0}"
       />
     </div>
   </div>
@@ -29,6 +29,7 @@ import { defineComponent } from 'vue';
 import BaseSelectHead from '@/components/common/baseSelectHead/BaseSelectHead.vue';
 import ResourceBody from '@/views/resource/childComps/pages/resourceHome/childComps/resourceLeft/ResourceBody.vue';
 import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
+import styles from '@/assets/style/define.scss';
 
 /**
  * @description:资源页面左边
@@ -64,11 +65,11 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props, context) {
+  setup(_, context) {
     /**
      * @description: 选择标签
-     * @param {Object} e e.index标签下标
-     * @return {Void}
+     * @param {object} e e.index标签下标
+     * @return {void}
      * @author: Z_Y_C
      */
     function changeTag(e) {
@@ -77,14 +78,18 @@ export default defineComponent({
 
     /**
      * @description: 选择时间下拉框
-     * @param {Object} e e.index标签下标
-     * @return {Void}
+     * @param {object} e e.index标签下标
+     * @return {void}
      * @author: Z_Y_C
      */
     function changeSelect(e) {
       context.emit('changeTime', e.index);
     }
-    return { changeTag, changeSelect };
+    return {
+      styles,
+      changeTag,
+      changeSelect,
+    };
   },
 });
 </script>
@@ -97,7 +102,7 @@ export default defineComponent({
   background-color: $grey-0;
   padding-bottom: 4px;
 
-  .contont {
+  .resource-left-contont {
     margin: 0 20px;
   }
 }

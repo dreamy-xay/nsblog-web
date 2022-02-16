@@ -3,10 +3,10 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2022-01-19 18:53:18
- * @LastEditors: Ban
- * @LastEditTime: 2022-01-24 11:17:24
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-16 16:13:58
  */
-import { get, del, RequestLifeCycle } from '@/network/request';
+import { get, RequestLifeCycle } from '@/network/request';
 
 /**
  * @description: 获取搜索结果

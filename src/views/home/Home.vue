@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-16 11:42:28
+ * @LastEditTime: 2022-02-16 12:01:39
 -->
 <template>
   <base-view
@@ -39,7 +39,7 @@
           class="button"
           role="button"
           v-show="showButton && !showContentLoading"
-          @click="uploadMore()"
+          @click="uploadMore(false)"
         >加载更多...</div>
 
       </div>
@@ -93,44 +93,24 @@ export default defineComponent({
     const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
 
     /**
-     * @description: 获取数据
-     * @param {string} username 用户名
-     * @param {string} category 过滤分类名
-     * @param {string} tag 过滤标签名
-     * @param {number} offset 起始位置
-     * @param {number} limit 限制条数
-     * @param {1 | -1 | 0} release_time 按发布时间排序，为 0 表示不排序
-     * @param {1 | -1 | 0} browsing_count 按浏览量排序，为 0 表示不排序
-     * @param {string } topic_name 文章专题
-     * @param {string} tag_name 文章标签
-     * @param {0 | 1 | 2|3|4|5} type 热门排序类型
+     * @description: 加载更多数据
+     * @param {boolean} topTop 是否回顶部 `默认为true`
      * @return {void}
      * @author: Z_Y_C
      */
-    function initArticlesHome(
-      username,
-      category,
-      tag,
-      offset,
-      limit,
-      release_time,
-      browsing_count,
-      topic_name,
-      tag_name,
-      type
-    ) {
-      if (view.value) view.value.setScrollTop(true);
+    function uploadMore(topTop = true) {
+      if (view.value && topTop) view.value.setScrollTop(true);
       getArticles(
-        username,
-        category,
-        tag,
-        offset,
+        '',
+        '',
+        '',
+        allArticles.length,
         limit,
-        release_time,
-        browsing_count,
-        ['推荐', '关注'].includes(topic_name) ? '' : topic_name,
-        tag_name,
-        type,
+        0,
+        0,
+        ['推荐', '关注'].includes(topicSelect.value) ? '' : topicSelect.value,
+        tagSelect.value,
+        typeIndex.value,
         {
           beforeRequest() {
             showContentLoading.value = true;
@@ -149,26 +129,6 @@ export default defineComponent({
           console.log(error);
           msg.error('获取文章信息失败');
         });
-    }
-
-    /**
-     * @description: 加载更多数据
-     * @return {void}
-     * @author: Z_Y_C
-     */
-    function uploadMore() {
-      initArticlesHome(
-        '',
-        '',
-        '',
-        allArticles.length,
-        limit,
-        0,
-        0,
-        topicSelect.value,
-        tagSelect.value,
-        typeIndex.value
-      );
     }
 
     /**
@@ -244,18 +204,7 @@ export default defineComponent({
         listIndex.value = e.index;
         allArticles.splice(0, allArticles.length);
         typeIndex.value = listIndex.value;
-        initArticlesHome(
-          '',
-          '',
-          '',
-          allArticles.length,
-          limit,
-          0,
-          0,
-          topicSelect.value,
-          tagSelect.value,
-          typeIndex.value
-        );
+        uploadMore();
       }
     }
 
@@ -270,18 +219,7 @@ export default defineComponent({
         timeIndex.value = e.index;
         allArticles.splice(0, allArticles.length);
         typeIndex.value = timeIndex.value + 2;
-        initArticlesHome(
-          '',
-          '',
-          '',
-          allArticles.length,
-          limit,
-          0,
-          0,
-          topicSelect.value,
-          tagSelect.value,
-          typeIndex.value
-        );
+        uploadMore();
       }
     }
 

@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2022-01-16 18:28:08
- * @LastEditors: clq
- * @LastEditTime: 2022-01-29 16:11:13
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-16 16:04:32
 -->
 <template>
   <base-view
@@ -35,8 +35,13 @@
             :key="index"
             :question="item"
           />
+          <base-content-loading
+            v-show="showContentLoading"
+            :style="{width: '664px',padding: '16px'}"
+          />
         </div>
         <div
+          v-show="!showContentLoading && showLoadMore"
           class="left-bottom"
           role="button"
           @click="loadMoreQuestions"
@@ -50,14 +55,16 @@
         </div>
         <div class="right-middle">
           <base-rank-card
+            :loading="showRankCardLoading"
             :data="rankingList"
-            title="热门文章"
+            title="热门问答"
             :menu-list="['综合', '点赞', '回答']"
             @clickMenuItem="rankCardClickMenuItem"
           />
         </div>
         <div class="right-bottom">
           <base-tag-card
+            :loading="showTagCardLoading"
             title="热门标签"
             :tags="hotTags"
           />
@@ -76,8 +83,10 @@ import QuestionHeader from '@/views/question/childComps/pages/questionHome/chldC
 import QuestionItem from '@/views/question/childComps/pages/questionHome/chldComps/QuestionItem.vue';
 import QuestionMyQuestion from '@/views/question/childComps/pages/questionHome/chldComps/QuestionMyQuestion.vue';
 import BaseRankCard from '@/components/common/baseRankCard/BaseRankCard.vue';
+import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
 import BaseTagCard from '@/components/common/baseTagCard/BaseTagCard.vue';
 import { getQuestions } from '@/network/api/questions';
+import { getQuestionsList, getTagsList } from '@/network/api/list';
 import { useMessage } from 'naive-ui';
 
 /**
@@ -96,73 +105,88 @@ export default defineComponent({
     QuestionMyQuestion,
     BaseRankCard,
     BaseTagCard,
+    BaseContentLoading,
   },
   setup() {
     const msg = useMessage(); // naive-ui 消息组件
     const questions = reactive([]); // 问答数据
+    let showContentLoading = ref(true); //加载动画显示控制
+    let showLoadMore = ref(true); // 加载更多显示控制
+    const showRankCardLoading = ref(false); // rank-card 是否显示加载状态
+    const showTagCardLoading = ref(false); // tag-card 是否显示加载状态
     let activeFilterRuleIndex = ref(0); // 当前有效的过滤规则 `{0:'最热', 1:'最新', 2:'待回答', 3:'周榜', 4:'月榜'}`
     let topicName = ref(''); // 主体
     let tagName = ref(''); // 标签
     let limit = ref(10); // 单次获取问答条数
     let offset = ref(0); // 问答记录起始偏移量
-    const rankingList = reactive([
-      {
-        title: 'react有tab页，如何实现未选中的tab页隐藏但不销毁在JavaScript中一组数据如何进行关联呢',
-        url: '#',
-      },
-      {
-        title: '在JavaScript中一组数据如何进行关联呢',
-        url: '#',
-      },
-      {
-        title: '在JavaScript中一组数据如何进行关联呢',
-        url: '#',
-      },
-      {
-        title: '在JavaScript中一组数据如何进行关联呢',
-        url: '#',
-      },
-      {
-        title: 'react有tab页，如何实现未选中的tab页隐藏但不销毁',
-        url: '#',
-      },
-      {
-        title: '如何给一个html字符串添加锚点',
-        url: '#',
-      },
-    ]);
+    const rankingList = reactive([]); // 热门问答
+    const hotTags = reactive([]); // 热门标签
 
-    // 热门标签
-    const hotTags = reactive([
-      {
-        name: 'Java',
-        url: `/tag/Java`,
+    // 初始化热门问答
+    updateQuestionsList();
+
+    // 初始化热门标签
+    getTagsList(1, {
+      beforeRequest() {
+        showTagCardLoading.value = true;
       },
-      {
-        name: 'Python',
-        url: `/tag/Python`,
+      afterResopnse() {
+        showTagCardLoading.value = false;
       },
-      {
-        name: 'Csharp',
-        url: `/tag/Csharp`,
-      },
-      {
-        name: 'Cpp',
-        url: `/tag/Cpp`,
-      },
-      {
-        name: 'Vscode',
-        url: `/tag/Vscode`,
-      },
-      {
-        name: '自然科学',
-        url: `/tag/自然科学`,
-      },
-      {
-        name: '人工智能',
-        url: `/tag/人工智能`,
-      },
-    ]);
+    })
+      .then((data) => {
+        // console.log('getTagsList');
+        // console.log(data);
+        hotTags.splice(0, hotTags.length);
+        for (let i = 0; i < data.tags.length; i++) {
+          let item = {
+            name: null,
+            url: `tag/`,
+          };
+          item.name = data.tags[i];
+          item.url += data.tags[i];
+          hotTags.splice(hotTags.length, 0, item);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        msg.error('获取标签失败', { closable: true, duration: 2000 });
+      });
+
+    /**
+     * @description: 更新热门问答
+     * @return {void}
+     * @author: clq
+     */
+    function updateQuestionsList(type = 0) {
+      getQuestionsList(type, {
+        beforeRequest() {
+          showRankCardLoading.value = true;
+        },
+        afterResopnse() {
+          showRankCardLoading.value = false;
+        },
+      })
+        .then((data) => {
+          // console.log('getQuestionsList');
+          // console.log(data);
+          // 清空原始数据
+          rankingList.splice(0, rankingList.length);
+          for (let i = 0; i < data.questions.length; i++) {
+            let item = {
+              title: null,
+              url: `question/`,
+            };
+            item.title = data.questions[i].title;
+            item.url += data.questions[i].id;
+            rankingList.splice(rankingList.length, 0, item);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('获取热门问答失败', { closable: true, duration: 2000 });
+        });
+    }
 
     /**
      * @description: 跟新问答数据
@@ -172,20 +196,29 @@ export default defineComponent({
      */
     function updateQuestions(flag) {
       // 获取问答
-      getQuestions('', 0, 0, activeFilterRuleIndex.value, topicName.value, tagName.value, limit.value, offset.value)
+      getQuestions('', 0, 0, activeFilterRuleIndex.value, topicName.value, tagName.value, limit.value, offset.value, {
+        beforeRequest() {
+          showContentLoading.value = true;
+        },
+        afterResopnse() {
+          showContentLoading.value = false;
+        },
+      })
         .then((data) => {
-          console.log('getQuestions');
-          console.log(data);
+          // console.log('getQuestions');
+          // console.log(data);
           if (flag == true) questions.splice(0, questions.length);
           // console.log('questions');
           // console.log(questions);
+          if (data.questions.length == limit.value) showLoadMore.value = true;
+          else showLoadMore.value = false;
           for (let i of data.questions) {
             questions.splice(questions.length, 0, i);
           }
         })
         .catch((error) => {
           console.log(error);
-          msg.error('获取问答失败');
+          msg.error('获取问答失败', { closable: true, duration: 2000 });
         });
     }
 
@@ -251,10 +284,7 @@ export default defineComponent({
      */
     function rankCardClickMenuItem(index, item) {
       console.log(index, item);
-      // 模拟
-      const data = rankingList[rankingList.length - 1];
-      rankingList.splice(rankingList.length - 1, 1);
-      rankingList.splice(0, 0, data);
+      updateQuestionsList(index);
     }
 
     return {
@@ -262,6 +292,10 @@ export default defineComponent({
       activeFilterRuleIndex,
       rankingList,
       hotTags,
+      showContentLoading,
+      showLoadMore,
+      showRankCardLoading,
+      showTagCardLoading,
       loadMoreQuestions,
       changeFilterRule,
       changeTpoic,

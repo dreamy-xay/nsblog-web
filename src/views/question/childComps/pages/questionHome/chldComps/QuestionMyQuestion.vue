@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-19 19:24:33
  * @LastEditors: clq
- * @LastEditTime: 2022-01-27 13:27:14
+ * @LastEditTime: 2022-02-16 14:31:11
 -->
 <template>
   <div class="question-my-question">
@@ -19,19 +19,19 @@
       <div class="middle">
         <div class="middle-item">
           <div class="item-left"><i class="iconfont blog-tiwen1" />提问</div>
-          <div class="item-right">23</div>
+          <div class="item-right">{{myQuestion.question_count}}</div>
         </div>
         <div class="middle-item">
           <div class="item-left"><i class="iconfont blog-huida1" />问答</div>
-          <div class="item-right">31</div>
+          <div class="item-right">{{myQuestion.reply_count}}</div>
         </div>
         <div class="middle-item">
           <div class="item-left"><i class="iconfont blog-dianzan1" />被点赞</div>
-          <div class="item-right">1.1k</div>
+          <div class="item-right">{{myQuestion.like_count}}</div>
         </div>
         <div class="middle-item">
-          <div class="item-left"><i class="iconfont blog-huida" />被采访</div>
-          <div class="item-right">0</div>
+          <div class="item-left"><i class="iconfont blog-huida" />被采纳</div>
+          <div class="item-right">{{myQuestion.accept_count}}</div>
         </div>
       </div>
     </div>
@@ -49,9 +49,11 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, reactive, ref } from 'vue';
 import { mapGetters } from '@/util/store';
 import QuestionCreateQuestion from '@/views/question/childComps/pages/questionHome/chldComps/QuestionCreateQuestion.vue';
+import { getMyQuestion } from '@/network/api/user';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description:
@@ -64,8 +66,26 @@ export default defineComponent({
     QuestionCreateQuestion,
   },
   setup() {
+    const msg = useMessage(); // naive-ui 消息组件
     const { isLogin } = mapGetters('global', ['isLogin']);
     let isModalShow = ref(false); //创建问答模态框显示控制
+    let myQuestion = reactive({});
+
+    // 初始化数据
+    getMyQuestion()
+      .then((data) => {
+        console.log('getMyQuestion');
+        console.log(data);
+        myQuestion.question_count = data.question_count;
+        myQuestion.reply_count = data.reply_count;
+        myQuestion.like_count = data.like_count;
+        myQuestion.accept_count = data.accept_count;
+        console.log(myQuestion);
+      })
+      .catch((error) => {
+        console.log(error);
+        msg.error('我的问答数据获取失败', { duration: 2000, closable: true });
+      });
 
     /**
      * @description: 更爱模态框显示状态
@@ -77,7 +97,12 @@ export default defineComponent({
       console.log('isModalShow.value: ' + isModalShow.value);
     }
 
-    return { isLogin, isModalShow, showModal };
+    return {
+      myQuestion,
+      isLogin,
+      isModalShow,
+      showModal,
+    };
   },
 });
 </script>

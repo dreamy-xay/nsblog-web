@@ -3,16 +3,16 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2021-08-18 15:25:00
- * @LastEditors: continue-hs
- * @LastEditTime: 2022-01-25 21:28:16
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-16 12:22:14
 -->
 <template>
   <div class="user-center-collection">
     <user-center-collection-list
       :favorites="favorites"
       :activeIndex="activeIndex"
-      @change-index="chooseActive($event)"
-      @new-fav="newfavorites($event)"
+      @change-index="chooseActive"
+      @new-fav="newfavorites"
     />
     <div class="user-center-collection-line"></div>
     <div class="user-center-collection-right">
@@ -21,7 +21,7 @@
         @updateName="changeName"
         @updateRemark="changeRemark"
         @cancelf="deleteFav"
-        @updatePrivate="changePrivate($event)"
+        @updatePrivate="changePrivate"
       />
       <div class="right-line"></div>
       <user-center-collection-right-bottom
@@ -29,8 +29,8 @@
         :Index="activeIndex"
         :List="List"
         :favoritesList="favorites"
-        @changeChoice="chooseChoice($event)"
-        @cancel-col="cancelCol($event)"
+        @changeChoice="chooseChoice"
+        @cancel-col="cancelCol"
         @update="getList"
       />
     </div>
@@ -52,7 +52,6 @@ import {
 import UserCenterCollectionList from '@/views/userCenter/childComps/pages/UserCenterCollection/childcomps/UserCenterCollectionList.vue';
 import UserCenterCollectionRightTop from '@/views/userCenter/childComps/pages/UserCenterCollection/childcomps/UserCenterCollectionRightTop.vue';
 import UserCenterCollectionRightBottom from '@/views/userCenter/childComps/pages/UserCenterCollection/childcomps/UserCenterCollectionRightBottom.vue';
-import { Random } from 'better-mock';
 import { useMessage } from 'naive-ui';
 
 export default defineComponent({
@@ -271,15 +270,14 @@ export default defineComponent({
      * @author: continue-hs
      */
     function newfavorites(e) {
-      const id = Random.id();
       let typeList = reactive([]);
       typeList.push({ List: [] }, { List: [] }, { List: [] }, { List: [] });
       let lenList = reactive([]);
       lenList.push({ lens: 0 }, { lens: 0 }, { lens: 0 }, { lens: 0 });
       newFavorites(e[0], e[1], e[2])
-        .then(() => {
+        .then((data) => {
           favorites.unshift({
-            favorite_id: id,
+            favorite_id: data.id,
             name: e[0],
             count: 0,
             remark: e[2],

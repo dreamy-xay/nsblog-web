@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2022-01-17 10:18:37
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-14 19:51:02
+ * @LastEditTime: 2022-02-16 16:03:54
 -->
 <template>
   <div class="home-right">
@@ -101,7 +101,7 @@ export default defineComponent({
     const hotTags = reactive([]);
 
     // 获取热门标签数据
-    getTagsList({
+    getTagsList(0, {
       beforeRequest() {
         showTagCardLoading.value = true;
       },
