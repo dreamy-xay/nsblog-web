@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: continue-hs
  * @Date: 2022-01-17 10:18:16
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-14 13:02:10
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-16 12:02:38
 -->
 <template>
   <div class="home-left">
@@ -21,7 +21,7 @@
     <div class="home-left-middle">
       <article-item
         :articleItem=" allArticles"
-        @change-like="changeLike($event)"
+        @change-like="changeLike"
       />
       <base-content-loading
         v-show="showContentLoading"

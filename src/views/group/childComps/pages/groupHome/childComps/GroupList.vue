@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: xiao
  * @Date: 2022-01-14 18:52:17
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-15 23:26:52
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-16 13:01:18
 -->
 <template>
   <div class="group-list">
@@ -65,7 +65,7 @@
               {{group.member_count}}
             </div>
           </div>
-          <hr style="background-color: #e5e5e5;height:0.5px; border:none;">
+          <hr style="background-color: #e5e5e5; height:0.5px; border:none;">
         </div>
       </div>
       <base-content-loading
@@ -105,6 +105,8 @@ import { useMessage } from 'naive-ui';
  * @param {Array} studyGroups 学习小组数据
  * @param {Boolean} showContentLoading 是否显示加载内容过渡
  * @param {Boolean} showLoading 是否显示加载按钮
+ * @event updateGroups 加载更多 (flag: boolean) => void
+ * @event changeGroupJoin 修改学习小组加入状态 (index: number) => void
  * @author: xiao
  */
 
@@ -115,7 +117,6 @@ export default defineComponent({
     BaseTag,
     BaseContentLoading,
   },
-  emits: ['changeGroupJoin', 'updateGroups'],
   props: {
     studyGroups: {
       type: Array,
@@ -131,7 +132,7 @@ export default defineComponent({
     },
   },
 
-  setup(props, context) {
+  setup(_, context) {
     const msg = useMessage(); // naive-ui 消息组件
     const modalShow = ref(false); //是否显示退出提示
     const selectGroup = ref(-1); //选择的小组下标
@@ -351,7 +352,7 @@ export default defineComponent({
     transition: 0.25s;
 
     &:hover {
-      color: $green-1;
+      background-color: $grey-1;
     }
   }
 }
