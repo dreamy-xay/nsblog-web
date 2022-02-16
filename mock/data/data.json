@@ -5,7 +5,11 @@
 			"nickname": "启航~ o(*￣▽￣*)o",
 			"password": "Abcd1234",
 			"email": "dreamy@qq.com",
+<<<<<<< HEAD
 			"token": "30ea22ee752802562c1d4b97751483f722711f71684dd1425ac7522047947c8eb63c335753abed198952a9c56783b91ce5588ee548be074084c3382a4c199e4f",
+=======
+			"token": "16e80ec361d7554322c36cfe83214d9028795f0d4819573970cd6adb33bfe138fdcda3804d279073a3bb2aff85a7d9b9264dd91a43e2c174a08839d9ac635689",
+>>>>>>> c678ec8446827aa4790052cf44874106502b06c5
 			"isActive": true,
 			"isSuper": true
 		},
@@ -14,7 +18,7 @@
 			"nickname": "幻墨如烟",
 			"password": "Abcd1234",
 			"email": "1@qq.com",
-			"token": null,
+			"token": "b566534b342be186cf5f5e8ea1b7aeb1fc0eb2f31e3d04797f41189f2d8ed3e0c06918c5efdce7f3fbd001ca2a8930b7830b00b1e08e00a6f210397f5f8226b8",
 			"isActive": true,
 			"isSuper": false
 		},
@@ -59,7 +63,7 @@
 			"nickname": "清幽兰",
 			"password": "Abcd1234",
 			"email": "6@qq.com",
-			"token": "6c0ca32b4fab852b12617ad3195464fdd5ac1c1b7c12861846eeed854c30568adc5d58960f84392760415aef4b0eaa8b379146fefa0ba4157220636a4917250c",
+			"token": "1b9158ba48a84efc4691ae0cd9c1ba0fb820fe414f979f40e3e772817d9c0b9d8407c9df93d57990fe49c7f7246b8e10454dc4dd6f119754501f7e67ca47edc0",
 			"isActive": true,
 			"isSuper": false
 		},

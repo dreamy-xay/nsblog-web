@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2022-01-25 14:25:23
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-27 19:12:55
+ * @LastEditTime: 2022-02-16 13:43:24
 -->
 <template>
   <div class="search-page-comprehensive">
@@ -20,15 +20,18 @@
         class="search-page-comprehensive-content-list"
         v-for="item, index in results"
         :key="index"
-        role="button"
-        @click="changePages('/article/' + item.id)"
       >
         <div class="list">
           <div class="title">
             <div
               class="iconfont blog-wenti1"
               v-if="item.type == 1"
-            ></div>{{ item.title }}
+            ></div>
+            <div
+              class="title-text"
+              @click="changePages('/article/' + item.id)"
+              role="button"
+            >{{ item.title }}</div>
           </div>
           <div class="content">{{ item.content }}</div>
           <div class="bottom">
@@ -97,7 +100,6 @@ export default defineComponent({
             results.push(item);
             context.emit('changeLoadingState', 0, true);
           });
-          // console.log(results);
         })
         .catch((error) => {
           console.log(error);
@@ -199,16 +201,24 @@ export default defineComponent({
         border-bottom: 1px solid $grey-4;
 
         .title {
-          @include ellipsis(1);
           font-weight: 700;
           font-size: 16px;
           color: $grey-10;
+          @include flex();
 
           .blog-wenti1 {
             display: inline-block;
             height: 14px;
             width: 14px;
             margin-right: 8px;
+          }
+
+          .title-text {
+            @include ellipsis(1);
+
+            &:hover {
+              color: $grey-8;
+            }
           }
         }
 

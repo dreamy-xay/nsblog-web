@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2022-01-25 13:17:52
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-15 18:43:35
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-16 13:07:57
 -->
 <template>
   <div
@@ -109,6 +109,7 @@ export default defineComponent({
       font-weight: 700;
       font-size: 16px;
       line-height: 24px;
+      transition: 0.25s;
 
       &:hover {
         color: $grey-8;
@@ -132,6 +133,7 @@ export default defineComponent({
       .bottom-left {
         @include flex(center);
         color: $grey-7;
+        transition: 0.25s;
 
         .icon {
           height: 20px;
@@ -161,6 +163,7 @@ export default defineComponent({
           font-size: 14px;
           line-height: 20px;
           color: $grey-7;
+          transition: 0.25s;
 
           &:hover {
             color: $green-1;
