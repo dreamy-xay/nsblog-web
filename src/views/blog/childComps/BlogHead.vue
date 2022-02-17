@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-30 16:27:56
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-17 15:11:44
+ * @LastEditTime: 2022-02-17 15:52:23
 -->
 <template>
   <div class="blog-head">
@@ -59,16 +59,16 @@
 </template>
 
 <script>
-import { defineComponent, ref, inject, onMounted, computed, reactive } from 'vue';
+import { defineComponent, ref, inject, onMounted, computed } from 'vue';
 import BaseImage from '@/components/content/baseImage/BaseImage.vue';
 import circleMagic from '@/util/animation/circleMagic';
 import styles from '@/assets/style/define.scss';
 import { colorHexToDec } from '@/util/util';
-import { getBlogInfo } from '@/network/api/articles';
 import { useRoute } from 'vue-router';
 
 /**
  * @description: 博客头部
+ * @param {Object} blogData 博客头部数据 `必传参数`
  * @author: dreamy-xay
  */
 
@@ -76,6 +76,12 @@ export default defineComponent({
   name: 'blogHead',
   components: {
     BaseImage,
+  },
+  props: {
+    blogData: {
+      type: Object,
+      required: true,
+    },
   },
   setup() {
     const route = useRoute(); // route
@@ -119,31 +125,12 @@ export default defineComponent({
       };
     });
 
-    // blog 数据
-    const blogData = reactive({
-      nickname: '',
-      signature: '',
-      blog_home_image: null,
-    });
-
-    // 获取博客数据
-    getBlogInfo(username)
-      .then((data) => {
-        blogData.nickname = data.nickname;
-        blogData.signature = data.signature;
-        blogData.blog_home_image = data.blog_home_image;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
     return {
       styles,
       colorHexToDec,
       blogHeadCoverRef,
       toContent,
       backTop,
-      blogData,
     };
   },
 });
