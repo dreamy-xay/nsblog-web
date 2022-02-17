@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-02 11:13:42
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-24 16:08:40
+ * @LastEditTime: 2022-02-17 13:29:06
  */
 /**
  * @description: 通过图片url 获取图片file对象
@@ -98,6 +98,7 @@ export function getDivisionFormatNum(
   endStr: string = divisor === 1000 ? 'K' : ''
 ): string {
   num = parseInt(num as string);
+  if (isNaN(num)) return '0';
   if (<number>num < divisor) return String(num);
   else return (<number>num / divisor).toFixed(fixed) + endStr;
 }
