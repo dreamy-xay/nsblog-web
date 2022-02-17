@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-16 18:28:08
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-16 22:06:23
+ * @LastEditTime: 2022-02-17 13:37:26
 -->
 <template>
   <base-view
@@ -31,15 +31,17 @@
             :activeIndex="activeFilterRuleIndex"
             @changeFilterRule="changeFilterRule"
           />
-          <question-item
-            v-for="(item, index) in questions"
-            :key="index"
-            :question="item"
-          />
-          <base-content-loading
-            v-show="showContentLoading"
-            :style="{width: '656px',padding: '16px 0',margin:' 0 20px'}"
-          />
+          <div class="left-body">
+            <question-item
+              v-for="(item, index) in questions"
+              :key="index"
+              :question="item"
+            />
+            <base-content-loading
+              v-show="showContentLoading"
+              :style="{padding: '16px 0'}"
+            />
+          </div>
         </div>
         <div
           v-show="!showContentLoading && showLoadMore"
@@ -341,6 +343,11 @@ export default defineComponent({
         background: $grey-0;
         border-radius: $border-radius-0;
         box-shadow: $shadow-0;
+
+        .left-body {
+          width: 656px;
+          margin: 0 auto;
+        }
       }
 
       .left-bottom {
