@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-09-29 16:58:46
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-14 13:23:40
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-17 15:21:04
 -->
 <template>
   <div class="blog-main">
@@ -41,11 +41,10 @@ export default defineComponent({
     BlogMainArticle,
     BlogPagination,
   },
-  setup(props) {
+  setup() {
     const msg = useMessage(); // naive-ui mssage
     const route = useRoute(); //路由
     const router = useRouter();
-    const username = route.params.username; // 获取用户名
     const page = ref(1); // 当前页面页数
     const pageCount = ref(1); // 总页数
     const text = ref(null); // 标签或分类Id
@@ -72,7 +71,7 @@ export default defineComponent({
     function getMeaaage() {
       getBlogArticles(type.value == true ? text.value : null, type.value == false ? text.value : null, page.value)
         .then((data) => {
-          console.log(data);
+          // console.log(data);
           if (route.query.page != null) {
             if (parseInt(data.page_count) >= route.query.page) {
               if (route.query.page > 0) {
