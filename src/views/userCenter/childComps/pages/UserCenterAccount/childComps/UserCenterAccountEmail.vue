@@ -183,7 +183,7 @@ export default defineComponent({
         let loading = msg.loading('验证码发送中', { duration: 0, closable: false });
         //发送验证码
         emailSendVCode(email.value, {
-          afterResopnse() {
+          afterResponse() {
             loading.destroy();
           },
         })
