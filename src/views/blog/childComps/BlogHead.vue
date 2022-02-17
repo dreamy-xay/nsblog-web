@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-30 16:27:56
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-15 16:56:53
+ * @LastEditTime: 2022-02-17 15:11:44
 -->
 <template>
   <div class="blog-head">
@@ -34,20 +34,20 @@
     <div
       class="blog-head-cover"
       ref="blogHeadCoverRef"
-      :style="{backgroundColor: data.blog_home_image ? null : styles.grey10}"
+      :style="{backgroundColor: blogData.blog_home_image ? null : styles.grey10}"
     >
       <base-image
-        v-if="data.blog_home_image"
+        v-if="blogData.blog_home_image"
         :loading="2"
-        :src="data.blog_home_image"
+        :src="blogData.blog_home_image"
         :style="{backgroundColor: `rgba(${colorHexToDec(styles.green0).rgb}, 0.5)`}"
       />
     </div>
     <div class="blog-head-inner">
       <h1 class="title">
-        <span>{{data.nickname}}</span>
+        <span>{{ blogData.nickname }}</span>
       </h1>
-      <h2 class="signature">{{data.signature}}</h2>
+      <h2 class="signature">{{ blogData.signature }}</h2>
     </div>
     <div
       class="blog-head-arrow"
@@ -59,11 +59,13 @@
 </template>
 
 <script>
-import { defineComponent, ref, inject, onMounted, computed } from 'vue';
+import { defineComponent, ref, inject, onMounted, computed, reactive } from 'vue';
 import BaseImage from '@/components/content/baseImage/BaseImage.vue';
 import circleMagic from '@/util/animation/circleMagic';
 import styles from '@/assets/style/define.scss';
 import { colorHexToDec } from '@/util/util';
+import { getBlogInfo } from '@/network/api/articles';
+import { useRoute } from 'vue-router';
 
 /**
  * @description: 博客头部
@@ -75,20 +77,9 @@ export default defineComponent({
   components: {
     BaseImage,
   },
-  props: {
-    data: {
-      type: Object,
-      default() {
-        return {
-          username: 'us1',
-          nickname: '小菠萝测试笔记',
-          signature: '未来的你，会感谢今天仍在努力奋斗的你',
-          blog_home_image: Math.random() >= 0.5 ? 'https://s3.bmp.ovh/imgs/2021/09/7fc65c1d3e881ea5.jpg' : null,
-        };
-      },
-    },
-  },
   setup() {
+    const route = useRoute(); // route
+    const username = route.params.username; // 用户名
     const blogHeadCoverRef = ref(null); // 博客首页头部 ref
     const blogPage = inject('blogPage'); // 博客首页绑定滚动 ref
 
@@ -128,12 +119,31 @@ export default defineComponent({
       };
     });
 
+    // blog 数据
+    const blogData = reactive({
+      nickname: '',
+      signature: '',
+      blog_home_image: null,
+    });
+
+    // 获取博客数据
+    getBlogInfo(username)
+      .then((data) => {
+        blogData.nickname = data.nickname;
+        blogData.signature = data.signature;
+        blogData.blog_home_image = data.blog_home_image;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
     return {
       styles,
       colorHexToDec,
       blogHeadCoverRef,
       toContent,
       backTop,
+      blogData,
     };
   },
 });
