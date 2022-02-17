@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-19 19:24:33
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-16 19:02:53
+ * @LastEditTime: 2022-02-17 14:02:09
 -->
 <template>
   <div class="question-my-question">
@@ -13,7 +13,9 @@
       class="question-my-question-container"
     >
       <div class="top">
-        <i class="iconfont blog-wenda" />
+        <div class="icon">
+          <i class="iconfont blog-wenda" />
+        </div>
         我的问答
       </div>
       <div class="middle">
@@ -132,10 +134,17 @@ export default defineComponent({
       font-weight: 700;
       line-height: 24px;
       color: $grey-10;
+      @include flex(center);
 
-      .iconfont {
+      .icon {
         margin-right: 10px;
-        color: $green-1;
+        line-height: 24px;
+        font-weight: normal;
+
+        .iconfont {
+          color: $green-1;
+          font-size: 15px;
+        }
       }
     }
 

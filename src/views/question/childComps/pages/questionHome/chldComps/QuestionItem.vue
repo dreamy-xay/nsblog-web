@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-19 19:21:05
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-16 22:05:26
+ * @LastEditTime: 2022-02-17 13:34:40
 -->
 <template>
   <div class="question-item">
@@ -13,7 +13,7 @@
       :class="{'question-item-border': question.reply_count>0, 'question-item-bgc':question.solution>0}"
     >
       <div class="left-top">
-        {{numberFormat(question.reply_count)}}
+        {{getDivisionFormatNum(question.reply_count)}}
       </div>
       <div class="left-bottom">
         {{question.solution? "解决":"回答"}}
@@ -23,7 +23,7 @@
       class="question-item-middle"
       :class="{'question-item-color': question.browsing_count >= 100}"
     >
-      <div class="middle-top">{{numberFormat(question.browsing_count)}}</div>
+      <div class="middle-top">{{getDivisionFormatNum(question.browsing_count)}}</div>
       <div class="middle-bottom">阅读</div>
     </div>
     <div class="question-item-right">
@@ -61,6 +61,7 @@
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 import { dateFormat } from '@/util/date.ts';
+import { getDivisionFormatNum } from '@/util/util';
 
 /**
  * @description: 问答条目组件
@@ -79,20 +80,6 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter(); //route
-
-    /**
-     * @description: 将大于1000的数转化为以k为单位的字符串
-     * @param {number} num 待处理的数据
-     * @return {void}
-     * @author: clq
-     */
-    function numberFormat(num) {
-      if (num > 1000) {
-        return `${Math.floor(num / 1000)}.${Math.floor((num % 1000) / 100)}k`;
-      } else {
-        return num;
-      }
-    }
 
     /**
      * @description: 跳转到问答详情页面
@@ -137,7 +124,7 @@ export default defineComponent({
     }
 
     return {
-      numberFormat,
+      getDivisionFormatNum,
       toResourceDetailPage,
       toUserPage,
       toTagPage,
@@ -151,11 +138,11 @@ export default defineComponent({
 .question-item {
   @include flex(center, space-between);
   box-sizing: border-box;
-  // width: 660px;
+  // width: 620px;
   width: 100%;
   // height: 80px;
   margin: 0px auto;
-  padding: 12px 18px 11px;
+  padding: 12px 0 11px;
   border-bottom: 1px solid $grey-4;
   transition: 0.25s;
 
