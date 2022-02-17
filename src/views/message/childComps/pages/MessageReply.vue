@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:25:27
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-17 14:27:01
+ * @LastEditTime: 2022-02-17 14:47:40
 -->
 
 <template>
@@ -323,7 +323,6 @@ $grey9: $grey-9;
       :deep(.v-md-editor-preview > div) {
         padding: 0;
         line-height: normal;
-        // font-family: normal;
 
         & > p {
           margin-bottom: 0;
@@ -346,7 +345,6 @@ $grey9: $grey-9;
           padding: 0;
           line-height: normal;
           font-size: 14px;
-          // font-family: normal;
 
           & > p {
             margin-bottom: 0;
