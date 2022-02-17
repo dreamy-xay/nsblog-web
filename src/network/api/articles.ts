@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 10:10:43
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-12 16:05:28
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-17 15:07:18
  */
 import { get, post, put, RequestLifeCycle } from '@/network/request';
 
@@ -259,7 +259,7 @@ export function getBlogArticles(
   });
 }
 
-/*
+/**
  * @description: 验证文章密码
  * @param {string | number} article_id 文章id `必传参数`
  * @param {string} password 文章密码 `必传参数`
@@ -279,6 +279,23 @@ export function verifyArticlePassword(
     data: {
       article_id,
       password
+    }
+  });
+}
+
+/**
+ * @description: 获取博客信息
+ * @param {string } username 用户名 `必传参数`
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: dreamy-xay
+ */
+export function getBlogInfo(username: string, RLC: RequestLifeCycle = {}): Promise<unknown> {
+  return get({
+    url: '/articles/blogs',
+    ...RLC,
+    params: {
+      username
     }
   });
 }

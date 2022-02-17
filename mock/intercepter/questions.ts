@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 20:59:37
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-16 20:54:32
+ * @LastEditTime: 2022-02-17 15:01:15
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -209,5 +209,28 @@ export default function(baseUrl: string, app: Application) {
     print('modify questions replies evaluation', { username, type, reply_id });
 
     return res.send();
+  });
+
+  // 获取邀请回答
+  app.get(baseUrl + '/questions/invitation', (req: Request, res: Response) => {
+    const { question_id } = req.query;
+
+    print('get questions invitation', { question_id });
+
+    const RUsers = randomUsers();
+    function getRandom(limit: number): Record<string, unknown>[] {
+      const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
+      for (let i: number = 0; i < limit; ++i) {
+        const user: RandomUser = RUsers.random();
+        ans.push({
+          username: user.username,
+          nickname: user.nickname,
+          avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username)
+        });
+      }
+      return ans;
+    }
+
+    return res.json({ users: getRandom(Random.integer(6, 9)) });
   });
 }
