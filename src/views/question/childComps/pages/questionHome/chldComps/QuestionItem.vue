@@ -4,10 +4,13 @@
  * @Autor: clq
  * @Date: 2022-01-19 19:21:05
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-17 13:34:40
+ * @LastEditTime: 2022-02-17 16:00:07
 -->
 <template>
-  <div class="question-item">
+  <div
+    class="question-item"
+    :style="style"
+  >
     <div
       class="question-item-left"
       :class="{'question-item-border': question.reply_count>0, 'question-item-bgc':question.solution>0}"
@@ -65,8 +68,10 @@ import { getDivisionFormatNum } from '@/util/util';
 
 /**
  * @description: 问答条目组件
- * @author: clq
  * @param {Object} question 问答信息
+ * @param {Object} style 样式
+ * @author: clq
+
  */
 
 export default defineComponent({
@@ -75,6 +80,10 @@ export default defineComponent({
     question: {
       type: Object,
       required: true,
+      default: null,
+    },
+    style: {
+      type: Object,
       default: null,
     },
   },
@@ -143,7 +152,7 @@ export default defineComponent({
   // height: 80px;
   margin: 0px auto;
   padding: 12px 0 11px;
-  border-bottom: 1px solid $grey-4;
+  border-top: 1px solid $grey-4;
   transition: 0.25s;
 
   // &:hover {

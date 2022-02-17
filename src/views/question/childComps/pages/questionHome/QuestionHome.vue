@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-16 18:28:08
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-17 13:37:26
+ * @LastEditTime: 2022-02-17 15:59:54
 -->
 <template>
   <base-view
@@ -36,6 +36,7 @@
               v-for="(item, index) in questions"
               :key="index"
               :question="item"
+              :style="index==0 ? {borderTop:'none'}:''"
             />
             <base-content-loading
               v-show="showContentLoading"
