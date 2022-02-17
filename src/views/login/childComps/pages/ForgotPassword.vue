@@ -81,7 +81,7 @@ export default defineComponent({
             if (data.emailExist) {
               const loading = msg.loading('邮箱验证成功，验证码发送中', { duration: 0, closable: false });
               emailSendVCode(email.value, {
-                afterResopnse() {
+                afterResponse() {
                   loading.destroy();
                 },
               })

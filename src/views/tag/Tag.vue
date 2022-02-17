@@ -164,7 +164,7 @@ export default defineComponent({
         beforeRequest() {
           showContentLoading.value = true;
         },
-        afterResopnse() {
+        afterResponse() {
           showContentLoading.value = false;
         },
       })

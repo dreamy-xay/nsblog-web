@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 18:20:47
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-12 13:16:23
+ * @LastEditTime: 2022-02-17 15:52:07
 -->
 <template>
   <div
@@ -14,7 +14,7 @@
     <base-background :mask="false" />
     <base-loading-bar inject-name="blogPage" />
     <blog-menu :username="username" />
-    <blog-head />
+    <blog-head :blog-data="blogData" />
     <router-view></router-view>
     <base-loading-page :show="showLoadingPage" />
     <base-footer :show-all="false" />
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, provide, onMounted } from 'vue';
+import { defineComponent, ref, provide, reactive } from 'vue';
 import BaseBackground from '@/components/content/baseBackground/BaseBackground.vue';
 import BaseLoadingPage from '@/components/common/baseLoadingPage/BaseLoadingPage.vue';
 import BaseLoadingBar from '@/components/common/baseLoadingBar/BaseLoadingBar.vue';
@@ -30,6 +30,7 @@ import BlogHead from '@/views/blog/childComps/BlogHead.vue';
 import BlogMenu from '@/views/blog/childComps/BlogMenu.vue';
 import BaseFooter from '@/components/content/baseFooter/BaseFooter.vue';
 import { useRoute } from 'vue-router';
+import { getBlogInfo } from '@/network/api/articles';
 
 /**
  * @description: 博客主页
@@ -55,14 +56,30 @@ export default defineComponent({
     // 向子组件传递
     provide('blogPage', blogPage);
 
-    onMounted(() => {
-      showLoadingPage.value = false;
+    // blog 数据
+    const blogData = reactive({
+      nickname: '',
+      signature: '',
+      blog_home_image: null,
     });
+
+    // 获取博客数据
+    getBlogInfo(username)
+      .then((data) => {
+        blogData.nickname = data.nickname;
+        blogData.signature = data.signature;
+        blogData.blog_home_image = data.blog_home_image;
+        showLoadingPage.value = false;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
     return {
       username,
       blogPage,
       showLoadingPage,
+      blogData,
     };
   },
 });

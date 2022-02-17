@@ -191,7 +191,7 @@ export default defineComponent({
         beforeRequest() {
           showRankCardLoading.value = true;
         },
-        afterResopnse() {
+        afterResponse() {
           showRankCardLoading.value = false;
         },
       })
