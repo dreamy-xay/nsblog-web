@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:31:44
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-15 23:44:14
+ * @LastEditTime: 2022-02-17 13:22:57
 -->
 <template>
   <el-scrollbar max-height="calc(100vh - 108px)">
@@ -47,7 +47,7 @@
           </div>
 
           <div class="message-like-right-bottom">
-            <span class="message-like-right-bottom-time">{{dateFormat('Y年m月d日 HH:MM', Date(item.time))}}</span>
+            <span class="message-like-right-bottom-time">{{dateFormat('Y年m月d日 HH:MM',new Date(item.time))}}</span>
 
             <div
               class="message-like-right-bottom-delete"
