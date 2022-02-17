@@ -5,7 +5,7 @@
  * @Autor: continue-hs
  * @Date: 2021-07-22 17:52:26
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-26 16:40:07
+ * @LastEditTime: 2022-02-17 13:06:28
 -->
 <template>
   <div
@@ -230,6 +230,7 @@ export default defineComponent({
     box-shadow: $shadow-0;
     position: absolute;
     top: 57px;
+    z-index: 1;
 
     .history-top {
       @include size(314px, 24px);
