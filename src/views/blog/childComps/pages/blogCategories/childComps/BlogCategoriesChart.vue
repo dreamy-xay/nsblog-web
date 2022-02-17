@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-13 14:38:10
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-17 12:31:25
+ * @LastEditTime: 2022-02-17 12:58:51
 -->
 <template>
   <div class="blog-categories-chart">
@@ -65,6 +65,7 @@ export default defineComponent({
             data: [
               {
                 value: props.categories.map((category) => category.count),
+                name: '文章分类',
               },
             ],
           },
