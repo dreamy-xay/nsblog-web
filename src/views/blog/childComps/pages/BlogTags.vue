@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 18:26:04
- * @LastEditors: xiao
- * @LastEditTime: 2022-01-19 20:11:52
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-17 12:46:30
 -->
 <template>
   <div class="blog-tags">
@@ -12,9 +12,12 @@
       <div class="left-icon">
         <i class="iconfont blog-biaoqian"></i>
       </div>
-      <div class="blog-tag-content">文章标签</div>
+      <div class="blog-tags-content">文章标签</div>
     </div>
-    <div class="blog-tags-show">
+    <div
+      class="blog-tags-show"
+      v-if="tags.length"
+    >
       <div
         v-for="tag in randomTags"
         :key="tag.name"
@@ -25,30 +28,39 @@
       </div>
     </div>
     <div class="blog-tags-all">
-      <base-tag
-        :size="38"
-        v-for="tag in tags"
-        :key="tag.name"
-        :text="tag.name"
-        :color="tag.color"
-        :hover-color="tag.hoverColor"
-        :style="{borderRadius: styles.borderRadius1, boxShadow: styles.shadow0, fontSize: '16px', marginRight: '20px', marginBottom: '20px'}"
-        :href="tag.url"
-      >
-        <template #text-after>
-          <div class="tags-count">
-            {{tag.count}}
-          </div>
-        </template>
-      </base-tag>
+      <template v-if="tags.length">
+        <base-tag
+          :size="38"
+          v-for="tag in tags"
+          :key="tag.name"
+          :text="tag.name"
+          :color="tag.color"
+          :hover-color="tag.hoverColor"
+          :style="{borderRadius: styles.borderRadius1, boxShadow: styles.shadow0, fontSize: '16px', marginRight: '20px', marginBottom: '20px'}"
+          :href="tag.url"
+        >
+          <template #text-after>
+            <div class="tags-count">
+              {{ tag.count }}
+            </div>
+          </template>
+        </base-tag>
+      </template>
+      <template v-else>
+        <base-svg
+          style="width: 100%; height: 400px; display: flex; align-items: center; justify-content: center;"
+          svg="data-empty"
+          :color="styles.green1"
+        />
+      </template>
     </div>
   </div>
-
 </template>
 
 <script>
 import { computed, defineComponent, reactive } from 'vue';
 import BaseTag from '@/components/content/baseTag/BaseTag.vue';
+import BaseSvg from '@/components/content/baseSvg/BaseSvg.vue';
 import { getTags } from '@/network/api/articles';
 import { useMessage } from 'naive-ui';
 import { circleRandomText } from '@/util/dom';
@@ -64,6 +76,7 @@ export default defineComponent({
   name: 'blogTags',
   components: {
     BaseTag,
+    BaseSvg,
   },
   setup() {
     const msg = useMessage(); // naive-ui 组件 消息
@@ -174,7 +187,7 @@ export default defineComponent({
       }
     }
 
-    .blog-tag-content {
+    .blog-tags-content {
       font-size: 32px;
       font-weight: bold;
       color: $grey-8;
@@ -195,9 +208,10 @@ export default defineComponent({
   .blog-tags-all {
     @include flex(flex-start);
     align-content: flex-start;
+    box-sizing: border-box;
     flex-wrap: wrap;
     margin-top: 16px;
-    margin-bottom: 100px;
+    margin-bottom: 50px;
     width: 800px;
     border-radius: $border-radius-0;
     box-shadow: $shadow-0; //阴影
