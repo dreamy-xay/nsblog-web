@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-20 17:15:26
  * @LastEditors: clq
- * @LastEditTime: 2022-01-25 21:29:30
+ * @LastEditTime: 2022-02-16 14:23:14
 -->
 <template>
   <n-modal
@@ -139,8 +139,8 @@ export default defineComponent({
     // 获取标签
     getTopics()
       .then((data) => {
-        console.log('topics');
-        console.log(data);
+        // console.log('topics');
+        // console.log(data);
         for (let item of data.topics) {
           topics.splice(0, 0, item);
         }

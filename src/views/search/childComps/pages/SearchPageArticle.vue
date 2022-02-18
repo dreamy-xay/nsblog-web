@@ -1,14 +1,14 @@
 <!--
- * @Description: 搜索页面-综合
+ * @Description: 搜索页面-文章
  * @Version:
  * @Autor: Ban
  * @Date: 2022-01-25 14:25:23
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-27 19:10:13
+ * @LastEditTime: 2022-02-18 13:35:11
 -->
 <template>
-  <div class="search-page-question">
-    <div class="search-page-question-content">
+  <div class="search-page-article">
+    <div class="search-page-article-content">
       <base-select-head
         :selectTag="selectTag"
         :selectTime="selectTime"
@@ -17,48 +17,67 @@
       >
       </base-select-head>
       <div
-        class="search-page-question-content-list"
+        class="search-page-article-content-list"
         v-for="item, index in results"
         :key="index"
-        role="button"
-        @click="changePages('/article/' + item.id)"
       >
         <div class="list">
           <div class="title">
             <div
-              class="iconfont blog-wenti1"
-              v-if="item.type == 1"
-            ></div>{{ item.title }}
+              class="title-text"
+              @click="changePages('/article/' + item.id)"
+              role="button"
+            >{{ item.title }}</div>
           </div>
           <div class="content">{{ item.content }}</div>
           <div class="bottom">
             <div class="left">
-              <div class="count">
+              <div
+                class="count"
+                role="button"
+              >
                 <span class="iconfont blog-yulan"></span>
                 {{ item.browsing_count }}
               </div>
               <div
                 class="count"
-                :class="item.like ? 'like' : ''"
+                :class="item.recommend ? 'recommend' : ''"
+                @click="changeLike(index)"
+                role="button"
               >
-                <span class="iconfont blog-dianzan1"></span>{{ item.like_count > 0 ? item.like_count : "点赞"}}
+                <span
+                  class="iconfont"
+                  :class="item.recommend ? 'blog-dianzan' : 'blog-dianzan1'"
+                ></span>{{ item.recommend_count > 0 ? item.recommend_count : "点赞" }}
               </div>
-              <div class="count">
-                <span class="iconfont blog-c-comment"></span>{{ item.reply_count > 0 ? item.reply_count : "评论"}}
+              <div
+                class="count"
+                @click="changePages('/article/' + item.id + '#comment')"
+                role="button"
+              >
+                <span class="iconfont blog-c-comment"></span>{{ item.reply_count > 0 ? item.reply_count : "评论" }}
               </div>
             </div>
             <div class="right">
               <div
                 class="name"
                 @click="changePages('/user/' + item.nickname)"
+                role="button"
               >{{ item.nickname }}</div>
               <div class="time">{{ item.release_time }}</div>
             </div>
           </div>
         </div>
       </div>
+      <base-content-loading
+        :style="{padding: '16px', boxSizing: 'border-box'}"
+        v-show="dataState"
+      ></base-content-loading>
     </div>
-    <search-page-to-load-more @onButtonClick="getData"></search-page-to-load-more>
+    <search-page-to-load-more
+      @onButtonClick="getData"
+      v-show="!dataState"
+    ></search-page-to-load-more>
   </div>
 </template>
 
@@ -68,43 +87,55 @@ import BaseSelectHead from '@/components/common/baseSelectHead/BaseSelectHead.vu
 import SearchPageToLoadMore from '@/views/search/childComps/SearchPageToLoadMore.vue';
 import { search } from '@/network/api/search';
 import { useRoute } from 'vue-router';
+import { mapGetters } from '@/util/store';
+import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
+import { modifyArticleRecommendEvaluation } from '@/network/api/articles';
+import { useMessage } from 'naive-ui';
 
 /**
- * @description: 搜索页面-综合
+ * @description: 搜索页面-文章
  * @author: Ban
  */
 
 export default defineComponent({
-  name: 'searchPageQuestion',
+  name: 'searchPageArticle',
   components: {
     BaseSelectHead,
     SearchPageToLoadMore,
+    BaseContentLoading,
   },
   setup(props, context) {
     const selectTag = ref(0); //选择 0:'综合', 1:'最新', 2:'热门'标签
     const selectTime = ref(0); //选择 0:'时间不限', 1:'最近一天', 2:'最近一周', 3:'最近三月'时间筛选
     const results = reactive([]); // 数据列表
     const route = useRoute(); // route
+    const dataState = ref(false); //是否在获取数据
+    const msg = useMessage();
+
+    const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
 
     /**
      * @description: 获取数据
      * @author: Ban
      */
     function getData() {
-      search(route.query.keyword, 2, selectTag.value, selectTime.value)
+      dataState.value = true;
+      search(route.query.keyword, 1, selectTag.value, selectTime.value)
         .then((data) => {
-          data.questions.forEach((item) => {
+          data.articles.forEach((item) => {
             results.push(item);
-            context.emit('changeLoadingState', 2, true);
+            context.emit('changeLoadingState', 1, true);
           });
+          dataState.value = false;
         })
         .catch((error) => {
           console.log(error);
+          msg.error('数据获取失败');
         });
     }
 
     onMounted(() => {
-      context.emit('changeActiveIndex', 2);
+      context.emit('changeActiveIndex', 1);
       getData();
     });
 
@@ -134,7 +165,6 @@ export default defineComponent({
     watch(
       () => [route.query.keyword, selectTag.value, selectTime.value],
       () => {
-        context.emit('changeLoadingState', 2, false); // 改变数据加载状态
         results.splice(0, results.length); // 清空数组
         getData(); // 重新获取数据
       }
@@ -150,6 +180,29 @@ export default defineComponent({
       window.open(path, path);
     }
 
+    /**
+     * @description: 修改文章评价
+     * @param {number} index 文章索引
+     * @author: Ban
+     */
+
+    function changeLike(index) {
+      if (isLogin.value) {
+        // 修改文章评价类型
+        let like = results[index].recommend ? 0 : 1;
+        modifyArticleRecommendEvaluation(results[index].id, like)
+          .then(() => {
+            results[index].recommend = like;
+            if (like) results[index].recommend_count++;
+            else results[index].recommend_count--;
+          })
+          .catch((error) => {
+            console.log(error);
+            msg.error('操作失败');
+          });
+      }
+    }
+
     return {
       selectTag,
       selectTime,
@@ -158,30 +211,28 @@ export default defineComponent({
       results,
       changePages,
       getData,
+      changeLike,
+      dataState,
     };
   },
 });
 </script>
 
 <style lang="scss" scoped>
-.search-page-question {
+.search-page-article {
   @include flex(center, initial, column);
 
-  .search-page-question-content {
+  .search-page-article-content {
     box-shadow: $shadow-0;
     border-radius: $border-radius-0;
     overflow: hidden;
     margin-bottom: 10px;
     width: 700px;
 
-    .search-page-question-content-list {
+    .search-page-article-content-list {
       height: 107px;
       background: $grey-0;
       transition: 0.2s;
-
-      &:hover {
-        background: $grey-1;
-      }
 
       &:last-child {
         .list {
@@ -198,16 +249,16 @@ export default defineComponent({
         border-bottom: 1px solid $grey-4;
 
         .title {
-          @include ellipsis(1);
           font-weight: 700;
           font-size: 16px;
           color: $grey-10;
 
-          .blog-wenti1 {
-            display: inline-block;
-            height: 14px;
-            width: 14px;
-            margin-right: 8px;
+          .title-text {
+            @include ellipsis(1);
+
+            &:hover {
+              color: $grey-8;
+            }
           }
         }
 
@@ -241,7 +292,7 @@ export default defineComponent({
               }
             }
 
-            .like {
+            .recommend {
               color: $green-1;
             }
           }

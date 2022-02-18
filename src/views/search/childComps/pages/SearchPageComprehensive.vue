@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2022-01-25 14:25:23
  * @LastEditors: Ban
- * @LastEditTime: 2022-02-16 16:10:47
+ * @LastEditTime: 2022-02-18 13:37:06
 -->
 <template>
   <div class="search-page-comprehensive">
@@ -66,6 +66,7 @@
               <div
                 class="name"
                 @click="changePages('/user/' + item.nickname)"
+                role="button"
               >{{ item.nickname }}</div>
               <div class="time">{{ item.release_time }}</div>
             </div>
@@ -94,6 +95,7 @@ import { useRoute } from 'vue-router';
 import { modifyArticleRecommendEvaluation } from '@/network/api/articles';
 import { mapGetters } from '@/util/store';
 import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description: 搜索页面-综合
@@ -113,6 +115,7 @@ export default defineComponent({
     const results = reactive([]); // 数据列表
     const route = useRoute(); // route
     const dataState = ref(false); //是否在获取数据
+    const msg = useMessage();
 
     const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
 
@@ -131,6 +134,7 @@ export default defineComponent({
         })
         .catch((error) => {
           console.log(error);
+          msg.error('数据获取失败');
         });
     }
 
@@ -165,7 +169,6 @@ export default defineComponent({
     watch(
       () => [route.query.keyword, selectTag.value, selectTime.value],
       () => {
-        dataState.value = true; // 改变数据加载状态
         results.splice(0, results.length); // 清空数组
         getData(); // 重新获取数据
       }
@@ -199,6 +202,7 @@ export default defineComponent({
           })
           .catch((error) => {
             console.log(error);
+            msg.error('操作失败');
           });
       }
     }
@@ -233,10 +237,6 @@ export default defineComponent({
       height: 107px;
       background: $grey-0;
       transition: 0.2s;
-
-      // &:hover {
-      //   background: $grey-1;
-      // }
 
       &:last-child {
         .list {

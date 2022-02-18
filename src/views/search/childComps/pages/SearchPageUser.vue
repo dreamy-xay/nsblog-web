@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2022-01-15 17:32:07
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-27 18:58:01
+ * @LastEditTime: 2022-02-18 20:08:47
 -->
 <template>
   <div class="search-page-tag">
@@ -37,13 +37,25 @@
         <div
           :class="item.attention == 1 ? 'cancel' : 'focus'"
           role="button"
-          @click="item.attention == 1 ? cancel(index) : focus(index)"
+          @click="item.attention == 1 ? modal(index) : focus(index)"
         >{{item.attention == 1 ? "取消关注" : "关注"}}</div>
       </div>
+      <base-content-loading
+        :style="{padding: '16px', boxSizing: 'border-box'}"
+        v-show="dataState"
+      ></base-content-loading>
     </div>
-    <search-page-to-load-more @click="getUser"></search-page-to-load-more>
+    <search-page-to-load-more
+      @click="getUser"
+      v-show="!dataState"
+    ></search-page-to-load-more>
+    <base-modal
+      content="确定要取消关注吗"
+      :show="modalShow"
+      @confirm="cancel"
+      @cancel="close"
+    />
   </div>
-
 </template>
 
 <script>
@@ -52,6 +64,11 @@ import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import SearchPageToLoadMore from '@/views/search/childComps/SearchPageToLoadMore.vue';
 import { useRoute } from 'vue-router';
 import { search } from '@/network/api/search';
+import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
+import { mapGetters } from '@/util/store';
+import { useMessage } from 'naive-ui';
+import BaseModal from '@/components/content/baseModal/BaseModal.vue';
+import { addAttentions, deleteAttentions } from '@/network/api/attentions';
 
 /**
  * @description: 搜索主页-用户
@@ -63,11 +80,19 @@ export default defineComponent({
   components: {
     BaseAvatar,
     SearchPageToLoadMore,
+    BaseContentLoading,
+    BaseModal,
   },
   setup(props, context) {
     // 用户搜索数据
     const userData = reactive([]);
-    const route = useRoute();
+    const route = useRoute(); // 路由
+    const dataState = ref(false); //是否在获取数据
+    const msg = useMessage();
+    const modalShow = ref(false); // 是否展示模态框
+    const selectedUser = ref(-1); // 选中用户索引
+
+    const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
 
     /**
      * @description:关注事件
@@ -76,17 +101,38 @@ export default defineComponent({
      * @author: Ban
      */
     function focus(index) {
-      userData[index].attention = 1;
+      if (isLogin.value)
+        addAttentions(userData[index].nickname)
+          .then(() => {
+            userData[index].attention = 1;
+            msg.success('关注成功');
+          })
+          .catch((error) => {
+            console.log(error);
+            msg.error('操作失败');
+          });
+      else msg.error('未登录');
     }
 
     /**
      * @description:取消关注事件
-     * @param {number} 索引 `必传参数`
-     * @return {*}
      * @author: Ban
      */
-    function cancel(index) {
-      userData[index].attention = 0;
+
+    function cancel() {
+      if (isLogin.value) {
+        if (selectedUser.value != -1)
+          deleteAttentions(userData[selectedUser.value].nickname)
+            .then(() => {
+              userData[selectedUser.value].addAttentions = 0;
+              msg.success('取消成功');
+              modalShow.value = false;
+            })
+            .catch((error) => {
+              console.log(error);
+              msg.error('操作失败');
+            });
+      } else msg.error('未登录');
     }
 
     /**
@@ -95,6 +141,7 @@ export default defineComponent({
      */
 
     function getUser() {
+      dataState.value = true;
       search(route.query.keyword, 6)
         .then((data) => {
           if (userData.length == 0) {
@@ -103,6 +150,7 @@ export default defineComponent({
           data.users.forEach((item) => {
             userData.push(item);
           });
+          dataState.value = false;
         })
         .catch((error) => {
           console.log(error);
@@ -138,12 +186,37 @@ export default defineComponent({
       window.open(path, path);
     }
 
+    /**
+     * @description: 关闭模态框
+     * @author: Ban
+     */
+
+    function close() {
+      modalShow.value = false;
+      selectedUser.value = -1;
+    }
+
+    /**
+     * @description: 开启模态框
+     * @param {number} index 索引
+     * @author: Ban
+     */
+
+    function modal(index) {
+      selectedUser.value = index;
+      modalShow.value = true;
+    }
+
     return {
       userData,
       focus,
       cancel,
       getUser,
       changePages,
+      dataState,
+      modalShow,
+      close,
+      modal,
     };
   },
 });
@@ -189,6 +262,10 @@ export default defineComponent({
             color: $grey-11;
             font-size: 16px;
             font-weight: 700;
+
+            &:hover {
+              color: $grey-8;
+            }
           }
         }
 

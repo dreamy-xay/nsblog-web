@@ -4,9 +4,9 @@
  * @Autor: Ban
  * @Date: 2022-01-19 18:53:18
  * @LastEditors: Ban
- * @LastEditTime: 2022-01-24 11:17:24
+ * @LastEditTime: 2022-02-17 13:28:18
  */
-import { get, del, RequestLifeCycle } from '@/network/request';
+import { get, RequestLifeCycle } from '@/network/request';
 
 /**
  * @description: 获取搜索结果
@@ -40,6 +40,23 @@ export function search(
       time,
       limit,
       offset
+    }
+  });
+}
+
+/**
+ * @description: 相关搜索结果
+ * @param {string} keyword 关键字 `必传参数`
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为{}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: Ban
+ */
+export function searchAbout(keyword: string, RLC: RequestLifeCycle = {}): Promise<unknown> {
+  return get({
+    url: '/search/about',
+    ...RLC,
+    params: {
+      keyword
     }
   });
 }
