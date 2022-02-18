@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: Ban
- * @LastEditTime: 2022-02-16 15:31:20
+ * @LastEditTime: 2022-02-18 20:15:03
 -->
 <template>
   <base-view
@@ -115,7 +115,7 @@ export default defineComponent({
           beforeRequest() {
             showContentLoading.value = true;
           },
-          afterResopnse() {
+          afterResponse() {
             showContentLoading.value = false;
           },
         }
@@ -169,7 +169,7 @@ export default defineComponent({
 
     /**
      * @description: 选择了标签
-     * @param {string} topic 专题名
+     * @param {string} top 标签名
      * @return {void}
      * @author: dreamy-xay
      */

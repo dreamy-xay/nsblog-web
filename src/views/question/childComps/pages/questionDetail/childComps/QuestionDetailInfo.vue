@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2022-01-25 12:46:18
- * @LastEditors: clq
- * @LastEditTime: 2022-01-29 16:06:59
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-16 20:45:51
 -->
 <template>
   <div class="question-detail-info">
@@ -29,7 +29,7 @@
         </div>
       </div>
       <div class="content">
-        {{questionInfo.content}}
+        <v-md-preview :text="questionInfo.content" />
       </div>
       <div class="tags">
         <div
@@ -243,6 +243,18 @@ export default defineComponent({
         font-weight: 400;
         color: $grey-8;
         line-height: 32px;
+      }
+    }
+
+    .content {
+      @include word-break;
+
+      :deep(.v-md-editor-preview > div) {
+        padding: 0;
+
+        & > p {
+          margin-bottom: 0;
+        }
       }
     }
 

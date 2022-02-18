@@ -3,26 +3,27 @@
  * @Version:
  * @Autor: clq
  * @Date: 2022-01-16 18:28:08
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-16 16:04:32
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-17 15:59:54
 -->
 <template>
   <base-view
     :background="true"
     :top-bar="true"
     :top-bar-scroll="true"
+    :footer="true"
+    :back-top="true"
     bind-class="question-home"
+    ref="view"
   >
     <template #top-bar-bottom>
       <base-topic-bar
-        @selectTopic="changeTpoic"
         @selectTag="changeTag"
+        @selectTopic="changeTpoic"
+        @selectTopicTag="changeTopicTag"
       />
     </template>
-    <base-topic-tags
-      @selectTopic="changeTpoic"
-      @selectTag="changeTag"
-    />
+    <base-topic-tags />
     <div class="question-container">
       <div class="container-left">
         <div class="left-top">
@@ -30,15 +31,18 @@
             :activeIndex="activeFilterRuleIndex"
             @changeFilterRule="changeFilterRule"
           />
-          <question-item
-            v-for="(item, index) in questions"
-            :key="index"
-            :question="item"
-          />
-          <base-content-loading
-            v-show="showContentLoading"
-            :style="{width: '664px',padding: '16px'}"
-          />
+          <div class="left-body">
+            <question-item
+              v-for="(item, index) in questions"
+              :key="index"
+              :question="item"
+              :style="index==0 ? {borderTop:'none'}:''"
+            />
+            <base-content-loading
+              v-show="showContentLoading"
+              :style="{padding: '16px 0'}"
+            />
+          </div>
         </div>
         <div
           v-show="!showContentLoading && showLoadMore"
@@ -115,12 +119,13 @@ export default defineComponent({
     const showRankCardLoading = ref(false); // rank-card 是否显示加载状态
     const showTagCardLoading = ref(false); // tag-card 是否显示加载状态
     let activeFilterRuleIndex = ref(0); // 当前有效的过滤规则 `{0:'最热', 1:'最新', 2:'待回答', 3:'周榜', 4:'月榜'}`
-    let topicName = ref(''); // 主体
+    let topicName = ref('推荐'); // 主体
     let tagName = ref(''); // 标签
-    let limit = ref(10); // 单次获取问答条数
+    const limit = 10; // 单次获取问答条数
     let offset = ref(0); // 问答记录起始偏移量
     const rankingList = reactive([]); // 热门问答
     const hotTags = reactive([]); // 热门标签
+    const view = ref(null); // base-view
 
     // 初始化热门问答
     updateQuestionsList();
@@ -130,22 +135,19 @@ export default defineComponent({
       beforeRequest() {
         showTagCardLoading.value = true;
       },
-      afterResopnse() {
+      afterResponse() {
         showTagCardLoading.value = false;
       },
     })
       .then((data) => {
         // console.log('getTagsList');
         // console.log(data);
-        hotTags.splice(0, hotTags.length);
-        for (let i = 0; i < data.tags.length; i++) {
-          let item = {
-            name: null,
-            url: `tag/`,
-          };
-          item.name = data.tags[i];
-          item.url += data.tags[i];
-          hotTags.splice(hotTags.length, 0, item);
+        // hotTags.splice(0, hotTags.length);
+        for (let tag of data.tags) {
+          hotTags.splice(hotTags.length, 0, {
+            name: tag.tag_name,
+            url: `question?topic=${tag.topic_name}&tag=${tag.tag_name}`,
+          });
         }
       })
       .catch((error) => {
@@ -163,7 +165,7 @@ export default defineComponent({
         beforeRequest() {
           showRankCardLoading.value = true;
         },
-        afterResopnse() {
+        afterResponse() {
           showRankCardLoading.value = false;
         },
       })
@@ -172,14 +174,8 @@ export default defineComponent({
           // console.log(data);
           // 清空原始数据
           rankingList.splice(0, rankingList.length);
-          for (let i = 0; i < data.questions.length; i++) {
-            let item = {
-              title: null,
-              url: `question/`,
-            };
-            item.title = data.questions[i].title;
-            item.url += data.questions[i].id;
-            rankingList.splice(rankingList.length, 0, item);
+          for (let question of data.questions) {
+            rankingList.splice(rankingList.length, 0, { title: question.title, url: `/question/` + question.id });
           }
         })
         .catch((error) => {
@@ -190,31 +186,48 @@ export default defineComponent({
 
     /**
      * @description: 跟新问答数据
-     * @param {boolean} flag 是否清空原数组
+     * @param {boolean} topTop 是否回顶部 `默认为true`
+     * @param {boolean} flag 是否清空原数组 `默认为false`
      * @return {void}
      * @author: clq
      */
-    function updateQuestions(flag) {
+    function updateQuestions(topTop = true, flag = false) {
+      if (flag == true) {
+        questions.splice(0, questions.length);
+        offset.value = 0;
+      }
+      if (view.value && topTop) view.value.setScrollTop(true);
+
       // 获取问答
-      getQuestions('', 0, 0, activeFilterRuleIndex.value, topicName.value, tagName.value, limit.value, offset.value, {
-        beforeRequest() {
-          showContentLoading.value = true;
-        },
-        afterResopnse() {
-          showContentLoading.value = false;
-        },
-      })
+      getQuestions(
+        '',
+        0,
+        0,
+        activeFilterRuleIndex.value,
+        ['推荐', '关注'].includes(topicName.value) ? '' : topicName.value,
+        tagName.value,
+        limit,
+        offset.value,
+        {
+          beforeRequest() {
+            showContentLoading.value = true;
+          },
+          afterResponse() {
+            showContentLoading.value = false;
+          },
+        }
+      )
         .then((data) => {
           // console.log('getQuestions');
           // console.log(data);
-          if (flag == true) questions.splice(0, questions.length);
           // console.log('questions');
           // console.log(questions);
-          if (data.questions.length == limit.value) showLoadMore.value = true;
+          // console.log(data);
+          if (data.questions.length == limit) showLoadMore.value = true;
           else showLoadMore.value = false;
-          for (let i of data.questions) {
-            questions.splice(questions.length, 0, i);
-          }
+          offset.value += data.questions.length;
+
+          questions.splice(questions.length, 0, ...data.questions);
         })
         .catch((error) => {
           console.log(error);
@@ -222,18 +235,14 @@ export default defineComponent({
         });
     }
 
-    //初始化数据
-    updateQuestions(true);
-
     /**
      * @description: 加载更多问答信息
      * @return {void}
      * @author: clq
      */
     function loadMoreQuestions() {
-      console.log('loadMoreQuestions()');
-      offset.value += limit.value;
-      updateQuestions(false);
+      // console.log('loadMoreQuestions()');
+      updateQuestions(false, false);
     }
 
     /**
@@ -243,15 +252,13 @@ export default defineComponent({
      * @author: clq
      */
     function changeFilterRule(newFilterRuleIndex) {
-      console.log('newFilterRuleIndex: ' + newFilterRuleIndex);
       activeFilterRuleIndex.value = newFilterRuleIndex;
-      offset.value = 0;
-      updateQuestions(true);
+      updateQuestions(true, true);
     }
 
     /**
      * @description: 改变topic
-     * @param {string} newTopic
+     * @param {string} newTopic 专题名
      * @return {void}
      * @author: clq
      */
@@ -259,20 +266,33 @@ export default defineComponent({
       topicName.value = newTopic;
       // 清空tag
       tagName.value = '';
-      console.log('newTopic: ' + newTopic);
-      updateQuestions(true);
+      // console.log('newTopic: ' + newTopic);
+      updateQuestions(true, true);
     }
 
     /**
      * @description: 改变tag
-     * @param {string} newTag 新tag
+     * @param {string} newTag 新标签名
      * @return {void}
      * @author: clq
      */
     function changeTag(newTag) {
       tagName.value = newTag;
-      console.log('newTag: ' + newTag);
-      updateQuestions(true);
+      // console.log('newTag: ' + newTag);
+      updateQuestions(true, true);
+    }
+
+    /**
+     * @description: 选择专题标签
+     * @param {string} topic 专题名 `必传参数`
+     * @param {string} tag 标签名 `必传参数`
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function changeTopicTag(topic, tag) {
+      tagName.value = tag;
+      topicName.value = topic;
+      updateQuestions(true, true);
     }
 
     /**
@@ -283,7 +303,7 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function rankCardClickMenuItem(index, item) {
-      console.log(index, item);
+      // console.log(index, item);
       updateQuestionsList(index);
     }
 
@@ -301,6 +321,8 @@ export default defineComponent({
       changeTpoic,
       changeTag,
       rankCardClickMenuItem,
+      view,
+      changeTopicTag,
     };
   },
 });
@@ -322,6 +344,11 @@ export default defineComponent({
         background: $grey-0;
         border-radius: $border-radius-0;
         box-shadow: $shadow-0;
+
+        .left-body {
+          width: 656px;
+          margin: 0 auto;
+        }
       }
 
       .left-bottom {
