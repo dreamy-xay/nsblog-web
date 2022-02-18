@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-15 21:10:45
+ * @LastEditTime: 2022-02-17 15:30:54
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -69,7 +69,7 @@ export default function(baseUrl: string, app: Application) {
           id: Random.increment(Random.integer(1, 10)),
           title: Random.integer(0, 1) ? Random.title(3, 100) : Random.ctitle(3, 50),
           content: Random.integer(0, 1) ? Random.paragraph(1, 3) : Random.cparagraph(1, 3),
-          topic_tag: tag_name ? tag_name : getRandomTag(),
+          topic_tag: tag_name ? tag_name : getRandomTag(data.topic as string),
           page_view: Random.integer(0, 300),
           comment_count: Random.integer(0, 200),
           recommend_count: Random.integer(0, 900),
@@ -415,6 +415,27 @@ export default function(baseUrl: string, app: Application) {
 
     if (password === '123') return res.send();
     else return res.status(403).json({ error: 'Password error' });
+  });
+
+  // 获取博客信息
+  app.get(baseUrl + '/articles/blogs', (req: Request, res: Response) => {
+    const { username } = req.query;
+    const user: Record<string, unknown> = select('users').findOne({ username });
+    if (!user) return res.status(410).json({ error: 'User name error' });
+
+    print('get blogs info', { username });
+
+    return res.json({
+      nickname: user.nickname,
+      signature: Random.integer(0, 1) ? Random.sentence() : Random.csentence(),
+      blog_home_image: [
+        null,
+        'https://s3.bmp.ovh/imgs/2021/09/fd25f71e808f3f23.jpg',
+        'https://s3.bmp.ovh/imgs/2021/09/8bcf34ab186f752c.jpg',
+        'https://s3.bmp.ovh/imgs/2021/09/040fbcab0802511e.jpg',
+        'https://s3.bmp.ovh/imgs/2021/09/7fc65c1d3e881ea5.jpg'
+      ][Random.integer(0, 4)]
+    });
   });
 }
 

@@ -4,12 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 10:01:23
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-16 14:43:29
+ * @LastEditTime: 2022-02-16 20:50:18
  */
 
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { print, randomUsers, RandomUser, int, getRandomTag } from './util';
+import { print, randomUsers, RandomUser, int, getRandomTag, getRandomTopic } from './util';
 
 export default function(baseUrl: string, app: Application) {
   // 热门文章
@@ -118,9 +118,13 @@ export default function(baseUrl: string, app: Application) {
 
     print('get tags list(hot)', { type });
 
-    const tags: string[] = [];
     const sum: number = Random.integer(10, 25);
-    for (let i: number = 0; i < sum; ++i) tags.push(getRandomTag());
+    const tags: unknown[] = [];
+    for (let i: number = 0; i < sum; ++i)
+      if (type) {
+        const topic_name: string = getRandomTopic();
+        tags.push({ topic_name, tag_name: getRandomTag(topic_name) });
+      } else tags.push(getRandomTag());
 
     return res.json({ tags });
   });

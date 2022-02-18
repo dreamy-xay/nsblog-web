@@ -79,7 +79,7 @@ export default defineComponent({
         beforeRequest() {
           showRankCardLoading.value = true;
         },
-        afterResopnse() {
+        afterResponse() {
           showRankCardLoading.value = false;
         },
       })
@@ -105,7 +105,7 @@ export default defineComponent({
       beforeRequest() {
         showTagCardLoading.value = true;
       },
-      afterResopnse() {
+      afterResponse() {
         showTagCardLoading.value = false;
       },
     })
@@ -131,7 +131,7 @@ export default defineComponent({
       beforeRequest() {
         showBulletinLoading.value = true;
       },
-      afterResopnse() {
+      afterResponse() {
         showBulletinLoading.value = false;
       },
     })

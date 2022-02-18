@@ -3,17 +3,20 @@
  * @Version:
  * @Autor: clq
  * @Date: 2022-01-19 19:21:05
- * @LastEditors: clq
- * @LastEditTime: 2022-01-29 16:11:32
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-17 16:00:07
 -->
 <template>
-  <div class="question-item">
+  <div
+    class="question-item"
+    :style="style"
+  >
     <div
       class="question-item-left"
       :class="{'question-item-border': question.reply_count>0, 'question-item-bgc':question.solution>0}"
     >
       <div class="left-top">
-        {{numberFormat(question.reply_count)}}
+        {{getDivisionFormatNum(question.reply_count)}}
       </div>
       <div class="left-bottom">
         {{question.solution? "解决":"回答"}}
@@ -23,7 +26,7 @@
       class="question-item-middle"
       :class="{'question-item-color': question.browsing_count >= 100}"
     >
-      <div class="middle-top">{{numberFormat(question.browsing_count)}}</div>
+      <div class="middle-top">{{getDivisionFormatNum(question.browsing_count)}}</div>
       <div class="middle-bottom">阅读</div>
     </div>
     <div class="question-item-right">
@@ -41,7 +44,7 @@
             :key="tag"
             role="button"
             @click="toTagPage(tag)"
-          >{{tag}}</div>
+          >{{tag.tag_name}}</div>
         </div>
         <div class="bottom-right">
           <div
@@ -50,7 +53,7 @@
             @click="toUserPage(question.username)"
           >{{question.nickname}}</div>
           <div class="point"></div>
-          <div class="release-time">{{question.release_time}}</div>
+          <div class="release-time">{{dateFormat('YY-mm-dd HH:MM',new Date(question.release_time))}}</div>
         </div>
       </div>
     </div>
@@ -59,12 +62,16 @@
 
 <script>
 import { defineComponent } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
+import { dateFormat } from '@/util/date.ts';
+import { getDivisionFormatNum } from '@/util/util';
 
 /**
  * @description: 问答条目组件
- * @author: clq
  * @param {Object} question 问答信息
+ * @param {Object} style 样式
+ * @author: clq
+
  */
 
 export default defineComponent({
@@ -75,23 +82,13 @@ export default defineComponent({
       required: true,
       default: null,
     },
+    style: {
+      type: Object,
+      default: null,
+    },
   },
   setup() {
-    const route = useRoute(); //route
-
-    /**
-     * @description: 将大于1000的数转化为以k为单位的字符串
-     * @param {number} num 待处理的数据
-     * @return {void}
-     * @author: clq
-     */
-    function numberFormat(num) {
-      if (num > 1000) {
-        return `${Math.floor(num / 1000)}.${Math.floor((num % 1000) / 100)}k`;
-      } else {
-        return num;
-      }
-    }
+    const router = useRouter(); //route
 
     /**
      * @description: 跳转到问答详情页面
@@ -100,7 +97,7 @@ export default defineComponent({
      * @author: clq
      */
     function toResourceDetailPage(questionId) {
-      console.log('questionId: ' + questionId);
+      // console.log('questionId: ' + questionId);
       window.open(`/question/${questionId}`);
     }
 
@@ -111,28 +108,36 @@ export default defineComponent({
      * @author: clq
      */
     function toUserPage(username) {
-      console.log('username: ' + username);
+      // console.log('username: ' + username);
       // this.$router.push({ name: 'question', params: { username: username } });
       window.open(`/user/${username}`);
     }
 
     /**
      * @description: 跳转到用户主页
-     * @param {string} tagName
+     * @param {object} tag // topic_name,tag_name
      * @return {void}
      * @author: clq
      */
-    function toTagPage(tagName) {
+    function toTagPage(tag) {
       // console.log('tagName: ' + tagName);
       // this.$router.push({ name: 'question', params: { tagName: tagName } });
-      window.open(`/tag/${tagName}`);
+      // window.open(`/tag/${tagName}`);
+      router.push({
+        name: 'questionHome',
+        query: {
+          topic: tag.topic_name,
+          tag: tag.tag_name,
+        },
+      });
     }
 
     return {
-      numberFormat,
+      getDivisionFormatNum,
       toResourceDetailPage,
       toUserPage,
       toTagPage,
+      dateFormat,
     };
   },
 });
@@ -142,12 +147,12 @@ export default defineComponent({
 .question-item {
   @include flex(center, space-between);
   box-sizing: border-box;
-  // width: 660px;
+  // width: 620px;
   width: 100%;
   // height: 80px;
   margin: 0px auto;
-  padding: 12px 18px 11px;
-  border-bottom: 1px solid $grey-4;
+  padding: 12px 0 11px;
+  border-top: 1px solid $grey-4;
   transition: 0.25s;
 
   // &:hover {
@@ -268,11 +273,13 @@ export default defineComponent({
         height: inherit;
 
         .tag {
+          max-width: 100px;
+          @include ellipsis(1);
           box-sizing: border-box;
           height: inherit;
           margin-right: 8px;
           padding: 3px 8px;
-          background: rgba(133, 232, 199, 0.3);
+          background: rgba($green-0, 0.3);
           border-radius: 4px;
           font-size: 14px;
           font-weight: 400;
@@ -281,7 +288,7 @@ export default defineComponent({
 
           &:hover {
             color: $green-2;
-            background-color: rgba(133, 232, 199, 0.7);
+            background-color: rgba($green-0, 0.7);
           }
         }
       }
@@ -304,8 +311,8 @@ export default defineComponent({
         }
 
         .point {
-          height: 3px;
-          width: 3px;
+          height: 2px;
+          width: 2px;
           margin: 0px 6px;
           background: $grey-7;
           border: 1px solid $grey-8;

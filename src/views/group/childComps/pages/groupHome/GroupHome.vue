@@ -112,7 +112,7 @@ export default defineComponent({
       beforeRequest() {
         showSolicitationLoading.value = true;
       },
-      afterResopnse() {
+      afterResponse() {
         showSolicitationLoading.value = false;
       },
     })
@@ -135,7 +135,7 @@ export default defineComponent({
       beforeRequest() {
         showRankCardLoading.value = true;
       },
-      afterResopnse() {
+      afterResponse() {
         showRankCardLoading.value = false;
       },
     })
@@ -165,7 +165,7 @@ export default defineComponent({
         beforeRequest() {
           showContentLoading.value = true;
         },
-        afterResopnse() {
+        afterResponse() {
           showContentLoading.value = false;
         },
       })
