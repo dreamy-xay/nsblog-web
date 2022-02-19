@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: Ban
- * @LastEditTime: 2022-02-19 13:25:06
+ * @LastEditTime: 2022-02-19 16:55:42
  */
 
 import axios, { AxiosRequestConfig } from 'axios';
@@ -78,8 +78,8 @@ export function request(options: RequestConfig): Promise<unknown> {
           clearToken();
           store.commit('global/updateTokenInfo', { status: false });
         }
-        // if (err && err.response && (err.response.status === 404 || err.response.status === 410))
-        //   router.push({ name: '404' });
+        if (err && err.response && (err.response.status === 404 || err.response.status === 410))
+          router.push({ name: '404' });
         if (options.failAfterResponse) options.failAfterResponse();
         if (options.afterResponse) options.afterResponse();
         return Promise.reject(err);
