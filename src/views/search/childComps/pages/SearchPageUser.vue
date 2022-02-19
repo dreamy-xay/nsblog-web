@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2022-01-15 17:32:07
  * @LastEditors: Ban
- * @LastEditTime: 2022-02-19 16:39:02
+ * @LastEditTime: 2022-02-19 17:03:10
 -->
 <template>
   <div class="search-page-user">
@@ -124,9 +124,9 @@ export default defineComponent({
         if (selectedUser.value != -1)
           deleteAttentions(userData[selectedUser.value].nickname)
             .then(() => {
-              userData[selectedUser.value].addAttentions = 0;
+              userData[selectedUser.value].attention = 0;
               msg.success('取消成功');
-              modalShow.value = false;
+              close();
             })
             .catch((error) => {
               console.log(error);
