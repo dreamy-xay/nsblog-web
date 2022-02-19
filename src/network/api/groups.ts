@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-16 10:05:10
  * @LastEditors: Ban
- * @LastEditTime: 2022-02-19 16:17:25
+ * @LastEditTime: 2022-02-19 16:45:01
  */
 
 import { get, post, del, RequestLifeCycle } from '@/network/request';
@@ -254,7 +254,7 @@ export function getGroupArticles(
   RLC: RequestLifeCycle = {}
 ): Promise<unknown> {
   return get({
-    url: '/group/articles',
+    url: '/groups/articles',
     ...RLC,
     params: {
       group_name,
@@ -286,7 +286,7 @@ export function getGroupQuestions(
   RLC: RequestLifeCycle = {}
 ): Promise<unknown> {
   return get({
-    url: '/group/questions',
+    url: '/groups/questions',
     ...RLC,
     params: {
       group_name,
@@ -316,7 +316,7 @@ export function getGroupUsers(
   RLC: RequestLifeCycle = {}
 ): Promise<unknown> {
   return get({
-    url: '/group/users',
+    url: '/groups/users',
     ...RLC,
     params: {
       group_name,
