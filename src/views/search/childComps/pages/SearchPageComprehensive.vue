@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2022-01-25 14:25:23
  * @LastEditors: Ban
- * @LastEditTime: 2022-02-18 13:37:06
+ * @LastEditTime: 2022-02-19 16:35:47
 -->
 <template>
   <div class="search-page-comprehensive">
@@ -125,7 +125,7 @@ export default defineComponent({
      */
     function getData() {
       dataState.value = true;
-      search(route.query.keyword, 0, selectTag.value, selectTime.value)
+      search(route.query.keyword, 0, 10, results.length, selectTag.value, selectTime.value)
         .then((data) => {
           data.results.forEach((item) => {
             results.push(item);

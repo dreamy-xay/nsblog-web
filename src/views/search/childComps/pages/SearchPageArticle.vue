@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2022-01-25 14:25:23
  * @LastEditors: Ban
- * @LastEditTime: 2022-02-18 13:35:11
+ * @LastEditTime: 2022-02-19 16:34:43
 -->
 <template>
   <div class="search-page-article">
@@ -120,11 +120,10 @@ export default defineComponent({
      */
     function getData() {
       dataState.value = true;
-      search(route.query.keyword, 1, selectTag.value, selectTime.value)
+      search(route.query.keyword, 1, 10, results.length, selectTag.value, selectTime.value)
         .then((data) => {
           data.articles.forEach((item) => {
             results.push(item);
-            context.emit('changeLoadingState', 1, true);
           });
           dataState.value = false;
         })

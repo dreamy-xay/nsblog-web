@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2022-01-15 17:32:07
  * @LastEditors: Ban
- * @LastEditTime: 2022-02-18 20:02:32
+ * @LastEditTime: 2022-02-19 16:38:49
 -->
 <template>
   <div class="search-page-tag">
@@ -139,7 +139,7 @@ export default defineComponent({
      */
     function getTag() {
       dataState.value = true;
-      search(route.query.keyword, 5)
+      search(route.query.keyword, 5, 10, tagData.length)
         .then((data) => {
           data.tags.forEach((item) => {
             tagData.push(item);
