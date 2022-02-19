@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2022-01-29 16:44:56
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-16 16:16:06
+ * @LastEditors: Ban
+ * @LastEditTime: 2022-02-19 16:38:22
 -->
 <template>
   <div class="search-page-resource">
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, reactive, ref, onMounted } from 'vue';
 import BaseSelectHead from '@/components/common/baseSelectHead/BaseSelectHead.vue';
 import ResourceBody from '@/views/resource/childComps/pages/resourceHome/childComps/resourceLeft/ResourceBody.vue';
 import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
@@ -54,7 +54,7 @@ export default defineComponent({
     ResourceBody,
     BaseContentLoading,
   },
-  setup() {
+  setup(props, context) {
     const route = useRoute(); // route
     const msg = useMessage(); // naive-ui组件
     const selectTag = ref(0); // 0为综合，1为最新，2为热门
@@ -71,7 +71,7 @@ export default defineComponent({
      */
     function getMoreInfo() {
       if (showLoading.value)
-        search(route.query.keyword, 4, selectTag.value, selectTime.value, limit, resourceData.length, {
+        search(route.query.keyword, 4, limit, resourceData.length, selectTag.value, selectTime.value, {
           beforeRequest() {
             showContentLoading.value = true;
           },
@@ -119,6 +119,10 @@ export default defineComponent({
       showLoading.value = true;
       getMoreInfo();
     }
+
+    onMounted(() => {
+      context.emit('changeActiceIndex', 4);
+    });
 
     return {
       styles,

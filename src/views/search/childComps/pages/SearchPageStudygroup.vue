@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: xiao
  * @Date: 2022-01-14 18:52:17
- * @LastEditors: xiao
- * @LastEditTime: 2022-01-27 19:13:34
+ * @LastEditors: Ban
+ * @LastEditTime: 2022-02-19 16:38:37
 -->
 <template>
   <div class="search-page-studygroup">
@@ -116,7 +116,6 @@ export default defineComponent({
     watch(
       () => route.query.keyword,
       () => {
-        context.emit('changeLoadingState', 3, false); // 改变数据加载状态
         groups.splice(0, groups.length); // 清空数组
         getData(); // 重新获取数据
       }

@@ -139,7 +139,7 @@ export default defineComponent({
         beforeRequest() {
           searchListLoading.value = true;
         },
-        afterResopnse() {
+        afterResponse() {
           searchListLoading.value = false;
         },
       })
@@ -174,7 +174,7 @@ export default defineComponent({
           },
         },
         {
-          afterResopnse() {
+          afterResponse() {
             searchAboutLoading.value = false;
           },
         }

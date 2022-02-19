@@ -4,13 +4,13 @@
  * @Autor: Ban
  * @Date: 2022-01-15 17:32:07
  * @LastEditors: Ban
- * @LastEditTime: 2022-02-18 20:08:47
+ * @LastEditTime: 2022-02-19 16:39:02
 -->
 <template>
-  <div class="search-page-tag">
-    <div class="search-page-tag-list">
+  <div class="search-page-user">
+    <div class="search-page-user-list">
       <div
-        class="search-page-tag-list-content"
+        class="search-page-user-list-content"
         v-for="item, index in userData"
         :key="index"
       >
@@ -144,9 +144,6 @@ export default defineComponent({
       dataState.value = true;
       search(route.query.keyword, 6)
         .then((data) => {
-          if (userData.length == 0) {
-            context.emit('changeLoadingState', 6, true);
-          }
           data.users.forEach((item) => {
             userData.push(item);
           });
@@ -170,7 +167,6 @@ export default defineComponent({
     watch(
       () => route.query.keyword,
       () => {
-        context.emit('changeLoadingState', 6, false); // 改变数据加载状态
         userData.splice(0, userData.length); // 清空数组
         getUser(); // 重新获取数据
       }
@@ -223,18 +219,18 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.search-page-tag {
+.search-page-user {
   width: 700px;
   @include flex(center, initial, column);
 
-  .search-page-tag-list {
+  .search-page-user-list {
     box-shadow: $shadow-0;
     border-radius: $border-radius-0;
     overflow: hidden;
     margin-bottom: 10px;
     width: 100%;
 
-    .search-page-tag-list-content {
+    .search-page-user-list-content {
       height: 93px;
       background: $grey-0;
       @include flex(center, space-between);
