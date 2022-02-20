@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2022-01-15 17:32:07
- * @LastEditors: Ban
- * @LastEditTime: 2022-02-19 16:38:49
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-20 16:12:09
 -->
 <template>
   <div class="search-page-tag">
@@ -41,13 +41,13 @@
         >{{item.attention == 1 ? "取消关注" : "关注"}}</div>
       </div>
       <base-content-loading
-        :style="{padding: '16px', boxSizing: 'border-box'}"
+        :style="{padding: '16px 20px', boxSizing: 'border-box',borderTop: tagData.length ? `1px solid ${styles.grey4}` : 0}"
         v-show="dataState"
       ></base-content-loading>
     </div>
     <search-page-to-load-more
       @click="getTag"
-      v-show="!dataState"
+      v-show="!dataState && showButton"
     >
     </search-page-to-load-more>
     <base-modal
@@ -71,6 +71,7 @@ import BaseContentLoading from '@/components/content/baseContentLoading/BaseCont
 import { useMessage } from 'naive-ui';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 import { addUserTag, delUserTag } from '@/network/api/user';
+import styles from '@/assets/style/define.scss';
 
 /**
  * @description: 搜索主页-标签
@@ -91,6 +92,8 @@ export default defineComponent({
     const msg = useMessage();
     const modalShow = ref(false); // 是否显示模态框
     const selectedTag = ref(-1); // 选中标签索引
+    const showButton = ref(false); // 是否显示加载更多按钮
+    const limit = 10; // 获取数据长度
 
     const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
 
@@ -139,8 +142,9 @@ export default defineComponent({
      */
     function getTag() {
       dataState.value = true;
-      search(route.query.keyword, 5, 10, tagData.length)
+      search(route.query.keyword, 5, limit, tagData.length)
         .then((data) => {
+          showButton.value = data.tags.length === limit;
           data.tags.forEach((item) => {
             tagData.push(item);
           });
@@ -208,6 +212,8 @@ export default defineComponent({
       modalShow,
       close,
       modal,
+      showButton,
+      styles,
     };
   },
 });
@@ -221,20 +227,20 @@ export default defineComponent({
   .search-page-tag-list {
     box-shadow: $shadow-0;
     border-radius: $border-radius-0;
+    background: $grey-0;
     overflow: hidden;
     width: 700px;
     margin-bottom: 10px;
 
     .search-page-tag-list-content {
       height: 83px;
-      background: $grey-0;
       @include flex(center, space-between);
       box-sizing: border-box;
       padding: 0 24px;
-      border-bottom: 1px solid $grey-4;
+      border-top: 1px solid $grey-4;
 
-      &:last-child {
-        border-bottom: 0;
+      &:nth-child(1) {
+        border-top: none;
       }
 
       .left {

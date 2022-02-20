@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-16 18:28:08
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-17 15:59:54
+ * @LastEditTime: 2022-02-20 13:56:54
 -->
 <template>
   <base-view
@@ -40,7 +40,7 @@
             />
             <base-content-loading
               v-show="showContentLoading"
-              :style="{padding: '16px 0'}"
+              :style="{padding: '16px 0', borderTop: questions.length ? `1px solid ${styles.grey4}` : 0}"
             />
           </div>
         </div>
@@ -92,6 +92,7 @@ import BaseTagCard from '@/components/common/baseTagCard/BaseTagCard.vue';
 import { getQuestions } from '@/network/api/questions';
 import { getQuestionsList, getTagsList } from '@/network/api/list';
 import { useMessage } from 'naive-ui';
+import styles from '@/assets/style/define.scss';
 
 /**
  * @description:
@@ -323,6 +324,7 @@ export default defineComponent({
       rankCardClickMenuItem,
       view,
       changeTopicTag,
+      styles,
     };
   },
 });
