@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-25 12:46:18
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-16 20:45:51
+ * @LastEditTime: 2022-02-20 17:08:49
 -->
 <template>
   <div class="question-detail-info">
@@ -39,7 +39,7 @@
           role="button"
           @click="toTagPage(tag)"
         >
-          {{tag}}
+          {{tag.tag_name}}
         </div>
       </div>
       <div class="buttons">
@@ -158,12 +158,12 @@ export default defineComponent({
 
     /**
      * @description: 跳转至标签页面
-     * @param {string} tagName
+     * @param {object} tag
      * @return {void}
      * @author: clq
      */
-    function toTagPage(tagName) {
-      window.open(`/tag/${tagName}`);
+    function toTagPage(tag) {
+      window.open(`/question?topic=${tag.topic_name}&tag=${tag.tag_name}`);
     }
 
     /**

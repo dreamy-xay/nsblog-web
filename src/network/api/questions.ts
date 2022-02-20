@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-09-17 20:17:15
- * @LastEditors: clq
- * @LastEditTime: 2022-01-29 13:17:33
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-20 16:53:12
  */
 import { get, post, put, RequestLifeCycle } from '@/network/request';
 
@@ -199,6 +199,23 @@ export function releaseQuestion(
       title,
       content,
       tags
+    }
+  });
+}
+
+/**
+ * @description: 获取邀请回答
+ * @param {string | number} question_id 问答id
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: Z_Y_C
+ */
+export function getInvitationToAnswer(question_id: string | number, RLC: RequestLifeCycle = {}): Promise<unknown> {
+  return get({
+    url: '/questions/invitation',
+    ...RLC,
+    params: {
+      question_id
     }
   });
 }

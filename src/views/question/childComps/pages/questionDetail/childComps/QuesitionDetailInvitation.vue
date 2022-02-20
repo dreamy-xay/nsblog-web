@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: xiao
  * @Date: 2022-01-23 15:06:34
- * @LastEditors: xiao
- * @LastEditTime: 2022-01-26 15:53:59
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-20 17:05:40
 -->
 <template>
   <n-modal
@@ -30,10 +30,12 @@
           <div class="item-left">
             <base-avatar
               :size="40"
-              :src="'../public/blog/none.jpg'"
+              :src="user.avatar"
+              :href="'/user/'+user.username"
+              :target="'/user/'+user.username"
             />
 
-            <div class="name">{{user.username}}</div>
+            <div class="name">{{user.nickname}}</div>
           </div>
           <div
             class="button"
@@ -50,7 +52,9 @@
 
 <script>
 import { defineComponent, reactive } from 'vue';
-import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar';
+import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
+import { useRoute } from 'vue-router';
+import { getInvitationToAnswer } from '@/network/api/questions';
 
 /**
  * @description:邀请回答
@@ -70,43 +74,20 @@ export default defineComponent({
     },
   },
   setup(_, context) {
-    const users = reactive([
-      {
-        username: 'aaa',
-      },
-      {
-        username: 'bbb',
-      },
-      {
-        username: 'ccc',
-      },
-      {
-        username: 'ddd',
-      },
-      {
-        username: 'ddd',
-      },
-      {
-        username: 'ddd',
-      },
-      {
-        username: 'ddd',
-      },
-      {
-        username: 'ddd',
-      },
-      {
-        username: 'ddd',
-      },
-      {
-        username: 'ddd',
-      },
-    ]);
+    const route = useRoute();
+    const questionId = route.params.questionId; // 问答id
 
+    const users = reactive([]);
+
+    // 获取邀请回答数据
+    getInvitationToAnswer(questionId).then((data) => {
+      users.splice(0, users.length, ...data.users);
+    });
     /**
      * @description: 点击关闭触发函数
      * @author: xiao
      */
+
     function close() {
       context.emit('update:isShow', false);
     }
@@ -171,12 +152,12 @@ export default defineComponent({
         margin-left: 24px;
 
         .name {
-          width: 28px;
           height: 19px;
           font-size: 14px;
           font-weight: 700;
           color: $grey-10;
           margin-left: 12px;
+          @include ellipsis(1);
         }
       }
 

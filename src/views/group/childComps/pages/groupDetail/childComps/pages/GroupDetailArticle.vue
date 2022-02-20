@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2022-02-19 13:40:17
- * @LastEditors: Ban
- * @LastEditTime: 2022-02-19 16:21:58
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-20 16:31:12
 -->
 <template>
   <div class="groud-detail-article">
@@ -70,13 +70,13 @@
         </div>
       </div>
       <base-content-loading
-        :style="{padding: '16px', boxSizing: 'border-box'}"
+        :style="{padding: '16px 0',width:'calc(100% - 40px)',margin:'0 20px', borderTop: results.length ? `1px solid ${styles.grey4}` : 0}"
         v-show="dataState"
       ></base-content-loading>
     </div>
     <search-page-to-load-more
       @onButtonClick="getData"
-      v-show="!dataState"
+      v-show="!dataState && showButton"
     ></search-page-to-load-more>
   </div>
 </template>
@@ -91,6 +91,7 @@ import { mapGetters } from '@/util/store';
 import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
 import { modifyArticleRecommendEvaluation } from '@/network/api/articles';
 import { useMessage } from 'naive-ui';
+import styles from '@/assets/style/define.scss';
 
 /**
  * @description: 搜索页面-文章
@@ -111,7 +112,8 @@ export default defineComponent({
     const route = useRoute(); // route
     const dataState = ref(false); //是否在获取数据
     const msg = useMessage();
-
+    const showButton = ref(false); // 是否显示加载更多按钮
+    const limit = 10; // 获取数据长度
     const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
 
     /**
@@ -120,8 +122,9 @@ export default defineComponent({
      */
     function getData() {
       dataState.value = true;
-      getGroupArticles(route.path.split('/')[2], selectTag.value, selectTime.value, 10, results.length)
+      getGroupArticles(route.path.split('/')[2], selectTag.value, selectTime.value, limit, results.length)
         .then((data) => {
+          showButton.value = data.articles.length === limit;
           data.articles.forEach((item) => {
             results.push(item);
           });
@@ -211,6 +214,8 @@ export default defineComponent({
       getData,
       changeLike,
       dataState,
+      styles,
+      showButton,
     };
   },
 });
@@ -222,6 +227,7 @@ export default defineComponent({
 
   .groud-detail-article-content {
     box-shadow: $shadow-0;
+    background: $grey-0;
     border-radius: $border-radius-0;
     overflow: hidden;
     margin-bottom: 10px;
@@ -229,12 +235,11 @@ export default defineComponent({
 
     .groud-detail-article-content-list {
       height: 107px;
-      background: $grey-0;
       transition: 0.2s;
 
-      &:last-child {
+      &:nth-child(2) {
         .list {
-          border-bottom: 0;
+          border-top: none;
         }
       }
 
@@ -244,7 +249,7 @@ export default defineComponent({
         margin: 0 20px;
         height: 100%;
         @include flex(initial, space-between, column);
-        border-bottom: 1px solid $grey-4;
+        border-top: 1px solid $grey-4;
 
         .title {
           font-weight: 700;

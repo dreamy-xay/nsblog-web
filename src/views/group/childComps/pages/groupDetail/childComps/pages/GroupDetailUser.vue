@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2022-01-15 17:32:07
- * @LastEditors: Ban
- * @LastEditTime: 2022-02-19 17:04:38
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-20 16:43:33
 -->
 <template>
   <div class="groud-detail-user">
@@ -48,13 +48,13 @@
         >{{item.attention == 1 ? "取消关注" : "关注"}}</div>
       </div>
       <base-content-loading
-        :style="{padding: '16px', boxSizing: 'border-box'}"
+        :style="{padding: '16px 20px', boxSizing: 'border-box',borderTop: userData.length ? `1px solid ${styles.grey4}` : 0}"
         v-show="dataState"
       ></base-content-loading>
     </div>
     <search-page-to-load-more
       @click="getUser"
-      v-show="!dataState"
+      v-show="!dataState && showButton"
     ></search-page-to-load-more>
     <base-modal
       content="确定要取消关注吗"
@@ -77,6 +77,7 @@ import { useMessage } from 'naive-ui';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 import { addAttentions, deleteAttentions } from '@/network/api/attentions';
 import BaseSelectHead from '@/components/common/baseSelectHead/BaseSelectHead.vue';
+import styles from '@/assets/style/define.scss';
 
 /**
  * @description: 搜索主页-用户
@@ -101,6 +102,8 @@ export default defineComponent({
     const modalShow = ref(false); // 是否展示模态框
     const selectedUser = ref(-1); // 选中用户索引
     const selectTag = ref(0); //选择 0:'小组成员', 1:'管理员'
+    const showButton = ref(false); // 是否显示加载更多按钮
+    const limit = 10; // 获取数据长度
 
     const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
 
@@ -152,8 +155,9 @@ export default defineComponent({
 
     function getUser() {
       dataState.value = true;
-      getGroupUsers(route.path.split('/')[2], selectTag.value, 10, userData.length)
+      getGroupUsers(route.path.split('/')[2], selectTag.value, limit, userData.length)
         .then((data) => {
+          showButton.value = data.users.length === limit;
           data.users.forEach((item) => {
             userData.push(item);
           });
@@ -233,6 +237,8 @@ export default defineComponent({
       modal,
       selectTag,
       changeTag,
+      styles,
+      showButton,
     };
   },
 });
@@ -256,10 +262,10 @@ export default defineComponent({
       @include flex(center, space-between);
       box-sizing: content-box;
       padding: 0 24px;
-      border-bottom: 1px solid $grey-4;
+      border-top: 1px solid $grey-4;
 
-      &:last-child {
-        border-bottom: 0;
+      &:nth-child(2) {
+        border-top: none;
       }
 
       .center {
