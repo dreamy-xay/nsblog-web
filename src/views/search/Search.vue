@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: Ban
- * @LastEditTime: 2022-02-18 20:12:21
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-20 17:21:37
 -->
 
 <template>
@@ -15,6 +15,7 @@
     :top-bar-scroll="true"
     bind-class="search"
     :footer="true"
+    ref="view"
   >
     <template #top-bar-bottom>
       <div class="search-top-bar">
@@ -93,6 +94,7 @@ export default defineComponent({
     // 相关搜索是否显示加载状态
     const searchAboutLoading = ref(false);
     const msg = useMessage();
+    const view = ref(null); // base-view
 
     const topics = [
       // 专题列表
@@ -219,6 +221,7 @@ export default defineComponent({
 
     function changeActiveIndex(index) {
       topicActiveIndex.value = index;
+      view.value.setScrollTop(true);
     }
 
     // 监听关键字改变相关搜索
@@ -239,6 +242,7 @@ export default defineComponent({
       searchListLoading,
       searchAbout,
       searchAboutLoading,
+      view,
     };
   },
 });

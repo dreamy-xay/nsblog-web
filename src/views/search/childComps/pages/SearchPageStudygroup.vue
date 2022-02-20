@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: xiao
  * @Date: 2022-01-14 18:52:17
- * @LastEditors: Ban
- * @LastEditTime: 2022-02-19 16:38:37
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-20 18:28:22
 -->
 <template>
   <div class="search-page-studygroup">
@@ -29,7 +29,7 @@
               v-show="group.join===1"
               class="join"
               role="button"
-              @click="showExit(group)"
+              @click="showExit(index)"
             >
               已加入
             </div>
@@ -45,14 +45,17 @@
               {{group.member_count}}
             </div>
           </div>
-          <hr
-            v-if="show?index!=studyGroups.length-1:index!=5"
-            style="background-color: #e5e5e5;height:0.5px; border:none;"
-          >
         </div>
       </div>
+      <base-content-loading
+        v-show="showContentLoading"
+        :style="{padding: '16px 0 12px 0', borderTop: groups.length ? `1px solid ${styles.grey4}` : 0}"
+      />
     </div>
-    <search-page-to-load-more @onButtonClick="getData"></search-page-to-load-more>
+    <search-page-to-load-more
+      @onButtonClick="getData"
+      :show='showLoading'
+    ></search-page-to-load-more>
   </div>
   <base-modal
     content="确定要退出学习小组吗"
@@ -69,6 +72,10 @@ import { search } from '@/network/api/search';
 import { useRoute } from 'vue-router';
 import SearchPageToLoadMore from '@/views/search/childComps/SearchPageToLoadMore.vue';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
+import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
+import styles from '@/assets/style/define.scss';
+import { mapGetters } from '@/util/store';
+import { addGroup, deleteGroup } from '@/network/api/groups';
 
 /**
  * @description:搜索学习小组
@@ -80,7 +87,9 @@ export default defineComponent({
   components: {
     SearchPageToLoadMore,
     BaseModal,
+    BaseContentLoading,
   },
+  emits: ['changeActiveIndex'],
   setup(_, context) {
     const msg = useMessage(); // naive-ui 组件
     const groups = reactive([]); //学习小组数据
@@ -89,19 +98,33 @@ export default defineComponent({
     const route = useRoute(); // route
     const modalShow = ref(false); //是否显示退出提示
     const selectGroup = ref(-1); //选择的小组下标
+    const showLoading = ref(false); // 显示按钮
+    const showContentLoading = ref(false); // 是否显示加载内容过渡
+    const limit = 10; // 获取数据条数
+    const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
 
     /**
      * @description: 获取数据
      * @author: Ban
      */
     function getData() {
-      search(route.query.keyword, 3)
+      search(route.query.keyword, 3, limit, groups.length, '', '', {
+        beforeRequest() {
+          showContentLoading.value = true;
+        },
+        afterResponse() {
+          showContentLoading.value = false;
+        },
+      })
         .then((data) => {
           console.log('data', data);
+          showLoading.value = data.gropus.length === limit;
+
           data.gropus.forEach((item) => {
             groups.push(item);
-            context.emit('changeLoadingState', 3, true);
+            // context.emit('changeLoadingState', 3, true);
           });
+          console.log(groups);
         })
         .catch((error) => {
           console.log(error);
@@ -128,8 +151,17 @@ export default defineComponent({
      * @author: xiao
      */
     function joinGroup(group) {
-      msg.success(`加入成功`);
-      group.join = 1;
+      if (isLogin.value) {
+        addGroup(group.name)
+          .then(() => {
+            group.join = 1;
+            msg.success('加入学习小组成功');
+          })
+          .catch((error) => {
+            console.log(error);
+            msg.error('加入学习小组失败');
+          });
+      } else msg.error('请先登录');
     }
 
     /**
@@ -143,17 +175,15 @@ export default defineComponent({
 
     /**
      * @description: 显示提示框
-     * @param {object} group 选择的小组
+     * @param {number} index 选择的小组下标
      * @return {void}
      * @author: xiao
      */
-    function showExit(group) {
-      for (let index = 0; index < groups.length; index++) {
-        if (groups[index] == group) {
-          selectGroup.value = index;
-        }
-      }
-      modalShow.value = true;
+    function showExit(index) {
+      if (isLogin.value) {
+        selectGroup.value = index;
+        modalShow.value = true;
+      } else msg.error('请先登录');
     }
 
     /**
@@ -162,8 +192,16 @@ export default defineComponent({
      * @author: xiao
      */
     function exitGroup() {
-      msg.success(`退出成功`);
-      groups[selectGroup.value].join = 0;
+      deleteGroup(groups[selectGroup.value].name)
+        .then(() => {
+          groups[selectGroup.value].join = 0;
+          msg.success('退出学习小组成功');
+          selectGroup.value = null;
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('退出学习小组失败');
+        });
       modalShow.value = false;
     }
 
@@ -177,6 +215,9 @@ export default defineComponent({
       show,
       change,
       modalShow,
+      styles,
+      showLoading,
+      showContentLoading,
     };
   },
 });
@@ -185,7 +226,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 .search-page-studygroup {
   @include flex(center, center, column);
-  margin-bottom: 40px;
 
   .search-page-studygroup-less {
     width: 660px;
@@ -193,18 +233,20 @@ export default defineComponent({
     background: $grey-0;
     border-radius: $border-radius-0; //圆角
     box-shadow: $shadow-0;
-    padding: 16px 20px;
+    padding: 4px 20px;
     margin-bottom: 10px;
+
     & > div {
       &:nth-child(1) div {
-        margin-top: 0px;
+        border-top: none;
       }
     }
 
     .groups {
       widows: 660px;
       height: 84px;
-      margin-top: 24px;
+      padding: 12px 0 12px 0;
+      border-top: 1px solid $grey-4;
 
       .name {
         height: 24px;
@@ -223,6 +265,7 @@ export default defineComponent({
           border: solid 1px $grey-7;
           @include flex(center, center);
           transition: 0.25s;
+          font-weight: normal;
 
           .iconfont {
             margin-right: 4.78px;
