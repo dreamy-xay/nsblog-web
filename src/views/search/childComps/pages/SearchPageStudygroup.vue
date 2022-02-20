@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2022-01-14 18:52:17
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-20 18:28:22
+ * @LastEditTime: 2022-02-20 18:30:17
 -->
 <template>
   <div class="search-page-studygroup">
@@ -269,6 +269,7 @@ export default defineComponent({
 
           .iconfont {
             margin-right: 4.78px;
+            font-size: 12px;
           }
 
           &:hover {
