@@ -3,17 +3,19 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: Ban
- * @LastEditTime: 2022-02-15 13:47:56
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-20 17:21:37
 -->
 
 <template>
   <base-view
     :background="true"
     :top-bar="true"
+    :back-top="true"
     :top-bar-scroll="true"
     bind-class="search"
     :footer="true"
+    ref="view"
   >
     <template #top-bar-bottom>
       <div class="search-top-bar">
@@ -35,33 +37,24 @@
     </template>
     <div class="search-content">
       <div class="search-content-left">
-        <div
-          class="loading"
-          v-if="!loadingState[topicActiveIndex]"
-        >
-          <base-content-loading>
-          </base-content-loading>
-        </div>
         <router-view
-          v-show="loadingState[topicActiveIndex]"
-          @changeLoadingState="changeLoadingState"
           @changeActiveIndex="changeActiveIndex"
           v-slot="{Component}"
         >
           <component :is="Component"></component>
         </router-view>
-
       </div>
       <div class="search-content-right">
         <base-rank-card
+          :loading="searchListLoading"
           title="热门搜索"
-          :menu-list="['综合', '点赞', '评论']"
-          @clickMenuItem="rankCardClickMenuItem"
-          :data="rankingList"
+          :data="searchList"
         ></base-rank-card>
         <base-tag-card
+          :loading="searchAboutLoading"
           title="相关搜索"
-          :tags="hotTags"
+          :tags="searchAbout"
+          :hotIcon="false"
         ></base-tag-card>
       </div>
     </div>
@@ -73,9 +66,11 @@ import { defineComponent, reactive, ref, watch } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import router from '@/router';
 import { useRoute } from 'vue-router';
-import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
 import BaseRankCard from '@/components/common/baseRankCard/BaseRankCard.vue';
 import BaseTagCard from '@/components/common/baseTagCard/BaseTagCard.vue';
+import { searchAbout as getSearchAbout } from '@/network/api/search';
+import { getSearchList } from '@/network/api/list';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description: 搜索主页
@@ -86,70 +81,20 @@ export default defineComponent({
   name: 'search',
   components: {
     BaseView,
-    BaseContentLoading,
     BaseRankCard,
     BaseTagCard,
   },
   setup() {
-    const loadingState = reactive([false, false, false, false, false, false, false]); // 数据获取状态
-    // 热门文章数据
-    const rankingList = reactive([
-      {
-        title: 'react有tab页，如何实现未选中的tab页隐藏但不销毁在JavaScript中一组数据如何进行关联呢',
-        url: '#',
-      },
-      {
-        title: '在JavaScript中一组数据如何进行关联呢',
-        url: '#',
-      },
-      {
-        title: '在JavaScript中一组数据如何进行关联呢',
-        url: '#',
-      },
-      {
-        title: '在JavaScript中一组数据如何进行关联呢',
-        url: '#',
-      },
-      {
-        title: 'react有tab页，如何实现未选中的tab页隐藏但不销毁',
-        url: '#',
-      },
-      {
-        title: '如何给一个html字符串添加锚点',
-        url: '#',
-      },
-    ]);
-    // 热门标签
-    const hotTags = reactive([
-      {
-        name: 'Java',
-        url: `/tag/Java`,
-      },
-      {
-        name: 'Python',
-        url: `/tag/Python`,
-      },
-      {
-        name: 'Csharp',
-        url: `/tag/Csharp`,
-      },
-      {
-        name: 'Cpp',
-        url: `/tag/Cpp`,
-      },
-      {
-        name: 'Vscode',
-        url: `/tag/Vscode`,
-      },
-      {
-        name: '自然科学',
-        url: `/tag/自然科学`,
-      },
-      {
-        name: '人工智能',
-        url: `/tag/人工智能`,
-      },
-    ]);
+    // 热门搜索数据
+    const searchList = reactive([]);
+    // 热门搜索是否显示加载状态
+    const searchListLoading = ref(false);
+    // 相关搜索数据
+    const searchAbout = reactive([]);
+    // 相关搜索是否显示加载状态
+    const searchAboutLoading = ref(false);
+    const msg = useMessage();
+    const view = ref(null); // base-view
 
     const topics = [
       // 专题列表
@@ -183,8 +128,78 @@ export default defineComponent({
       },
     ];
     const topicActiveIndex = ref(0); // 专题激活
-    const route = useRoute();
-    const key = ref(route.query.value);
+    const route = useRoute(); // 路由
+    let key = route.query.keyword; // 搜索关键字
+
+    /**
+     * @description: 获取热门搜索
+     * @author: Ban
+     */
+
+    function getSearchListData() {
+      getSearchList({
+        beforeRequest() {
+          searchListLoading.value = true;
+        },
+        afterResponse() {
+          searchListLoading.value = false;
+        },
+      })
+        .then((data) => {
+          searchList.splice(0, searchList.length);
+          data.search.forEach((item) => {
+            searchList.push({
+              title: item,
+              url: ``,
+            });
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('获取热门搜索失败');
+        });
+    }
+    // 初始化
+    getSearchListData();
+
+    /**
+     * @description: 获取相关搜索
+     * @author: Ban
+     */
+
+    function getSearchAboutData() {
+      getSearchAbout(
+        key,
+        {
+          beforeRequest() {
+            searchAboutLoading.value = true;
+          },
+        },
+        {
+          afterResponse() {
+            searchAboutLoading.value = false;
+          },
+        }
+      )
+        .then((data) => {
+          searchAbout.splice(0, searchAbout.length);
+          data.about.forEach((item) => {
+            searchAbout.push({
+              name: item,
+              url: ``,
+            });
+          });
+          searchAboutLoading.value = false;
+          console.log(data);
+          console.log(searchAbout);
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('获取相关搜索失败');
+        });
+    }
+    // 初始化
+    getSearchAboutData();
 
     /**
      * @description: 点击专题
@@ -192,6 +207,7 @@ export default defineComponent({
      * @return {void}
      * @author: dreamy-xay
      */
+
     function clickTopic(index) {
       topicActiveIndex.value = index;
       router.push({ path: `/search/${topics[index].path}`, query: route.query });
@@ -202,30 +218,31 @@ export default defineComponent({
      * @param {Number} index `索引`
      * @author: Ban
      */
+
     function changeActiveIndex(index) {
       topicActiveIndex.value = index;
+      view.value.setScrollTop(true);
     }
 
-    /**
-     * @description: 改变数据加载状态
-     * @param {Number} index `索引`
-     * @author: Ban
-     */
-    function changeLoadingState(index, state) {
-      loadingState[index] = state;
-      console.log(loadingState[index]);
-    }
+    // 监听关键字改变相关搜索
+    watch(
+      () => route.query.keyword,
+      () => {
+        key = route.query.keyword;
+        getSearchAboutData();
+      }
+    );
 
     return {
       topics,
       topicActiveIndex,
       clickTopic,
-      loadingState,
-      changeLoadingState,
       changeActiveIndex,
-      key,
-      rankingList,
-      hotTags,
+      searchList,
+      searchListLoading,
+      searchAbout,
+      searchAboutLoading,
+      view,
     };
   },
 });
@@ -285,6 +302,7 @@ export default defineComponent({
 
     .search-content-left {
       width: 700px;
+      margin-bottom: 6px;
 
       .loading {
         box-sizing: border-box;

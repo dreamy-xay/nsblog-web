@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2022-01-15 17:32:07
- * @LastEditors: Ban
- * @LastEditTime: 2022-01-27 19:36:53
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-20 16:12:09
 -->
 <template>
   <div class="search-page-tag">
@@ -36,22 +36,42 @@
 
         <div
           :class="item.attention == 1 ? 'cancel' : 'focus'"
-          @click="item.attention == 1 ? cancel(index) : focus(index)"
+          @click="item.attention == 1 ? modal(index) : focus(index)"
           role="button"
         >{{item.attention == 1 ? "取消关注" : "关注"}}</div>
       </div>
+      <base-content-loading
+        :style="{padding: '16px 20px', boxSizing: 'border-box',borderTop: tagData.length ? `1px solid ${styles.grey4}` : 0}"
+        v-show="dataState"
+      ></base-content-loading>
     </div>
-    <search-page-to-load-more @click="getTag">
+    <search-page-to-load-more
+      @click="getTag"
+      v-show="!dataState && showButton"
+    >
     </search-page-to-load-more>
+    <base-modal
+      content="确定要取消关注吗"
+      :show="modalShow"
+      @confirm="cancel"
+      @cancel="close"
+    />
   </div>
+
 </template>
 
 <script>
-import { defineComponent, reactive, onMounted, watch } from 'vue';
+import { defineComponent, reactive, onMounted, watch, ref } from 'vue';
 import SearchPageToLoadMore from '@/views/search/childComps/SearchPageToLoadMore.vue';
 import { search } from '@/network/api/search';
 import { useRoute } from 'vue-router';
 import router from '@/router';
+import { mapGetters } from '@/util/store';
+import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
+import { useMessage } from 'naive-ui';
+import BaseModal from '@/components/content/baseModal/BaseModal.vue';
+import { addUserTag, delUserTag } from '@/network/api/user';
+import styles from '@/assets/style/define.scss';
 
 /**
  * @description: 搜索主页-标签
@@ -62,27 +82,58 @@ export default defineComponent({
   name: 'searchPageTag',
   components: {
     SearchPageToLoadMore,
+    BaseContentLoading,
+    BaseModal,
   },
   setup(props, context) {
     const tagData = reactive([]); // 数据
     const route = useRoute(); // 路由
+    const dataState = ref(false); //是否在获取数据
+    const msg = useMessage();
+    const modalShow = ref(false); // 是否显示模态框
+    const selectedTag = ref(-1); // 选中标签索引
+    const showButton = ref(false); // 是否显示加载更多按钮
+    const limit = 10; // 获取数据长度
+
+    const { isLogin } = mapGetters('global', ['isLogin']); // 是否登录
 
     /**
      * @description:关注事件
      * @param {number} 索引 `必传参数`
      * @author: Ban
      */
+
     function focus(index) {
-      tagData[index].attention = 1;
+      if (isLogin.value)
+        addUserTag(tagData[index].name)
+          .then(() => {
+            tagData[index].attention = 1;
+            msg.success('关注成功');
+          })
+          .catch((error) => {
+            console.log(error);
+            msg.error('操作失败');
+          });
+      else msg.error('未登录');
     }
 
     /**
      * @description:取消关注事件
-     * @param {number} 索引 `必传参数`
      * @author: Ban
      */
-    function cancel(index) {
-      tagData[index].attention = 0;
+    function cancel() {
+      if (isLogin.value)
+        delUserTag(tagData[selectedTag.value].name)
+          .then(() => {
+            tagData[selectedTag.value].attention = 0;
+            msg.success('取消成功');
+            modalShow.value = false;
+          })
+          .catch((error) => {
+            console.log(error);
+            msg.error('操作失败');
+          });
+      else msg.error('未登录');
     }
 
     /**
@@ -90,14 +141,15 @@ export default defineComponent({
      * @author: Ban
      */
     function getTag() {
-      search(route.query.keyword, 5)
+      dataState.value = true;
+      search(route.query.keyword, 5, limit, tagData.length)
         .then((data) => {
-          if (tagData.length == 0) {
-            context.emit('changeLoadingState', 5, true);
-          }
+          showButton.value = data.tags.length === limit;
           data.tags.forEach((item) => {
             tagData.push(item);
           });
+          console.log(data);
+          dataState.value = false;
         })
         .catch((error) => {
           console.log(error);
@@ -116,7 +168,6 @@ export default defineComponent({
     watch(
       () => route.query.keyword,
       () => {
-        context.emit('changeLoadingState', 5, false); // 改变数据加载状态
         tagData.splice(0, tagData.length); // 清空数组
         getTag(); // 重新获取数据
       }
@@ -130,7 +181,25 @@ export default defineComponent({
      */
     function changePage(url) {
       router.push(url);
-      // console.log(route);
+    }
+
+    /**
+     * @description: 关闭模态框
+     * @author: Ban
+     */
+    function close() {
+      modalShow.value = false;
+      selectedTag.value = -1;
+    }
+
+    /**
+     * @description: 开启模态框
+     * @param {number} index 选中标签索引
+     * @author: Ban
+     */
+    function modal(index) {
+      modalShow.value = true;
+      selectedTag.value = index;
     }
 
     return {
@@ -139,6 +208,12 @@ export default defineComponent({
       cancel,
       getTag,
       changePage,
+      dataState,
+      modalShow,
+      close,
+      modal,
+      showButton,
+      styles,
     };
   },
 });
@@ -152,20 +227,20 @@ export default defineComponent({
   .search-page-tag-list {
     box-shadow: $shadow-0;
     border-radius: $border-radius-0;
+    background: $grey-0;
     overflow: hidden;
     width: 700px;
     margin-bottom: 10px;
 
     .search-page-tag-list-content {
       height: 83px;
-      background: $grey-0;
       @include flex(center, space-between);
       box-sizing: border-box;
       padding: 0 24px;
-      border-bottom: 1px solid $grey-4;
+      border-top: 1px solid $grey-4;
 
-      &:last-child {
-        border-bottom: 0;
+      &:nth-child(1) {
+        border-top: none;
       }
 
       .left {

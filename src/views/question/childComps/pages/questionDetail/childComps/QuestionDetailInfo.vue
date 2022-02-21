@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-25 12:46:18
  * @LastEditors: clq
- * @LastEditTime: 2022-02-16 20:34:30
+ * @LastEditTime: 2022-02-21 11:12:17
 -->
 <template>
   <div class="question-detail-info">
@@ -29,7 +29,7 @@
         </div>
       </div>
       <div class="content">
-        {{questionInfo.content}}
+        <v-md-preview :text="questionInfo.content" />
       </div>
       <div class="tags">
         <div
@@ -39,7 +39,7 @@
           role="button"
           @click="toTagPage(tag)"
         >
-          {{tag}}
+          {{tag.tag_name}}
         </div>
       </div>
       <div class="buttons">
@@ -172,12 +172,12 @@ export default defineComponent({
 
     /**
      * @description: 跳转至标签页面
-     * @param {string} tagName
+     * @param {object} tag
      * @return {void}
      * @author: clq
      */
-    function toTagPage(tagName) {
-      window.open(`/tag/${tagName}`);
+    function toTagPage(tag) {
+      window.open(`/question?topic=${tag.topic_name}&tag=${tag.tag_name}`);
     }
 
     /**
@@ -257,6 +257,18 @@ export default defineComponent({
         font-weight: 400;
         color: $grey-8;
         line-height: 32px;
+      }
+    }
+
+    .content {
+      @include word-break;
+
+      :deep(.v-md-editor-preview > div) {
+        padding: 0;
+
+        & > p {
+          margin-bottom: 0;
+        }
       }
     }
 

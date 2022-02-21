@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2022-01-21 23:15:38
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 22:50:43
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-16 15:39:20
 -->
 <template>
   <div class="resource-home">
@@ -22,7 +22,7 @@
           class="button"
           role="button"
           v-show="showButton && !showContentLoading"
-          @click="getMessage()"
+          @click="getMessage"
         >加载更多...</div>
 
       </div>
@@ -60,7 +60,6 @@ export default defineComponent({
     const selectTag = ref(0); // 0为综合，1为最新，2为热门
     const selectTime = ref(0); // 0为不限时间，1为最近一天，2为最近一周，3为最近一个月
     const limit = 10; // 获取信息条数
-    const offest = ref(0); // 获取信息起点
     const showButton = ref(true); // 显示按钮
     const resourceData = reactive([]); // 资源数据
     const rankinglist = reactive([]); // 下载排行
@@ -73,18 +72,17 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function getMessage() {
-      if (showButton.value == true)
-        getResources(null, offest.value, limit, selectTime.value, selectTag.value, {
+      if (showButton.value)
+        getResources(null, resourceData.length, limit, selectTime.value, selectTag.value, {
           beforeRequest() {
             showContentLoading.value = true;
           },
-          afterResopnse() {
+          afterResponse() {
             showContentLoading.value = false;
           },
         })
           .then((data) => {
-            resourceData.splice(offest.value, 0, ...data.resources);
-            offest.value += data.resources.length;
+            resourceData.splice(resourceData.length, 0, ...data.resources);
             if (data.resources.length < limit) showButton.value = false;
           })
           .catch((error) => {
@@ -100,7 +98,7 @@ export default defineComponent({
       beforeRequest() {
         showRankCardLoading.value = true;
       },
-      afterResopnse() {
+      afterResponse() {
         showRankCardLoading.value = false;
       },
     })
@@ -129,8 +127,7 @@ export default defineComponent({
     function changeTag(e) {
       if (e !== selectTag.value) {
         selectTag.value = e;
-        resourceData.splice(0, offest.value);
-        offest.value = 0;
+        resourceData.splice(0, resourceData.length);
         showButton.value = true;
         getMessage();
       }
@@ -145,8 +142,7 @@ export default defineComponent({
     function changeTime(e) {
       if (e !== selectTime.value) {
         selectTime.value = e;
-        resourceData.splice(0, offest.value);
-        offest.value = 0;
+        resourceData.splice(0, resourceData.length);
         showButton.value = true;
         getMessage();
       }

@@ -189,7 +189,7 @@ export default defineComponent({
 
               // 发送验证码
               emailSendVCode(email.value, {
-                afterResopnse() {
+                afterResponse() {
                   loading.destroy();
                 },
               })

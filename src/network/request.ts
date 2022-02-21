@@ -3,21 +3,22 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-25 18:06:02
+ * @LastEditors: Ban
+ * @LastEditTime: 2022-02-19 16:55:42
  */
 
 import axios, { AxiosRequestConfig } from 'axios';
 import { getToken, clearToken } from './token';
 import store from '@/store';
+import router from '@/router';
 
 export interface RequestLifeCycle {
   beforeRequest?(): void;
-  afterResopnse?(): void;
+  afterResponse?(): void;
   successBeforeRequest?(): void;
-  successAfterResopnse?(): void;
+  successAfterResponse?(): void;
   failBeforeRequest?(): void;
-  failAfterResopnse?(): void;
+  failAfterResponse?(): void;
 }
 
 /**
@@ -67,8 +68,8 @@ export function request(options: RequestConfig): Promise<unknown> {
 
     instance.interceptors.response.use(
       response => {
-        if (options.successAfterResopnse) options.successAfterResopnse();
-        if (options.afterResopnse) options.afterResopnse();
+        if (options.successAfterResponse) options.successAfterResponse();
+        if (options.afterResponse) options.afterResponse();
 
         return response;
       },
@@ -77,8 +78,10 @@ export function request(options: RequestConfig): Promise<unknown> {
           clearToken();
           store.commit('global/updateTokenInfo', { status: false });
         }
-        if (options.failAfterResopnse) options.failAfterResopnse();
-        if (options.afterResopnse) options.afterResopnse();
+        if (err && err.response && (err.response.status === 404 || err.response.status === 410))
+          router.push({ name: '404' });
+        if (options.failAfterResponse) options.failAfterResponse();
+        if (options.afterResponse) options.afterResponse();
         return Promise.reject(err);
       }
     );

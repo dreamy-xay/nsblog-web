@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2022-01-23 21:16:25
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-27 20:20:14
+ * @LastEditors: Ban
+ * @LastEditTime: 2022-02-19 16:18:18
 -->
 <template>
   <div
@@ -40,7 +40,6 @@
             placement="bottom"
             class="select-menu-style"
           >
-
             <el-scrollbar max-height="300px">
               <div
                 class="select-menu"
@@ -57,7 +56,7 @@
                 class="select-button"
                 :class="type ? '' : 'select-button-false'"
                 role="button"
-                v-show="type ? true : (selectTag == 2 ? true : false )"
+                v-show="(type ? true : (selectTag == 2 ? true : false )) && selectMenu.length != 0"
               >
                 <div
                   class="select-button-text"
@@ -82,6 +81,8 @@ import { defineComponent, ref } from 'vue';
  * @param {Number} selectTime 选择 0:'时间不限', 1:'最近一天', 2:'最近一周', 3:'最近三月'时间筛选 `默认为0`
  * @param {Object} style 最外层样式 `默认为 null`
  * @param {Boolean} type 类型true下拉框在最后，false下拉框在旁边 `默认为 true`
+ * @param {Array} menu 左侧标签选项 `默认为['综合', '最新', '热门']`
+ * @param {Array} selectMenu 右侧时间选项 `默认为[时间不限', '最近一天', '最近一周', '最近一月]`
  * @event changeTag 改变标签，传回标签下标
  * @event changeSelect 改变时间筛选，传回时间筛选下标
  * @author: Z_Y_C
@@ -106,10 +107,18 @@ export default defineComponent({
       type: Boolean,
       default: true,
     },
+    menu: {
+      type: Array,
+      default: () => ['综合', '最新', '热门'],
+    },
+    selectMenu: {
+      type: Array,
+      default: () => ['时间不限', '最近一天', '最近一周', '最近一月'],
+    },
   },
   setup(props, context) {
-    const menu = ['综合', '最新', '热门']; // 0 1 2
-    const selectMenu = ['时间不限', '最近一天', '最近一周', '最近一月'];
+    //const menu = ['综合', '最新', '热门']; // 0 1 2
+    //const selectMenu = ['时间不限', '最近一天', '最近一周', '最近一月'];
     const rankMenu = ['3天内', '7天内', '30天内', '全部'];
     const npopoverRef = ref(null); //n-popover引用对象
 
@@ -134,9 +143,9 @@ export default defineComponent({
       npopoverRef.value.setShow(false); // 不显示 popover
     }
     return {
-      menu,
+      //menu,
       rankMenu,
-      selectMenu,
+      //selectMenu,
       npopoverRef,
       changeTag,
       changeSelect,
@@ -171,7 +180,9 @@ export default defineComponent({
 
       .box {
         @include flex(center, center);
-        width: 58px;
+        //width: 58px;
+        padding: 0 15px;
+        box-sizing: border-box;
         height: 14px;
         line-height: 14px;
         color: $grey-9;
