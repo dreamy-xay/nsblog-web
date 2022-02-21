@@ -3,18 +3,15 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-15 16:09:44
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-16 20:39:20
 -->
 <template>
   <div
     class="user-profile"
     v-if="(privacySetting.view_profile || isSelf) && text"
   >
-    <v-md-preview
-      :text="text"
-      :style="style"
-    />
+    <v-md-preview :text="text" />
   </div>
   <user-null
     v-else

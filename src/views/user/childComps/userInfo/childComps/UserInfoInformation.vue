@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-09-10 09:23:58
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-11 15:19:29
+ * @LastEditTime: 2022-02-17 15:02:40
 -->
 <template>
   <div class="user-info-information">
@@ -130,7 +130,7 @@ export default defineComponent({
       if (props.data.username) {
         return [
           props.data.gender !== null ? (props.data.gender ? '女' : '男') : '保密',
-          `${process.env.VUE_APP_APIHOST}/blog/${props.data.username}`,
+          `${window.location.origin}/blog/${props.data.username}`,
           props.data.tags,
         ];
       }

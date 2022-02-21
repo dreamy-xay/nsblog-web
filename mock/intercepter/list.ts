@@ -4,12 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 10:01:23
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-14 11:17:15
+ * @LastEditTime: 2022-02-16 20:50:18
  */
 
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { print, randomUsers, RandomUser, int } from './util';
+import { print, randomUsers, RandomUser, int, getRandomTag, getRandomTopic } from './util';
 
 export default function(baseUrl: string, app: Application) {
   // 热门文章
@@ -102,14 +102,29 @@ export default function(baseUrl: string, app: Application) {
   });
 
   // 热门搜索
+  app.get(baseUrl + '/list/search', (req: Request, res: Response) => {
+    print('get search list(hot)');
+
+    const search: string[] = [];
+    const sum: number = Random.integer(10, 25);
+    for (let i: number = 0; i < sum; ++i)
+      search.push(Random.integer(0, 1) ? Random.title(3, 100) : Random.ctitle(3, 50));
+    return res.json({ search });
+  });
+
+  // 热门标签
   app.get(baseUrl + '/list/tags', (req: Request, res: Response) => {
     const type: number = int(req.query.type);
 
     print('get tags list(hot)', { type });
 
-    const tags: string[] = [];
     const sum: number = Random.integer(10, 25);
-    for (let i: number = 0; i < sum; ++i) tags.push(Random.integer(0, 1) ? Random.word() : Random.cword());
+    const tags: unknown[] = [];
+    for (let i: number = 0; i < sum; ++i)
+      if (type) {
+        const topic_name: string = getRandomTopic();
+        tags.push({ topic_name, tag_name: getRandomTag(topic_name) });
+      } else tags.push(getRandomTag());
 
     return res.json({ tags });
   });

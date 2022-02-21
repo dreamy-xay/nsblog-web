@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2022-01-19 22:18:34
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-15 19:55:31
+ * @LastEditTime: 2022-02-17 13:24:10
 -->
 <template>
   <n-modal
@@ -76,7 +76,7 @@ import { defineComponent, ref } from 'vue';
 /**
  * @description: 举报页面
  * @param {Boolean} show 是否显示举报界面 `默认为false`
- * @param {Number} type 举报类型，(1=>文章，2=>问答，3=>资源，4=>征集令) `必传参数`
+ * @param {Number | String} type 举报类型，(1=>文章，2=>问答，3=>资源，4=>征集令) `必传参数`
  * @param {String | Number} 举报id `必传参数`
  * @author: xiao
  */
@@ -89,11 +89,10 @@ export default defineComponent({
       default: false,
     },
     type: {
-      type: Number,
+      type: [Number, String],
       required: true,
     },
     id: {
-      type: [String, Number],
       required: true,
     },
   },

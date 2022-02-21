@@ -3,59 +3,54 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-09-24 18:26:04
- * @LastEditors: clq
- * @LastEditTime: 2022-01-22 18:52:52
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-17 12:46:38
 -->
 <template>
   <div class="blog-categories">
-    <div class="blog-categories-title">
-      <div>
+    <div class="blog-categories-head">
+      <div class="left-icon">
         <i class="iconfont blog-fenlei1"></i>
-        文章分类
       </div>
+      <div class="content">文章分类</div>
     </div>
-
-    <div class="blog-categories-content">
+    <div
+      class="blog-categories-content"
+      v-if="categories.length"
+    >
+      <base-tag
+        :size="38"
+        v-for="category in shuffle(categories)"
+        :key="category.name"
+        :text="category.name"
+        :color="category.color"
+        :hover-color="category.hoverColor"
+        :style="{borderRadius: styles.borderRadius1, boxShadow: styles.shadow0, fontSize: '16px', marginRight: '20px', marginBottom: '20px'}"
+        :href="category.url"
+      >
+        <template #text-after>
+          <div class="categories-count">
+            {{ category.count }}
+          </div>
+        </template>
+      </base-tag>
+    </div>
+    <div class="blog-categories-chart-container">
       <template v-if="categories.length">
-        <base-tag
-          :size="38"
-          v-for="category in categories"
-          :key="category.name"
-          :text="category.name"
-          :color="category.color"
-          :hover-color="category.hoverColor"
-          :style="{borderRadius: styles.borderRadius1, boxShadow: styles.shadow0, fontSize: '16px', marginRight: '20px', marginBottom: '20px'}"
-          :href="category.url"
-        >
-          <template #text-after>
-            <div class="categories-count">
-              {{ category.count }}
-            </div>
-          </template>
-        </base-tag>
+        <div class="title">
+          文章分类雷达图
+        </div>
+        <div class="chart">
+          <blog-categories-chart :categories="chartCategories" />
+        </div>
       </template>
       <template v-else>
         <base-svg
-          style="width:100%;height:200px;padding-left: 60px;"
+          style="width: 100%; height: 400px; display: flex; align-items: center; justify-content: center;"
           svg="data-empty"
-          :color="svgColor"
-        ></base-svg>
-      </template>
-    </div>
-
-    <div
-      v-if="categories.length"
-      class="blog-categories-chart"
-    >
-      <div class="title">
-        文章分类雷达图
-      </div>
-      <div class="chart">
-        <blog-categories-chart
-          :indicator="indicator"
-          :chartData="categoryCount"
+          :color="styles.green1"
         />
-      </div>
+      </template>
     </div>
   </div>
 </template>
@@ -68,7 +63,9 @@ import BlogCategoriesChart from '@/views/blog/childComps/pages/blogCategories/ch
 import { getCategories } from '@/network/api/articles';
 import { useRoute } from 'vue-router';
 import { useMessage } from 'naive-ui';
+import { shuffle } from 'lodash';
 import styles from '@/assets/style/define.scss';
+
 /**
  * @description: 博客全部分类页面
  * @author: clq
@@ -81,18 +78,14 @@ export default defineComponent({
     BaseTag,
     BaseSvg,
   },
-  props: {},
-  setup(props, context) {
+  setup() {
     const msg = useMessage(); // naive-ui 消息组件
-    const route = useRoute(); //route
-    const username = route.params.username; //获取博主用户名
-    const svgColor = styles.green1; //svg图片颜色
-    const chartDataCount = ref(20); //雷达图数据项限制
+    const route = useRoute(); // route
+    const username = route.params.username; // 获取博主用户名
+    let chartDataMaxCount = 20; // 雷达图数据项限制
 
-    let categories = reactive([]); // 文章分类信息
-    let indicator = reactive([]);
-    let categoryCount = reactive([]); // 各分类的文章数量
-    let maxCount = ref(); // categoryCount中的最大值
+    const categories = reactive([]); // 文章分类信息
+    const maxCount = ref(0); // 分类中count最大值
 
     const colorList = [
       // 颜色列表
@@ -113,38 +106,28 @@ export default defineComponent({
       return colorList[Math.floor(Math.random() * colorList.length)];
     }
 
-    /**
-     * @description: 文章分类数组按分类数降序排序
-     * @param {*} a
-     * @param {*} b
-     * @return {*}
-     * @author: clq
-     */
-    function sortCategoriesByCount(a, b) {
-      return b.count - a.count;
-    }
+    // 计算表格分类信息
+    const chartCategories = computed(() => {
+      const newCategories = [...categories];
+      newCategories.sort((a, b) => {
+        return b.count - a.count;
+      });
+      return shuffle(newCategories.slice(0, Math.min(chartDataMaxCount, newCategories.length)));
+    });
 
+    // 初始化获取数据
     getCategories(username)
       .then((data) => {
-        data.categories.sort(sortCategoriesByCount);
-        // console.log('data.categories');
-        // console.log(data.categories);
-
         for (let category of data.categories) {
           const color = randomColor();
           category.color = color[0];
           category.hoverColor = color[1];
           category.url = `/blog/${username}?category=${category.id}`;
           delete category['id'];
-          categories.splice(0, 0, category);
+          categories.splice(categories.length, 0, category);
         }
-        maxCount = data.categories[0].count;
-        chartDataCount.value =
-          chartDataCount.value > data.categories.length ? data.categories.length : chartDataCount.value;
-        for (let i = 0; i < chartDataCount.value; i++) {
-          indicator.splice(0, 0, { name: data.categories[i].name, max: maxCount });
-          categoryCount.splice(0, 0, data.categories[i].count);
-        }
+
+        maxCount.value = data.categories[0].count;
       })
       .catch((error) => {
         console.log(error);
@@ -153,7 +136,7 @@ export default defineComponent({
 
     /**
      * @description: 跳转至分类页面
-     * @param id:地址
+     * @param {number} id 分类id `必传参数`
      * @return {void}
      * @author: clq
      */
@@ -164,9 +147,10 @@ export default defineComponent({
     return {
       styles,
       categories,
-      indicator,
-      categoryCount,
-      svgColor,
+      chartCategories,
+      maxCount,
+      chartDataMaxCount,
+      shuffle,
       toCategory,
     };
   },
@@ -175,52 +159,58 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .blog-categories {
-  @include flex(center, initial, column);
+  @include flex(center, flex-start, column);
   width: 100%;
-  height: 100%;
 
   & > div {
-    box-sizing: border-box;
-    width: 800px;
+    border-radius: $border-radius-0;
     background-color: $grey-0;
-    border-radius: 8px;
-    margin-bottom: 20px;
     box-shadow: $shadow-0;
+    width: 800px;
   }
 
-  .blog-categories-title {
-    @include flex(center, center);
+  .blog-categories-head {
+    margin-top: 31px;
     height: 80px;
-    margin-top: 30px;
-    font-size: 32px;
-    font-weight: 700;
-    color: $grey-8;
+    @include flex(center, center);
 
-    .iconfont {
-      color: $grey-9;
+    .left-icon {
+      height: 100%;
+      margin-right: 16px;
+      @include flex(center);
+
+      .iconfont {
+        font-size: 35px;
+        color: $grey-8;
+      }
+    }
+
+    .content {
       font-size: 32px;
+      font-weight: bold;
+      color: $grey-8;
     }
   }
 
   .blog-categories-content {
+    @include flex(flex-start);
+    align-content: flex-start;
+    flex-wrap: wrap;
     margin-top: 16px;
-    margin-bottom: 50px;
-    width: 800px;
-    border-radius: $border-radius-0;
-    box-shadow: $shadow-0; //阴影
+    box-sizing: border-box;
     padding: 24px 4px 4px 24px;
-    background-color: $grey-0;
 
     .categories-count {
       margin-left: 6px;
     }
   }
 
-  .blog-categories-chart {
+  .blog-categories-chart-container {
     @include flex(center, initial, column);
+    margin: 16px 0 50px 0;
 
     .title {
-      margin: 12px 0 0;
+      margin: 20px 0 0;
       font-size: 26px;
       font-weight: 400;
       color: $grey-8;

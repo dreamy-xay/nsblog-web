@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 18:26:04
- * @LastEditors: xiao
- * @LastEditTime: 2022-02-14 14:27:23
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-17 12:49:31
 -->
 <template>
   <div class="blog-friends">
@@ -15,25 +15,34 @@
       <div class="blog-friends-content">小伙伴们</div>
     </div>
     <div class="blog-friends-body">
-      <div
-        class="link-item"
-        v-for="(friendChain,index) in friendChains"
-        :key="index"
-      >
-        <a
-          :href="friendChain.link"
-          class="link"
+      <template v-if="friendChains.length">
+        <div
+          class="link-item"
+          v-for="(friendChain, index) in friendChains"
+          :key="index"
         >
-          <div class="back"></div>
-          <img
-            src="../../../../../public/blog/none.jpg"
-            class="img"
+          <a
+            :href="friendChain.link"
+            class="link"
           >
-          <div class="name">{{friendChain.title}}</div>
-          <hr class="hr" />
-          <div class="describe">{{friendChain.describe}}</div>
-        </a>
-      </div>
+            <div class="back"></div>
+            <img
+              src="/blog/none.jpg"
+              class="img"
+            >
+            <div class="name">{{ friendChain.title }}</div>
+            <hr class="hr" />
+            <div class="describe">{{ friendChain.describe }}</div>
+          </a>
+        </div>
+      </template>
+      <template v-else>
+        <base-svg
+          style="width: 100%; height: 400px; display: flex; align-items: center; justify-content: center;"
+          svg="data-empty"
+          :color="styles.green1"
+        />
+      </template>
     </div>
   </div>
 
@@ -44,6 +53,8 @@ import { defineComponent, reactive } from 'vue';
 import { getChains } from '@/network/api/chains';
 import { useMessage } from 'naive-ui';
 import { useRoute } from 'vue-router';
+import BaseSvg from '@/components/content/baseSvg/BaseSvg.vue';
+import styles from '@/assets/style/define.scss';
 
 /**
  * @description: 博客全部友链页面
@@ -52,6 +63,9 @@ import { useRoute } from 'vue-router';
 
 export default defineComponent({
   name: 'blogFriends',
+  components: {
+    BaseSvg,
+  },
   setup() {
     const friendChains = reactive([]);
     const msg = useMessage(); // naive-ui
@@ -71,6 +85,7 @@ export default defineComponent({
 
     return {
       friendChains,
+      styles,
     };
   },
 });
@@ -109,10 +124,11 @@ export default defineComponent({
   }
 
   .blog-friends-body {
-    @include flex(first-start, first-start);
+    @include flex(flex-start, flex-start);
     align-content: flex-start;
     flex-wrap: wrap;
     margin: 16px 16px;
+    margin-bottom: 50px;
     width: 784px;
     height: auto !important;
     height: 828px;

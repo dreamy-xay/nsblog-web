@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2021-07-29 19:25:27
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-15 23:45:38
+ * @LastEditTime: 2022-02-17 14:47:40
 -->
 
 <template>
@@ -47,20 +47,18 @@
             </div>
           </div>
 
-          <div
-            class="message-reply-right-text"
-            v-html="item.content.content"
-          ></div>
+          <div class="message-reply-right-text">
+            <v-md-preview :text="item.content.content" />
+          </div>
 
           <div
             class="message-reply-right-center"
             v-if="item.content.reply_username!==''"
           >
-            <span>{{item.content.reply_username}}：</span>
-            <span
-              class="message-reply-right-center-content"
-              v-html="item.content.reply_content"
-            ></span>
+            <div>{{item.content.reply_username}}：</div>
+            <div class="message-reply-right-center-content">
+              <v-md-preview :text="item.content.reply_content" />
+            </div>
           </div>
 
           <div class="message-reply-right-bottom">
@@ -321,6 +319,15 @@ $grey9: $grey-9;
       color: $grey9;
       margin-bottom: 5px;
       @include word-break;
+
+      :deep(.v-md-editor-preview > div) {
+        padding: 0;
+        line-height: normal;
+
+        & > p {
+          margin-bottom: 0;
+        }
+      }
     }
 
     .message-reply-right-center {
@@ -333,6 +340,16 @@ $grey9: $grey-9;
 
       .message-reply-right-center-content {
         @include word-break;
+
+        :deep(.v-md-editor-preview > div) {
+          padding: 0;
+          line-height: normal;
+          font-size: 14px;
+
+          & > p {
+            margin-bottom: 0;
+          }
+        }
       }
     }
 

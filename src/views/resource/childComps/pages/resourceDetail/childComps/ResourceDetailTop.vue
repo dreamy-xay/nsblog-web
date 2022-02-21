@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2022-01-24 21:42:19
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-16 13:05:36
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-16 20:35:00
 -->
 <template>
   <div class="resource-detail-top">
@@ -199,6 +199,7 @@ export default defineComponent({
     font-size: 32px;
     color: $grey-10;
     margin-bottom: 16px;
+    @include word-break;
   }
 
   .user {
@@ -227,6 +228,7 @@ export default defineComponent({
     margin-top: 10px;
     font-size: 16px;
     color: $grey-8;
+    @include word-break;
   }
 
   .button {

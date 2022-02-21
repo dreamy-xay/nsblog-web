@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-15 18:09:36
+ * @LastEditTime: 2022-02-16 20:44:28
 -->
 <template>
   <div
@@ -112,6 +112,7 @@ export default defineComponent({
     margin-bottom: 16px;
     padding: 16px;
     @include flex(center, space-between);
+    @include word-break;
 
     .markdown {
       width: 763px;

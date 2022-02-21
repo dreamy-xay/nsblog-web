@@ -4,7 +4,7 @@
  * @Autor: xiao
  * @Date: 2021-09-27 17:17:24
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-13 14:52:58
+ * @LastEditTime: 2022-02-17 13:24:14
 -->
 <template>
   <n-modal
@@ -54,8 +54,8 @@ import { mapState } from '@/util/store';
 /**
  * @description: 收藏夹界面
  * @param {Boolean} isShow 是否显示收藏夹界面 `默认为false`
- * @param {number} type 收藏的类型1为文章、2为问答、3为资源 `必传参数`
- * @param {number | string} cid 要收藏的内容的id `必传参数`
+ * @param {Number | String} type 收藏的类型1为文章、2为问答、3为资源 `必传参数`
+ * @param {Number | String} cid 要收藏的内容的id `必传参数`
  * @event addCollection 添加收藏成功 (id: string) => void
  * @author: xiao
  */
@@ -69,12 +69,11 @@ export default defineComponent({
       default: false,
     },
     type: {
-      type: Number,
-      default: null,
+      type: [Number, String],
+      required: true,
     },
     cid: {
-      type: [String, Number],
-      default: null,
+      required: true,
     },
   },
   setup(props, context) {
