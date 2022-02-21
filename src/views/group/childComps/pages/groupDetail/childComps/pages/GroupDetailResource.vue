@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-29 16:44:56
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-16 15:55:16
+ * @LastEditTime: 2022-02-21 20:17:23
 -->
 <template>
   <div class="group-detail-resource">
@@ -161,10 +161,12 @@ export default defineComponent({
     border-radius: $border-radius-0;
     box-shadow: $shadow-0;
     background-color: $grey-0;
+    color: $grey-9;
     transition: 0.25s;
 
     &:hover {
       background: $grey-1;
+      color: $grey-10;
     }
   }
 }
