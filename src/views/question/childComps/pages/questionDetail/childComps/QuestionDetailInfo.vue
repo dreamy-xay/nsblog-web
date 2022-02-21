@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-25 12:46:18
  * @LastEditors: clq
- * @LastEditTime: 2022-01-29 16:06:59
+ * @LastEditTime: 2022-02-16 20:34:30
 -->
 <template>
   <div class="question-detail-info">
@@ -81,13 +81,25 @@
         >举报</div>
       </div>
     </div>
-    <base-report v-model:isShow="isShowReport" />
+    <base-report
+      v-model:show="isShowReport"
+      :id="questionInfo.id"
+      :type="'2'"
+    />
+    <base-favorite
+      v-model:isShow="isShow"
+      :cid="questionInfo.id"
+      :type="'1'"
+      @addCollection="addCollection"
+    >
+    </base-favorite>
   </div>
 </template>
 
 <script>
 import { defineComponent, reactive, ref, inject } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
+import BaseFavorite from '@/components/common/baseFavorite/BaseFavorite.vue';
 import BaseReport from '@/components/common/baseReport/BaseReport.vue';
 import { getQuestionDetail } from '@/network/api/questions';
 import { useRoute } from 'vue-router';
@@ -103,6 +115,7 @@ export default defineComponent({
   components: {
     BaseAvatar,
     BaseReport,
+    BaseFavorite,
   },
   setup() {
     const articlePage = inject('articlePage'); // 获取主页面 ref (dom)
@@ -117,6 +130,7 @@ export default defineComponent({
       .then((data) => {
         // console.log('getQuestionDetail');
         // console.log(data);
+        questionInfo.id = data.id;
         questionInfo.title = data.title;
         questionInfo.avatar = data.avatar;
         questionInfo.nickname = data.nickname;
