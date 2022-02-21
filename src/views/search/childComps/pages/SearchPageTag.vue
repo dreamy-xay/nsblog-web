@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2022-01-15 17:32:07
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-20 16:12:09
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-21 20:07:39
 -->
 <template>
   <div class="search-page-tag">
@@ -85,7 +85,7 @@ export default defineComponent({
     BaseContentLoading,
     BaseModal,
   },
-  setup(props, context) {
+  setup(_, context) {
     const tagData = reactive([]); // 数据
     const route = useRoute(); // 路由
     const dataState = ref(false); //是否在获取数据
