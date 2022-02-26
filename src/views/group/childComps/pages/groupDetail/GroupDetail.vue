@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-29 14:37:16
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-15 19:28:06
+ * @LastEditTime: 2022-02-21 20:10:44
 -->
 <template>
   <base-view
@@ -14,6 +14,7 @@
     :back-top="true"
     :footer="true"
     :footer-show-all="false"
+    ref="view"
     bind-class="group-detail"
   >
     <template #top-bar-bottom>
@@ -119,6 +120,7 @@ export default defineComponent({
     const msg = useMessage(); //naive-ui message
     const route = useRoute(); // route
     const showRankCardLoading = ref(false); // rank-card 是否显示加载状态
+    const view = ref(null); // base-view ref
 
     const menuList = [
       // 菜单列表
@@ -160,6 +162,7 @@ export default defineComponent({
     function clickMenuItem(index) {
       activeIndex.value = index;
       router.push({ name: menuList[index].routerName });
+      view.value.setScrollTop(true);
     }
 
     const showSolicitation = ref(false); // 是否显示发布征集令弹框
@@ -214,6 +217,7 @@ export default defineComponent({
     }
 
     return {
+      view,
       showRankCardLoading,
       activeIndex,
       menuList,

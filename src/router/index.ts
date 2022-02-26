@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:02:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-15 12:29:11
+ * @LastEditTime: 2022-02-21 20:04:25
  */
 import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 import loginRouter from './modules/login';
@@ -21,6 +21,7 @@ import groupRouter from './modules/group';
 import resourceRouter from './modules/resource';
 import tagRouter from './modules/tag';
 import solicitationRouter from './modules/solicitation';
+import adminRouter from './modules/admin';
 
 const routes: Array<RouteRecordRaw> = [
   // 主页
@@ -51,6 +52,8 @@ const routes: Array<RouteRecordRaw> = [
   resourceRouter,
   // 征集令页面
   solicitationRouter,
+  // 后台管理界面
+  adminRouter,
   // 404 not find pages
   {
     path: '/404',

@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2022-01-15 17:32:07
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-20 16:26:51
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-21 20:07:20
 -->
 <template>
   <div class="search-page-user">
@@ -84,7 +84,7 @@ export default defineComponent({
     BaseContentLoading,
     BaseModal,
   },
-  setup(props, context) {
+  setup(_, context) {
     // 用户搜索数据
     const userData = reactive([]);
     const route = useRoute(); // 路由
@@ -144,7 +144,7 @@ export default defineComponent({
 
     function getUser() {
       dataState.value = true;
-      search(route.query.keyword, 6, limit)
+      search(route.query.keyword, 6, limit, userData.length)
         .then((data) => {
           showButton.value = data.users.length === limit;
 

@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2022-01-29 16:44:56
- * @LastEditors: Ban
- * @LastEditTime: 2022-02-19 16:38:22
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-21 20:16:47
 -->
 <template>
   <div class="search-page-resource">
@@ -54,7 +54,7 @@ export default defineComponent({
     ResourceBody,
     BaseContentLoading,
   },
-  setup(props, context) {
+  setup(_, context) {
     const route = useRoute(); // route
     const msg = useMessage(); // naive-ui组件
     const selectTag = ref(0); // 0为综合，1为最新，2为热门
@@ -164,10 +164,12 @@ export default defineComponent({
     border-radius: $border-radius-0;
     box-shadow: $shadow-0;
     background-color: $grey-0;
+    color: $grey-9;
     transition: 0.25s;
 
     &:hover {
       background: $grey-1;
+      color: $grey-10;
     }
   }
 }
