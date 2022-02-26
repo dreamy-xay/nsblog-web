@@ -3,8 +3,13 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 20:59:37
+<<<<<<< HEAD
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-26 18:47:17
+=======
  * @LastEditors: clq
  * @LastEditTime: 2022-02-21 13:21:09
+>>>>>>> 3c9170ae8af99213c35ccd915b6a0541f7790375
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -208,6 +213,17 @@ export default function(baseUrl: string, app: Application) {
     const { type, reply_id } = req.body;
 
     print('modify questions replies evaluation', { username, type, reply_id });
+
+    return res.send();
+  });
+
+  //
+  app.post(baseUrl + '/questions/replies/accept', (req: Request, res: Response) => {
+    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
+    const username: string = getToken(req.headers).username;
+    const { reply_id, question_id } = req.body;
+
+    print('accept questions replies', { username, reply_id, question_id });
 
     return res.send();
   });

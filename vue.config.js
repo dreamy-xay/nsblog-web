@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:25:41
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-13 11:51:45
+ * @LastEditTime: 2022-02-26 18:47:30
  */
 
 const path = require('path');
@@ -37,7 +37,7 @@ module.exports = {
 
   // 环境配置
   devServer: {
-    host: 'localhost',
+    // host: 'localhost',
 
     port: process.env.VUE_APP_PORT,
 
