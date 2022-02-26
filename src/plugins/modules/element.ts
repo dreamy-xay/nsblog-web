@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-19 21:30:24
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-09 15:53:05
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-26 20:14:27
  */
 import { App } from 'vue';
 import 'dayjs/locale/zh-cn';
@@ -18,7 +18,7 @@ import {
   // ElAutocomplete,
   ElAvatar,
   ElBacktop,
-  // ElBadge,
+  ElBadge,
   // ElBreadcrumb,
   // ElBreadcrumbItem,
   ElButton,
@@ -43,9 +43,9 @@ import {
   ElDialog,
   // ElDivider,
   // ElDrawer,
-  // ElDropdown,
+  ElDropdown,
   // ElDropdownItem,
-  // ElDropdownMenu,
+  ElDropdownMenu,
   // ElEmpty,
   // ElFooter,
   // ElForm,
@@ -80,10 +80,10 @@ import {
   // ElSteps,
   // ElSubmenu,
   // ElSwitch,
-  // ElTabPane,
+  ElTabPane,
   // ElTable,
   // ElTableColumn,
-  // ElTabs,
+  ElTabs,
   ElTag,
   // ElTimePicker,
   // ElTimeSelect,
@@ -116,7 +116,7 @@ const components = [
   // ElAutocomplete,
   ElAvatar,
   ElBacktop,
-  // ElBadge,
+  ElBadge,
   // ElBreadcrumb,
   // ElBreadcrumbItem,
   ElButton,
@@ -141,9 +141,9 @@ const components = [
   ElDialog,
   // ElDivider,
   // ElDrawer,
-  // ElDropdown,
+  ElDropdown,
   // ElDropdownItem,
-  // ElDropdownMenu,
+  ElDropdownMenu,
   // ElEmpty,
   // ElFooter,
   // ElForm,
@@ -178,10 +178,10 @@ const components = [
   // ElSteps,
   // ElSubmenu,
   // ElSwitch,
-  // ElTabPane,
+  ElTabPane,
   // ElTable,
   // ElTableColumn,
-  // ElTabs,
+  ElTabs,
   ElTag,
   // ElTimePicker,
   // ElTimeSelect,
