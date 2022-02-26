@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 20:59:37
  * @LastEditors: clq
- * @LastEditTime: 2022-02-26 21:13:35
+ * @LastEditTime: 2022-02-26 22:03:11
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -103,7 +103,6 @@ export default function(baseUrl: string, app: Application) {
       avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
       release_time: Random.datetime(),
       tags,
-      solution: Random.integer(0, 100),
       evaluation_count: Random.integer(0, 100),
       browsing_count: Random.integer(0, 10000),
       reply_count: Random.integer(0, 100),
@@ -223,7 +222,7 @@ export default function(baseUrl: string, app: Application) {
     return res.send();
   });
 
-  //
+  // 采纳回答
   app.post(baseUrl + '/questions/replies/accept', (req: Request, res: Response) => {
     if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
     const username: string = getToken(req.headers).username;
