@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2022-01-19 19:24:33
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-17 14:02:09
+ * @LastEditors: clq
+ * @LastEditTime: 2022-02-26 19:02:06
 -->
 <template>
   <div class="question-my-question">
@@ -75,20 +75,22 @@ export default defineComponent({
     let myQuestion = reactive({});
 
     // 初始化数据
-    getMyQuestion()
-      .then((data) => {
-        console.log('getMyQuestion');
-        console.log(data);
-        myQuestion.question_count = data.question_count;
-        myQuestion.reply_count = data.reply_count;
-        myQuestion.like_count = data.like_count;
-        myQuestion.accept_count = data.accept_count;
-        console.log(myQuestion);
-      })
-      .catch((error) => {
-        console.log(error);
-        msg.error('我的问答数据获取失败', { duration: 2000, closable: true });
-      });
+    // console.log('isLogin: ' + isLogin.value);
+    if (isLogin.value)
+      getMyQuestion()
+        .then((data) => {
+          console.log('getMyQuestion');
+          console.log(data);
+          myQuestion.question_count = data.question_count;
+          myQuestion.reply_count = data.reply_count;
+          myQuestion.like_count = data.like_count;
+          myQuestion.accept_count = data.accept_count;
+          console.log(myQuestion);
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('我的问答数据获取失败', { duration: 2000, closable: true });
+        });
 
     /**
      * @description: 更爱模态框显示状态
