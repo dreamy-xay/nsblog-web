@@ -3,10 +3,51 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-09-17 20:17:15
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-20 16:53:12
+ * @LastEditors: clq
+ * @LastEditTime: 2022-02-26 21:04:26
  */
 import { get, post, put, RequestLifeCycle } from '@/network/request';
+
+/**
+ * @description: 修改采纳状态
+ * @param {number} replyId 回答id
+ * @param {number} questionId 问答id
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: clq
+ */
+export function changeSolution(replyId: number, questionId: number, RLC: RequestLifeCycle = {}): Promise<unknown> {
+  return post({
+    url: '/questions/replies/accept',
+    ...RLC,
+    data: {
+      replyId,
+      questionId
+    }
+  });
+}
+
+/**
+ * @description: 修改问答评价
+ * @param {number} questionId 回答id
+ * @param {number} type 评价类型 `0为无操作，1为点赞`
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: clq
+ */
+export function changeEvaluationOnQuestion(
+  questionId: number,
+  type: number,
+  RLC: RequestLifeCycle = {}
+): Promise<unknown> {
+  return put({
+    url: '/questions/evaluation',
+    ...RLC,
+    data: {
+      questionId,
+      type
+    }
+  });
+}
 
 /**
  * @description: 修改回答评价
@@ -18,7 +59,7 @@ import { get, post, put, RequestLifeCycle } from '@/network/request';
  */
 export function changeEvaluationOnReply(replyId: number, type: number, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return put({
-    url: 'questions/replies/evaluation',
+    url: '/questions/replies/evaluation',
     ...RLC,
     data: {
       replyId,
@@ -30,28 +71,28 @@ export function changeEvaluationOnReply(replyId: number, type: number, RLC: Requ
 /**
  * @description: 发表提问的回答
  * @param {number} questionId 问答id
+ * @param {string} content 回答内容
  * @param {number} parentId 上级回复id
  * @param {strig} replyUsername 回复的用户名
- * @param {string} content 回答内容
  * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
  * @return {Promise<unknown>} 请求返回promise
  * @author: clq
  */
 export function releaseQuestionReply(
   questionId: number,
+  content: string,
   parentId: number,
   replyUsername: string,
-  content: string,
   RLC: RequestLifeCycle = {}
 ): Promise<unknown> {
   return post({
-    url: 'questions/replies',
+    url: '/questions/replies',
     ...RLC,
     data: {
       questionId,
+      content,
       parentId,
-      replyUsername,
-      content
+      replyUsername
     }
   });
 }
@@ -76,7 +117,7 @@ export function getQuestionReplies(
   RLC: RequestLifeCycle = {}
 ): Promise<unknown> {
   return get({
-    url: 'questions/replies',
+    url: '/questions/replies',
     ...RLC,
     params: {
       questionId,

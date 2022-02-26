@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-25 18:58:26
  * @LastEditors: clq
- * @LastEditTime: 2022-01-29 16:08:45
+ * @LastEditTime: 2022-02-26 19:58:12
 -->
 <template>
   <div class="question-detail-write-answer">
@@ -17,7 +17,10 @@
           @click="showInvitation"
         >邀请回答</div>
       </div>
-      <div class="body">
+      <div
+        id="md-editor"
+        class="body"
+      >
         <v-md-editor
           v-model="answerText"
           mode="edit"
@@ -29,6 +32,7 @@
         <div
           class="btn"
           role="button"
+          @click="releaseReply"
         >提交回答</div>
       </div>
     </div>
@@ -37,11 +41,12 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
 import QuesitionDetailInvitation from '@/views/question/childComps/pages/questionDetail/childComps/QuesitionDetailInvitation.vue';
 
 /**
  * @description:
+ * @event releaseReply 发布回答 {text:回答内容}
  * @author: clq
  */
 
@@ -50,7 +55,8 @@ export default defineComponent({
   components: {
     QuesitionDetailInvitation,
   },
-  setup() {
+  emits: ['releaseReply'],
+  setup(props, context) {
     let answerText = ref(''); //回答内容
     let isShowIncitation = ref(false); // 邀请回答页面显示控制 `true：显示，false：不显示`
 
@@ -64,10 +70,21 @@ export default defineComponent({
       isShowIncitation.value = true;
     }
 
+    /**
+     * @description: 发布回答
+     * @return {void}
+     * @author: clq
+     */
+    function releaseReply() {
+      context.emit('releaseReply', answerText.value);
+      answerText.value = '';
+    }
+
     return {
       answerText,
       isShowIncitation,
       showInvitation,
+      releaseReply,
     };
   },
 });
