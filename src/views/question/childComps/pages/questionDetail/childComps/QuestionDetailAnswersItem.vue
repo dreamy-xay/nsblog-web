@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-25 19:18:14
  * @LastEditors: clq
- * @LastEditTime: 2022-02-26 15:57:40
+ * @LastEditTime: 2022-02-26 21:58:31
 -->
 <template>
   <div class="question-detail-answers-item">
@@ -61,7 +61,7 @@
       <div class="right">
         <div
           class="support"
-          :class="{'active-support':standpoint==1}"
+          :class="{'active-support':answer.evaluation==1}"
           role="button"
           @click="changeStandpoint(1)"
         >
@@ -70,7 +70,7 @@
         </div>
         <div
           class="oppose"
-          :class="{'active-oppose':standpoint==2}"
+          :class="{'active-oppose':answer.evaluation==2}"
           role="button"
           @click="changeStandpoint(2)"
         >
@@ -114,13 +114,14 @@ import { mapState } from '@/util/store';
  * @param {Number} solutionId 被采纳回答的id
  * @event addReply 添加回复 {praentId:一级回复id, replyId:回复对象id, text:回复文本信息}
  * @event changeAcceptValue 修改回答采纳状态 {answerId: 待修改的回答id}
+ * @event changeEvaluation 修改回答评价{parentId:一级回答id, replyId: 回答id, newEvaluation: 新评价, newSupportCount: 新支持数, newOpposeCount: 新反对数}
  * @author: clq
  */
 
 export default defineComponent({
   name: 'questionDetailAnswersItem',
   components: { BaseAvatar },
-  emits: ['addReply', 'changeAcceptValue'],
+  emits: ['addReply', 'changeAcceptValue', 'changeEvaluation'],
   props: {
     parentId: {
       type: Number,
@@ -150,7 +151,6 @@ export default defineComponent({
     const questionId = route.params.questionId;
     let isShowEdit = ref(false); // 编辑框显示标志 `true:显示, false:不显示`
     let text = ref(''); // 回答内容
-    let standpoint = ref(0); // 当前用户对回答的态度 `0为无操作，1为推荐，2为反对`
     // console.log('props.answer');
     // console.log(props.answer);
 
@@ -175,10 +175,44 @@ export default defineComponent({
      * @author: clq
      */
     function changeStandpoint(newpoint) {
-      let type = standpoint.value == newpoint ? 0 : newpoint;
-      changeEvaluationOnReply(props.answer.id, type)
+      let newEvaluation = props.answer.evaluation == newpoint ? 0 : newpoint;
+      let newSupportCount;
+      let newOpposeCount;
+      changeEvaluationOnReply(props.answer.id, newEvaluation)
         .then(() => {
-          standpoint.value = type;
+          if (props.answer.evaluation == 0) {
+            if (newpoint == 1) {
+              newSupportCount = props.answer.support_count + 1;
+              newOpposeCount = props.answer.oppose_count;
+            } else {
+              newSupportCount = props.answer.support_count;
+              newOpposeCount = props.answer.oppose_count + 1;
+            }
+          } else if (props.answer.evaluation == 1) {
+            if (newpoint == 1) {
+              newSupportCount = props.answer.support_count - 1;
+              newOpposeCount = props.answer.oppose_count;
+            } else {
+              newSupportCount = props.answer.support_count - 1;
+              newOpposeCount = props.answer.oppose_count + 1;
+            }
+          } else {
+            if (newpoint == 1) {
+              newSupportCount = props.answer.support_count + 1;
+              newOpposeCount = props.answer.oppose_count - 1;
+            } else {
+              newSupportCount = props.answer.support_count;
+              newOpposeCount = props.answer.oppose_count - 1;
+            }
+          }
+          context.emit(
+            'changeEvaluation',
+            props.parentId,
+            props.answer.id,
+            newEvaluation,
+            newSupportCount,
+            newOpposeCount
+          );
         })
         .catch((error) => {
           console.log(error);
@@ -217,23 +251,6 @@ export default defineComponent({
       );
       text.value = '';
       isShowEdit.value = false;
-
-      // releaseQuestionReply(questionId, props.answer.id, props.answer.username, text.value)
-      //   .then(() => {
-      //     context.emit(
-      //       'addReply',
-      //       props.parentId == -1 ? props.answer.id : props.parentId,
-      //       props.parentId == -1 ? -1 : props.answer.id,
-      //       text.value
-      //     );
-      //     text.value = '';
-      //     isShowEdit.value = false;
-      //     msg.success('发布成功');
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //     msg.error('发布失败');
-      //   });
     }
 
     /**
@@ -253,7 +270,6 @@ export default defineComponent({
     return {
       isShowEdit,
       text,
-      standpoint,
       tokenInfo,
       toUserCenter,
       changeStandpoint,
@@ -389,7 +405,7 @@ export default defineComponent({
         margin-right: 20px;
 
         &:hover {
-          color: $green-2;
+          color: $green-1;
         }
 
         .icon {
@@ -398,7 +414,11 @@ export default defineComponent({
       }
 
       .active-support {
-        color: $green-2;
+        color: $green-1;
+
+        &:hover {
+          color: $green-2;
+        }
       }
 
       .oppose {
@@ -413,6 +433,10 @@ export default defineComponent({
 
       .active-oppose {
         color: $orange-0;
+
+        &:hover {
+          color: $orange-1;
+        }
       }
     }
   }

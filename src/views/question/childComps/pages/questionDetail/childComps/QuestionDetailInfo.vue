@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-25 12:46:18
  * @LastEditors: clq
- * @LastEditTime: 2022-02-26 14:14:27
+ * @LastEditTime: 2022-02-26 21:56:56
 -->
 <template>
   <div class="question-detail-info">
@@ -71,7 +71,7 @@
         <base-qr-code-popover
           :value="path"
           :placement="'right'"
-          title="扫一扫，分享资源"
+          title="扫一扫，分享问答"
         >
           <div
             class="btn-style-2"
@@ -124,6 +124,8 @@ import BaseQrCodePopover from '@/components/content/baseQrCodePopover/BaseQrCode
 import BaseReport from '@/components/common/baseReport/BaseReport.vue';
 import { useMessage } from 'naive-ui';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
+import { mapGetters } from '@/util/store';
+import { cancelCollections } from '@/network/api/favorites';
 
 /**
  * @description:
@@ -154,9 +156,11 @@ export default defineComponent({
   setup(props, context) {
     const msg = useMessage(); // naive-ui 消息组件
     // const articlePage = inject('articlePage'); // 获取主页面 ref (dom)
+    const { isLogin } = mapGetters('global', ['isLogin']); // 当前登录状态
     let isShowReport = ref(false); // 举报页面显示控制
     let isShowFavorite = ref(false); // 举报页面显示控制
     const modalShow = ref(false); //取消收藏提示
+    let collectionId = ref(-1); //收藏id
 
     /**
      * @description: 跳转到用户主页
@@ -193,7 +197,7 @@ export default defineComponent({
      * @author: clq
      */
     function toEdit() {
-      console.log('toEdit');
+      // console.log('toEdit');
       context.emit('toEdit');
     }
 
@@ -203,7 +207,26 @@ export default defineComponent({
      * @author: clq
      */
     function changeEvaluation() {
-      context.emit('changeEvaluation');
+      if (isLogin.value) context.emit('changeEvaluation');
+      else msg.error('请先登录', { duration: 2000, closable: true });
+    }
+
+    /**
+     * @description: 显示收藏组件
+     * @param {collection} 收藏状态
+     * @return {void}
+     * @author: clq
+     */
+    function showFavorite(collection) {
+      if (isLogin.value) {
+        if (collection) {
+          modalShow.value = true;
+          console.log('modalShow: ' + modalShow.value);
+        } else {
+          isShowFavorite.value = true;
+        }
+        console.log('collection: ' + collection);
+      } else msg.error('请先登录', { duration: 2000, closable: true });
     }
 
     /**
@@ -214,24 +237,9 @@ export default defineComponent({
      */
     function addCollection(id) {
       // console.log('addCollection: ' + id);
-      context.emit('addCollection', id);
+      context.emit('addCollection');
       isShowFavorite.value = false;
-    }
-
-    /**
-     * @description: 显示收藏组件
-     * @param {collection} 收藏状态
-     * @return {void}
-     * @author: clq
-     */
-    function showFavorite(collection) {
-      if (collection) {
-        modalShow.value = true;
-        console.log('modalShow: ' + modalShow.value);
-      } else {
-        isShowFavorite.value = true;
-      }
-      console.log('collection: ' + collection);
+      collectionId.value = id;
     }
 
     /**
@@ -240,9 +248,16 @@ export default defineComponent({
      * @author: xiao
      */
     function delCollection() {
-      modalShow.value = false;
-      context.emit('cacelCollection'); //取消收藏
-      msg.success(`取消收藏成功`);
+      cancelCollections(collectionId.value)
+        .then(() => {
+          modalShow.value = false;
+          context.emit('cacelCollection'); //取消收藏
+          msg.success('取消收藏成功', { duration: 2000, closable: true });
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('取消收藏失败', { duration: 2000, closable: true });
+        });
     }
 
     /**

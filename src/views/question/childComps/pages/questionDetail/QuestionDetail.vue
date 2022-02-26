@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-25 10:25:30
  * @LastEditors: clq
- * @LastEditTime: 2022-02-26 18:47:56
+ * @LastEditTime: 2022-02-26 20:59:38
 -->
 <template>
   <base-view
@@ -12,7 +12,7 @@
     :top-bar="true"
     :top-bar-scroll="true"
     bind-class="question-detail"
-    :ref="baseViewRef"
+    ref="baseViewRef"
   >
     <div class="question-detail-container">
       <div class="container-top">
@@ -48,7 +48,7 @@ import QuestionDetailWriteAnswer from '@/views/question/childComps/pages/questio
 import { getQuestionDetail } from '@/network/api/questions';
 import { useRoute } from 'vue-router';
 import { useMessage } from 'naive-ui';
-import { changeEvaluationOnQuestion } from '@/network/api/questions';
+import { changeEvaluationOnQuestion, changeSolution } from '@/network/api/questions';
 
 /**
  * @description: 问答详情页面
@@ -67,7 +67,7 @@ export default defineComponent({
     const msg = useMessage(); // naive-ui 消息组件
     const route = useRoute(); //route
     const questionId = route.params.questionId; // 问答id
-    const baseViewRef = ref(); // baseView 引用对象
+    const baseViewRef = ref(null); // baseView 引用对象
     let newReply = ref(''); // 新发布的回答
     let questionInfo = reactive({}); // 问答详情
 
@@ -89,8 +89,8 @@ export default defineComponent({
         questionInfo.collection = data.collection;
         questionInfo.solution = data.solution;
         questionInfo.browsing_count = data.browsing_count;
-        // console.log('questionInfo');
-        // console.log(questionInfo);
+        console.log('questionInfo');
+        console.log(questionInfo);
       })
       .catch((error) => {
         console.log(error);
@@ -104,18 +104,20 @@ export default defineComponent({
      */
     function changeEvaluation() {
       let newEvaluation;
+      let newEvaluationCount;
       if (questionInfo.evaluation == 0) {
         newEvaluation = 1;
-        questionInfo.evaluation_count += 1;
+        newEvaluationCount = questionInfo.evaluation_count + 1;
       } else {
         newEvaluation = 0;
-        questionInfo.evaluation_count -= 1;
+        newEvaluationCount = questionInfo.evaluation_count - 1;
       }
-      questionInfo.evaluation = newEvaluation;
+      // questionInfo.evaluation = newEvaluation;
       changeEvaluationOnQuestion(questionInfo.id, newEvaluation)
         .then(() => {
-          msg.success('修改成功', { duration: 2000, closable: true });
-          // questionInfo.evaluation = newEvaluation;
+          msg.success('修改评价成功', { duration: 2000, closable: true });
+          questionInfo.evaluation = newEvaluation;
+          questionInfo.evaluation_count = newEvaluationCount;
         })
         .catch((error) => {
           console.log(error);
@@ -132,8 +134,17 @@ export default defineComponent({
      */
     function changeAccept(answerId) {
       // console.log('DetailAnswerId: ', answerId);
-      if (questionInfo.solution == answerId) questionInfo.solution = -1;
-      else questionInfo.solution = answerId;
+      let newSolution = questionInfo.solution == answerId ? -1 : answerId;
+      changeSolution(answerId, questionInfo.id)
+        .then(() => {
+          msg.success('采纳成功');
+          questionInfo.solution = newSolution;
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('采纳失败', { duration: 2000, closable: true });
+        });
+      // questionInfo.solution = newSolution;
     }
 
     /**
@@ -142,12 +153,12 @@ export default defineComponent({
      * @author: clq
      */
     function toEdit() {
-      // baseViewRef.value.setScrollTop(1000);
+      baseViewRef.value.setScrollTop(false);
       // console.log('DetailToEdit');
     }
 
     /**
-     * @description: 删除收藏
+     * @description: 取消收藏
      * @return {void}
      * @author: clq
      */
@@ -158,13 +169,12 @@ export default defineComponent({
 
     /**
      * @description: 添加收藏
-     * @param {number} 文件夹id
      * @return {void}
      * @author: clq
      */
-    function addCollection(id) {
+    function addCollection() {
       // console.log('Detail-addCollection: ' + id);
-      questionInfo.collection = id;
+      questionInfo.collection = 1;
     }
 
     /**
@@ -174,7 +184,8 @@ export default defineComponent({
      * @author: clq
      */
     function releaseReply(text) {
-      console.log('Detail-releaseReply: ' + text);
+      // console.log('Detail-releaseReply: ' + text);
+      baseViewRef.value.setScrollTop(true);
       newReply.value = text;
     }
 

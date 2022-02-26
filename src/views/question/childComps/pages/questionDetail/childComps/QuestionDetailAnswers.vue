@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-25 13:54:46
  * @LastEditors: clq
- * @LastEditTime: 2022-02-26 16:04:04
+ * @LastEditTime: 2022-02-26 21:47:51
 -->
 <template>
   <div class="question-detail-answers">
@@ -37,6 +37,7 @@
             :isAccept="solutionId == answer.id"
             @addReply="addReply"
             @changeAcceptValue="changeAccept"
+            @changeEvaluation="changeEvaluation"
           />
           <!-- :isBtn="isLogin && username == tokenInfo.username" -->
           <div
@@ -50,6 +51,7 @@
               :solution-id="solutionId"
               :answer="item"
               @addReply="addReply"
+              @changeEvaluation="changeEvaluation"
             />
           </div>
           <div
@@ -131,10 +133,11 @@ export default defineComponent({
     watch(
       () => props.newReplyContent,
       (newValue) => {
-        releaseQuestionReply(questionId, null, null, newValue)
+        console.log('releaseQuestionReply');
+        releaseQuestionReply(questionId, newValue)
           .then((data) => {
-            console.log('releaseQuestionReply');
             console.log(data);
+            msg.success('发布回答成功');
           })
           .catch((error) => {
             console.log(error);
@@ -230,15 +233,15 @@ export default defineComponent({
      * @author: clq
      */
     function addReply(parentId, replyId, text, replyUsername) {
-      console.log('addReply');
-      console.log('parentId: ' + parentId);
-      console.log('replyId: ' + replyId);
-      console.log('text: ' + text);
+      // console.log('addReply');
+      // console.log('parentId: ' + parentId);
+      // console.log('replyId: ' + replyId);
+      // console.log('text: ' + text);
       let newReply = {};
 
-      releaseQuestionReply(questionId, parentId, replyUsername, text)
+      releaseQuestionReply(questionId, text, parentId, replyUsername)
         .then((data) => {
-          console.log('releaseQuestionReply');
+          msg.success('发布成功');
           console.log(data);
         })
         .catch((error) => {
@@ -293,6 +296,40 @@ export default defineComponent({
       context.emit('changeAcceptValue', answerId);
     }
 
+    /**
+     * @description: 修改回答评价
+     * @param {number} parentId 一级回答id
+     * @param {number} replyId 回答id
+     * @param {number} newEvaluation 新评价
+     * @param {number} newSupportCount 新支持数
+     * @param {number} newOpposeCount 新反对数
+     * @return {void}
+     * @author: clq
+     */
+    function changeEvaluation(parentId, replyId, newEvaluation, newSupportCount, newOpposeCount) {
+      if (parentId == -1) {
+        for (let i = 0; i < answers.length; i++) {
+          if (answers[i].id == replyId) {
+            answers[i].evaluation = newEvaluation;
+            answers[i].support_count = newSupportCount;
+            answers[i].oppose_count = newOpposeCount;
+          }
+        }
+      } else {
+        for (let i = 0; i < answers.length; i++) {
+          if (answers[i].id == parentId) {
+            for (let j = 0; j < answers[i].child_replies.length; j++) {
+              if (answers[i].child_replies[j].id == replyId) {
+                answers[i].child_replies[j].evaluation = newEvaluation;
+                answers[i].child_replies[j].support_count = newSupportCount;
+                answers[i].child_replies[j].oppose_count = newOpposeCount;
+              }
+            }
+          }
+        }
+      }
+    }
+
     return {
       answers,
       answersType,
@@ -303,6 +340,7 @@ export default defineComponent({
       loadMoreAnswers,
       addReply,
       changeAccept,
+      changeEvaluation,
     };
   },
 });
