@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2022-01-24 21:42:19
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-16 20:35:00
+ * @LastEditors: clq
+ * @LastEditTime: 2022-02-26 21:51:10
 -->
 <template>
   <div class="resource-detail-top">
@@ -102,6 +102,8 @@ import BaseReport from '@/components/common/baseReport/BaseReport.vue';
 import BaseFavorite from '@/components/common/baseFavorite/BaseFavorite.vue';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 import { dateFormat } from '@/util/date';
+import { mapGetters } from '@/util/store';
+import { useMessage } from 'naive-ui';
 
 /**
  * @description: 资源详细信息页面top
@@ -132,6 +134,8 @@ export default defineComponent({
     const id = ref(null); // 资源id
     const type = '3'; // 收藏类型
     const showReport = ref(false);
+    const { isLogin } = mapGetters('global', ['isLogin']);
+    const msg = useMessage(); // naive-ui 消息组件
 
     /**
      * @description: 按钮跳转
@@ -144,12 +148,14 @@ export default defineComponent({
       if (index == 0) window.open('/user/' + props.data.username, '/user/' + props.data.username);
       else if (index == 1) window.open(props.data.link, props.data.link);
       else if (index == 2) {
-        if (!props.data.collection) {
-          isShow.value = true;
-          addCollection();
-        } else {
-          modalShow.value = true;
-        }
+        if (isLogin.value)
+          if (!props.data.collection) {
+            isShow.value = true;
+            addCollection();
+          } else {
+            modalShow.value = true;
+          }
+        else msg.error('请登录', { duration: 2000, closable: true });
       } else {
         showReport.value = true;
       }
