@@ -1,0 +1,190 @@
+<!--
+ * @Description: 管理员页面菜单
+ * @Version:
+ * @Autor: dreamy-xay
+ * @Date: 2022-02-26 19:06:03
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-26 22:02:37
+-->
+<template>
+  <div class="admin-menu">
+    <div class="admin-menu-main">
+      <div class="main-icon">
+        <img
+          src="/favicon.ico"
+          alt="nsblog icon"
+        >
+      </div>
+      <div class="main-inner">
+        <div
+          class="menu-item"
+          v-for="(item, index) in menuList"
+          :class="{'menu-item-active': activeIndex === index}"
+          :key="index"
+          role="button"
+          @click="goto(item.name)"
+        >
+          <div class="icon">
+            <i
+              class="iconfont"
+              :class="item.icon"
+            ></i>
+          </div>
+          {{ item.title }}
+        </div>
+      </div>
+    </div>
+    <div class="admin-menu-sub">
+
+    </div>
+  </div>
+</template>
+
+<script>
+import { computed, defineComponent, ref, watch } from 'vue';
+import { getMenuRoutes } from '@/util/router';
+import router from '@/router';
+import { useRoute } from 'vue-router';
+
+/**
+ * @description: 管理员页面菜单
+ * @author: dreamy-xay
+ */
+
+export default defineComponent({
+  name: 'adminMenu',
+  components: {},
+  props: {
+    super: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  setup(props) {
+    const route = useRoute(); // route
+    const routes = getMenuRoutes(); // 获取所有路由菜单列表
+
+    const activeIndex = ref(-1); // 激活菜单
+
+    // 计算显示的菜单列表
+    const menuList = computed(() => {
+      return props.super ? routes : routes.filter((route) => !route.super);
+    });
+
+    /**
+     * @description: 获取更新激活菜单索引
+     * @param {string} name 当前路由名称 `必传参数`
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function updateActiveIndex(name) {
+      // 获取菜单子列表项路由名称
+      function get(routes) {
+        const nameList = [];
+        for (const route of routes) {
+          nameList.push(route.name);
+          nameList.push(...get(route.children));
+        }
+        return nameList;
+      }
+
+      const list = menuList.value; // 当前菜单
+      let ok = false; // 是否激活
+
+      for (let i = 0; i < list.length; ++i)
+        if (list[i].name === name || get(list[i].children).includes(name)) {
+          activeIndex.value = i;
+          ok = true;
+          break;
+        }
+      if (!ok) activeIndex.value = -1;
+    }
+    // 初始化激活
+    updateActiveIndex(route.name);
+
+    // 监听路由
+    watch(() => route.name, updateActiveIndex);
+
+    /**
+     * @description: 前往路由
+     * @param {string} routeName 路由名称
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function goto(routeName) {
+      router.push({ name: routeName });
+    }
+
+    return {
+      menuList,
+      activeIndex,
+      goto,
+    };
+  },
+});
+</script>
+
+<style lang="scss" scoped>
+.admin-menu {
+  height: 100%;
+  overflow: hidden;
+
+  .admin-menu-main {
+    height: 100%;
+    width: 64px;
+    overflow: hidden;
+
+    .main-icon {
+      height: 60px;
+      width: 100%;
+      @include flex(center, center);
+      background-color: #034291;
+
+      img {
+        width: 32px;
+        height: 32px;
+      }
+    }
+
+    .main-inner {
+      height: calc(100% - 60px);
+      width: 100%;
+      background: url('/admin/menu-background.png') no-repeat;
+      background-size: auto 100%;
+      overflow-y: hidden;
+      overflow-x: auto;
+
+      &::-webkit-scrollbar {
+        width: 0;
+        opacity: 0;
+      }
+
+      .menu-item {
+        margin: 5px;
+        width: 54px;
+        height: 54px;
+        border-radius: $border-radius-1;
+        @include flex(center, center, column);
+        color: $grey-0;
+        font-size: 14px;
+        transition: 0.25s;
+
+        &.menu-item-active {
+          background-color: rgba($grey-11, 0.3);
+        }
+
+        .icon {
+          height: 20px;
+          @include flex(center);
+          margin-bottom: 4px;
+
+          .iconfont {
+            font-weight: 700;
+            font-size: 18px;
+          }
+        }
+      }
+    }
+  }
+}
+</style>
