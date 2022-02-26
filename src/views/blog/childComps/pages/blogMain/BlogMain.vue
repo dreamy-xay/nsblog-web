@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-09-29 16:58:46
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-17 15:21:04
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-26 21:58:18
 -->
 <template>
   <div class="blog-main">
@@ -62,6 +62,7 @@ export default defineComponent({
       type.value = false;
     }
     if (route.query.tag != null) text.value = route.query.tag;
+    if (route.query.page != null) page.value = route.query.page;
 
     /**
      * @description: 获取基本信息

@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: xiao
  * @Date: 2022-01-21 19:42:59
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-16 13:02:17
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-26 19:11:53
 -->
 <template>
   <base-view
@@ -161,7 +161,7 @@ export default defineComponent({
         view.value.setScrollTop(true); // 回顶部
       }
       // 获取小组
-      getGroups(username, topicSelect.value, 0, limit, '', {
+      getGroups(username, topicSelect.value, groups.length, limit, '', {
         beforeRequest() {
           showContentLoading.value = true;
         },
