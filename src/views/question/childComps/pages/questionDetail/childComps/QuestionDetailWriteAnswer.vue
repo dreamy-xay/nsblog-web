@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-25 18:58:26
  * @LastEditors: clq
- * @LastEditTime: 2022-02-26 15:16:09
+ * @LastEditTime: 2022-02-26 19:58:12
 -->
 <template>
   <div class="question-detail-write-answer">
@@ -17,7 +17,10 @@
           @click="showInvitation"
         >邀请回答</div>
       </div>
-      <div class="body">
+      <div
+        id="md-editor"
+        class="body"
+      >
         <v-md-editor
           v-model="answerText"
           mode="edit"
@@ -38,7 +41,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
 import QuesitionDetailInvitation from '@/views/question/childComps/pages/questionDetail/childComps/QuesitionDetailInvitation.vue';
 
 /**
