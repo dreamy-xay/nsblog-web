@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-25 13:54:46
  * @LastEditors: clq
- * @LastEditTime: 2022-01-29 16:27:52
+ * @LastEditTime: 2022-02-26 21:47:51
 -->
 <template>
   <div class="question-detail-answers">
@@ -31,9 +31,15 @@
           class="answer"
         >
           <question-detail-answers-item
-            @addReply="addReply"
             :answer="answer"
+            :isBtn="true"
+            :solution-id="solutionId"
+            :isAccept="solutionId == answer.id"
+            @addReply="addReply"
+            @changeAcceptValue="changeAccept"
+            @changeEvaluation="changeEvaluation"
           />
+          <!-- :isBtn="isLogin && username == tokenInfo.username" -->
           <div
             v-show="answer.child_replies.length"
             class="child-answer"
@@ -42,8 +48,10 @@
               v-for="(item,index) in answer.child_replies"
               :parentId="answer.id"
               :key="index"
+              :solution-id="solutionId"
               :answer="item"
               @addReply="addReply"
+              @changeEvaluation="changeEvaluation"
             />
           </div>
           <div
@@ -66,14 +74,20 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, reactive, ref, watch } from 'vue';
 import QuestionDetailAnswersItem from '@/views/question/childComps/pages/questionDetail/childComps/QuestionDetailAnswersItem.vue';
-import { getQuestionReplies } from '@/network/api/questions';
+import { getQuestionReplies, releaseQuestionReply } from '@/network/api/questions';
 import { useRoute } from 'vue-router';
 import { useMessage } from 'naive-ui';
+import { mapState } from '@/util/store';
+import { mapGetters } from '@/util/store';
 
 /**
  * @description:
+ * @param {Number} solutionId 被采纳回答的id
+ * @param {String} username 问答发布者用户名
+ * @param {String} newReplyContent 新发布的一级回答
+ * @event changeAcceptValue 修改回答采纳状态 {answerId: 待修改的回答id}
  * @author: clq
  */
 
@@ -82,18 +96,69 @@ export default defineComponent({
   components: {
     QuestionDetailAnswersItem,
   },
-  props: {},
-  setup() {
+  emits: ['changeAcceptValue'],
+  props: {
+    solutionId: {
+      type: Number,
+      default: 10,
+    },
+    username: {
+      type: String,
+      default: 'user6',
+    },
+    newReplyContent: {
+      type: String,
+      default: '',
+    },
+  },
+  setup(props, context) {
     const msg = useMessage(); // naive-ui 消息组件
     const route = useRoute(); //route
     const questionId = route.params.questionId; // 问答id
+    const { tokenInfo } = mapState('global', ['tokenInfo']); // 全局用户信息
+    const { isLogin } = mapGetters('global', ['isLogin']); //登录状态
     let answersType = ref(0); // 问答过滤规则，0:综合，1:最新
     let answers = reactive([]); // 问答回答数据
     let limit = ref(3); // 单次获取数量
     let offset = ref(0); // 起始偏移量
 
+    // console.log('solutionId: ' + props.solutionId);
+    // console.log('username: ' + props.username);
+    // console.log('isLogin: ' + isLogin.value);
+    // console.log('tokenInfoUsername: ' + tokenInfo.value.username);
+
     // 获取回答数据
     getReplies(true);
+
+    watch(
+      () => props.newReplyContent,
+      (newValue) => {
+        console.log('releaseQuestionReply');
+        releaseQuestionReply(questionId, newValue)
+          .then((data) => {
+            console.log(data);
+            msg.success('发布回答成功');
+          })
+          .catch((error) => {
+            console.log(error);
+            msg.error('发布回答失败', { duration: 2000, closable: true });
+          });
+        console.log('newValue');
+        console.log(newValue);
+        let newReply = {};
+        newReply.id = 1234;
+        newReply.avatar = '#';
+        newReply.evaluation = 0;
+        newReply.content = newValue;
+        newReply.username = 'username';
+        newReply.nickname = 'nickname';
+        newReply.oppose_count = 400;
+        newReply.support_count = 300;
+        newReply.time = '1974-03-26 07:37:14';
+        newReply.child_replies = [];
+        answers.splice(0, 0, newReply);
+      }
+    );
 
     /**
      * @description: 获取回答
@@ -108,8 +173,8 @@ export default defineComponent({
       // 获取回答数据
       getQuestionReplies(questionId, answersType.value, replyId, limit.value, offset.value)
         .then((data) => {
-          console.log('getQuestionReplies');
-          console.log(data);
+          // console.log('getQuestionReplies');
+          // console.log(data);
           if (clean) answers.splice(0, answers.length);
           if (!replyId) {
             for (let reply of data.replies) {
@@ -123,7 +188,10 @@ export default defineComponent({
                 }
               }
             }
+            answers[0].id = props.solutionId;
           }
+          console.log('answers');
+          console.log(answers);
         })
         .catch((error) => {
           // console.log(error);
@@ -152,7 +220,7 @@ export default defineComponent({
      * @author: clq
      */
     function loadMoreAnswers(replyId) {
-      console.log('replyId: ' + replyId);
+      // console.log('replyId: ' + replyId);
       getReplies(false, replyId);
     }
 
@@ -164,25 +232,115 @@ export default defineComponent({
      * @return {void}
      * @author: clq
      */
-    function addReply(parentId, replyId, text) {
-      console.log('addReply');
-      console.log('parentId: ' + parentId);
-      console.log('replyId: ' + replyId);
-      console.log('text: ' + text);
+    function addReply(parentId, replyId, text, replyUsername) {
+      // console.log('addReply');
+      // console.log('parentId: ' + parentId);
+      // console.log('replyId: ' + replyId);
+      // console.log('text: ' + text);
+      let newReply = {};
 
-      // for (let i = 0; i < answers.length; i++) {
-      //   if (answers[i].id == parentId) {
-      //   }
-      // }
+      releaseQuestionReply(questionId, text, parentId, replyUsername)
+        .then((data) => {
+          msg.success('发布成功');
+          console.log(data);
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('发布回答失败', { duration: 2000, closable: true });
+        });
+
+      for (let i = 0; i < answers.length; i++) {
+        if (answers[i].id == parentId) {
+          if (replyId != -1) {
+            for (let j = 0; j < answers[i].child_replies.length; j++) {
+              if (replyId == answers[i].child_replies[j].id) {
+                newReply.id = 1234;
+                newReply.avatar = '#';
+                newReply.evaluation = 0;
+                newReply.content = text;
+                newReply.username = 'username';
+                newReply.nickname = 'nickname';
+                newReply.oppose_count = 400;
+                newReply.reply_nickname = answers[i].child_replies[j].nickname;
+                newReply.reply_username = answers[i].child_replies[j].username;
+                newReply.support_count = 300;
+                newReply.time = '1974-03-26 07:37:14';
+              }
+            }
+          } else {
+            newReply.id = 1234;
+            newReply.avatar = '#';
+            newReply.evaluation = 0;
+            newReply.content = text;
+            newReply.username = 'username';
+            newReply.nickname = 'nickname';
+            newReply.oppose_count = 400;
+            newReply.reply_nickname = answers[i].nickname;
+            newReply.reply_username = answers[i].username;
+            newReply.support_count = 300;
+            newReply.time = '1974-03-26 07:37:14';
+          }
+          answers[i].child_replies.splice(0, 0, newReply);
+        }
+      }
+    }
+
+    /**
+     * @description: 修改回答采纳状态
+     * @param {number} answerId 回答id
+     * @return {void}
+     * @author: clq
+     */
+    function changeAccept(answerId) {
+      // console.log('DetailAnswersanswerId: ', answerId);
+      context.emit('changeAcceptValue', answerId);
+    }
+
+    /**
+     * @description: 修改回答评价
+     * @param {number} parentId 一级回答id
+     * @param {number} replyId 回答id
+     * @param {number} newEvaluation 新评价
+     * @param {number} newSupportCount 新支持数
+     * @param {number} newOpposeCount 新反对数
+     * @return {void}
+     * @author: clq
+     */
+    function changeEvaluation(parentId, replyId, newEvaluation, newSupportCount, newOpposeCount) {
+      if (parentId == -1) {
+        for (let i = 0; i < answers.length; i++) {
+          if (answers[i].id == replyId) {
+            answers[i].evaluation = newEvaluation;
+            answers[i].support_count = newSupportCount;
+            answers[i].oppose_count = newOpposeCount;
+          }
+        }
+      } else {
+        for (let i = 0; i < answers.length; i++) {
+          if (answers[i].id == parentId) {
+            for (let j = 0; j < answers[i].child_replies.length; j++) {
+              if (answers[i].child_replies[j].id == replyId) {
+                answers[i].child_replies[j].evaluation = newEvaluation;
+                answers[i].child_replies[j].support_count = newSupportCount;
+                answers[i].child_replies[j].oppose_count = newOpposeCount;
+              }
+            }
+          }
+        }
+      }
     }
 
     return {
       answers,
       answersType,
       limit,
+      tokenInfo,
+      isLogin,
       changeAnswerType,
       loadMoreAnswers,
       addReply,
+      changeAccept,
+      changeEvaluation,
     };
   },
 });

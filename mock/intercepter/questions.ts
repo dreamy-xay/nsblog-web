@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 20:59:37
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-17 15:01:15
+ * @LastEditors: clq
+ * @LastEditTime: 2022-02-26 22:03:11
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -121,6 +121,17 @@ export default function(baseUrl: string, app: Application) {
     return res.send();
   });
 
+  // 修改问答评价
+  app.put(baseUrl + '/questions/evaluation', (req: Request, res: Response) => {
+    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
+    const username: string = getToken(req.headers).username;
+    const { type, question_id } = req.body;
+
+    print('modify questions evaluation', { username, type, question_id });
+
+    return res.send();
+  });
+
   // 获取发布的提问的回答
   app.get(baseUrl + '/questions/replies', (req: Request, res: Response) => {
     const { question_id, type, reply_id, limit, offset } = req.query;
@@ -207,6 +218,17 @@ export default function(baseUrl: string, app: Application) {
     const { type, reply_id } = req.body;
 
     print('modify questions replies evaluation', { username, type, reply_id });
+
+    return res.send();
+  });
+
+  // 采纳回答
+  app.post(baseUrl + '/questions/replies/accept', (req: Request, res: Response) => {
+    if (!verifyToken(req.headers)) return res.status(401).json({ error: 'Unauthorized' });
+    const username: string = getToken(req.headers).username;
+    const { reply_id, question_id } = req.body;
+
+    print('accept questions replies', { username, reply_id, question_id });
 
     return res.send();
   });
