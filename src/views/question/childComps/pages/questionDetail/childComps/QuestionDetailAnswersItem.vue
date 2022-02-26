@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-25 19:18:14
  * @LastEditors: clq
- * @LastEditTime: 2022-01-29 16:29:27
+ * @LastEditTime: 2022-02-26 15:57:40
 -->
 <template>
   <div class="question-detail-answers-item">
@@ -35,11 +35,13 @@
         <div class="release-time">{{answer.child_replies ? '发布于': '回复于'}} {{answer.time}}</div>
       </div>
       <div
-        v-show="parentId==-1"
+        v-show="isBtn || isAccept"
         class="right"
-        role="button"
+        :class="isAccept? isBtn? 'isAccept-btn':'isAccept':''"
+        :role="isBtn? 'button':''"
+        @click="changeAccept(isBtn,answer.id)"
       >
-        采纳
+        {{isBtn? isAccept? '已采纳':'采纳' : isAccept? '√已被采纳':''}}
       </div>
     </div>
     <div class="question-detail-answers-item-body">
@@ -103,19 +105,22 @@ import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import { releaseQuestionReply, changeEvaluationOnReply } from '@/network/api/questions';
 import { useRoute } from 'vue-router';
 import { useMessage } from 'naive-ui';
+import { mapState } from '@/util/store';
 
 /**
  * @description: 问答回答条目组件
  * @param parentId 上级回复id
  * @param {Object} answer 问答回答
+ * @param {Number} solutionId 被采纳回答的id
  * @event addReply 添加回复 {praentId:一级回复id, replyId:回复对象id, text:回复文本信息}
+ * @event changeAcceptValue 修改回答采纳状态 {answerId: 待修改的回答id}
  * @author: clq
  */
 
 export default defineComponent({
   name: 'questionDetailAnswersItem',
   components: { BaseAvatar },
-  emits: ['addReply'],
+  emits: ['addReply', 'changeAcceptValue'],
   props: {
     parentId: {
       type: Number,
@@ -125,16 +130,33 @@ export default defineComponent({
       type: Object,
       required: true,
     },
+    solutionId: {
+      type: Number,
+      required: true,
+    },
+    isBtn: {
+      type: Boolean,
+      default: false,
+    },
+    isAccept: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup(props, context) {
     const msg = useMessage();
     const route = useRoute(); //route
+    const { tokenInfo } = mapState('global', ['tokenInfo']); // 全局用户信息
     const questionId = route.params.questionId;
     let isShowEdit = ref(false); // 编辑框显示标志 `true:显示, false:不显示`
     let text = ref(''); // 回答内容
     let standpoint = ref(0); // 当前用户对回答的态度 `0为无操作，1为推荐，2为反对`
     // console.log('props.answer');
     // console.log(props.answer);
+
+    // console.log('tokenInfo: ');
+    //     console.log(tokenInfo);
+    //     console.log(tokenInfo.value.username);
 
     /**
      * @description: 跳转到用户zhuye
@@ -185,32 +207,59 @@ export default defineComponent({
       // console.log(props.answer.id);
       // console.log(props.answer.username);
       // console.log(text.value);
-      releaseQuestionReply(questionId, props.answer.id, props.answer.username, text.value)
-        .then(() => {
-          context.emit(
-            'addReply',
-            props.parentId == -1 ? props.answer.id : props.parentId,
-            props.parentId == -1 ? -1 : props.answer.id,
-            text.value
-          );
-          text.value = '';
-          isShowEdit.value = false;
-          msg.success('发布成功');
-        })
-        .catch((error) => {
-          console.log(error);
-          msg.error('发布失败');
-        });
+
+      context.emit(
+        'addReply',
+        props.parentId == -1 ? props.answer.id : props.parentId,
+        props.parentId == -1 ? -1 : props.answer.id,
+        text.value,
+        props.answer.username
+      );
+      text.value = '';
+      isShowEdit.value = false;
+
+      // releaseQuestionReply(questionId, props.answer.id, props.answer.username, text.value)
+      //   .then(() => {
+      //     context.emit(
+      //       'addReply',
+      //       props.parentId == -1 ? props.answer.id : props.parentId,
+      //       props.parentId == -1 ? -1 : props.answer.id,
+      //       text.value
+      //     );
+      //     text.value = '';
+      //     isShowEdit.value = false;
+      //     msg.success('发布成功');
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //     msg.error('发布失败');
+      //   });
+    }
+
+    /**
+     * @description: 修改回答采纳状态
+     * @param {boolean} isBtn 按扭点击是否有效
+     * @param {number} answerId 回答id
+     * @return {void}
+     * @author: clq
+     */
+    function changeAccept(isBtn, answerId) {
+      if (isBtn) {
+        // console.log('changeAccept: ' + answerId);
+        context.emit('changeAcceptValue', answerId);
+      }
     }
 
     return {
       isShowEdit,
       text,
       standpoint,
+      tokenInfo,
       toUserCenter,
       changeStandpoint,
       ShowEdit,
       releaseReply,
+      changeAccept,
     };
   },
 });
@@ -280,6 +329,20 @@ export default defineComponent({
       &:hover {
         background-color: $green-1;
         color: $grey-0;
+      }
+    }
+
+    .isAccept {
+      background-color: $green-1;
+      color: $grey-0;
+    }
+
+    .isAccept-btn {
+      background-color: $green-1;
+      color: $grey-0;
+
+      &:hover {
+        background-color: $green-2;
       }
     }
   }

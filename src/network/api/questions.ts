@@ -3,10 +3,33 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-09-17 20:17:15
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-20 16:53:12
+ * @LastEditors: clq
+ * @LastEditTime: 2022-02-26 15:48:09
  */
 import { get, post, put, RequestLifeCycle } from '@/network/request';
+
+/**
+ * @description: 修改问答评价
+ * @param {number} questionId 回答id
+ * @param {number} type 评价类型 `0为无操作，1为点赞`
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: clq
+ */
+export function changeEvaluationOnQuestion(
+  questionId: number,
+  type: number,
+  RLC: RequestLifeCycle = {}
+): Promise<unknown> {
+  return put({
+    url: 'questions/evaluation',
+    ...RLC,
+    data: {
+      questionId,
+      type
+    }
+  });
+}
 
 /**
  * @description: 修改回答评价
@@ -163,7 +186,7 @@ export function getReplies(
   RLC: RequestLifeCycle = {}
 ): Promise<unknown> {
   return get({
-    url: '/questions/replies',
+    url: 'questions/replies',
     ...RLC,
     params: {
       username,
