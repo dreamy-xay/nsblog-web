@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 19:06:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-26 22:02:37
+ * @LastEditTime: 2022-02-26 23:22:25
 -->
 <template>
   <div class="admin-menu">
@@ -35,27 +35,34 @@
       </div>
     </div>
     <div class="admin-menu-sub">
-
+      <admin-sub-menu
+        :is-super="isSuper"
+        :menu-data="activeIndex !== -1 ? menuList[activeIndex] : {children: []}"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import { computed, defineComponent, ref, watch } from 'vue';
+import AdminSubMenu from '@/views/admin/childComps/adminMenu/childComps/AdminSubMenu.vue';
 import { getMenuRoutes } from '@/util/router';
 import router from '@/router';
 import { useRoute } from 'vue-router';
 
 /**
  * @description: 管理员页面菜单
+ * @param {Boolean} 是否超级管理员 `默认为 false`
  * @author: dreamy-xay
  */
 
 export default defineComponent({
   name: 'adminMenu',
-  components: {},
+  components: {
+    AdminSubMenu,
+  },
   props: {
-    super: {
+    isSuper: {
       type: Boolean,
       default: true,
     },
@@ -68,7 +75,7 @@ export default defineComponent({
 
     // 计算显示的菜单列表
     const menuList = computed(() => {
-      return props.super ? routes : routes.filter((route) => !route.super);
+      return props.isSuper ? routes : routes.filter((route) => !route.super);
     });
 
     /**
@@ -127,7 +134,8 @@ export default defineComponent({
 <style lang="scss" scoped>
 .admin-menu {
   height: 100%;
-  overflow: hidden;
+  display: inline-flex;
+  box-shadow: $shadow-0;
 
   .admin-menu-main {
     height: 100%;
@@ -185,6 +193,11 @@ export default defineComponent({
         }
       }
     }
+  }
+
+  .admin-menu-sub {
+    height: 100%;
+    overflow: hidden;
   }
 }
 </style>

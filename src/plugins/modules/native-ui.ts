@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 16:13:02
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-14 15:55:11
+ * @LastEditTime: 2022-02-26 23:29:28
  */
 import { App } from 'vue';
 import {
@@ -22,7 +22,8 @@ import {
   NConfigProvider,
   NDatePicker,
   NPagination,
-  NSkeleton
+  NSkeleton,
+  NDivider
 } from 'naive-ui';
 
 const components = [
@@ -39,7 +40,8 @@ const components = [
   NConfigProvider,
   NDatePicker,
   NPagination,
-  NSkeleton
+  NSkeleton,
+  NDivider
 ];
 
 export default (app: App): void => {
