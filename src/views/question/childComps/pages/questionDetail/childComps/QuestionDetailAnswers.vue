@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-25 13:54:46
  * @LastEditors: clq
- * @LastEditTime: 2022-02-26 15:58:45
+ * @LastEditTime: 2022-02-26 16:04:04
 -->
 <template>
   <div class="question-detail-answers">
@@ -68,7 +68,6 @@
     >
       加载更多...
     </div>
-    {{newReplyContent}}
   </div>
 </template>
 
