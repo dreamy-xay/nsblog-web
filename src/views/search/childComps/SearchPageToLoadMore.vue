@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2022-01-16 12:55:29
- * @LastEditors: Ban
- * @LastEditTime: 2022-01-24 12:43:06
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-21 20:15:10
 -->
 <template>
   <div
@@ -25,7 +25,7 @@ import { defineComponent } from 'vue';
  * @param {Boolean} show 是否展示 `默认为true`
  * @param {String} bindClass 绑定类
  * @param {String} onClick 点击后的回调 `默认无`
- * @param {String} title 标题 `默认为加载更多...`
+ * @param {String} title 标题 `默认为 '加载更多...'`
  * @event onButtonClick 按钮被点击
  * @slot 全局内容插槽
  * @author: Ban
@@ -42,16 +42,12 @@ export default defineComponent({
       type: String,
       default: null,
     },
-    // onClick: {
-    //   type: String,
-    //   default: null,
-    // },
     title: {
       type: String,
       default: '加载更多...',
     },
   },
-  setup(props, context) {
+  setup(_, context) {
     /**
      * @description: 按钮被点击
      * @return {void}
@@ -80,6 +76,7 @@ export default defineComponent({
 
   &:hover {
     background: $grey-1;
+    color: $grey-10;
   }
 }
 </style>

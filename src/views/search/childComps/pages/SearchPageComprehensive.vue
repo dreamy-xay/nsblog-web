@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2022-01-25 14:25:23
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-20 14:43:05
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-21 20:08:11
 -->
 <template>
   <div class="search-page-comprehensive">
@@ -110,7 +110,7 @@ export default defineComponent({
     SearchPageToLoadMore,
     BaseContentLoading,
   },
-  setup(props, context) {
+  setup(_, context) {
     const selectTag = ref(0); //选择 0:'综合', 1:'最新', 2:'热门'标签
     const selectTime = ref(0); //选择 0:'时间不限', 1:'最近一天', 2:'最近一周', 3:'最近三月'时间筛选
     const results = reactive([]); // 数据列表
