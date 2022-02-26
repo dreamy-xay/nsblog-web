@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-25 10:25:30
  * @LastEditors: clq
- * @LastEditTime: 2022-02-26 15:16:38
+ * @LastEditTime: 2022-02-26 18:47:56
 -->
 <template>
   <base-view
@@ -112,15 +112,16 @@ export default defineComponent({
         questionInfo.evaluation_count -= 1;
       }
       questionInfo.evaluation = newEvaluation;
-      // changeEvaluationOnQuestion(questionInfo.id, newEvaluation)
-      //   .then(() => {
-      //     questionInfo.evaluation = newEvaluation;
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //     msg.error('修改评价失败', { duration: 2000, closable: true });
-      //   });
-      // console.log('evaluation: ' + newEvaluation);
+      changeEvaluationOnQuestion(questionInfo.id, newEvaluation)
+        .then(() => {
+          msg.success('修改成功', { duration: 2000, closable: true });
+          // questionInfo.evaluation = newEvaluation;
+        })
+        .catch((error) => {
+          console.log(error);
+          msg.error('修改评价失败', { duration: 2000, closable: true });
+        });
+      console.log('evaluation: ' + newEvaluation);
     }
 
     /**
