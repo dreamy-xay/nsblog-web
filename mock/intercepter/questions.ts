@@ -3,8 +3,13 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 20:59:37
+<<<<<<< HEAD
  * @LastEditors: dreamy-xay
  * @LastEditTime: 2022-02-26 18:47:17
+=======
+ * @LastEditors: clq
+ * @LastEditTime: 2022-02-21 13:21:09
+>>>>>>> 3c9170ae8af99213c35ccd915b6a0541f7790375
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -103,6 +108,7 @@ export default function(baseUrl: string, app: Application) {
       avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', user.username),
       release_time: Random.datetime(),
       tags,
+      solution: Random.integer(0, 100),
       evaluation_count: Random.integer(0, 100),
       browsing_count: Random.integer(0, 10000),
       reply_count: Random.integer(0, 100),

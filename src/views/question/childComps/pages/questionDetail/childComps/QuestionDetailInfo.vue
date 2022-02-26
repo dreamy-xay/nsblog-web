@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2022-01-25 12:46:18
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-20 17:08:49
+ * @LastEditors: clq
+ * @LastEditTime: 2022-02-26 14:14:27
 -->
 <template>
   <div class="question-detail-info">
@@ -52,22 +52,35 @@
         </div>
         <div
           class="btn-style-2"
+          :class="questionInfo.evaluation ? 'active':''"
           role="button"
+          @click="changeEvaluation"
         >
-          <div><i class="iconfont blog-dianzan1" /></div>点赞 {{questionInfo.evaluation_count}}
+          <div v-if="!questionInfo.evaluation"><i class="iconfont blog-dianzan1" /></div>{{questionInfo.evaluation? '已点赞':'点赞'}} {{questionInfo.evaluation_count}}
         </div>
+
         <div
           class="btn-style-2"
+          :class="questionInfo.collection? 'active': ''"
           role="button"
+          @click="showFavorite(questionInfo.collection)"
         >
-          <div><i class="iconfont blog-shoucang21" /></div>收藏
+          <div v-if="!questionInfo.collection"><i class="iconfont blog-shoucang21" /></div>{{questionInfo.collection? '已收藏':'收藏'}}
         </div>
-        <div
-          class="btn-style-2"
-          role="button"
+
+        <base-qr-code-popover
+          :value="path"
+          :placement="'right'"
+          title="扫一扫，分享资源"
         >
-          <div><i class="iconfont blog-fenxiang" /></div>分享
-        </div>
+          <div
+            class="btn-style-2"
+            role="button"
+          >
+            <div><i class="iconfont blog-fenxiang" /></div>分享
+          </div>
+        </base-qr-code-popover>
+
       </div>
       <div class="footer">
         <div class="left">{{questionInfo.solution? '已解决':'未解决'}}
@@ -81,61 +94,69 @@
         >举报</div>
       </div>
     </div>
-    <base-report v-model:isShow="isShowReport" />
+    <base-report
+      v-model:show="isShowReport"
+      :id="questionInfo.id"
+      :type="'2'"
+    />
+    <base-favorite
+      v-model:isShow="isShowFavorite"
+      :cid="questionInfo.id"
+      :type="'1'"
+      @addCollection="addCollection"
+    >
+    </base-favorite>
+
+    <base-modal
+      content="确定要取消收藏嘛"
+      :show="modalShow"
+      @confirm="delCollection"
+      @cancel="close"
+    />
   </div>
 </template>
 
 <script>
-import { defineComponent, reactive, ref, inject } from 'vue';
+import { defineComponent, ref, inject } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
+import BaseFavorite from '@/components/common/baseFavorite/BaseFavorite.vue';
+import BaseQrCodePopover from '@/components/content/baseQrCodePopover/BaseQrCodePopover.vue';
 import BaseReport from '@/components/common/baseReport/BaseReport.vue';
-import { getQuestionDetail } from '@/network/api/questions';
-import { useRoute } from 'vue-router';
 import { useMessage } from 'naive-ui';
+import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 
 /**
  * @description:
+ * @param {Object} questionInfo 问答数据对象
+ * @event changeEvaluation 修改问答评价
+ * @event toEdit 转到编辑区
+ * @event cacelCollection 删除收藏
+ * @event addCollection 增加收藏
  * @author: clq
  */
 
 export default defineComponent({
   name: 'questionDetailInfo',
   components: {
+    BaseQrCodePopover,
     BaseAvatar,
     BaseReport,
+    BaseModal,
+    BaseFavorite,
   },
-  setup() {
-    const articlePage = inject('articlePage'); // 获取主页面 ref (dom)
+  emits: ['changeEvaluation', 'toEdit', 'cacelCollection', 'addCollection'],
+  props: {
+    questionInfo: {
+      type: Object,
+      required: true,
+    },
+  },
+  setup(props, context) {
     const msg = useMessage(); // naive-ui 消息组件
-    const route = useRoute(); //route
-    const questionId = route.params.questionId; // 问答id
-    let questionInfo = reactive({}); // 问答详情
+    // const articlePage = inject('articlePage'); // 获取主页面 ref (dom)
     let isShowReport = ref(false); // 举报页面显示控制
-
-    // 获取问答详情
-    getQuestionDetail(questionId)
-      .then((data) => {
-        // console.log('getQuestionDetail');
-        // console.log(data);
-        questionInfo.title = data.title;
-        questionInfo.avatar = data.avatar;
-        questionInfo.nickname = data.nickname;
-        questionInfo.username = data.username;
-        questionInfo.release_time = data.release_time;
-        questionInfo.content = data.content;
-        questionInfo.tags = data.tags;
-        questionInfo.evaluation = data.evaluation;
-        questionInfo.evaluation_count = data.evaluation_count;
-        questionInfo.collection = data.collection;
-        questionInfo.solution = data.solution;
-        questionInfo.browsing_count = data.browsing_count;
-        // console.log('questionInfo');
-        // console.log(questionInfo);
-      })
-      .catch((error) => {
-        console.log(error);
-        msg.error('获取问答失败');
-      });
+    let isShowFavorite = ref(false); // 举报页面显示控制
+    const modalShow = ref(false); //取消收藏提示
 
     /**
      * @description: 跳转到用户主页
@@ -173,15 +194,80 @@ export default defineComponent({
      */
     function toEdit() {
       console.log('toEdit');
+      context.emit('toEdit');
+    }
+
+    /**
+     * @description: 修改问答评价
+     * @return {void}
+     * @author: clq
+     */
+    function changeEvaluation() {
+      context.emit('changeEvaluation');
+    }
+
+    /**
+     * @description: 添加收藏
+     * @param {string} id 收藏夹id
+     * @return {void}
+     * @author: clq
+     */
+    function addCollection(id) {
+      // console.log('addCollection: ' + id);
+      context.emit('addCollection', id);
+      isShowFavorite.value = false;
+    }
+
+    /**
+     * @description: 显示收藏组件
+     * @param {collection} 收藏状态
+     * @return {void}
+     * @author: clq
+     */
+    function showFavorite(collection) {
+      if (collection) {
+        modalShow.value = true;
+        console.log('modalShow: ' + modalShow.value);
+      } else {
+        isShowFavorite.value = true;
+      }
+      console.log('collection: ' + collection);
+    }
+
+    /**
+     * @description: 取消收藏
+     * @return {void}
+     * @author: xiao
+     */
+    function delCollection() {
+      modalShow.value = false;
+      context.emit('cacelCollection'); //取消收藏
+      msg.success(`取消收藏成功`);
+    }
+
+    /**
+     * @description: 关闭提示框
+     * @return {void}
+     * @author: xiao
+     */
+    function close() {
+      modalShow.value = false;
     }
 
     return {
-      questionInfo,
       isShowReport,
+      isShowFavorite,
+      modalShow,
+      path: window.location.href,
+      changeEvaluation,
       toUserCenter,
       showReport,
       toTagPage,
       toEdit,
+      addCollection,
+      showFavorite,
+      delCollection,
+      close,
     };
   },
 });
@@ -327,6 +413,15 @@ export default defineComponent({
         &:hover {
           background-color: $grey-8;
           color: $grey-0;
+        }
+      }
+
+      .active {
+        background-color: $green-1;
+        color: $grey-0;
+        border: 1px solid $green-1;
+        &:hover {
+          border: 1px solid $grey-7;
         }
       }
     }
