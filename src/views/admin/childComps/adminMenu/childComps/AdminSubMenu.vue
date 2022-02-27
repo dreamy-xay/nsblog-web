@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 22:42:44
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-27 11:32:34
+ * @LastEditTime: 2022-02-27 14:46:48
 -->
 <template>
   <div
@@ -25,13 +25,31 @@
       <div class="admin-sub-menu-inner">
         <div
           class="menu-item"
-          v-for="(item, index) in menuList"
-          :class="{'menu-item-active': activeRouteName === item.name}"
-          :key="index"
-          role="button"
-          @click="goto(item.name)"
+          v-for="item in menuList"
+          :key="item.name"
         >
-          {{ item.title }}
+          <admin-sub-menu-item
+            :item="item"
+            :active="activeRouteName === item.name"
+            :rank="0"
+            :expand="Boolean(!itemClose[item.name])"
+            @itemClick="itemClick"
+          />
+          <div
+            v-if="item.children.length"
+            class="menu-item-sub"
+            :class="{'menu-item-sub-close': Boolean(itemClose[item.name])}"
+            :style="{height: item.children.length * 55 + 'px'}"
+          >
+            <admin-sub-menu-item
+              v-for="subItem in item.children"
+              :key="subItem.name"
+              :item="subItem"
+              :active="activeRouteName === subItem.name"
+              :rank="1"
+              @itemClick="itemClick"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -39,7 +57,8 @@
 </template>
 
 <script>
-import { computed, defineComponent, ref, watch } from 'vue';
+import { computed, defineComponent, reactive, ref, watch } from 'vue';
+import AdminSubMenuItem from '@/views/admin/childComps/adminMenu/childComps/AdminSubMenuItem.vue';
 import { useRoute } from 'vue-router';
 import router from '@/router';
 import events from '@/events';
@@ -49,11 +68,15 @@ import events from '@/events';
  * @param {Boolean} isSuper 是否超级管理员 `必传参数`
  * @param {Array} menuList 子菜单列表 `默认为 []`
  * @method setSubMenuStatus 设置子菜单显示状态 (isShow: boolean = null) => void
+ * @method resetSubMenuItemStatus 重置子菜单项展开状态 () => void
  * @author: dreamy-xay
  */
 
 export default defineComponent({
   name: 'admiSubMenu',
+  components: {
+    AdminSubMenuItem,
+  },
   props: {
     isSuper: {
       type: Boolean,
@@ -68,6 +91,7 @@ export default defineComponent({
     const route = useRoute(); // route
     const showSubMenu = ref(true); // 显示子菜单
     const activeRouteName = ref(route.name); // 激活菜单名
+    const itemClose = reactive({}); // 菜单是否关闭
 
     // 计算显示的菜单列表
     const menuList = computed(() => {
@@ -83,13 +107,18 @@ export default defineComponent({
     );
 
     /**
-     * @description: 前往路由
-     * @param {string} routeName 路由名称 `必传参数`
+     * @description: item 点击触发
+     * @param {object} route 路由数据 `必传参数`
      * @return {void}
      * @author: dreamy-xay
      */
-    function goto(routeName) {
-      router.push({ name: routeName });
+    function itemClick(route) {
+      if (route.children.length) itemClose[route.name] = itemClose[route.name] ? !itemClose[route.name] : true;
+      else if (route['beforeToggle'])
+        route.beforeToggle(() => {
+          router.push({ name: route.name });
+        });
+      else router.push({ name: route.name });
     }
 
     /**
@@ -102,6 +131,15 @@ export default defineComponent({
       showSubMenu.value = isShow === null ? !showSubMenu.value : isShow;
     }
 
+    /**
+     * @description: 重置子菜单项展开状态
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function resetSubMenuItemStatus() {
+      for (const key in itemClose) itemClose[key] = false;
+    }
+
     // 监听全局修改事件
     events.on('AdminNavigation-changeMenu', setSubMenuStatus);
 
@@ -109,7 +147,9 @@ export default defineComponent({
       showSubMenu,
       menuList,
       activeRouteName,
-      goto,
+      itemClose,
+      itemClick,
+      resetSubMenuItemStatus,
       setSubMenuStatus,
     };
   },
@@ -174,21 +214,17 @@ export default defineComponent({
       @include flex(center, center, column);
 
       .menu-item {
-        height: 50px;
         width: 100%;
-        border-radius: $border-radius-1;
-        transition: background-color 0.25s, color 0.25s;
-        background-color: $grey-0;
-        margin-bottom: 5px;
-        color: $grey-8;
+        @include flex(center, center, column);
 
-        &:last-child {
-          margin-bottom: 0;
-        }
+        .menu-item-sub {
+          width: 100%;
+          overflow: hidden;
+          transition: 0.25s ease-in-out;
 
-        &.menu-item-active {
-          color: $blue-2;
-          background-color: rgba($blue-1, 0.14);
+          &.menu-item-sub-close {
+            height: 0 !important;
+          }
         }
       }
     }
