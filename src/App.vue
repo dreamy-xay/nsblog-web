@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:02:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-14 20:34:01
+ * @LastEditTime: 2022-02-27 10:45:59
 -->
 <template>
   <n-config-provider
@@ -45,7 +45,7 @@ export default defineComponent({
 
 <style lang="scss">
 @import 'assets/style/normalize';
-@import 'assets/front/iconfont';
+@import 'assets/font/iconfont';
 @import 'assets/style/base';
 
 #app {
