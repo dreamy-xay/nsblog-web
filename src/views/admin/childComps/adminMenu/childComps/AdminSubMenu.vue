@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 22:42:44
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-27 11:15:13
+ * @LastEditTime: 2022-02-27 11:32:34
 -->
 <template>
   <div
@@ -119,8 +119,8 @@ export default defineComponent({
 <style lang="scss" scoped>
 .admin-sub-menu {
   height: 100%;
-  overflow-y: hidden;
-  overflow-x: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   transition: 0.25s ease-out;
   background-color: $grey-0;
 
@@ -187,7 +187,7 @@ export default defineComponent({
         }
 
         &.menu-item-active {
-          color: $blue-1;
+          color: $blue-2;
           background-color: rgba($blue-1, 0.14);
         }
       }

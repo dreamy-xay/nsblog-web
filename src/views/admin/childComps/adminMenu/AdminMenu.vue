@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 19:06:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-27 11:01:21
+ * @LastEditTime: 2022-02-27 11:40:57
 -->
 <template>
   <div class="admin-menu">
@@ -162,8 +162,8 @@ export default defineComponent({
       width: 100%;
       background: url('/admin/menu-background.png') no-repeat;
       background-size: auto 100%;
-      overflow-y: hidden;
-      overflow-x: auto;
+      overflow-y: auto;
+      overflow-x: hidden;
 
       &::-webkit-scrollbar {
         width: 0;

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 16:13:02
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-26 23:29:28
+ * @LastEditTime: 2022-02-27 11:30:42
  */
 import { App } from 'vue';
 import {
@@ -20,6 +20,7 @@ import {
   NDrawer,
   NDialogProvider,
   NConfigProvider,
+  NLoadingBarProvider,
   NDatePicker,
   NPagination,
   NSkeleton,
@@ -38,6 +39,7 @@ const components = [
   NDrawer,
   NDialogProvider,
   NConfigProvider,
+  NLoadingBarProvider,
   NDatePicker,
   NPagination,
   NSkeleton,
