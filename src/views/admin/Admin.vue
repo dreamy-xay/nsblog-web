@@ -3,25 +3,23 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2022-02-21 20:02:51
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-26 22:08:27
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-02-27 11:39:42
 -->
 <template>
-  <div class="admin">
-    <admin-menu />
-    <router-view v-slot="{ Component }">
-      <!-- 将页面数据缓存 -->
-      <keep-alive>
-        <component :is="Component" />
-      </keep-alive>
-    </router-view>
-  </div>
+  <n-loading-bar-provider :loading-bar-style="{loading: {backgroundColor: styles.blue1}}">
+    <div class="admin">
+      <admin-menu />
+      <router-view />
+    </div>
+  </n-loading-bar-provider>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
 import AdminMenu from '@/views/admin/childComps/adminMenu/AdminMenu.vue';
 import store from '@/store';
+import styles from '@/assets/style/define.scss';
 
 /**
  * @description: 后台管理页面
@@ -36,6 +34,9 @@ export default defineComponent({
   beforeRouteEnter(_, __, next) {
     if (store.getters['global/isLogin']) next();
     else next({ name: 'signIn' });
+  },
+  setup() {
+    return { styles };
   },
 });
 </script>
