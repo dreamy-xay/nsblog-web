@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 22:42:44
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-27 14:46:48
+ * @LastEditTime: 2022-02-27 15:00:20
 -->
 <template>
   <div
@@ -13,9 +13,13 @@
   >
     <div class="admin-sub-menu-container">
       <div class="admin-sub-menu-head">
-        <div class="logo">
+        <a
+          class="logo"
+          href="/admin"
+          target="_self"
+        >
           NSBlog Admin
-        </div>
+        </a>
         <div class="title">
           <n-divider>
             {{ menuData.title }}
@@ -176,6 +180,7 @@ export default defineComponent({
     .admin-sub-menu-head {
       height: 60px;
       width: 100%;
+      user-select: none;
       position: relative;
 
       .logo {
@@ -199,6 +204,7 @@ export default defineComponent({
         :deep(.n-divider__title) {
           color: $grey-8;
           font-size: 14px;
+          cursor: default;
         }
 
         :deep(.n-divider__line) {
@@ -210,6 +216,7 @@ export default defineComponent({
 
     .admin-sub-menu-inner {
       padding: 20px 10px;
+      padding-bottom: 0;
       width: calc(100% - 20px);
       @include flex(center, center, column);
 

@@ -4,17 +4,21 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 19:06:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-27 14:53:12
+ * @LastEditTime: 2022-02-27 14:59:00
 -->
 <template>
   <div class="admin-menu">
     <div class="admin-menu-main">
-      <div class="main-icon">
+      <a
+        class="main-icon"
+        href="/admin"
+        target="_self"
+      >
         <img
           src="/favicon.ico"
           alt="nsblog icon"
         >
-      </div>
+      </a>
       <div class="main-inner">
         <div
           class="menu-item"
@@ -160,6 +164,7 @@ export default defineComponent({
       width: 100%;
       @include flex(center, center);
       background-color: #034291;
+      user-select: none;
 
       img {
         width: 32px;
