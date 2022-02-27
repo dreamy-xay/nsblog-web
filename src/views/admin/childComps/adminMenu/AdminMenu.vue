@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 19:06:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-26 23:22:25
+ * @LastEditTime: 2022-02-27 11:01:21
 -->
 <template>
   <div class="admin-menu">
@@ -36,6 +36,7 @@
     </div>
     <div class="admin-menu-sub">
       <admin-sub-menu
+        ref="subMenuRef"
         :is-super="isSuper"
         :menu-data="activeIndex !== -1 ? menuList[activeIndex] : {children: []}"
       />
@@ -52,7 +53,7 @@ import { useRoute } from 'vue-router';
 
 /**
  * @description: 管理员页面菜单
- * @param {Boolean} 是否超级管理员 `默认为 false`
+ * @param {Boolean} isSuper 是否超级管理员 `默认为 false`
  * @author: dreamy-xay
  */
 
@@ -70,7 +71,7 @@ export default defineComponent({
   setup(props) {
     const route = useRoute(); // route
     const routes = getMenuRoutes(); // 获取所有路由菜单列表
-
+    const subMenuRef = ref(null); // 子菜单ref
     const activeIndex = ref(-1); // 激活菜单
 
     // 计算显示的菜单列表
@@ -119,10 +120,12 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function goto(routeName) {
+      if (subMenuRef.value) subMenuRef.value.setSubMenuStatus(true);
       router.push({ name: routeName });
     }
 
     return {
+      subMenuRef,
       menuList,
       activeIndex,
       goto,
