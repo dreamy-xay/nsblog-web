@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 22:42:44
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-27 11:32:34
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-27 22:04:46
 -->
 <template>
   <div
@@ -71,6 +71,10 @@ export default defineComponent({
 
     // 计算显示的菜单列表
     const menuList = computed(() => {
+      if (!props.menuData.children.length) {
+        events.emit('AdminNavigation-changeMenu');
+        console.log(123);
+      }
       return props.isSuper ? props.menuData.children : props.menuData.children.filter((route) => !route.super);
     });
 

@@ -4,11 +4,11 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-22 10:20:59
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-26 21:49:20
+ * @LastEditTime: 2022-02-27 18:43:50
 -->
 <template>
   <div class="admin-head">
-    <admin-navigation @change-menu="changeMenu" />
+    <admin-navigation />
     <admin-tab />
   </div>
 </template>
@@ -19,7 +19,6 @@ import AdminTab from '@/views/admin/childComps/adminHead/childComps/AdminTab.vue
 
 /**
  * @description:头部
- * @event changeMenu 展开或关闭菜单
  * @author: Z_Y_C
  */
 
@@ -27,15 +26,7 @@ export default defineComponent({
   name: 'adminHead',
   components: { AdminNavigation, AdminTab },
   setup(_, content) {
-    /**
-     * @description: 展开或关闭菜单
-     * @return {void}
-     * @author: Z_Y_C
-     */
-    function changeMenu() {
-      content.emit('changeMenu');
-    }
-    return { changeMenu };
+    return {};
   },
 });
 </script>
@@ -44,5 +35,6 @@ export default defineComponent({
 .admin-head {
   // width: 600px;
   box-shadow: 0 1px 4px rgb(0 21 41 / 8%);
+  // width: calc(100% - 266px);
 }
 </style>

@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-22 13:26:38
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-26 18:39:21
+ * @LastEditTime: 2022-02-27 21:25:11
 -->
 <template>
   <div class="admin-tab">
@@ -78,6 +78,7 @@
   </div>
 </template>
 <script>
+import { getMenuRoutes } from '@/util/router';
 import { defineComponent, reactive, ref } from 'vue';
 
 /**
@@ -97,6 +98,8 @@ export default defineComponent({
       { icon: 'iconfont blog-ri-arrow-left-line rotate', text: '关闭右侧' },
       { icon: 'iconfont blog-ri-close-line', text: '关闭全部' },
     ];
+
+    console.log(getMenuRoutes());
 
     const editableTabs = reactive([
       {
