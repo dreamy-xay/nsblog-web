@@ -4,15 +4,17 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-21 22:02:46
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-27 21:20:15
+ * @LastEditTime: 2022-02-27 23:28:14
 -->
 <template>
   <div class="admin-navigation">
     <div class="admin-navigation-left">
       <div
+        v-show="showMenu"
         class="icon"
         role="button"
         @click="changeMenu"
+        :class="roateMenu ? '' : 'roate'"
       >
         <i class="iconfont blog-menu-fold-line"></i>
       </div>
@@ -147,6 +149,8 @@ export default defineComponent({
   setup(_, content) {
     const adminDropdownVisible = ref(false); // 下拉框显示
     const activeName = ref('first'); // el-tabs显示name
+    const roateMenu = ref(true); // 图标旋转
+    const showMenu = ref(true); // 显示展示子菜单目录
     /**
      * @description: 点击用户下拉框
      * @param {number} index 下拉框下标
@@ -157,6 +161,11 @@ export default defineComponent({
       console.log(index);
       adminDropdownVisible.value = false;
     }
+
+    events.on('AdmiSubMenu-subMenuChange', (showLength, show) => {
+      roateMenu.value = show && showLength;
+      showMenu.value = showLength;
+    });
 
     /**
      * @description: 显示adminDropdownVisible下拉框
@@ -176,6 +185,7 @@ export default defineComponent({
     function changeMenu() {
       // 监听全局修改事件
       events.emit('AdminNavigation-changeMenu');
+      roateMenu.value = !roateMenu.value;
     }
 
     function handleClick(e) {
@@ -198,6 +208,8 @@ export default defineComponent({
       count,
       load,
       changeMenu,
+      roateMenu,
+      showMenu,
     };
   },
 });
@@ -214,6 +226,7 @@ export default defineComponent({
   .admin-navigation-left {
     height: inherit;
     @include flex(center);
+    transition: 0.25s all;
 
     .icon {
       height: 16px;
@@ -224,6 +237,9 @@ export default defineComponent({
       .iconfont {
         font-size: 16px;
       }
+    }
+    .roate {
+      transform: rotateY(180deg);
     }
   }
 

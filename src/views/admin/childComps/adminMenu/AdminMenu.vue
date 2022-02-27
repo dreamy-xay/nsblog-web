@@ -4,17 +4,21 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 19:06:03
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-27 22:00:59
+ * @LastEditTime: 2022-02-27 22:25:21
 -->
 <template>
   <div class="admin-menu">
     <div class="admin-menu-main">
-      <div class="main-icon">
+      <a
+        class="main-icon"
+        href="/admin"
+        target="_self"
+      >
         <img
           src="/favicon.ico"
           alt="nsblog icon"
         >
-      </div>
+      </a>
       <div class="main-inner">
         <div
           class="menu-item"
@@ -47,7 +51,6 @@
 <script>
 import { computed, defineComponent, ref, watch } from 'vue';
 import AdminSubMenu from '@/views/admin/childComps/adminMenu/childComps/AdminSubMenu.vue';
-import { getMenuRoutes } from '@/util/router';
 import router from '@/router';
 import { useRoute } from 'vue-router';
 import events from '@/events';
@@ -68,16 +71,19 @@ export default defineComponent({
       type: Boolean,
       default: true,
     },
+    routes: {
+      type: Array,
+      required: true,
+    },
   },
   setup(props) {
     const route = useRoute(); // route
-    const routes = getMenuRoutes(); // 获取所有路由菜单列表
     const subMenuRef = ref(null); // 子菜单ref
     const activeIndex = ref(-1); // 激活菜单
 
     // 计算显示的菜单列表
     const menuList = computed(() => {
-      return props.isSuper ? routes : routes.filter((route) => !route.super);
+      return props.isSuper ? props.routes : props.routes.filter((route) => !route.super);
     });
 
     /**
@@ -121,13 +127,17 @@ export default defineComponent({
      * @return {void}
      * @author: dreamy-xay
      */
-    function goto(routeName, index) {
+    function goto(routeName) {
       if (subMenuRef.value) {
-        // subMenuRef.value.setSubMenuStatus(true);
-        console.log('=============:' + subMenuRef.value.showSubMenu);
-        if (!subMenuRef.value.showSubMenu) events.emit('AdminNavigation-changeMenu');
+        // 更新子菜单
+        subMenuRef.value.setSubMenuStatus(true);
+        subMenuRef.value.resetSubMenuItemStatus();
       }
-      router.push({ name: routeName });
+      if (route['beforeToggle'])
+        route.beforeToggle(() => {
+          router.push({ name: routeName });
+        });
+      else router.push({ name: routeName });
     }
 
     return {
@@ -156,6 +166,7 @@ export default defineComponent({
       width: 100%;
       @include flex(center, center);
       background-color: #034291;
+      user-select: none;
 
       img {
         width: 32px;
@@ -170,6 +181,7 @@ export default defineComponent({
       background-size: auto 100%;
       overflow-y: auto;
       overflow-x: hidden;
+      transition: 0.25s;
 
       &::-webkit-scrollbar {
         width: 0;
@@ -177,7 +189,7 @@ export default defineComponent({
       }
 
       .menu-item {
-        margin: 5px;
+        margin: 10px 5px;
         width: 54px;
         height: 54px;
         border-radius: $border-radius-1;
@@ -186,6 +198,14 @@ export default defineComponent({
         font-size: 14px;
         transition: 0.25s;
 
+        &:first-child {
+          margin-top: 5px;
+        }
+
+        &:last-child {
+          margin-bottom: 5px;
+        }
+
         &.menu-item-active {
           background-color: rgba($grey-11, 0.3);
         }
@@ -193,10 +213,9 @@ export default defineComponent({
         .icon {
           height: 20px;
           @include flex(center);
-          margin-bottom: 4px;
+          margin-bottom: 2px;
 
           .iconfont {
-            font-weight: 700;
             font-size: 18px;
           }
         }

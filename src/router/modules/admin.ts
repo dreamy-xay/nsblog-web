@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-21 20:01:40
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-26 22:02:01
+ * @LastEditTime: 2022-02-27 14:20:14
  */
 import { RouteRecordRaw } from 'vue-router';
 import adminEmpty from '@/views/admin/childComps/AdminEmpty.vue';
@@ -47,7 +47,8 @@ const adminRouter: any = {
           meta: {
             title: '看板',
             icon: 'iconfont blog-hot',
-            super: false
+            super: false,
+            badge: 9
           },
           component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
         },
@@ -57,7 +58,8 @@ const adminRouter: any = {
           meta: {
             title: '工作台',
             icon: 'iconfont blog-hot',
-            super: false
+            super: false,
+            badge: 'Hot'
           },
           component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
         }
@@ -83,9 +85,45 @@ const adminRouter: any = {
           meta: {
             title: '图标',
             icon: 'iconfont blog-hot',
-            super: false
+            super: false,
+            badge: 'Pro'
           },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+          redirect: {
+            name: 'adminIconI'
+          },
+          component: adminEmpty,
+          children: [
+            {
+              path: 'i',
+              name: 'adminIconI',
+              meta: {
+                title: '图标I',
+                icon: 'iconfont blog-hot',
+                super: false
+              },
+              component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+            },
+            {
+              path: 'ii',
+              name: 'adminIconII',
+              meta: {
+                title: '图标II',
+                icon: 'iconfont blog-hot',
+                super: false
+              },
+              component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+            },
+            {
+              path: 'iii',
+              name: 'adminIconIII',
+              meta: {
+                title: '图标III',
+                icon: 'iconfont blog-hot',
+                super: false
+              },
+              component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+            }
+          ]
         },
         {
           path: 'permission',
@@ -93,7 +131,8 @@ const adminRouter: any = {
           meta: {
             title: '角色权限',
             icon: 'iconfont blog-hot',
-            super: false
+            super: false,
+            badge: 'New'
           },
           component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
         },
@@ -113,7 +152,8 @@ const adminRouter: any = {
           meta: {
             title: '卡片',
             icon: 'iconfont blog-hot',
-            super: false
+            super: false,
+            badge: '23'
           },
           component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
         },
@@ -153,7 +193,8 @@ const adminRouter: any = {
           meta: {
             title: '编辑器',
             icon: 'iconfont blog-hot',
-            super: false
+            super: false,
+            badge: '56'
           },
           component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
         },

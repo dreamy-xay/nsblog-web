@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 19:56:18
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-27 19:04:16
+ * @LastEditTime: 2022-02-27 23:31:39
 -->
 <template>
   <div class="admin-dashboard">
@@ -37,8 +37,8 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .admin-dashboard {
-  width: 100%;
-  height: 500px;
-  background-color: red;
+  // width: 100%;
+  // height: 500px;
+  // background-color: red;
 }
 </style>

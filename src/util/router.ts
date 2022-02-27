@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 19:51:18
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-26 21:40:40
+ * @LastEditTime: 2022-02-27 14:52:53
  */
 
 import router from '@/router';
@@ -12,12 +12,14 @@ import { RouteRecordNormalized } from 'vue-router';
 
 // 过滤路由信息接口
 export interface RouteInfo {
-  title: string;
-  icon: string;
-  super: boolean;
-  name: string;
-  children: RouteInfo[];
-  route?: RouteRecordNormalized;
+  title: string; // 路由标题
+  icon: string; // 路由图标
+  super: boolean; // 是否超级管理员支持路由
+  name: string; // 路由名称
+  children: RouteInfo[]; // 子路由
+  badge?: string; // 路由徽章
+  route?: RouteRecordNormalized; // 路由详细信息
+  beforeToggle?: (next: () => void) => void; // 路由切换前拦截函数
 }
 
 /**
@@ -44,6 +46,7 @@ export function getMenuRoutes(all: boolean = false): RouteInfo[] {
       routeData['super'] = route.meta.super as boolean;
       routeData['name'] = route.name as string;
       if (all) routeData['route'] = route;
+      if (route.meta['badge']) routeData['badge'] = route.meta.badge as string;
       if (route['children'] && route.children.length)
         routeData['children'] = getDeepRoutes(route.children as RouteRecordNormalized[]);
       return routeData;

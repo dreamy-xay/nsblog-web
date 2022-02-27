@@ -4,39 +4,30 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-21 20:02:51
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-27 21:17:56
+ * @LastEditTime: 2022-02-27 23:29:10
 -->
 <template>
   <n-loading-bar-provider :loading-bar-style="{loading: {backgroundColor: styles.blue1}}">
-    <div
-      class="admin"
-      :style="{width:headWidth+'px'}"
-    >
-      <admin-menu />
+    <div class="admin">
+      <admin-menu :routes="routes" />
       <div
-        class="content"
-        :style="{width:openMenu ? 'calc(100% - 64px)' : 'calc(100% - 266px)'}"
+        class="admin-view"
+        :style="{width: viewWidth}"
       >
         <admin-head />
-      </div>
-
-      <div
-        class="router"
-        :style="{width:openMenu ? 'calc(100% - 84px)' : 'calc(100% - 286px)'}"
-      >
         <router-view />
       </div>
     </div>
-
   </n-loading-bar-provider>
 </template>
 
 <script>
-import { computed, defineComponent, ref, watch } from 'vue';
+import { defineComponent, ref } from 'vue';
 import AdminMenu from '@/views/admin/childComps/adminMenu/AdminMenu.vue';
 import AdminHead from '@/views/admin/childComps/adminHead/AdminHead.vue';
 import store from '@/store';
 import styles from '@/assets/style/define.scss';
+import { getMenuRoutes } from '@/util/router';
 import events from '@/events';
 
 /**
@@ -55,17 +46,19 @@ export default defineComponent({
     else next({ name: 'signIn' });
   },
   setup() {
-    const openMenu = ref(false); // 打卡目录
-    const headWidth = ref(document.body.clientWidth);
-    events.on('AdminNavigation-changeMenu', () => {
-      openMenu.value = !openMenu.value;
+    const routes = getMenuRoutes(); // 获取所有路由菜单列表
+    const viewWidth = ref('');
+
+    // 监听子菜单显示状态
+    events.on('AdmiSubMenu-subMenuChange', (showLength, show) => {
+      viewWidth.value = show && showLength ? 'calc(100% - 266px)' : 'calc(100% - 64px)';
     });
 
-    window.onresize = () => {
-      headWidth.value = document.body.clientWidth;
+    return {
+      styles,
+      routes,
+      viewWidth,
     };
-
-    return { styles, openMenu, headWidth };
   },
 });
 </script>
@@ -75,26 +68,12 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   overflow: hidden;
-  position: relative;
+  @include flex(center, center, space-between);
 
-  // @include flex();
-  .content {
-    // @include flex(initial, initial, column);
-    transition: 0.4s;
-
-    position: absolute;
-    top: 0px;
-    right: 0px;
-
-    // width: 100%;
-  }
-
-  .router {
-    position: absolute;
-    transition: 0.4s;
-    top: 120px;
-    right: 10px;
-    width: 100%;
+  .admin-view {
+    height: 100%;
+    overflow: hidden;
+    transition: 0.25s ease-in;
   }
 }
 </style>
