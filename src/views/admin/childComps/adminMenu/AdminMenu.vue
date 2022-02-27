@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 19:06:03
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-27 11:40:57
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-02-27 22:00:59
 -->
 <template>
   <div class="admin-menu">
@@ -22,7 +22,7 @@
           :class="{'menu-item-active': activeIndex === index}"
           :key="index"
           role="button"
-          @click="goto(item.name)"
+          @click="goto(item.name,index)"
         >
           <div class="icon">
             <i
@@ -50,6 +50,7 @@ import AdminSubMenu from '@/views/admin/childComps/adminMenu/childComps/AdminSub
 import { getMenuRoutes } from '@/util/router';
 import router from '@/router';
 import { useRoute } from 'vue-router';
+import events from '@/events';
 
 /**
  * @description: 管理员页面菜单
@@ -116,11 +117,16 @@ export default defineComponent({
     /**
      * @description: 前往路由
      * @param {string} routeName 路由名称
+     * @param {number} index 路由下标
      * @return {void}
      * @author: dreamy-xay
      */
-    function goto(routeName) {
-      if (subMenuRef.value) subMenuRef.value.setSubMenuStatus(true);
+    function goto(routeName, index) {
+      if (subMenuRef.value) {
+        // subMenuRef.value.setSubMenuStatus(true);
+        console.log('=============:' + subMenuRef.value.showSubMenu);
+        if (!subMenuRef.value.showSubMenu) events.emit('AdminNavigation-changeMenu');
+      }
       router.push({ name: routeName });
     }
 

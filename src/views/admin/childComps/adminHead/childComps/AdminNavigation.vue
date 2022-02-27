@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-21 22:02:46
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-26 21:47:42
+ * @LastEditTime: 2022-02-27 21:20:15
 -->
 <template>
   <div class="admin-navigation">
@@ -134,10 +134,10 @@
 <script>
 import { defineComponent, reactive, ref } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
+import events from '@/events';
 
 /**
  * @description: 管理员头部导航
- * @event changeMenu 展开或关闭菜单
  * @author: Z_Y_C
  */
 
@@ -174,7 +174,8 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function changeMenu() {
-      content.emit('changeMenu');
+      // 监听全局修改事件
+      events.emit('AdminNavigation-changeMenu');
     }
 
     function handleClick(e) {
