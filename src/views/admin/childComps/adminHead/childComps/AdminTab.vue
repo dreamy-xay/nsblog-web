@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-22 13:26:38
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-27 21:25:11
+ * @LastEditTime: 2022-02-28 13:48:28
 -->
 <template>
   <div class="admin-tab">
@@ -25,7 +25,7 @@
 
           <template #label>
             <div class="label">
-              <div class="icon"><i class="iconfont blog-box"></i></div>
+              <div class="icon"><i :class="item.icon"></i></div>
               {{item.content}}
             </div>
           </template>
@@ -78,19 +78,33 @@
   </div>
 </template>
 <script>
-import { getMenuRoutes } from '@/util/router';
-import { defineComponent, reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { defineComponent, ref } from 'vue';
 
 /**
- * @description:
+ * @description: 浏览标签
+ * @param {Array} editableTabs 缓存标签 `必传参数`
+ * @param {String} editableTabsValue 绑定值，选中选项卡的 name 在editableTabs中id属性 `必传参数`
+ * @event removeTab 移除缓存页面 id 被删除的标签的id
+ * @event handleCommand 点击关闭发生事件 index 关闭类型 0:关闭其他，1:关闭左侧，2:关闭右侧，3:关闭全部
  * @author: Z_Y_C
  */
 
 export default defineComponent({
   name: 'adminTab',
-  setup() {
+  props: {
+    editableTabs: {
+      type: Array,
+      required: true,
+    },
+    editableTabsValue: {
+      type: String,
+      required: true,
+    },
+  },
+  setup(props, content) {
     const Dropdownvisible = ref(false); // 下拉框显示
-    const editableTabsValue = ref('0'); // 绑定值，选中选项卡的 name
+    const router = useRouter(); // 路由跳转
 
     const menus = [
       { icon: 'iconfont blog-ri-close-line', text: '关闭其他' },
@@ -98,71 +112,6 @@ export default defineComponent({
       { icon: 'iconfont blog-ri-arrow-left-line rotate', text: '关闭右侧' },
       { icon: 'iconfont blog-ri-close-line', text: '关闭全部' },
     ];
-
-    console.log(getMenuRoutes());
-
-    const editableTabs = reactive([
-      {
-        title: 'Tab 1',
-        name: '0',
-        content: '首页',
-      },
-      {
-        title: 'Tab 1',
-        name: '1',
-        content: 'Tab 1 content',
-      },
-      {
-        title: 'Tab 2',
-        name: '2',
-        content: 'Tab 2 content',
-      },
-      {
-        title: 'Tab 2',
-        name: '3',
-        content: 'Tab 3 content',
-      },
-      {
-        title: 'Tab 2',
-        name: '4',
-        content: 'Tab 4 content',
-      },
-      {
-        title: 'Tab 2',
-        name: '5',
-        content: 'Tab 5 content',
-      },
-      {
-        title: 'Tab 2',
-        name: '6',
-        content: 'Tab 6 content',
-      },
-      {
-        title: 'Tab 2',
-        name: '7',
-        content: 'Tab 7 content',
-      },
-      {
-        title: 'Tab 2',
-        name: '8',
-        content: 'Tab 8 content',
-      },
-      {
-        title: 'Tab 2',
-        name: '9',
-        content: 'Tab 9 content',
-      },
-      {
-        title: 'Tab 2',
-        name: '10',
-        content: 'Tab 10 content',
-      },
-      {
-        title: 'Tab 2',
-        name: '11',
-        content: 'Tab 11 content',
-      },
-    ]);
 
     /**
      * @description: 下拉框显示
@@ -176,22 +125,12 @@ export default defineComponent({
 
     /**
      * @description: 移除缓存页面
-     * @param {string} e 被删除的标签的名字
+     * @param {string} name 被删除的标签的name
      * @return {void}
      * @author: Z_Y_C
      */
-    function removeTab(e) {
-      console.log('removeTab:' + e);
-      let j = 0;
-      for (let i = 1; i < editableTabs.length; ++i) {
-        if (e == editableTabs[i].name) {
-          editableTabs.splice(i, 1);
-          j = i - 1;
-        }
-      }
-      console.log(editableTabsValue.value == e);
-      if (editableTabsValue.value == e) editableTabsValue.value = editableTabs[j].name;
-      console.log('editableTabsValue:' + editableTabsValue.value);
+    function removeTab(name) {
+      content.emit('removeTab', name);
     }
 
     /**
@@ -201,56 +140,29 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function clickTab(e) {
-      if (e.paneName !== editableTabsValue.value) {
-        console.log('clickTab:' + e);
-        console.log(e);
-        editableTabsValue.value = e.paneName;
-        console.log('editableTabsValue:' + editableTabsValue.value);
+      if (e.paneName !== props.editableTabsValue.value) {
+        content.emit('update:editableTabsValue', e.paneName);
+        router.push({ name: e.paneName });
       }
     }
 
     /**
      * @description: 点击关闭发生事件
-     * @param {number} index 关闭类型
+     * @param {number} index 关闭类型 0:关闭其他，1:关闭左侧，2:关闭右侧，3:关闭全部
      * @return {void}
      * @author: Z_Y_C
      */
     function handleCommand(index) {
-      if (index === 0) {
-        for (let i = 0; i < editableTabs.length; ++i) {
-          if (editableTabsValue.value == editableTabs[i].name) {
-            editableTabs.splice(i + 1, editableTabs.length);
-            editableTabs.splice(1, i - 1);
-          }
-        }
-      } else if (index === 1) {
-        for (let i = 0; i < editableTabs.length; ++i) {
-          if (editableTabsValue.value == editableTabs[i].name) {
-            editableTabs.splice(1, i - 1);
-          }
-        }
-      } else if (index === 2) {
-        for (let i = 0; i < editableTabs.length; ++i) {
-          if (editableTabsValue.value == editableTabs[i].name) {
-            editableTabs.splice(i + 1, editableTabs.length);
-          }
-        }
-      } else {
-        editableTabs.splice(1, editableTabs.length);
-        editableTabsValue.value = editableTabs[0].name;
-      }
-      console.log(index);
+      content.emit('handleCommand', index);
       Dropdownvisible.value = false;
     }
 
     return {
-      editableTabsValue,
       Dropdownvisible,
       visibleChange,
       removeTab,
       clickTab,
       menus,
-      editableTabs,
       handleCommand,
     };
   },
