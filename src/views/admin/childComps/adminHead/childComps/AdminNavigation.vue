@@ -4,19 +4,44 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-21 22:02:46
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-27 23:28:14
+ * @LastEditTime: 2022-02-28 16:36:29
 -->
 <template>
   <div class="admin-navigation">
     <div class="admin-navigation-left">
       <div
         v-show="showMenu"
-        class="icon"
+        class="icon-menu"
         role="button"
         @click="changeMenu"
         :class="roateMenu ? '' : 'roate'"
       >
         <i class="iconfont blog-menu-fold-line"></i>
+      </div>
+      <div
+        class="breadcrumb"
+        v-for="(item , index) in breadcrumbData"
+        :key="index"
+      >
+        <div class="content">
+          <div
+            class="icon"
+            v-if="item.icon"
+          >
+            <i :class="item.icon"></i>
+          </div>
+          {{
+            item.content
+          }}
+        </div>
+
+        <div
+          class="icon-next"
+          v-if="index != breadcrumbData.length-1"
+        >
+          <i class="iconfont blog-arrow-down"></i>
+        </div>
+
       </div>
     </div>
     <div class="admin-navigation-right">
@@ -109,10 +134,6 @@
                           </div>
                         </el-scrollbar>
                       </el-tab-pane>
-                      <el-tab-pane
-                        label="邮件"
-                        name="second"
-                      >邮件</el-tab-pane>
                     </el-tabs>
                   </div>
                 </div>
@@ -124,10 +145,12 @@
         <div
           class="icon"
           role="button"
-        ><i class="iconfont blog-ri-fullscreen-fill"></i></div>
+          @click="changeFullScreen()"
+        ><i :class=" fullscreen ? 'iconfont blog-ri-fullscreen-exit-fill':'iconfont blog-ri-fullscreen-fill'"></i></div>
         <div
           class="icon"
           role="button"
+          @click="clickRefresh()"
         ><i class="iconfont blog-ri-refresh-line"></i></div>
       </div>
     </div>
@@ -137,20 +160,30 @@
 import { defineComponent, reactive, ref } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import events from '@/events';
+import { useRouter } from 'vue-router';
 
 /**
  * @description: 管理员头部导航
+ * @param breadcrumbData 面包屑数据 `必传参数`
  * @author: Z_Y_C
  */
 
 export default defineComponent({
   name: 'adminNavigation',
   components: { BaseAvatar },
-  setup(_, content) {
+  props: {
+    breadcrumbData: {
+      type: Array,
+      require: true,
+    },
+  },
+  setup(props) {
     const adminDropdownVisible = ref(false); // 下拉框显示
     const activeName = ref('first'); // el-tabs显示name
     const roateMenu = ref(true); // 图标旋转
     const showMenu = ref(true); // 显示展示子菜单目录
+    const router = useRouter();
+    const fullscreen = ref(false); // 是否全屏
     /**
      * @description: 点击用户下拉框
      * @param {number} index 下拉框下标
@@ -158,7 +191,6 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function cliclItem(index) {
-      console.log(index);
       adminDropdownVisible.value = false;
     }
 
@@ -199,6 +231,49 @@ export default defineComponent({
       count.push(count.length + 1);
     }
 
+    /**
+     * @description: 刷新按钮
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function clickRefresh() {
+      router.push({ name: props.breadcrumbData[props.breadcrumbData.length - 1].name });
+    }
+
+    /**
+     * @description: 全屏和退出全屏
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function changeFullScreen() {
+      const element = document.documentElement;
+      // 如果是全屏状态
+      if (fullscreen.value) {
+        // 如果浏览器有这个Function
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitCancelFullScreen) {
+          document.webkitCancelFullScreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+      } else {
+        // 如果浏览器有这个Function
+        if (element.requestFullscreen) {
+          element.requestFullscreen();
+        } else if (element.webkitRequestFullScreen) {
+          element.webkitRequestFullScreen();
+        } else if (element.mozRequestFullScreen) {
+          element.mozRequestFullScreen();
+        } else if (element.msRequestFullscreen) {
+          element.msRequestFullscreen();
+        }
+      }
+      // 判断全屏状态的变量
+      fullscreen.value = !fullscreen.value;
+    }
     return {
       cliclItem,
       changeAdminVisible,
@@ -210,6 +285,9 @@ export default defineComponent({
       changeMenu,
       roateMenu,
       showMenu,
+      clickRefresh,
+      changeFullScreen,
+      fullscreen,
     };
   },
 });
@@ -228,7 +306,7 @@ export default defineComponent({
     @include flex(center);
     transition: 0.25s all;
 
-    .icon {
+    .icon-menu {
       height: 16px;
       line-height: 16px;
       margin-right: 20px;
@@ -240,6 +318,35 @@ export default defineComponent({
     }
     .roate {
       transform: rotateY(180deg);
+    }
+
+    .breadcrumb {
+      @include flex(center);
+      color: $grey-8;
+
+      .content {
+        @include flex(center);
+        font-size: 14px;
+
+        .icon {
+          height: 14px;
+          line-height: 14px;
+          margin-right: 3px;
+          .iconfont {
+            font-size: 14px;
+          }
+        }
+      }
+
+      .icon-next {
+        margin: 0 10px;
+        height: 14px;
+        line-height: 14px;
+        transform: rotate(-90deg);
+        .iconfont {
+          font-size: 14px;
+        }
+      }
     }
   }
 
