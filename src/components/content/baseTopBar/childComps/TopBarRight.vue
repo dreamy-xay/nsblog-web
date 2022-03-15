@@ -4,7 +4,7 @@
  * @Autor: Ban
  * @Date: 2021-07-20 11:01:33
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-18 20:58:55
+ * @LastEditTime: 2022-03-15 22:29:28
 -->
 
 <template>
@@ -116,7 +116,7 @@ export default defineComponent({
         },
         {
           name: '创作中心',
-          url: tokenInfo.value.status ? '/admin' : '/login',
+          url: tokenInfo.value.status ? '/admin/creation' : '/login',
           component: tokenInfo.value.status ? '' : 'TopBarNotLogin',
           content: '登录即可进入创作中心',
         },

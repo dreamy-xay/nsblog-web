@@ -4,12 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-21 20:01:40
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-27 14:20:14
+ * @LastEditTime: 2022-03-15 22:26:20
  */
 import { RouteRecordRaw } from 'vue-router';
 import adminEmpty from '@/views/admin/childComps/AdminEmpty.vue';
 
-const adminRouter: any = {
+const adminRouter: RouteRecordRaw = {
   path: '/admin',
   name: 'admin',
   component: () => import('@/views/admin/Admin.vue'),
@@ -21,104 +21,92 @@ const adminRouter: any = {
       path: 'home',
       name: 'adminHome',
       redirect: {
-        name: 'adminDashboard'
+        name: 'adminHomeDashboard'
       },
       component: adminEmpty,
       meta: {
         title: '首页',
-        icon: 'iconfont blog-hot',
+        icon: 'blog-homepage',
         super: false,
         menu: true
       },
       children: [
         {
-          path: 'index',
-          name: 'adminIndex',
+          path: 'dashboard',
+          name: 'adminHomeDashboard',
           meta: {
-            title: '首页',
-            icon: 'iconfont blog-hot',
+            title: '看板',
+            icon: 'blog-shujukanban',
             super: false
           },
           component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
         },
         {
-          path: 'dashboard',
-          name: 'adminDashboard',
-          meta: {
-            title: '看板',
-            icon: 'iconfont blog-hot',
-            super: false,
-            badge: 9
-          },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
-        },
-        {
           path: 'workbench',
-          name: 'adminWorkbench',
+          name: 'adminHomeWorkbench',
           meta: {
             title: '工作台',
-            icon: 'iconfont blog-hot',
+            icon: 'blog-gongzuotai',
             super: false,
-            badge: 'Hot'
+            badge: 'New'
           },
           component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
         }
       ]
     },
     {
-      path: 'component',
-      name: 'adminComponent',
+      path: 'creation',
+      name: 'adminCreation',
       redirect: {
-        name: 'adminIcon'
+        name: 'adminCreationArticle'
       },
       component: adminEmpty,
       meta: {
-        title: '组件',
-        icon: 'iconfont blog-hot',
+        title: '创作',
+        icon: 'blog-chuangzuo',
         super: false,
         menu: true
       },
       children: [
         {
-          path: 'icon',
-          name: 'adminIcon',
+          path: 'article',
+          name: 'adminCreationArticle',
           meta: {
-            title: '图标',
-            icon: 'iconfont blog-hot',
-            super: false,
-            badge: 'Pro'
+            title: '我的文章',
+            icon: 'blog-wodewenzhang',
+            super: false
           },
           redirect: {
-            name: 'adminIconI'
+            name: 'adminCreationArticleRelease'
           },
           component: adminEmpty,
           children: [
             {
-              path: 'i',
-              name: 'adminIconI',
+              path: 'release',
+              name: 'adminCreationArticleRelease',
               meta: {
-                title: '图标I',
-                icon: 'iconfont blog-hot',
+                title: '文章发布',
+                icon: 'blog-fabu',
                 super: false
               },
               component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
             },
             {
-              path: 'ii',
-              name: 'adminIconII',
+              path: 'manage',
+              name: 'adminCreationArticleManage',
               meta: {
-                title: '图标II',
-                icon: 'iconfont blog-hot',
+                title: '文章管理',
+                icon: 'blog-ziyuan',
                 super: false
               },
               component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
             },
             {
-              path: 'iii',
-              name: 'adminIconIII',
+              path: 'preview',
+              name: 'adminCreationArticlePreview',
               meta: {
-                title: '图标III',
-                icon: 'iconfont blog-hot',
+                title: '文章预览',
+                icon: 'blog-preview',
                 super: false
               },
               component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
@@ -126,309 +114,88 @@ const adminRouter: any = {
           ]
         },
         {
-          path: 'permission',
-          name: 'adminPermission',
+          path: 'question',
+          name: 'adminCreationQuestion',
           meta: {
-            title: '角色权限',
-            icon: 'iconfont blog-hot',
+            title: '我的问答',
+            icon: 'blog-wenda',
             super: false,
-            badge: 'New'
+            badge: 7
           },
           component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
         },
         {
-          path: 'table',
-          name: 'adminTable',
+          path: 'group',
+          name: 'adminCreationGroup',
           meta: {
-            title: '表格',
-            icon: 'iconfont blog-hot',
-            super: false
-          },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
-        },
-        {
-          path: 'card',
-          name: 'adminCard',
-          meta: {
-            title: '卡片',
-            icon: 'iconfont blog-hot',
-            super: false,
-            badge: '23'
-          },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
-        },
-        {
-          path: 'list',
-          name: 'adminList',
-          meta: {
-            title: '列表',
-            icon: 'iconfont blog-hot',
-            super: false
-          },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
-        },
-        {
-          path: 'description',
-          name: 'adminDescription',
-          meta: {
-            title: '描述',
-            icon: 'iconfont blog-hot',
-            super: false
-          },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
-        },
-        {
-          path: 'calendar',
-          name: 'adminCalendar',
-          meta: {
-            title: '日历',
-            icon: 'iconfont blog-hot',
-            super: false
-          },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
-        },
-        {
-          path: 'editor',
-          name: 'adminEditor',
-          meta: {
-            title: '编辑器',
-            icon: 'iconfont blog-hot',
-            super: false,
-            badge: '56'
-          },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
-        },
-        {
-          path: 'form',
-          name: 'adminForm',
-          meta: {
-            title: '表单',
-            icon: 'iconfont blog-hot',
-            super: false
+            title: '学习小组管理',
+            icon: 'blog-xiaozu1',
+            super: true
           },
           component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
         }
       ]
     },
     {
-      path: 'other',
-      name: 'adminOther',
+      path: 'blog',
+      name: 'adminBlog',
       redirect: {
-        name: 'adminWorkflow'
+        name: 'adminBlogVisitor'
       },
       component: adminEmpty,
       meta: {
-        title: '其它',
-        icon: 'iconfont blog-hot',
+        title: '博客',
+        icon: 'blog-icon',
         super: false,
         menu: true
       },
       children: [
         {
-          path: 'workflow',
-          name: 'adminWorkflow',
+          path: 'visitor',
+          name: 'adminBlogVisitor',
           meta: {
-            title: '工作流',
-            icon: 'iconfont blog-hot',
+            title: '访客',
+            icon: 'blog-guanzhuderen2',
             super: false
           },
           component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
         },
         {
-          path: 'echarts',
-          name: 'adminEcharts',
+          path: 'category',
+          name: 'adminBlogCategory',
           meta: {
-            title: '图表',
-            icon: 'iconfont blog-hot',
+            title: '分类',
+            icon: 'blog-fenlei2',
             super: false
           },
           component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
         },
         {
-          path: 'print',
-          name: 'adminPrint',
+          path: 'tag',
+          name: 'adminBlogTag',
           meta: {
-            title: '打印',
-            icon: 'iconfont blog-hot',
+            title: '标签',
+            icon: 'blog-tag',
             super: false
           },
           component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
         },
         {
-          path: 'cropper',
-          name: 'adminCropper',
+          path: 'friendChain',
+          name: 'adminBlogFriendChain',
           meta: {
-            title: '头像裁剪',
-            icon: 'iconfont blog-hot',
+            title: '友链',
+            icon: 'blog-lianjie',
             super: false
           },
           component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
         },
         {
-          path: 'notice',
-          name: 'adminNotice',
+          path: 'settings',
+          name: 'adminBlogSettings',
           meta: {
-            title: '通知',
-            icon: 'iconfont blog-hot',
-            super: false
-          },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
-        },
-        {
-          path: 'timeline',
-          name: 'adminTimeline',
-          meta: {
-            title: '时间线',
-            icon: 'iconfont blog-hot',
-            super: false
-          },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
-        },
-        {
-          path: 'count',
-          name: 'adminCount',
-          meta: {
-            title: '数字自增长',
-            icon: 'iconfont blog-hot',
-            super: false
-          },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
-        },
-        {
-          path: 'tabs',
-          name: 'adminTabs',
-          meta: {
-            title: '多标签',
-            icon: 'iconfont blog-hot',
-            super: false
-          },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
-        },
-        {
-          path: 'share',
-          name: 'adminShare',
-          meta: {
-            title: '分享',
-            icon: 'iconfont blog-hot',
-            super: false
-          },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
-        },
-        {
-          path: 'dynamicAnchor',
-          name: 'adminDynamicAnchor',
-          meta: {
-            title: '动态锚点',
-            icon: 'iconfont blog-hot',
-            super: false
-          },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
-        },
-        {
-          path: 'dynamicMeta',
-          name: 'adminDynamicMeta',
-          meta: {
-            title: '动态Meta',
-            icon: 'iconfont blog-hot',
-            super: false
-          },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
-        },
-        {
-          path: 'dynamicSegment',
-          name: 'adminDynamicSegment',
-          meta: {
-            title: '动态路径参数',
-            icon: 'iconfont blog-hot',
-            super: false
-          },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
-        },
-        {
-          path: 'drag',
-          name: 'adminDrag',
-          meta: {
-            title: '拖拽',
-            icon: 'iconfont blog-hot',
-            super: false
-          },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
-        },
-        {
-          path: 'player',
-          name: 'adminPlayer',
-          meta: {
-            title: '视频播放器',
-            icon: 'iconfont blog-hot',
-            super: false
-          }
-        },
-        {
-          path: 'upload',
-          name: 'adminUpload',
-          meta: {
-            title: '上传',
-            icon: 'iconfont blog-hot',
-            super: false
-          },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
-        },
-        {
-          path: 'menu1',
-          name: 'adminMenu1',
-          meta: {
-            title: '多级路由缓存',
-            icon: 'iconfont blog-hot',
-            super: false
-          },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
-        },
-        {
-          path: 'log',
-          name: 'adminLog',
-          meta: {
-            title: '错误日志模拟',
-            icon: 'iconfont blog-hot',
-            super: false
-          },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
-        },
-        {
-          path: 'cssfx',
-          name: 'adminCssfx',
-          meta: {
-            title: 'Css动画',
-            icon: 'iconfont blog-hot',
-            super: false
-          },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
-        },
-        {
-          path: 'social',
-          name: 'adminSocial',
-          meta: {
-            title: '第三方登录',
-            icon: 'iconfont blog-hot',
-            super: false
-          },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
-        },
-        {
-          path: 'iframe',
-          name: 'adminIframe',
-          meta: {
-            title: 'iframe',
-            icon: 'iconfont blog-hot',
-            super: false
-          },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
-        },
-        {
-          path: 'excel',
-          name: 'adminExcel',
-          meta: {
-            title: 'Excel',
-            icon: 'iconfont blog-hot',
+            title: '博客设置',
+            icon: 'blog-shezhi',
             super: false
           },
           component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
@@ -436,25 +203,45 @@ const adminRouter: any = {
       ]
     },
     {
-      path: 'mall',
-      name: 'adminMall',
+      path: 'upload',
+      name: 'adminUpload',
       redirect: {
-        name: 'adminGoods'
+        name: 'adminUploadPicture'
       },
       component: adminEmpty,
       meta: {
-        title: '物料源',
-        icon: 'iconfont blog-hot',
+        title: '上传',
+        icon: 'blog-shangchuan',
         super: false,
         menu: true
       },
       children: [
         {
-          path: 'goods',
-          name: 'adminGoods',
+          path: 'picture',
+          name: 'adminUploadPicture',
           meta: {
-            title: '物料市场',
-            icon: 'iconfont blog-hot',
+            title: '本地图库',
+            icon: 'blog-image',
+            super: false
+          },
+          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+        },
+        {
+          path: 'file',
+          name: 'adminUploadFile',
+          meta: {
+            title: '上传文件',
+            icon: 'blog-wenjianshangchuan',
+            super: false
+          },
+          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+        },
+        {
+          path: 'resource',
+          name: 'adminUploadResource',
+          meta: {
+            title: '资源分享',
+            icon: 'blog-fenxiang',
             super: false
           },
           component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
@@ -462,96 +249,56 @@ const adminRouter: any = {
       ]
     },
     {
-      path: 'noColumn',
-      name: 'adminNoColumn',
+      path: 'comment',
+      name: 'adminComment',
       component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue'),
       meta: {
-        title: '无分栏',
-        icon: 'iconfont blog-hot',
+        title: '评论',
+        icon: 'blog-interactive',
         super: false,
         menu: true
       }
     },
     {
-      path: 'setting',
-      name: 'adminSetting',
+      path: 'system',
+      name: 'adminSystem',
       redirect: {
-        name: 'adminPersonalCenter'
+        name: 'adminSystemLog'
       },
       component: adminEmpty,
       meta: {
-        title: '配置',
-        icon: 'iconfont blog-hot',
+        title: '系统',
+        icon: 'blog-xitong',
         super: false,
         menu: true
       },
       children: [
         {
-          path: 'personalCenter',
-          name: 'adminPersonalCenter',
-          meta: {
-            title: '个人中心',
-            icon: 'iconfont blog-hot',
-            super: false
-          },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
-        },
-        {
-          path: 'userManagement',
-          name: 'adminUserManagement',
-          meta: {
-            title: '个人管理',
-            icon: 'iconfont blog-hot',
-            super: false
-          },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
-        },
-        {
-          path: 'roleManagement',
-          name: 'adminRoleManagement',
-          meta: {
-            title: '角色管理',
-            icon: 'iconfont blog-hot',
-            super: false
-          },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
-        },
-        {
-          path: 'departmentManagement',
-          name: 'adminDepartmentManagement',
-          meta: {
-            title: '部门管理',
-            icon: 'iconfont blog-hot',
-            super: false
-          },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
-        },
-        {
-          path: 'menuManagement',
-          name: 'adminMenuManagement',
-          meta: {
-            title: '菜单管理',
-            icon: 'iconfont blog-hot',
-            super: false
-          },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
-        },
-        {
-          path: 'taskManagement',
-          name: 'adminTaskManagement',
-          meta: {
-            title: '任务管理',
-            icon: 'iconfont blog-hot',
-            super: false
-          },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
-        },
-        {
-          path: 'systemLog',
+          path: 'log',
           name: 'adminSystemLog',
           meta: {
             title: '系统日志',
-            icon: 'iconfont blog-hot',
+            icon: 'blog-rizhifenxi',
+            super: false
+          },
+          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+        },
+        {
+          path: 'status',
+          name: 'adminSystemStatus',
+          meta: {
+            title: '系统状态',
+            icon: 'blog-xitongzhuangtai',
+            super: true
+          },
+          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+        },
+        {
+          path: 'settings',
+          name: 'adminSystemSettings',
+          meta: {
+            title: '系统设置',
+            icon: 'blog-shezhi',
             super: false
           },
           component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
@@ -567,7 +314,7 @@ const adminRouter: any = {
       component: adminEmpty,
       meta: {
         title: '工具',
-        icon: 'iconfont blog-hot',
+        icon: 'blog-gongju',
         super: false,
         menu: true
       },
@@ -577,7 +324,7 @@ const adminRouter: any = {
           name: 'adminEyeDropper',
           meta: {
             title: '取色器',
-            icon: 'iconfont blog-hot',
+            icon: 'blog-xiguan',
             super: false
           },
           component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
@@ -590,42 +337,52 @@ const adminRouter: any = {
       component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue'),
       meta: {
         title: '外链',
-        icon: 'iconfont blog-hot',
+        icon: 'blog-fenxiang1',
         super: false,
         menu: true
       }
     },
     {
-      path: 'error',
-      name: 'adminError',
+      path: 'maintain',
+      name: 'adminMaintain',
       redirect: {
-        name: 'admin403'
+        name: 'adminMaintainStatistics'
       },
       component: adminEmpty,
       meta: {
-        title: '错误页',
-        icon: 'iconfont blog-hot',
-        super: false,
+        title: '程序坞',
+        icon: 'blog-wangluo',
+        super: true,
         menu: true
       },
       children: [
         {
-          path: '403',
-          name: 'admin403',
+          path: 'statistics',
+          name: 'adminMaintainStatistics',
           meta: {
-            title: '403',
-            icon: 'iconfont blog-hot',
-            super: false
+            title: '数据统计',
+            icon: 'blog-shujutongji',
+            super: true
           },
           component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
         },
         {
-          path: '404',
-          name: 'admin404',
+          path: 'websiteManage',
+          name: 'adminMaintainWebsiteManage',
           meta: {
-            title: '404',
-            icon: 'iconfont blog-hot',
-            super: false
+            title: '网站管理',
+            icon: 'blog-wangzhanguanli',
+            super: true
+          },
+          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+        },
+        {
+          path: 'userManage',
+          name: 'adminMaintainUserManage',
+          meta: {
+            title: '用户管理',
+            icon: 'blog-yonghuguanli',
+            super: true
           },
           component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
         }
