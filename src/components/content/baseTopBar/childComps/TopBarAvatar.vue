@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-19 18:32:43
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-27 18:23:03
+ * @LastEditTime: 2022-03-15 22:34:04
 -->
 <template>
   <div class="top-bar-avatar">
@@ -175,17 +175,17 @@ export default defineComponent({
       },
       {
         name: '我的订阅',
-        url: '#',
+        url: '/userCenter/collection',
         icon: 'blog-xin',
       },
       {
         name: '数据统计',
-        url: '#',
+        url: '/admin/home/dashboard',
         icon: 'blog-shujutongji',
       },
       {
         name: '文章管理',
-        url: '#',
+        url: '/admin/creation/article/manage',
         icon: 'blog-wenzhang',
       },
       {

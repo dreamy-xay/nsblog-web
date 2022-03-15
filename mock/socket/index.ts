@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-10 21:44:12
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-14 12:26:01
+ * @LastEditTime: 2022-03-15 22:39:07
  */
 import { Random } from 'better-mock';
 import { Server } from 'http';
@@ -80,7 +80,7 @@ export default (server: Server) => {
       console.log('\x1B[32m>\x1b[0m ', onlineUsers.getUsers(), '\n');
 
       socket.on('sendMessage', (content: string, to: string, time: string, from: string) => {
-        print('send message', { from, to, content, time });
+        print('send message', { from, to, content: content.toString().slice(0, 100), time });
 
         if (from === username && from !== to && onlineUsers.hasUser(to)) {
           messageNotice(to, 0, false, 5); // 通知来了新消息
