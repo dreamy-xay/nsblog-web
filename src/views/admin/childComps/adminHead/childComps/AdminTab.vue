@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-22 13:26:38
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-28 13:48:28
+ * @LastEditTime: 2022-03-16 12:03:16
 -->
 <template>
   <div class="admin-tab">
@@ -25,7 +25,7 @@
 
           <template #label>
             <div class="label">
-              <div class="icon"><i :class="item.icon"></i></div>
+              <div class="icon"><i :class="'iconfont '+item.icon"></i></div>
               {{item.content}}
             </div>
           </template>
@@ -244,6 +244,15 @@ export default defineComponent({
 
     .label {
       @include flex(center);
+
+      .icon {
+        margin-right: 3px;
+        width: 16px;
+
+        .iconfont {
+          font-size: 16px;
+        }
+      }
     }
   }
 
