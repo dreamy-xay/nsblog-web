@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-21 22:02:46
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-28 16:36:29
+ * @LastEditTime: 2022-03-16 12:04:25
 -->
 <template>
   <div class="admin-navigation">
@@ -28,7 +28,7 @@
             class="icon"
             v-if="item.icon"
           >
-            <i :class="item.icon"></i>
+            <i :class="'iconfont '+item.icon"></i>
           </div>
           {{
             item.content
