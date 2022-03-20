@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 19:51:18
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-03-20 22:34:11
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-03-20 22:57:11
  */
 
 import router from '@/router';
@@ -76,7 +76,10 @@ export function searchMenuRoutes(
     menuRoute.push(route);
     let ok: boolean = false; // 下一级是否已经收集
     for (const r of route.children) if (filterMenu(r)) ok = true;
-    if ((!ok || all) && rules(route)) menuRoutes.push(menuRoute);
+    if ((!ok || all) && rules(route)) {
+      ok = true;
+      menuRoutes.push(menuRoute);
+    }
     menuRoute.pop();
     return ok;
   }

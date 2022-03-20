@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-03-20 15:21:39
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-03-20 22:35:44
+ * @LastEditTime: 2022-03-20 23:25:25
 -->
 <template>
   <n-modal
@@ -19,8 +19,9 @@
           placeholder="搜索"
           :style="{height:'48px',padding:'4px 11px'}"
           :show-close="true"
-          v-model:model-value="modelValue"
+          v-model="modelValue"
           :maxlength="20"
+          @input="input"
         />
       </div>
       <div class="admin-search-body">
@@ -35,7 +36,7 @@
         >
           <el-scrollbar
             max-height="472px"
-            ref="scrollbarRowRef"
+            ref="scrollBarRef"
           >
             <div
               role="button"
@@ -75,103 +76,113 @@
 
       </div>
       <div class="admin-search-bottom">
-        <div class="vben-app-search-footer"><span class="vben-app-search-footer-item"><span
-              class="app-iconify anticon"
-              style="font-size: 16px; display: inline-flex;"
-            ><svg
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                aria-hidden="true"
-                role="img"
-                class="iconify iconify--ant-design"
-                width="1em"
-                height="1em"
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 1024 1024"
-              >
-                <path
-                  fill="currentColor"
-                  d="M864 170h-60c-4.4 0-8 3.6-8 8v518H310v-73c0-6.7-7.8-10.5-13-6.3l-141.9 112a8 8 0 0 0 0 12.6l141.9 112c5.3 4.2 13 .4 13-6.3v-75h498c35.3 0 64-28.7 64-64V178c0-4.4-3.6-8-8-8z"
-                ></path>
-              </svg></span></span><span data-v-6ec2a118="">确认</span><span
-            class="vben-app-search-footer-item"
-            data-v-6ec2a118=""
-          ><span
-              class="app-iconify anticon"
-              style="font-size: 16px; display: inline-flex;"
-            ><svg
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                aria-hidden="true"
-                role="img"
-                class="iconify iconify--ion"
-                width="1em"
-                height="1em"
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="48"
-                  d="m112 244l144-144l144 144M256 120v292"
-                ></path>
-              </svg></span></span><span
-            class="vben-app-search-footer-item"
-            data-v-6ec2a118=""
-          ><span
-              class="app-iconify anticon"
-              style="font-size: 16px; display: inline-flex;"
-            ><svg
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                aria-hidden="true"
-                role="img"
-                class="iconify iconify--ion"
-                width="1em"
-                height="1em"
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="48"
-                  d="m112 268l144 144l144-144M256 392V100"
-                ></path>
-              </svg></span></span><span data-v-6ec2a118="">切换</span><span
-            class="vben-app-search-footer-item"
-            data-v-6ec2a118=""
-          ><span
-              class="app-iconify anticon"
-              style="font-size: 16px; display: inline-flex;"
-            ><svg
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                aria-hidden="true"
-                role="img"
-                class="iconify iconify--mdi"
-                width="1em"
-                height="1em"
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill="currentColor"
-                  d="M1 7h6v2H3v2h4v2H3v2h4v2H1V7m10 0h4v2h-4v2h2a2 2 0 0 1 2 2v2c0 1.11-.89 2-2 2H9v-2h4v-2h-2a2 2 0 0 1-2-2V9c0-1.1.9-2 2-2m8 0h2a2 2 0 0 1 2 2v1h-2V9h-2v6h2v-1h2v1c0 1.11-.89 2-2 2h-2a2 2 0 0 1-2-2V9c0-1.1.9-2 2-2Z"
-                ></path>
-              </svg></span></span><span data-v-6ec2a118="">关闭</span></div>
+        <span class="vben-app-search-footer-item">
+          <span
+            class="app-iconify anticon"
+            style="font-size: 16px; display: inline-flex;"
+          ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              aria-hidden="true"
+              role="img"
+              class="iconify iconify--ant-design"
+              width="1em"
+              height="1em"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 1024 1024"
+            >
+              <path
+                fill="currentColor"
+                d="M864 170h-60c-4.4 0-8 3.6-8 8v518H310v-73c0-6.7-7.8-10.5-13-6.3l-141.9 112a8 8 0 0 0 0 12.6l141.9 112c5.3 4.2 13 .4 13-6.3v-75h498c35.3 0 64-28.7 64-64V178c0-4.4-3.6-8-8-8z"
+              ></path>
+            </svg>
+          </span>
+        </span>
+        <span class="text">确认</span>
+        <span class="vben-app-search-footer-item">
+          <span
+            class="app-iconify anticon"
+            style="font-size: 16px; display: inline-flex;"
+          ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              aria-hidden="true"
+              role="img"
+              class="iconify iconify--ion"
+              width="1em"
+              height="1em"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 512 512"
+            >
+              <path
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="48"
+                d="m112 244l144-144l144 144M256 120v292"
+              ></path>
+            </svg>
+          </span>
+        </span>
+        <span class="vben-app-search-footer-item">
+          <span
+            class="app-iconify anticon"
+            style="font-size: 16px; display: inline-flex;"
+          ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              aria-hidden="true"
+              role="img"
+              class="iconify iconify--ion"
+              width="1em"
+              height="1em"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 512 512"
+            >
+              <path
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="48"
+                d="m112 268l144 144l144-144M256 392V100"
+              ></path>
+            </svg>
+          </span>
+        </span>
+        <span class="text">切换</span>
+        <span class="vben-app-search-footer-item"><span
+            class="app-iconify anticon"
+            style="font-size: 16px; display: inline-flex;"
+          ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              aria-hidden="true"
+              role="img"
+              class="iconify iconify--mdi"
+              width="1em"
+              height="1em"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="currentColor"
+                d="M1 7h6v2H3v2h4v2H3v2h4v2H1V7m10 0h4v2h-4v2h2a2 2 0 0 1 2 2v2c0 1.11-.89 2-2 2H9v-2h4v-2h-2a2 2 0 0 1-2-2V9c0-1.1.9-2 2-2m8 0h2a2 2 0 0 1 2 2v1h-2V9h-2v6h2v-1h2v1c0 1.11-.89 2-2 2h-2a2 2 0 0 1-2-2V9c0-1.1.9-2 2-2Z"
+              ></path>
+            </svg>
+          </span>
+        </span>
+        <span class="text">关闭</span>
       </div>
     </div>
+
   </n-modal>
 </template>
 <script>
 import { defineComponent, nextTick, reactive, ref } from 'vue';
 import BaseInput from '@/components/content/baseInput/BaseInput.vue';
+import { searchMenuRoutes } from '@/util/router';
 
 /**
  * @description: 搜索页面
@@ -187,13 +198,11 @@ export default defineComponent({
     const modelValue = ref('');
     const searchData = reactive([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
     const hoverIndex = ref(-1); // 鼠标选择页面下标
-    const scrollbarRowRef = ref(null); // 控制滚动条 ref
+    const scrollBarRef = ref(null); // 控制滚动条 ref
 
-    console.log(scrollbarRowRef);
-
-    // function routerSearch(index) {
-    //   hoverIndex.value = index;
-    // }
+    function input() {
+      console.log(searchMenuRoutes((route) => route.title.includes(modelValue.value)));
+    }
 
     //当前页面监视键盘输入
     document.onkeydown = function (e) {
@@ -206,12 +215,12 @@ export default defineComponent({
         else if (hoverIndex.value == 0) {
           hoverIndex.value = searchData.length - 1;
           nextTick(() => {
-            scrollbarRowRef.value.setScrollTop(scrollbarRowRef.value.wrap.scrollHeight);
+            scrollBarRef.value.setScrollTop(scrollBarRef.value.wrap.scrollHeight);
           });
         }
-        if (scrollbarRowRef.value.sizeHeight && hoverIndex.value != searchData.length - 1) {
+        if (scrollBarRef.value.sizeHeight && hoverIndex.value != searchData.length - 1) {
           nextTick(() => {
-            scrollbarRowRef.value.setScrollTop(scrollbarRowRef.value.wrap.scrollTop - 64);
+            scrollBarRef.value.setScrollTop(scrollBarRef.value.wrap.scrollTop - 64);
           });
         }
       } else if (e1 && e1.keyCode == 40) {
@@ -219,12 +228,12 @@ export default defineComponent({
         else if (hoverIndex.value == searchData.length - 1) {
           hoverIndex.value = 0;
           nextTick(() => {
-            scrollbarRowRef.value.setScrollTop(0);
+            scrollBarRef.value.setScrollTop(0);
           });
         }
-        if (scrollbarRowRef.value.sizeHeight && hoverIndex.value) {
+        if (scrollBarRef.value.sizeHeight && hoverIndex.value) {
           nextTick(() => {
-            scrollbarRowRef.value.setScrollTop(scrollbarRowRef.value.wrap.scrollTop + 64);
+            scrollBarRef.value.setScrollTop(scrollBarRef.value.wrap.scrollTop + 64);
           });
         }
       } else if (e1 && e1.keyCode == 13) {
@@ -232,7 +241,14 @@ export default defineComponent({
       }
     };
 
-    return { show, modelValue, searchData, hoverIndex, scrollbarRowRef };
+    return {
+      show,
+      modelValue,
+      searchData,
+      hoverIndex,
+      scrollBarRef,
+      input,
+    };
   },
 });
 </script>
@@ -314,15 +330,11 @@ export default defineComponent({
 
   .admin-search-bottom {
     border-top: 1px solid $grey-4;
-    // height: 44px;
-    // padding: 0 16px;
-    // box-sizing: border-box;
     @include flex(center, initial);
-    // position: relative;
     height: 44px;
     padding: 0 16px;
     font-size: 12px;
-    color: #666;
+    color: $grey-9;
     flex-shrink: 0;
 
     .vben-app-search-footer-item {
@@ -332,9 +344,30 @@ export default defineComponent({
       padding-bottom: 2px;
       margin-right: 0.4em;
       border-radius: 2px;
-      box-shadow: inset 0 -2px #cdcde6, inset 0 0 1px 1px #fff, 0 1px 2px 1px #1e235a66;
+      box-shadow: inset 0 -2px $grey-4, inset 0 0 1px 1px $grey-0, 0 1px 2px 1px $grey-9;
       align-items: center;
       justify-content: center;
+
+      .app-iconify {
+        display: inline-block;
+      }
+
+      .anticon {
+        display: inline-block;
+        color: inherit;
+        font-style: normal;
+        line-height: 0;
+        text-align: center;
+        text-transform: none;
+        vertical-align: -0.125em;
+        text-rendering: optimizelegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+    }
+
+    .text {
+      margin: 0 10px 0 0;
     }
   }
 }
