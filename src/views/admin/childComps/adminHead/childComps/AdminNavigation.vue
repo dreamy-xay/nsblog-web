@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-21 22:02:46
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-03-21 00:53:13
+ * @LastEditTime: 2022-03-21 01:06:40
 -->
 <template>
   <div class="admin-navigation">
@@ -167,7 +167,11 @@ import { defineComponent, inject, reactive, ref } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import AdminSearch from '@/views/admin/childComps/adminHead/childComps/AdminSearch.vue';
 import events from '@/events';
+import { clearToken } from '@/network/token';
+import { mapMutations } from '@/util/store';
+import { authLogout } from '@/network/api/auth';
 import { changeFullScreen } from '@/util/dom';
+import { useRouter } from 'vue-router';
 
 /**
  * @description: 管理员头部导航
@@ -194,6 +198,8 @@ export default defineComponent({
     const showMenu = ref(true); // 显示展示子菜单目录
     const fullscreen = ref(false); // 是否全屏
     const showSearch = ref(false); // 显示搜索
+    const { updateTokenInfo } = mapMutations('global', ['updateTokenInfo']); // 更新tokenInfo
+    const router = useRouter();
     /**
      * @description: 点击用户下拉框
      * @param {number} index 下拉框下标
@@ -202,6 +208,15 @@ export default defineComponent({
      */
     function cliclItem(index) {
       adminDropdownVisible.value = false;
+      if (index == 0) {
+        router.push({ name: 'userCenter' });
+      } else if (index == 1) {
+        clearToken();
+        updateTokenInfo({ status: false });
+        // 登出
+        authLogout().catch((error) => console.log(error));
+        router.push({ name: 'login' });
+      }
     }
 
     events.on('AdmiSubMenu-subMenuChange', (showLength, show) => {
