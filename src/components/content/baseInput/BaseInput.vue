@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-31 16:34:22
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-14 11:57:04
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-03-20 21:56:12
 -->
 <template>
   <div
@@ -60,6 +60,7 @@ import { useMessage } from 'naive-ui';
  * @event enter 键盘按下回车时出发事件
  * @event blur 输入框失焦
  * @event focus 输入框聚焦
+ * @event input 输入触发
  * @event toggleType 当输入框类型发生改变时触发事件，携带一个参数type['password', 'text']
  * @method check 最终检查校验，message选项，无效时触发，返回是否有效，{message:'',type:'', duration}
  * @var {HtmlElement} userCenterInput 输入框dom节点
@@ -178,6 +179,9 @@ export default defineComponent({
      */
     function input(e) {
       const value = e.target.value;
+
+      // 发出input事件
+      context.emit('input', e);
 
       // v-model
       context.emit('update:modelValue', value);
