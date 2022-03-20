@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-21 22:02:46
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-03-20 16:29:49
+ * @LastEditTime: 2022-03-21 00:53:13
 -->
 <template>
   <div class="admin-navigation">
@@ -157,10 +157,13 @@
     </div>
   </div>
 
-  <admin-search v-model:show="showSearch" />
+  <admin-search
+    v-model:show="showSearch"
+    @close-search="changeSearch"
+  />
 </template>
 <script>
-import { defineComponent, inject, reactive, ref, watch } from 'vue';
+import { defineComponent, inject, reactive, ref } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import AdminSearch from '@/views/admin/childComps/adminHead/childComps/AdminSearch.vue';
 import events from '@/events';
@@ -241,16 +244,14 @@ export default defineComponent({
     // 刷新按钮页面
     const clickRefresh = inject('reload');
 
+    /**
+     * @description: 关闭或打开搜索
+     * @return {void}
+     * @author: Z_Y_C
+     */
     function changeSearch() {
       showSearch.value = !showSearch.value;
     }
-
-    watch(
-      () => showSearch.value,
-      () => {
-        console.log(showSearch.value);
-      }
-    );
 
     return {
       cliclItem,

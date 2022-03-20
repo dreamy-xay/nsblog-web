@@ -4,13 +4,15 @@
  * @Autor: Z_Y_C
  * @Date: 2022-03-20 15:21:39
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-03-20 23:25:25
+ * @LastEditTime: 2022-03-21 00:52:57
 -->
 <template>
   <n-modal
     class="base-modal"
     display-directive="if"
-    v-model:show="show"
+    v-model="isShow"
+    :on-esc="close"
+    :on-mask-click="close"
   >
 
     <div class="admin-search">
@@ -26,7 +28,7 @@
       </div>
       <div class="admin-search-body">
         <div
-          v-if="!searchData.length"
+          v-if="!showData"
           class="null-data"
         >暂无搜索结果</div>
 
@@ -40,13 +42,38 @@
           >
             <div
               role="button"
-              v-for="(item , index) in searchData"
+              v-for="(item , index) in searchData[0]"
               :key="index"
               class="item"
               :class="index==hoverIndex ? 'item-hover':''"
               @mouseenter="hoverIndex=index"
+              @click="changPage(item)"
             >
-              <div>{{index}}</div>
+              <div class="item-search">
+                <div
+                  class="search"
+                  v-for="(item1 , index1) in item"
+                  :key="index1"
+                >
+                  <div class="content">
+                    <div
+                      class="icon"
+                      v-if="item1.icon"
+                    >
+                      <i :class="'iconfont '+item1.icon"></i>
+                    </div>
+                    {{item1.title}}
+                  </div>
+
+                  <div
+                    class="icon-next"
+                    v-if="index1 != item.length-1"
+                  >
+                    <i class="iconfont blog-arrow-down"></i>
+                  </div>
+
+                </div>
+              </div>
               <div
                 v-if="index==hoverIndex"
                 class="vben-app-search-modal-list__item-enter"
@@ -183,71 +210,126 @@
 import { defineComponent, nextTick, reactive, ref } from 'vue';
 import BaseInput from '@/components/content/baseInput/BaseInput.vue';
 import { searchMenuRoutes } from '@/util/router';
+import { useRouter } from 'vue-router';
 
 /**
  * @description: 搜索页面
- * @param {Boolean} show 是否展示 Modal `默认false`
+ * @event close-search 关闭model
  * @author: Z_Y_C
  */
 
 export default defineComponent({
   name: 'adminSearch',
   components: { BaseInput },
-  setup() {
-    const show = ref(true); //是否显示model
-    const modelValue = ref('');
-    const searchData = reactive([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+  setup(_, content) {
+    const isShow = ref(true); //是否显示model
+    const modelValue = ref(''); // 输入框的值
+    const searchData = reactive([]); // 搜索到的数据
     const hoverIndex = ref(-1); // 鼠标选择页面下标
     const scrollBarRef = ref(null); // 控制滚动条 ref
+    const router = useRouter();
+    const showData = ref(false); // 是否有数据
 
+    /**
+     * @description: 输入框输入
+     * @return {void}
+     * @author: Z_Y_C
+     */
     function input() {
-      console.log(searchMenuRoutes((route) => route.title.includes(modelValue.value)));
+      if (modelValue.value) {
+        searchData.splice(0, searchData.length);
+        let arr = [];
+        arr = searchMenuRoutes((route) => route.title.includes(modelValue.value));
+        searchData.splice(0, arr.length, arr);
+        if (searchData[0].length) {
+          showData.value = true;
+          hoverIndex.value = 0;
+        } else {
+          showData.value = false;
+          hoverIndex.value = -1;
+        }
+      } else {
+        showData.value = false;
+        hoverIndex.value = -1;
+        searchData.splice(0, searchData.length);
+      }
     }
 
     //当前页面监视键盘输入
     document.onkeydown = function (e) {
-      console.log('键盘输入了');
       //事件对象兼容
       let e1 = e || event || window.event || arguments.callee.caller.arguments[0];
       //键盘按键判断:左箭头-37;上箭头-38；右箭头-39;下箭头-40
-      if (e1 && e1.keyCode == 38) {
-        if (hoverIndex.value >= 1) hoverIndex.value--;
-        else if (hoverIndex.value == 0) {
-          hoverIndex.value = searchData.length - 1;
-          nextTick(() => {
-            scrollBarRef.value.setScrollTop(scrollBarRef.value.wrap.scrollHeight);
-          });
+      if (searchData[0]) {
+        if (e1 && e1.keyCode == 38) {
+          if (hoverIndex.value >= 1) hoverIndex.value--;
+          else if (hoverIndex.value == 0) {
+            hoverIndex.value = searchData[0].length - 1;
+            nextTick(() => {
+              scrollBarRef.value.setScrollTop(scrollBarRef.value.wrap.scrollHeight);
+            });
+          }
+          if (scrollBarRef.value.sizeHeight && hoverIndex.value != searchData[0].length - 1) {
+            nextTick(() => {
+              scrollBarRef.value.setScrollTop(scrollBarRef.value.wrap.scrollTop - 64);
+            });
+          }
+        } else if (e1 && e1.keyCode == 40) {
+          if (hoverIndex.value < searchData[0].length - 1) hoverIndex.value++;
+          else if (hoverIndex.value == searchData[0].length - 1) {
+            hoverIndex.value = 0;
+            nextTick(() => {
+              scrollBarRef.value.setScrollTop(0);
+            });
+          }
+          if (scrollBarRef.value.sizeHeight && hoverIndex.value) {
+            nextTick(() => {
+              scrollBarRef.value.setScrollTop(scrollBarRef.value.wrap.scrollTop + 64);
+            });
+          }
+        } else if (e1 && e1.keyCode == 13) {
+          changPage(searchData[0][hoverIndex.value]);
         }
-        if (scrollBarRef.value.sizeHeight && hoverIndex.value != searchData.length - 1) {
-          nextTick(() => {
-            scrollBarRef.value.setScrollTop(scrollBarRef.value.wrap.scrollTop - 64);
-          });
-        }
-      } else if (e1 && e1.keyCode == 40) {
-        if (hoverIndex.value < searchData.length - 1) hoverIndex.value++;
-        else if (hoverIndex.value == searchData.length - 1) {
-          hoverIndex.value = 0;
-          nextTick(() => {
-            scrollBarRef.value.setScrollTop(0);
-          });
-        }
-        if (scrollBarRef.value.sizeHeight && hoverIndex.value) {
-          nextTick(() => {
-            scrollBarRef.value.setScrollTop(scrollBarRef.value.wrap.scrollTop + 64);
-          });
-        }
-      } else if (e1 && e1.keyCode == 13) {
-        console.log('13');
       }
     };
 
+    /**
+     * @description: 跳转
+     * @param {object} 跳转的object信息
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function changPage(item) {
+      router.push({ name: item[item.length - 1].name });
+      isShow.value = false;
+      showData.value = false;
+      searchData.splice(0, searchData.length);
+      modelValue.value = '';
+      content.emit('close-search');
+    }
+
+    /**
+     * @description: 关闭model
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function close() {
+      isShow.value = false;
+      showData.value = false;
+      searchData.splice(0, searchData.length);
+      modelValue.value = '';
+    }
+
     return {
-      show,
+      isShow,
       modelValue,
       searchData,
       hoverIndex,
       scrollBarRef,
       input,
+      changPage,
+      showData,
+      close,
     };
   },
 });
@@ -306,7 +388,7 @@ export default defineComponent({
         margin: 8px 14px 0;
         border-radius: $border-radius-1;
         box-shadow: $shadow-0;
-        color: $grey-11;
+        color: $grey-8;
         padding-left: 14px;
         box-sizing: border-box;
 
@@ -314,6 +396,38 @@ export default defineComponent({
 
         &:last-child {
           margin-bottom: 20px;
+        }
+
+        .item-search {
+          @include flex(center);
+
+          .search {
+            @include flex(center);
+
+            .content {
+              @include flex(center);
+              font-size: 14px;
+
+              .icon {
+                height: 14px;
+                line-height: 14px;
+                margin-right: 3px;
+                .iconfont {
+                  font-size: 14px;
+                }
+              }
+            }
+
+            .icon-next {
+              margin: 0 10px;
+              height: 14px;
+              line-height: 14px;
+              transform: rotate(-90deg);
+              .iconfont {
+                font-size: 14px;
+              }
+            }
+          }
         }
       }
 
