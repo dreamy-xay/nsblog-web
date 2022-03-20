@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 19:51:18
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-03-20 22:57:11
+ * @LastEditTime: 2022-03-20 23:26:19
  */
 
 import router from '@/router';
@@ -78,7 +78,7 @@ export function searchMenuRoutes(
     for (const r of route.children) if (filterMenu(r)) ok = true;
     if ((!ok || all) && rules(route)) {
       ok = true;
-      menuRoutes.push(menuRoute);
+      menuRoutes.push(JSON.parse(JSON.stringify(menuRoute)));
     }
     menuRoute.pop();
     return ok;
