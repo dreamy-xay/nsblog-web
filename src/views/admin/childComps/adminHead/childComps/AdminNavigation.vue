@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-21 22:02:46
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-03-16 12:04:25
+ * @LastEditTime: 2022-03-20 16:29:49
 -->
 <template>
   <div class="admin-navigation">
@@ -93,6 +93,7 @@
         <div
           class="icon"
           role="button"
+          @click="changeSearch"
         ><i class="iconfont blog-ri-search-line"></i></div>
 
         <div class="notice">
@@ -145,7 +146,7 @@
         <div
           class="icon"
           role="button"
-          @click="changeFullScreen()"
+          @click="fullscreen = changeFullScreen(fullscreen)"
         ><i :class=" fullscreen ? 'iconfont blog-ri-fullscreen-exit-fill':'iconfont blog-ri-fullscreen-fill'"></i></div>
         <div
           class="icon"
@@ -155,12 +156,15 @@
       </div>
     </div>
   </div>
+
+  <admin-search v-model:show="showSearch" />
 </template>
 <script>
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, inject, reactive, ref, watch } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
+import AdminSearch from '@/views/admin/childComps/adminHead/childComps/AdminSearch.vue';
 import events from '@/events';
-import { useRouter } from 'vue-router';
+import { changeFullScreen } from '@/util/dom';
 
 /**
  * @description: 管理员头部导航
@@ -170,20 +174,23 @@ import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'adminNavigation',
-  components: { BaseAvatar },
+  components: {
+    BaseAvatar,
+    AdminSearch,
+  },
   props: {
     breadcrumbData: {
       type: Array,
       require: true,
     },
   },
-  setup(props) {
+  setup() {
     const adminDropdownVisible = ref(false); // 下拉框显示
     const activeName = ref('first'); // el-tabs显示name
     const roateMenu = ref(true); // 图标旋转
     const showMenu = ref(true); // 显示展示子菜单目录
-    const router = useRouter();
     const fullscreen = ref(false); // 是否全屏
+    const showSearch = ref(false); // 显示搜索
     /**
      * @description: 点击用户下拉框
      * @param {number} index 下拉框下标
@@ -231,49 +238,20 @@ export default defineComponent({
       count.push(count.length + 1);
     }
 
-    /**
-     * @description: 刷新按钮
-     * @return {void}
-     * @author: Z_Y_C
-     */
-    function clickRefresh() {
-      router.push({ name: props.breadcrumbData[props.breadcrumbData.length - 1].name });
+    // 刷新按钮页面
+    const clickRefresh = inject('reload');
+
+    function changeSearch() {
+      showSearch.value = !showSearch.value;
     }
 
-    /**
-     * @description: 全屏和退出全屏
-     * @return {void}
-     * @author: Z_Y_C
-     */
-    function changeFullScreen() {
-      const element = document.documentElement;
-      // 如果是全屏状态
-      if (fullscreen.value) {
-        // 如果浏览器有这个Function
-        if (document.exitFullscreen) {
-          document.exitFullscreen();
-        } else if (document.webkitCancelFullScreen) {
-          document.webkitCancelFullScreen();
-        } else if (document.mozCancelFullScreen) {
-          document.mozCancelFullScreen();
-        } else if (document.msExitFullscreen) {
-          document.msExitFullscreen();
-        }
-      } else {
-        // 如果浏览器有这个Function
-        if (element.requestFullscreen) {
-          element.requestFullscreen();
-        } else if (element.webkitRequestFullScreen) {
-          element.webkitRequestFullScreen();
-        } else if (element.mozRequestFullScreen) {
-          element.mozRequestFullScreen();
-        } else if (element.msRequestFullscreen) {
-          element.msRequestFullscreen();
-        }
+    watch(
+      () => showSearch.value,
+      () => {
+        console.log(showSearch.value);
       }
-      // 判断全屏状态的变量
-      fullscreen.value = !fullscreen.value;
-    }
+    );
+
     return {
       cliclItem,
       changeAdminVisible,
@@ -288,6 +266,8 @@ export default defineComponent({
       clickRefresh,
       changeFullScreen,
       fullscreen,
+      showSearch,
+      changeSearch,
     };
   },
 });

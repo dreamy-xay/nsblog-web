@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-22 10:20:59
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-28 16:34:23
+ * @LastEditTime: 2022-03-20 15:23:30
 -->
 <template>
   <div class="admin-head">
@@ -21,19 +21,27 @@
 import { defineComponent, reactive, ref, watch } from 'vue';
 import AdminNavigation from '@/views/admin/childComps/adminHead/childComps/AdminNavigation.vue';
 import AdminTab from '@/views/admin/childComps/adminHead/childComps/AdminTab.vue';
-import { getMenuRoutes } from '@/util/router';
 import { useRoute, useRouter } from 'vue-router';
 
 /**
  * @description:头部
+ * @param {Array} routesMenu  获取所有路由菜单列表
  * @author: Z_Y_C
  */
 
 export default defineComponent({
   name: 'adminHead',
-  components: { AdminNavigation, AdminTab },
-  setup(_, content) {
-    const routesMenu = getMenuRoutes(); // 获取所有路由菜单列表
+  components: {
+    AdminNavigation,
+    AdminTab,
+  },
+  props: {
+    routesMenu: {
+      type: Array,
+      required: true,
+    },
+  },
+  setup(props) {
     const route = useRoute();
     const router = useRouter();
     const breadcrumbData = reactive([]); // 面包屑数据
@@ -44,7 +52,7 @@ export default defineComponent({
     const editableTabsValue = ref('');
 
     // 面包屑显示数据
-    if (route.matched[1].name == routesMenu[0].name) {
+    if (route.matched[1].name == props.routesMenu[0].name) {
       breadcrumbData.splice(breadcrumbData.length, 0, {
         icon: route.matched[2].meta.icon,
         content: route.matched[2].meta.title,
@@ -62,16 +70,16 @@ export default defineComponent({
 
     // 页面缓存数据
     editableTabs.splice(editableTabs.length, 0, {
-      icon: routesMenu[0].children[0].icon,
-      content: routesMenu[0].children[0].title,
-      name: routesMenu[0].children[0].name,
+      icon: props.routesMenu[0].children[0].icon,
+      content: props.routesMenu[0].children[0].title,
+      name: props.routesMenu[0].children[0].name,
     });
 
     // 选择缓存页面数据
-    editableTabsValue.value = routesMenu[0].children[0].name;
+    editableTabsValue.value = route.name;
 
     // 页面缓存数据
-    if (routesMenu[0].children[0].name != route.name) {
+    if (props.routesMenu[0].children[0].name != route.name) {
       editableTabs.splice(editableTabs.length, 0, {
         icon: route.meta.icon,
         content: route.meta.title,
@@ -98,7 +106,7 @@ export default defineComponent({
         editableTabsValue.value = route.name;
 
         breadcrumbData.splice(0, breadcrumbData.length);
-        if (route.matched[1].name == routesMenu[0].name) {
+        if (route.matched[1].name == props.routesMenu[0].name) {
           breadcrumbData.splice(breadcrumbData.length, 0, {
             icon: route.matched[2].meta.icon,
             content: route.matched[2].meta.title,
@@ -116,9 +124,6 @@ export default defineComponent({
       }
     );
 
-    console.log(routesMenu);
-    console.log(route);
-
     /**
      * @description: 移除缓存页面
      * @param {string} name 被删除的标签的name
@@ -126,7 +131,6 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function removeTab(name) {
-      console.log('removeTab:' + name);
       let j = 0;
       for (let i = 1; i < editableTabs.length; ++i) {
         if (name == editableTabs[i].name) {
@@ -185,8 +189,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .admin-head {
-  // width: 600px;
   box-shadow: 0 1px 4px rgb(0 21 41 / 8%);
-  // width: calc(100% - 266px);
 }
 </style>

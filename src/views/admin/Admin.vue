@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-21 20:02:51
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-27 23:29:10
+ * @LastEditTime: 2022-03-20 14:43:08
 -->
 <template>
   <n-loading-bar-provider :loading-bar-style="{loading: {backgroundColor: styles.blue1}}">
@@ -14,15 +14,15 @@
         class="admin-view"
         :style="{width: viewWidth}"
       >
-        <admin-head />
-        <router-view />
+        <admin-head :routes-menu="routes" />
+        <router-view v-if="isRouterAlive" />
       </div>
     </div>
   </n-loading-bar-provider>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, nextTick, provide, ref } from 'vue';
 import AdminMenu from '@/views/admin/childComps/adminMenu/AdminMenu.vue';
 import AdminHead from '@/views/admin/childComps/adminHead/AdminHead.vue';
 import store from '@/store';
@@ -54,10 +54,27 @@ export default defineComponent({
       viewWidth.value = show && showLength ? 'calc(100% - 266px)' : 'calc(100% - 64px)';
     });
 
+    const isRouterAlive = ref(true); // router刷新控制变量
+
+    /**
+     * @description: router重新加载方法
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function reload() {
+      isRouterAlive.value = false; //先关闭，
+      nextTick(() => {
+        isRouterAlive.value = true; //再打开
+      });
+    }
+    // 方法向下映射
+    provide('reload', reload);
+
     return {
       styles,
       routes,
       viewWidth,
+      isRouterAlive,
     };
   },
 });

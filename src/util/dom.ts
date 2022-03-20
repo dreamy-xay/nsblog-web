@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-28 21:37:34
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-13 20:43:39
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-03-20 13:56:18
  */
 import ResizeObserver from 'resize-observer-polyfill';
 import { debounce, throttle, shuffle } from 'lodash';
@@ -305,4 +305,35 @@ export function circleRandomText(
   }
 
   return texts;
+}
+
+/**
+ * @description: 全屏或者关闭全屏
+ * @param {boolean} fullscreen 当前全屏状态 `必传参数`
+ * @return {boolean} 返回全屏状态
+ * @author: Z_Y_C
+ */
+export function changeFullScreen(fullscreen: boolean): boolean {
+  const element = document.documentElement;
+  // 如果是全屏状态
+  if (fullscreen) {
+    // 如果浏览器有这个Function
+    if (document.exitFullscreen) document.exitFullscreen();
+    else if (document['webkitCancelFullScreen']) document['webkitCancelFullScreen']();
+    else if (document['mozCancelFullScreen']) document['mozCancelFullScreen']();
+    else if (document['msExitFullscreen']) document['msExitFullscreen']();
+  } else {
+    // 如果浏览器有这个Function
+    if (element.requestFullscreen) {
+      element.requestFullscreen();
+    } else if (element['webkitRequestFullScreen']) {
+      element['webkitRequestFullScreen']();
+    } else if (element['mozRequestFullScreen']) {
+      element['mozRequestFullScreen']();
+    } else if (element['msRequestFullscreen']) {
+      element['msRequestFullscreen']();
+    }
+  }
+  // 判断全屏状态的变量
+  return !fullscreen;
 }
