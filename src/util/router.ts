@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 19:51:18
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-27 14:52:53
+ * @LastEditTime: 2022-03-20 22:34:11
  */
 
 import router from '@/router';
@@ -54,4 +54,32 @@ export function getMenuRoutes(all: boolean = false): RouteInfo[] {
   }
 
   return getDeepRoutes(router.getRoutes(), true);
+}
+
+/**
+ * @description:
+ * @param {(route: RouteInfo) => boolean} roules 规则回调函数，返回true则为匹配成功 `必传参数`
+ * @param {RouteInfo[]} routes 路由信息列表 `默认为 getMenuRoutes()`
+ * @param {boolean} all 是否全部匹配(路由间存在包含关系) `默认为false`
+ * @return {RouteInfo[][]} 返回路由信息行列表
+ * @author: dreamy-xay
+ */
+export function searchMenuRoutes(
+  rules: (route: RouteInfo) => boolean,
+  routes: RouteInfo[] = getMenuRoutes(),
+  all: boolean = false
+): RouteInfo[][] {
+  const menuRoutes: RouteInfo[][] = [];
+  const menuRoute: RouteInfo[] = [];
+  // dfs 更新route列表
+  function filterMenu(route: RouteInfo): boolean {
+    menuRoute.push(route);
+    let ok: boolean = false; // 下一级是否已经收集
+    for (const r of route.children) if (filterMenu(r)) ok = true;
+    if ((!ok || all) && rules(route)) menuRoutes.push(menuRoute);
+    menuRoute.pop();
+    return ok;
+  }
+  for (const route of routes) filterMenu(route);
+  return menuRoutes;
 }
