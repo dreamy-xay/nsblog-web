@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-21 20:01:40
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-03-21 11:14:29
+ * @LastEditTime: 2022-03-21 17:35:19
  */
 import { RouteRecordRaw } from 'vue-router';
 import adminEmpty from '@/views/admin/childComps/AdminEmpty.vue';
@@ -35,7 +35,7 @@ const adminRouter: RouteRecordRaw = {
           path: 'dashboard',
           name: 'adminHomeDashboard',
           meta: {
-            title: '看板',
+            title: '仪表盘',
             icon: 'blog-shujukanban',
             super: false
           },
@@ -50,7 +50,7 @@ const adminRouter: RouteRecordRaw = {
             super: false,
             badge: 'New'
           },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+          component: adminEmpty
         }
       ]
     },
@@ -89,7 +89,7 @@ const adminRouter: RouteRecordRaw = {
                 icon: 'blog-fabu',
                 super: false
               },
-              component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+              component: adminEmpty
             },
             {
               path: 'manage',
@@ -99,7 +99,7 @@ const adminRouter: RouteRecordRaw = {
                 icon: 'blog-ziyuan',
                 super: false
               },
-              component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+              component: adminEmpty
             },
             {
               path: 'preview',
@@ -109,7 +109,7 @@ const adminRouter: RouteRecordRaw = {
                 icon: 'blog-preview',
                 super: false
               },
-              component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+              component: adminEmpty
             }
           ]
         },
@@ -122,7 +122,7 @@ const adminRouter: RouteRecordRaw = {
             super: false,
             badge: 7
           },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+          component: adminEmpty
         },
         {
           path: 'group',
@@ -132,7 +132,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-xiaozu1',
             super: true
           },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+          component: adminEmpty
         }
       ]
     },
@@ -158,7 +158,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-guanzhuderen2',
             super: false
           },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+          component: adminEmpty
         },
         {
           path: 'category',
@@ -168,7 +168,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-fenlei2',
             super: false
           },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+          component: adminEmpty
         },
         {
           path: 'tag',
@@ -178,7 +178,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-tag',
             super: false
           },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+          component: adminEmpty
         },
         {
           path: 'friendChain',
@@ -188,7 +188,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-lianjie',
             super: false
           },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+          component: adminEmpty
         },
         {
           path: 'settings',
@@ -198,7 +198,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-shezhi',
             super: false
           },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+          component: adminEmpty
         }
       ]
     },
@@ -224,7 +224,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-image',
             super: false
           },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+          component: adminEmpty
         },
         {
           path: 'file',
@@ -234,7 +234,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-wenjianshangchuan',
             super: false
           },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+          component: adminEmpty
         },
         {
           path: 'resource',
@@ -244,14 +244,14 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-fenxiang',
             super: false
           },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+          component: adminEmpty
         }
       ]
     },
     {
       path: 'comment',
       name: 'adminComment',
-      component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue'),
+      component: adminEmpty,
       meta: {
         title: '评论',
         icon: 'blog-interactive',
@@ -281,7 +281,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-rizhifenxi',
             super: false
           },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+          component: adminEmpty
         },
         {
           path: 'status',
@@ -291,7 +291,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-xitongzhuangtai',
             super: true
           },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+          component: adminEmpty
         },
         {
           path: 'settings',
@@ -301,7 +301,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-shezhi',
             super: false
           },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+          component: adminEmpty
         },
         {
           path: 'notice',
@@ -311,7 +311,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-ri-notification-line',
             super: false
           },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+          component: adminEmpty
         }
       ]
     },
@@ -337,14 +337,14 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-xiguan',
             super: false
           },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+          component: adminEmpty
         }
       ]
     },
     {
       path: 'outsideChain',
       name: 'adminOutsideChain',
-      component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue'),
+      component: adminEmpty,
       meta: {
         title: '外链',
         icon: 'blog-fenxiang1',
@@ -374,7 +374,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-shujutongji',
             super: true
           },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+          component: adminEmpty
         },
         {
           path: 'websiteManage',
@@ -384,7 +384,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-wangzhanguanli',
             super: true
           },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+          component: adminEmpty
         },
         {
           path: 'userManage',
@@ -394,7 +394,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-yonghuguanli',
             super: true
           },
-          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+          component: adminEmpty
         }
       ]
     }

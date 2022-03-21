@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 22:42:44
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-28 08:59:47
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-03-21 17:36:48
 -->
 <template>
   <div
@@ -181,7 +181,7 @@ export default defineComponent({
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-  transition: 0.25s ease-in;
+  transition: 0.25s;
   background-color: $grey-0;
 
   &::-webkit-scrollbar {

@@ -27,6 +27,7 @@
     "vue-class-component": "^8.0.0-0",
     "vue-echarts": "^6.0.0",
     "vue-router": "^4.0.0-0",
+    "vue3-count-to": "^1.1.2",
     "vuex": "^4.0.0-0",
     "vuex-persistedstate": "^4.0.0"
   },

@@ -4,14 +4,15 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 20:55:54
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-27 11:39:47
+ * @LastEditTime: 2022-03-21 17:35:06
 -->
 <template>
   <router-view />
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { useLoadingBar } from 'naive-ui';
+import { defineComponent, onMounted } from 'vue';
 
 /**
  * @description: 空路由组件
@@ -20,5 +21,15 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'adminEmpty',
+  setup() {
+    const loadingBar = useLoadingBar(); // naive-ui loadingBar
+    loadingBar.start();
+
+    onMounted(() => {
+      loadingBar.finish();
+    });
+
+    return {};
+  },
 });
 </script>
