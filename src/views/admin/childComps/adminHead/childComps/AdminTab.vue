@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-22 13:26:38
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-03-16 12:03:16
+ * @LastEditTime: 2022-03-21 12:05:32
 -->
 <template>
   <div class="admin-tab">
@@ -190,11 +190,13 @@ export default defineComponent({
       }
 
       .el-tabs__nav-prev {
-        line-height: 50px;
+        margin-top: 10px;
+        line-height: 40px;
       }
 
       .el-tabs__nav-next {
-        line-height: 50px;
+        margin-top: 10px;
+        line-height: 40px;
       }
 
       .el-tabs__nav {
@@ -232,9 +234,13 @@ export default defineComponent({
         mask-size: 100% 100%;
       }
 
-      // 图标位置
+      // X图标位置
       .el-tabs__item .el-icon-close {
         top: 0px;
+        &:hover {
+          background-color: $blue-1;
+          color: $grey-0;
+        }
       }
 
       .el-tabs__item {
