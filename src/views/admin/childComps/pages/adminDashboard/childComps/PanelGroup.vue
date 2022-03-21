@@ -3,7 +3,7 @@
  * @Author: ZY
  * @Date: 2021-01-18 10:48:43
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-03-21 16:52:40
+ * @LastEditTime: 2022-03-21 17:57:59
 -->
 <template>
   <el-row
@@ -25,7 +25,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            New Visits
+            浏览量
           </div>
           <CountTo
             ref="myCount"
@@ -52,7 +52,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            Messages
+            评论数
           </div>
           <CountTo
             :start-val="0"
@@ -78,7 +78,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            Purchases
+            发文数
           </div>
           <CountTo
             :start-val="0"
@@ -104,7 +104,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            Shoppings
+            上传数
           </div>
           <CountTo
             :start-val="0"
@@ -125,16 +125,12 @@ export default defineComponent({
   components: {
     CountTo,
   },
-  emits: ['handle-set-line-chart-data'],
   setup(_, { emit }) {
     const handleSetLineChartData = (type: string) => {
       emit('handle-set-line-chart-data', type);
     };
 
     const myCount = ref(null);
-    onMounted(() => {
-      console.log((myCount.value as any).value);
-    });
 
     return {
       handleSetLineChartData,
