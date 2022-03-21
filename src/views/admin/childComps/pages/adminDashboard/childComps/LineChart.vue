@@ -3,7 +3,7 @@
  * @Author: ZY
  * @Date: 2021-01-18 09:31:32
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-03-21 17:15:56
+ * @LastEditTime: 2022-03-21 18:00:44
 -->
 <template>
   <div
@@ -58,7 +58,7 @@ export default defineComponent({
       if (chart.value) {
         chart.value.setOption({
           xAxis: {
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
             boundaryGap: false,
             axisTick: {
               show: false,
@@ -84,11 +84,11 @@ export default defineComponent({
             },
           },
           legend: {
-            data: ['expected', 'actual'],
+            data: ['预期', '实际'],
           },
           series: [
             {
-              name: 'expected',
+              name: '预期',
               itemStyle: {
                 color: '#FF005A',
                 lineStyle: {
@@ -103,7 +103,7 @@ export default defineComponent({
               animationEasing: 'cubicInOut',
             },
             {
-              name: 'actual',
+              name: '实际',
               smooth: true,
               type: 'line',
               itemStyle: {

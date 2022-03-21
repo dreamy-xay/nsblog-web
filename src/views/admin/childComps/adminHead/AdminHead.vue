@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2022-02-22 10:20:59
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-03-20 15:23:30
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-03-21 17:53:38
 -->
 <template>
   <div class="admin-head">
@@ -190,5 +190,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 .admin-head {
   box-shadow: 0 1px 4px rgb(0 21 41 / 8%);
+  background-color: $grey-0;
 }
 </style>
