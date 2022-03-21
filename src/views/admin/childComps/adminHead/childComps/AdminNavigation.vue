@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-21 22:02:46
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-03-21 01:06:40
+ * @LastEditTime: 2022-03-21 17:13:26
 -->
 <template>
   <div class="admin-navigation">
@@ -30,9 +30,7 @@
           >
             <i :class="'iconfont '+item.icon"></i>
           </div>
-          {{
-            item.content
-          }}
+          {{item.content}}
         </div>
 
         <div
@@ -112,32 +110,45 @@
             <template #dropdown>
               <el-dropdown-menu>
                 <div class="notice-content">
-                  <div class="top">
-                    <el-tabs
-                      v-model="activeName"
-                      class="demo-tabs"
-                      @tab-click="handleClick"
+                  <el-tabs
+                    class="demo-tabs"
+                    v-model="activeName"
+                  >
+                    <el-tab-pane
+                      label="通知"
+                      name="first"
                     >
-                      <el-tab-pane
-                        label="通知"
-                        name="first"
+                    </el-tab-pane>
+                    <el-scrollbar
+                      v-if="activeName=='first'"
+                      height="210px"
+                    >
+                      <div
+                        v-for="(item , index) in notice"
+                        :key="index"
+                        class="notice-item"
                       >
-                        <el-scrollbar height="210px">
-                          <div
-                            v-infinite-scroll="load"
-                            infinite-scroll-delay="300"
-                            :infinite-scroll-disabled="true"
-                          >
-                            <div
-                              v-for="i in count"
-                              :key="i"
-                            >{{ i }}</div>
-                          </div>
-                        </el-scrollbar>
-                      </el-tab-pane>
-                    </el-tabs>
-                  </div>
+                        <base-avatar
+                          :size="50"
+                          :src="item.avatar"
+                          :style="{marginLeft:'15px'}"
+                        />
+                        <div class="text">{{item.content}}</div>
+                      </div>
+                    </el-scrollbar>
+                    <div class="clean">
+                      <div
+                        class="icon"
+                        role="button"
+                        @click="jumpMessage"
+                      >
+                        <!-- <i></i> -->
+                        查看全部
+                      </div>
+                    </div>
+                  </el-tabs>
                 </div>
+
               </el-dropdown-menu>
 
             </template>
@@ -200,6 +211,7 @@ export default defineComponent({
     const showSearch = ref(false); // 显示搜索
     const { updateTokenInfo } = mapMutations('global', ['updateTokenInfo']); // 更新tokenInfo
     const router = useRouter();
+
     /**
      * @description: 点击用户下拉框
      * @param {number} index 下拉框下标
@@ -245,15 +257,20 @@ export default defineComponent({
       roateMenu.value = !roateMenu.value;
     }
 
-    function handleClick(e) {
-      activeName.value = e.paneName.value;
-    }
+    const notice = reactive([
+      { avatar: '', content: 'ZYC赞了你的评论' },
+      { avatar: '', content: '收到了clq的打赏' },
+      { avatar: '', content: 'xxb踩了你的回答' },
+      { avatar: '', content: 'xay回答了你的问题' },
+    ]); //消息通知
 
-    const count = reactive([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
-
-    function load() {
-      console.log('=============================');
-      count.push(count.length + 1);
+    /**
+     * @description: 跳转到系统消息界面
+     * @return {void}
+     * @author: Z_Y_C
+     */
+    function jumpMessage() {
+      router.push({ name: 'adminSystemNotice' });
     }
 
     // 刷新按钮页面
@@ -273,9 +290,7 @@ export default defineComponent({
       changeAdminVisible,
       adminDropdownVisible,
       activeName,
-      handleClick,
-      count,
-      load,
+      notice,
       changeMenu,
       roateMenu,
       showMenu,
@@ -284,6 +299,7 @@ export default defineComponent({
       fullscreen,
       showSearch,
       changeSearch,
+      jumpMessage,
     };
   },
 });
@@ -439,16 +455,48 @@ export default defineComponent({
 }
 
 .notice-content {
-  padding: 0 10px;
-
   .demo-tabs {
     width: 270px;
-    // .infinite-list {
-    //   height: 10px;
-    //   padding: 0;
-    //   margin: 0;
-    //   list-style: none;
-    // }
+
+    :deep(.el-tabs__header) {
+      padding: 0 10px;
+    }
+
+    :deep(.el-tabs__active-bar) {
+      width: 28px !important; // 选择标题下方蓝线
+    }
+  }
+  .notice-item {
+    @include flex(center);
+    min-height: 50px;
+    padding: 10px 10px;
+
+    .text {
+      width: 150px;
+      margin-left: 10px;
+      font-size: 14px;
+      color: $grey-8;
+      @include word-break;
+    }
+  }
+  .clean {
+    padding: 0 10px;
+    @include flex(center, center, column);
+    height: 32px;
+    color: $blue-1;
+    font-style: 14px;
+
+    &:hover {
+      color: $blue-0;
+    }
+
+    .icon {
+      height: 100%;
+      width: calc(100% - 10px);
+      border-top: 1px solid $grey-2;
+      @include flex(center, center);
+      padding-top: 10px;
+    }
   }
 }
 </style>
