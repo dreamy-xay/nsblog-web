@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-21 20:01:40
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-03-15 22:26:20
+ * @LastEditTime: 2022-03-21 11:14:29
  */
 import { RouteRecordRaw } from 'vue-router';
 import adminEmpty from '@/views/admin/childComps/AdminEmpty.vue';
@@ -299,6 +299,16 @@ const adminRouter: RouteRecordRaw = {
           meta: {
             title: '系统设置',
             icon: 'blog-shezhi',
+            super: false
+          },
+          component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
+        },
+        {
+          path: 'notice',
+          name: 'adminSystemNotice',
+          meta: {
+            title: '系统通知',
+            icon: 'blog-ri-notification-line',
             super: false
           },
           component: () => import('@/views/admin/childComps/pages/adminDashboard/AdminDashboard.vue')
