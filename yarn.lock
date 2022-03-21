@@ -4204,7 +4204,7 @@
   "resolved" "https://registry.nlark.com/core-js/download/core-js-2.6.12.tgz?cache=0&sync_timestamp=1624966056491&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fcore-js%2Fdownload%2Fcore-js-2.6.12.tgz"
   "version" "2.6.12"
 
-"core-js@^3.6.5":
+"core-js@^3.6.5", "core-js@^3.8.1":
   "integrity" "sha1-dAZg0v9V7zTOZk1+JFURnFvdPWE="
   "resolved" "https://registry.nlark.com/core-js/download/core-js-3.15.2.tgz?cache=0&sync_timestamp=1624966056491&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fcore-js%2Fdownload%2Fcore-js-3.15.2.tgz"
   "version" "3.15.2"
@@ -12916,6 +12916,11 @@
   "resolved" "https://registry.nlark.com/vue-cli-plugin-naive-ui/download/vue-cli-plugin-naive-ui-0.0.4.tgz"
   "version" "0.0.4"
 
+"vue-count-to@^1.0.13":
+  "integrity" "sha512-6R4OVBVNtQTlcbXu6SJ8ENR35M2/CdWt3Jmv57jOUM+1ojiFmjVGvZPH8DfHpMDSA+ITs+EW5V6qthADxeyYOQ=="
+  "resolved" "https://registry.npmmirror.com/vue-count-to/-/vue-count-to-1.0.13.tgz"
+  "version" "1.0.13"
+
 "vue-demi@^0.11.2":
   "integrity" "sha1-YQGZL+RyTPVjQBihbpU/MFLpTio="
   "resolved" "https://registry.nlark.com/vue-demi/download/vue-demi-0.11.4.tgz?cache=0&sync_timestamp=1630868339719&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fvue-demi%2Fdownload%2Fvue-demi-0.11.4.tgz"
@@ -13016,7 +13021,7 @@
   "resolved" "https://registry.nlark.com/vue-template-es2015-compiler/download/vue-template-es2015-compiler-1.9.1.tgz"
   "version" "1.9.1"
 
-"vue@^2 || ^3.0.0-0", "vue@^2.6.12 || ^3.1.1", "vue@^2.x", "vue@^3.0.0", "vue@^3.0.0-0", "vue@^3.0.0-0 || ^2.6.0", "vue@^3.0.1", "vue@^3.0.11", "vue@^3.0.2", "vue@3.1.5", "vue@3.1.x":
+"vue@^2 || ^3.0.0-0", "vue@^2.6.12 || ^3.1.1", "vue@^2.x", "vue@^3.0.0", "vue@^3.0.0-0", "vue@^3.0.0-0 || ^2.6.0", "vue@^3.0.1", "vue@^3.0.11", "vue@^3.0.2", "vue@>= 3 < 4", "vue@3.1.5", "vue@3.1.x":
   "integrity" "sha1-EoebEdBoXuRHjIhpVReZYwpS+f4="
   "resolved" "https://registry.nlark.com/vue/download/vue-3.1.5.tgz"
   "version" "3.1.5"
@@ -13024,6 +13029,14 @@
     "@vue/compiler-dom" "3.1.5"
     "@vue/runtime-dom" "3.1.5"
     "@vue/shared" "3.1.5"
+
+"vue3-count-to@^1.1.2":
+  "integrity" "sha512-C5AvlcGfyM4XvFqPDkni94rqGd5K/+RB+B4xv/1NQx3RrdC+GvXPFzeXW5hWL/jh8ehWLm4LITyK0eMKf4iJbg=="
+  "resolved" "https://registry.npmmirror.com/vue3-count-to/-/vue3-count-to-1.1.2.tgz"
+  "version" "1.1.2"
+  dependencies:
+    "core-js" "^3.8.1"
+    "vue-count-to" "^1.0.13"
 
 "vueuc@^0.4.25":
   "integrity" "sha512-SkQCtJ0N+O24gCgDwc+TYNAptgoOb/+lCTlZ7s9I+eTLo7DiLvfHp0mWI04cGkP1elhH26xdkCN+TCQ0vwaL5g=="

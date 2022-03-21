@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-19 21:30:24
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-26 20:14:27
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-03-21 17:05:44
  */
 import { App } from 'vue';
 import 'dayjs/locale/zh-cn';
@@ -32,7 +32,7 @@ import {
   ElCheckbox,
   // ElCheckboxButton,
   // ElCheckboxGroup,
-  // ElCol,
+  ElCol,
   // ElCollapse,
   // ElCollapseItem,
   // ElCollapseTransition,
@@ -72,7 +72,7 @@ import {
   // ElRadioButton,
   ElRadioGroup,
   // ElRate,
-  // ElRow,
+  ElRow,
   ElScrollbar,
   // ElSelect,
   // ElSlider,
@@ -130,7 +130,7 @@ const components = [
   ElCheckbox,
   // ElCheckboxButton,
   // ElCheckboxGroup,
-  // ElCol,
+  ElCol,
   // ElCollapse,
   // ElCollapseItem,
   // ElCollapseTransition,
@@ -170,7 +170,7 @@ const components = [
   // ElRadioButton,
   ElRadioGroup,
   // ElRate,
-  // ElRow,
+  ElRow,
   ElScrollbar,
   // ElSelect,
   // ElSlider,

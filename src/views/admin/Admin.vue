@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2022-02-21 20:02:51
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-03-20 14:43:08
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-03-21 17:36:30
 -->
 <template>
   <n-loading-bar-provider :loading-bar-style="{loading: {backgroundColor: styles.blue1}}">
@@ -15,7 +15,15 @@
         :style="{width: viewWidth}"
       >
         <admin-head :routes-menu="routes" />
-        <router-view v-if="isRouterAlive" />
+        <el-scrollbar
+          bind-class="admin-body"
+          max-height="calc(100% - 110px)"
+        >
+          <div class="admin-body">
+            <router-view v-if="isRouterAlive" />
+          </div>
+        </el-scrollbar>
+
       </div>
     </div>
   </n-loading-bar-provider>
@@ -90,7 +98,14 @@ export default defineComponent({
   .admin-view {
     height: 100%;
     overflow: hidden;
-    transition: 0.25s ease-in;
+    background-color: $grey-1;
+    transition: 0.25s;
+
+    .admin-body {
+      padding: 16px;
+      height: calc(100% - 32px);
+      width: calc(100% - 32px);
+    }
   }
 }
 </style>
