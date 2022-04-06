@@ -2,8 +2,8 @@
  * @Description: 首页柱形图小组件
  * @Author: ZY
  * @Date: 2021-01-15 18:48:40
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-03-21 17:15:04
+ * @LastEditors: clq
+ * @LastEditTime: 2022-03-25 19:40:46
 -->
 
 <template>
@@ -73,7 +73,7 @@ export default defineComponent({
         series: [
           {
             color: ['#57CAEB', '#5DDAB4', '#57CAEB', '#435EBE'],
-            name: 'pageA',
+            name: '访问',
             type: 'bar',
             stack: 'vistors',
             // barWidth: '60%',
@@ -81,7 +81,7 @@ export default defineComponent({
             animationDuration,
           },
           {
-            name: 'pageB',
+            name: '评论',
             type: 'bar',
             stack: 'vistors',
             // barWidth: '60%',
@@ -89,7 +89,7 @@ export default defineComponent({
             animationDuration,
           },
           {
-            name: 'pageC',
+            name: '点赞',
             type: 'bar',
             stack: 'vistors',
             // barWidth: '60%',

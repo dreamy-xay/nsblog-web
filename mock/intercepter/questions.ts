@@ -201,7 +201,7 @@ export default function(baseUrl: string, app: Application) {
 
     print('release questions replies', { username, question_id, content, parent_id, reply_username });
 
-    const user: Record<string, unknown> = select('user').findOne({ username });
+    const user: Record<string, unknown> = select('users').findOne({ username });
 
     return res.json({
       id: Random.increment(Random.integer(1, 10)),

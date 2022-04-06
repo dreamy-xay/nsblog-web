@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-25 13:54:46
  * @LastEditors: clq
- * @LastEditTime: 2022-02-26 21:47:51
+ * @LastEditTime: 2022-04-06 15:20:39
 -->
 <template>
   <div class="question-detail-answers">
@@ -81,6 +81,7 @@ import { useRoute } from 'vue-router';
 import { useMessage } from 'naive-ui';
 import { mapState } from '@/util/store';
 import { mapGetters } from '@/util/store';
+import { dateGetText } from '@/util/date';
 
 /**
  * @description:
@@ -237,52 +238,55 @@ export default defineComponent({
       // console.log('parentId: ' + parentId);
       // console.log('replyId: ' + replyId);
       // console.log('text: ' + text);
+      // console.log('replyUsername: ' + replyUsername);
       let newReply = {};
 
       releaseQuestionReply(questionId, text, parentId, replyUsername)
         .then((data) => {
           msg.success('发布成功');
           console.log(data);
+
+          for (let i = 0; i < answers.length; i++) {
+            if (answers[i].id == parentId) {
+              if (replyId != -1) {
+                for (let j = 0; j < answers[i].child_replies.length; j++) {
+                  if (replyId == answers[i].child_replies[j].id) {
+                    newReply.id = data.id;
+                    newReply.avatar = data.avatar;
+                    newReply.evaluation = 0;
+                    newReply.content = text;
+                    newReply.username = data.username;
+                    newReply.nickname = data.nickname;
+                    newReply.oppose_count = 0;
+                    newReply.reply_nickname = answers[i].child_replies[j].nickname;
+                    newReply.reply_username = answers[i].child_replies[j].username;
+                    newReply.support_count = 0;
+                    // newReply.time = data.time;
+                    newReply.time = dateGetText(new Date(data.time), '');
+                  }
+                }
+              } else {
+                newReply.id = data.id;
+                newReply.avatar = data.avatar;
+                newReply.evaluation = 0;
+                newReply.content = text;
+                newReply.username = data.username;
+                newReply.nickname = data.nickname;
+                newReply.oppose_count = 0;
+                newReply.reply_nickname = answers[i].nickname;
+                newReply.reply_username = answers[i].username;
+                newReply.support_count = 0;
+                // newReply.time = data.time;
+                newReply.time = dateGetText(new Date(data.time), '');
+              }
+              answers[i].child_replies.splice(0, 0, newReply);
+            }
+          }
         })
         .catch((error) => {
           console.log(error);
           msg.error('发布回答失败', { duration: 2000, closable: true });
         });
-
-      for (let i = 0; i < answers.length; i++) {
-        if (answers[i].id == parentId) {
-          if (replyId != -1) {
-            for (let j = 0; j < answers[i].child_replies.length; j++) {
-              if (replyId == answers[i].child_replies[j].id) {
-                newReply.id = 1234;
-                newReply.avatar = '#';
-                newReply.evaluation = 0;
-                newReply.content = text;
-                newReply.username = 'username';
-                newReply.nickname = 'nickname';
-                newReply.oppose_count = 400;
-                newReply.reply_nickname = answers[i].child_replies[j].nickname;
-                newReply.reply_username = answers[i].child_replies[j].username;
-                newReply.support_count = 300;
-                newReply.time = '1974-03-26 07:37:14';
-              }
-            }
-          } else {
-            newReply.id = 1234;
-            newReply.avatar = '#';
-            newReply.evaluation = 0;
-            newReply.content = text;
-            newReply.username = 'username';
-            newReply.nickname = 'nickname';
-            newReply.oppose_count = 400;
-            newReply.reply_nickname = answers[i].nickname;
-            newReply.reply_username = answers[i].username;
-            newReply.support_count = 300;
-            newReply.time = '1974-03-26 07:37:14';
-          }
-          answers[i].child_replies.splice(0, 0, newReply);
-        }
-      }
     }
 
     /**
