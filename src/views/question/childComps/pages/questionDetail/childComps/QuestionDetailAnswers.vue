@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-25 13:54:46
  * @LastEditors: clq
- * @LastEditTime: 2022-04-06 16:01:13
+ * @LastEditTime: 2022-04-06 16:05:47
 -->
 <template>
   <div class="question-detail-answers">
@@ -138,25 +138,25 @@ export default defineComponent({
           .then((data) => {
             console.log(data);
             msg.success('发布回答成功');
+            //     console.log('newValue');
+            // console.log(newValue);
+            let newReply = {};
+            newReply.id = data.id;
+            newReply.avatar = data.avatar;
+            newReply.evaluation = 0;
+            newReply.content = newValue;
+            newReply.username = data.username;
+            newReply.nickname = data.nickname;
+            newReply.oppose_count = 0;
+            newReply.support_count = 0;
+            newReply.time = data.time;
+            newReply.child_replies = [];
+            answers.splice(0, 0, newReply);
           })
           .catch((error) => {
             console.log(error);
             msg.error('发布回答失败', { duration: 2000, closable: true });
           });
-        console.log('newValue');
-        console.log(newValue);
-        let newReply = {};
-        newReply.id = 1234;
-        newReply.avatar = '#';
-        newReply.evaluation = 0;
-        newReply.content = newValue;
-        newReply.username = 'username';
-        newReply.nickname = 'nickname';
-        newReply.oppose_count = 400;
-        newReply.support_count = 300;
-        newReply.time = '1974-03-26 07:37:14';
-        newReply.child_replies = [];
-        answers.splice(0, 0, newReply);
       }
     );
 
