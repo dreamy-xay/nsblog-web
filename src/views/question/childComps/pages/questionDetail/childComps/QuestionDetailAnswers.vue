@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-25 13:54:46
  * @LastEditors: clq
- * @LastEditTime: 2022-04-06 16:05:47
+ * @LastEditTime: 2022-04-06 16:06:47
 -->
 <template>
   <div class="question-detail-answers">
@@ -188,7 +188,7 @@ export default defineComponent({
                 }
               }
             }
-            answers[0].id = props.solutionId;
+            // answers[0].id = props.solutionId;
           }
           console.log('answers');
           console.log(answers);
