@@ -2,8 +2,8 @@
  * @Description: 首页饼图组件
  * @Author: ZY
  * @Date: 2021-01-18 11:08:53
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-03-21 17:16:04
+ * @LastEditors: clq
+ * @LastEditTime: 2022-03-25 19:36:20
 -->
 <template>
   <div
@@ -45,7 +45,7 @@ export default defineComponent({
         legend: {
           left: 'center',
           bottom: '10',
-          data: ['Industries', 'Technology', 'Forex', 'Gold', 'Forecasts'],
+          data: ['java', 'python', 'C#', 'NumPy', 'MySql'],
         },
         series: [
           {
@@ -56,11 +56,11 @@ export default defineComponent({
             radius: [15, 95],
             center: ['50%', '38%'],
             data: [
-              { value: 320, name: 'Industries' },
-              { value: 240, name: 'Technology' },
-              { value: 149, name: 'Forex' },
-              { value: 100, name: 'Gold' },
-              { value: 59, name: 'Forecasts' },
+              { value: 320, name: 'java' },
+              { value: 240, name: 'python' },
+              { value: 149, name: 'C#' },
+              { value: 100, name: 'NumPy' },
+              { value: 59, name: 'MySql' },
             ],
             animationEasing: 'cubicInOut',
             animationDuration: 2600,
