@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-21 20:01:40
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-03-21 17:35:19
+ * @LastEditTime: 2022-04-06 15:15:06
  */
 import { RouteRecordRaw } from 'vue-router';
 import adminEmpty from '@/views/admin/childComps/AdminEmpty.vue';
@@ -89,7 +89,7 @@ const adminRouter: RouteRecordRaw = {
                 icon: 'blog-fabu',
                 super: false
               },
-              component: adminEmpty
+              component: () => import('@/views/admin/childComps/pages/adminCreation/AdminCreationArticleRelease.vue')
             },
             {
               path: 'manage',
@@ -158,7 +158,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-guanzhuderen2',
             super: false
           },
-          component: adminEmpty
+          component: () => import('@/views/admin/childComps/pages/adminBlog/AdminBlogVisitor.vue')
         },
         {
           path: 'category',
@@ -224,7 +224,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-image',
             super: false
           },
-          component: adminEmpty
+          component: () => import('@/views/admin/childComps/pages/adminUpload/AdminUploadPicture.vue')
         },
         {
           path: 'file',
@@ -281,7 +281,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-rizhifenxi',
             super: false
           },
-          component: adminEmpty
+          component: () => import('@/views/admin/childComps/pages/adminSystem/AdminSystemLog.vue')
         },
         {
           path: 'status',
@@ -319,7 +319,7 @@ const adminRouter: RouteRecordRaw = {
       path: 'tools',
       name: 'adminTools',
       redirect: {
-        name: 'adminEyeDropper'
+        name: 'adminToolsFlowChart'
       },
       component: adminEmpty,
       meta: {
@@ -330,8 +330,18 @@ const adminRouter: RouteRecordRaw = {
       },
       children: [
         {
+          path: 'flowChart',
+          name: 'adminToolsFlowChart',
+          meta: {
+            title: '流程图',
+            icon: 'blog-icon__liuchengtu',
+            super: false
+          },
+          component: () => import('@/views/admin/childComps/pages/adminTools/AdminToolsFlowChart.vue')
+        },
+        {
           path: 'eyeDropper',
-          name: 'adminEyeDropper',
+          name: 'adminToolsEyeDropper',
           meta: {
             title: '取色器',
             icon: 'blog-xiguan',
@@ -374,7 +384,40 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-shujutongji',
             super: true
           },
-          component: adminEmpty
+          redirect: {
+            name: 'adminMaintainStatisticsLine'
+          },
+          component: adminEmpty,
+          children: [
+            {
+              path: 'line',
+              name: 'adminMaintainStatisticsLine',
+              meta: {
+                title: '网站波动',
+                icon: 'blog-shouye',
+                super: true,
+                badge: 'New'
+              },
+              component: () =>
+                import(
+                  '@/views/admin/childComps/pages/adminMaintain/adminMaintainStatistics/adminMaintainStatisticsLine.vue'
+                )
+            },
+            {
+              path: 'map',
+              name: 'adminMaintainStatisticsMap',
+              meta: {
+                title: '用户分布',
+                icon: 'blog-yonghutongji',
+                super: true,
+                badge: '+67'
+              },
+              component: () =>
+                import(
+                  '@/views/admin/childComps/pages/adminMaintain/adminMaintainStatistics/adminMaintainStatisticsMap.vue'
+                )
+            }
+          ]
         },
         {
           path: 'websiteManage',
