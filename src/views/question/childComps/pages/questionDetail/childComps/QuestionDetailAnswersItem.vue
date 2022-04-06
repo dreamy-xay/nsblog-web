@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-25 19:18:14
  * @LastEditors: clq
- * @LastEditTime: 2022-02-26 21:58:31
+ * @LastEditTime: 2022-04-06 15:58:15
 -->
 <template>
   <div class="question-detail-answers-item">
@@ -32,7 +32,7 @@
             @click="toUserCenter(answer.reply_nickname)"
           >{{answer.reply_nickname}}</div>
         </div>
-        <div class="release-time">{{answer.child_replies ? '发布于': '回复于'}} {{answer.time}}</div>
+        <div class="release-time">{{answer.child_replies ? '发布于': '回复于'}} {{dateGetText(new Date(answer.time), '')}}</div>
       </div>
       <div
         v-show="isBtn || isAccept"
@@ -106,6 +106,7 @@ import { releaseQuestionReply, changeEvaluationOnReply } from '@/network/api/que
 import { useRoute } from 'vue-router';
 import { useMessage } from 'naive-ui';
 import { mapState } from '@/util/store';
+import { dateGetText } from '@/util/date';
 
 /**
  * @description: 问答回答条目组件
@@ -276,6 +277,7 @@ export default defineComponent({
       ShowEdit,
       releaseReply,
       changeAccept,
+      dateGetText,
     };
   },
 });

@@ -3,7 +3,7 @@
  * @Author: ZY
  * @Date: 2021-01-18 11:23:22
  * @LastEditors: clq
- * @LastEditTime: 2022-03-25 19:33:47
+ * @LastEditTime: 2022-04-06 15:49:51
 -->
 <template>
   <div
@@ -61,11 +61,11 @@ export default defineComponent({
             },
           },
           indicator: [
-            { name: '后端', max: 10000 },
-            { name: '前端', max: 20000 },
+            { name: '自然科学', max: 10000 },
+            { name: '数学', max: 20000 },
             { name: '移动开发', max: 20000 },
             { name: '人工智能', max: 20000 },
-            { name: '大数据', max: 20000 },
+            { name: '阅读', max: 20000 },
             { name: '区块链', max: 20000 },
           ],
         },
