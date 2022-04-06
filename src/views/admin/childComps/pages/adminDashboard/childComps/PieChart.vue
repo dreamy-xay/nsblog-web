@@ -3,7 +3,7 @@
  * @Author: ZY
  * @Date: 2021-01-18 11:08:53
  * @LastEditors: clq
- * @LastEditTime: 2022-03-25 19:36:20
+ * @LastEditTime: 2022-04-06 15:51:58
 -->
 <template>
   <div
@@ -45,7 +45,7 @@ export default defineComponent({
         legend: {
           left: 'center',
           bottom: '10',
-          data: ['java', 'python', 'C#', 'NumPy', 'MySql'],
+          data: ['计算数学', '架构', '自然科学', 'IOS', '散文'],
         },
         series: [
           {
@@ -56,11 +56,11 @@ export default defineComponent({
             radius: [15, 95],
             center: ['50%', '38%'],
             data: [
-              { value: 320, name: 'java' },
-              { value: 240, name: 'python' },
-              { value: 149, name: 'C#' },
-              { value: 100, name: 'NumPy' },
-              { value: 59, name: 'MySql' },
+              { value: 320, name: '计算数学' },
+              { value: 240, name: '架构' },
+              { value: 149, name: '自然科学' },
+              { value: 100, name: 'IOS' },
+              { value: 59, name: '散文' },
             ],
             animationEasing: 'cubicInOut',
             animationDuration: 2600,

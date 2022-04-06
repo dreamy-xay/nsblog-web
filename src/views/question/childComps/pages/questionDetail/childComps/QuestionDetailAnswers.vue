@@ -4,7 +4,7 @@
  * @Autor: clq
  * @Date: 2022-01-25 13:54:46
  * @LastEditors: clq
- * @LastEditTime: 2022-04-06 15:20:39
+ * @LastEditTime: 2022-04-06 16:01:13
 -->
 <template>
   <div class="question-detail-answers">
@@ -32,14 +32,13 @@
         >
           <question-detail-answers-item
             :answer="answer"
-            :isBtn="true"
+            :isBtn="isLogin && username == tokenInfo.username"
             :solution-id="solutionId"
             :isAccept="solutionId == answer.id"
             @addReply="addReply"
             @changeAcceptValue="changeAccept"
             @changeEvaluation="changeEvaluation"
           />
-          <!-- :isBtn="isLogin && username == tokenInfo.username" -->
           <div
             v-show="answer.child_replies.length"
             class="child-answer"
@@ -81,7 +80,7 @@ import { useRoute } from 'vue-router';
 import { useMessage } from 'naive-ui';
 import { mapState } from '@/util/store';
 import { mapGetters } from '@/util/store';
-import { dateGetText } from '@/util/date';
+// import { dateGetText } from '@/util/date';
 
 /**
  * @description:
@@ -261,8 +260,8 @@ export default defineComponent({
                     newReply.reply_nickname = answers[i].child_replies[j].nickname;
                     newReply.reply_username = answers[i].child_replies[j].username;
                     newReply.support_count = 0;
-                    // newReply.time = data.time;
-                    newReply.time = dateGetText(new Date(data.time), '');
+                    newReply.time = data.time;
+                    // newReply.time = dateGetText(new Date(data.time), '');
                   }
                 }
               } else {
@@ -276,8 +275,8 @@ export default defineComponent({
                 newReply.reply_nickname = answers[i].nickname;
                 newReply.reply_username = answers[i].username;
                 newReply.support_count = 0;
-                // newReply.time = data.time;
-                newReply.time = dateGetText(new Date(data.time), '');
+                newReply.time = data.time;
+                // newReply.time = dateGetText(new Date(data.time), '');
               }
               answers[i].child_replies.splice(0, 0, newReply);
             }
