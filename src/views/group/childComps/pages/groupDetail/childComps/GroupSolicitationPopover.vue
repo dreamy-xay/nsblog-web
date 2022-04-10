@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-01-29 16:58:20
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-15 19:51:26
+ * @LastEditTime: 2022-04-10 14:10:32
 -->
 <template>
   <n-modal
@@ -274,7 +274,7 @@ export default defineComponent({
       :deep(.v-md-editor) {
         transition: 0.25s;
         width: 100%;
-        z-index: 9999999999;
+        z-index: 2001;
         box-shadow: $shadow-0;
         border-radius: $border-radius-0;
         transition: 0.25s;

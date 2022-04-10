@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2022-01-25 19:18:14
- * @LastEditors: clq
- * @LastEditTime: 2022-04-06 15:58:15
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-04-10 14:51:38
 -->
 <template>
   <div class="question-detail-answers-item">
@@ -41,7 +41,7 @@
         :role="isBtn? 'button':''"
         @click="changeAccept(isBtn,answer.id)"
       >
-        {{isBtn? isAccept? '已采纳':'采纳' : isAccept? '√已被采纳':''}}
+        {{isBtn? isAccept? '已采纳':'采纳' : isAccept? '✔ 已被采纳':''}}
       </div>
     </div>
     <div class="question-detail-answers-item-body">
