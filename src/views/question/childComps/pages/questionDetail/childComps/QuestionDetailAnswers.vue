@@ -3,14 +3,14 @@
  * @Version:
  * @Autor: clq
  * @Date: 2022-01-25 13:54:46
- * @LastEditors: clq
- * @LastEditTime: 2022-04-06 16:06:47
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-04-10 14:48:08
 -->
 <template>
   <div class="question-detail-answers">
     <div class="question-detail-answers-top">
       <div class="header">
-        <div class="left">1 个回答</div>
+        <div class="left">13 个回答</div>
         <div class="right">
           <div
             :class="{'active' : !answersType}"
@@ -389,7 +389,6 @@ export default defineComponent({
           transition: 0.25s;
 
           font-size: 14px;
-          font-weight: Narrow;
           text-align: center;
           color: $grey-7;
           line-height: 30px;
@@ -435,8 +434,7 @@ export default defineComponent({
           transition: 0.25s;
 
           &:hover {
-            background-color: $grey-7;
-            color: $grey-0;
+            background-color: $grey-1;
           }
         }
       }
@@ -457,8 +455,7 @@ export default defineComponent({
     transition: 0.25s;
 
     &:hover {
-      background-color: $grey-6;
-      color: $grey-0;
+      background-color: $grey-1;
     }
   }
 }

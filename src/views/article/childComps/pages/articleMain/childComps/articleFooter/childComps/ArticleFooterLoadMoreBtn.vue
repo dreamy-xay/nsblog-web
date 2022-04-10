@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-09-28 16:08:43
- * @LastEditors: clq
- * @LastEditTime: 2021-09-30 21:38:51
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-04-10 14:42:45
 -->
 <template>
   <div class="article-footer-load-more-btn">
@@ -59,6 +59,11 @@ export default defineComponent({
     color: $grey-9;
     transition: 0.25s;
     box-shadow: $shadow-0;
+    background-color: $grey-0;
+
+    &:hover {
+      background-color: $grey-1;
+    }
   }
 }
 </style>

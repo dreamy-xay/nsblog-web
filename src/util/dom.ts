@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-28 21:37:34
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-03-20 13:56:18
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-04-10 14:43:29
  */
 import ResizeObserver from 'resize-observer-polyfill';
 import { debounce, throttle, shuffle } from 'lodash';
@@ -324,16 +324,30 @@ export function changeFullScreen(fullscreen: boolean): boolean {
     else if (document['msExitFullscreen']) document['msExitFullscreen']();
   } else {
     // 如果浏览器有这个Function
-    if (element.requestFullscreen) {
-      element.requestFullscreen();
-    } else if (element['webkitRequestFullScreen']) {
-      element['webkitRequestFullScreen']();
-    } else if (element['mozRequestFullScreen']) {
-      element['mozRequestFullScreen']();
-    } else if (element['msRequestFullscreen']) {
-      element['msRequestFullscreen']();
-    }
+    if (element.requestFullscreen) element.requestFullscreen();
+    else if (element['webkitRequestFullScreen']) element['webkitRequestFullScreen']();
+    else if (element['mozRequestFullScreen']) element['mozRequestFullScreen']();
+    else if (element['msRequestFullscreen']) element['msRequestFullscreen']();
   }
   // 判断全屏状态的变量
   return !fullscreen;
+}
+
+/**
+ * @description: 等待图片加完成
+ * @param {HTMLElement} element 根节点元素 `默认为 document.body`
+ * @return {Promise<any>} 返回Promise
+ * @author: dreamy-xay
+ */
+export async function waitImageLoaded(element: HTMLElement = document.body): Promise<any> {
+  const imgNodes: HTMLImageElement[] | NodeListOf<HTMLImageElement> =
+    element instanceof HTMLImageElement ? [element] : element.querySelectorAll('img');
+  const imgArr: any[] = Array.prototype.slice.call(imgNodes); // NodeList转Array，Array才有map方法
+  return await Promise.all(
+    imgArr.map(img => {
+      new Promise(resolve => {
+        img.addEventListener('load', () => resolve(img));
+      });
+    })
+  );
 }
