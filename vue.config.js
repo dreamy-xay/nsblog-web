@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:25:41
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-26 18:47:30
+ * @LastEditTime: 2022-04-12 13:46:33
  */
 
 const path = require('path');
@@ -15,10 +15,10 @@ const resolve = (dir) => {
 
 module.exports = {
   // 基本路径
-  // publicPath: '/',
+  publicPath: './',
 
   // 输出文件目录
-  // outputDir: 'dist',
+  outputDir: 'dist',
 
   // 设置放置打包生成的静态资源 (js、css、img、fonts) 的目录
   assetsDir: 'static',
