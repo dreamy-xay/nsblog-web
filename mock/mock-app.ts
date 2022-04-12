@@ -4,11 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-10 17:38:14
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-13 18:45:01
+ * @LastEditTime: 2022-04-12 15:50:20
  */
 
 import Mock, { MockCbOptions } from 'better-mock';
 import intercepter from './app';
+import { pathToRegexp, match } from 'path-to-regexp';
 
 /* mock请求延迟 */
 Mock.setup({
@@ -81,6 +82,11 @@ function getUrlRegExp(url: string): RegExp {
  * @author: dreamy-xay
  */
 function getParams(url: string, realUrl: string): Record<string, unknown> {
+  const search = match(url, { decode: decodeURIComponent });
+  const params: Record<string, unknown> = (search(realUrl.replace(/^http(s)?:\/\/(.*?)\//, '/').split('?')[0]) as any)
+    .params as Record<string, unknown>;
+  return params ? params : {};
+
   url = url.replace(/.*?:\/\/.*?(\/.*)/, '$1').replace(/(.*?)\?.*/, '$1');
   realUrl = realUrl.replace(/.*?:\/\/.*?(\/.*)/, '$1').replace(/(.*?)\?.*/, '$1');
 
@@ -228,7 +234,12 @@ class ResponseObj implements Response {
  * @author: dreamy-xay
  */
 function request(url: string, type: string, callback: (req: Request, res: Response) => void): void {
-  Mock.mock(getUrlRegExp(url), type, (options: MockCbOptions | any) => {
+  const host: string = new RegExp(/^http(s)?:\/\/(.*?)\//.exec(url)[0]).toString();
+  url = url.replace(/^http(s)?:\/\/(.*?)\//, '/');
+  const other: string = pathToRegexp(url).toString();
+  const exp: RegExp = eval('/^' + host.substring(1, host.length - 3) + other.substring(2, other.length - 3) + '.*$/');
+
+  Mock.mock(exp, type, (options: MockCbOptions | any) => {
     const req: Request = {
       query: getQuery(options.url),
       body: JSON.parse(options.body),
@@ -238,7 +249,12 @@ function request(url: string, type: string, callback: (req: Request, res: Respon
     };
 
     const res: Response = new ResponseObj();
-    console.log('request invoke: ' + options.type.toUpperCase() + ' ' + options.url);
+    console.log(
+      '\x1B[45m\x1B[1m%s\x1b[0m\x1B[34m%s\x1b[0m%s',
+      ' request invoke: ',
+      ` ${options.type.toUpperCase()} `,
+      `${options.url}`
+    );
     return callback(req, res);
   });
 }
