@@ -10,80 +10,80 @@
 const path = require('path');
 
 const resolve = (dir) => {
-  return path.join(__dirname, dir);
+    return path.join(__dirname, dir);
 };
 
 module.exports = {
-  // 基本路径
-  publicPath: './',
+    // 基本路径
+    // publicPath: './',
 
-  // 输出文件目录
-  outputDir: 'dist',
+    // 输出文件目录
+    // outputDir: 'dist',
 
-  // 设置放置打包生成的静态资源 (js、css、img、fonts) 的目录
-  assetsDir: 'static',
+    // 设置放置打包生成的静态资源 (js、css、img、fonts) 的目录
+    assetsDir: 'static',
 
-  // 是否开启eslint保存检测
-  lintOnSave: true,
+    // 是否开启eslint保存检测
+    lintOnSave: true,
 
-  // 多线程
-  parallel: true,
+    // 多线程
+    parallel: true,
 
-  // 是否使用包含运行时编译器的 Vue 构建版本
-  runtimeCompiler: true,
+    // 是否使用包含运行时编译器的 Vue 构建版本
+    runtimeCompiler: true,
 
-  // 生产环境的 source map
-  productionSourceMap: false,
+    // 生产环境的 source map
+    productionSourceMap: false,
 
-  // 环境配置
-  devServer: {
-    // host: 'localhost',
+    // 环境配置
+    devServer: {
+        // host: 'localhost',
 
-    port: process.env.VUE_APP_PORT,
+        port: process.env.VUE_APP_PORT,
 
-    // 是否开启https
-    https: false,
+        // 是否开启https
+        https: false,
 
-    // 编译完是否打开网页
-    open: true,
+        // 编译完是否打开网页
+        open: true,
 
-    // 代理配置
-    proxy: {
-      '/socket': {
-        target: `${process.env.VUE_APP_APIHOST}:${process.env.VUE_APP_APIPORT}`,
-        ws: true,
-      },
-      '/v1': {
-        target: `${process.env.VUE_APP_APIHOST}:${process.env.VUE_APP_APIPORT}`,
-        changeOrigin: true,
-        pathRewrite: {
-          '^/v1': ''
+        // 代理配置
+        proxy: {
+            '/socket': {
+                target: `${process.env.VUE_APP_APIHOST}:${process.env.VUE_APP_APIPORT}`,
+                ws: true,
+            },
+            '/v1': {
+                target: `${process.env.VUE_APP_APIHOST}:${process.env.VUE_APP_APIPORT}`,
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/v1': ''
+                }
+            }
+        },
+
+        // 请求拦截
+        before: require('./mock/sever-app').default
+    },
+
+    // webpack配置
+    chainWebpack: config => {
+        // 配置路径别名
+        config.resolve.alias.set('@', resolve('src'));
+    },
+
+    // 插件配置
+    pluginOptions: {
+        'style-resources-loader': {
+            preProcessor: 'scss',
+            patterns: [path.resolve(__dirname, 'src/assets/style/define.scss')]
+        },
+    },
+    css: {
+        loaderOptions: {
+            sass: {
+                prependData: `@import '@/assets/style/define';` //引入全局变量
+            }
         }
-      }
-    },
-
-    // 请求拦截
-    before: require('./mock/sever-app').default
-  },
-
-  // webpack配置
-  chainWebpack: config => {
-    // 配置路径别名
-    config.resolve.alias.set('@', resolve('src'));
-  },
-
-  // 插件配置
-  pluginOptions: {
-    'style-resources-loader': {
-      preProcessor: 'scss',
-      patterns: [path.resolve(__dirname, 'src/assets/style/define.scss')]
-    },
-  },
-  css: {
-    loaderOptions: {
-      sass: {
-        prependData: `@import '@/assets/style/define';` //引入全局变量
-      }
     }
-  }
 };
