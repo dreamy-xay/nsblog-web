@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:15:05
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-15 21:17:15
+ * @LastEditTime: 2022-04-29 11:29:35
  */
 import { Random, mock } from 'better-mock';
 import { Application, Request, Response } from 'express';
@@ -162,7 +162,7 @@ export default function(baseUrl: string, app: Application) {
     print('new user', { username, email, password, code });
 
     if (select('codes').findOne({ code, email })) {
-      users.insertOne({ username, password, email, token: null, isActive: true, isSuper: false });
+      users.insertOne({ username, nickname: username, password, email, token: null, isActive: true, isSuper: false });
       select('codes').removeOne({ code, email });
       return res.status(201).json({ username });
     } else return res.status(403).json({ error: 'code error' });

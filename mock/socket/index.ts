@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-10 21:44:12
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-03-15 22:39:07
+ * @LastEditTime: 2022-04-29 11:46:11
  */
 import { Random } from 'better-mock';
 import { Server } from 'http';
@@ -77,7 +77,7 @@ export default (server: Server) => {
 
       //建立连接后 用户点击不同通讯录都是建立同样的socket对象
       print(`在线人数: ${onlineUsers.count()}`);
-      console.log('\x1B[32m>\x1b[0m ', onlineUsers.getUsers(), '\n');
+      print(['\x1B[32m>\x1b[0m ', onlineUsers.getUsers(), '\n']);
 
       socket.on('sendMessage', (content: string, to: string, time: string, from: string) => {
         print('send message', { from, to, content: content.toString().slice(0, 100), time });
@@ -97,7 +97,7 @@ export default (server: Server) => {
       function offline() {
         onlineUsers.offline(username, socket.id);
         print(`离开一人(${username} ${socket.id}，在线人数: ${onlineUsers.count()}`);
-        console.log('\x1B[32m>\x1b[0m ', onlineUsers.getUsers(), '\n');
+        print(['\x1B[32m>\x1b[0m ', onlineUsers.getUsers(), '\n']);
       }
 
       // 随机发送消息
