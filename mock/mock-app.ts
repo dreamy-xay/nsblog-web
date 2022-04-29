@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-10 17:38:14
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-04-12 15:50:20
+ * @LastEditTime: 2022-04-29 11:53:12
  */
 
 import Mock, { MockCbOptions } from 'better-mock';
@@ -249,12 +249,13 @@ function request(url: string, type: string, callback: (req: Request, res: Respon
     };
 
     const res: Response = new ResponseObj();
-    console.log(
-      '\x1B[45m\x1B[1m%s\x1b[0m\x1B[34m%s\x1b[0m%s',
-      ' request invoke: ',
-      ` ${options.type.toUpperCase()} `,
-      `${options.url}`
-    );
+    if (process.env.VUE_APP_API_DEBUG !== 'false')
+      console.log(
+        '\x1B[45m\x1B[1m%s\x1b[0m\x1B[34m%s\x1b[0m%s',
+        ' request invoke: ',
+        ` ${options.type.toUpperCase()} `,
+        `${options.url}`
+      );
     return callback(req, res);
   });
 }
