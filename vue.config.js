@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:25:41
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-04-29 11:27:22
+ * @LastEditTime: 2022-04-29 22:30:24
  */
 
 const path = require('path');
@@ -19,15 +19,9 @@ const debug = process.env.NODE_ENV !== 'production';
 module.exports = {
   // 基本路径
   // publicPath: './',
-  ...(debug ? {} : {
-    publicPath: './'
-  }),
 
   // 输出文件目录
-  // outputDir: 'dist',
-  ...(debug ? {} : {
-    outputDir: 'dist'
-  }),
+  outputDir: 'dist',
 
   // 设置放置打包生成的静态资源 (js、css、img、fonts) 的目录
   assetsDir: 'static',
