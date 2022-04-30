@@ -4,10 +4,11 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-11 21:28:05
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-04-29 23:01:24
+ * @LastEditTime: 2022-04-30 12:22:42
  */
 import { Application } from 'express';
-import http, { Server } from 'http';
+import * as http from 'http';
+import { Server } from 'http';
 import intercepter from './app';
 import socket from './socket';
 import * as bodyParser from 'body-parser';
