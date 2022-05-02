@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-11 21:28:05
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-04-30 12:22:42
+ * @LastEditTime: 2022-05-02 15:11:15
  */
 import { Application } from 'express';
 import * as http from 'http';
@@ -35,6 +35,7 @@ export default function sever(app: Application) {
     });
 
     // 打印请求状态
+    const timeout: number[] = (process.env.VUE_APP_MOCK_TIMEOUT as string).split('-').map(parseInt);
     app.use((req, res, next) => {
       if (new RegExp(process.env.VUE_APP_APIROUTER).test(req.url) && req.method.toLowerCase() !== 'options') {
         // 请求延时模拟
@@ -48,7 +49,7 @@ export default function sever(app: Application) {
             );
           next();
           clearTimeout(timer);
-        }, Random.integer(300, 900));
+        }, Random.integer(timeout[0], timeout[1]));
       } else next();
     });
 

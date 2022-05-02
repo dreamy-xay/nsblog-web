@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-10 17:38:14
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-04-29 11:53:12
+ * @LastEditTime: 2022-05-02 15:09:07
  */
 
 import Mock, { MockCbOptions } from 'better-mock';
@@ -13,7 +13,7 @@ import { pathToRegexp, match } from 'path-to-regexp';
 
 /* mock请求延迟 */
 Mock.setup({
-  timeout: '300-900'
+  timeout: process.env.VUE_APP_MOCK_TIMEOUT
 });
 
 /**
