@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-19 21:30:24
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-03-21 17:05:44
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-06-30 21:33:05
  */
 import { App } from 'vue';
 import 'dayjs/locale/zh-cn';
@@ -55,13 +55,13 @@ import {
   // ElImage,
   // ElImageViewer,
   ElInput,
-  // ElInputNumber,
+  ElInputNumber,
   ElLink,
   // ElMain,
   // ElMenu,
   // ElMenuItem,
   // ElMenuItemGroup,
-  // ElOption,
+  ElOption,
   // ElOptionGroup,
   // ElPageHeader,
   // ElPagination,
@@ -69,13 +69,13 @@ import {
   // ElPopper,
   // ElProgress,
   ElRadio,
-  // ElRadioButton,
+  ElRadioButton,
   ElRadioGroup,
   // ElRate,
   ElRow,
   ElScrollbar,
-  // ElSelect,
-  // ElSlider,
+  ElSelect,
+  ElSlider,
   // ElStep,
   // ElSteps,
   // ElSubmenu,
@@ -153,13 +153,13 @@ const components = [
   // ElImage,
   // ElImageViewer,
   ElInput,
-  // ElInputNumber,
+  ElInputNumber,
   ElLink,
   // ElMain,
   // ElMenu,
   // ElMenuItem,
   // ElMenuItemGroup,
-  // ElOption,
+  ElOption,
   // ElOptionGroup,
   // ElPageHeader,
   // ElPagination,
@@ -167,13 +167,13 @@ const components = [
   // ElPopper,
   // ElProgress,
   ElRadio,
-  // ElRadioButton,
+  ElRadioButton,
   ElRadioGroup,
   // ElRate,
   ElRow,
   ElScrollbar,
-  // ElSelect,
-  // ElSlider,
+  ElSelect,
+  ElSlider,
   // ElStep,
   // ElSteps,
   // ElSubmenu,

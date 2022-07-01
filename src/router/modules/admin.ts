@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2022-02-21 20:01:40
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-04-06 15:15:06
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-07-01 21:03:00
  */
 import { RouteRecordRaw } from 'vue-router';
 import adminEmpty from '@/views/admin/childComps/AdminEmpty.vue';
@@ -319,7 +319,7 @@ const adminRouter: RouteRecordRaw = {
       path: 'tools',
       name: 'adminTools',
       redirect: {
-        name: 'adminToolsFlowChart'
+        name: 'adminToolsAutomaticGeneration'
       },
       component: adminEmpty,
       meta: {
@@ -329,6 +329,16 @@ const adminRouter: RouteRecordRaw = {
         menu: true
       },
       children: [
+        {
+          path: 'automaticGeneration',
+          name: 'adminToolsAutomaticGeneration',
+          meta: {
+            title: '智能生成器',
+            icon: 'blog-zidonghua',
+            super: false
+          },
+          component: () => import('@/views/admin/childComps/pages/adminTools/AdminToolsAutomaticGeneration.vue')
+        },
         {
           path: 'flowChart',
           name: 'adminToolsFlowChart',
@@ -347,7 +357,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-xiguan',
             super: false
           },
-          component: adminEmpty
+          component: () => import('@/views/admin/childComps/pages/adminTools/AdminToolsEyeDropper.vue')
         }
       ]
     },

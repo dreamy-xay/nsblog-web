@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-03 16:13:02
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-27 11:30:42
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-06-28 19:53:48
  */
 import { App } from 'vue';
 import {
@@ -24,7 +24,14 @@ import {
   NDatePicker,
   NPagination,
   NSkeleton,
-  NDivider
+  NDivider,
+  NDrawerContent,
+  NRadioGroup,
+  NRadioButton,
+  NInputNumber,
+  NSwitch,
+  NInput,
+  NColorPicker
 } from 'naive-ui';
 
 const components = [
@@ -43,7 +50,14 @@ const components = [
   NDatePicker,
   NPagination,
   NSkeleton,
-  NDivider
+  NDivider,
+  NDrawerContent,
+  NRadioGroup,
+  NRadioButton,
+  NInputNumber,
+  NSwitch,
+  NInput,
+  NColorPicker
 ];
 
 export default (app: App): void => {

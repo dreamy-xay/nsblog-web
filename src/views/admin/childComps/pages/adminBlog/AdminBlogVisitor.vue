@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2022-04-06 14:57:24
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-04-06 15:16:47
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-07-01 21:06:13
 -->
 <template>
   <div class="admin-blog-visitor">
@@ -31,6 +31,8 @@ export default defineComponent({
 <style lang="scss" scoped>
 .admin-blog-visitor {
   width: 100%;
+  user-select: none;
+  -webkit-user-drag: none;
 
   img {
     width: 100%;
