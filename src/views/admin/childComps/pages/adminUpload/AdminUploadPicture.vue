@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2022-04-06 14:57:24
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-04-06 15:16:39
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-07-01 21:06:27
 -->
 <template>
   <div class="admin-upload-picture">
@@ -31,6 +31,8 @@ export default defineComponent({
 <style lang="scss" scoped>
 .admin-upload-picture {
   width: 100%;
+  user-select: none;
+  -webkit-user-drag: none;
 
   img {
     width: 100%;
