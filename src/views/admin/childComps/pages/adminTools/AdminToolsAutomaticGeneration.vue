@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2022-06-27 20:21:16
- * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-07-02 17:05:10
+ * @LastEditors: Z_Y_C
+ * @LastEditTime: 2022-07-02 18:52:44
 -->
 <template>
   <div class="admin-tools-automatic-generation">
@@ -161,11 +161,7 @@ export default defineComponent({
     const showContent = ref(false);
 
     function getPreProcessingContent() {
-      return inputArticle.value
-        .trim()
-        .replace(/[ \t]+/g, '，')
-        .replace(/(\n)+/g, '。')
-        .replace(/[，。]{2,}/g, '。');
+      return inputArticle.value.trim();
     }
 
     function generateTitle() {
