@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2022-06-27 20:21:16
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-07-01 20:53:45
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-07-02 17:05:10
 -->
 <template>
   <div class="admin-tools-automatic-generation">
@@ -169,20 +169,19 @@ export default defineComponent({
     }
 
     function generateTitle() {
-      axios
-        .post({
-          url: 'http://127.0.0.1:3001/v1/generate/title',
-          data: {
-            content: getPreProcessingContent(),
-            ai_token: '12123123',
-            top_k: value2.value,
-            top_p: value3.value,
-            max_length: Math.max(num3.value, 32),
-          },
-        })
+      axios({
+        method: 'POST',
+        url: 'http://127.0.0.1:3001/v1/generate/title',
+        data: {
+          content: getPreProcessingContent(),
+          ai_token: 'as89as#5612&jhsgja$Jja90I7&sa712@asasjjj!',
+          top_k: value2.value,
+          top_p: value3.value,
+          max_length: Math.max(num3.value, 32),
+        },
+      })
         .then((data) => {
-          console.log(data);
-          inputValue.value = data;
+          inputValue.value = data.data.title;
           showTitle.value = true;
         })
         .catch(() => {
@@ -191,20 +190,19 @@ export default defineComponent({
     }
 
     function generateSummary() {
-      axios
-        .post({
-          url: 'http://127.0.0.1:3001/v1/generate/summary',
-          data: {
-            content: getPreProcessingContent(),
-            ai_token: '12123123',
-            ratio: value1.value,
-            min_length: num1.value,
-            max_length: num2.value,
-          },
-        })
+      axios({
+        method: 'POST',
+        url: 'http://127.0.0.1:3001/v1/generate/summary',
+        data: {
+          content: getPreProcessingContent(),
+          ai_token: 'as89as#5612&jhsgja$Jja90I7&sa712@asasjjj!',
+          ratio: value1.value,
+          min_length: num1.value,
+          max_length: num2.value,
+        },
+      })
         .then((data) => {
-          console.log(data);
-          inputRemark.value = data;
+          inputRemark.value = data.data.summary;
           showContent.value = true;
         })
         .catch(() => {
