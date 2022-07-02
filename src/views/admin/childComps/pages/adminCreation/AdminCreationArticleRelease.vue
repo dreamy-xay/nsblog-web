@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-04-06 14:57:24
  * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-07-01 20:02:56
+ * @LastEditTime: 2022-07-02 18:55:16
 -->
 <template>
   <div class="admin-creation-article-release">
@@ -633,17 +633,16 @@ export default defineComponent({
     const markdown = ref(null);
 
     function generateTitle() {
-      axios
-        .post({
-          url: 'http://127.0.0.1:3001/v1/generate/title',
-          data: {
-            content: getPreProcessingContent(),
-            ai_token: '12123123',
-          },
-        })
+      axios({
+        method: 'POST',
+        url: 'http://127.0.0.1:3001/v1/generate/title',
+        data: {
+          content: getPreProcessingContent(),
+          ai_token: 'as89as#5612&jhsgja$Jja90I7&sa712@asasjjj!',
+        },
+      })
         .then((data) => {
-          console.log(data);
-          titleValue.value = data;
+          titleValue.value = data.data.title;
         })
         .catch(() => {
           msg.error('生成标题失败');
@@ -651,17 +650,16 @@ export default defineComponent({
     }
 
     function generateSummary() {
-      axios
-        .post({
-          url: 'http://127.0.0.1:3001/v1/generate/summary',
-          data: {
-            content: getPreProcessingContent(),
-            ai_token: '12123123',
-          },
-        })
+      axios({
+        method: 'POST',
+        url: 'http://127.0.0.1:3001/v1/generate/summary',
+        data: {
+          content: getPreProcessingContent(),
+          ai_token: 'as89as#5612&jhsgja$Jja90I7&sa712@asasjjj!',
+        },
+      })
         .then((data) => {
-          console.log(data);
-          inputRemark.value = data;
+          inputRemark.value = data.data.summary;
         })
         .catch(() => {
           msg.error('生成摘要失败');
