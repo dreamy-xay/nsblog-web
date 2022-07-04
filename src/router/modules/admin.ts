@@ -3,11 +3,12 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2022-02-21 20:01:40
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-07-01 21:03:00
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-07-04 15:40:59
  */
 import { RouteRecordRaw } from 'vue-router';
 import adminEmpty from '@/views/admin/childComps/AdminEmpty.vue';
+import adminLoading from '@/views/admin/childComps/AdminLoading.vue';
 
 const adminRouter: RouteRecordRaw = {
   path: '/admin',
@@ -50,7 +51,7 @@ const adminRouter: RouteRecordRaw = {
             super: false,
             badge: 'New'
           },
-          component: adminEmpty
+          component: adminLoading
         }
       ]
     },
@@ -99,7 +100,7 @@ const adminRouter: RouteRecordRaw = {
                 icon: 'blog-ziyuan',
                 super: false
               },
-              component: adminEmpty
+              component: adminLoading
             },
             {
               path: 'preview',
@@ -109,7 +110,7 @@ const adminRouter: RouteRecordRaw = {
                 icon: 'blog-preview',
                 super: false
               },
-              component: adminEmpty
+              component: adminLoading
             }
           ]
         },
@@ -122,7 +123,7 @@ const adminRouter: RouteRecordRaw = {
             super: false,
             badge: 7
           },
-          component: adminEmpty
+          component: adminLoading
         },
         {
           path: 'group',
@@ -132,7 +133,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-xiaozu1',
             super: true
           },
-          component: adminEmpty
+          component: adminLoading
         }
       ]
     },
@@ -168,7 +169,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-fenlei2',
             super: false
           },
-          component: adminEmpty
+          component: adminLoading
         },
         {
           path: 'tag',
@@ -178,7 +179,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-tag',
             super: false
           },
-          component: adminEmpty
+          component: adminLoading
         },
         {
           path: 'friendChain',
@@ -188,7 +189,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-lianjie',
             super: false
           },
-          component: adminEmpty
+          component: adminLoading
         },
         {
           path: 'settings',
@@ -198,7 +199,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-shezhi',
             super: false
           },
-          component: adminEmpty
+          component: adminLoading
         }
       ]
     },
@@ -234,7 +235,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-wenjianshangchuan',
             super: false
           },
-          component: adminEmpty
+          component: adminLoading
         },
         {
           path: 'resource',
@@ -244,7 +245,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-fenxiang',
             super: false
           },
-          component: adminEmpty
+          component: adminLoading
         }
       ]
     },
@@ -291,7 +292,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-xitongzhuangtai',
             super: true
           },
-          component: adminEmpty
+          component: adminLoading
         },
         {
           path: 'settings',
@@ -301,7 +302,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-shezhi',
             super: false
           },
-          component: adminEmpty
+          component: adminLoading
         },
         {
           path: 'notice',
@@ -311,7 +312,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-ri-notification-line',
             super: false
           },
-          component: adminEmpty
+          component: adminLoading
         }
       ]
     },
@@ -364,7 +365,7 @@ const adminRouter: RouteRecordRaw = {
     {
       path: 'outsideChain',
       name: 'adminOutsideChain',
-      component: adminEmpty,
+      component: adminLoading,
       meta: {
         title: '外链',
         icon: 'blog-fenxiang1',
@@ -437,7 +438,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-wangzhanguanli',
             super: true
           },
-          component: adminEmpty
+          component: adminLoading
         },
         {
           path: 'userManage',
@@ -447,7 +448,7 @@ const adminRouter: RouteRecordRaw = {
             icon: 'blog-yonghuguanli',
             super: true
           },
-          component: adminEmpty
+          component: adminLoading
         }
       ]
     }

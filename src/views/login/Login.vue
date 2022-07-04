@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 14:18:16
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-05 14:50:51
+ * @LastEditTime: 2022-07-04 14:39:00
 -->
 
 <template>
@@ -14,7 +14,7 @@
     <base-login-card>
       <router-view />
     </base-login-card>
-    <span class="login-copyright">© 2021 笔记分享部落阁</span>
+    <span class="login-copyright">© 2022 笔记分享部落阁</span>
   </div>
 </template>
 
