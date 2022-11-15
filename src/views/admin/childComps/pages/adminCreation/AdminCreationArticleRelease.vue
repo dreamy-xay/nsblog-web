@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2022-04-06 14:57:24
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-07-02 18:55:16
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-07-06 15:45:00
 -->
 <template>
   <div class="admin-creation-article-release">
@@ -633,6 +633,7 @@ export default defineComponent({
     const markdown = ref(null);
 
     function generateTitle() {
+      let loading = msg.loading('生成标题中...', { closable: false });
       axios({
         method: 'POST',
         url: 'http://127.0.0.1:3001/v1/generate/title',
@@ -643,13 +644,18 @@ export default defineComponent({
       })
         .then((data) => {
           titleValue.value = data.data.title;
+
+          loading.destroy();
+          loading = null;
+          msg.success('生成标题成功');
         })
         .catch(() => {
-          msg.error('生成标题失败');
+          msg.error('生成标题失败，网络错误');
         });
     }
 
     function generateSummary() {
+      let loading = msg.loading('抽取摘要中...', { closable: false });
       axios({
         method: 'POST',
         url: 'http://127.0.0.1:3001/v1/generate/summary',
@@ -660,9 +666,13 @@ export default defineComponent({
       })
         .then((data) => {
           inputRemark.value = data.data.summary;
+
+          loading.destroy();
+          loading = null;
+          msg.success('抽取摘要成功');
         })
         .catch(() => {
-          msg.error('生成摘要失败');
+          msg.error('抽取摘要失败，网络错误');
         });
     }
 

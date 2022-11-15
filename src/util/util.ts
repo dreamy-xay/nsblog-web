@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-02 11:13:42
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-17 13:29:06
+ * @LastEditTime: 2022-11-15 22:46:18
  */
 /**
  * @description: 通过图片url 获取图片file对象
@@ -57,12 +57,24 @@ export function base64ToFile(base64Data: string, fileName: string = 'file'): Blo
 /**
  * @description: 获取数字的指定位数分割
  * @param {string | number} num 传入数字 `必传参数`
- * @param {number} count 指定分割位数 `默认为3，千位分割`
+ * @param {number | [number, number]} count 指定分割位数，如果是元组则，第一位为整数分割规则，第二位为小数分割规则 `默认为3，只分割整数，千位分割`
  * @param {string} split 指定分割嵌入字符串 `默认为,`
+ * @param {boolean} inverse 是否反向添加 `默认为false`
  * @return {string} 返回符合条件分割字符串
  * @author: dreamy-xay
  */
-export function getSplitNum(num: string | number, count: number = 3, split: string = ','): string {
+export function getSplitNum(
+  num: string | number,
+  count: number | [number, number] = 3,
+  split: string = ',',
+  inverse: boolean = false
+): string {
+  let decimalCount: number = 0; // 小数分割位， 默认不分割
+  if (count instanceof Array) {
+    // 更新
+    decimalCount = (count as any)[1];
+    count = count[0];
+  }
   // 字符串反转
   function reverse(str: string): string {
     let ans: string = '';
@@ -70,16 +82,32 @@ export function getSplitNum(num: string | number, count: number = 3, split: stri
     return ans;
   }
 
-  const str: string = parseInt(num + '').toString();
+  const str: string = /^-?\d*\.?\d+$/.test(num + '') ? parseInt(num + '').toString() : 'NaN'; // 此次可以提取整数，并判断是否为number
   if (str === 'NaN') return '0';
+
   let ans: string = '';
-  split = reverse(split);
-  for (let i: number = str.length - 1, j: number = 1; i >= 0; --i, ++j) {
-    ans += str[i];
-    if (j % count === 0) ans += split;
+
+  // 分割整数
+  if (count > 0) {
+    if (!inverse) split = reverse(split);
+    for (let i: number = str.length - 1, j: number = 1; i >= 0; --i, ++j) {
+      ans += str[i];
+      if (j % count === 0) ans += split;
+    }
+    if (str.length % count === 0) ans = ans.slice(0, ans.length - 1);
+    if (!inverse) ans = reverse(ans);
+  } else ans = str;
+
+  // 分割小数
+  const numList: string[] = (num + '').split('.');
+  if (numList.length === 2) {
+    ans += '.'; // 添加小数点
+    const decimal: string = numList[1]; // 取出小数位
+    if (decimalCount) ans += getSplitNum(decimal, decimalCount, split, true);
+    else ans += decimal;
   }
-  if (str.length % count === 0) ans = ans.slice(0, ans.length - 1);
-  return reverse(ans);
+
+  return ans;
 }
 
 /**
