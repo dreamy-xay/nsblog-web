@@ -4,11 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-24 13:14:19
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-15 21:02:45
+ * @LastEditTime: 2022-12-06 15:25:26
  */
 
 import * as fs from 'fs';
 import * as path from 'path';
+import { stringifyQuery } from 'vue-router';
 
 /**
  * @description: 读取json文件
@@ -17,7 +18,7 @@ import * as path from 'path';
  * @author: dreamy-xay
  */
 function readJson(jsonFilePath: string): Record<string, Record<string, unknown>[]> {
-  if (process.env.VUE_APP_MOCK_SEVER !== 'false') return require('./data.json');
+  if (process.env.VUE_APP_MOCK_SEVER !== 'false') return JSON.parse(JSON.stringify(require('./data.json')));
 
   // 判断是否存在此文件
   if (fs.existsSync(jsonFilePath))

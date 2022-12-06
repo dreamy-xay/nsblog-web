@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:02:59
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-04-17 20:28:11
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2022-12-06 14:31:50
  */
 import { createApp } from 'vue';
 import App from './App.vue';
@@ -13,7 +13,7 @@ import store from './store';
 import directives from './directives';
 import installPlugins from './plugins';
 
-// import '../mock/mock-app'; // mock拦截
+import '../mock/mock-app'; // mock拦截
 
 // 创建app
 const app = createApp(App);
