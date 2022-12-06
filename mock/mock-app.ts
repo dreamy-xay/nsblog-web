@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-10 17:38:14
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-05-02 15:09:07
+ * @LastEditTime: 2022-12-06 21:09:47
  */
 
 import Mock, { MockCbOptions } from 'better-mock';
@@ -153,6 +153,7 @@ const statusText: Record<number, string> = {
  * @description: request接口
  * @param {Record<string, unknown>} query  get请求参数解析
  * @param {Record<string, unknown>} body  请求body解析
+ * @param {string} method 使用的是什么方法
  * @param {string} path 请求路由
  * @param {Record<string, unknown>} 请求头
  * @author: dreamy-xay
@@ -160,6 +161,8 @@ const statusText: Record<number, string> = {
 export interface Request {
   query: Record<string, unknown>;
   body: Record<string, unknown>;
+  method: string;
+  url: string;
   headers: Record<string, unknown>;
   params: Record<string, unknown>;
   path: string;
@@ -183,6 +186,7 @@ export interface Response {
 /**
  * @description:  response 类对象实现，具体见接口
  * @param {number} Status 状态码
+ * @param {Record<string, unknown>} headers 请求头
  * @author: dreamy-xay
  */
 class ResponseObj implements Response {
@@ -225,40 +229,11 @@ class ResponseObj implements Response {
   }
 }
 
-/**
- * @description: request请求
- * @param {string} url 请求路由
- * @param {string} type 请求类型
- * @param {function} callback 请求回调
- * @return {void}
- * @author: dreamy-xay
- */
-function request(url: string, type: string, callback: (req: Request, res: Response) => void): void {
-  const host: string = new RegExp(/^http(s)?:\/\/(.*?)\//.exec(url)[0]).toString();
-  url = url.replace(/^http(s)?:\/\/(.*?)\//, '/');
-  const other: string = pathToRegexp(url).toString();
-  const exp: RegExp = eval('/^' + host.substring(1, host.length - 3) + other.substring(2, other.length - 3) + '.*$/');
+// 中间件回调类型
+type Middleware = (req: Request, res: Response) => void;
 
-  Mock.mock(exp, type, (options: MockCbOptions | any) => {
-    const req: Request = {
-      query: getQuery(options.url),
-      body: JSON.parse(options.body),
-      params: getParams(url, options.url),
-      path: options.url,
-      headers: lowerObjKey(options.headers)
-    };
-
-    const res: Response = new ResponseObj();
-    if (process.env.VUE_APP_API_DEBUG !== 'false')
-      console.log(
-        '\x1B[45m\x1B[1m%s\x1b[0m\x1B[34m%s\x1b[0m%s',
-        ' request invoke: ',
-        ` ${options.type.toUpperCase()} `,
-        `${options.url}`
-      );
-    return callback(req, res);
-  });
-}
+// 缓存请求类型
+type CacheRequest = { exp: RegExp; url: string; type: string; callback: (req: Request, res: Response) => void };
 
 /**
  * @description: Application 接口
@@ -266,61 +241,220 @@ function request(url: string, type: string, callback: (req: Request, res: Respon
  * @method post 拦截post请求
  * @method delete 拦截delete请求
  * @method put 拦截put请求
+ * @method use 添加中间件
+ * @method getAllRequests 获取所有请求列表
+ * @method getMiddlewares 获取中间件列表
  * @author: dreamy-xay
  */
-export interface Application {
+export interface ApplicationInterface {
   get: (url: string, callback: (req: Request, res: Response) => void) => void;
   post: (url: string, callback: (req: Request, res: Response) => void) => void;
   delete: (url: string, callback: (req: Request, res: Response) => void) => void;
   put: (url: string, callback: (req: Request, res: Response) => void) => void;
+  use: (middleware: Middleware) => void;
+  getAllRequests: () => CacheRequest[];
+  getMiddlewares: () => Middleware[];
+}
+
+/**
+ * @description: Application 类实现
+ * @param allRequests 所有请求列表
+ * @param middlewares 中间件列表
+ * @author: dreamy-xay
+ */
+export class Application implements ApplicationInterface {
+  private allRequests: CacheRequest[];
+  private middlewares: Middleware[];
+
+  constructor() {
+    this.allRequests = [];
+    this.middlewares = [];
+  }
+
+  /**
+   * @description: request请求
+   * @param {string} url 请求路由
+   * @param {string} type 请求类型
+   * @param {function} callback 请求回调
+   * @return {void}
+   * @author: dreamy-xay
+   */
+  private request(url: string, type: string, callback: (req: Request, res: Response) => void): void {
+    const host: string = new RegExp(/^http(s)?:\/\/(.*?)\//.exec(url)[0]).toString();
+    url = url.replace(/^http(s)?:\/\/(.*?)\//, '/');
+    const other: string = pathToRegexp(url).toString();
+    const exp: RegExp = eval('/^' + host.substring(1, host.length - 3) + other.substring(2, other.length - 3) + '.*$/');
+
+    this.allRequests.push({ exp, url, type, callback });
+  }
+
+  /**
+   * @description: 拦截get请求
+   * @param {string} url 请求路由
+   * @param {function} callback 请求回调
+   * @return {void}
+   * @author: dreamy-xay
+   */
+  public get(url: string, callback: (req: Request, res: Response) => void): void {
+    this.request(url, 'get', callback);
+  }
+
+  /**
+   * @description: 拦截post请求
+   * @param {string} url 请求路由
+   * @param {function} callback 请求回调
+   * @return {void}
+   * @author: dreamy-xay
+   */
+  public post(url: string, callback: (req: Request, res: Response) => void): void {
+    this.request(url, 'post', callback);
+  }
+
+  /**
+   * @description: 拦截delete请求
+   * @param {string} url 请求路由
+   * @param {function} callback 请求回调
+   * @return {void}
+   * @author: dreamy-xay
+   */
+  public delete(url: string, callback: (req: Request, res: Response) => void): void {
+    this.request(url, 'delete', callback);
+  }
+
+  /**
+   * @description: 拦截put请求
+   * @param {string} url 请求路由
+   * @param {function} callback 请求回调
+   * @return {void}
+   * @author: dreamy-xay
+   */
+  public put(url: string, callback: (req: Request, res: Response) => void): void {
+    this.request(url, 'put', callback);
+  }
+
+  /**
+   * @description: 添加一个中间件
+   * @param {Middleware} middleware 中间件
+   * @return {void}
+   * @author: dreamy-xay
+   */
+  public use(middleware: Middleware): void {
+    this.middlewares.push(middleware);
+  }
+
+  /**
+   * @description: 返回所有请求列表
+   * @return {Array<CacheRequest>}
+   * @author: dreamy-xay
+   */
+  public getAllRequests(): Array<CacheRequest> {
+    return this.allRequests;
+  }
+
+  /**
+   * @description: 返回所有中间件
+   * @return {Array<Middleware>}
+   * @author: dreamy-xay
+   */
+  public getMiddlewares(): Array<Middleware> {
+    return this.middlewares;
+  }
+}
+
+/**
+ * @description: MockServer 接口
+ * @method createServer 创建一个mock模拟式server
+ * @method listen mock模拟启动监听服务
+ * @author: dreamy-xay
+ */
+export interface Server {
+  createServer: (app: Application) => Server;
+  listen: () => Server;
+}
+
+export class MockServer implements Server {
+  private app: Application;
+
+  constructor(app: Application = null) {
+    this.app = app;
+  }
+  /**
+   * @description: 创建一个 server
+   * @param {Application} app 传入app
+   * @return {Server}
+   * @author: dreamy-xay
+   */
+
+  public createServer(app: Application): Server {
+    this.app = app;
+    return this;
+  }
+
+  /**
+   * @description: 监听接收的所有请求
+   * @return {Server}
+   * @author: dreamy-xay
+   */
+  public listen(): Server {
+    if (this.app === null) {
+      console.error('Application is null.');
+      return this;
+    }
+
+    // 长链接优先级高
+    const sortedAllRequests: CacheRequest[] = this.app.getAllRequests().sort((a: CacheRequest, b: CacheRequest) => {
+      return b.url.length - a.url.length;
+    }); // 排好序的请求列表
+
+    const middlewares: Middleware[] = this.app.getMiddlewares(); // 中间件列表
+
+    for (const request of sortedAllRequests) {
+      Mock.mock(request.exp, request.type, (options: MockCbOptions | any) => {
+        const req: Request = {
+          query: getQuery(options.url),
+          body: JSON.parse(options.body),
+          url: options.url,
+          method: request.type,
+          params: getParams(request.url, options.url),
+          path: options.url,
+          headers: lowerObjKey(options.headers)
+        };
+
+        const res: Response = new ResponseObj();
+
+        // 中间件执行
+        for (const middleware of middlewares) middleware(req, res);
+
+        return request.callback(req, res);
+      });
+    }
+    return this;
+  }
 }
 
 (function() {
   if (process.env.VUE_APP_MOCK_SEVER !== 'false' && process.env.VUE_APP_MOCK !== 'false') {
-    const app: Application = {
-      /**
-       * @description: 拦截get请求
-       * @param {string} url 请求路由
-       * @param {function} callback 请求回调
-       * @return {void}
-       * @author: dreamy-xay
-       */
-      get(url: string, callback: (req: Request, res: Response) => void): void {
-        request(url, 'get', callback);
-      },
-      /**
-       * @description: 拦截post请求
-       * @param {string} url 请求路由
-       * @param {function} callback 请求回调
-       * @return {void}
-       * @author: dreamy-xay
-       */
-      post(url: string, callback: (req: Request, res: Response) => void): void {
-        request(url, 'post', callback);
-      },
-      /**
-       * @description: 拦截delete请求
-       * @param {string} url 请求路由
-       * @param {function} callback 请求回调
-       * @return {void}
-       * @author: dreamy-xay
-       */
-      delete(url: string, callback: (req: Request, res: Response) => void): void {
-        request(url, 'delete', callback);
-      },
-      /**
-       * @description: 拦截put请求
-       * @param {string} url 请求路由
-       * @param {function} callback 请求回调
-       * @return {void}
-       * @author: dreamy-xay
-       */
-      put(url: string, callback: (req: Request, res: Response) => void): void {
-        request(url, 'put', callback);
-      }
-    };
+    // 创建 app(仿照 express 接口)
+    const app: Application = new Application();
+
+    // 创建server
+    const server: Server = new MockServer(app);
+
+    // 打印中间过程
+    app.use((req: Request, res: Response) => {
+      if (process.env.VUE_APP_API_DEBUG !== 'false')
+        console.log(
+          '\x1B[45m\x1B[1m%s\x1b[0m\x1B[34m%s\x1b[0m%s',
+          ' request invoke: ',
+          ` ${req.method.toUpperCase()} `,
+          `${req.url}`
+        );
+    });
 
     // 拦截
     intercepter(app as any);
+
+    // 监听（纯web拦截监听，没端口）
+    server.listen();
   }
 })();

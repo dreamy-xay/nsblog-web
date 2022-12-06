@@ -4,13 +4,14 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-28 00:28:11
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-04-29 11:46:55
+ * @LastEditTime: 2022-12-06 20:40:47
  */
 
 import { Base64 } from 'js-base64';
 import { Random } from 'better-mock';
 import select, { DataBaseOperator } from '../data/index';
 import * as CryptoJS from 'crypto-js';
+import { shuffle } from 'lodash';
 
 /**
  * @description: 强转成number类型整数
@@ -103,13 +104,13 @@ export function clearToken(headers: Record<string, unknown>): void {
 /**
  * @description: 验证token
  * @param {Record<string, unknown>} headers 传入请求头 `必传参数`
- * @param {boolean} verifyTime 是否验证时间有效性 `默认根据env`
+ * @param {boolean} verify 是否验证时间、token有效性 `默认根据env`
  * @return {boolean} token是否有效
  * @author: dreamy-xay
  */
 export function verifyToken(
   headers: Record<string, unknown>,
-  verifyTime: boolean = process.env.VUE_APP_MOCK_SEVER === 'false'
+  verify: boolean = process.env.VUE_APP_MOCK_SEVER === 'false'
 ): boolean {
   const { token, time, username }: { token: string; time: number; username: string } = getToken(headers);
   const users: DataBaseOperator = select('users');
@@ -117,11 +118,11 @@ export function verifyToken(
   if (
     user &&
     user.isActive &&
-    decrypt(user.token as string) === token &&
-    (verifyTime ? new Date().getTime() - time <= 172800000 : true)
+    (verify ? decrypt(user.token as string) === token : true) &&
+    (verify ? new Date().getTime() - time <= 172800000 : true)
   )
     return true;
-  if (user && verifyTime) users.modifyOne({ username }, { token: null });
+  if (user && verify) users.modifyOne({ username }, { token: null });
   return false;
 }
 
@@ -220,14 +221,7 @@ export function getTopics(): string[] {
     topic: string;
     tags: string[];
   }[];
-  const ans: string[] = [];
-  let limit: number = topics.length;
-  while (limit--) {
-    const index: number = Random.integer(0, topics.length - 1);
-    ans.push(topics[index].topic);
-    topics.splice(index, 1);
-  }
-  return ans;
+  return shuffle(topics.map((item: { topic: string; tags: string[] }) => item.topic));
 }
 
 /**
