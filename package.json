@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "serve": "tsc ./mock/sever-app.ts --downlevelIteration --resolveJsonModule && vue-cli-service serve",
+    "mock:compile": "tsc ./mock/sever-app.ts --downlevelIteration --resolveJsonModule",
+    "serve": "npm run mock:compile && vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
