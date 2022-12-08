@@ -4,12 +4,11 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-24 13:14:19
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-12-06 15:25:26
+ * @LastEditTime: 2022-12-08 11:10:14
  */
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { stringifyQuery } from 'vue-router';
 
 /**
  * @description: 读取json文件
