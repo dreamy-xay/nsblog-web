@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: xiao
  * @Date: 2022-01-21 19:42:59
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-26 19:11:53
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2023-03-03 15:49:02
 -->
 <template>
   <base-view
@@ -196,7 +196,7 @@ export default defineComponent({
      * @author: xiao
      */
     function changeGroupJoin(join) {
-      console.log('join', join);
+      // console.log('join', join);
       if (isLogin.value)
         if (!groups[join].join)
           //加入学习小组

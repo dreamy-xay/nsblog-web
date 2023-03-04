@@ -3,14 +3,17 @@
  * @Version:
  * @Autor: clq
  * @Date: 2022-01-25 10:25:30
- * @LastEditors: clq
- * @LastEditTime: 2022-02-26 20:59:38
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2023-03-03 15:16:21
 -->
 <template>
   <base-view
     :background="true"
     :top-bar="true"
     :top-bar-scroll="true"
+    :footer="true"
+    :footer-show-all="false"
+    :back-top="true"
     bind-class="question-detail"
     ref="baseViewRef"
   >
@@ -89,8 +92,8 @@ export default defineComponent({
         questionInfo.collection = data.collection;
         questionInfo.solution = data.solution;
         questionInfo.browsing_count = data.browsing_count;
-        console.log('questionInfo');
-        console.log(questionInfo);
+        // console.log('questionInfo');
+        // console.log(questionInfo);
       })
       .catch((error) => {
         console.log(error);
@@ -123,7 +126,7 @@ export default defineComponent({
           console.log(error);
           msg.error('修改评价失败', { duration: 2000, closable: true });
         });
-      console.log('evaluation: ' + newEvaluation);
+      // console.log('evaluation: ' + newEvaluation);
     }
 
     /**

@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2022-02-21 22:02:46
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-03-21 17:13:26
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2023-03-04 14:52:17
 -->
 <template>
   <div class="admin-navigation">
@@ -231,9 +231,9 @@ export default defineComponent({
       }
     }
 
-    events.on('AdmiSubMenu-subMenuChange', (showLength, show) => {
-      roateMenu.value = show && showLength;
-      showMenu.value = showLength;
+    events.on('AdmiSubMenu-subMenuChange', (should_show, show) => {
+      roateMenu.value = show && should_show;
+      showMenu.value = should_show;
     });
 
     /**

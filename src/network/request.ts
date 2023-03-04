@@ -4,13 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-04-12 14:40:43
+ * @LastEditTime: 2023-03-03 14:22:13
  */
 
 import axios, { AxiosRequestConfig } from 'axios';
 import { getToken, clearToken } from './token';
 import store from '@/store';
-import router from '@/router';
 
 export interface RequestLifeCycle {
   beforeRequest?(): void;

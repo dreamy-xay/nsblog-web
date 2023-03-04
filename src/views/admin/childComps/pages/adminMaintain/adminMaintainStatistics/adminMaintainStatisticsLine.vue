@@ -4,19 +4,20 @@
  * @Autor: dreamy-xay
  * @Date: 2022-04-06 11:27:34
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-04-06 11:56:59
+ * @LastEditTime: 2023-03-04 17:11:33
 -->
 <template>
-  <div class="admin-maintain-statistics-line">
+  <admin-view class="admin-maintain-statistics-line">
     <v-chart
       class="chart"
       :option="option"
     />
-  </div>
+  </admin-view>
 </template>
 
 <script>
-import { defineComponent, computed } from 'vue';
+import { defineComponent, computed, ref } from 'vue';
+import AdminView from '@/views/admin/childComps/AdminView.vue';
 import { graphic } from 'echarts';
 
 /**
@@ -26,6 +27,9 @@ import { graphic } from 'echarts';
 
 export default defineComponent({
   name: 'adminMaintainStatisticsLine',
+  components: {
+    AdminView,
+  },
   setup() {
     const category = [];
     let dottedBase = +new Date();
@@ -132,8 +136,19 @@ export default defineComponent({
       };
     });
 
+    // const statisticsChartRef = ref(null);
+    // function chartResize() {
+    //   statisticsChartRef.value.resize({
+    //     animation: {
+    //       duration: 0,
+    //     },
+    //   });
+    // }
+
     return {
       option,
+      // statisticsChartRef,
+      // chartResize,
     };
   },
 });
@@ -141,7 +156,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .admin-maintain-statistics-line {
-  width: 100%;
-  height: calc(100vh - 140px);
+  height: calc(100vh - 142px);
 }
 </style>

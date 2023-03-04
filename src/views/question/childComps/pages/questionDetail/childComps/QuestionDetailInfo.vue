@@ -13,7 +13,7 @@
       <div class="userinfo">
         <div class="avatar">
           <base-avatar
-            :src="questionInfo.avatar"
+            :src="questionInfo.avatar ? questionInfo.avatar : ''"
             :size="32"
           />
         </div>
@@ -219,13 +219,8 @@ export default defineComponent({
      */
     function showFavorite(collection) {
       if (isLogin.value) {
-        if (collection) {
-          modalShow.value = true;
-          console.log('modalShow: ' + modalShow.value);
-        } else {
-          isShowFavorite.value = true;
-        }
-        console.log('collection: ' + collection);
+        if (collection) modalShow.value = true;
+        else isShowFavorite.value = true;
       } else msg.error('请先登录', { duration: 2000, closable: true });
     }
 

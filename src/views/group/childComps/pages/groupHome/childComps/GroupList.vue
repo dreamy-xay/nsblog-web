@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: xiao
  * @Date: 2022-01-14 18:52:17
- * @LastEditors: Ban
- * @LastEditTime: 2022-02-18 18:23:25
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2023-03-03 15:55:18
 -->
 <template>
   <div class="group-list">
@@ -84,13 +84,13 @@
     >
       加载更多...
     </div>
+    <base-modal
+      content="确定要退出学习小组吗"
+      :show="modalShow"
+      @confirm="exitGroup"
+      @cancel="close"
+    />
   </div>
-  <base-modal
-    content="确定要退出学习小组吗"
-    :show="modalShow"
-    @confirm="exitGroup"
-    @cancel="close"
-  />
 </template>
 
 <script>
@@ -134,7 +134,6 @@ export default defineComponent({
       required: true,
     },
   },
-
   setup(_, context) {
     const msg = useMessage(); // naive-ui 消息组件
     const modalShow = ref(false); //是否显示退出提示

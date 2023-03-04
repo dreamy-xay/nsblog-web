@@ -10,7 +10,7 @@
   <div class="admin-head">
     <admin-navigation :breadcrumb-data="breadcrumbData" />
     <admin-tab
-      :editable-tabs='editableTabs'
+      :editable-tabs="editableTabs"
       v-model:editable-tabs-value="editableTabsValue"
       @remove-tab="removeTab"
       @handle-command="handleCommand"

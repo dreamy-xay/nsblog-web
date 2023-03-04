@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:24:57
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-16 12:03:59
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2023-03-03 15:59:31
 -->
 <template>
   <div class="user-article">
@@ -160,7 +160,7 @@ export default defineComponent({
     function initArticles(username, categoryId, tagId, offse, limit, release_time, browsing_count) {
       getArticles(username, categoryId, tagId, offse, limit, release_time, browsing_count)
         .then((res) => {
-          console.log(res.articles.length);
+          // console.log(res.articles.length);
           if (res.articles.length < limit) {
             isShowLoadMore.value = false;
           } else {
@@ -170,7 +170,7 @@ export default defineComponent({
           offset.value += res.articles.length;
         })
         .catch((err) => {
-          console.log('initArticlesError: ' + err);
+          console.log(err);
         });
     }
 
@@ -186,7 +186,7 @@ export default defineComponent({
           categoryOptions.splice(0, categoryOptions.length, ...res.categories);
         })
         .catch((err) => {
-          console.log('initCategoriesError: ' + err);
+          console.log(err);
         });
     }
 
@@ -202,7 +202,7 @@ export default defineComponent({
           tagOptions.splice(0, tagOptions.length, ...res.tags);
         })
         .catch((err) => {
-          console.log('initTagsError: ' + err);
+          console.log(err);
         });
     }
 
@@ -275,7 +275,7 @@ export default defineComponent({
      * @author: clq
      */
     function loadMore() {
-      console.log('loadMore');
+      // console.log('loadMore');
       //更新文章
       initArticles(
         username,

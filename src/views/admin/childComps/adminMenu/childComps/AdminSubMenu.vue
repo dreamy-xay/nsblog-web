@@ -73,7 +73,7 @@ import events from '@/events';
  * @param {Array} menuList 子菜单列表 `默认为 []`
  * @method setSubMenuStatus 设置子菜单显示状态 (isShow: boolean = null) => void
  * @method resetSubMenuItemStatus 重置子菜单项展开状态 () => void
- * @events AdmiSubMenu-subMenuChange 子菜单改变状态 (show: boolean) => void
+ * @events AdmiSubMenu-subMenuChange 子菜单改变状态 (should_show: boolean, show: boolean) => void
  * @author: dreamy-xay
  */
 

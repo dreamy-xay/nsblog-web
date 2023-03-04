@@ -4,19 +4,20 @@
  * @Autor: dreamy-xay
  * @Date: 2022-04-06 11:27:34
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-04-06 12:08:14
+ * @LastEditTime: 2023-03-04 17:11:53
 -->
 <template>
-  <div class="admin-maintain-statistics-map">
+  <admin-view class="admin-maintain-statistics-map">
     <v-chart
       class="chart"
       :option="option"
     />
-  </div>
+  </admin-view>
 </template>
 
 <script>
 import { defineComponent, computed } from 'vue';
+import AdminView from '@/views/admin/childComps/AdminView.vue';
 import chinaMap from '@/util/json/china.json';
 import { registerMap } from 'echarts';
 
@@ -27,6 +28,9 @@ import { registerMap } from 'echarts';
 
 export default defineComponent({
   name: 'adminMaintainStatisticsMap',
+  components: {
+    AdminView,
+  },
   setup() {
     const mapData = [
       {
@@ -257,7 +261,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .admin-maintain-statistics-map {
-  width: 100%;
-  height: calc(100vh - 140px);
+  height: calc(100vh - 142px);
 }
 </style>

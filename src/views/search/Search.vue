@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Ban
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-20 17:21:37
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2023-03-03 15:29:49
 -->
 
 <template>
@@ -190,8 +190,8 @@ export default defineComponent({
             });
           });
           searchAboutLoading.value = false;
-          console.log(data);
-          console.log(searchAbout);
+          // console.log(data);
+          // console.log(searchAbout);
         })
         .catch((error) => {
           console.log(error);

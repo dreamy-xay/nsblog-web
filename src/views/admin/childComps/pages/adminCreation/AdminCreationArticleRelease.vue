@@ -4,10 +4,10 @@
  * @Autor: dreamy-xay
  * @Date: 2022-04-06 14:57:24
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-07-06 15:45:00
+ * @LastEditTime: 2023-03-04 16:54:40
 -->
 <template>
-  <div class="admin-creation-article-release">
+  <admin-view class="admin-creation-article-release">
     <div class="article-release-top">
       <div class="release-top-title">
         <div class="title-left">文章发布</div>
@@ -230,7 +230,8 @@
       </div>
 
     </div>
-  </div>
+  </admin-view>
+
   <n-drawer
     v-model:show="innerDrawer"
     :width="502"
@@ -333,6 +334,7 @@
 
 <script>
 import { defineComponent, reactive, ref } from 'vue';
+import AdminView from '@/views/admin/childComps/AdminView.vue';
 import BaseInput from '@/components/content/baseInput/BaseInput.vue';
 import BaseSelect from '@/components/content/baseSelect/BaseSelect.vue';
 import BaseTag from '@/components/content/baseTag/BaseTag.vue';
@@ -350,7 +352,12 @@ import axios from 'axios';
 
 export default defineComponent({
   name: 'adminCreationArticleRelease',
-  components: { BaseInput, BaseSelect, BaseTag },
+  components: {
+    AdminView,
+    BaseInput,
+    BaseSelect,
+    BaseTag,
+  },
   setup() {
     const msg = useMessage(); // naive-ui mssage
     const imageUrl = ref(null); // 显示图片路径
@@ -731,8 +738,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .admin-creation-article-release {
-  width: 100%;
-
   .article-release-top {
     width: 100%;
     padding: 16px 0;

@@ -162,8 +162,8 @@ export default defineComponent({
     function updateTags(topicName) {
       getTopicTags(topicName)
         .then((data) => {
-          console.log('topicTags');
-          console.log(data);
+          // console.log('topicTags');
+          // console.log(data);
           // 过滤topicTags中已被选择的tag
           for (let item of selectTags) {
             if (item.topic == topics[topicIndex.value])
@@ -210,10 +210,10 @@ export default defineComponent({
      * @author: clq
      */
     function release() {
-      console.log('title: ' + title.value);
-      console.log('text: ' + text.value);
-      console.log('tags');
-      console.log(selectTags);
+      // console.log('title: ' + title.value);
+      // console.log('text: ' + text.value);
+      // console.log('tags');
+      // console.log(selectTags);
       let flag = true;
       if (!title.value) msg.error('标题不能为空'), (flag = false);
       if (!selectTags.length) msg.error('标签不能为空'), (flag = false);
@@ -244,7 +244,7 @@ export default defineComponent({
      * @author: clq
      */
     function changeTopic(newIndex) {
-      console.log('newTopic: ' + topics[newIndex]);
+      // console.log('newTopic: ' + topics[newIndex]);
       topicShowText.value = topics[newIndex];
       topicIndex.value = newIndex;
       updateTags(topics[newIndex]);
@@ -257,7 +257,7 @@ export default defineComponent({
      * @author: clq
      */
     function changeTag(newIndex) {
-      console.log('newTag: ' + topicTags[newIndex]);
+      // console.log('newTag: ' + topicTags[newIndex]);
       if (selectTags.length < 3) {
         tagShowText.value = topicTags[newIndex];
         let obj = {};

@@ -4,16 +4,19 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 20:55:54
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-04-10 14:35:28
+ * @LastEditTime: 2023-03-04 15:51:31
 -->
 <template>
-  <router-view />
+  <router-view v-slot="{ Component }">
+    <!-- 将页面数据缓存 -->
+    <keep-alive>
+      <component :is="Component" />
+    </keep-alive>
+  </router-view>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
-import { useLoadingBar } from 'naive-ui';
-import { waitImageLoaded } from '@/util/dom';
 
 /**
  * @description: 空路由组件
@@ -22,17 +25,5 @@ import { waitImageLoaded } from '@/util/dom';
 
 export default defineComponent({
   name: 'adminEmpty',
-  setup() {
-    const loadingBar = useLoadingBar(); // naive-ui loadingBar
-    loadingBar.start(); // 开始加载
-
-    // 等待页面全部资源加载完毕
-    window.onload = () =>
-      waitImageLoaded()
-        .then(() => setTimeout(() => loadingBar.finish(), 0))
-        .catch(() => setTimeout(() => loadingBar.error(), 0));
-
-    return {};
-  },
 });
 </script>

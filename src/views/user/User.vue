@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-07 16:04:40
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-15 23:53:08
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2023-03-03 16:00:37
 -->
 <template>
   <base-view
@@ -135,7 +135,7 @@ export default defineComponent({
     // 获取用户数据
     getUserInfo(username, 2)
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         userData.username = data.username;
         userData.nickname = data.nickname;
         userData.avatar = data.avatar;

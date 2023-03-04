@@ -4,10 +4,10 @@
  * @Autor: Z_Y_C
  * @Date: 2022-06-27 20:21:16
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-07-06 15:42:20
+ * @LastEditTime: 2023-03-04 17:00:07
 -->
 <template>
-  <div class="admin-tools-automatic-generation">
+  <admin-view class="admin-tools-automatic-generation">
     <div class="centent">
       <div class="left">
         <div class="summary">摘要配置参数</div>
@@ -137,10 +137,11 @@
       </div>
     </div>
 
-  </div>
+  </admin-view>
 </template>
 <script>
 import axios from 'axios';
+import AdminView from '@/views/admin/childComps/AdminView.vue';
 import { useMessage } from 'naive-ui';
 import { defineComponent, ref } from 'vue';
 
@@ -151,6 +152,9 @@ import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'adminToolsAutomaticGeneration',
+  components: {
+    AdminView,
+  },
   setup() {
     const msg = useMessage();
     const inputRemark = ref('');
@@ -244,7 +248,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .admin-tools-automatic-generation {
-  width: 100%;
   background: $grey-0;
   border-radius: $border-radius-0;
   box-shadow: $border-radius-0;

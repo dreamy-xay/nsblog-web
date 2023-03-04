@@ -36,7 +36,7 @@
               v-for="(item, index) in questions"
               :key="index"
               :question="item"
-              :style="index==0 ? {borderTop:'none'}:''"
+              :style="index==0 ? {borderTop:'none'} : {}"
             />
             <base-content-loading
               v-show="showContentLoading"
@@ -95,7 +95,7 @@ import { useMessage } from 'naive-ui';
 import styles from '@/assets/style/define.scss';
 
 /**
- * @description:
+ * @description: 问答主页
  * @author: clq
  */
 

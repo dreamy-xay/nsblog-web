@@ -7,16 +7,17 @@
  * @LastEditTime: 2022-07-01 21:06:27
 -->
 <template>
-  <div class="admin-upload-picture">
+  <admin-view class="admin-upload-picture">
     <img
       src="/admin/pages/adminUploadPicture.png"
       alt=""
     >
-  </div>
+  </admin-view>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
+import AdminView from '@/views/admin/childComps/AdminView.vue';
 
 /**
  * @description: 本地图库
@@ -25,12 +26,14 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'adminUploadPicture',
+  components: {
+    AdminView,
+  },
 });
 </script>
 
 <style lang="scss" scoped>
 .admin-upload-picture {
-  width: 100%;
   user-select: none;
   -webkit-user-drag: none;
 
