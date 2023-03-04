@@ -40,7 +40,6 @@ export default (app: App): void => {
       };
       const [method] = Object.keys(modifiers);
       const wait = arg || 300;
-      console.log(binding, method, wait);
       if (method && method === 'throttle') {
         el._observer = new ResizeObserver(throttle(callback, wait));
       } else {
