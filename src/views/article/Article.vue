@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 16:32:13
- * @LastEditors: xiao
- * @LastEditTime: 2022-01-26 22:14:13
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2023-03-03 15:23:29
 -->
 
 <template>
@@ -20,7 +20,7 @@ import { defineComponent } from 'vue';
  */
 
 export default defineComponent({
-  name: 'article',
+  name: 'Article',
 });
 </script>
 

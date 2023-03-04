@@ -7,16 +7,17 @@
  * @LastEditTime: 2022-07-01 21:06:44
 -->
 <template>
-  <div class="admin-system-log">
+  <admin-view class="admin-system-log">
     <img
       src="/admin/pages/adminSystemLog.png"
       alt=""
     >
-  </div>
+  </admin-view>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
+import AdminView from '@/views/admin/childComps/AdminView.vue';
 
 /**
  * @description: 系统日志
@@ -25,12 +26,14 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'adminSystemLog',
+  components: {
+    AdminView,
+  },
 });
 </script>
 
 <style lang="scss" scoped>
 .admin-system-log {
-  width: 100%;
   user-select: none;
   -webkit-user-drag: none;
 

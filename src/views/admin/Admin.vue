@@ -4,14 +4,14 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-21 20:02:51
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-03-21 17:36:30
+ * @LastEditTime: 2023-03-04 17:10:04
 -->
 <template>
   <n-loading-bar-provider :loading-bar-style="{loading: {backgroundColor: styles.blue1}}">
     <div class="admin">
       <admin-menu :routes="routes" />
       <div
-        class="admin-view"
+        class="admin-content"
         :style="{width: viewWidth}"
       >
         <admin-head :routes-menu="routes" />
@@ -20,10 +20,17 @@
           max-height="calc(100% - 110px)"
         >
           <div class="admin-body">
-            <router-view v-if="isRouterAlive" />
+            <router-view
+              v-slot="{ Component }"
+              v-if="isRouterAlive"
+            >
+              <!-- 将页面数据缓存 -->
+              <keep-alive>
+                <component :is="Component" />
+              </keep-alive>
+            </router-view>
           </div>
         </el-scrollbar>
-
       </div>
     </div>
   </n-loading-bar-provider>
@@ -95,7 +102,7 @@ export default defineComponent({
   overflow: hidden;
   @include flex(center, center, space-between);
 
-  .admin-view {
+  .admin-content {
     height: 100%;
     overflow: hidden;
     background-color: $grey-1;

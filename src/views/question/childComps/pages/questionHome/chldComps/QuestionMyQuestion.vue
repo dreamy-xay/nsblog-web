@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2022-01-19 19:24:33
- * @LastEditors: clq
- * @LastEditTime: 2022-02-26 19:02:06
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2023-03-03 14:08:37
 -->
 <template>
   <div class="question-my-question">
@@ -79,13 +79,13 @@ export default defineComponent({
     if (isLogin.value)
       getMyQuestion()
         .then((data) => {
-          console.log('getMyQuestion');
-          console.log(data);
+          // console.log('getMyQuestion');
+          // console.log(data);
           myQuestion.question_count = data.question_count;
           myQuestion.reply_count = data.reply_count;
           myQuestion.like_count = data.like_count;
           myQuestion.accept_count = data.accept_count;
-          console.log(myQuestion);
+          // console.log(myQuestion);
         })
         .catch((error) => {
           console.log(error);
@@ -98,10 +98,8 @@ export default defineComponent({
      * @author: clq
      */
     function showModal() {
-      if (isLogin.value) {
-        isModalShow.value = !isModalShow.value;
-        console.log('isModalShow.value: ' + isModalShow.value);
-      } else msg.error('请先登录');
+      if (isLogin.value) isModalShow.value = !isModalShow.value;
+      else msg.error('请先登录');
     }
 
     return {

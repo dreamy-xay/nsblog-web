@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: clq
  * @Date: 2021-09-20 17:53:48
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-13 11:57:02
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2023-03-03 15:21:41
 -->
 <template>
   <div
@@ -147,8 +147,8 @@ export default defineComponent({
     function getComments(arricleId, commentId, offset, limit) {
       getArticleComments(arricleId, commentId, offset, limit)
         .then((res) => {
-          console.log('articleFooterGetComments: ' + commentId);
-          console.log(res);
+          // console.log('articleFooterGetComments: ' + commentId);
+          // console.log(res);
           if (commentId === '') {
             // 获取一级评论
             if (res.comments.length < limit) isShowLoadMoreBtn.value = false;

@@ -133,10 +133,10 @@ export default defineComponent({
     watch(
       () => props.newReplyContent,
       (newValue) => {
-        console.log('releaseQuestionReply');
+        // console.log('releaseQuestionReply');
         releaseQuestionReply(questionId, newValue)
           .then((data) => {
-            console.log(data);
+            // console.log(data);
             msg.success('发布回答成功');
             //     console.log('newValue');
             // console.log(newValue);
@@ -190,8 +190,8 @@ export default defineComponent({
             }
             // answers[0].id = props.solutionId;
           }
-          console.log('answers');
-          console.log(answers);
+          // console.log('answers');
+          // console.log(answers);
         })
         .catch((error) => {
           // console.log(error);
@@ -243,7 +243,7 @@ export default defineComponent({
       releaseQuestionReply(questionId, text, parentId, replyUsername)
         .then((data) => {
           msg.success('发布成功');
-          console.log(data);
+          // console.log(data);
 
           for (let i = 0; i < answers.length; i++) {
             if (answers[i].id == parentId) {

@@ -130,7 +130,7 @@ export default defineComponent({
       default: null,
     },
     parentId: {
-      type: String,
+      type: [String, Number],
       default: '',
     },
     firstIndex: {

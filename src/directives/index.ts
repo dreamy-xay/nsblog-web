@@ -4,12 +4,14 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 16:13:51
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-26 11:41:52
+ * @LastEditTime: 2023-03-04 16:31:08
  */
 
 import { debounce, throttle } from 'lodash';
 import { App, nextTick } from 'vue';
 import ResizeObserver from 'resize-observer-polyfill';
+import { LoadingBarProviderInst } from 'naive-ui';
+import { waitImageLoaded } from '@/util/dom';
 
 export default (app: App): void => {
   // 点击元素之外隐藏该元素
@@ -37,7 +39,8 @@ export default (app: App): void => {
         value(entries[0]);
       };
       const [method] = Object.keys(modifiers);
-      const wait = (arg && arg.wait) || 300;
+      const wait = arg || 300;
+      console.log(binding, method, wait);
       if (method && method === 'throttle') {
         el._observer = new ResizeObserver(throttle(callback, wait));
       } else {
@@ -51,6 +54,20 @@ export default (app: App): void => {
     },
     unmounted(el: any) {
       el._observer && el._observer.unobserve(el);
+    }
+  });
+
+  // naive-ui loadingBar 状态显示指令
+  app.directive('naiveUiLoadingBar', {
+    created(el: any, binding: any) {
+      const naiveUiLoadingBar: LoadingBarProviderInst = binding.value;
+      naiveUiLoadingBar.start();
+    },
+    mounted(el: any, binding: any) {
+      const naiveUiLoadingBar: LoadingBarProviderInst = binding.value;
+        waitImageLoaded(el)
+          .then(() => setTimeout(() => naiveUiLoadingBar.finish(), 0))
+          .catch(() => setTimeout(() => naiveUiLoadingBar.error(), 0));
     }
   });
 };

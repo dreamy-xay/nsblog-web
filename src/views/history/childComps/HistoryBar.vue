@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-04 18:45:12
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-08-16 16:01:06
+ * @LastEditTime: 2023-03-03 16:22:24
 -->
 
 <template>
@@ -43,11 +43,11 @@
         role="button"
         @click="stopHistory"
       >
-        暂停历史记录
+        {{switchHistoryStatus}}历史记录
         <base-modal
           :show="stopModalShow"
-          content="啊叻？你要暂停历史记录功能吗？"
-          confirmeText="确定暂停"
+          :content="`啊叻？你要${switchHistoryStatus}历史记录功能吗？`"
+          :confirmeText="`确定${switchHistoryStatus}`"
           @confirm="stopConfirm"
           @cancel="stopCancel"
         />
@@ -71,10 +71,10 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 import events from '@/events';
-import { modifySetting } from '@/network/api/setting';
+import { modifySetting, getHistorySetting } from '@/network/api/setting';
 import { mapGetters } from '@/util/store';
 
 /**
@@ -90,9 +90,24 @@ export default defineComponent({
     BaseModal,
   },
   setup() {
+    const historyRecord = ref(true); // 是否启动历史记录
     const searchValue = ref(''); // 搜索输入框内容
     const stopModalShow = ref(false); // 暂停历史记录设置模态框显示
     const clearModalShow = ref(false); // 清空历史记录设置模态框显示
+
+    // 获取历史记录是否启动记录的状态
+    getHistorySetting()
+      .then((data) => {
+        historyRecord.value = data.history_record;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    // 计算开关历史记录状态
+    const switchHistoryStatus = computed(() => {
+      return historyRecord.value ? '暂停' : '开启';
+    });
 
     /**
      * @description: 开始搜索
@@ -128,11 +143,17 @@ export default defineComponent({
      */
     function stopConfirm() {
       stopModalShow.value = false;
+
+      // 修改设置
       modifySetting({
-        history_record: false,
-      }).catch((error) => {
-        console.log(error);
-      });
+        history_record: !historyRecord.value,
+      })
+        .then(() => {
+          historyRecord.value = !historyRecord.value;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
 
     /**
@@ -174,6 +195,7 @@ export default defineComponent({
 
     return {
       searchValue,
+      switchHistoryStatus,
       search,
       clear,
       ...mapGetters('global', ['isLogin']),

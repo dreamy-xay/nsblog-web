@@ -3,20 +3,21 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2022-04-06 14:57:24
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-07-01 21:06:13
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2023-03-04 16:53:51
 -->
 <template>
-  <div class="admin-blog-visitor">
+  <admin-view class="admin-blog-visitor">
     <img
       src="/admin/pages/adminBlogVisitor.png"
       alt=""
     >
-  </div>
+  </admin-view>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
+import AdminView from '@/views/admin/childComps/AdminView.vue';
 
 /**
  * @description: 访客信息
@@ -25,12 +26,14 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'adminBlogVisitor',
+  components: {
+    AdminView,
+  },
 });
 </script>
 
 <style lang="scss" scoped>
 .admin-blog-visitor {
-  width: 100%;
   user-select: none;
   -webkit-user-drag: none;
 

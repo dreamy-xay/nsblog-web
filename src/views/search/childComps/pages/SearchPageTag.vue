@@ -148,7 +148,7 @@ export default defineComponent({
           data.tags.forEach((item) => {
             tagData.push(item);
           });
-          console.log(data);
+          // console.log(data);
           dataState.value = false;
         })
         .catch((error) => {

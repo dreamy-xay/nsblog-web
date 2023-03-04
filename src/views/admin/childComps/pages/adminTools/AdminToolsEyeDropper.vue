@@ -7,7 +7,7 @@
  * @LastEditTime: 2022-07-01 21:03:17
 -->
 <template>
-  <div class="admin-tools-eye-dropper">
+  <admin-view class="admin-tools-eye-dropper">
     <div class="color-select">
       <n-color-picker
         :modes="[hex]"
@@ -22,10 +22,11 @@
     ]"
       />
     </div>
-  </div>
+  </admin-view>
 </template>
 <script>
 import { defineComponent, ref } from 'vue';
+import AdminView from '@/views/admin/childComps/AdminView.vue';
 
 /**
  * @description:
@@ -34,6 +35,9 @@ import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'adminToolsTyeDropper',
+  components: {
+    AdminView,
+  },
   setup() {
     const show = ref(false);
 
@@ -46,7 +50,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .admin-tools-eye-dropper {
-  width: 100%;
   @include flex(center, center);
 
   .color-select {

@@ -9,6 +9,19 @@
 import { get, put, RequestLifeCycle } from '@/network/request';
 
 /**
+ * @description: 获取历史记录页面设置信息
+ * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
+ * @return {Promise<unknown>} 请求返回promise
+ * @author: dreamy-xay
+ */
+export function getHistorySetting(RLC: RequestLifeCycle = {}): Promise<unknown> {
+  return get({
+    url: '/setting/history',
+    ...RLC
+  });
+}
+
+/**
  * @description: 获取消息页面设置信息
  * @param {RequestLifeCycle} RLC 请求生命周期 `默认值为 {}`
  * @return {Promise<unknown>} 请求返回promise

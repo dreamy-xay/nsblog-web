@@ -7,16 +7,17 @@
  * @LastEditTime: 2022-07-01 21:04:35
 -->
 <template>
-  <div class="admin-tools-flow-chart">
+  <admin-view class="admin-tools-flow-chart">
     <img
       src="/admin/pages/adminToolsFlowChart.png"
       alt=""
     >
-  </div>
+  </admin-view>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
+import AdminView from '@/views/admin/childComps/AdminView.vue';
 
 /**
  * @description: 流程图
@@ -25,12 +26,14 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'adminToolsFlowChart',
+  components: {
+    AdminView,
+  },
 });
 </script>
 
 <style lang="scss" scoped>
 .admin-tools-flow-chart {
-  width: 100%;
   user-select: none;
   -webkit-user-drag: none;
 

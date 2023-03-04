@@ -117,14 +117,14 @@ export default defineComponent({
         },
       })
         .then((data) => {
-          console.log('data', data);
+          // console.log('data', data);
           showLoading.value = data.gropus.length === limit;
 
           data.gropus.forEach((item) => {
             groups.push(item);
             // context.emit('changeLoadingState', 3, true);
           });
-          console.log(groups);
+          // console.log(groups);
         })
         .catch((error) => {
           console.log(error);
