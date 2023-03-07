@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-10 17:38:14
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-12-06 21:09:47
+ * @LastEditTime: 2023-03-07 16:44:00
  */
 
 import Mock, { MockCbOptions } from 'better-mock';
@@ -202,7 +202,7 @@ class ResponseObj implements Response {
   }
 
   public send(data: unknown): Record<string, unknown> {
-    this.headers['content-length'] = new String(data).length;
+    this.set('content-length', new String(data).length);
     return {
       config: {},
       data,
