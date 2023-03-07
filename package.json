@@ -8,6 +8,8 @@
     "serve:server": "npm run tsc:server-app && cross-env VUE_APP_MOCK_SEVER=false vue-cli-service serve",
     "serve:mock": "cross-env VUE_APP_MOCK_SEVER=true vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build:server": "cross-env VUE_APP_MOCK_SEVER=false vue-cli-service build",
+    "build:mock": "cross-env VUE_APP_MOCK_SEVER=true VUE_APP_MOCK=true vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint"

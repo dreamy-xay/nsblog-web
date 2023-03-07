@@ -13,7 +13,8 @@ import store from './store';
 import directives from './directives';
 import installPlugins from './plugins';
 
-import '../mock/mock-app'; // mock拦截
+// mock拦截
+if (process.env.VUE_APP_MOCK_SEVER !== 'false') import('../mock/mock-app');
 
 // 创建app
 const app = createApp(App);
