@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-21 22:02:46
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-04 14:52:17
+ * @LastEditTime: 2023-03-11 18:37:33
 -->
 <template>
   <div class="admin-navigation">
@@ -53,10 +53,12 @@
         >
           <base-avatar
             :size="40"
-            :src="'https://i.gtimg.cn/club/item/face/img/2/16022_100.gif'"
+            :src="userData.avatar"
+            :href="`/user/${userData.username}`"
+            :target="`/user/${userData.username}`"
             :style="{marginLeft:'15px'}"
           />
-          <div class="admin-name">admin
+          <div class="admin-name">{{userData.nickname}}
             <div class="icon"><i
                 class="iconfont blog-arrow-down-s-line"
                 :class="adminDropdownVisible ? 'rotate' : ''"
@@ -91,6 +93,7 @@
         <div
           class="icon"
           role="button"
+          :href="userData.username ? `/user/${userData.username}` : null"
           @click="changeSearch"
         ><i class="iconfont blog-ri-search-line"></i></div>
 
@@ -187,6 +190,7 @@ import { useRouter } from 'vue-router';
 /**
  * @description: 管理员头部导航
  * @param breadcrumbData 面包屑数据 `必传参数`
+ * @param {Object} userData  用户数据 `必传参数`
  * @author: Z_Y_C
  */
 
@@ -200,6 +204,10 @@ export default defineComponent({
     breadcrumbData: {
       type: Array,
       require: true,
+    },
+    userData: {
+      type: Object,
+      required: true,
     },
   },
   setup() {
@@ -220,9 +228,8 @@ export default defineComponent({
      */
     function cliclItem(index) {
       adminDropdownVisible.value = false;
-      if (index == 0) {
-        router.push({ name: 'userCenter' });
-      } else if (index == 1) {
+      if (index == 0) window.open('/userCenter/profile', '_blank');
+      else if (index == 1) {
         clearToken();
         updateTokenInfo({ status: false });
         // 登出
@@ -372,7 +379,7 @@ export default defineComponent({
       .admin-name {
         font-size: 14px;
         color: $grey-8;
-        margin-left: 6px;
+        margin-left: 8px;
         @include flex(center);
         transition: 2s;
 

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:15:05
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-04-29 11:29:35
+ * @LastEditTime: 2023-03-11 18:15:34
  */
 import { Random, mock } from 'better-mock';
 import { Application, Request, Response } from 'express';
@@ -149,6 +149,15 @@ export default function(baseUrl: string, app: Application) {
           qq: Random.integer(0, 2) ? Random.integer(1000000, 30000000000) : null,
           weibo: Random.integer(0, 2) ? Random.integer(1000000, 30000000000) : null,
           email: user.email
+        });
+      else return res.status(410).json({ error: 'User name error' });
+    } else if (type === 4) {
+      if (user && user.isActive)
+        return res.json({
+          username,
+          nickname: user.nickname,
+          avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', username),
+          is_super: Random.integer(0, 1)
         });
       else return res.status(410).json({ error: 'User name error' });
     } else return res.status(410).json({ error: 'Type error' });

@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 19:51:18
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-03-20 23:26:19
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2023-03-11 17:49:39
  */
 
 import router from '@/router';
@@ -17,6 +17,7 @@ export interface RouteInfo {
   super: boolean; // 是否超级管理员支持路由
   name: string; // 路由名称
   children: RouteInfo[]; // 子路由
+  meta: Record<string, unknown>; // 全部meta信息
   badge?: string; // 路由徽章
   route?: RouteRecordNormalized; // 路由详细信息
   beforeToggle?: (next: () => void) => void; // 路由切换前拦截函数
@@ -40,11 +41,12 @@ export function getMenuRoutes(all: boolean = false): RouteInfo[] {
 
     // 返回格式化的route
     return filterRouters.map((route: RouteRecordNormalized) => {
-      const routeData: RouteInfo = { title: '', icon: '', name: '', super: false, children: [] };
+      const routeData: RouteInfo = { title: '', icon: '', name: '', meta: {}, super: false, children: [] };
       routeData['title'] = route.meta.title as string;
       routeData['icon'] = route.meta.icon as string;
       routeData['super'] = route.meta.super as boolean;
       routeData['name'] = route.name as string;
+      routeData['meta'] = route.meta;
       if (all) routeData['route'] = route;
       if (route.meta['badge']) routeData['badge'] = route.meta.badge as string;
       if (route['children'] && route.children.length)
@@ -61,16 +63,18 @@ export function getMenuRoutes(all: boolean = false): RouteInfo[] {
  * @param {(route: RouteInfo) => boolean} roules 规则回调函数，返回true则为匹配成功 `必传参数`
  * @param {RouteInfo[]} routes 路由信息列表 `默认为 getMenuRoutes()`
  * @param {boolean} all 是否全部匹配(路由间存在包含关系) `默认为false`
+ * @param {boolean} deepCopy 是否获取深拷贝数据 `默认为 false`
  * @return {RouteInfo[][]} 返回路由信息行列表
  * @author: dreamy-xay
  */
 export function searchMenuRoutes(
   rules: (route: RouteInfo) => boolean,
   routes: RouteInfo[] = getMenuRoutes(),
-  all: boolean = false
+  all: boolean = false,
+  deepCopy: boolean = false
 ): RouteInfo[][] {
   const menuRoutes: RouteInfo[][] = [];
-  const menuRoute: RouteInfo[] = [];
+  let menuRoute: RouteInfo[] = [];
   // dfs 更新route列表
   function filterMenu(route: RouteInfo): boolean {
     menuRoute.push(route);
@@ -78,11 +82,59 @@ export function searchMenuRoutes(
     for (const r of route.children) if (filterMenu(r)) ok = true;
     if ((!ok || all) && rules(route)) {
       ok = true;
-      menuRoutes.push(JSON.parse(JSON.stringify(menuRoute)));
+      if (deepCopy) menuRoutes.push(JSON.parse(JSON.stringify(menuRoute)));
+      else {
+        menuRoutes.push(menuRoute);
+        menuRoute = []; // 重新赋值，改变对象地址
+        for (const r of menuRoutes[menuRoutes.length - 1]) menuRoute.push(r); // 重新添加
+      }
     }
     menuRoute.pop();
     return ok;
   }
   for (const route of routes) filterMenu(route);
   return menuRoutes;
+}
+
+// 被修改路由信息接口
+export interface ModifiedRouteInfo {
+  name: string; // 路由名称
+  meta:
+    | {
+        // 需要修改的meta
+        title?: string; // 路由标题
+        icon?: string; // 路由图标
+        super?: boolean; // 是否超级管理员支持路由
+        badge?: string; // 路由徽章
+        beforeToggle?: (next: () => void) => void; // 路由切换前拦截函数
+      }
+    | Record<string, unknown>;
+}
+
+/**
+ * @description: 修改菜单路由
+ * @param {ModifiedRouteInfo} options 修改的参数选项 `必传参数`
+ * @param {RouteInfo} routes 当前菜单路由信息 `路由信息列表 `默认为 getMenuRoutes()`
+ * @return {RouteInfo[]} 返回更新的菜单路由信息
+ * @author: dreamy-xay
+ */
+export function modifyMenuRoutes(options: ModifiedRouteInfo, routes: RouteInfo[] = getMenuRoutes()): RouteInfo[] {
+  // 查找制定项并修改
+  function findAndModifyMenu(route: RouteInfo): boolean {
+    if (route.name == options.name) {
+      // 开始修改
+      for (const key in options.meta) {
+        route[key] = options.meta[key];
+        route.meta[key] = options.meta[key];
+      }
+
+      return true; // 修改完毕
+    }
+    // 子菜单修改
+    for (const r of route.children) if (findAndModifyMenu(r)) return true; // 修改完毕
+    return false; // 未修改完毕
+  }
+  // 迭代修改
+  for (const route of routes) if (findAndModifyMenu(route)) return routes;
+  return routes;
 }

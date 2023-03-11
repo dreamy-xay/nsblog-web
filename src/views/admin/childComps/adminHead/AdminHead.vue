@@ -4,11 +4,11 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-22 10:20:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-03-21 17:53:38
+ * @LastEditTime: 2023-03-11 18:24:55
 -->
 <template>
   <div class="admin-head">
-    <admin-navigation :breadcrumb-data="breadcrumbData" />
+    <admin-navigation :breadcrumb-data="breadcrumbData" :user-data="userData" />
     <admin-tab
       :editable-tabs="editableTabs"
       v-model:editable-tabs-value="editableTabsValue"
@@ -22,11 +22,12 @@ import { defineComponent, reactive, ref, watch } from 'vue';
 import AdminNavigation from '@/views/admin/childComps/adminHead/childComps/AdminNavigation.vue';
 import AdminTab from '@/views/admin/childComps/adminHead/childComps/AdminTab.vue';
 import { useRoute, useRouter } from 'vue-router';
+import { mapState } from '@/util/store';
 
 /**
- * @description:头部
- * @param {Array} routesMenu  获取所有路由菜单列表
- * @author: Z_Y_C
+ * @description: 头部
+ * @param {Object} userData  用户数据 `必传参数`
+ * @author: dreamy-xay
  */
 
 export default defineComponent({
@@ -36,12 +37,12 @@ export default defineComponent({
     AdminTab,
   },
   props: {
-    routesMenu: {
-      type: Array,
-      required: true,
-    },
+    userData: {
+      type: Object,
+      required: true
+    }
   },
-  setup(props) {
+  setup() {
     const route = useRoute();
     const router = useRouter();
     const breadcrumbData = reactive([]); // 面包屑数据
@@ -51,8 +52,10 @@ export default defineComponent({
     // 绑定值，选中选项卡的 name 缓存页面数据中id属性
     const editableTabsValue = ref('');
 
+    const { adminRoutes } = mapState('global', ['adminRoutes']); // 获取adminRoutes
+
     // 面包屑显示数据
-    if (route.matched[1].name == props.routesMenu[0].name) {
+    if (route.matched[1].name == adminRoutes.value[0].name) {
       breadcrumbData.splice(breadcrumbData.length, 0, {
         icon: route.matched[2].meta.icon,
         content: route.matched[2].meta.title,
@@ -70,16 +73,16 @@ export default defineComponent({
 
     // 页面缓存数据
     editableTabs.splice(editableTabs.length, 0, {
-      icon: props.routesMenu[0].children[0].icon,
-      content: props.routesMenu[0].children[0].title,
-      name: props.routesMenu[0].children[0].name,
+      icon: adminRoutes.value[0].children[0].icon,
+      content: adminRoutes.value[0].children[0].title,
+      name: adminRoutes.value[0].children[0].name,
     });
 
     // 选择缓存页面数据
     editableTabsValue.value = route.name;
 
     // 页面缓存数据
-    if (props.routesMenu[0].children[0].name != route.name) {
+    if (adminRoutes.value[0].children[0].name != route.name) {
       editableTabs.splice(editableTabs.length, 0, {
         icon: route.meta.icon,
         content: route.meta.title,
@@ -106,7 +109,7 @@ export default defineComponent({
         editableTabsValue.value = route.name;
 
         breadcrumbData.splice(0, breadcrumbData.length);
-        if (route.matched[1].name == props.routesMenu[0].name) {
+        if (route.matched[1].name == adminRoutes.value[0].name) {
           breadcrumbData.splice(breadcrumbData.length, 0, {
             icon: route.matched[2].meta.icon,
             content: route.matched[2].meta.title,

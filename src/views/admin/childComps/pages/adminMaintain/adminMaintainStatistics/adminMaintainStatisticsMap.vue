@@ -4,13 +4,14 @@
  * @Autor: dreamy-xay
  * @Date: 2022-04-06 11:27:34
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-04 17:11:53
+ * @LastEditTime: 2023-03-08 15:24:03
 -->
 <template>
   <admin-view class="admin-maintain-statistics-map">
     <v-chart
       class="chart"
       :option="option"
+      autoresize
     />
   </admin-view>
 </template>
