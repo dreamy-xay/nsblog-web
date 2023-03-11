@@ -32,5 +32,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 .admin-view {
   width: 100%;
+  overflow-x: hidden;
 }
 </style>

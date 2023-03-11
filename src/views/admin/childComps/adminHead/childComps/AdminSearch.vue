@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2022-03-20 15:21:39
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-03-21 00:52:57
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2023-03-11 17:52:26
 -->
 <template>
   <n-modal
@@ -76,7 +76,7 @@
               </div>
               <div
                 v-if="index==hoverIndex"
-                class="vben-app-search-modal-list__item-enter"
+                class="nsblog-app-search-modal-list__item-enter"
               ><span
                   class="app-iconify anticon"
                   style="font-size: 20px; display: inline-flex;"
@@ -103,7 +103,7 @@
 
       </div>
       <div class="admin-search-bottom">
-        <span class="vben-app-search-footer-item">
+        <span class="nsblog-app-search-footer-item">
           <span
             class="app-iconify anticon"
             style="font-size: 16px; display: inline-flex;"
@@ -126,7 +126,7 @@
           </span>
         </span>
         <span class="text">确认</span>
-        <span class="vben-app-search-footer-item">
+        <span class="nsblog-app-search-footer-item">
           <span
             class="app-iconify anticon"
             style="font-size: 16px; display: inline-flex;"
@@ -152,7 +152,7 @@
             </svg>
           </span>
         </span>
-        <span class="vben-app-search-footer-item">
+        <span class="nsblog-app-search-footer-item">
           <span
             class="app-iconify anticon"
             style="font-size: 16px; display: inline-flex;"
@@ -179,7 +179,7 @@
           </span>
         </span>
         <span class="text">切换</span>
-        <span class="vben-app-search-footer-item"><span
+        <span class="nsblog-app-search-footer-item"><span
             class="app-iconify anticon"
             style="font-size: 16px; display: inline-flex;"
           ><svg
@@ -211,6 +211,7 @@ import { defineComponent, nextTick, reactive, ref } from 'vue';
 import BaseInput from '@/components/content/baseInput/BaseInput.vue';
 import { searchMenuRoutes } from '@/util/router';
 import { useRouter } from 'vue-router';
+import { mapState } from '@/util/store';
 
 /**
  * @description: 搜索页面
@@ -230,6 +231,8 @@ export default defineComponent({
     const router = useRouter();
     const showData = ref(false); // 是否有数据
 
+    const { adminRoutes } = mapState('global', ['adminRoutes']); // 获取adminRoutes
+
     /**
      * @description: 输入框输入
      * @return {void}
@@ -239,7 +242,7 @@ export default defineComponent({
       if (modelValue.value) {
         searchData.splice(0, searchData.length);
         let arr = [];
-        arr = searchMenuRoutes((route) => route.title.includes(modelValue.value));
+        arr = searchMenuRoutes((route) => route.title.includes(modelValue.value), adminRoutes.value);
         searchData.splice(0, arr.length, arr);
         if (searchData[0].length) {
           showData.value = true;
@@ -436,7 +439,7 @@ export default defineComponent({
         color: $grey-0;
       }
 
-      .vben-app-search-modal-list__item-enter {
+      .nsblog-app-search-modal-list__item-enter {
         width: 30px;
       }
     }
@@ -451,7 +454,7 @@ export default defineComponent({
     color: $grey-9;
     flex-shrink: 0;
 
-    .vben-app-search-footer-item {
+    .nsblog-app-search-footer-item {
       display: flex;
       width: 20px;
       height: 18px;

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 22:42:44
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-03-21 17:36:48
+ * @LastEditTime: 2023-03-11 17:50:28
 -->
 <template>
   <div
@@ -37,7 +37,7 @@
             :active="activeRouteName === item.name"
             :rank="0"
             :expand="Boolean(!itemClose[item.name])"
-            @itemClick="itemClick"
+            @itemClick="itemClick($event, activeRouteName)"
           />
           <div
             v-if="item.children.length"
@@ -51,7 +51,7 @@
               :item="subItem"
               :active="activeRouteName === subItem.name"
               :rank="1"
-              @itemClick="itemClick"
+              @itemClick="itemClick($event, activeRouteName)"
             />
           </div>
         </div>
@@ -66,11 +66,12 @@ import AdminSubMenuItem from '@/views/admin/childComps/adminMenu/childComps/Admi
 import { useRoute } from 'vue-router';
 import router from '@/router';
 import events from '@/events';
+import { searchMenuRoutes } from '@/util/router';
 
 /**
  * @description: 管理员页面子菜单
  * @param {Boolean} isSuper 是否超级管理员 `必传参数`
- * @param {Array} menuList 子菜单列表 `默认为 []`
+ * @param {Array} menuData 子菜单数据 `默认为 { children: [] }`
  * @method setSubMenuStatus 设置子菜单显示状态 (isShow: boolean = null) => void
  * @method resetSubMenuItemStatus 重置子菜单项展开状态 () => void
  * @events AdmiSubMenu-subMenuChange 子菜单改变状态 (should_show: boolean, show: boolean) => void
@@ -127,17 +128,21 @@ export default defineComponent({
 
     /**
      * @description: item 点击触发
-     * @param {object} route 路由数据 `必传参数`
+     * @param {RouteInfo} route 路由数据 `必传参数`
+     * @param {string} preRouteName 切换前的路由数据 `必传参数`
      * @return {void}
      * @author: dreamy-xay
      */
-    function itemClick(route) {
+    function itemClick(route, preRouteName) {
       if (route.children.length) itemClose[route.name] = itemClose[route.name] ? !itemClose[route.name] : true;
-      else if (route['beforeToggle'])
-        route.beforeToggle(() => {
-          router.push({ name: route.name });
-        });
-      else router.push({ name: route.name });
+      else {
+        const preRoute = searchMenuRoutes((route) => route.name === preRouteName, menuList.value)[0][0];
+        if (preRoute['beforeToggle'])
+          preRoute.beforeToggle(() => {
+            router.push({ name: route.name });
+          });
+        else router.push({ name: route.name });
+      }
     }
 
     /**

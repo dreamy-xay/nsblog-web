@@ -3,15 +3,15 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 19:06:03
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-02-27 22:25:21
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2023-03-11 17:12:12
 -->
 <template>
   <div class="admin-menu">
     <div class="admin-menu-main">
       <a
         class="main-icon"
-        href="/admin"
+        href="/"
         target="_self"
       >
         <img
@@ -26,7 +26,7 @@
           :class="{'menu-item-active': activeIndex === index}"
           :key="index"
           role="button"
-          @click="goto(item.name,index)"
+          @click="goto(item, menuList[activeIndex])"
         >
           <div class="icon">
             <i
@@ -53,7 +53,7 @@ import { computed, defineComponent, ref, watch } from 'vue';
 import AdminSubMenu from '@/views/admin/childComps/adminMenu/childComps/AdminSubMenu.vue';
 import router from '@/router';
 import { useRoute } from 'vue-router';
-import events from '@/events';
+import { mapState } from '@/util/store';
 
 /**
  * @description: 管理员页面菜单
@@ -69,10 +69,6 @@ export default defineComponent({
   props: {
     isSuper: {
       type: Boolean,
-      default: true,
-    },
-    routes: {
-      type: Array,
       required: true,
     },
   },
@@ -81,9 +77,10 @@ export default defineComponent({
     const subMenuRef = ref(null); // 子菜单ref
     const activeIndex = ref(-1); // 激活菜单
 
+    const { adminRoutes } = mapState('global', ['adminRoutes']); // 获取adminRoutes
     // 计算显示的菜单列表
     const menuList = computed(() => {
-      return props.isSuper ? props.routes : props.routes.filter((route) => !route.super);
+      return props.isSuper ? adminRoutes.value : adminRoutes.value.filter((route) => !route.super);
     });
 
     /**
@@ -122,22 +119,22 @@ export default defineComponent({
 
     /**
      * @description: 前往路由
-     * @param {string} routeName 路由名称
-     * @param {number} index 路由下标
+     * @param {RouteInfo} route 路由数据 `必传参数`
+     * @param {RouteInfo} preRoute 切换前的路由数据 `必传参数`
      * @return {void}
      * @author: dreamy-xay
      */
-    function goto(routeName) {
+    function goto(route, preRoute) {
       if (subMenuRef.value) {
         // 更新子菜单
         subMenuRef.value.setSubMenuStatus(true);
         subMenuRef.value.resetSubMenuItemStatus();
       }
-      if (route['beforeToggle'])
-        route.beforeToggle(() => {
-          router.push({ name: routeName });
+      if (preRoute['beforeToggle'])
+        preRoute.beforeToggle(() => {
+          router.push({ name: route.name });
         });
-      else router.push({ name: routeName });
+      else router.push({ name: route.name });
     }
 
     return {
