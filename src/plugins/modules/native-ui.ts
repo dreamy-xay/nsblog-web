@@ -31,7 +31,8 @@ import {
   NInputNumber,
   NSwitch,
   NInput,
-  NColorPicker
+  NColorPicker,
+  NNumberAnimation
 } from 'naive-ui';
 
 const components = [
@@ -57,7 +58,8 @@ const components = [
   NInputNumber,
   NSwitch,
   NInput,
-  NColorPicker
+  NColorPicker,
+  NNumberAnimation
 ];
 
 export default (app: App): void => {

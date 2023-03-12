@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-21 20:02:51
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-11 18:31:25
+ * @LastEditTime: 2023-03-12 17:41:50
 -->
 <template>
   <n-loading-bar-provider :loading-bar-style="{loading: {backgroundColor: styles.blue1}}">
@@ -85,7 +85,7 @@ export default defineComponent({
           userData.username = data.username;
           userData.nickname = data.nickname;
           userData.avatar = data.avatar;
-          userData.is_super = data.is_super;
+          userData.is_super = Boolean(data.is_super);
         })
         .catch((error) => {
           console.log(error);
@@ -132,7 +132,7 @@ export default defineComponent({
   .admin-content {
     height: 100%;
     overflow: hidden;
-    background-color: $grey-1;
+    background-color: $grey-2;
     transition: 0.25s;
 
     .admin-body {

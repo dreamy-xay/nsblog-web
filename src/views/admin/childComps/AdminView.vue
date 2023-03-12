@@ -1,10 +1,23 @@
+<!--
+ * @Description:
+ * @Version:
+ * @Autor: dreamy-xay
+ * @Date: 2023-03-04 16:36:54
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2023-03-12 17:56:30
+-->
 <template>
-  <div
-    class="admin-view"
-    v-naive-ui-loading-bar="loadingBar"
+  <transition
+    appear
+    name="fade-slide"
   >
-    <slot></slot>
-  </div>
+    <div
+      class="admin-view"
+      v-naive-ui-loading-bar="loadingBar"
+    >
+      <slot></slot>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -32,6 +45,22 @@ export default defineComponent({
 <style lang="scss" scoped>
 .admin-view {
   width: 100%;
-  overflow-x: hidden;
+  opacity: 1;
+  transform: translateX(0px);
+}
+
+.fade-slide-leave-active,
+.fade-slide-enter-active {
+  transition: all 0.3s;
+}
+
+.fade-slide-enter-from {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
 }
 </style>

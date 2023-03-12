@@ -4,11 +4,14 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-22 10:20:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-11 18:24:55
+ * @LastEditTime: 2023-03-12 18:44:17
 -->
 <template>
   <div class="admin-head">
-    <admin-navigation :breadcrumb-data="breadcrumbData" :user-data="userData" />
+    <admin-navigation
+      :breadcrumb-data="breadcrumbData"
+      :user-data="userData"
+    />
     <admin-tab
       :editable-tabs="editableTabs"
       v-model:editable-tabs-value="editableTabsValue"
@@ -39,14 +42,13 @@ export default defineComponent({
   props: {
     userData: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   setup() {
     const route = useRoute();
     const router = useRouter();
     const breadcrumbData = reactive([]); // 面包屑数据
-
     const editableTabs = reactive([]); // 缓存页面数据
 
     // 绑定值，选中选项卡的 name 缓存页面数据中id属性
@@ -54,15 +56,28 @@ export default defineComponent({
 
     const { adminRoutes } = mapState('global', ['adminRoutes']); // 获取adminRoutes
 
-    // 面包屑显示数据
-    if (route.matched[1].name == adminRoutes.value[0].name) {
-      breadcrumbData.splice(breadcrumbData.length, 0, {
-        icon: route.matched[2].meta.icon,
-        content: route.matched[2].meta.title,
-        name: route.matched[2].name,
-      });
-    } else {
-      for (let i = 1; i < route.matched.length; i++) {
+    tabInit(); // 初始化
+
+    /**
+     * @description: 根据路由更改检查并更新tab和面包屑
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function checkAndUpdate() {
+      // 如果缓存tab里没有该路径则添加
+      if (editableTabs.findIndex((editableTab) => editableTab.name === route.name) == -1) {
+        editableTabs.splice(editableTabs.length, 0, {
+          icon: route.meta.icon,
+          content: route.meta.title,
+          name: route.name,
+        });
+      }
+
+      editableTabsValue.value = route.name; // 更新激活值
+
+      // 处理面包屑
+      breadcrumbData.splice(0, breadcrumbData.length); // 清空面包屑
+      for (let i = 1; i < route.matched.length; ++i) {
         breadcrumbData.splice(breadcrumbData.length, 0, {
           icon: route.matched[i].meta.icon,
           content: route.matched[i].meta.title,
@@ -71,61 +86,25 @@ export default defineComponent({
       }
     }
 
-    // 页面缓存数据
-    editableTabs.splice(editableTabs.length, 0, {
-      icon: adminRoutes.value[0].children[0].icon,
-      content: adminRoutes.value[0].children[0].title,
-      name: adminRoutes.value[0].children[0].name,
-    });
-
-    // 选择缓存页面数据
-    editableTabsValue.value = route.name;
-
-    // 页面缓存数据
-    if (adminRoutes.value[0].children[0].name != route.name) {
-      editableTabs.splice(editableTabs.length, 0, {
-        icon: route.meta.icon,
-        content: route.meta.title,
-        name: route.name,
-      });
-      editableTabsValue.value = route.name;
-    }
-
     // 监听路由变化
-    watch(
-      () => route.path,
-      () => {
-        let i = 0;
-        for (; i < editableTabs.length; i++) {
-          if (route.name == editableTabs[i].name) break;
-        }
-        if (i == editableTabs.length) {
-          editableTabs.splice(editableTabs.length, 0, {
-            icon: route.meta.icon,
-            content: route.meta.title,
-            name: route.name,
-          });
-        }
-        editableTabsValue.value = route.name;
+    watch(() => route.name, checkAndUpdate);
 
-        breadcrumbData.splice(0, breadcrumbData.length);
-        if (route.matched[1].name == adminRoutes.value[0].name) {
-          breadcrumbData.splice(breadcrumbData.length, 0, {
-            icon: route.matched[2].meta.icon,
-            content: route.matched[2].meta.title,
-            name: route.matched[2].name,
-          });
-        } else {
-          for (let i = 1; i < route.matched.length; i++) {
-            breadcrumbData.splice(breadcrumbData.length, 0, {
-              icon: route.matched[i].meta.icon,
-              content: route.matched[i].meta.title,
-              name: route.matched[i].name,
-            });
-          }
-        }
-      }
-    );
+    /**
+     * @description: tab 初始化函数
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function tabInit() {
+      // 如果跳转页面不是首页，则将首页加入 tab 列表
+      if (adminRoutes.value[0].children[0].name != route.name)
+        editableTabs.splice(0, 0, {
+          icon: adminRoutes.value[0].children[0].icon,
+          content: adminRoutes.value[0].children[0].title,
+          name: adminRoutes.value[0].children[0].name,
+        });
+
+      checkAndUpdate();
+    }
 
     /**
      * @description: 移除缓存页面
