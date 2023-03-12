@@ -4,13 +4,13 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:02:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-12-06 14:31:50
+ * @LastEditTime: 2023-03-12 11:33:30
  */
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import directives from './directives';
+import registerDirectives from './directives';
 import installPlugins from './plugins';
 
 // mock拦截
@@ -20,7 +20,7 @@ if (process.env.VUE_APP_MOCK_SEVER !== 'false') import('../mock/mock-app');
 const app = createApp(App);
 
 // 注册自定义指令
-directives(app);
+registerDirectives(app);
 
 // 安装插件
 installPlugins(app);
