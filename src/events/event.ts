@@ -4,14 +4,14 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-27 12:19:40
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-09-22 16:17:06
+ * @LastEditTime: 2023-03-13 13:47:50
  */
 
 /**
  * @description: events回调函数类型
  * @author: dreamy-xay
  */
-type EventCallback = (...args: any[]) => void;
+type EventCallback = (...args: any[]) => void | unknown;
 
 /**
  * @description: events单次事件类型
@@ -38,6 +38,15 @@ export interface EventsInterface<T> {
    * @author: dreamy-xay
    */
   emit(eventId: T, ...args: any[]): this;
+
+  /**
+   * @description: 发出事件并获得时间返回的结果
+   * @param {T} eventId 事件名 `必传参数`
+   * @param {array} args 多参数 `可传可不传`
+   * @return {unknown[]} 返回事件返回值列表
+   * @author: dreamy-xay
+   */
+  emitAndReturn(eventId: T, ...args: any[]): unknown[];
 
   /**
    * @description: 绑定接收事件
@@ -139,6 +148,26 @@ export default class Events<T extends string | number = string> implements Event
       }
     }
     return this;
+  }
+
+  public emitAndReturn(eventId: T, ...args: any[]): unknown[] {
+    const returnValueList: unknown[] = [];
+    const eventInfoList: EventInfo[] | undefined = this.events.get(eventId);
+    if (eventInfoList) {
+      const offEventIndex: Set<number> = new Set<number>();
+      for (let i: number = 0; i < eventInfoList.length; ++i) {
+        returnValueList.push(eventInfoList[i][0](...args));
+        if (eventInfoList[i][1]) offEventIndex.add(i);
+      }
+
+      if (offEventIndex.size) {
+        const newEventInfoList: EventInfo[] = [];
+        for (let i: number = 0; i < eventInfoList.length; ++i)
+          if (!offEventIndex.has(i)) newEventInfoList.push(eventInfoList[i]);
+        this.events.set(eventId, newEventInfoList);
+      }
+    }
+    return returnValueList;
   }
 
   public on(eventId: T, callback: EventCallback, override: boolean = false): this {

@@ -74,7 +74,7 @@ import { searchMenuRoutes } from '@/util/router';
  * @param {Array} menuData 子菜单数据 `默认为 { children: [] }`
  * @method setSubMenuStatus 设置子菜单显示状态 (isShow: boolean = null) => void
  * @method resetSubMenuItemStatus 重置子菜单项展开状态 () => void
- * @events AdmiSubMenu-subMenuChange 子菜单改变状态 (should_show: boolean, show: boolean) => void
+ * @events AdminSubMenu-subMenuChange 子菜单改变状态 (should_show: boolean, show: boolean) => void
  * @author: dreamy-xay
  */
 
@@ -110,11 +110,11 @@ export default defineComponent({
     });
 
     // 监听
-    events.emit('AdmiSubMenu-subMenuChange', widthShow.value, showSubMenu.value);
+    events.emit('AdminSubMenu-subMenuChange', widthShow.value, showSubMenu.value);
     watch(
       () => [widthShow.value, showSubMenu.value],
       () => {
-        events.emit('AdmiSubMenu-subMenuChange', widthShow.value, showSubMenu.value);
+        events.emit('AdminSubMenu-subMenuChange', widthShow.value, showSubMenu.value);
       }
     );
 

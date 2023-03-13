@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-22 10:20:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-12 18:44:17
+ * @LastEditTime: 2023-03-13 15:42:01
 -->
 <template>
   <div class="admin-head">
@@ -134,25 +134,20 @@ export default defineComponent({
      */
     function handleCommand(index) {
       if (index === 0) {
-        for (let i = 0; i < editableTabs.length; ++i) {
-          if (editableTabsValue.value == editableTabs[i].name) {
-            editableTabs.splice(i + 1, editableTabs.length);
-            editableTabs.splice(1, i - 1);
-          }
-        }
-      } else if (index === 1) {
-        for (let i = 0; i < editableTabs.length; ++i) {
-          if (editableTabsValue.value == editableTabs[i].name) {
-            editableTabs.splice(1, i - 1);
-          }
-        }
-      } else if (index === 2) {
-        for (let i = 0; i < editableTabs.length; ++i) {
-          if (editableTabsValue.value == editableTabs[i].name) {
-            editableTabs.splice(i + 1, editableTabs.length);
-          }
-        }
-      } else {
+        const currentTab =
+          editableTabs[editableTabs.findIndex((editableTab) => editableTab.name === editableTabsValue.value)];
+        editableTabs.splice(1, editableTabs.length - 1, currentTab);
+      } else if (index === 1)
+        editableTabs.splice(
+          1,
+          editableTabs.findIndex((editableTab) => editableTab.name === editableTabsValue.value) - 1
+        );
+      else if (index === 2)
+        editableTabs.splice(
+          editableTabs.findIndex((editableTab) => editableTab.name === editableTabsValue.value) + 1,
+          editableTabs.length
+        );
+      else {
         editableTabs.splice(1, editableTabs.length);
         editableTabsValue.value = editableTabs[0].name;
         router.push({ name: editableTabs[0].name });
