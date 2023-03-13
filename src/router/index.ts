@@ -6,7 +6,15 @@
  * @LastEditors: dreamy-xay
  * @LastEditTime: 2022-02-21 20:04:25
  */
-import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } from 'vue-router';
+import {
+  createRouter,
+  createWebHistory,
+  createWebHashHistory,
+  RouteRecordRaw,
+  RouteLocationNormalized,
+  NavigationGuardNext
+} from 'vue-router';
+import { handleKeepAlive } from '@/util/router';
 import loginRouter from './modules/login';
 import messageRouter from './modules/message';
 import userCenterRouter from './modules/userCenter';
@@ -76,6 +84,12 @@ const router = createRouter({
       ? createWebHistory(process.env.BASE_URL)
       : createWebHashHistory(process.env.BASE_URL),
   routes
+});
+
+// admin 后台管理清除多层 adminEmpty
+router.beforeEach((to: RouteLocationNormalized, _, next: NavigationGuardNext) => {
+  handleKeepAlive(to, 'adminEmpty');
+  next();
 });
 
 export default router;

@@ -4,14 +4,11 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 20:55:54
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-04 15:51:31
+ * @LastEditTime: 2023-03-13 18:06:36
 -->
 <template>
   <router-view v-slot="{ Component }">
-    <!-- 将页面数据缓存 -->
-    <keep-alive>
-      <component :is="Component" />
-    </keep-alive>
+    <component :is="Component" />
   </router-view>
 </template>
 

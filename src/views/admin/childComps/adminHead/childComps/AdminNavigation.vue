@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-21 22:02:46
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-11 18:37:33
+ * @LastEditTime: 2023-03-13 15:26:03
 -->
 <template>
   <div class="admin-navigation">
@@ -20,7 +20,7 @@
       </div>
       <div
         class="breadcrumb"
-        v-for="(item , index) in breadcrumbData"
+        v-for="(item, index) in breadcrumbData"
         :key="index"
       >
         <div class="content">
@@ -58,11 +58,14 @@
             :target="`/user/${userData.username}`"
             :style="{marginLeft:'15px'}"
           />
-          <div class="admin-name">{{userData.nickname}}
-            <div class="icon"><i
+          <div class="admin-name">
+            <div class="name">{{userData.nickname}}</div>
+            <div class="icon">
+              <i
                 class="iconfont blog-arrow-down-s-line"
                 :class="adminDropdownVisible ? 'rotate' : ''"
-              ></i></div>
+              ></i>
+            </div>
           </div>
         </div>
         <template #dropdown>
@@ -191,6 +194,7 @@ import { useRouter } from 'vue-router';
  * @description: 管理员头部导航
  * @param breadcrumbData 面包屑数据 `必传参数`
  * @param {Object} userData  用户数据 `必传参数`
+ * @events AdminSubMenu-subMenuChange 子菜单改变状态 (should_show: boolean, show: boolean) => void
  * @author: Z_Y_C
  */
 
@@ -238,7 +242,7 @@ export default defineComponent({
       }
     }
 
-    events.on('AdmiSubMenu-subMenuChange', (should_show, show) => {
+    events.on('AdminSubMenu-subMenuChange', (should_show, show) => {
       roateMenu.value = show && should_show;
       showMenu.value = should_show;
     });
@@ -382,6 +386,13 @@ export default defineComponent({
         margin-left: 8px;
         @include flex(center);
         transition: 2s;
+        height: 100%;
+
+        .name {
+          width: 75px;
+          height: 100%;
+          @include ellipsis(1);
+        }
 
         .icon {
           height: 16px;

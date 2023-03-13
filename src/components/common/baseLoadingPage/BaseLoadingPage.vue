@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-29 16:55:47
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-10-02 10:10:50
+ * @LastEditTime: 2023-03-13 12:55:59
 -->
 <template>
   <div
@@ -15,12 +15,17 @@
       class="base-loading-page-loading"
       :style="{transform: `scale(${scale})`}"
     >
-      <div class="border out"></div>
-      <div class="border in"></div>
-      <div class="border mid"></div>
+      <div
+        v-for="className in ['out', 'in', 'mid']"
+        :key="className"
+        class="border"
+        :class="className"
+        :style="{border: `3px solid ${color}`}"
+      ></div>
       <div class="circle">
         <span
           class="dot"
+          :style="{backgroundColor: color}"
           v-for="index of 12"
           :key="index"
         ></span>
@@ -31,10 +36,12 @@
 
 <script>
 import { defineComponent, onMounted, ref } from 'vue';
+import styles from '@/assets/style/define.scss';
 
 /**
  * @description: 博客或文章加载页面
  * @param {Boolean} show 文章是否显示 `必传参数`
+ * @param {String} color 加载动画颜色 `默认为 styles.green0`
  * @author: dreamy-xay
  */
 
@@ -44,6 +51,10 @@ export default defineComponent({
     show: {
       type: Boolean,
       required: true,
+    },
+    color: {
+      type: String,
+      default: styles.green0,
     },
   },
   setup() {
@@ -93,7 +104,6 @@ export default defineComponent({
         width: 20px;
         height: 20px;
         border-radius: 50%;
-        background-color: $green-0;
         animation: jitter 5s ease-in-out infinite, fade-in-out 5s linear infinite;
 
         &:nth-child(1) {
@@ -173,7 +183,6 @@ export default defineComponent({
     .border {
       position: absolute;
       border-radius: 50%;
-      border: 3px solid $green-0;
     }
 
     .out {
@@ -181,8 +190,8 @@ export default defineComponent({
       left: 15%;
       width: 70%;
       height: 70%;
-      border-left-color: transparent;
-      border-right-color: transparent;
+      border-left-color: transparent !important;
+      border-right-color: transparent !important;
       animation: spin 2s linear reverse infinite;
     }
 
@@ -191,8 +200,8 @@ export default defineComponent({
       left: 18%;
       width: 64%;
       height: 64%;
-      border-top-color: transparent;
-      border-bottom-color: transparent;
+      border-top-color: transparent !important;
+      border-bottom-color: transparent !important;
       animation: spin 2s linear infinite;
     }
 
@@ -201,8 +210,8 @@ export default defineComponent({
       left: 40%;
       width: 20%;
       height: 20%;
-      border-left-color: transparent;
-      border-right-color: transparent;
+      border-left-color: transparent !important;
+      border-right-color: transparent !important;
       animation: spin 1s linear infinite;
     }
   }

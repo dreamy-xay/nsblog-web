@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:15:05
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-11 18:15:34
+ * @LastEditTime: 2023-03-13 11:32:02
  */
 import { Random, mock } from 'better-mock';
 import { Application, Request, Response } from 'express';
@@ -157,7 +157,7 @@ export default function(baseUrl: string, app: Application) {
           username,
           nickname: user.nickname,
           avatar: Random.image('150x150', '#234567', '#FFFFFF', 'png', username),
-          is_super: Random.integer(0, 1)
+          is_super: user.isSuper
         });
       else return res.status(410).json({ error: 'User name error' });
     } else return res.status(410).json({ error: 'Type error' });

@@ -4,11 +4,11 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 19:51:18
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-11 17:49:39
+ * @LastEditTime: 2023-03-13 18:09:22
  */
 
 import router from '@/router';
-import { RouteRecordNormalized } from 'vue-router';
+import { RouteRecordNormalized, RouteLocationNormalized } from 'vue-router';
 
 // 过滤路由信息接口
 export interface RouteInfo {
@@ -19,8 +19,10 @@ export interface RouteInfo {
   children: RouteInfo[]; // 子路由
   meta: Record<string, unknown>; // 全部meta信息
   badge?: string; // 路由徽章
+  noCache?: boolean; // 是否取消页面缓存
   route?: RouteRecordNormalized; // 路由详细信息
   beforeToggle?: (next: () => void) => void; // 路由切换前拦截函数
+  beforeClose?: (next: () => void) => void; // 路由界面关闭前拦截函数
 }
 
 /**
@@ -48,7 +50,8 @@ export function getMenuRoutes(all: boolean = false): RouteInfo[] {
       routeData['name'] = route.name as string;
       routeData['meta'] = route.meta;
       if (all) routeData['route'] = route;
-      if (route.meta['badge']) routeData['badge'] = route.meta.badge as string;
+      for (const key of ['badge', 'noCache', 'beforeToggle', 'beforeClose'])
+        if (route.meta[key]) routeData[key] = route.meta[key];
       if (route['children'] && route.children.length)
         routeData['children'] = getDeepRoutes(route.children as RouteRecordNormalized[]);
       return routeData;
@@ -106,7 +109,9 @@ export interface ModifiedRouteInfo {
         icon?: string; // 路由图标
         super?: boolean; // 是否超级管理员支持路由
         badge?: string; // 路由徽章
+        noCache?: boolean; // 是否取消页面缓存
         beforeToggle?: (next: () => void) => void; // 路由切换前拦截函数
+        beforeClose?: (next: () => void) => void; // 路由界面关闭前拦截函数
       }
     | Record<string, unknown>;
 }
@@ -137,4 +142,60 @@ export function modifyMenuRoutes(options: ModifiedRouteInfo, routes: RouteInfo[]
   // 迭代修改
   for (const route of routes) if (findAndModifyMenu(route)) return routes;
   return routes;
+}
+
+/**
+ * @description: 修改自定义配置vue-router的路由
+ * @param {ModifiedRouteInfo} options 修改的参数选项 `必传参数`
+ * @return {boolean} 返回是否查找到并修改成功
+ * @author: dreamy-xay
+ */
+export function modifyRoutesOfVueRouter(options: ModifiedRouteInfo): boolean {
+  const routes: RouteRecordNormalized[] = router.getRoutes();
+
+  // 获取过滤的 routes （带有菜单的）
+  const filterRoutes: RouteRecordNormalized[] = routes.filter((route: RouteRecordNormalized) => {
+    return Object.prototype.hasOwnProperty.call(route.meta, 'menu');
+  });
+
+  // 查找制定项并修改
+  function findAndModifyRoute(route: RouteRecordNormalized): boolean {
+    if (route.name == options.name) {
+      // 开始修改
+      for (const key in options.meta) route.meta[key] = options.meta[key];
+
+      return true; // 修改完毕
+    }
+    // 子菜单修改
+    for (const r of route.children) if (findAndModifyRoute(r as RouteRecordNormalized)) return true; // 修改完毕
+    return false; // 未修改完毕
+  }
+  // 迭代修改
+  for (const route of filterRoutes) if (findAndModifyRoute(route)) return true;
+
+  return false;
+}
+
+/**
+ * @description: 兼容<routeName>按需加载
+ * @param {RouteLocationNormalized} to 前往的路由 `必传参数`
+ * @param {string} routeName 需要删除的缓存组件名字 `必传参数`
+ * @return {Promise<void>}
+ * @author: dreamy-xay
+ */
+export async function handleKeepAlive(to: RouteLocationNormalized, routeName: string): Promise<void> {
+  if (to.matched && to.matched.length > 2) {
+    for (let i: number = 0; i < to.matched.length; ++i) {
+      const element: RouteRecordNormalized = to.matched[i];
+      if (element.components.default.name === routeName) {
+        to.matched.splice(i, 1);
+        await handleKeepAlive(to, routeName);
+      }
+      // 如果没有按需加载完成则等待加载
+      if (typeof element.components.default === 'function') {
+        await (element.components.default as any)();
+        await handleKeepAlive(to, routeName);
+      }
+    }
+  }
 }
