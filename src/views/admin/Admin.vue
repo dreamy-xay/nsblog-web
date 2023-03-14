@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-21 20:02:51
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-13 18:30:22
+ * @LastEditTime: 2023-03-14 16:36:28
 -->
 <template>
   <base-loading-page
@@ -33,20 +33,12 @@
               v-slot="{ Component, route }"
               v-if="isRouterAlive"
             >
-              <keep-alive
-                v-if="!route.meta['noCache']"
-                :include="cacheAdminMenuList"
-              >
+              <keep-alive :include="cacheAdminMenuList">
                 <component
                   :is="Component"
                   :key="route.fullPath"
                 />
               </keep-alive>
-              <component
-                v-else
-                :is="Component"
-                :key="route.fullPath"
-              />
             </router-view>
           </div>
         </el-scrollbar>
@@ -95,12 +87,12 @@ export default defineComponent({
       username: '',
       nickname: '',
       avatar: '',
-      is_super: true,
+      is_super: false,
     }); // 用户数据
 
     const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
     const { cacheAdminMenuList } = mapGetters('global', ['cacheAdminMenuList']); // 获取计算的缓存的页面
-    console.log(cacheAdminMenuList.value);
+
     /**
      * @description: 获取后台基本用户数据
      * @author: dreamy-xay

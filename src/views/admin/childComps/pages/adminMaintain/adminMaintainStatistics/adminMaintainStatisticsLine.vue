@@ -4,13 +4,10 @@
  * @Autor: dreamy-xay
  * @Date: 2022-04-06 11:27:34
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-08 15:47:54
+ * @LastEditTime: 2023-03-14 14:32:31
 -->
 <template>
-  <admin-view
-    class="admin-maintain-statistics-line"
-    :style="{width: viewWidth}"
-  >
+  <admin-view class="admin-maintain-statistics-line">
     <v-chart
       class="chart"
       :option="option"
@@ -20,10 +17,9 @@
 </template>
 
 <script>
-import { defineComponent, computed, ref } from 'vue';
+import { defineComponent, computed } from 'vue';
 import AdminView from '@/views/admin/childComps/AdminView.vue';
 import { graphic } from 'echarts';
-import events from '@/events';
 
 /**
  * @description: 数据统计
@@ -141,15 +137,8 @@ export default defineComponent({
       };
     });
 
-    const viewWidth = ref('calc(100vw - 298px)');
-    // 监听子菜单显示状态
-    events.on('AdmiSubMenu-subMenuChange', (showLength, show) => {
-      viewWidth.value = show && showLength ? 'calc(100vw - 298px)' : 'calc(100vw - 96px)';
-    });
-
     return {
       option,
-      viewWidth,
     };
   },
 });

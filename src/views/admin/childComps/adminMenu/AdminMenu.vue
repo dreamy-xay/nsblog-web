@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 19:06:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-11 17:12:12
+ * @LastEditTime: 2023-03-14 16:18:16
 -->
 <template>
   <div class="admin-menu">
@@ -26,7 +26,7 @@
           :class="{'menu-item-active': activeIndex === index}"
           :key="index"
           role="button"
-          @click="goto(item, menuList[activeIndex])"
+          @click="goto(item)"
         >
           <div class="icon">
             <i
@@ -54,6 +54,7 @@ import AdminSubMenu from '@/views/admin/childComps/adminMenu/childComps/AdminSub
 import router from '@/router';
 import { useRoute } from 'vue-router';
 import { mapState } from '@/util/store';
+import { searchMenuRoute } from '@/util/router';
 
 /**
  * @description: 管理员页面菜单
@@ -119,12 +120,13 @@ export default defineComponent({
 
     /**
      * @description: 前往路由
-     * @param {RouteInfo} route 路由数据 `必传参数`
-     * @param {RouteInfo} preRoute 切换前的路由数据 `必传参数`
+     * @param {RouteInfo} currentRoute 路由数据 `必传参数`
      * @return {void}
      * @author: dreamy-xay
      */
-    function goto(route, preRoute) {
+    function goto(currentRoute) {
+      // 查找上一个路由
+      const preRoute = searchMenuRoute((r) => r.name === route.name, menuList.value);
       if (subMenuRef.value) {
         // 更新子菜单
         subMenuRef.value.setSubMenuStatus(true);
@@ -132,9 +134,9 @@ export default defineComponent({
       }
       if (preRoute['beforeToggle'])
         preRoute.beforeToggle(() => {
-          router.push({ name: route.name });
+          router.push({ name: currentRoute.name });
         });
-      else router.push({ name: route.name });
+      else router.push({ name: currentRoute.name });
     }
 
     return {

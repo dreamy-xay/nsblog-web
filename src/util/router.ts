@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 19:51:18
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-13 18:09:22
+ * @LastEditTime: 2023-03-14 16:07:21
  */
 
 import router from '@/router';
@@ -62,7 +62,7 @@ export function getMenuRoutes(all: boolean = false): RouteInfo[] {
 }
 
 /**
- * @description:
+ * @description: 搜索系列匹配路由菜单列表
  * @param {(route: RouteInfo) => boolean} roules 规则回调函数，返回true则为匹配成功 `必传参数`
  * @param {RouteInfo[]} routes 路由信息列表 `默认为 getMenuRoutes()`
  * @param {boolean} all 是否全部匹配(路由间存在包含关系) `默认为false`
@@ -97,6 +97,34 @@ export function searchMenuRoutes(
   }
   for (const route of routes) filterMenu(route);
   return menuRoutes;
+}
+
+/**
+ * @description: 搜索第一个匹配规则的路由菜单
+ * @param {(route: RouteInfo) => boolean} roules 规则回调函数，返回true则为匹配成功 `必传参数`
+ * @param {RouteInfo[]} routes 路由信息列表 `默认为 getMenuRoutes()`
+ * @return {RouteInfo | undefined} 返回查找到的路由信息，未查找到则返回undefined
+ * @author: dreamy-xay
+ */
+export function searchMenuRoute(
+  rules: (route: RouteInfo) => boolean,
+  routes: RouteInfo[] = getMenuRoutes()
+): RouteInfo | undefined {
+  let result: RouteInfo | undefined = undefined;
+  // dfs 搜索route
+  function findMenu(route: RouteInfo): boolean {
+    if (rules(route)) {
+      // 更新结构
+      result = route;
+      return true; // 查找完毕
+    }
+    // 子菜单查找
+    for (const r of route.children) if (findMenu(r)) return true; // 查找完毕
+    return false; // 未查找到
+  }
+
+  for (const route of routes) if (findMenu(route)) return result;
+  return result;
 }
 
 // 被修改路由信息接口
@@ -167,7 +195,8 @@ export function modifyRoutesOfVueRouter(options: ModifiedRouteInfo): boolean {
       return true; // 修改完毕
     }
     // 子菜单修改
-    for (const r of route.children) if (findAndModifyRoute(r as RouteRecordNormalized)) return true; // 修改完毕
+    if (route['children'])
+      for (const r of route.children) if (findAndModifyRoute(r as RouteRecordNormalized)) return true; // 修改完毕
     return false; // 未修改完毕
   }
   // 迭代修改

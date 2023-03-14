@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2023-03-04 16:36:54
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-13 17:27:14
+ * @LastEditTime: 2023-03-14 16:57:44
 -->
 <template>
   <transition
@@ -39,7 +39,7 @@ export default defineComponent({
     const loadingBar = useLoadingBar(); // naive-ui loadingBar
     const route = useRoute(); // route
     const thisComponentRouteName = route.name; // 记录当前组件路由名称
-    const show = ref(Boolean(route.meta.noCache)); // 控制过渡动画显示
+    const show = ref(!route.meta['noCache']); // 控制过渡动画显示
 
     /**
      * @description: 初始化过渡效果
@@ -53,9 +53,10 @@ export default defineComponent({
       }, 250);
     }
 
-    if (!route.meta.noCache) {
+    if (route.meta['noCache'])
       // 初始化过渡
       viewInit();
+    else {
       // 如果缓存了当前页面者监听
       watch(
         () => route.name,
