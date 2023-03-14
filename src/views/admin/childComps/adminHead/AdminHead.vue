@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-22 10:20:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-13 15:42:01
+ * @LastEditTime: 2023-03-14 16:14:25
 -->
 <template>
   <div class="admin-head">
@@ -16,6 +16,7 @@
       :editable-tabs="editableTabs"
       v-model:editable-tabs-value="editableTabsValue"
       @remove-tab="removeTab"
+      @click-tab="clickTab"
       @handle-command="handleCommand"
     />
   </div>
@@ -26,6 +27,7 @@ import AdminNavigation from '@/views/admin/childComps/adminHead/childComps/Admin
 import AdminTab from '@/views/admin/childComps/adminHead/childComps/AdminTab.vue';
 import { useRoute, useRouter } from 'vue-router';
 import { mapState } from '@/util/store';
+import { searchMenuRoute } from '@/util/router';
 
 /**
  * @description: 头部
@@ -107,23 +109,50 @@ export default defineComponent({
     }
 
     /**
-     * @description: 移除缓存页面
+     * @description: 移除tab页面
      * @param {string} name 被删除的标签的name
      * @return {void}
      * @author: Z_Y_C
      */
     function removeTab(name) {
-      let j = 0;
-      for (let i = 1; i < editableTabs.length; ++i) {
-        if (name == editableTabs[i].name) {
-          editableTabs.splice(i, 1);
-          j = i - 1;
-        }
-      }
+      // 获取移除标签索引
+      const removeTabIndex = editableTabs.findIndex((editableTab) => editableTab.name === name);
+
+      // 如果移除标签是当前标签
       if (editableTabsValue.value == name) {
-        editableTabsValue.value = editableTabs[j].name;
-        router.push({ name: editableTabs[j].name });
-      }
+        // 获取当前路由全部参数
+        const currentRoute = searchMenuRoute((r) => r.name === name, adminRoutes.value);
+        // 下一步操作函数
+        const next = () => {
+          editableTabs.splice(removeTabIndex, 1); // 删除该标签
+          editableTabsValue.value = editableTabs[removeTabIndex - 1].name; // 更新激活标签name
+          router.push({ name: editableTabs[removeTabIndex - 1].name }); // 前往路由
+        };
+        // 如果当前路由存在关闭前执行函数则执行 beforeClose
+        if (currentRoute['beforeClose']) currentRoute.beforeClose(next);
+        else next();
+      } // 否则直接移除
+      else editableTabs.splice(removeTabIndex, 1); // 移除它
+    }
+
+    /**
+     * @description: 切换tab页面
+     * @param {string} name 被删除的标签的name
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function clickTab(name) {
+      const preRouteName = editableTabsValue.value; // 切换前路由名称
+      // 获取切换前路由全部参数
+      const preRoute = searchMenuRoute((r) => r.name === preRouteName, adminRoutes.value);
+      // 下一步操作函数
+      const next = () => {
+        editableTabsValue.value = name;
+        router.push({ name: name });
+      };
+      // 如果切换前路由存在切换前执行函数则执行 beforeToggle
+      if (preRoute['beforeToggle']) preRoute.beforeToggle(next);
+      else next();
     }
 
     /**
@@ -148,9 +177,20 @@ export default defineComponent({
           editableTabs.length
         );
       else {
-        editableTabs.splice(1, editableTabs.length);
-        editableTabsValue.value = editableTabs[0].name;
-        router.push({ name: editableTabs[0].name });
+        // 下一步（关闭全部）的执行函数
+        const next = () => {
+          editableTabs.splice(1, editableTabs.length);
+          editableTabsValue.value = editableTabs[0].name;
+          router.push({ name: editableTabs[0].name });
+        };
+        // 如果当前激活菜单不是第一个不可关闭的菜单
+        if (editableTabsValue.value != editableTabs[0].name) {
+          // 获取当前路由全部参数
+          const currentRoute = searchMenuRoute((r) => r.name === editableTabsValue.value, adminRoutes.value);
+          // 如果当前路由存在关闭前执行函数则执行 beforeClose
+          if (currentRoute['beforeClose']) currentRoute.beforeClose(next);
+          else next();
+        } else next();
       }
     }
     return {
@@ -158,6 +198,7 @@ export default defineComponent({
       editableTabsValue,
       breadcrumbData,
       removeTab,
+      clickTab,
       handleCommand,
     };
   },

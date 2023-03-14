@@ -3,21 +3,21 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2022-02-22 13:26:38
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-03-21 12:05:32
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2023-03-14 16:34:37
 -->
 <template>
   <div class="admin-tab">
     <div class="admin-tab-left">
       <el-tabs
-        :model-value="editableTabsValue"
+        v-model="currentTabModelValue"
         type="card"
-        :closable='false'
+        :closable="false"
         @tab-remove="removeTab"
         @tab-click="clickTab"
       >
         <el-tab-pane
-          v-for="(item , index) in editableTabs"
+          v-for="(item, index) in editableTabs"
           :key="index"
           :name="item.name"
           :closable="index ? true : false"
@@ -25,7 +25,7 @@
 
           <template #label>
             <div class="label">
-              <div class="icon"><i :class="'iconfont '+item.icon"></i></div>
+              <div class="icon"><i :class="'iconfont '+ item.icon"></i></div>
               {{item.content}}
             </div>
           </template>
@@ -42,12 +42,12 @@
         <div
           role="button"
           class="tab-close"
-          :class="Dropdownvisible ? 'tab-close-rotate' : ''"
+          :class="{'tab-close-rotate': Dropdownvisible}"
         >
           <div class="tab-top">
             <div
               class="icon"
-              :class="Dropdownvisible ? 'icon-rotate' : ''"
+              :class="{'icon-rotate': Dropdownvisible}"
             ><i class="iconfont blog-box"></i></div>
             <div class="icon icon-left"><i class="iconfont blog-box"></i></div>
           </div>
@@ -63,7 +63,7 @@
             <div
               class="el-dropdown-item"
               role="button"
-              v-for="(item , index) in menus"
+              v-for="(item, index) in menus"
               :key="index"
               @click="handleCommand(index)"
             >
@@ -78,8 +78,7 @@
   </div>
 </template>
 <script>
-import { useRouter } from 'vue-router';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, nextTick, ref, watch } from 'vue';
 
 /**
  * @description: 浏览标签
@@ -87,6 +86,7 @@ import { defineComponent, ref } from 'vue';
  * @param {String} editableTabsValue 绑定值，选中选项卡的 name 在editableTabs中id属性 `必传参数`
  * @event removeTab 移除缓存页面 id 被删除的标签的id
  * @event handleCommand 点击关闭发生事件 index 关闭类型 0:关闭其他，1:关闭左侧，2:关闭右侧，3:关闭全部
+ * @event clickTab 点击了新的tab
  * @author: Z_Y_C
  */
 
@@ -104,7 +104,15 @@ export default defineComponent({
   },
   setup(props, content) {
     const Dropdownvisible = ref(false); // 下拉框显示
-    const router = useRouter(); // 路由跳转
+    const currentTabModelValue = ref(props.editableTabsValue); // 当前激活的tab value
+
+    // 监听更新激活状态
+    watch(
+      () => props.editableTabsValue,
+      (value) => {
+        currentTabModelValue.value = value;
+      }
+    );
 
     const menus = [
       { icon: 'iconfont blog-ri-close-line', text: '关闭其他' },
@@ -135,14 +143,17 @@ export default defineComponent({
 
     /**
      * @description: 点击缓存页面跳转
-     * @param {object} e 	tab 被点击的标签
+     * @param {object} e tab 被点击的标签
      * @return {void}
      * @author: Z_Y_C
      */
     function clickTab(e) {
-      if (e.paneName !== props.editableTabsValue.value) {
-        content.emit('update:editableTabsValue', e.paneName);
-        router.push({ name: e.paneName });
+      if (e.paneName !== props.editableTabsValue) {
+        // 恢复原激活状态，等待 clickTab events 更新 currentTabModelValue
+        nextTick(() => {
+          currentTabModelValue.value = props.editableTabsValue;
+        });
+        content.emit('clickTab', e.paneName);
       }
     }
 
@@ -159,6 +170,7 @@ export default defineComponent({
 
     return {
       Dropdownvisible,
+      currentTabModelValue,
       visibleChange,
       removeTab,
       clickTab,
@@ -226,25 +238,29 @@ export default defineComponent({
         }
       }
 
-      // 选择后颜色
-      .el-tabs__item.is-active {
-        color: $blue-1;
-        background: #e8f4ff;
-        padding: 0 30px;
-        mask-size: 100% 100%;
-      }
-
       // X图标位置
       .el-tabs__item .el-icon-close {
         top: 0px;
         &:hover {
-          background-color: $blue-1;
+          background-color: $grey-7;
           color: $grey-0;
         }
       }
 
       .el-tabs__item {
         border: none;
+      }
+
+      // 选择后颜色
+      .el-tabs__item.is-active {
+        color: $blue-1;
+        background: #e8f4ff;
+        padding: 0 30px;
+        mask-size: 100% 100%;
+
+        .el-icon-close:hover {
+          background-color: $blue-1;
+        }
       }
     }
 

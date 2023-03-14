@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 22:42:44
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-11 17:50:28
+ * @LastEditTime: 2023-03-14 16:13:57
 -->
 <template>
   <div
@@ -37,7 +37,7 @@
             :active="activeRouteName === item.name"
             :rank="0"
             :expand="Boolean(!itemClose[item.name])"
-            @itemClick="itemClick($event, activeRouteName)"
+            @itemClick="itemClick"
           />
           <div
             v-if="item.children.length"
@@ -51,7 +51,7 @@
               :item="subItem"
               :active="activeRouteName === subItem.name"
               :rank="1"
-              @itemClick="itemClick($event, activeRouteName)"
+              @itemClick="itemClick"
             />
           </div>
         </div>
@@ -66,7 +66,7 @@ import AdminSubMenuItem from '@/views/admin/childComps/adminMenu/childComps/Admi
 import { useRoute } from 'vue-router';
 import router from '@/router';
 import events from '@/events';
-import { searchMenuRoutes } from '@/util/router';
+import { searchMenuRoute } from '@/util/router';
 
 /**
  * @description: 管理员页面子菜单
@@ -129,14 +129,13 @@ export default defineComponent({
     /**
      * @description: item 点击触发
      * @param {RouteInfo} route 路由数据 `必传参数`
-     * @param {string} preRouteName 切换前的路由数据 `必传参数`
      * @return {void}
      * @author: dreamy-xay
      */
-    function itemClick(route, preRouteName) {
+    function itemClick(route) {
       if (route.children.length) itemClose[route.name] = itemClose[route.name] ? !itemClose[route.name] : true;
       else {
-        const preRoute = searchMenuRoutes((route) => route.name === preRouteName, menuList.value)[0][0];
+        const preRoute = searchMenuRoute((r) => r.name === activeRouteName.value, menuList.value);
         if (preRoute['beforeToggle'])
           preRoute.beforeToggle(() => {
             router.push({ name: route.name });
