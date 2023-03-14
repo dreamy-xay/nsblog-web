@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 19:51:18
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-14 16:07:21
+ * @LastEditTime: 2023-03-14 20:33:29
  */
 
 import router from '@/router';
@@ -16,13 +16,32 @@ export interface RouteInfo {
   icon: string; // 路由图标
   super: boolean; // 是否超级管理员支持路由
   name: string; // 路由名称
-  children: RouteInfo[]; // 子路由
-  meta: Record<string, unknown>; // 全部meta信息
   badge?: string; // 路由徽章
   noCache?: boolean; // 是否取消页面缓存
+  children: RouteInfo[]; // 子路由
+  parent?: RouteInfo; // 父路由
+  level: number; // 层级（含有 meta.menu 的为第一级别，其子路由层级递增）
+  meta: Record<string, unknown>; // 全部meta信息
   route?: RouteRecordNormalized; // 路由详细信息
   beforeToggle?: (next: () => void) => void; // 路由切换前拦截函数
   beforeClose?: (next: () => void) => void; // 路由界面关闭前拦截函数
+}
+
+// 被修改路由信息接口
+export interface ModifiedRouteInfo {
+  name: string; // 路由名称
+  meta:
+    | {
+        // 需要修改的meta
+        title?: string; // 路由标题
+        icon?: string; // 路由图标
+        super?: boolean; // 是否超级管理员支持路由
+        badge?: string; // 路由徽章
+        noCache?: boolean; // 是否取消页面缓存
+        beforeToggle?: (next: () => void) => void; // 路由切换前拦截函数
+        beforeClose?: (next: () => void) => void; // 路由界面关闭前拦截函数
+      }
+    | Record<string, unknown>;
 }
 
 /**
@@ -33,7 +52,12 @@ export interface RouteInfo {
  */
 export function getMenuRoutes(all: boolean = false): RouteInfo[] {
   // 获取全部routes
-  function getDeepRoutes(routes: RouteRecordNormalized[], filter: boolean = false): RouteInfo[] {
+  function getDeepRoutes(
+    routes: RouteRecordNormalized[],
+    filter: boolean,
+    level: number = 1,
+    parent: RouteInfo = undefined
+  ): RouteInfo[] {
     // 获取过滤的 routes
     const filterRouters: RouteRecordNormalized[] = filter
       ? routes.filter((route: RouteRecordNormalized) => {
@@ -43,7 +67,16 @@ export function getMenuRoutes(all: boolean = false): RouteInfo[] {
 
     // 返回格式化的route
     return filterRouters.map((route: RouteRecordNormalized) => {
-      const routeData: RouteInfo = { title: '', icon: '', name: '', meta: {}, super: false, children: [] };
+      const routeData: RouteInfo = {
+        title: '',
+        icon: '',
+        name: '',
+        meta: {},
+        level,
+        parent,
+        super: false,
+        children: []
+      };
       routeData['title'] = route.meta.title as string;
       routeData['icon'] = route.meta.icon as string;
       routeData['super'] = route.meta.super as boolean;
@@ -53,7 +86,7 @@ export function getMenuRoutes(all: boolean = false): RouteInfo[] {
       for (const key of ['badge', 'noCache', 'beforeToggle', 'beforeClose'])
         if (route.meta[key]) routeData[key] = route.meta[key];
       if (route['children'] && route.children.length)
-        routeData['children'] = getDeepRoutes(route.children as RouteRecordNormalized[]);
+        routeData['children'] = getDeepRoutes(route.children as RouteRecordNormalized[], false, level + 1, routeData);
       return routeData;
     });
   }
@@ -127,23 +160,6 @@ export function searchMenuRoute(
   return result;
 }
 
-// 被修改路由信息接口
-export interface ModifiedRouteInfo {
-  name: string; // 路由名称
-  meta:
-    | {
-        // 需要修改的meta
-        title?: string; // 路由标题
-        icon?: string; // 路由图标
-        super?: boolean; // 是否超级管理员支持路由
-        badge?: string; // 路由徽章
-        noCache?: boolean; // 是否取消页面缓存
-        beforeToggle?: (next: () => void) => void; // 路由切换前拦截函数
-        beforeClose?: (next: () => void) => void; // 路由界面关闭前拦截函数
-      }
-    | Record<string, unknown>;
-}
-
 /**
  * @description: 修改菜单路由
  * @param {ModifiedRouteInfo} options 修改的参数选项 `必传参数`
@@ -157,7 +173,8 @@ export function modifyMenuRoutes(options: ModifiedRouteInfo, routes: RouteInfo[]
     if (route.name == options.name) {
       // 开始修改
       for (const key in options.meta) {
-        route[key] = options.meta[key];
+        // RouteInfo 不可修改的键
+        if (!['children', 'parent', 'level', 'meta', 'route'].includes(key)) route[key] = options.meta[key];
         route.meta[key] = options.meta[key];
       }
 

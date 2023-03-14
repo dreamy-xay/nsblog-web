@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 18:26:04
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-17 12:46:30
+ * @LastEditTime: 2023-03-14 20:42:06
 -->
 <template>
   <div class="blog-tags">
@@ -63,7 +63,7 @@ import BaseTag from '@/components/content/baseTag/BaseTag.vue';
 import BaseSvg from '@/components/content/baseSvg/BaseSvg.vue';
 import { getTags } from '@/network/api/articles';
 import { useMessage } from 'naive-ui';
-import { circleRandomText } from '@/util/dom';
+import circleRandomText from '@/util/render/circleRandomText';
 import styles from '@/assets/style/define.scss';
 import { useRoute } from 'vue-router';
 
