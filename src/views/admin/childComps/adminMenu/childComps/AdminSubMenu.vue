@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 22:42:44
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-14 16:13:57
+ * @LastEditTime: 2023-03-14 21:05:11
 -->
 <template>
   <div
@@ -92,6 +92,10 @@ export default defineComponent({
       type: Object,
       default: () => ({ children: [] }),
     },
+    adminRoutes: {
+      type: Array,
+      required: true,
+    },
   },
   setup(props) {
     const route = useRoute(); // route
@@ -123,6 +127,7 @@ export default defineComponent({
       () => route.name,
       (name) => {
         activeRouteName.value = name;
+        resetSubMenuItemStatus();
       }
     );
 
@@ -156,11 +161,17 @@ export default defineComponent({
 
     /**
      * @description: 重置子菜单项展开状态
+     * @param {boolean} all 是否重置全部 `默认为 false`
      * @return {void}
      * @author: dreamy-xay
      */
-    function resetSubMenuItemStatus() {
-      for (const key in itemClose) itemClose[key] = false;
+    function resetSubMenuItemStatus(all = false) {
+      if (all) for (const key in itemClose) itemClose[key] = false;
+      else {
+        const currentRoute = searchMenuRoute((r) => r.name === route.name, props.adminRoutes);
+        console.log(route.name, currentRoute);
+        if (currentRoute.level === 3) itemClose[currentRoute.parent.name] = false;
+      }
     }
 
     // 监听全局修改事件

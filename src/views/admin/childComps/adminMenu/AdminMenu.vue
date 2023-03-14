@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 19:06:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-14 16:18:16
+ * @LastEditTime: 2023-03-14 21:07:16
 -->
 <template>
   <div class="admin-menu">
@@ -43,6 +43,7 @@
         ref="subMenuRef"
         :is-super="isSuper"
         :menu-data="activeIndex !== -1 ? menuList[activeIndex] : {children: []}"
+        :admin-routes="adminRoutes"
       />
     </div>
   </div>
@@ -127,22 +128,25 @@ export default defineComponent({
     function goto(currentRoute) {
       // 查找上一个路由
       const preRoute = searchMenuRoute((r) => r.name === route.name, menuList.value);
-      if (subMenuRef.value) {
-        // 更新子菜单
-        subMenuRef.value.setSubMenuStatus(true);
-        subMenuRef.value.resetSubMenuItemStatus();
-      }
-      if (preRoute['beforeToggle'])
-        preRoute.beforeToggle(() => {
-          router.push({ name: currentRoute.name });
+      // 下一步执行函数
+      const next = () => {
+        router.push({ name: currentRoute.name }).then(() => {
+          if (subMenuRef.value) {
+            // 更新子菜单
+            subMenuRef.value.setSubMenuStatus(true);
+            // subMenuRef.value.resetSubMenuItemStatus(); // watch route 中已经实现
+          }
         });
-      else router.push({ name: currentRoute.name });
+      };
+      if (preRoute['beforeToggle']) preRoute.beforeToggle(next);
+      else next();
     }
 
     return {
       subMenuRef,
       menuList,
       activeIndex,
+      adminRoutes,
       goto,
     };
   },
