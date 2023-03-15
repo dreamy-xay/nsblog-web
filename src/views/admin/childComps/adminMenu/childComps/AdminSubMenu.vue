@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 22:42:44
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-14 21:05:11
+ * @LastEditTime: 2023-03-15 11:44:35
 -->
 <template>
   <div
@@ -169,7 +169,6 @@ export default defineComponent({
       if (all) for (const key in itemClose) itemClose[key] = false;
       else {
         const currentRoute = searchMenuRoute((r) => r.name === route.name, props.adminRoutes);
-        console.log(route.name, currentRoute);
         if (currentRoute.level === 3) itemClose[currentRoute.parent.name] = false;
       }
     }

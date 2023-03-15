@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-04-06 14:57:24
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-04 16:54:40
+ * @LastEditTime: 2023-03-15 11:44:21
 -->
 <template>
   <admin-view class="admin-creation-article-release">
@@ -230,6 +230,14 @@
       </div>
 
     </div>
+    <base-modal
+      content="是否保存为草稿"
+      :show="showQuitModal"
+      :color="style.blue0"
+      :hover-color="style.blue1"
+      @confirm="quitModalHandle(true)"
+      @cancel="quitModalHandle(false)"
+    />
   </admin-view>
 
   <n-drawer
@@ -338,11 +346,12 @@ import AdminView from '@/views/admin/childComps/AdminView.vue';
 import BaseInput from '@/components/content/baseInput/BaseInput.vue';
 import BaseSelect from '@/components/content/baseSelect/BaseSelect.vue';
 import BaseTag from '@/components/content/baseTag/BaseTag.vue';
+import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 import { getTopics, getTopicTags } from '@/network/api/topics';
 import style from '@/assets/style/define.scss';
 import { useMessage } from 'naive-ui';
 import { getCategories } from '@/network/api/articles';
-import { mapState } from '@/util/store';
+import { mapMutations, mapState } from '@/util/store';
 import axios from 'axios';
 
 /**
@@ -357,6 +366,7 @@ export default defineComponent({
     BaseInput,
     BaseSelect,
     BaseTag,
+    BaseModal,
   },
   setup() {
     const msg = useMessage(); // naive-ui mssage
@@ -683,6 +693,33 @@ export default defineComponent({
         });
     }
 
+    const showQuitModal = ref(false);
+    let globalNext = null;
+    const { updateAdminRoutes } = mapMutations('global', ['updateAdminRoutes']);
+
+    updateAdminRoutes({
+      name: 'adminCreationArticleRelease',
+      meta: {
+        beforeToggle(next) {
+          globalNext = next;
+          showQuitModal.value = true;
+        },
+        beforeClose(next) {
+          globalNext = next;
+          showQuitModal.value = true;
+        },
+      },
+    });
+    function quitModalHandle(isConfirm) {
+      if (isConfirm) {
+        console.log('save article success!!!');
+      } else {
+         console.log('not save article???');
+      }
+      showQuitModal.value = false;
+      globalNext();
+    }
+
     return {
       changeImage,
       imageUrl,
@@ -731,6 +768,8 @@ export default defineComponent({
       generateTitle,
       generateSummary,
       save,
+      showQuitModal,
+      quitModalHandle,
     };
   },
 });
