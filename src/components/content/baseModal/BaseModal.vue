@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-16 14:57:54
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-15 16:48:05
+ * @LastEditTime: 2023-03-15 11:40:13
 -->
 <template>
   <n-modal
@@ -18,6 +18,7 @@
     <div
       class="base-modal-inner"
       v-if="preset === 'default'"
+      :style="{'--default-color': color, '--hover-color': hoverColor}"
     >
       <slot name="default-inner"></slot>
       <div
@@ -49,16 +50,19 @@
 
 <script>
 import { defineComponent } from 'vue';
+import styles from '@/assets/style/define.scss';
 
 /**
  * @description: 基础模态框
  * @param {'if' | 'show'} displayDirective 使用何种指令控制模态框主体的条件渲染 `默认show`
- * @param {Boolean} maskClosable 点击遮罩时是否发出 update:show 事件 `默认未true`
+ * @param {Boolean} maskClosable 点击遮罩时是否发出 update:show 事件 `默认为true`
  * @param {String} preset 模态框使用何种预设，具体参考n-modal，如果想重写内容则置为undefined即可 `默认为default`
  * @param {Boolean} show 是否展示 Modal `默认false`
  * @param {String} content 仅当preset为default时提示框内容 `默认为null`
  * @param {String} confirmeText 仅当preset为default时确认按钮内容 `默认为'确认'`
  * @param {String} cancelText 仅当preset为default时取消按钮内容 `默认为'取消'`
+ * @param {String} color 按钮颜色 `默认为null`
+ * @param {String} hoverColor 鼠标 hover 按钮后标签颜色 `默认为null`
  * @event update 模态框更新是否展示状态的回调 (isShow: boolean) => void
  * @event confirm 仅当preset为default时点击确认按钮的回调 () => void
  * @event cancel 仅当preset为default时点击取消按钮的回调 () => void
@@ -97,6 +101,14 @@ export default defineComponent({
     cancelText: {
       type: String,
       default: '取消',
+    },
+    color: {
+      type: String,
+      default: styles.green0,
+    },
+    hoverColor: {
+      type: String,
+      default: styles.green1,
     },
   },
 });
@@ -141,12 +153,12 @@ export default defineComponent({
       transition: 0.4s;
 
       &.confirm {
-        background-color: $green-0;
+        background-color: var(--default-color);
         color: $grey-0;
         margin-right: 20px;
 
         &:hover {
-          background-color: $green-1;
+          background-color: var(--hover-color);
         }
       }
 
@@ -157,8 +169,8 @@ export default defineComponent({
         height: 30px;
 
         &:hover {
-          border: 1px solid $green-1;
-          color: $green-1;
+          border: 1px solid var(--hover-color);
+          color: var(--hover-color);
         }
       }
     }
