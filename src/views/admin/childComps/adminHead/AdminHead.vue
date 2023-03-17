@@ -4,11 +4,12 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-22 10:20:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-17 17:49:34
+ * @LastEditTime: 2023-03-17 18:42:16
 -->
 <template>
   <div class="admin-head">
     <admin-navigation
+      v-show="showNavigation"
       :breadcrumb-data="breadcrumbData"
       :user-data="userData"
     />
@@ -18,6 +19,7 @@
       @remove-tab="removeTab"
       @click-tab="clickTab"
       @handle-command="handleCommand"
+      @zoomToggle="$emit('zoomToggle', $event)"
     />
   </div>
 </template>
@@ -32,6 +34,7 @@ import { searchMenuRoute, searchMenuRoutes } from '@/util/router';
 /**
  * @description: 头部
  * @param {Object} userData  用户数据 `必传参数`
+ * @param {Boolean} showNavigation 是否显示navigation `默认为true`
  * @events tagsChange 缓存列表的状态改变 (routeName: string, isAdd: boolean) => void
  * @author: dreamy-xay
  */
@@ -42,11 +45,15 @@ export default defineComponent({
     AdminNavigation,
     AdminTab,
   },
-  emits: ['tagsChange'],
+  emits: ['tagsChange', 'zoomToggle'],
   props: {
     userData: {
       type: Object,
       required: true,
+    },
+    showNavigation: {
+      type: Boolean,
+      default: true,
     },
   },
   setup(_, context) {
@@ -96,11 +103,7 @@ export default defineComponent({
     function tabInit() {
       // 如果跳转页面不是首页，则将首页加入 tab 列表
       if (adminRoutes.value[0].children[0].name != route.name) {
-        editableTabs.splice(0, 0, {
-          icon: adminRoutes.value[0].children[0].icon,
-          content: adminRoutes.value[0].children[0].title,
-          name: adminRoutes.value[0].children[0].name,
-        });
+        editableTabs.splice(0, 0, adminRoutes.value[0].children[0]);
         // 添加首页tabs改变
         context.emit('tagsChange', adminRoutes.value[0].children[0].name, true);
       }

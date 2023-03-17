@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-21 20:02:51
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-17 17:57:22
+ * @LastEditTime: 2023-03-17 19:22:59
 -->
 <template>
   <base-loading-page
@@ -16,35 +16,47 @@
     v-else
     :loading-bar-style="{loading: {backgroundColor: styles.blue1}}"
   >
-    <div class="admin">
+    <div
+      class="admin"
+      v-show="!zoom"
+    >
       <admin-menu :is-super="userData.is_super" />
-      <div
-        class="admin-content"
-        :style="{width: viewWidth}"
+      <teleport
+        to="#app"
+        :disabled="!zoom"
       >
-        <admin-head
-          :user-data="userData"
-          @tagsChange="cachedRouteChanage"
-        />
-        <el-scrollbar
-          bind-class="
-          admin-body"
-          max-height="calc(100% - 110px)"
+        <div
+          class="admin-content"
+          :class="{'admin-content-zoom': zoom}"
+          :style="{width: viewWidth}"
         >
-          <div class="admin-body">
-            <base-router-view
-              :cached-route-names="cachedRouteNames"
-              :routes="adminRoutes"
-            />
-          </div>
-        </el-scrollbar>
-      </div>
+
+          <admin-head
+            :user-data="userData"
+            :show-navigation="!zoom"
+            @tagsChange="cachedRouteChanage"
+            @zoomToggle="zoomToggle"
+          />
+          <el-scrollbar
+            bind-class="admin-body"
+            :max-height="`calc(100% - ${pageHeight}px)`"
+          >
+
+            <div class="admin-body">
+              <base-router-view
+                :cached-route-names="cachedRouteNames"
+                :routes="adminRoutes"
+              />
+            </div>
+          </el-scrollbar>
+        </div>
+      </teleport>
     </div>
   </n-loading-bar-provider>
 </template>
 
 <script>
-import { defineComponent, nextTick, provide, reactive, ref } from 'vue';
+import { computed, defineComponent, nextTick, provide, reactive, ref } from 'vue';
 import BaseLoadingPage from '@/components/common/baseLoadingPage/BaseLoadingPage.vue';
 import BaseRouterView from '@/components/content/baseRouterView/BaseRouterView.vue';
 import AdminMenu from '@/views/admin/childComps/adminMenu/AdminMenu.vue';
@@ -54,7 +66,7 @@ import styles from '@/assets/style/define.scss';
 import events from '@/events';
 import { getUserInfo } from '@/network/api/user';
 import { useMessage } from 'naive-ui';
-import { mapState, mapMutations } from '@/util/store';
+import { mapState } from '@/util/store';
 import { useRoute } from 'vue-router';
 import router from '@/router';
 
@@ -78,7 +90,8 @@ export default defineComponent({
   setup() {
     const route = useRoute(); // 当前路由状态
     const msg = useMessage(); // naive-ui message
-    const viewWidth = ref('');
+    const viewWidth = ref(''); // 除了菜单外视图宽度
+    const zoom = ref(false); // 页面放大缩小模式
     const cachedRouteNames = reactive({}); // 已经缓存的路由名称列表
     const loading = ref(true); // 是否显示加载状态
     const userData = reactive({
@@ -89,21 +102,6 @@ export default defineComponent({
     }); // 用户数据
 
     const { tokenInfo, adminRoutes } = mapState('global', ['tokenInfo', 'adminRoutes']); // 获取tokenInfo 和 adminRoutes
-    const { updateAdminRoutes } = mapMutations('global', ['updateAdminRoutes']);
-
-    setTimeout(() => {
-      updateAdminRoutes({
-        name: 'adminHomeDashboards',
-        meta: {
-          icon: 'blog-chuangzuo',
-          title: '主页吗',
-        },
-      });
-
-      setTimeout(() => {
-        console.log(router.getRoutes().filter((r) => r.name === 'adminHomeDashboard'));
-      }, 1000);
-    }, 3000);
 
     /**
      * @description: 初始化执行函数
@@ -171,6 +169,16 @@ export default defineComponent({
     }
 
     /**
+     * @description: 触发页面的放大缩小
+     * @param {boolean} zoomIn 是否放大 `必传参数`
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function zoomToggle(zoomIn) {
+      zoom.value = zoomIn;
+    }
+
+    /**
      * @description: router重新加载方法
      * @param {string} routeName 重新加载的路由名称 `必传参数`
      * @return {void}
@@ -185,14 +193,24 @@ export default defineComponent({
     // 方法向下映射
     provide('reload', reload);
 
+    // 计算子页面可可视范围的高度
+    const pageHeight = computed(() => {
+      return zoom.value ? 50 : 110;
+    });
+    // 方法向下映射
+    provide('pageHeight', pageHeight);
+
     return {
       styles,
       viewWidth,
+      zoom,
       userData,
       cachedRouteNames,
       loading,
       adminRoutes,
+      zoomToggle,
       cachedRouteChanage,
+      pageHeight,
     };
   },
 });
@@ -217,6 +235,21 @@ export default defineComponent({
       width: calc(100% - 32px);
       position: relative;
     }
+  }
+}
+
+.admin-content-zoom {
+  width: 100vw !important;
+  height: 100vh;
+  overflow: hidden;
+  background-color: $grey-2;
+  transition: 0.25s;
+
+  .admin-body {
+    margin: 16px;
+    height: calc(100% - 32px);
+    width: calc(100% - 32px);
+    position: relative;
   }
 }
 </style>

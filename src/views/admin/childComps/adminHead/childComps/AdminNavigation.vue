@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-21 22:02:46
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-17 17:42:43
+ * @LastEditTime: 2023-03-17 19:12:52
 -->
 <template>
   <div class="admin-navigation">
@@ -172,12 +172,11 @@
         ><i class="iconfont blog-ri-refresh-line"></i></div>
       </div>
     </div>
+    <admin-search
+      v-model:show="showSearch"
+      @close-search="changeSearch"
+    />
   </div>
-
-  <admin-search
-    v-model:show="showSearch"
-    @close-search="changeSearch"
-  />
 </template>
 <script>
 import { defineComponent, inject, reactive, ref } from 'vue';
