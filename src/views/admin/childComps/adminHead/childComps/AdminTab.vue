@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-22 13:26:38
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-17 17:44:14
+ * @LastEditTime: 2023-03-17 18:42:00
 -->
 <template>
   <div class="admin-tab">
@@ -73,7 +73,46 @@
           </el-dropdown-menu>
         </template>
       </el-dropdown>
-
+      <div
+        class="tab-zoom"
+        @click="zoomClick"
+        role="button"
+      >
+        <svg
+          v-if="zoom"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          aria-hidden="true"
+          role="img"
+          class="iconify iconify--codicon"
+          width="1em"
+          height="1em"
+          preserveAspectRatio="xMidYMid meet"
+          viewBox="0 0 16 16"
+        >
+          <path
+            fill="currentColor"
+            d="M3.5 4H1V3h2V1h1v2.5l-.5.5zM13 3V1h-1v2.5l.5.5H15V3h-2zm-1 9.5V15h1v-2h2v-1h-2.5l-.5.5zM1 12v1h2v2h1v-2.5l-.5-.5H1zm11-1.5l-.5.5h-7l-.5-.5v-5l.5-.5h7l.5.5v5zM10 7H6v2h4V7z"
+          ></path>
+        </svg>
+        <svg
+          v-else
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          aria-hidden="true"
+          role="img"
+          class="iconify iconify--codicon"
+          width="1em"
+          height="1em"
+          preserveAspectRatio="xMidYMid meet"
+          viewBox="0 0 16 16"
+        >
+          <path
+            fill="currentColor"
+            d="M3 12h10V4H3v8zm2-6h6v4H5V6zM2 6H1V2.5l.5-.5H5v1H2v3zm13-3.5V6h-1V3h-3V2h3.5l.5.5zM14 10h1v3.5l-.5.5H11v-1h3v-3zM2 13h3v1H1.5l-.5-.5V10h1v3z"
+          ></path>
+        </svg>
+      </div>
     </div>
   </div>
 </template>
@@ -87,6 +126,7 @@ import { defineComponent, nextTick, ref, watch } from 'vue';
  * @event removeTab 移除缓存页面 id 被删除的标签的id
  * @event handleCommand 点击关闭发生事件 index 关闭类型 0:关闭其他，1:关闭左侧，2:关闭右侧，3:关闭全部
  * @event clickTab 点击了新的tab
+ * @event zoomToggle 点击了页面放大缩小按钮
  * @author: Z_Y_C
  */
 
@@ -102,9 +142,11 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props, content) {
+  emits:['removeTab', 'handleCommand', 'clickTab', 'zoomToggle'],
+  setup(props, context) {
     const Dropdownvisible = ref(false); // 下拉框显示
     const currentTabModelValue = ref(props.editableTabsValue); // 当前激活的tab value
+    const zoom = ref(false); // 是否显示窗口放大缩小（false 未正常状态， true 为放大状态）
 
     // 监听更新激活状态
     watch(
@@ -138,7 +180,7 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function removeTab(name) {
-      content.emit('removeTab', name);
+      context.emit('removeTab', name);
     }
 
     /**
@@ -153,7 +195,7 @@ export default defineComponent({
         nextTick(() => {
           currentTabModelValue.value = props.editableTabsValue;
         });
-        content.emit('clickTab', e.paneName);
+        context.emit('clickTab', e.paneName);
       }
     }
 
@@ -164,18 +206,30 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function handleCommand(index) {
-      content.emit('handleCommand', index);
+      context.emit('handleCommand', index);
       Dropdownvisible.value = false;
+    }
+
+    /**
+     * @description: 点击触发放大缩小页面
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function zoomClick() {
+      zoom.value = !zoom.value;
+      context.emit('zoomToggle', zoom.value);
     }
 
     return {
       Dropdownvisible,
       currentTabModelValue,
+      zoom,
       visibleChange,
       removeTab,
       clickTab,
       menus,
       handleCommand,
+      zoomClick,
     };
   },
 });
@@ -282,6 +336,16 @@ export default defineComponent({
     width: 80px;
     margin-right: 3px;
     @include flex(center, initial, row-reverse);
+
+    .tab-zoom {
+      @include flex(center);
+      color: $grey-8;
+      margin-right: 20px;
+
+      svg {
+        transform: scale(1.4);
+      }
+    }
 
     :deep(.el-dropdown .tab-close:focus-visible) {
       outline: none;

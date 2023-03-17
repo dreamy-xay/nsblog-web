@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-06-27 20:21:16
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-04 17:00:07
+ * @LastEditTime: 2023-03-17 19:28:41
 -->
 <template>
   <admin-view class="admin-tools-automatic-generation">
@@ -276,7 +276,7 @@ export default defineComponent({
 
     .left {
       width: 260px;
-      background-color: $grey-3;
+      background-color: $grey-4;
       padding: 24px;
 
       .summary {
