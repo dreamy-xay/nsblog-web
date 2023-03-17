@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-22 13:26:38
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-14 16:34:37
+ * @LastEditTime: 2023-03-17 17:44:14
 -->
 <template>
   <div class="admin-tab">
@@ -26,7 +26,7 @@
           <template #label>
             <div class="label">
               <div class="icon"><i :class="'iconfont '+ item.icon"></i></div>
-              {{item.content}}
+              {{item.title}}
             </div>
           </template>
         </el-tab-pane>

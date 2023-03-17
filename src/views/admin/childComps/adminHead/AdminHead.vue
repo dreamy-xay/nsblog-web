@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-22 10:20:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-14 16:14:25
+ * @LastEditTime: 2023-03-17 17:49:34
 -->
 <template>
   <div class="admin-head">
@@ -27,11 +27,12 @@ import AdminNavigation from '@/views/admin/childComps/adminHead/childComps/Admin
 import AdminTab from '@/views/admin/childComps/adminHead/childComps/AdminTab.vue';
 import { useRoute, useRouter } from 'vue-router';
 import { mapState } from '@/util/store';
-import { searchMenuRoute } from '@/util/router';
+import { searchMenuRoute, searchMenuRoutes } from '@/util/router';
 
 /**
  * @description: 头部
  * @param {Object} userData  用户数据 `必传参数`
+ * @events tagsChange 缓存列表的状态改变 (routeName: string, isAdd: boolean) => void
  * @author: dreamy-xay
  */
 
@@ -41,13 +42,14 @@ export default defineComponent({
     AdminNavigation,
     AdminTab,
   },
+  emits: ['tagsChange'],
   props: {
     userData: {
       type: Object,
       required: true,
     },
   },
-  setup() {
+  setup(_, context) {
     const route = useRoute();
     const router = useRouter();
     const breadcrumbData = reactive([]); // 面包屑数据
@@ -66,26 +68,21 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function checkAndUpdate() {
+      // 处理面包屑（使用动态属性，而不是route.matched）
+      const matchedRoutes = searchMenuRoutes((r) => r.name === route.name, adminRoutes.value)[0];
+      breadcrumbData.splice(0, breadcrumbData.length, ...matchedRoutes);
+
       // 如果缓存tab里没有该路径则添加
       if (editableTabs.findIndex((editableTab) => editableTab.name === route.name) == -1) {
-        editableTabs.splice(editableTabs.length, 0, {
-          icon: route.meta.icon,
-          content: route.meta.title,
-          name: route.name,
-        });
+        // 查询路由信息（使用动态属性，而不是route.meta）
+        // 此处可省略查询，因为 matchedRoutes 就是查询结果，面包屑先查了一遍
+        // 添加进tabs（matchedRoutes 数组的最后一个）
+        editableTabs.splice(editableTabs.length, 0, matchedRoutes[matchedRoutes.length - 1]);
+        // 增加tabs改变
+        context.emit('tagsChange', route.name, true);
       }
 
       editableTabsValue.value = route.name; // 更新激活值
-
-      // 处理面包屑
-      breadcrumbData.splice(0, breadcrumbData.length); // 清空面包屑
-      for (let i = 1; i < route.matched.length; ++i) {
-        breadcrumbData.splice(breadcrumbData.length, 0, {
-          icon: route.matched[i].meta.icon,
-          content: route.matched[i].meta.title,
-          name: route.matched[i].name,
-        });
-      }
     }
 
     // 监听路由变化
@@ -98,12 +95,15 @@ export default defineComponent({
      */
     function tabInit() {
       // 如果跳转页面不是首页，则将首页加入 tab 列表
-      if (adminRoutes.value[0].children[0].name != route.name)
+      if (adminRoutes.value[0].children[0].name != route.name) {
         editableTabs.splice(0, 0, {
           icon: adminRoutes.value[0].children[0].icon,
           content: adminRoutes.value[0].children[0].title,
           name: adminRoutes.value[0].children[0].name,
         });
+        // 添加首页tabs改变
+        context.emit('tagsChange', adminRoutes.value[0].children[0].name, true);
+      }
 
       checkAndUpdate();
     }
@@ -119,12 +119,13 @@ export default defineComponent({
       const removeTabIndex = editableTabs.findIndex((editableTab) => editableTab.name === name);
 
       // 如果移除标签是当前标签
-      if (editableTabsValue.value == name) {
+      if (editableTabsValue.value === name) {
         // 获取当前路由全部参数
         const currentRoute = searchMenuRoute((r) => r.name === name, adminRoutes.value);
         // 下一步操作函数
         const next = () => {
           editableTabs.splice(removeTabIndex, 1); // 删除该标签
+          context.emit('tagsChange', editableTabsValue.value, false); // 添加tabs改变
           editableTabsValue.value = editableTabs[removeTabIndex - 1].name; // 更新激活标签name
           router.push({ name: editableTabs[removeTabIndex - 1].name }); // 前往路由
         };
@@ -132,7 +133,10 @@ export default defineComponent({
         if (currentRoute['beforeClose']) currentRoute.beforeClose(next);
         else next();
       } // 否则直接移除
-      else editableTabs.splice(removeTabIndex, 1); // 移除它
+      else {
+        context.emit('tagsChange', editableTabs[removeTabIndex].name, false); // 添加tabs改变
+        editableTabs.splice(removeTabIndex, 1); // 移除它
+      }
     }
 
     /**
@@ -162,23 +166,33 @@ export default defineComponent({
      * @author: Z_Y_C
      */
     function handleCommand(index) {
+      const currentTabIndex = editableTabs.findIndex((editableTab) => editableTab.name === editableTabsValue.value); // 当前tab 索引
       if (index === 0) {
-        const currentTab =
-          editableTabs[editableTabs.findIndex((editableTab) => editableTab.name === editableTabsValue.value)];
+        const currentTab = editableTabs[currentTabIndex]; // 当前tab
+
+        // 添加tabs改变
+        for (let i = 1; i < editableTabs.length; ++i)
+          if (i !== currentTabIndex) context.emit('tagsChange', editableTabs[i].name, false);
+
         editableTabs.splice(1, editableTabs.length - 1, currentTab);
-      } else if (index === 1)
-        editableTabs.splice(
-          1,
-          editableTabs.findIndex((editableTab) => editableTab.name === editableTabsValue.value) - 1
-        );
-      else if (index === 2)
-        editableTabs.splice(
-          editableTabs.findIndex((editableTab) => editableTab.name === editableTabsValue.value) + 1,
-          editableTabs.length
-        );
-      else {
+      } else if (index === 1) {
+        // 添加tabs改变
+        for (let i = 1; i < currentTabIndex; ++i)
+          if (i !== currentTabIndex) context.emit('tagsChange', editableTabs[i].name, false);
+
+        editableTabs.splice(1, currentTabIndex - 1);
+      } else if (index === 2) {
+        // 添加tabs改变
+        for (let i = currentTabIndex + 1; i < editableTabs.length; ++i)
+          if (i !== currentTabIndex) context.emit('tagsChange', editableTabs[i].name, false);
+
+        editableTabs.splice(currentTabIndex + 1, editableTabs.length);
+      } else {
         // 下一步（关闭全部）的执行函数
         const next = () => {
+          // 添加tabs改变
+          for (let i = 1; i < editableTabs.length; ++i) context.emit('tagsChange', editableTabs[i].name, false);
+
           editableTabs.splice(1, editableTabs.length);
           editableTabsValue.value = editableTabs[0].name;
           router.push({ name: editableTabs[0].name });
@@ -193,6 +207,7 @@ export default defineComponent({
         } else next();
       }
     }
+
     return {
       editableTabs,
       editableTabsValue,

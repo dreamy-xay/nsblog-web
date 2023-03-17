@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-21 20:02:51
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-14 16:36:28
+ * @LastEditTime: 2023-03-17 17:57:22
 -->
 <template>
   <base-loading-page
@@ -22,24 +22,20 @@
         class="admin-content"
         :style="{width: viewWidth}"
       >
-        <admin-head :user-data="userData" />
+        <admin-head
+          :user-data="userData"
+          @tagsChange="cachedRouteChanage"
+        />
         <el-scrollbar
           bind-class="
           admin-body"
           max-height="calc(100% - 110px)"
         >
           <div class="admin-body">
-            <router-view
-              v-slot="{ Component, route }"
-              v-if="isRouterAlive"
-            >
-              <keep-alive :include="cacheAdminMenuList">
-                <component
-                  :is="Component"
-                  :key="route.fullPath"
-                />
-              </keep-alive>
-            </router-view>
+            <base-router-view
+              :cached-route-names="cachedRouteNames"
+              :routes="adminRoutes"
+            />
           </div>
         </el-scrollbar>
       </div>
@@ -50,6 +46,7 @@
 <script>
 import { defineComponent, nextTick, provide, reactive, ref } from 'vue';
 import BaseLoadingPage from '@/components/common/baseLoadingPage/BaseLoadingPage.vue';
+import BaseRouterView from '@/components/content/baseRouterView/BaseRouterView.vue';
 import AdminMenu from '@/views/admin/childComps/adminMenu/AdminMenu.vue';
 import AdminHead from '@/views/admin/childComps/adminHead/AdminHead.vue';
 import store from '@/store';
@@ -57,7 +54,7 @@ import styles from '@/assets/style/define.scss';
 import events from '@/events';
 import { getUserInfo } from '@/network/api/user';
 import { useMessage } from 'naive-ui';
-import { mapState, mapGetters } from '@/util/store';
+import { mapState, mapMutations } from '@/util/store';
 import { useRoute } from 'vue-router';
 import router from '@/router';
 
@@ -70,6 +67,7 @@ export default defineComponent({
   name: 'admin',
   components: {
     BaseLoadingPage,
+    BaseRouterView,
     AdminMenu,
     AdminHead,
   },
@@ -81,7 +79,7 @@ export default defineComponent({
     const route = useRoute(); // 当前路由状态
     const msg = useMessage(); // naive-ui message
     const viewWidth = ref('');
-    const isRouterAlive = ref(true); // router刷新控制变量
+    const cachedRouteNames = reactive({}); // 已经缓存的路由名称列表
     const loading = ref(true); // 是否显示加载状态
     const userData = reactive({
       username: '',
@@ -90,34 +88,71 @@ export default defineComponent({
       is_super: false,
     }); // 用户数据
 
-    const { tokenInfo } = mapState('global', ['tokenInfo']); // 获取tokenInfo
-    const { cacheAdminMenuList } = mapGetters('global', ['cacheAdminMenuList']); // 获取计算的缓存的页面
+    const { tokenInfo, adminRoutes } = mapState('global', ['tokenInfo', 'adminRoutes']); // 获取tokenInfo 和 adminRoutes
+    const { updateAdminRoutes } = mapMutations('global', ['updateAdminRoutes']);
+
+    setTimeout(() => {
+      updateAdminRoutes({
+        name: 'adminHomeDashboards',
+        meta: {
+          icon: 'blog-chuangzuo',
+          title: '主页吗',
+        },
+      });
+
+      setTimeout(() => {
+        console.log(router.getRoutes().filter((r) => r.name === 'adminHomeDashboard'));
+      }, 1000);
+    }, 3000);
 
     /**
-     * @description: 获取后台基本用户数据
+     * @description: 初始化执行函数
      * @author: dreamy-xay
      */
-    if (tokenInfo.value.status) {
-      getUserInfo(tokenInfo.value.username, 4)
-        .then((data) => {
-          userData.username = data.username;
-          userData.nickname = data.nickname;
-          userData.avatar = data.avatar;
-          userData.is_super = Boolean(data.is_super);
+    function init() {
+      //获取后台基本用户数据
+      if (tokenInfo.value.status) {
+        getUserInfo(tokenInfo.value.username, 4)
+          .then((data) => {
+            userData.username = data.username;
+            userData.nickname = data.nickname;
+            userData.avatar = data.avatar;
+            userData.is_super = Boolean(data.is_super);
 
-          // 更新路由状态
-          if (!userData.is_super && route.meta['super'])
-            router.replace({ name: 'admin' }).then(() => {
-              // 加载状态取消
-              loading.value = false;
-            });
-          else loading.value = false; // 加载状态取消
-        })
-        .catch((error) => {
-          console.log(error);
-          msg.error('数据加载异常，请刷新页面！', { duration: 3000, closable: true });
-        });
+            // 更新路由状态
+            if (!userData.is_super && route.meta['super'])
+              router.replace({ name: 'admin' }).then(() => {
+                // 加载状态取消
+                loading.value = false;
+              });
+            else loading.value = false; // 加载状态取消
+          })
+          .catch((error) => {
+            console.log(error);
+            msg.error('数据加载异常，请刷新页面！', { duration: 3000, closable: true });
+          });
+      }
+
+      /**
+       * @description: 平铺路由
+       * @param {RouteInfo[]} routes 路由列表 `必传参数`
+       * @return {string[]} 返回平铺路由名称
+       * @author: dreamy-xay
+       */
+      function tileRoute(routes) {
+        const nameList = [];
+        for (const route of routes) {
+          nameList.push(route.name);
+          nameList.push(...tileRoute(route.children));
+        }
+        return nameList;
+      }
+
+      // 初始化 cachedRouteNames
+      for (const name of tileRoute(adminRoutes.value)) cachedRouteNames[name] = false;
     }
+    // 初始化执行
+    init();
 
     // 监听子菜单显示状态
     events.on('AdminSubMenu-subMenuChange', (showLength, show) => {
@@ -125,14 +160,26 @@ export default defineComponent({
     });
 
     /**
-     * @description: router重新加载方法
+     * @description: 缓存路由发生改变
+     * @param {string} routeName 路由名称 `必传参数`
+     * @param {boolean} isAdd 是否加入缓存 `必传参数`
      * @return {void}
-     * @author: Z_Y_C
+     * @author: dreamy-xay
      */
-    function reload() {
-      isRouterAlive.value = false; //先关闭，
+    function cachedRouteChanage(routeName, isAdd) {
+      cachedRouteNames[routeName] = isAdd;
+    }
+
+    /**
+     * @description: router重新加载方法
+     * @param {string} routeName 重新加载的路由名称 `必传参数`
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function reload(routeName) {
+      cachedRouteNames[routeName] = false; // 先关闭
       nextTick(() => {
-        isRouterAlive.value = true; //再打开
+        cachedRouteNames[routeName] = true; // 在打开
       });
     }
     // 方法向下映射
@@ -142,9 +189,10 @@ export default defineComponent({
       styles,
       viewWidth,
       userData,
-      isRouterAlive,
+      cachedRouteNames,
       loading,
-      cacheAdminMenuList,
+      adminRoutes,
+      cachedRouteChanage,
     };
   },
 });
@@ -164,9 +212,10 @@ export default defineComponent({
     transition: 0.25s;
 
     .admin-body {
-      padding: 16px;
+      margin: 16px;
       height: calc(100% - 32px);
       width: calc(100% - 32px);
+      position: relative;
     }
   }
 }

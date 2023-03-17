@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2023-03-04 16:36:54
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-14 16:57:44
+ * @LastEditTime: 2023-03-17 16:56:57
 -->
 <template>
   <transition
@@ -80,6 +80,9 @@ export default defineComponent({
 <style lang="scss" scoped>
 .admin-view {
   width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .fade-slide-leave-active,

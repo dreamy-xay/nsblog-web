@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-21 22:02:46
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-13 15:26:03
+ * @LastEditTime: 2023-03-17 17:42:43
 -->
 <template>
   <div class="admin-navigation">
@@ -30,7 +30,7 @@
           >
             <i :class="'iconfont '+item.icon"></i>
           </div>
-          {{item.content}}
+          {{item.title}}
         </div>
 
         <div
@@ -168,7 +168,7 @@
         <div
           class="icon"
           role="button"
-          @click="clickRefresh()"
+          @click="clickRefresh($route.name)"
         ><i class="iconfont blog-ri-refresh-line"></i></div>
       </div>
     </div>
