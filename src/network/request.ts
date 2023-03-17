@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-03 14:22:13
+ * @LastEditTime: 2023-03-17 18:04:05
  */
 
 import axios, { AxiosRequestConfig } from 'axios';
@@ -91,7 +91,9 @@ export function request(options: RequestConfig): Promise<unknown> {
           if (res.data.status >= 200 && res.data.status < 300) resolve(options.all ? res.data : res.data.data);
           else {
             console.error(
-              `Failed to load resource: the server responded with a status of ${res.data.status} (${res.data.statusText})`
+              new Error(
+                `Failed to load resource: the server responded with a status of ${res.data.status} (${res.data.statusText})`
+              )
             );
             reject(axios.isAxiosError(res.data));
           }

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 19:51:18
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-14 20:33:29
+ * @LastEditTime: 2023-03-17 17:56:10
  */
 
 import router from '@/router';
@@ -164,10 +164,10 @@ export function searchMenuRoute(
  * @description: 修改菜单路由
  * @param {ModifiedRouteInfo} options 修改的参数选项 `必传参数`
  * @param {RouteInfo} routes 当前菜单路由信息 `路由信息列表 `默认为 getMenuRoutes()`
- * @return {RouteInfo[]} 返回更新的菜单路由信息
+ * @return {boolean} 返回是否查找到并修改成功
  * @author: dreamy-xay
  */
-export function modifyMenuRoutes(options: ModifiedRouteInfo, routes: RouteInfo[] = getMenuRoutes()): RouteInfo[] {
+export function modifyMenuRoutes(options: ModifiedRouteInfo, routes: RouteInfo[] = getMenuRoutes()): boolean {
   // 查找制定项并修改
   function findAndModifyMenu(route: RouteInfo): boolean {
     if (route.name == options.name) {
@@ -176,6 +176,7 @@ export function modifyMenuRoutes(options: ModifiedRouteInfo, routes: RouteInfo[]
         // RouteInfo 不可修改的键
         if (!['children', 'parent', 'level', 'meta', 'route'].includes(key)) route[key] = options.meta[key];
         route.meta[key] = options.meta[key];
+        if (route['route']) route.route.meta[key] = options.meta[key];
       }
 
       return true; // 修改完毕
@@ -185,8 +186,8 @@ export function modifyMenuRoutes(options: ModifiedRouteInfo, routes: RouteInfo[]
     return false; // 未修改完毕
   }
   // 迭代修改
-  for (const route of routes) if (findAndModifyMenu(route)) return routes;
-  return routes;
+  for (const route of routes) if (findAndModifyMenu(route)) return true;
+  return false;
 }
 
 /**

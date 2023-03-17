@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-21 20:01:40
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-12 15:52:42
+ * @LastEditTime: 2023-03-17 17:05:38
  */
 import { RouteRecordRaw } from 'vue-router';
 import adminEmpty from '@/views/admin/childComps/AdminEmpty.vue';
@@ -346,7 +346,8 @@ const adminRouter: RouteRecordRaw = {
           meta: {
             title: '流程图',
             icon: 'blog-icon__liuchengtu',
-            super: false
+            super: false,
+            iframe: true,
           },
           component: () => import('@/views/admin/childComps/pages/adminTools/AdminToolsFlowChart.vue')
         },
@@ -407,7 +408,7 @@ const adminRouter: RouteRecordRaw = {
                 title: '网站波动',
                 icon: 'blog-shouye',
                 super: true,
-                badge: 'New'
+                badge: 'New',
               },
               component: () =>
                 import(
