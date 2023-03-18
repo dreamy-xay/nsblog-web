@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2023-03-04 16:36:54
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-17 16:56:57
+ * @LastEditTime: 2023-03-18 17:33:24
 -->
 <template>
   <transition
@@ -16,6 +16,9 @@
       class="admin-view"
       v-show="show"
       v-naive-ui-loading-bar="loadingBar"
+      v-loading="loading"
+      :element-loading-svg="loadingSvg"
+      :element-loading-svg-view-box="loadingSvgViewBox"
     >
       <slot></slot>
     </div>
@@ -26,6 +29,8 @@
 import { defineComponent, ref, watch } from 'vue';
 import { useLoadingBar } from 'naive-ui';
 import { useRoute } from 'vue-router';
+import { ElLoading } from 'element-plus';
+import styles from '@/assets/style/define.scss';
 
 /**
  * @description: 后台管理不同项视图
@@ -35,6 +40,23 @@ import { useRoute } from 'vue-router';
 
 export default defineComponent({
   name: 'adminView',
+  props: {
+    loading: {
+      type: Boolean,
+      default: false,
+    },
+    loadingSvg: {
+      type: String,
+      default: `<svg t="1679131210382" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3248" width="256" height="256"><path d="M204.8 204.8m-204.8 0a204.8 204.8 0 1 0 409.6 0 204.8 204.8 0 1 0-409.6 0Z" fill="#EBF2FC" p-id="3249"></path><path d="M819.2 204.8m-204.8 0a204.8 204.8 0 1 0 409.6 0 204.8 204.8 0 1 0-409.6 0Z" fill="#B5D2F3" p-id="3250"></path><path d="M819.2 819.2m-204.8 0a204.8 204.8 0 1 0 409.6 0 204.8 204.8 0 1 0-409.6 0Z" fill="#7FB0EA" p-id="3251"></path><path d="M204.8 819.2m-204.8 0a204.8 204.8 0 1 0 409.6 0 204.8 204.8 0 1 0-409.6 0Z" fill="#4A90E2" p-id="3252"></path></svg>`,
+    },
+    loadingSvgViewBox: {
+      type: String,
+      default: '0, 0, 256, 256',
+    },
+  },
+  directives: {
+    loading: ElLoading.directive,
+  },
   setup() {
     const loadingBar = useLoadingBar(); // naive-ui loadingBar
     const route = useRoute(); // route
@@ -72,6 +94,7 @@ export default defineComponent({
     return {
       loadingBar,
       show,
+      styles,
     };
   },
 });

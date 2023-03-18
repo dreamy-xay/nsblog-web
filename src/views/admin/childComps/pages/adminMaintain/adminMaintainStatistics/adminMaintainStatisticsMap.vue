@@ -4,10 +4,13 @@
  * @Autor: dreamy-xay
  * @Date: 2022-04-06 11:27:34
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-08 15:24:03
+ * @LastEditTime: 2023-03-18 17:45:15
 -->
 <template>
-  <admin-view class="admin-maintain-statistics-map">
+  <admin-view
+    class="admin-maintain-statistics-map"
+    :style="{height: `calc(100vh - ${pageHeadHeight + 32}px)`}"
+  >
     <v-chart
       class="chart"
       :option="option"
@@ -17,7 +20,7 @@
 </template>
 
 <script>
-import { defineComponent, computed } from 'vue';
+import { defineComponent, computed, inject } from 'vue';
 import AdminView from '@/views/admin/childComps/AdminView.vue';
 import chinaMap from '@/util/json/china.json';
 import { registerMap } from 'echarts';
@@ -33,6 +36,7 @@ export default defineComponent({
     AdminView,
   },
   setup() {
+    const pageHeadHeight = inject('pageHeadHeight'); // 子页面头部可视范围的高度
     const mapData = [
       {
         name: '北京',
@@ -254,6 +258,7 @@ export default defineComponent({
     });
 
     return {
+      pageHeadHeight,
       option,
     };
   },
