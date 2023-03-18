@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-21 22:02:46
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-17 19:12:52
+ * @LastEditTime: 2023-03-18 18:28:48
 -->
 <template>
   <div class="admin-navigation">
@@ -163,7 +163,7 @@
         <div
           class="icon"
           role="button"
-          @click="fullscreen = changeFullScreen(fullscreen)"
+          @click="changeFullScreen(fullscreen)"
         ><i :class=" fullscreen ? 'iconfont blog-ri-fullscreen-exit-fill':'iconfont blog-ri-fullscreen-fill'"></i></div>
         <div
           class="icon"
@@ -187,7 +187,8 @@ import { clearToken } from '@/network/token';
 import { mapMutations } from '@/util/store';
 import { authLogout } from '@/network/api/auth';
 import { changeFullScreen } from '@/util/dom';
-import { useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
+import router from '@/util/router';
 
 /**
  * @description: 管理员头部导航
@@ -221,7 +222,7 @@ export default defineComponent({
     const fullscreen = ref(false); // 是否全屏
     const showSearch = ref(false); // 显示搜索
     const { updateTokenInfo } = mapMutations('global', ['updateTokenInfo']); // 更新tokenInfo
-    const router = useRouter();
+    const route = useRoute(); // route
 
     /**
      * @description: 点击用户下拉框
@@ -285,6 +286,24 @@ export default defineComponent({
 
     // 刷新按钮页面
     const clickRefresh = inject('reload');
+
+    // 监听按键事件
+    window.addEventListener('keydown', (e) => {
+      //事件对象兼容
+      let event = e || window.event || arguments.callee.caller.arguments[0];
+      // Shift + R
+      if (typeof clickRefresh !== 'undefined' && event && event.shiftKey && event.keyCode == 82)
+        clickRefresh(route.name);
+    });
+    // 监听全屏时间
+    window.addEventListener('resize', () => {
+      if (typeof fullscreen.value !== 'undefined') {
+        // 可视区域的高度
+        const clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
+        // screen是window的属性方法，window.screen可省略window，指的是窗口
+        fullscreen.value = screen.height == clientHeight;
+      }
+    });
 
     /**
      * @description: 关闭或打开搜索

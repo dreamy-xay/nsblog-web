@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-21 20:02:51
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-18 17:42:23
+ * @LastEditTime: 2023-03-18 18:16:22
 -->
 <template>
   <base-loading-page
@@ -180,10 +180,12 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function reload(routeName) {
+      msg.destroyAll();
       cachedRouteNames[routeName] = false; // 先关闭
       nextTick(() => {
         cachedRouteNames[routeName] = true; // 在打开
       });
+      msg.info('Shift + R 刷新子页面', { closable: false });
     }
     // 方法向下映射
     provide('reload', reload);
