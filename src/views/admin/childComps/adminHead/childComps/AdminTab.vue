@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-22 13:26:38
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-18 15:44:32
+ * @LastEditTime: 2023-03-18 18:04:04
 -->
 <template>
   <div class="admin-tab">
@@ -221,8 +221,7 @@ export default defineComponent({
     function zoomClick() {
       zoom.value = !zoom.value;
       context.emit('zoomToggle', zoom.value);
-      console.log(this);
-      if (zoom.value) zoomMessage = msg.info('Ctrl + F11 缩放子页面', { closable: false });
+      if (zoom.value) zoomMessage = msg.info('Shift + F11 缩放子页面', { closable: false });
       else {
         zoomMessage.destroy();
         zoomMessage = null;
@@ -233,10 +232,8 @@ export default defineComponent({
     window.addEventListener('keydown', (e) => {
       //事件对象兼容
       let event = e || window.event || arguments.callee.caller.arguments[0];
-      if (typeof zoom.value !== 'undefined' && event && event.keyCode == 122) {
-        const ctrlKey = event.ctrlKey || event.metaKey;
-        if (ctrlKey) zoomClick();
-      }
+      // Shift + F11
+      if (typeof zoom.value !== 'undefined' && event && event.shiftKey && event.keyCode == 122) zoomClick();
     });
 
     return {
