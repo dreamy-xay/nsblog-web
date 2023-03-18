@@ -4,10 +4,13 @@
  * @Autor: dreamy-xay
  * @Date: 2022-04-06 11:27:34
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-14 14:32:31
+ * @LastEditTime: 2023-03-18 17:42:39
 -->
 <template>
-  <admin-view class="admin-maintain-statistics-line">
+  <admin-view
+    class="admin-maintain-statistics-line"
+    :style="{height: `calc(100vh - ${pageHeadHeight + 32}px)`}"
+  >
     <v-chart
       class="chart"
       :option="option"
@@ -17,7 +20,7 @@
 </template>
 
 <script>
-import { defineComponent, computed } from 'vue';
+import { defineComponent, computed, inject } from 'vue';
 import AdminView from '@/views/admin/childComps/AdminView.vue';
 import { graphic } from 'echarts';
 
@@ -32,6 +35,7 @@ export default defineComponent({
     AdminView,
   },
   setup() {
+    const pageHeadHeight = inject('pageHeadHeight'); // 子页面头部可视范围的高度
     const category = [];
     let dottedBase = +new Date();
     const lineData = [];
@@ -138,6 +142,7 @@ export default defineComponent({
     });
 
     return {
+      pageHeadHeight,
       option,
     };
   },

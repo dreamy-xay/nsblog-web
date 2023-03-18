@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-22 13:26:38
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-17 18:42:00
+ * @LastEditTime: 2023-03-18 15:44:32
 -->
 <template>
   <div class="admin-tab">
@@ -117,6 +117,7 @@
   </div>
 </template>
 <script>
+import { useMessage } from 'naive-ui';
 import { defineComponent, nextTick, ref, watch } from 'vue';
 
 /**
@@ -142,8 +143,9 @@ export default defineComponent({
       required: true,
     },
   },
-  emits:['removeTab', 'handleCommand', 'clickTab', 'zoomToggle'],
+  emits: ['removeTab', 'handleCommand', 'clickTab', 'zoomToggle'],
   setup(props, context) {
+    const msg = useMessage(); // naive-ui message
     const Dropdownvisible = ref(false); // 下拉框显示
     const currentTabModelValue = ref(props.editableTabsValue); // 当前激活的tab value
     const zoom = ref(false); // 是否显示窗口放大缩小（false 未正常状态， true 为放大状态）
@@ -215,10 +217,27 @@ export default defineComponent({
      * @return {void}
      * @author: dreamy-xay
      */
+    let zoomMessage = null; // 缓存msg
     function zoomClick() {
       zoom.value = !zoom.value;
       context.emit('zoomToggle', zoom.value);
+      console.log(this);
+      if (zoom.value) zoomMessage = msg.info('Ctrl + F11 缩放子页面', { closable: false });
+      else {
+        zoomMessage.destroy();
+        zoomMessage = null;
+      }
     }
+
+    // 监听按键事件
+    window.addEventListener('keydown', (e) => {
+      //事件对象兼容
+      let event = e || window.event || arguments.callee.caller.arguments[0];
+      if (typeof zoom.value !== 'undefined' && event && event.keyCode == 122) {
+        const ctrlKey = event.ctrlKey || event.metaKey;
+        if (ctrlKey) zoomClick();
+      }
+    });
 
     return {
       Dropdownvisible,

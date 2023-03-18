@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-21 20:02:51
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-17 19:22:59
+ * @LastEditTime: 2023-03-18 17:42:23
 -->
 <template>
   <base-loading-page
@@ -16,41 +16,36 @@
     v-else
     :loading-bar-style="{loading: {backgroundColor: styles.blue1}}"
   >
-    <div
-      class="admin"
-      v-show="!zoom"
-    >
-      <admin-menu :is-super="userData.is_super" />
-      <teleport
-        to="#app"
-        :disabled="!zoom"
+    <div class="admin">
+      <admin-menu
+        :is-super="userData.is_super"
+        v-show="!zoom"
+      />
+      <div
+        class="admin-content"
+        :class="{'admin-content-zoom': zoom}"
+        :style="{width: viewWidth}"
       >
-        <div
-          class="admin-content"
-          :class="{'admin-content-zoom': zoom}"
-          :style="{width: viewWidth}"
+
+        <admin-head
+          :user-data="userData"
+          :show-navigation="!zoom"
+          @tagsChange="cachedRouteChanage"
+          @zoomToggle="zoomToggle"
+        />
+        <el-scrollbar
+          bind-class="admin-body"
+          :max-height="`calc(100% - ${pageHeadHeight}px)`"
         >
 
-          <admin-head
-            :user-data="userData"
-            :show-navigation="!zoom"
-            @tagsChange="cachedRouteChanage"
-            @zoomToggle="zoomToggle"
-          />
-          <el-scrollbar
-            bind-class="admin-body"
-            :max-height="`calc(100% - ${pageHeight}px)`"
-          >
-
-            <div class="admin-body">
-              <base-router-view
-                :cached-route-names="cachedRouteNames"
-                :routes="adminRoutes"
-              />
-            </div>
-          </el-scrollbar>
-        </div>
-      </teleport>
+          <div class="admin-body">
+            <base-router-view
+              :cached-route-names="cachedRouteNames"
+              :routes="adminRoutes"
+            />
+          </div>
+        </el-scrollbar>
+      </div>
     </div>
   </n-loading-bar-provider>
 </template>
@@ -193,12 +188,12 @@ export default defineComponent({
     // 方法向下映射
     provide('reload', reload);
 
-    // 计算子页面可可视范围的高度
-    const pageHeight = computed(() => {
+    // 计算子页面头部可视范围的高度
+    const pageHeadHeight = computed(() => {
       return zoom.value ? 50 : 110;
     });
     // 方法向下映射
-    provide('pageHeight', pageHeight);
+    provide('pageHeadHeight', pageHeadHeight);
 
     return {
       styles,
@@ -210,7 +205,7 @@ export default defineComponent({
       adminRoutes,
       zoomToggle,
       cachedRouteChanage,
-      pageHeight,
+      pageHeadHeight,
     };
   },
 });
@@ -229,27 +224,18 @@ export default defineComponent({
     background-color: $grey-2;
     transition: 0.25s;
 
+    &.admin-content-zoom {
+      width: 100vw !important;
+      height: 100vh;
+      transition: none;
+    }
+
     .admin-body {
       margin: 16px;
       height: calc(100% - 32px);
       width: calc(100% - 32px);
       position: relative;
     }
-  }
-}
-
-.admin-content-zoom {
-  width: 100vw !important;
-  height: 100vh;
-  overflow: hidden;
-  background-color: $grey-2;
-  transition: 0.25s;
-
-  .admin-body {
-    margin: 16px;
-    height: calc(100% - 32px);
-    width: calc(100% - 32px);
-    position: relative;
   }
 }
 </style>

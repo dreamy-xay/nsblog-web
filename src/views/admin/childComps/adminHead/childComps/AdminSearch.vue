@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-03-20 15:21:39
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-11 17:52:26
+ * @LastEditTime: 2023-03-18 15:22:03
 -->
 <template>
   <n-modal
@@ -259,12 +259,12 @@ export default defineComponent({
     }
 
     //当前页面监视键盘输入
-    document.onkeydown = function (e) {
+    window.addEventListener('keydown', (e) => {
       //事件对象兼容
-      let e1 = e || event || window.event || arguments.callee.caller.arguments[0];
+      let event = e || window.event || arguments.callee.caller.arguments[0];
       //键盘按键判断:左箭头-37;上箭头-38；右箭头-39;下箭头-40
       if (searchData[0]) {
-        if (e1 && e1.keyCode == 38) {
+        if (event && event.keyCode == 38) {
           if (hoverIndex.value >= 1) hoverIndex.value--;
           else if (hoverIndex.value == 0) {
             hoverIndex.value = searchData[0].length - 1;
@@ -277,7 +277,7 @@ export default defineComponent({
               scrollBarRef.value.setScrollTop(scrollBarRef.value.wrap.scrollTop - 64);
             });
           }
-        } else if (e1 && e1.keyCode == 40) {
+        } else if (event && event.keyCode == 40) {
           if (hoverIndex.value < searchData[0].length - 1) hoverIndex.value++;
           else if (hoverIndex.value == searchData[0].length - 1) {
             hoverIndex.value = 0;
@@ -290,11 +290,11 @@ export default defineComponent({
               scrollBarRef.value.setScrollTop(scrollBarRef.value.wrap.scrollTop + 64);
             });
           }
-        } else if (e1 && e1.keyCode == 13) {
+        } else if (event && event.keyCode == 13) {
           changPage(searchData[0][hoverIndex.value]);
         }
       }
-    };
+    });
 
     /**
      * @description: 跳转
