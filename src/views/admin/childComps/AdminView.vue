@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2023-03-04 16:36:54
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-18 17:33:24
+ * @LastEditTime: 2023-03-19 15:24:48
 -->
 <template>
   <transition
@@ -34,6 +34,7 @@ import styles from '@/assets/style/define.scss';
 
 /**
  * @description: 后台管理不同项视图
+ * @emits 'AdminView-AddEventListener-KeyDown' 为iframe内部增加子页面刷新和缩放按键监听 (element: HTMLElement) => void
  * @slot 全局内容插槽
  * @author: dreamy-xay
  */
@@ -102,10 +103,8 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .admin-view {
-  width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
+  width: calc(100% - 32px);
+  margin: 16px;
 }
 
 .fade-slide-leave-active,

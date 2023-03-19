@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-21 22:02:46
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-18 18:28:48
+ * @LastEditTime: 2023-03-19 15:31:24
 -->
 <template>
   <div class="admin-navigation">
@@ -188,7 +188,7 @@ import { mapMutations } from '@/util/store';
 import { authLogout } from '@/network/api/auth';
 import { changeFullScreen } from '@/util/dom';
 import { useRoute } from 'vue-router';
-import router from '@/util/router';
+import router from '@/router';
 
 /**
  * @description: 管理员头部导航
@@ -287,7 +287,7 @@ export default defineComponent({
     // 刷新按钮页面
     const clickRefresh = inject('reload');
 
-    // 监听按键事件
+    // 监听子页面刷新快捷键
     window.addEventListener('keydown', (e) => {
       //事件对象兼容
       let event = e || window.event || arguments.callee.caller.arguments[0];
@@ -295,6 +295,7 @@ export default defineComponent({
       if (typeof clickRefresh !== 'undefined' && event && event.shiftKey && event.keyCode == 82)
         clickRefresh(route.name);
     });
+
     // 监听全屏时间
     window.addEventListener('resize', () => {
       if (typeof fullscreen.value !== 'undefined') {

@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-21 20:02:51
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-18 18:16:22
+ * @LastEditTime: 2023-03-19 14:33:12
 -->
 <template>
   <base-loading-page
@@ -26,25 +26,23 @@
         :class="{'admin-content-zoom': zoom}"
         :style="{width: viewWidth}"
       >
-
         <admin-head
           :user-data="userData"
           :show-navigation="!zoom"
           @tagsChange="cachedRouteChanage"
           @zoomToggle="zoomToggle"
         />
-        <el-scrollbar
-          bind-class="admin-body"
-          :max-height="`calc(100% - ${pageHeadHeight}px)`"
+        <div
+          class="admin-body"
+          :style="{height: `calc(100% - ${pageHeadHeight}px)`}"
         >
-
-          <div class="admin-body">
+          <el-scrollbar>
             <base-router-view
               :cached-route-names="cachedRouteNames"
               :routes="adminRoutes"
             />
-          </div>
-        </el-scrollbar>
+          </el-scrollbar>
+        </div>
       </div>
     </div>
   </n-loading-bar-provider>
@@ -233,10 +231,8 @@ export default defineComponent({
     }
 
     .admin-body {
-      margin: 16px;
-      height: calc(100% - 32px);
-      width: calc(100% - 32px);
-      position: relative;
+      width: 100%;
+      overflow: hidden;
     }
   }
 }
