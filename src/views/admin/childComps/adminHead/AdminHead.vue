@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-22 10:20:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-19 14:41:54
+ * @LastEditTime: 2023-03-19 17:11:20
 -->
 <template>
   <div class="admin-head">
@@ -227,5 +227,7 @@ export default defineComponent({
 .admin-head {
   box-shadow: 0 1px 4px rgb(0 21 41 / 8%);
   background-color: $grey-0;
+  z-index: 1;
+  position: relative;
 }
 </style>
