@@ -4,13 +4,13 @@
  * @Autor: dreamy-xay
  * @Date: 2022-04-06 14:57:24
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-19 15:20:59
+ * @LastEditTime: 2023-03-19 17:12:31
 -->
 <template>
   <admin-view
     class="admin-tools-flow-chart"
     :loading="loading"
-    :style="{height: `calc(100vh - ${pageHeadHeight + 1}px)`}"
+    :style="{height: `calc(100vh - ${pageHeadHeight}px)`}"
   >
     <base-iframe
       name="adminToolsFlowChart"
@@ -53,6 +53,6 @@ export default defineComponent({
   overflow: hidden;
   width: 100%;
   background-color: $grey-0;
-  margin: 1px 0 0 0;
+  margin: 0;
 }
 </style>
