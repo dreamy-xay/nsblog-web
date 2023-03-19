@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-22 13:26:38
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-18 18:04:04
+ * @LastEditTime: 2023-03-19 15:30:05
 -->
 <template>
   <div class="admin-tab">
@@ -228,7 +228,7 @@ export default defineComponent({
       }
     }
 
-    // 监听按键事件
+    // 监听子页面缩放快捷键
     window.addEventListener('keydown', (e) => {
       //事件对象兼容
       let event = e || window.event || arguments.callee.caller.arguments[0];

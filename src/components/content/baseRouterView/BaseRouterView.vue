@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2023-03-16 14:02:28
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-17 17:24:48
+ * @LastEditTime: 2023-03-18 20:35:53
 -->
 
 <template>
@@ -134,15 +134,9 @@ export default defineComponent({
     // 监听动态更新
     watch(() => route.name, registerIframeComponent);
 
-    function get(a, b) {
-      console.log(a, b);
-      return true;
-    }
-
     return {
       cachedRouteNameList,
       iframeRoutes,
-      get,
     };
   },
 });

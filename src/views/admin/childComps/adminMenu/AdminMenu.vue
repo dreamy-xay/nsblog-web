@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 19:06:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-14 21:07:16
+ * @LastEditTime: 2023-03-19 14:40:56
 -->
 <template>
   <div class="admin-menu">
@@ -157,7 +157,8 @@ export default defineComponent({
 .admin-menu {
   height: 100%;
   display: inline-flex;
-  box-shadow: $shadow-0;
+  box-shadow: 0 4px 4px rgba($grey-11, 0.1);
+  z-index: 1;
 
   .admin-menu-main {
     height: 100%;
