@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2023-03-04 16:36:54
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-19 15:24:48
+ * @LastEditTime: 2023-03-20 14:43:38
 -->
 <template>
   <transition
@@ -17,7 +17,7 @@
       v-show="show"
       v-naive-ui-loading-bar="loadingBar"
       v-loading="loading"
-      :element-loading-svg="loadingSvg"
+      :element-loading-svg="loading ? loadingSvg : null"
       :element-loading-svg-view-box="loadingSvgViewBox"
     >
       <slot></slot>

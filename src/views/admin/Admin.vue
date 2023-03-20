@@ -94,6 +94,9 @@ export default defineComponent({
       is_super: false,
     }); // 用户数据
 
+    // 向下映射用户数据
+    provide('userData', userData);
+
     const { tokenInfo, adminRoutes } = mapState('global', ['tokenInfo', 'adminRoutes']); // 获取tokenInfo 和 adminRoutes
 
     /**
