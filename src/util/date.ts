@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-05 22:17:07
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-15 14:58:35
+ * @LastEditTime: 2023-03-21 15:02:27
  */
 
 /**
@@ -67,4 +67,26 @@ export function dateGetText(date: Date, limit: number = 604800, fmt: string = 'Y
 export function getCurrentDiffirence(date: Date): number {
   const diff: number = new Date().getTime() - date.getTime();
   return Math.floor(diff / 86400000);
+}
+
+/**
+ * @description: 根据日期（小时）获取一天所处时刻的文本描述
+ * @param {(text: string, hour: number) => string} callback 回调处理文本 `默认不处理`
+ * @param {Date} date `默认为当前时间`
+ * @return {string} 返回处理好的文本
+ * @author: dreamy-xay
+ */
+export function dateGetDayText(
+  callback: (text: string, hour: number) => string = undefined,
+  date: Date = new Date()
+): string {
+  if (!callback) callback = (text: string, _) => text;
+  const currentHour: number = date.getHours();
+  if (currentHour < 4) return callback('晚安', currentHour);
+  if (currentHour < 9) return callback('早安', currentHour);
+  else if (currentHour < 11) return callback('上午好', currentHour);
+  else if (currentHour < 14) return callback('中午好', currentHour);
+  else if (currentHour < 19) return callback('下午好', currentHour);
+  else if (currentHour < 21) return callback('晚上好', currentHour);
+  else return callback('晚安', currentHour);
 }
