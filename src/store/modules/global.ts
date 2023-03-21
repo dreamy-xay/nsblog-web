@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-16 15:51:19
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-17 18:01:45
+ * @LastEditTime: 2023-03-21 16:18:39
  */
 import { StoreOptions } from 'vuex';
 import { verifyToken } from '@/network/token';
@@ -16,15 +16,20 @@ const messageStore: StoreOptions<unknown> = {
     adminRoutes: getMenuRoutes(true) // 后台管理全局菜单路由信息
   },
   getters: {
+    /* tokenInfo */
+    // 计算是否登录
     isLogin(state: any) {
-      // 是否登录
       return state.tokenInfo.status;
     }
   },
   mutations: {
+    /* tokenInfo */
+    // 更新登录token信息
     updateTokenInfo(state: any, tokenInfo: unknown = null) {
       state.tokenInfo = tokenInfo ? tokenInfo : verifyToken();
     },
+    /* adminRoutes */
+    // 更新后台管理全局菜单路由信息
     updateAdminRoutes(state: any, options: ModifiedRouteInfo) {
       /* adminRoutes = getMenuRoutes() 情况下的修改执行代码 */
       // if (modifyRoutesOfVueRouter(options)) modifyMenuRoutes(options, state.adminRoutes);

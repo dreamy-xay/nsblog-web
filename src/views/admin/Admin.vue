@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-21 20:02:51
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-19 14:33:12
+ * @LastEditTime: 2023-03-21 15:29:05
 -->
 <template>
   <base-loading-page
@@ -220,6 +220,12 @@ export default defineComponent({
   height: 100%;
   overflow: hidden;
   @include flex(center, center, space-between);
+
+  ::selection {
+    background-color: $blue-1;
+    color: $grey-0;
+    text-shadow: none;
+  }
 
   .admin-content {
     height: 100%;

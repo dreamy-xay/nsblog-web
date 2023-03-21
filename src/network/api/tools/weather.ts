@@ -4,11 +4,32 @@
  * @Autor: dreamy-xay
  * @Date: 2023-03-20 15:10:19
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-20 19:04:36
+ * @LastEditTime: 2023-03-21 14:31:23
  */
 
 import { get, RequestLifeCycle } from '@/network/request';
 import { getLocation } from '@/network/api/tools/location';
+
+export interface WindInfo {
+  directionDegree: number; //  风向360角度
+  direction: string; // 风向
+  speed: number; // 风速
+  scale: number; // 风力等级
+}
+
+export interface WeatherInfo {
+  temperature: number; // 温度，单位为c摄氏度或f华氏度
+  text: string; // 天气情况，天气现象文字
+  updateTime: Date; // 更新时间
+  feelsLike?: number; // 体感温度，单位为c摄氏度或f华氏度
+  wind?: WindInfo; // 风
+  pressure?: number; // 气压，单位为mb百帕或in英寸
+  colud?: number; // 云量
+  humidity?: number; // 相对湿度，0~100，单位为百分比
+  visibility?: number; // 能见度，单位为km公里或mi英里
+  precipitation?: number; // 当前小时累计降水量，默认单位：毫米
+  now: Record<string, unknown>; // 当前天气全部信息
+}
 
 export namespace XinZhiWeather {
   /* https://seniverse.yuque.com/hyper_data/api_v3/bwi8100zvwl0koau#ElVVu
@@ -89,6 +110,35 @@ export namespace XinZhiWeather {
       }
     });
   };
+
+  /**
+   * @description: 规范化 getWeather 返回的天气信息
+   * @param {Record<string, unknown>} data 返回的天气信息 `必传参数`
+   * @return {WeatherInfo} 返回详细天气信息
+   * @author: dreamy-xay
+   */
+  export const standardizeWeatherInfo = function(data: Record<string, unknown>): WeatherInfo {
+    const now: any = data.results[0].now;
+    const weatherInfo: WeatherInfo = {
+      now,
+      temperature: parseInt(now.temperature),
+      text: now.text,
+      updateTime: new Date(data.results[0].last_update)
+    };
+    if (now['feels_like']) weatherInfo.feelsLike = parseInt(now['feels_like']);
+    if (now['pressure']) weatherInfo.pressure = parseInt(now['pressure']);
+    if (now['humidity']) weatherInfo.humidity = parseInt(now['humidity']);
+    if (now['visibility']) weatherInfo.visibility = parseFloat(now['visibility']);
+    if (now['wind_direction'])
+      weatherInfo.wind = {
+        direction: now['wind_direction'],
+        directionDegree: parseInt(now['wind_direction_degree']),
+        speed: parseInt(now['wind_speed']),
+        scale: parseInt(now['wind_scale'])
+      };
+    if (now['clouds']) weatherInfo.colud = parseInt(now['clouds']);
+    return weatherInfo;
+  };
 }
 
 export namespace HeFengWeather {
@@ -144,5 +194,33 @@ export namespace HeFengWeather {
         unit
       }
     });
+  };
+
+  /**
+   * @description: 规范化 getWeather 返回的天气信息
+   * @param {Record<string, unknown>} data 返回的天气信息 `必传参数`
+   * @return {WeatherInfo} 返回详细天气信息
+   * @author: dreamy-xay
+   */
+  export const standardizeWeatherInfo = function(data: Record<string, unknown>): WeatherInfo {
+    const now: any = data.now;
+    const weatherInfo: WeatherInfo = {
+      now,
+      temperature: parseInt(now.temp),
+      text: now.text,
+      updateTime: new Date(data.updateTime as any),
+      feelsLike: parseInt(now.feelsLike),
+      pressure:parseInt(now.pressure),
+        humidity: parseInt(now.humidity),
+      visibility: parseFloat(now.vis),
+      wind: {
+        direction: now.windDir,
+        directionDegree: parseInt(now.wind360),
+        speed: parseInt(now.windSpeed),
+        scale: parseInt(now.windScale)
+      }
+    };
+    if (now['cloud']) weatherInfo.colud = parseInt(now['cloud']);
+    return weatherInfo;
   };
 }

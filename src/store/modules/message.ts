@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-11 11:45:25
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-14 12:40:28
+ * @LastEditTime: 2023-03-21 16:19:03
  */
 
 import { StoreOptions, ActionContext } from 'vuex';
@@ -16,6 +16,8 @@ const messageStore: StoreOptions<unknown> = {
   },
   getters: {},
   mutations: {
+    /* messageCount */
+    // 更新message页面左侧菜单未读消息数量
     updateMessageCount(state: any, options: { type: number; count: number }) {
       let index: number = -1;
       if (options.type === 2) index = 0;
@@ -31,6 +33,7 @@ const messageStore: StoreOptions<unknown> = {
     }
   },
   actions: {
+    /* message socket */
     // 对话发消息
     sendMessage(context: ActionContext<unknown, unknown>, options: { to: string; content: string; time: string }) {
       socket.emit(
