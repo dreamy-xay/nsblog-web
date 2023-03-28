@@ -4,10 +4,13 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 19:56:18
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-21 18:48:13
+ * @LastEditTime: 2023-03-28 17:24:37
 -->
 <template>
-  <admin-view class="admin-home-workbench">
+  <admin-view
+    class="admin-home-workbench"
+    :loading="loading"
+  >
     <div class="home-workbench-head">
       <div class="workbench-head-left">
         <base-avatar
@@ -35,11 +38,14 @@
     </div>
     <div class="home-workbench-body">
       <div class="workbench-body-left">
-        <workbench-draft />
-        <workbench-dynamic />
+        <workbench-draft :draft="draft" />
+        <workbench-dynamic
+          :dynamic="dynamic.dynamic"
+          :username="userData.username"
+        />
       </div>
       <div class="workbench-body-right">
-        <div class="quick-navigation"></div>
+        <workbench-navigation />
         <div class="img">
           <img src="/admin/home/workbench/work.svg">
         </div>
@@ -50,17 +56,18 @@
 </template>
 
 <script>
-import { computed, defineComponent, inject, reactive } from 'vue';
+import { computed, defineComponent, inject, reactive, ref } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import AdminView from '@/views/admin/childComps/AdminView.vue';
 import WorkbenchDraft from '@/views/admin/childComps/pages/adminHome/adminHomeWorkbench/childComps/WorkbenchDraft.vue';
 import WorkbenchDynamic from '@/views/admin/childComps/pages/adminHome/adminHomeWorkbench/childComps/WorkbenchDynamic.vue';
-import WorkbenchToDo from '@/views/admin/childComps/pages/adminHome/adminHomeWorkbench/childComps/WorkbenchToDo.vue';
+import WorkbenchNavigation from '@/views/admin/childComps/pages/adminHome/adminHomeWorkbench/childComps/WorkbenchNavigation.vue';
+import WorkbenchToDo from '@/views/admin/childComps/pages/adminHome/adminHomeWorkbench/childComps/workbenchToDo/WorkbenchToDo.vue';
 import { dateGetDayText } from '@/util/date';
 import { mapGetters } from '@/util/store';
+import { useMessage } from 'naive-ui';
 import { HeFengWeather } from '@/network/api/tools/weather';
 import { getDynamic } from '@/network/api/dynamic';
-import { useMessage } from 'naive-ui';
 
 /**
  * @description: 工作台页面
@@ -74,17 +81,19 @@ export default defineComponent({
     AdminView,
     WorkbenchDraft,
     WorkbenchDynamic,
+    WorkbenchNavigation,
     WorkbenchToDo,
   },
   setup() {
     const msg = useMessage(); // naive-ui message
+    const loading = ref(true); // 是否处于加载状态
     const userData = inject('userData'); // 用户数据
     const weatherInfo = reactive({
       temperature: 20,
       text: '晴',
     }); // 天气数据
     const draft = reactive([]); // 草稿数据
-    const dynamic = reactive([]); // 动态数据
+    const dynamic = reactive({ count: 0, dynamic: [] }); // 动态数据
 
     /**
      * @description: 数据获取函数初始化
@@ -92,16 +101,20 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function init() {
+      const promises = []; // 存放所有 promise
+
       // 获取天气信息
-      // HeFengWeather.getWeather()
-      //   .then((data) => {
-      //     data = HeFengWeather.standardizeWeatherInfo(data); // 标准化天气信息
-      //     for (const key in data) weatherInfo[key] = data[key]; //  更新信息
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //     msg.error('获取天气信息失败');
-      //   });
+      // promises.push(
+      //   HeFengWeather.getWeather()
+      //     .then((data) => {
+      //       data = HeFengWeather.standardizeWeatherInfo(data); // 标准化天气信息
+      //       for (const key in data) weatherInfo[key] = data[key]; //  更新信息
+      //     })
+      //     .catch((err) => {
+      //       console.log(err);
+      //       msg.error('获取天气信息失败');
+      //     })
+      // );
 
       // 获取草稿数据
       draft.splice(
@@ -147,14 +160,22 @@ export default defineComponent({
       );
 
       // 获取动态数据
-      getDynamic(userData.username, 0, 11)
-        .then((data) => {
-          dynamic.splice(dynamic.length, 0, ...data.dynamic);
-        })
-        .catch((error) => {
-          console.log(error);
-          msg.error('获取动态失败');
-        });
+      promises.push(
+        getDynamic(userData.username, 0, 6, 1)
+          .then((data) => {
+            dynamic.count = data.count;
+            dynamic.dynamic.splice(dynamic.length, 0, ...data.dynamic);
+          })
+          .catch((error) => {
+            console.log(error);
+            msg.error('获取动态失败');
+          })
+      );
+
+      // 全部请求执行完毕
+      Promise.all(promises).finally(() => {
+        loading.value = false;
+      });
     }
 
     // 初始化
@@ -193,12 +214,13 @@ export default defineComponent({
         },
         {
           title: '动态',
-          content: dynamic.length,
+          content: dynamic.count,
         },
       ];
     });
 
     return {
+      loading,
       userData,
       draft,
       dynamic,
@@ -308,10 +330,6 @@ export default defineComponent({
         margin-top: 16px;
         border-radius: $border-radius-1;
         background-color: $grey-0;
-      }
-
-      .quick-navigation {
-        height: 254px;
       }
 
       .img {
