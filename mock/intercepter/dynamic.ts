@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-16 15:43:02
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-21 18:23:13
+ * @LastEditTime: 2023-03-22 16:05:50
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
@@ -14,10 +14,10 @@ import select from '../data/index';
 export default function(baseUrl: string, app: Application) {
   // 获取动态数据
   app.get(baseUrl + '/dynamic', (req: Request, res: Response) => {
-    const { username, limit, offset } = req.query;
+    const { username, limit, offset, total } = req.query;
     if (username && !select('users').findOne({ username })) return res.status(410).json({ error: 'User name error' });
 
-    print('get dynamics', { username, limit, offset });
+    print('get dynamics', { username, limit, offset, total });
 
     function getRandom(limit: number): Record<string, unknown>[] {
       const ans: Record<string, unknown>[] = new Array<Record<string, unknown>>();
@@ -27,9 +27,12 @@ export default function(baseUrl: string, app: Application) {
           content: randomDynamic()
         });
       }
-      return ans;
+      return ans.sort((a:any, b: any) => <any>new Date(b.time) - <any>new Date(a.time));
     }
-    return res.json({ dynamic: getRandom(int(offset) >= 66 ? 0 : Math.min(int(limit), 66 - int(offset))) });
+    return res.json({
+      dynamic: getRandom(int(offset) >= 66 ? 0 : Math.min(int(limit), 66 - int(offset))),
+      ...(int(total) ? { count: Random.integer(int(limit), 1000) } : {})
+    });
   });
 }
 
