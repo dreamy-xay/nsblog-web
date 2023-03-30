@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2023-03-21 18:37:04
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-28 19:02:56
+ * @LastEditTime: 2023-03-30 11:30:45
 -->
 
 <template>
@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import { computed, defineComponent, provide, reactive, ref } from 'vue';
+import { computed, defineComponent, reactive, ref } from 'vue';
 import WorkbenchToDoEditor from '@/views/admin/childComps/pages/adminHome/adminHomeWorkbench/childComps/workbenchToDo/childComps/WorkbenchToDoEditor.vue';
 import { mapGetters, mapMutations } from '@/util/store';
 import { ToDoTask } from '@/store/modules/globalStore';
@@ -115,6 +115,7 @@ export default defineComponent({
 
     // 获取排好序的todoList
     const { sortedToDoList } = mapGetters('globalStore', ['sortedToDoList']);
+
     // 获取历史记录操作方法
     const { updateToDoTask } = mapMutations('globalStore', ['updateToDoTask']);
 
@@ -138,8 +139,6 @@ export default defineComponent({
       // 更新该任务
       updateToDoTask(task);
     }
-    // 向下传递该函数
-    provide('completeTask', completeTask);
 
     /**
      * @description: 置顶这个任务
@@ -150,12 +149,10 @@ export default defineComponent({
     function toppingTask(task) {
       task = JSON.parse(JSON.stringify(task)); // 深拷贝
       if (task.toppingTime) delete task['toppingTime'];
-      else task.toppingTime = dateFormat('YYYY-mm-dd HH-MM-SS', new Date()); // 置顶该任务并赋值当前日期
+      else task.toppingTime = dateFormat('YYYY-mm-dd HH:MM:SS', new Date()); // 置顶该任务并赋值当前日期
       // 更新该任务
       updateToDoTask(task);
     }
-    // 向下传递该函数
-    provide('toppingTask', toppingTask);
 
     /**
      * @description: 编辑或者添加这个任务
