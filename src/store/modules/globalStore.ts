@@ -4,7 +4,7 @@
  * @Autor: continue-hs
  * @Date: 2021-08-17 09:50:38
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-28 15:38:40
+ * @LastEditTime: 2023-03-30 11:30:30
  */
 import { StoreOptions } from 'vuex';
 
@@ -47,7 +47,9 @@ const searchHistoryStore: StoreOptions<unknown> = {
     sortedToDoList(state: any) {
       // 重新构造（深拷贝）
       return state.toDoList.sort(
-        (a: ToDoTask, b: ToDoTask) => <any>new Date(b.toppingTime) - <any>new Date(a.toppingTime)
+        (a: ToDoTask, b: ToDoTask) =>
+          <any>new Date(Object.prototype.hasOwnProperty.call(b, 'toppingTime') ? b.toppingTime : 0) -
+          <any>new Date(Object.prototype.hasOwnProperty.call(a, 'toppingTime') ? a.toppingTime : 0)
       );
     }
   },
