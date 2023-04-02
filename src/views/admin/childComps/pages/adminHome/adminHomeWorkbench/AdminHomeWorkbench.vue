@@ -104,17 +104,17 @@ export default defineComponent({
       const promises = []; // 存放所有 promise
 
       // 获取天气信息
-      // promises.push(
-      //   HeFengWeather.getWeather()
-      //     .then((data) => {
-      //       data = HeFengWeather.standardizeWeatherInfo(data); // 标准化天气信息
-      //       for (const key in data) weatherInfo[key] = data[key]; //  更新信息
-      //     })
-      //     .catch((err) => {
-      //       console.log(err);
-      //       msg.error('获取天气信息失败');
-      //     })
-      // );
+      promises.push(
+        HeFengWeather.getWeather()
+          .then((data) => {
+            data = HeFengWeather.standardizeWeatherInfo(data); // 标准化天气信息
+            for (const key in data) weatherInfo[key] = data[key]; //  更新信息
+          })
+          .catch((err) => {
+            console.log(err);
+            msg.error('获取天气信息失败');
+          })
+      );
 
       // 获取草稿数据
       draft.splice(

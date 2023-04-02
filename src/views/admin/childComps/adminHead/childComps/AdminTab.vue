@@ -228,13 +228,21 @@ export default defineComponent({
       }
     }
 
-    // 监听子页面缩放快捷键
-    window.addEventListener('keydown', (e) => {
+    /**
+     * @description: 缩放子页面按键事件函数
+     * @param {KeyboardEvent} e 事件参数 `必传参数`
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function zooming(e) {
       //事件对象兼容
       let event = e || window.event || arguments.callee.caller.arguments[0];
       // Shift + F11
       if (typeof zoom.value !== 'undefined' && event && event.shiftKey && event.keyCode == 122) zoomClick();
-    });
+    }
+
+    // 监听子页面缩放快捷键
+    window.addEventListener('keydown', zooming);
 
     return {
       Dropdownvisible,
@@ -246,7 +254,12 @@ export default defineComponent({
       menus,
       handleCommand,
       zoomClick,
+      zooming,
     };
+  },
+  unmounted() {
+    // 销毁事件
+    window.removeEventListener('keydown', this.zooming);
   },
 });
 </script>
