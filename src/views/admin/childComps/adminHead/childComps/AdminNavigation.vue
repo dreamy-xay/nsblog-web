@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-02-21 22:02:46
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-19 15:31:24
+ * @LastEditTime: 2023-04-02 16:45:38
 -->
 <template>
   <div class="admin-navigation">
@@ -287,24 +287,37 @@ export default defineComponent({
     // 刷新按钮页面
     const clickRefresh = inject('reload');
 
-    // 监听子页面刷新快捷键
-    window.addEventListener('keydown', (e) => {
+    /**
+     * @description: 刷新子页面按键事件函数
+     * @param {KeyboardEvent} e 事件参数 `必传参数`
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function refreshing(e){
       //事件对象兼容
       let event = e || window.event || arguments.callee.caller.arguments[0];
       // Shift + R
       if (typeof clickRefresh !== 'undefined' && event && event.shiftKey && event.keyCode == 82)
         clickRefresh(route.name);
-    });
+    }
 
-    // 监听全屏时间
-    window.addEventListener('resize', () => {
-      if (typeof fullscreen.value !== 'undefined') {
+    // 监听子页面刷新快捷键
+    window.addEventListener('keydown', refreshing);
+
+    /**
+     * @description: 全屏状态监听resize事件函数
+     * @return {void}
+     * @author: dreamy-xay
+     */
+    function fullscreening() {
         // 可视区域的高度
         const clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
         // screen是window的属性方法，window.screen可省略window，指的是窗口
         fullscreen.value = screen.height == clientHeight;
-      }
-    });
+    }
+
+    // 监听全屏时间
+    window.addEventListener('resize', fullscreening);
 
     /**
      * @description: 关闭或打开搜索
@@ -330,8 +343,15 @@ export default defineComponent({
       showSearch,
       changeSearch,
       jumpMessage,
+      refreshing,
+      fullscreening,
     };
   },
+  unmounted() {
+    // 销毁事件
+    window.removeEventListener('keydown', this.refreshing);
+    window.removeEventListener('resize', this.fullscreening)
+  }
 });
 </script>
 

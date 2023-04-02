@@ -17,6 +17,7 @@
       v-show="show"
       v-naive-ui-loading-bar="loadingBar"
       v-loading="loading"
+      v-bind="$attrs"
       :element-loading-svg="loading ? loadingSvg : null"
       :element-loading-svg-view-box="loadingSvgViewBox"
     >
@@ -41,6 +42,7 @@ import styles from '@/assets/style/define.scss';
 
 export default defineComponent({
   name: 'adminView',
+  inheritAttrs: false,
   props: {
     loading: {
       type: Boolean,
