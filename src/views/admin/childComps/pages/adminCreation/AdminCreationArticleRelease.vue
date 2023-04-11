@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-04-06 14:57:24
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-15 11:44:21
+ * @LastEditTime: 2023-04-11 17:50:52
 -->
 <template>
   <admin-view class="admin-creation-article-release">
@@ -219,14 +219,20 @@
         <div
           class="button"
           role="button"
-          @click="generateTitle"
+          @click="generateTitleClick"
         >生成标题</div>
 
         <div
           class="button"
           role="button"
-          @click="generateSummary"
+          @click="extractSummaryClick"
         >生成摘要</div>
+
+        <div
+          class="button"
+          role="button"
+          @click="extractTagsClick"
+        >抽取标签</div>
       </div>
 
     </div>
@@ -352,7 +358,7 @@ import style from '@/assets/style/define.scss';
 import { useMessage } from 'naive-ui';
 import { getCategories } from '@/network/api/articles';
 import { mapMutations, mapState } from '@/util/store';
-import axios from 'axios';
+import { extractSummary, generateTitle, extractTags } from '@/network/api/tools/intelligentCreation';
 
 /**
  * @description: 发布文章
@@ -649,47 +655,58 @@ export default defineComponent({
 
     const markdown = ref(null);
 
-    function generateTitle() {
-      let loading = msg.loading('生成标题中...', { closable: false });
-      axios({
-        method: 'POST',
-        url: 'http://127.0.0.1:3001/v1/generate/title',
-        data: {
-          content: getPreProcessingContent(),
-          ai_token: 'as89as#5612&jhsgja$Jja90I7&sa712@asasjjj!',
-        },
-      })
+    function generateTitleClick() {
+      let loading = msg.loading('生成标题中...', { closable: false, duration: 15000 });
+
+      generateTitle(getPreProcessingContent())
         .then((data) => {
-          titleValue.value = data.data.title;
+          titleValue.value = data.title;
 
           loading.destroy();
           loading = null;
           msg.success('生成标题成功');
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log(err);
+          loading.destroy();
+          loading = null;
           msg.error('生成标题失败，网络错误');
         });
     }
 
-    function generateSummary() {
-      let loading = msg.loading('抽取摘要中...', { closable: false });
-      axios({
-        method: 'POST',
-        url: 'http://127.0.0.1:3001/v1/generate/summary',
-        data: {
-          content: getPreProcessingContent(),
-          ai_token: 'as89as#5612&jhsgja$Jja90I7&sa712@asasjjj!',
-        },
-      })
+    function extractSummaryClick() {
+      let loading = msg.loading('抽取摘要中...', { closable: false, duration: 15000 });
+      extractSummary(getPreProcessingContent())
         .then((data) => {
-          inputRemark.value = data.data.summary;
+          inputRemark.value = data.summary;
 
           loading.destroy();
           loading = null;
           msg.success('抽取摘要成功');
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log(err);
+          loading.destroy();
+          loading = null;
           msg.error('抽取摘要失败，网络错误');
+        });
+    }
+
+    function extractTagsClick() {
+      let loading = msg.loading('抽取标签中...', { closable: false, duration: 15000 });
+      extractTags(getPreProcessingContent())
+        .then((data) => {
+          tags.splice(0, tags.length, ...data.tags.map((tag) => tag.word));
+
+          loading.destroy();
+          loading = null;
+          msg.success('抽取标签成功');
+        })
+        .catch((err) => {
+          console.log(err);
+          loading.destroy();
+          loading = null;
+          msg.error('抽取标签失败，网络错误');
         });
     }
 
@@ -714,7 +731,7 @@ export default defineComponent({
       if (isConfirm) {
         console.log('save article success!!!');
       } else {
-         console.log('not save article???');
+        console.log('not save article???');
       }
       showQuitModal.value = false;
       globalNext();
@@ -765,8 +782,9 @@ export default defineComponent({
       sharingValue,
       passwordValue,
       markdown,
-      generateTitle,
-      generateSummary,
+      generateTitleClick,
+      extractSummaryClick,
+      extractTagsClick,
       save,
       showQuitModal,
       quitModalHandle,

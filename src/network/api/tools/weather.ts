@@ -4,11 +4,11 @@
  * @Autor: dreamy-xay
  * @Date: 2023-03-20 15:10:19
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-21 14:31:23
+ * @LastEditTime: 2023-04-11 16:39:09
  */
 
 import { get, RequestLifeCycle } from '@/network/request';
-import { getLocation } from '@/network/api/tools/location';
+import { QQ, LocationInfo } from '@/network/api/tools/location';
 
 export interface WindInfo {
   directionDegree: number; //  风向360角度
@@ -180,8 +180,11 @@ export namespace HeFengWeather {
     RLC: RequestLifeCycle = {}
   ): Promise<unknown> {
     if (location === 'ip') {
-      const res: any = await getLocation();
-      location = `${res.result.location.lng.toFixed(2)},${res.result.location.lat.toFixed(2)}`;
+      // 请求获取地址信息
+      const res: any = await QQ.getLocation();
+      // 标准化请求数据
+      const locationInfo: LocationInfo = QQ.standardizeLocationInfo(res);
+      location = `${locationInfo.location.longitude.toFixed(2)},${locationInfo.location.latitude.toFixed(2)}`;
     }
     return get({
       ...RLC,
@@ -210,8 +213,8 @@ export namespace HeFengWeather {
       text: now.text,
       updateTime: new Date(data.updateTime as any),
       feelsLike: parseInt(now.feelsLike),
-      pressure:parseInt(now.pressure),
-        humidity: parseInt(now.humidity),
+      pressure: parseInt(now.pressure),
+      humidity: parseInt(now.humidity),
       visibility: parseFloat(now.vis),
       wind: {
         direction: now.windDir,

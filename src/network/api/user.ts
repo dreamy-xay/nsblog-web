@@ -7,7 +7,7 @@
  * @LastEditTime: 2022-02-18 18:12:58
  */
 import { post, get, put, RequestLifeCycle, del } from '@/network/request';
-import { sendEmail } from '@/network/api/tools/email';
+import { sendRegisterEmail } from '@/network/api/tools/email';
 import { encrypt } from '@/util/crypto';
 
 /**
@@ -108,7 +108,7 @@ export async function emailSendVCode(email: string, RLC: RequestLifeCycle = {}):
 
   // 生成随机验证码并发送邮件
   const code: string = Math.floor(Math.random() * (999999 - 100000 + 1) + 100000).toString();
-  await sendEmail(code, email);
+  await sendRegisterEmail(code, email);
 
   return post({
     url: '/users/email/validation',

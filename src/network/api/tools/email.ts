@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2023-03-20 14:54:32
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-20 19:05:34
+ * @LastEditTime: 2023-04-11 15:55:19
  */
 
 import { post, RequestLifeCycle } from '@/network/request';
@@ -38,7 +38,7 @@ interface MailOptions extends Record<string, unknown> {
  * @return {Promise<unknown>} 请求返回promise
  * @author: dreamy-xay
  */
-export function sendEmail(code: string, email: string, RLC: RequestLifeCycle = {}): Promise<unknown> {
+export function sendRegisterEmail(code: string, email: string, RLC: RequestLifeCycle = {}): Promise<unknown> {
   return post({
     ...RLC,
     url: 'https://api.emailjs.com/api/v1.0/email/send',
