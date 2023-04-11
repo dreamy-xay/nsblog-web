@@ -4,7 +4,7 @@
  * @Autor: Z_Y_C
  * @Date: 2022-06-27 20:21:16
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-17 19:28:41
+ * @LastEditTime: 2023-04-11 17:39:13
 -->
 <template>
   <admin-view class="admin-tools-automatic-generation">
@@ -97,12 +97,12 @@
           <div
             class="button"
             role="button"
-            @click="generateTitle"
+            @click="generateTitleClick"
           >生成标题</div>
           <div
             class="button"
             role="button"
-            @click="generateSummary"
+            @click="extractSummaryClick"
           >生成摘要 </div>
         </div>
 
@@ -140,13 +140,13 @@
   </admin-view>
 </template>
 <script>
-import axios from 'axios';
 import AdminView from '@/views/admin/childComps/AdminView.vue';
 import { useMessage } from 'naive-ui';
 import { defineComponent, ref } from 'vue';
+import { generateTitle, extractSummary } from '@/network/api/tools/intelligentCreation';
 
 /**
- * @description:
+ * @description: 智能创作工具
  * @author: Z_Y_C
  */
 
@@ -164,58 +164,41 @@ export default defineComponent({
     const showTitle = ref(false);
     const showContent = ref(false);
 
-    function getPreProcessingContent() {
-      return inputArticle.value.trim();
-    }
+    function generateTitleClick() {
+      let loading = msg.loading('生成标题中...', { closable: false, duration: 15000 });
 
-    function generateTitle() {
-      let loading = msg.loading('生成标题中...', { closable: false });
-      axios({
-        method: 'POST',
-        url: 'http://127.0.0.1:3001/v1/generate/title',
-        data: {
-          content: getPreProcessingContent(),
-          ai_token: 'as89as#5612&jhsgja$Jja90I7&sa712@asasjjj!',
-          top_k: value2.value,
-          top_p: value3.value,
-          max_length: Math.max(num3.value, 32),
-        },
-      })
+      generateTitle(inputArticle.value.trim(), value2.value, value3.value, Math.max(num3.value, 32))
         .then((data) => {
-          inputValue.value = data.data.title;
+          inputValue.value = data.title;
           showTitle.value = true;
 
           loading.destroy();
           loading = null;
           msg.success('生成标题成功');
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log(err);
+          loading.destroy();
+          loading = null;
           msg.error('生成标题失败，网络错误');
         });
     }
 
-    function generateSummary() {
-      let loading = msg.loading('抽取摘要中...', { closable: false });
-      axios({
-        method: 'POST',
-        url: 'http://127.0.0.1:3001/v1/generate/summary',
-        data: {
-          content: getPreProcessingContent(),
-          ai_token: 'as89as#5612&jhsgja$Jja90I7&sa712@asasjjj!',
-          ratio: value1.value,
-          min_length: num1.value,
-          max_length: num2.value,
-        },
-      })
+    function extractSummaryClick() {
+      let loading = msg.loading('抽取摘要中...', { closable: false, duration: 15000 });
+      extractSummary(inputArticle.value.trim(), value1.value, num1.value, num2.value, {})
         .then((data) => {
-          inputRemark.value = data.data.summary;
+          inputRemark.value = data.summary;
           showContent.value = true;
 
           loading.destroy();
           loading = null;
           msg.success('抽取摘要成功');
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log(err);
+          loading.destroy();
+          loading = null;
           msg.error('抽取摘要失败，网络错误');
         });
     }
@@ -231,8 +214,8 @@ export default defineComponent({
       inputRemark,
       inputValue,
       inputArticle,
-      generateTitle,
-      generateSummary,
+      generateTitleClick,
+      extractSummaryClick,
       value1,
       value2,
       value3,
