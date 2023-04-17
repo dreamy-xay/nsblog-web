@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-10 17:38:14
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-07 16:44:00
+ * @LastEditTime: 2023-04-17 17:35:48
  */
 
 import Mock, { MockCbOptions } from 'better-mock';
@@ -375,8 +375,9 @@ export interface Server {
 export class MockServer implements Server {
   private app: Application;
 
-  constructor(app: Application = null) {
-    this.app = app;
+  constructor(server?: MockServer) {
+    if (server) this.app = server.app;
+    else this.app = null;
   }
   /**
    * @description: 创建一个 server
@@ -437,8 +438,11 @@ export class MockServer implements Server {
     // 创建 app(仿照 express 接口)
     const app: Application = new Application();
 
+    // http
+    const http: MockServer = new MockServer();
+
     // 创建server
-    const server: Server = new MockServer(app);
+    const server: Server = http.createServer(app);
 
     // 打印中间过程
     app.use((req: Request, res: Response) => {
