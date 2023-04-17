@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-21 20:01:40
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-04-02 17:17:45
+ * @LastEditTime: 2023-04-14 17:47:27
  */
 import { RouteRecordRaw } from 'vue-router';
 import adminEmpty from '@/views/admin/childComps/AdminEmpty.vue';
@@ -339,6 +339,16 @@ const adminRouter: RouteRecordRaw = {
             super: false
           },
           component: () => import('@/views/admin/childComps/pages/adminTools/AdminToolsAutomaticGeneration.vue')
+        },
+        {
+          path: 'textCorrection',
+          name: 'adminToolsTextCorrection',
+          meta: {
+            title: '文本纠错',
+            icon: 'blog-jiucuo',
+            super: false
+          },
+          component: () => import('@/views/admin/childComps/pages/adminTools/AdminToolsTextCorrection.vue')
         },
         {
           path: 'flowChart',

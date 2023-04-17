@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2023-04-11 16:41:21
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-04-11 17:30:09
+ * @LastEditTime: 2023-04-15 17:22:22
  */
 import { post, RequestLifeCycle } from '@/network/request';
 
@@ -32,6 +32,7 @@ export function extractSummary(
     ...RLC,
     url: 'http://127.0.0.1:3001/v1/generate/summary',
     noAuthorization: true,
+    timeout: 15000,
     data: {
       content,
       ai_token: AI_TOKEN,
@@ -86,6 +87,7 @@ export function correctContent(content: string, RLC: RequestLifeCycle = {}): Pro
     ...RLC,
     url: 'http://127.0.0.1:3001/v1/generate/correct',
     noAuthorization: true,
+    timeout: 15000,
     data: {
       content,
       ai_token: AI_TOKEN
@@ -114,6 +116,7 @@ export function extractTags(
     ...RLC,
     url: 'http://127.0.0.1:3001/v1/generate/tags',
     noAuthorization: true,
+    timeout: 15000,
     data: {
       content,
       ai_token: AI_TOKEN,
