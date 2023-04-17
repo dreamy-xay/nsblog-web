@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-04-06 14:57:24
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-04-11 17:50:52
+ * @LastEditTime: 2023-04-14 16:28:51
 -->
 <template>
   <admin-view class="admin-creation-article-release">
@@ -210,6 +210,7 @@
       <div class="edit">
         <v-md-editor
           :include-level="[1,2,3,4,5,6]"
+          left-toolbar="undo redo clear | h bold italic strikethrough quote | ul ol table hr | link image code | tip emoji todo-list | save"
           v-model="text"
           height="600px"
           ref="markdown"
@@ -627,12 +628,13 @@ export default defineComponent({
     }
 
     function getPreProcessingContent() {
-      return markdown.value.$el
-        .getElementsByClassName('vuepress-markdown-body')[0]
-        .innerText.trim()
-        .replace(/[ \t]+/g, '，')
-        .replace(/(\n)+/g, '。')
-        .replace(/[，。]{2,}/g, '。');
+      const div = document.createElement('div');
+      div.innerHTML = markdown.value.$el.getElementsByClassName('vuepress-markdown-body')[0].innerHTML;
+      for (const code of ['v-md-pre-wrapper', 'v-md-mermaid', 'katex-display']
+        .map((className) => div.getElementsByClassName(className))
+        .reduce((a, b) => [...a, ...b]))
+        code.parentNode.removeChild(code);
+      return div.innerText.replace(/[\n\t\s]/g, '');
     }
 
     const showModel = ref(false);
@@ -727,6 +729,7 @@ export default defineComponent({
         },
       },
     });
+
     function quitModalHandle(isConfirm) {
       if (isConfirm) {
         console.log('save article success!!!');
