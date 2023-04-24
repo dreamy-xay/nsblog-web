@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: Z_Y_C
  * @Date: 2021-08-23 19:01:15
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-01-25 21:55:51
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2023-04-23 16:19:19
 -->
 <template>
   <n-popover
@@ -15,19 +15,19 @@
     :show="visible"
     placement="bottom"
     class="base-select"
-    :style="{ marginTop: '10px' }"
+    :style="{marginTop: '10px'}"
   >
 
     <el-scrollbar max-height="300px">
-
       <div
         class="base-select-content"
-        v-for="(item,index) in sdata"
+        v-for="(item, index) in sdata"
         :key="index"
         :class="item === selectTag ? 'base-select-content-ok' : ''"
         @click="changeSelect(index)"
         :style="selectStyle"
         role="button"
+        v-bind="$attrs"
       >{{ item }}</div>
 
     </el-scrollbar>
@@ -38,6 +38,7 @@
         role="button"
         @click="computedPages"
         v-click-outside="computedPosFalse"
+        v-bind="$attrs"
       >
         <div
           class="base-select-button-text"
@@ -66,12 +67,14 @@ import { computed, defineComponent, ref } from 'vue';
  * @param {Boolean} disabled 是否禁用 `默认为false`
  * @param {Object} buttonStyle 按钮样式 `默认为{}`
  * @event changeItem 改变选择数据
+ * @style 针对css变量 --select-color --select-emphasize-color 可自定义
  * @author: Z_Y_C
  */
 
 export default defineComponent({
   name: 'baseSelect',
   emits: ['changeItem'],
+  inheritAttrs: false,
   props: {
     swidth: {
       type: Number,
@@ -171,6 +174,10 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+$select-color: var(--select-color, $green-0);
+$select-emphasize-color: var(--select-emphasize-color, $green-1);
+$select-shadow: 0px 0px 6px $select-emphasize-color;
+
 .base-select-content {
   display: flex;
   border-radius: $border-radius-1;
@@ -179,13 +186,13 @@ export default defineComponent({
   color: $grey-10;
 
   &:hover {
-    background-color: $green-0;
+    background-color: $select-color;
     color: $grey-0;
   }
 }
 
 .base-select-content-ok {
-  background-color: $green-1;
+  background-color: $select-emphasize-color;
   color: $grey-0;
 }
 
@@ -234,8 +241,8 @@ export default defineComponent({
   user-select: none;
 
   &:hover {
-    box-shadow: $shadow-2;
-    color: $green-1;
+    box-shadow: $select-shadow;
+    color: $select-emphasize-color;
   }
 
   .base-select-button-text {
@@ -260,8 +267,8 @@ export default defineComponent({
 }
 
 .selcect-click {
-  box-shadow: $shadow-2;
-  color: $green-1;
+  box-shadow: $select-shadow;
+  color: $select-emphasize-color;
 }
 </style>
 

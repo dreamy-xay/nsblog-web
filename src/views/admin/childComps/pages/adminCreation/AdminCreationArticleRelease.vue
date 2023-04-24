@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2022-04-06 14:57:24
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-04-14 16:28:51
+ * @LastEditTime: 2023-04-23 16:26:35
 -->
 <template>
   <admin-view class="admin-creation-article-release">
@@ -52,8 +52,9 @@
         <div class="name">标题</div>
         <div class="title-input">
           <base-input
-            showClose
+            show-close
             :modelValue="titleValue"
+            :style="{'--input-success': styles.blue2}"
           />
         </div>
       </div>
@@ -80,6 +81,7 @@
             :sdata="topics"
             @changeItem="changeTopics($event)"
             :selectTag="topic"
+            :style="{'--select-color': styles.blue1, '--select-emphasize-color': styles.blue2}"
           />
 
           <base-select
@@ -89,6 +91,7 @@
             :sdata="topicTags"
             :selectTag="topicTag"
             @changeItem="changeTags($event)"
+            :style="{'--select-color': styles.blue1, '--select-emphasize-color': styles.blue2}"
           />
 
         </div>
@@ -107,8 +110,8 @@
           >
             <base-tag
               :size="25"
-              :color="style.orange0"
-              :hoverColor="style.orange1"
+              :color="styles.orange0"
+              :hoverColor="styles.orange1"
               :text="item"
               @mouseenter="categoryHover(index)"
               @mouseleave="categoryLeave(index)"
@@ -159,8 +162,8 @@
           >
             <base-tag
               :size="25"
-              :color="style.orange0"
-              :hoverColor="style.orange1"
+              :color="styles.orange0"
+              :hover-color="styles.orange1"
               :text="item"
               @mouseenter="tagHover(index)"
               @mouseleave="tagLeave(index)"
@@ -240,8 +243,8 @@
     <base-modal
       content="是否保存为草稿"
       :show="showQuitModal"
-      :color="style.blue0"
-      :hover-color="style.blue1"
+      :color="styles.blue0"
+      :hover-color="styles.blue1"
       @confirm="quitModalHandle(true)"
       @cancel="quitModalHandle(false)"
     />
@@ -355,7 +358,7 @@ import BaseSelect from '@/components/content/baseSelect/BaseSelect.vue';
 import BaseTag from '@/components/content/baseTag/BaseTag.vue';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 import { getTopics, getTopicTags } from '@/network/api/topics';
-import style from '@/assets/style/define.scss';
+import styles from '@/assets/style/define.scss';
 import { useMessage } from 'naive-ui';
 import { getCategories } from '@/network/api/articles';
 import { mapMutations, mapState } from '@/util/store';
@@ -747,7 +750,7 @@ export default defineComponent({
       pickImage,
       titleValue,
       inputRemark,
-      style,
+      styles,
       inputRef,
       inputClick,
       tagHover,
@@ -832,9 +835,9 @@ export default defineComponent({
           transition: 0.25s;
 
           &:hover {
-            background: $green-0;
+            background: $blue-1;
             color: $grey-0;
-            box-shadow: $shadow-2;
+            box-shadow: 0px 0px 6px $blue-1;
           }
         }
       }
@@ -856,22 +859,23 @@ export default defineComponent({
         @include flex(center, center);
         border-radius: $border-radius-1;
         box-shadow: $shadow-0;
-        transition: 0.25;
+        transition: 0.25s;
 
         .iconfont {
-          font-weight: 300;
-          font-size: 40px;
+          font-weight: 100;
+          font-size: 20px;
           color: $grey-7;
+          transition: 0.25s;
         }
 
         &:hover {
-          color: $green-1;
-          box-shadow: $shadow-2;
+          color: $blue-2;
+          box-shadow: 0px 0px 6px $blue-1;
           border-color: $grey-0;
 
           .iconfont {
-            font-size: 40px;
-            color: $green-1;
+            font-size: 26px;
+            color: $blue-2;
           }
         }
       }
@@ -911,10 +915,12 @@ export default defineComponent({
           resize: none;
           padding: 6px 8px;
           border: none;
+          transition: 0.25s;
+
           &:hover,
           &:focus {
-            color: $green-1;
-            box-shadow: $shadow-2;
+            color: $blue-2;
+            box-shadow: 0px 0px 6px $blue-1;
             border-color: $grey-0;
           }
         }
@@ -943,13 +949,14 @@ export default defineComponent({
         height: 32px;
         border-radius: $border-radius-1;
         box-shadow: $shadow-0;
-        transition: 0.25;
+        transition: 0.25s;
 
         :deep(.el-input__inner) {
           border: none;
-          color: $green-1;
+          color: $blue-2;
           height: 32px;
           padding: 6px 8px;
+          transition: 0.25s;
 
           &::-webkit-input-placeholder {
             color: $grey-8;
@@ -960,19 +967,19 @@ export default defineComponent({
           &:hover,
           &:focus-within {
             &::-webkit-input-placeholder {
-              color: $green-1;
+              color: $blue-2;
             }
           }
         }
 
         &:hover,
         &:focus-within {
-          color: $green-1;
-          box-shadow: $shadow-2;
+          color: $blue-2;
+          box-shadow: 0px 0px 6px $blue-1;
           border-color: $grey-0;
 
           &::-webkit-input-placeholder {
-            color: $green-1;
+            color: $blue-2;
           }
         }
       }
@@ -998,12 +1005,12 @@ export default defineComponent({
         height: 32px;
         border-radius: $border-radius-1;
         box-shadow: $shadow-0;
-        transition: 0.25;
+        transition: 0.25s;
 
         &:hover,
         &:focus-within {
-          color: $green-1;
-          box-shadow: $shadow-2;
+          color: $blue-2;
+          box-shadow: 0px 0px 6px $blue-1;
           border-color: $grey-0;
         }
 
@@ -1041,16 +1048,16 @@ export default defineComponent({
 
             &:focus,
             &:hover {
-              color: $green-1;
-              box-shadow: $shadow-2;
+              color: $blue-2;
+              box-shadow: 0px 0px 6px $blue-1;
 
               &::-webkit-input-placeholder {
-                color: $green-1;
+                color: $blue-2;
               }
 
               & ~ .base-input-eye,
               & ~ .base-input-close {
-                color: $green-1;
+                color: $blue-2;
               }
             }
           }
@@ -1090,7 +1097,7 @@ export default defineComponent({
           &:hover {
             .iconfont {
               font-size: 20px;
-              color: $green-1;
+              color: $blue-2;
             }
           }
         }
@@ -1105,7 +1112,7 @@ export default defineComponent({
           &:hover {
             .iconfont {
               font-size: 20px;
-              color: $green-1;
+              color: $blue-2;
             }
           }
         }
@@ -1134,9 +1141,9 @@ export default defineComponent({
         transition: 0.25s;
 
         &:hover {
-          background: $green-0;
+          background: $blue-1;
           color: $grey-0;
-          box-shadow: $shadow-2;
+          box-shadow: 0px 0px 6px $blue-1;
         }
       }
     }
@@ -1177,7 +1184,7 @@ export default defineComponent({
       }
 
       &:hover {
-        color: $green-0;
+        color: $blue-1;
       }
     }
   }
