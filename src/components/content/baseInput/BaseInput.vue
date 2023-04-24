@@ -3,8 +3,8 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-08-31 16:34:22
- * @LastEditors: Z_Y_C
- * @LastEditTime: 2022-03-20 21:56:12
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2023-04-23 15:50:50
 -->
 <template>
   <div
@@ -65,6 +65,7 @@ import { useMessage } from 'naive-ui';
  * @method check 最终检查校验，message选项，无效时触发，返回是否有效，{message:'',type:'', duration}
  * @var {HtmlElement} userCenterInput 输入框dom节点
  * @var {Boolean} efficient 输入内容是否通过验证函数有效
+ * @style 针对css变量 --input-success --input-warn --input-error 可自定义
  * @author: dreamy-xay
  */
 
@@ -252,11 +253,11 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 $default: $grey-8;
-$success: $green-1;
-$warn: $red-1;
-$error: $red-2;
+$success: var(--input-success, $green-1);
+$warn: var(--input-warn, $red-1);
+$error: var(--input-error, $red-2);
 $default-shadow: $shadow-0;
-$success-shadow: $shadow-2;
+$success-shadow: 0 0 6px $success;
 $warn-shadow: 0 0 6px $warn;
 $error-shadow: 0 0 6px $error;
 
