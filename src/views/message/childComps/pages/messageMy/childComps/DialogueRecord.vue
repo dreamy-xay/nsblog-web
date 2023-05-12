@@ -59,7 +59,7 @@
 <script>
 import { defineComponent, nextTick, ref } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
-import { dateFormat } from '@/util/date';
+import { dateFormat } from '@/utils/date';
 import { throttle } from 'lodash';
 import events from '@/events';
 

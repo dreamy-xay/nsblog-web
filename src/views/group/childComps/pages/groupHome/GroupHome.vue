@@ -72,7 +72,7 @@ import { getGroups, getGroupSolicitations } from '@/network/api/groups';
 import { useMessage } from 'naive-ui';
 import { getGroupsList } from '@/network/api/list';
 import { useRoute } from 'vue-router';
-import { mapGetters } from '@/util/store';
+import { mapGetters } from '@/utils/store';
 import { addGroup, deleteGroup } from '@/network/api/groups';
 
 /**

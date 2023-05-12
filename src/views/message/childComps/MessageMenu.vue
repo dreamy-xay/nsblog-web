@@ -60,7 +60,7 @@
 import { defineComponent } from 'vue';
 import { getMessages } from '@/network/api/messages';
 import { useMessage } from 'naive-ui';
-import { mapState, mapMutations } from '@/util/store';
+import { mapState, mapMutations } from '@/utils/store';
 import styles from '@/assets/style/define.scss';
 
 /**

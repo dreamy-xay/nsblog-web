@@ -105,8 +105,8 @@ import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import { releaseQuestionReply, changeEvaluationOnReply } from '@/network/api/questions';
 import { useRoute } from 'vue-router';
 import { useMessage } from 'naive-ui';
-import { mapState } from '@/util/store';
-import { dateGetText } from '@/util/date';
+import { mapState } from '@/utils/store';
+import { dateGetText } from '@/utils/date';
 
 /**
  * @description: 问答回答条目组件

@@ -22,7 +22,7 @@
 <script>
 import { defineComponent, computed, inject } from 'vue';
 import AdminView from '@/views/admin/childComps/AdminView.vue';
-import chinaMap from '@/util/json/china.json';
+import chinaMap from '@/utils/json/china.json';
 import { registerMap } from 'echarts';
 
 /**

@@ -39,7 +39,7 @@
 
 <script>
 import { computed, defineComponent, reactive, ref } from 'vue';
-import { mapState } from '@/util/store';
+import { mapState } from '@/utils/store';
 import {
   getFavorites,
   deleteFavorites,

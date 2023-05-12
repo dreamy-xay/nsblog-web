@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-28 00:28:11
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-12-06 20:40:47
+ * @LastEditTime: 2023-05-12 20:24:42
  */
 
 import { Base64 } from 'js-base64';
@@ -67,7 +67,7 @@ export function print(
  */
 export function getToken(headers: Record<string, unknown>): { token: string; time: number; username: string } {
   let token: string = (headers['authorization'] as string).replace('Basic ', '');
-  token = decrypt(Base64.fromBase64(token.substr(0, token.length - 1)));
+  token = decrypt(Base64.fromBase64(token.substring(0, token.length - 1)));
   const [_, time, username]: string[] = token.split('$^$');
   return {
     token,
@@ -128,52 +128,42 @@ export function verifyToken(
 
 /**
  * @description: aes加密
- * @param {string | Record<string, unknown>} 加密对象 `必传参数`
+ * @param {string | Record<string, unknown>} word 加密对象 `必传参数`
  * @return {string} 返回加密字符串
  * @author: dreamy-xay
  */
 export function encrypt(word: string | Record<string, unknown>): string {
-  const key = CryptoJS.enc.Utf8.parse(process.env.VUE_APP_CRYPTO_KEY); //16位
-  const iv = CryptoJS.enc.Utf8.parse(process.env.VUE_APP_CRYPTO_IV);
-  let encrypted: any = '';
-  if (typeof word == 'string') {
-    const srcs = CryptoJS.enc.Utf8.parse(word);
-    encrypted = CryptoJS.AES.encrypt(srcs, key, {
-      iv: iv,
-      mode: CryptoJS.mode.CBC,
-      padding: CryptoJS.pad.Pkcs7
-    });
-  } else if (typeof word == 'object') {
-    //对象格式的转成json字符串
-    const data = JSON.stringify(word);
-    const srcs = CryptoJS.enc.Utf8.parse(data);
-    encrypted = CryptoJS.AES.encrypt(srcs, key, {
-      iv: iv,
-      mode: CryptoJS.mode.CBC,
-      padding: CryptoJS.pad.Pkcs7
-    });
-  }
+  const key: CryptoJS.lib.WordArray = CryptoJS.enc.Utf8.parse(process.env.VUE_APP_CRYPTO_KEY); //16位
+  const iv: CryptoJS.lib.WordArray = CryptoJS.enc.Utf8.parse(process.env.VUE_APP_CRYPTO_IV);
+  // 对象格式的转成json字符串
+  const data: string = typeof word !== 'string' ? JSON.stringify(word) : word;
+  const srcs: CryptoJS.lib.WordArray = CryptoJS.enc.Utf8.parse(data);
+  const encrypted: CryptoJS.lib.CipherParams = CryptoJS.AES.encrypt(srcs, key, {
+    iv: iv,
+    mode: CryptoJS.mode.CBC,
+    padding: CryptoJS.pad.Pkcs7
+  });
   return encrypted.ciphertext.toString();
 }
 
 /**
  * @description: aes解密
- * @param {string} 已加密字符串 `必传参数`
+ * @param {string} word 已加密字符串 `必传参数`
  * @return {string} 返回原串
  * @author: dreamy-xay
  */
-export function decrypt(word: string): string {
-  const key = CryptoJS.enc.Utf8.parse(process.env.VUE_APP_CRYPTO_KEY); //16位
-  const iv = CryptoJS.enc.Utf8.parse(process.env.VUE_APP_CRYPTO_IV);
-  const encryptedHexStr = CryptoJS.enc.Hex.parse(word);
-  const srcs = CryptoJS.enc.Base64.stringify(encryptedHexStr);
-  const decrypt = CryptoJS.AES.decrypt(srcs, key, {
+export function decrypt(word: string, parse: boolean = false): string {
+  const key: CryptoJS.lib.WordArray = CryptoJS.enc.Utf8.parse(process.env.VUE_APP_CRYPTO_KEY); //16位
+  const iv: CryptoJS.lib.WordArray = CryptoJS.enc.Utf8.parse(process.env.VUE_APP_CRYPTO_IV);
+  const encryptedHexStr: CryptoJS.lib.WordArray = CryptoJS.enc.Hex.parse(word);
+  const srcs: string = CryptoJS.enc.Base64.stringify(encryptedHexStr);
+  const decrypt: CryptoJS.lib.WordArray = CryptoJS.AES.decrypt(srcs, key, {
     iv: iv,
     mode: CryptoJS.mode.CBC,
     padding: CryptoJS.pad.Pkcs7
   });
-  const decryptedStr = decrypt.toString(CryptoJS.enc.Utf8);
-  return decryptedStr.toString();
+  const decryptedStr: string = decrypt.toString(CryptoJS.enc.Utf8);
+  return decryptedStr;
 }
 
 /**

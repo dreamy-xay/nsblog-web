@@ -83,7 +83,7 @@ import UserInfoAchievement from '@/views/user/childComps/userInfo/childComps/Use
 import UserInfoInformation from '@/views/user/childComps/userInfo/childComps/UserInfoInformation.vue';
 import UserInfoAttention from '@/views/user/childComps/userInfo/childComps/UserInfoAttention.vue';
 import router from '@/router';
-import { dateFormat } from '@/util/date';
+import { dateFormat } from '@/utils/date';
 
 /**
  * @description: 用户中心左侧详细信息

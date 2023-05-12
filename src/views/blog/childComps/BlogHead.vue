@@ -61,9 +61,9 @@
 <script>
 import { defineComponent, ref, inject, onMounted, computed } from 'vue';
 import BaseImage from '@/components/content/baseImage/BaseImage.vue';
-import circleMagic from '@/util/animation/circleMagic';
+import circleMagic from '@/utils/animation/circleMagic';
 import styles from '@/assets/style/define.scss';
-import { colorHexToDec } from '@/util/util';
+import { colorHexToDec } from '@/utils/utils';
 import { useRoute } from 'vue-router';
 
 /**

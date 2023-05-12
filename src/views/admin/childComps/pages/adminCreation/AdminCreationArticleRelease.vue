@@ -361,7 +361,7 @@ import { getTopics, getTopicTags } from '@/network/api/topics';
 import styles from '@/assets/style/define.scss';
 import { useMessage } from 'naive-ui';
 import { getCategories } from '@/network/api/articles';
-import { mapMutations, mapState } from '@/util/store';
+import { mapMutations, mapState } from '@/utils/store';
 import { extractSummary, generateTitle, extractTags } from '@/network/api/tools/intelligentCreation';
 
 /**

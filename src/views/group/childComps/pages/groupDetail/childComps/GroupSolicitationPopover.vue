@@ -79,7 +79,7 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import BaseInput from '@/components/content/baseInput/BaseInput.vue';
-import { dateFormat } from '@/util/date';
+import { dateFormat } from '@/utils/date';
 import { useMessage } from 'naive-ui';
 import { releaseGroupSolicitation } from '@/network/api/groups';
 

@@ -79,7 +79,7 @@
 import { defineComponent, reactive, ref } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
-import { dateFormat } from '@/util/date';
+import { dateFormat } from '@/utils/date';
 import { getGroupSolicitations } from '@/network/api/groups';
 import { useRoute } from 'vue-router';
 import styles from '@/assets/style/define.scss';

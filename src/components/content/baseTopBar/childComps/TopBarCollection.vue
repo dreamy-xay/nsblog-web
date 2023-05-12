@@ -76,7 +76,7 @@ import { defineComponent, ref, reactive, computed } from 'vue';
 import { getFavorites } from '@/network/api/favorites';
 import BaseTag from '../../baseTag/BaseTag.vue';
 import styles from '@/assets/style/define.scss';
-import { mapState } from '@/util/store';
+import { mapState } from '@/utils/store';
 
 /**
  * @description:  收藏栏弹窗

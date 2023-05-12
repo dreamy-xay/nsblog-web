@@ -48,7 +48,7 @@
 
 <script>
 import { defineComponent, computed } from 'vue';
-import { mapGetters } from '@/util/store';
+import { mapGetters } from '@/utils/store';
 
 /**
  * @description:  TopBar_笔记分享

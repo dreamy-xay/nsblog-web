@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-20 16:46:55
+ * @LastEditTime: 2023-05-12 21:33:03
  */
 
 import axios, { AxiosRequestConfig } from 'axios';
@@ -91,8 +91,10 @@ export function request(options: RequestConfig): Promise<unknown> {
     // 2.传入对象进行网络请求
     instance(options)
       .then(res => {
+        // 如果是前端 mock
         if (process.env.VUE_APP_MOCK !== 'false' && process.env.VUE_APP_MOCK_SEVER !== 'false') {
-          if (res.data.status >= 200 && res.data.status < 300) resolve(options.all ? res.data : res.data.data);
+          if (typeof res.data !== 'object' || (res.data.status >= 200 && res.data.status < 300))
+            resolve(options.all ? res.data : res.data.data);
           else {
             console.error(
               new Error(

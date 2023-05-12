@@ -43,7 +43,7 @@
 <script>
 import { defineComponent, computed, ref, reactive } from 'vue';
 import { getUserInfo } from '@/network/api/user';
-import { mapState } from '@/util/store';
+import { mapState } from '@/utils/store';
 import UserCenterAccountPassword from '@/views/userCenter/childComps/pages/UserCenterAccount/childComps/UserCenterAccountPassword.vue';
 import UserCenterAccountEmail from '@/views/userCenter/childComps/pages/UserCenterAccount/childComps/UserCenterAccountEmail.vue';
 import UserCenterAccountLoginRecord from '@/views/userCenter/childComps/pages/UserCenterAccount/childComps/UserCenterAccountLoginRecord.vue';

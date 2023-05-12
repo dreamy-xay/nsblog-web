@@ -8,7 +8,7 @@
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { print, verifyToken, getToken, getTopics, getTags } from './util';
+import { print, verifyToken, getToken, getTopics, getTags } from './utils';
 
 export default function(baseUrl: string, app: Application) {
   // 获取专题名

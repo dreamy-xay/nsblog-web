@@ -56,7 +56,7 @@
 <script>
 import { defineComponent, computed, ref, reactive } from 'vue';
 import { getUserInfo } from '@/network/api/user';
-import { mapState } from '@/util/store';
+import { mapState } from '@/utils/store';
 import { useDialog, useMessage } from 'naive-ui';
 import BaseInput from '@/components/content/baseInput/BaseInput.vue';
 import { authLogoff } from '@/network/api/auth';

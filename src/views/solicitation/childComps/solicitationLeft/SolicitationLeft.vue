@@ -99,8 +99,8 @@ import BaseQrCodePopover from '@/components/content/baseQrCodePopover/BaseQrCode
 import BaseReport from '@/components/common/baseReport/BaseReport.vue';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 import SolicitationUser from '@/views/solicitation/childComps/solicitationLeft/childComps/SolicitationUser.vue';
-import { dateGetText, dateFormat } from '@/util/date';
-import { mapState } from '@/util/store';
+import { dateGetText, dateFormat } from '@/utils/date';
+import { mapState } from '@/utils/store';
 import { receiveSolicitation, cancelSolicitation } from '@/network/api/groups';
 import { useRoute } from 'vue-router';
 import { useMessage } from 'naive-ui';

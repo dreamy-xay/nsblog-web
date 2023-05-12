@@ -9,7 +9,7 @@
 
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { print } from './util';
+import { print } from './utils';
 import { shuffle } from 'lodash';
 
 export default function(baseUrl: string, app: Application) {

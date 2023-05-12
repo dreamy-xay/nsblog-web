@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-02 11:13:42
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-11-15 22:46:18
+ * @LastEditTime: 2023-05-12 19:03:16
  */
 /**
  * @description: 通过图片url 获取图片file对象
@@ -112,7 +112,7 @@ export function getSplitNum(
 
 /**
  * @description: 获取格式化之后的字符串
- * @param {string ｜ number} num 需要格式化的数字 `必传参数`
+ * @param {string | number} num 需要格式化的数字 `必传参数`
  * @param {number} fixed 保留的小数位数 `默认为 1`
  * @param {number} divisor 一倍数 `默认为 1000`
  * @param {string} endStr 结尾添加字符串 `默认为 (divisor === 1000 ? 'K' : '')`
@@ -139,9 +139,9 @@ export function getDivisionFormatNum(
  */
 export function colorHexToDec(color: string): { r: number; g: number; b: number; rgb: string } {
   if (!new RegExp(/#[0-9a-fA-F]{6}/).test(color)) return { r: 0, g: 0, b: 0, rgb: '0,0,0' };
-  const r = parseInt(color.substr(1, 2), 16),
-    g = parseInt(color.substr(3, 2), 16),
-    b = parseInt(color.substr(5, 2), 16);
+  const r = parseInt(color.substring(1, 3), 16),
+    g = parseInt(color.substring(3, 5), 16),
+    b = parseInt(color.substring(5, 7), 16);
   return {
     r,
     g,

@@ -59,7 +59,7 @@ import styles from '@/assets/style/define.scss';
 import events from '@/events';
 import { getUserInfo } from '@/network/api/user';
 import { useMessage } from 'naive-ui';
-import { mapState } from '@/util/store';
+import { mapState } from '@/utils/store';
 import { useRoute } from 'vue-router';
 import router from '@/router';
 

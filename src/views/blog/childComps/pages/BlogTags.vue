@@ -63,7 +63,7 @@ import BaseTag from '@/components/content/baseTag/BaseTag.vue';
 import BaseSvg from '@/components/content/baseSvg/BaseSvg.vue';
 import { getTags } from '@/network/api/articles';
 import { useMessage } from 'naive-ui';
-import circleRandomText from '@/util/render/circleRandomText';
+import circleRandomText from '@/utils/render/circleRandomText';
 import styles from '@/assets/style/define.scss';
 import { useRoute } from 'vue-router';
 

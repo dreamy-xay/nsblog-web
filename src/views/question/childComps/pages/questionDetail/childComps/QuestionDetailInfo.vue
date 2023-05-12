@@ -124,7 +124,7 @@ import BaseQrCodePopover from '@/components/content/baseQrCodePopover/BaseQrCode
 import BaseReport from '@/components/common/baseReport/BaseReport.vue';
 import { useMessage } from 'naive-ui';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
-import { mapGetters } from '@/util/store';
+import { mapGetters } from '@/utils/store';
 import { cancelCollections } from '@/network/api/favorites';
 
 /**

@@ -8,7 +8,7 @@
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { int, print, randomUsers, RandomUser, getRandomTopic, getRandomTag } from './util';
+import { int, print, randomUsers, RandomUser, getRandomTopic, getRandomTag } from './utils';
 import select from '../data/index';
 
 export default function(baseUrl: string, app: Application) {
@@ -27,7 +27,7 @@ export default function(baseUrl: string, app: Application) {
           content: randomDynamic()
         });
       }
-      return ans.sort((a:any, b: any) => <any>new Date(b.time) - <any>new Date(a.time));
+      return ans.sort((a: any, b: any) => <any>new Date(b.time) - <any>new Date(a.time));
     }
     return res.json({
       dynamic: getRandom(int(offset) >= 66 ? 0 : Math.min(int(limit), 66 - int(offset))),

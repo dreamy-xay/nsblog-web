@@ -36,7 +36,7 @@
 
 <script>
 import { computed, defineComponent, watch } from 'vue';
-import { mapState } from '@/util/store';
+import { mapState } from '@/utils/store';
 import { useRoute } from 'vue-router';
 
 /**

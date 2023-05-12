@@ -8,7 +8,7 @@
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { print, getToken, verifyToken } from './util';
+import { print, getToken, verifyToken } from './utils';
 
 export default function(baseUrl: string, app: Application) {
   // 获取登录登出日志内容

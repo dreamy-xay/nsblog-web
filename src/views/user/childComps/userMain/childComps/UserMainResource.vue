@@ -37,7 +37,7 @@
 
 <script>
 import { defineComponent, computed, ref } from 'vue';
-import { getSplitNum } from '@/util/util';
+import { getSplitNum } from '@/utils/utils';
 import styles from '@/assets/style/define.scss';
 import events from '@/events';
 

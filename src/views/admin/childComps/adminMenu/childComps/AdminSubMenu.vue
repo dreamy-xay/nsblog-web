@@ -66,7 +66,7 @@ import AdminSubMenuItem from '@/views/admin/childComps/adminMenu/childComps/Admi
 import { useRoute } from 'vue-router';
 import router from '@/router';
 import events from '@/events';
-import { searchMenuRoute } from '@/util/router';
+import { searchMenuRoute } from '@/utils/router';
 
 /**
  * @description: 管理员页面子菜单

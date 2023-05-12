@@ -4,12 +4,12 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-09 21:34:55
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-15 12:03:22
+ * @LastEditTime: 2023-05-12 19:46:13
  */
 
 import { Application, Request, Response } from 'express';
 import select, { DataBaseOperator } from '../data/index';
-import { print, createToken, clearToken, getToken, verifyToken } from './util';
+import { print, createToken, clearToken, getToken, verifyToken } from './utils';
 
 export default function(baseUrl: string, app: Application) {
   // 登录

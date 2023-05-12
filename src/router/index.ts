@@ -14,7 +14,7 @@ import {
   RouteLocationNormalized,
   NavigationGuardNext
 } from 'vue-router';
-import { handleKeepAlive } from '@/util/router';
+import { handleKeepAlive } from '@/utils/router';
 import loginRouter from './modules/login';
 import messageRouter from './modules/message';
 import userCenterRouter from './modules/userCenter';

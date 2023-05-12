@@ -132,7 +132,7 @@ import ArticleLink from '@/views/article/childComps/ArticleLink.vue';
 import ArticleBottomSponsor from '@/views/article/childComps/pages/articleMain/childComps/articleBody/childComps/ArticleBottomSponsor.vue';
 import styles from '@/assets/style/define.scss';
 import { useMessage } from 'naive-ui';
-import { mapGetters } from '@/util/store';
+import { mapGetters } from '@/utils/store';
 import events from '@/events';
 import BaseFavorite from '@/components/common/baseFavorite/BaseFavorite.vue';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';

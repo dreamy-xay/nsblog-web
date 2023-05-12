@@ -8,7 +8,7 @@
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { int, print, RandomUser, randomUsers, verifyToken, getToken, getRandomTopic } from './util';
+import { int, print, RandomUser, randomUsers, verifyToken, getToken, getRandomTopic } from './utils';
 
 export default function(baseUrl: string, app: Application) {
   // 获取搜索标签

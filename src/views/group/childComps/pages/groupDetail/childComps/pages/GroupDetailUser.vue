@@ -72,7 +72,7 @@ import SearchPageToLoadMore from '@/views/search/childComps/SearchPageToLoadMore
 import { useRoute } from 'vue-router';
 import { getGroupUsers } from '@/network/api/groups';
 import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
-import { mapGetters } from '@/util/store';
+import { mapGetters } from '@/utils/store';
 import { useMessage } from 'naive-ui';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 import { addAttentions, deleteAttentions } from '@/network/api/attentions';

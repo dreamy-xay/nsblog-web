@@ -63,7 +63,7 @@ import { defineComponent, ref } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 import { addAttentions, deleteAttentions } from '@/network/api/attentions';
-import { mapGetters } from '@/util/store';
+import { mapGetters } from '@/utils/store';
 import { useMessage } from 'naive-ui';
 import router from '@/router';
 

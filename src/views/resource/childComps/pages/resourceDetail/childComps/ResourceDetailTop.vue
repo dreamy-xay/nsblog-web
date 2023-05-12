@@ -101,8 +101,8 @@ import BaseQrCodePopover from '@/components/content/baseQrCodePopover/BaseQrCode
 import BaseReport from '@/components/common/baseReport/BaseReport.vue';
 import BaseFavorite from '@/components/common/baseFavorite/BaseFavorite.vue';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
-import { dateFormat } from '@/util/date';
-import { mapGetters } from '@/util/store';
+import { dateFormat } from '@/utils/date';
+import { mapGetters } from '@/utils/store';
 import { useMessage } from 'naive-ui';
 
 /**

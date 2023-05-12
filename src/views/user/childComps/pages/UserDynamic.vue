@@ -39,12 +39,12 @@
 
 <script>
 import { defineComponent, reactive, ref } from 'vue';
-import { mapState } from '@/util/store';
+import { mapState } from '@/utils/store';
 import UserNull from '@/views/user/childComps/UserNull.vue';
 import { useRoute } from 'vue-router';
 import { getDynamic } from '@/network/api/dynamic';
 import { useMessage } from 'naive-ui';
-import { dateGetText } from '@/util/date';
+import { dateGetText } from '@/utils/date';
 
 /**
  * @description: 用户主页动态记录

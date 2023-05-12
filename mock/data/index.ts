@@ -4,11 +4,14 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-24 13:14:19
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-12-08 11:10:14
+ * @LastEditTime: 2023-05-12 20:48:16
  */
 
 import * as fs from 'fs';
 import * as path from 'path';
+import store from 'storejs';
+
+const mockDatabaseName: string = 'mockDatabase'; // mock web浏览器localStorage key值
 
 /**
  * @description: 读取json文件
@@ -17,7 +20,15 @@ import * as path from 'path';
  * @author: dreamy-xay
  */
 function readJson(jsonFilePath: string): Record<string, Record<string, unknown>[]> {
-  if (process.env.VUE_APP_MOCK_SEVER !== 'false') return JSON.parse(JSON.stringify(require('./data.json')));
+  // web 浏览器 模拟后端数据库读取
+  if (process.env.VUE_APP_MOCK_SEVER !== 'false') {
+    if (store.has(mockDatabaseName)) return store.get(mockDatabaseName);
+    else {
+      const data: Record<string, Record<string, unknown>[]> = JSON.parse(JSON.stringify(require('./data.json')));
+      store.set(mockDatabaseName, data);
+      return data;
+    }
+  }
 
   // 判断是否存在此文件
   if (fs.existsSync(jsonFilePath))
@@ -34,7 +45,14 @@ function readJson(jsonFilePath: string): Record<string, Record<string, unknown>[
  * @author: dreamy-xay
  */
 function writeJson(jsonFilePath: string, data: Record<string, Record<string, unknown>[]>): boolean {
-  if (process.env.VUE_APP_MOCK_SEVER !== 'false') return false;
+  // web 浏览器 模拟后端数据库写入
+  if (process.env.VUE_APP_MOCK_SEVER !== 'false') {
+    if (store.has(mockDatabaseName)) {
+      store.set(mockDatabaseName, data);
+      return true;
+    }
+    return false;
+  }
 
   // 判断是否存在此文件
   if (fs.existsSync(jsonFilePath)) {

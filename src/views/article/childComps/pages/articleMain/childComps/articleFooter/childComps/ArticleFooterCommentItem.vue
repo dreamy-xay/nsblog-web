@@ -102,7 +102,7 @@ import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import ArticleFooterEdit from '@/views/article/childComps/pages/articleMain/childComps/articleFooter/childComps/ArticleFooterEdit.vue';
 import ArticleLink from '@/views/article/childComps/ArticleLink.vue';
 import { useMessage } from 'naive-ui';
-import { mapGetters } from '@/util/store';
+import { mapGetters } from '@/utils/store';
 import events from '@/events';
 
 /**

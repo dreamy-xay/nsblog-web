@@ -46,7 +46,7 @@ import UserHeader from '@/views/user/childComps/UserHeader.vue';
 import UserInfo from '@/views/user/childComps/userInfo/UserInfo.vue';
 import UserMain from '@/views/user/childComps/userMain/UserMain.vue';
 import { addAttentions, deleteAttentions } from '@/network/api/attentions';
-import { mapMutations, mapState } from '@/util/store';
+import { mapMutations, mapState } from '@/utils/store';
 import { useRoute } from 'vue-router';
 import { getUserInfo } from '@/network/api/user';
 import { useMessage } from 'naive-ui';

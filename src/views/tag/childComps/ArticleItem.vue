@@ -138,7 +138,7 @@
 import router from '@/router';
 import { defineComponent } from 'vue';
 import BaseImage from '@/components/content/baseImage/BaseImage.vue';
-import { dateGetText } from '@/util/date';
+import { dateGetText } from '@/utils/date';
 
 /**
  * @description:文章列表单个文章框

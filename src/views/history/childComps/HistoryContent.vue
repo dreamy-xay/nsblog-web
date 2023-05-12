@@ -50,7 +50,7 @@ import { defineComponent, reactive, ref } from 'vue';
 import HistoryItem from '@/views/history/childComps/HistoryItem.vue';
 import BaseSvg from '@/components/content/baseSvg/BaseSvg';
 import { getHistory, deleteHistory } from '@/network/api/history';
-import { mapGetters } from '@/util/store';
+import { mapGetters } from '@/utils/store';
 import styles from '@/assets/style/define.scss';
 import events from '@/events';
 import { useMessage } from 'naive-ui';

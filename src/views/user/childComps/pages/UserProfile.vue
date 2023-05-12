@@ -26,7 +26,7 @@ import { getProfile } from '@/network/api/user';
 
 import { useRoute } from 'vue-router';
 
-import { mapState } from '@/util/store';
+import { mapState } from '@/utils/store';
 import UserNull from '@/views/user/childComps/UserNull.vue';
 import { useMessage } from 'naive-ui';
 

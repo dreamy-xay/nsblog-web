@@ -52,7 +52,7 @@ import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import BaseModal from '@/components/content/baseModal/BaseModal';
 import { addAttentions, deleteAttentions } from '@/network/api/attentions';
 import { useMessage } from 'naive-ui';
-import { mapGetters } from '@/util/store';
+import { mapGetters } from '@/utils/store';
 
 /**
  * @description:

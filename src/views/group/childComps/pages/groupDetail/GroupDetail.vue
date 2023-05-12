@@ -99,7 +99,7 @@ import GroupApplyAdmin from '@/views/group/childComps/pages/groupDetail/childCom
 import router from '@/router';
 import { getGroupsUsersList } from '@/network/api/list';
 import { useRoute } from 'vue-router';
-import { mapGetters } from '@/util/store';
+import { mapGetters } from '@/utils/store';
 import { useMessage } from 'naive-ui';
 
 /**

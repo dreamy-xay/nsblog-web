@@ -70,7 +70,7 @@
 
 <script>
 import { getFavorites } from '@/network/api/favorites';
-import { dateFormat } from '@/util/date';
+import { dateFormat } from '@/utils/date';
 import { useMessage } from 'naive-ui';
 import { defineComponent, reactive } from 'vue';
 import { useRoute } from 'vue-router';

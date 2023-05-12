@@ -53,7 +53,7 @@
 <script>
 import { computed, defineComponent, ref, reactive, watch } from 'vue';
 import BaseSelect from '@/components/content/baseSelect/BaseSelect.vue';
-import location from '@/util/json/location';
+import location from '@/utils/json/location';
 
 /**
  * @description: 工作信息模块

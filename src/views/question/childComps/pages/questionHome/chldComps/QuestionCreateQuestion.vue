@@ -100,7 +100,7 @@ import BaseSelect from '@/components/content/baseSelect/BaseSelect.vue';
 import BaseInput from '@/components/content/baseInput/BaseInput.vue';
 import { getTopics, getTopicTags } from '@/network/api/topics';
 import { releaseQuestion } from '@/network/api/questions';
-import { mapState } from '@/util/store';
+import { mapState } from '@/utils/store';
 import { useMessage } from 'naive-ui';
 
 /**

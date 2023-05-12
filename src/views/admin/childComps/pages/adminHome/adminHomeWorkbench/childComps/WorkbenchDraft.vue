@@ -66,7 +66,7 @@
 <script>
 import { computed, defineComponent } from 'vue';
 import { shuffle } from 'lodash';
-import { dateFormat } from '@/util/date';
+import { dateFormat } from '@/utils/date';
 
 /**
  * @description: 工作台草稿台

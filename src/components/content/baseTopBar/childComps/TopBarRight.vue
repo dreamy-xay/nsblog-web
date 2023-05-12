@@ -67,7 +67,7 @@ import TopBarCollection from '@/components/content/baseTopBar/childComps/TopBarC
 import TopBarHistory from '@/components/content/baseTopBar/childComps/TopBarHistory.vue';
 import TopBarNoteShare from '@/components/content/baseTopBar/childComps/TopBarNoteShare.vue';
 import TopBarNotLogin from '@/components/content/baseTopBar/childComps/TopBarNotLogin.vue';
-import { mapState } from '@/util/store';
+import { mapState } from '@/utils/store';
 
 /**
  * @description: 首页顶部之右边部分组件

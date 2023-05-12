@@ -71,7 +71,7 @@
 
 <script>
 import { computed, defineComponent, inject, watch, reactive, ref, onMounted, nextTick } from 'vue';
-import { binary_bound } from '@/util/algorithm';
+import { binary_bound } from '@/utils/algorithm';
 
 /**
  * @description: 文章内容部分包括目录

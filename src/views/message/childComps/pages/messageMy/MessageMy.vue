@@ -40,10 +40,10 @@ import MessageMyContent from '@/views/message/childComps/pages/messageMy/childCo
 import MessageEmpty from '@/views/message/childComps/MessageEmpty.vue';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 import { getDialogue, deleteDialogue, clearDialogue } from '@/network/api/dialogues';
-import { mapState, mapGetters, mapActions, mapMutations } from '@/util/store';
+import { mapState, mapGetters, mapActions, mapMutations } from '@/utils/store';
 import { useMessage } from 'naive-ui';
 import events from '@/events';
-import { dateFormat } from '@/util/date';
+import { dateFormat } from '@/utils/date';
 import { useRoute } from 'vue-router';
 
 /**

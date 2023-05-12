@@ -30,7 +30,7 @@
 import { defineComponent } from 'vue';
 import BaseImage from '@/components/content/baseImage/BaseImage.vue';
 import styles from '@/assets/style/define.scss';
-import { colorHexToDec } from '@/util/util';
+import { colorHexToDec } from '@/utils/utils';
 
 /**
  * @description:

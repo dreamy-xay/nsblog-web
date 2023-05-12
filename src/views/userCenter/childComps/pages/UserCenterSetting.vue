@@ -42,7 +42,7 @@
 import { computed, defineComponent, reactive } from 'vue';
 import { getPrivacySetting, modifySetting } from '@/network/api/setting';
 import { useMessage } from 'naive-ui';
-import { mapState } from '@/util/store';
+import { mapState } from '@/utils/store';
 
 /**
  * @description: 隐私设置页面

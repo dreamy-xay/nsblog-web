@@ -63,8 +63,8 @@ import WorkbenchDraft from '@/views/admin/childComps/pages/adminHome/adminHomeWo
 import WorkbenchDynamic from '@/views/admin/childComps/pages/adminHome/adminHomeWorkbench/childComps/WorkbenchDynamic.vue';
 import WorkbenchNavigation from '@/views/admin/childComps/pages/adminHome/adminHomeWorkbench/childComps/WorkbenchNavigation.vue';
 import WorkbenchToDo from '@/views/admin/childComps/pages/adminHome/adminHomeWorkbench/childComps/workbenchToDo/WorkbenchToDo.vue';
-import { dateGetDayText } from '@/util/date';
-import { mapGetters } from '@/util/store';
+import { dateGetDayText } from '@/utils/date';
+import { mapGetters } from '@/utils/store';
 import { useMessage } from 'naive-ui';
 import { HeFengWeather } from '@/network/api/tools/weather';
 import { getDynamic } from '@/network/api/dynamic';

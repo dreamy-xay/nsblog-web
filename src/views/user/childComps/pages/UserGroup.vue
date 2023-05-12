@@ -95,11 +95,11 @@ import { addGroup, getGroups, deleteGroup } from '@/network/api/groups';
 import { useRoute, useRouter } from 'vue-router';
 import BaseTag from '@/components/content/baseTag/BaseTag.vue';
 import styles from '@/assets/style/define.scss';
-import { dateFormat } from '@/util/date';
+import { dateFormat } from '@/utils/date';
 import { useMessage } from 'naive-ui';
 import UserNull from '@/views/user/childComps/UserNull.vue';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
-import { mapGetters } from '@/util/store';
+import { mapGetters } from '@/utils/store';
 
 /**
  * @description: 用户主页学习小组记录

@@ -49,7 +49,7 @@ import BaseFavoriteList from '@/components/common/baseFavorite/childComps/BaseFa
 import { getFavorites } from '@/network/api/favorites';
 import { useMessage } from 'naive-ui';
 import { addCollections, newFavorites } from '@/network/api/favorites';
-import { mapState } from '@/util/store';
+import { mapState } from '@/utils/store';
 
 /**
  * @description: 收藏夹界面
