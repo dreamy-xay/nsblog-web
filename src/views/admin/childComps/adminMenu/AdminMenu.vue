@@ -54,8 +54,8 @@ import { computed, defineComponent, ref, watch } from 'vue';
 import AdminSubMenu from '@/views/admin/childComps/adminMenu/childComps/AdminSubMenu.vue';
 import router from '@/router';
 import { useRoute } from 'vue-router';
-import { mapState } from '@/util/store';
-import { searchMenuRoute } from '@/util/router';
+import { mapState } from '@/utils/store';
+import { searchMenuRoute } from '@/utils/router';
 
 /**
  * @description: 管理员页面菜单

@@ -33,7 +33,7 @@ import BaseView from '@/components/content/baseView/BaseView.vue';
 import UserCenterMenu from '@/views/userCenter/childComps/UserCenterMenu.vue';
 import router from '@/router';
 import store from '@/store';
-import { mapState } from '@/util/store';
+import { mapState } from '@/utils/store';
 import events from '@/events';
 
 /**

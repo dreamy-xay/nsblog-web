@@ -184,9 +184,9 @@ import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import AdminSearch from '@/views/admin/childComps/adminHead/childComps/AdminSearch.vue';
 import events from '@/events';
 import { clearToken } from '@/network/token';
-import { mapMutations } from '@/util/store';
+import { mapMutations } from '@/utils/store';
 import { authLogout } from '@/network/api/auth';
-import { changeFullScreen } from '@/util/dom';
+import { changeFullScreen } from '@/utils/dom';
 import { useRoute } from 'vue-router';
 import router from '@/router';
 
@@ -293,7 +293,7 @@ export default defineComponent({
      * @return {void}
      * @author: dreamy-xay
      */
-    function refreshing(e){
+    function refreshing(e) {
       //事件对象兼容
       let event = e || window.event || arguments.callee.caller.arguments[0];
       // Shift + R
@@ -310,10 +310,10 @@ export default defineComponent({
      * @author: dreamy-xay
      */
     function fullscreening() {
-        // 可视区域的高度
-        const clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
-        // screen是window的属性方法，window.screen可省略window，指的是窗口
-        fullscreen.value = screen.height == clientHeight;
+      // 可视区域的高度
+      const clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
+      // screen是window的属性方法，window.screen可省略window，指的是窗口
+      fullscreen.value = screen.height == clientHeight;
     }
 
     // 监听全屏时间
@@ -350,8 +350,8 @@ export default defineComponent({
   unmounted() {
     // 销毁事件
     window.removeEventListener('keydown', this.refreshing);
-    window.removeEventListener('resize', this.fullscreening)
-  }
+    window.removeEventListener('resize', this.fullscreening);
+  },
 });
 </script>
 

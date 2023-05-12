@@ -59,7 +59,7 @@ import HomeRight from '@/views/home/childComps/homeRight/HomeRight.vue';
 import BaseTopicBar from '@/components/common/baseTopicBar/BaseTopicBar.vue';
 import BaseTopicTags from '@/components/common/baseTopicBar/BaseTopicTags.vue';
 import { useMessage } from 'naive-ui';
-import { mapGetters } from '@/util/store';
+import { mapGetters } from '@/utils/store';
 import { getArticles } from '@/network/api/articles';
 import { modifyArticleRecommendEvaluation } from '@/network/api/articles';
 

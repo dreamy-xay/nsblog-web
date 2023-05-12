@@ -11,7 +11,7 @@ import { debounce, throttle } from 'lodash';
 import { App, nextTick } from 'vue';
 import ResizeObserver from 'resize-observer-polyfill';
 import { LoadingBarProviderInst } from 'naive-ui';
-import { waitImageLoaded } from '@/util/dom';
+import { waitImageLoaded } from '@/utils/dom';
 
 export default (app: App): void => {
   // 点击元素之外隐藏该元素
@@ -64,9 +64,9 @@ export default (app: App): void => {
     },
     mounted(el: any, binding: any) {
       const naiveUiLoadingBar: LoadingBarProviderInst = binding.value;
-        waitImageLoaded(el)
-          .then(() => setTimeout(() => naiveUiLoadingBar.finish(), 0))
-          .catch(() => setTimeout(() => naiveUiLoadingBar.error(), 0));
+      waitImageLoaded(el)
+        .then(() => setTimeout(() => naiveUiLoadingBar.finish(), 0))
+        .catch(() => setTimeout(() => naiveUiLoadingBar.error(), 0));
     }
   });
 };

@@ -72,7 +72,7 @@
 <script>
 import { defineComponent } from 'vue';
 import UserNull from '@/views/user/childComps/UserNull.vue';
-import { dateFormat } from '@/util/date';
+import { dateFormat } from '@/utils/date';
 
 /**
  * @description: 用户主页问答记录数据组件

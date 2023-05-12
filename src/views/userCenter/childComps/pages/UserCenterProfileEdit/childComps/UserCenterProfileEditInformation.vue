@@ -102,8 +102,8 @@
 import { computed, defineComponent, ref, reactive, watch } from 'vue';
 import BaseSelect from '@/components/content/baseSelect/BaseSelect.vue';
 import BaseInput from '@/components/content/baseInput/BaseInput.vue';
-import location from '@/util/json/location';
-import { dateFormat } from '@/util/date';
+import location from '@/utils/json/location';
+import { dateFormat } from '@/utils/date';
 
 /**
  * @description: 基本信息模块

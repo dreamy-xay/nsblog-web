@@ -79,7 +79,7 @@ import { defineComponent, ref, reactive, computed } from 'vue';
 import { getHistory } from '@/network/api/history';
 import BaseTag from '@/components/content/baseTag/BaseTag.vue';
 import styles from '@/assets/style/define.scss';
-import { dateFormat } from '@/util/date';
+import { dateFormat } from '@/utils/date';
 
 /**
  * @description: 顶部栏历史记录

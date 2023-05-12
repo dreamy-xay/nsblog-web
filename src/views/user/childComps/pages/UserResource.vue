@@ -61,7 +61,7 @@ import { defineComponent, reactive, ref } from 'vue';
 import { getResources } from '@/network/api/resources';
 import { useRoute } from 'vue-router';
 import styles from '@/assets/style/define.scss';
-import { dateFormat } from '@/util/date';
+import { dateFormat } from '@/utils/date';
 import UserNull from '@/views/user/childComps/UserNull.vue';
 import { useMessage } from 'naive-ui';
 

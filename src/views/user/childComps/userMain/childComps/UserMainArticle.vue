@@ -78,9 +78,9 @@
 
 <script>
 import { defineComponent, computed, ref } from 'vue';
-import { getSplitNum } from '@/util/util';
+import { getSplitNum } from '@/utils/utils';
 import styles from '@/assets/style/define.scss';
-import { dateFormat } from '@/util/date';
+import { dateFormat } from '@/utils/date';
 import events from '@/events';
 
 /**

@@ -82,7 +82,7 @@ import BaseInput from '@/components/content/baseInput/BaseInput.vue';
 import { forgotPasswordChange } from '@/network/api/user';
 import { useMessage } from 'naive-ui';
 import router from '@/router';
-import { mapState } from '@/util/store';
+import { mapState } from '@/utils/store';
 import { clearToken } from '@/network/token';
 
 /**

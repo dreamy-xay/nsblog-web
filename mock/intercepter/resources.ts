@@ -8,7 +8,7 @@
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { int, print, RandomUser, randomUsers, verifyToken, getToken } from './util';
+import { int, print, RandomUser, randomUsers, verifyToken, getToken } from './utils';
 import select from '../data/index';
 
 export default function(baseUrl: string, app: Application) {

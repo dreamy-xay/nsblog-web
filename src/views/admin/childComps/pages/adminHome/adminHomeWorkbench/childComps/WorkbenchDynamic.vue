@@ -50,7 +50,7 @@
 <script>
 import { computed, defineComponent } from 'vue';
 import { shuffle } from 'lodash';
-import { dateGetText } from '@/util/date';
+import { dateGetText } from '@/utils/date';
 
 /**
  * @description: 工作台动态信息

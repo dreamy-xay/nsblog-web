@@ -209,9 +209,9 @@
 <script>
 import { defineComponent, nextTick, reactive, ref } from 'vue';
 import BaseInput from '@/components/content/baseInput/BaseInput.vue';
-import { searchMenuRoutes } from '@/util/router';
+import { searchMenuRoutes } from '@/utils/router';
 import { useRouter } from 'vue-router';
-import { mapState } from '@/util/store';
+import { mapState } from '@/utils/store';
 
 /**
  * @description: 搜索页面

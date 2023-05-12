@@ -102,7 +102,7 @@
 <script>
 import { defineComponent, reactive, ref, computed, watch } from 'vue';
 import { getTopics, getTopicTags } from '@/network/api/topics';
-import { mapGetters } from '@/util/store';
+import { mapGetters } from '@/utils/store';
 import { useRoute } from 'vue-router';
 import router from '@/router';
 import events from '@/events';

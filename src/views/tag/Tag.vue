@@ -74,7 +74,7 @@
 <script>
 import { useMessage } from 'naive-ui';
 import { useRoute } from 'vue-router';
-import { mapGetters } from '@/util/store';
+import { mapGetters } from '@/utils/store';
 import { getTagDetails } from '@/network/api/topics';
 import { getArticles } from '@/network/api/articles';
 import TagTop from '@/views/tag/childComps/TagTop.vue';

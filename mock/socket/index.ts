@@ -9,7 +9,7 @@
 import { Random } from 'better-mock';
 import { Server } from 'http';
 import * as socketIo from 'socket.io';
-import { print } from '../intercepter/util';
+import { print } from '../intercepter/utils';
 
 class OnlineUser {
   private users: Map<string, Set<string>>;

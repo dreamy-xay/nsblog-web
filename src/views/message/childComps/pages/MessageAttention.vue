@@ -95,9 +95,9 @@ import MessageEmpty from '@/views/message/childComps/MessageEmpty.vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import { getMessages, deleteMessages } from '@/network/api/messages';
 import { addAttentions, deleteAttentions } from '@/network/api/attentions';
-import { dateFormat } from '@/util/date.ts';
+import { dateFormat } from '@/utils/date.ts';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
-import { mapMutations, mapState } from '@/util/store';
+import { mapMutations, mapState } from '@/utils/store';
 import { useMessage } from 'naive-ui';
 import { useRoute, useRouter } from 'vue-router';
 

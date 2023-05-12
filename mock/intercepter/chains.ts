@@ -9,7 +9,7 @@
 
 import { Random } from 'better-mock';
 import { Application, Request, Response } from 'express';
-import { print, int } from './util';
+import { print, int } from './utils';
 
 export default function(baseUrl: string, app: Application) {
   // 获取友链

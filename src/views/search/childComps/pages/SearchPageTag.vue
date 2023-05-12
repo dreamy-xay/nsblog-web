@@ -66,7 +66,7 @@ import SearchPageToLoadMore from '@/views/search/childComps/SearchPageToLoadMore
 import { search } from '@/network/api/search';
 import { useRoute } from 'vue-router';
 import router from '@/router';
-import { mapGetters } from '@/util/store';
+import { mapGetters } from '@/utils/store';
 import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
 import { useMessage } from 'naive-ui';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';

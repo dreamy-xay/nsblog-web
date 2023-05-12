@@ -74,7 +74,7 @@
 <script>
 import { defineComponent, reactive, ref } from 'vue';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
-import { mapGetters } from '@/util/store';
+import { mapGetters } from '@/utils/store';
 import { useRoute } from 'vue-router';
 import { useMessage } from 'naive-ui';
 import { getGroups, addGroup, deleteGroup } from '@/network/api/groups';

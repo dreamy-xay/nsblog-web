@@ -8,7 +8,7 @@
  */
 import { StoreOptions } from 'vuex';
 import { verifyToken } from '@/network/token';
-import { getMenuRoutes, modifyMenuRoutes, modifyRoutesOfVueRouter, ModifiedRouteInfo } from '@/util/router';
+import { getMenuRoutes, modifyMenuRoutes, modifyRoutesOfVueRouter, ModifiedRouteInfo } from '@/utils/router';
 
 const messageStore: StoreOptions<unknown> = {
   state: {

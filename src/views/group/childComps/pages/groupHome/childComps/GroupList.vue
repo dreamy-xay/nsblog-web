@@ -100,7 +100,7 @@ import { useRouter } from 'vue-router';
 import styles from '@/assets/style/define.scss';
 import BaseTag from '@/components/content/baseTag/BaseTag.vue';
 import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
-import { mapGetters } from '@/util/store';
+import { mapGetters } from '@/utils/store';
 import { useMessage } from 'naive-ui';
 
 /**

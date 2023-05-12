@@ -63,8 +63,8 @@
 <script>
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
-import { dateFormat } from '@/util/date.ts';
-import { getDivisionFormatNum } from '@/util/util';
+import { dateFormat } from '@/utils/date.ts';
+import { getDivisionFormatNum } from '@/utils/utils';
 
 /**
  * @description: 问答条目组件

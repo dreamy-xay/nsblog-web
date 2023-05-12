@@ -75,7 +75,7 @@ import { computed, defineComponent, ref } from 'vue';
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 import events from '@/events';
 import { modifySetting, getHistorySetting } from '@/network/api/setting';
-import { mapGetters } from '@/util/store';
+import { mapGetters } from '@/utils/store';
 
 /**
  * @description: 历史记录顶部栏

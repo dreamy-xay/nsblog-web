@@ -55,7 +55,7 @@
 
 <script>
 import { defineComponent, reactive, ref } from 'vue';
-import { mapState } from '@/util/store';
+import { mapState } from '@/utils/store';
 import { useRoute } from 'vue-router';
 import UserSort from '@/views/user/childComps/UserSort.vue';
 import UserQuestionSwitch from '@/views/user/childComps/pages/UserQuestion/childComps/UserQuestionSwitch.vue';

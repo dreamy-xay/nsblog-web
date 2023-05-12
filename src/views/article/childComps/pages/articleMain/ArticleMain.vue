@@ -41,7 +41,7 @@ import { addCollections, cancelCollections } from '@/network/api/favorites';
 import { useRoute } from 'vue-router';
 import events from '@/events';
 import { useMessage } from 'naive-ui';
-import { appendHTML } from '@/util/dom';
+import { appendHTML } from '@/utils/dom';
 import router from '@/router';
 
 /**

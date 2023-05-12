@@ -77,7 +77,7 @@ import LoginLogo from '@/views/login/childComps/LoginLogo.vue';
 import LoginInput from '@/views/login/childComps/LoginInput.vue';
 import LoginButton from '@/views/login/childComps/LoginButton.vue';
 import { useMessage } from 'naive-ui';
-import { mapMutations } from '@/util/store';
+import { mapMutations } from '@/utils/store';
 import { useRoute } from 'vue-router';
 
 /**

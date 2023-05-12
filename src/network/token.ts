@@ -3,13 +3,13 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-06-09 08:19:13
- * @LastEditors: Ban
- * @LastEditTime: 2021-08-11 21:03:32
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2023-05-12 20:34:57
  */
 
 import store from 'storejs';
 import { Base64 } from 'js-base64';
-import { decrypt, encrypt } from '@/util/crypto';
+import { decrypt, encrypt } from '@/utils/crypto';
 
 export default store;
 
@@ -31,15 +31,25 @@ export interface TokenInfo {
  */
 export function verifyToken(originToken: string = store.get('token')): TokenInfo {
   if (originToken) {
-    const { token, code, data, startTime, expires } = JSON.parse(originToken);
-    if (token !== null && code !== null && data !== null && startTime !== null && expires !== null)
-      if (startTime + expires * 1000 >= new Date().getTime())
-        return { status: token === decrypt(code), token, username: decrypt(data) };
+    try {
+      const { token, data, startTime, expires } = <any>decrypt(originToken, true);
+      if (
+        token &&
+        data &&
+        startTime !== undefined &&
+        expires !== undefined &&
+        startTime + expires * 1000 >= new Date().getTime()
+      )
+        return { status: true, token, username: data };
       else {
         store.remove('token');
         return { status: false };
       }
-    else return { status: false };
+    } catch {
+      // token 解密失败，直接删除
+      store.remove('token');
+      return { status: false };
+    }
   } else return { status: false };
 }
 
@@ -63,15 +73,14 @@ export function getToken(): string {
  * @return {void}
  * @author: dreamy-xay
  */
-export function setToken(token: string, username: string, expires = 172800, tokenKey = 'token'): void {
-  const options: unknown = {
+export function setToken(token: string, username: string, expires: number = 172800, tokenKey: string = 'token'): void {
+  const options: Record<string, unknown> = {
     token,
-    data: encrypt(username),
-    code: encrypt(token),
+    data: username,
     startTime: new Date().getTime(),
     expires
   };
-  store.set(tokenKey, JSON.stringify(options));
+  store.set(tokenKey, encrypt(options));
 }
 
 /**
@@ -80,6 +89,6 @@ export function setToken(token: string, username: string, expires = 172800, toke
  * @return {void}
  * @author: dreamy-xay
  */
-export function clearToken(tokenKey = 'token'): void {
+export function clearToken(tokenKey: string = 'token'): void {
   store.remove(tokenKey);
 }

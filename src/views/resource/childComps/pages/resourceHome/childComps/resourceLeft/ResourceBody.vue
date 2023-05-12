@@ -50,7 +50,7 @@
 <script>
 import router from '@/router';
 import { defineComponent } from 'vue';
-import { dateFormat } from '@/util/date';
+import { dateFormat } from '@/utils/date';
 
 /**
  * @description: 资源body样式

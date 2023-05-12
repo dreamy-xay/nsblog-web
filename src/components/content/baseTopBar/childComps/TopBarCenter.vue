@@ -79,7 +79,7 @@
 
 <script>
 import { defineComponent, ref } from 'vue';
-import { mapState, mapMutations } from '@/util/store';
+import { mapState, mapMutations } from '@/utils/store';
 import { useRoute } from 'vue-router';
 import router from '@/router';
 

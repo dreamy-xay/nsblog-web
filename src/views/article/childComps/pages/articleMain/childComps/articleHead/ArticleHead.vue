@@ -61,8 +61,8 @@
 import { computed, defineComponent, onMounted, ref, watch } from 'vue';
 import ArticleHeadBackground from '@/views/article/childComps/pages/articleMain/childComps/articleHead/childComps/ArticleHeadBackground.vue';
 import BaseTag from '@/components/content/baseTag/BaseTag.vue';
-import { dateFormat } from '@/util/date';
-import { getSplitNum } from '@/util/util';
+import { dateFormat } from '@/utils/date';
+import { getSplitNum } from '@/utils/utils';
 import styles from '@/assets/style/define.scss';
 
 /**

@@ -28,8 +28,8 @@ import { defineComponent, reactive, ref, watch } from 'vue';
 import AdminNavigation from '@/views/admin/childComps/adminHead/childComps/AdminNavigation.vue';
 import AdminTab from '@/views/admin/childComps/adminHead/childComps/AdminTab.vue';
 import { useRoute, useRouter } from 'vue-router';
-import { mapState } from '@/util/store';
-import { searchMenuRoute, searchMenuRoutes } from '@/util/router';
+import { mapState } from '@/utils/store';
+import { searchMenuRoute, searchMenuRoutes } from '@/utils/router';
 
 /**
  * @description: 头部

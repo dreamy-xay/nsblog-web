@@ -70,7 +70,7 @@
 <script>
 import { computed, defineComponent } from 'vue';
 import style from '@/assets/style/define.scss';
-import { getSplitNum } from '@/util/util';
+import { getSplitNum } from '@/utils/utils';
 
 /**
  * @description: 用户中心左侧获得成就

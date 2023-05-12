@@ -4,13 +4,13 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:15:05
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-13 11:32:02
+ * @LastEditTime: 2023-05-12 19:23:11
  */
 import { Random, mock } from 'better-mock';
 import { Application, Request, Response } from 'express';
 import select, { DataBaseOperator } from '../data/index';
-import { print, verifyToken, getToken, int, getRandomTag } from './util';
-import * as location from '../../src/util/json/location.json';
+import { print, verifyToken, getToken, int, getRandomTag } from './utils';
+import * as location from '../../src/utils/json/location.json';
 
 function randomAddress(): string {
   if (!Random.integer(0, 2)) return ',,';

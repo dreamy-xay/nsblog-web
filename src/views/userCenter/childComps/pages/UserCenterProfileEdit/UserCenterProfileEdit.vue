@@ -35,9 +35,9 @@ import UserCenterProfileEditAvatar from '@/views/userCenter/childComps/pages/Use
 import UserCenterProfileEditInformation from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/UserCenterProfileEditInformation.vue';
 import UserCenterProfileEditJob from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/UserCenterProfileEditJob.vue';
 import UserCenterProfileEditInterest from '@/views/userCenter/childComps/pages/UserCenterProfileEdit/childComps/UserCenterProfileEditInterest.vue';
-import { base64ToFile } from '@/util/util';
+import { base64ToFile } from '@/utils/utils';
 import { getUserInfo, modifyUserInfo, modifySignature, delUserTag, addUserTag } from '@/network/api/user';
-import { mapState } from '@/util/store';
+import { mapState } from '@/utils/store';
 import { useMessage } from 'naive-ui';
 import events from '@/events';
 

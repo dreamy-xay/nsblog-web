@@ -48,7 +48,7 @@ import { defineComponent, ref, watch } from 'vue';
 import BaseView from '@/components/content/baseView/BaseView.vue';
 import MessageMenu from '@/views/message/childComps/MessageMenu.vue';
 import MessageTop from '@/views/message/childComps/MessageTop.vue';
-import { mapState, mapActions, mapMutations } from '@/util/store';
+import { mapState, mapActions, mapMutations } from '@/utils/store';
 import store from '@/store';
 import { useRoute, useRouter } from 'vue-router';
 

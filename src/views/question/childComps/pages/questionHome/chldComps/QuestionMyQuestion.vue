@@ -52,11 +52,11 @@
 
 <script>
 import { defineComponent, reactive, ref } from 'vue';
-import { mapGetters } from '@/util/store';
+import { mapGetters } from '@/utils/store';
 import QuestionCreateQuestion from '@/views/question/childComps/pages/questionHome/chldComps/QuestionCreateQuestion.vue';
 import { getMyQuestion } from '@/network/api/user';
 import { useMessage } from 'naive-ui';
-import { getDivisionFormatNum } from '@/util/util';
+import { getDivisionFormatNum } from '@/utils/utils';
 
 /**
  * @description:

@@ -9,7 +9,7 @@
 
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { print, verifyToken, getToken, randomUsers, RandomUser, int, getRandomTag } from './util';
+import { print, verifyToken, getToken, randomUsers, RandomUser, int, getRandomTag } from './utils';
 
 export default function(baseUrl: string, app: Application) {
   // 获取历史记录

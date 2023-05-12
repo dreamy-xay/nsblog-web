@@ -3,12 +3,12 @@
  * @Version:
  * @Autor: dreamy-xay
  * @Date: 2021-07-23 23:38:31
- * @LastEditors: Ban
- * @LastEditTime: 2022-02-18 18:12:58
+ * @LastEditors: dreamy-xay
+ * @LastEditTime: 2023-05-12 21:33:37
  */
 import { post, get, put, RequestLifeCycle, del } from '@/network/request';
 import { sendRegisterEmail } from '@/network/api/tools/email';
-import { encrypt } from '@/util/crypto';
+import { encrypt } from '@/utils/crypto';
 
 /**
  * @description: 获取用户信息

@@ -42,8 +42,8 @@
 import { defineComponent, ref, reactive, watch } from 'vue';
 import MessageEmpty from '@/views/message/childComps/MessageEmpty.vue';
 import { getMessages, deleteMessages } from '@/network/api/messages';
-import { dateFormat } from '@/util/date';
-import { mapMutations, mapState } from '@/util/store';
+import { dateFormat } from '@/utils/date';
+import { mapMutations, mapState } from '@/utils/store';
 import { useMessage } from 'naive-ui';
 import { useRoute } from 'vue-router';
 

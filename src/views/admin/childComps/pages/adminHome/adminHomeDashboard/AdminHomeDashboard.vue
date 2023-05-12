@@ -69,7 +69,7 @@ import AdminView from '@/views/admin/childComps/AdminView.vue';
 import DashboardLineChart from '@/views/admin/childComps/pages/adminHome/adminHomeDashboard/childComps/DashboardLineChart.vue';
 import DashboardCircleChart from '@/views/admin/childComps/pages/adminHome/adminHomeDashboard/childComps/DashboardCircleChart.vue';
 import styles from '@/assets/style/define.scss';
-import { colorHexToDec } from '@/util/util';
+import { colorHexToDec } from '@/utils/utils';
 
 /**
  * @description: 仪表盘页面

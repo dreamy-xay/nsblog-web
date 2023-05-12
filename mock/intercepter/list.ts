@@ -9,7 +9,7 @@
 
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { print, randomUsers, RandomUser, int, getRandomTag, getRandomTopic } from './util';
+import { print, randomUsers, RandomUser, int, getRandomTag, getRandomTopic } from './utils';
 
 export default function(baseUrl: string, app: Application) {
   // 热门文章

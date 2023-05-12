@@ -4,11 +4,11 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-13 21:24:06
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-17 15:30:54
+ * @LastEditTime: 2023-05-12 19:24:25
  */
 import { Application, Request, Response } from 'express';
 import { Random } from 'better-mock';
-import { int, print, verifyToken, getToken, RandomUser, randomUsers, getRandomTopic, getRandomTag } from './util';
+import { int, print, verifyToken, getToken, RandomUser, randomUsers, getRandomTopic, getRandomTag } from './utils';
 import select from '../data/index';
 
 export default function(baseUrl: string, app: Application) {

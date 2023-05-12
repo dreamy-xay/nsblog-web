@@ -74,7 +74,7 @@ import SearchPageToLoadMore from '@/views/search/childComps/SearchPageToLoadMore
 import BaseModal from '@/components/content/baseModal/BaseModal.vue';
 import BaseContentLoading from '@/components/content/baseContentLoading/BaseContentLoading.vue';
 import styles from '@/assets/style/define.scss';
-import { mapGetters } from '@/util/store';
+import { mapGetters } from '@/utils/store';
 import { addGroup, deleteGroup } from '@/network/api/groups';
 
 /**

@@ -68,8 +68,8 @@
 <script>
 import { defineComponent, computed } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
-import { getSplitNum } from '@/util/util';
-import { mapState, mapGetters } from '@/util/store';
+import { getSplitNum } from '@/utils/utils';
+import { mapState, mapGetters } from '@/utils/store';
 import router from '@/router';
 
 /**
