@@ -10,7 +10,7 @@ import { Random, mock } from 'better-mock';
 import { Application, Request, Response } from 'express';
 import select, { DataBaseOperator } from '../data/index';
 import { print, verifyToken, getToken, int, getRandomTag } from './utils';
-import * as location from '../../src/utils/json/location.json';
+import * as location from '../data/location.json';
 
 function randomAddress(): string {
   if (!Random.integer(0, 2)) return ',,';

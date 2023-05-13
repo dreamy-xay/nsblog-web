@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-08-11 12:25:53
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-12-06 15:40:24
+ * @LastEditTime: 2023-05-13 15:28:18
  */
 import io, { Socket } from 'socket.io-client';
 
@@ -13,7 +13,7 @@ const socket: Socket = io(`${process.env.VUE_APP_APIHOST}:${process.env.VUE_APP_
 });
 
 // 网页mock模式下关闭socket
-if (process.env.VUE_APP_MOCK_SEVER !== 'false' && process.env.NODE_ENV === 'development') socket.close();
+if (process.env.VUE_APP_MOCK_SEVER !== 'false') socket.close();
 
 socket.on('connect', () => {
   console.log('>>>>>>> 和服务器已建立连接');

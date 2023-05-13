@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-26 14:41:12
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-01-20 17:45:12
+ * @LastEditTime: 2023-05-13 15:35:52
 -->
 <template>
   <div class="sign-in">
@@ -158,7 +158,7 @@ export default defineComponent({
       if ((usernameReg.test(username.value) || emailReg.test(username.value)) && passwordReg.test(password.value)) {
         authLogin(username.value, password.value)
           .then((data) => {
-            setToken(data.token, username.value);
+            setToken(data.token, data.username);
             updateTokenInfo();
             if (
               Object.prototype.hasOwnProperty.call(route.params, 'back') ||
