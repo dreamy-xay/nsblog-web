@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:02:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-12 11:33:30
+ * @LastEditTime: 2023-05-13 15:45:22
  */
 import { createApp } from 'vue';
 import App from './App.vue';
@@ -14,7 +14,7 @@ import registerDirectives from './directives';
 import installPlugins from './plugins';
 
 // mock拦截
-if (process.env.VUE_APP_MOCK_SEVER !== 'false') import('../mock/mock-app');
+if (process.env.VUE_APP_MOCK_SEVER !== 'false' && process.env.VUE_APP_MOCK !== 'false') import('../mock/mock-app');
 
 // 创建app
 const app = createApp(App);

@@ -4,11 +4,10 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:25:41
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-05-13 14:39:24
+ * @LastEditTime: 2023-05-13 15:46:06
  */
 
 const path = require('path');
-const fs = require('fs');
 
 const resolve = dir => {
   return path.join(__dirname, dir);
@@ -66,7 +65,10 @@ module.exports = {
       }
     },
     // 请求拦截
-    before: fs.existsSync('./mock/dist/sever-app.js') ? require('./mock/dist/sever-app').default : null
+    before:
+      process.env.VUE_APP_MOCK_SEVER === 'false' && process.env.VUE_APP_MOCK !== 'false'
+        ? require('./mock/dist/sever-app').default
+        : null
   },
 
   // webpack配置
