@@ -6,10 +6,7 @@ node_modules
 /tests/e2e/screenshots/
 
 # tsc mock files
-/mock/*.js
-/mock/intercepter/*.js
-/mock/socket/*.js
-/mock/data/*.js
+/mock/dist
 
 # local env files
 .env.local

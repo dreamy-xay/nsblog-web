@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-09 21:34:55
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-05-12 19:46:13
+ * @LastEditTime: 2023-05-13 15:35:09
  */
 
 import { Application, Request, Response } from 'express';
@@ -23,7 +23,7 @@ export default function(baseUrl: string, app: Application) {
     if (!ans) ans = users.findOne({ email: username });
     if (!ans) return res.status(401).json({ error: 'Password or username error' });
     else if (!ans.isActive) return res.status(401).json({ error: 'Account has been disabled' });
-    else if (ans.password === password) return res.json({ token: createToken((ans as any).username) });
+    else if (ans.password === password) return res.json({ username: ans.username, token: createToken((ans as any).username) });
     else return res.status(401).json({ error: 'Password or username error' });
   });
 

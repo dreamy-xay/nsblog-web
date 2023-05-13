@@ -4,18 +4,19 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-24 13:14:19
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-05-12 20:48:16
+ * @LastEditTime: 2023-05-13 14:44:44
  */
 
 import * as fs from 'fs';
 import * as path from 'path';
-import store from 'storejs';
 
+// 特殊情况下导入store
+const store: any = process.env.VUE_APP_MOCK_SEVER !== 'false' ? require('storejs') : null;
 const mockDatabaseName: string = 'mockDatabase'; // mock web浏览器localStorage key值
 
 /**
  * @description: 读取json文件
- * @param {string} dir 读取文件目录 `必传参数`
+ * @param {string} jsonFilePath 读取文件目录 `必传参数`
  * @return {Record<string, Record<string, unknown>[]>} 返回json对象，读取失败返回undefined
  * @author: dreamy-xay
  */
@@ -39,7 +40,7 @@ function readJson(jsonFilePath: string): Record<string, Record<string, unknown>[
 
 /**
  * @description: 编辑json文件
- * @param {string} dir 写入文件目录 `必传参数`
+ * @param {string} jsonFilePath 写入文件目录 `必传参数`
  * @param {Record<string, Record<string, unknown>[]>} data 写入数据 `必传参数`
  * @return {boolean} 返回是否成功写入
  * @author: dreamy-xay
@@ -249,6 +250,6 @@ class DataBaseOp implements DataBaseOperator {
  * @author: dreamy-xay
  */
 export default function select(table: string): DataBaseOperator {
-  const jsonFilePath: string = path.join(__dirname, 'data.json');
+  const jsonFilePath: string = path.join(process.cwd(), 'mock', 'data', 'data.json');
   return new DataBaseOp(jsonFilePath, table);
 }

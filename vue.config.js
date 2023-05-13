@@ -4,12 +4,13 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:25:41
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-04-29 22:30:24
+ * @LastEditTime: 2023-05-13 14:39:24
  */
 
 const path = require('path');
+const fs = require('fs');
 
-const resolve = (dir) => {
+const resolve = dir => {
   return path.join(__dirname, dir);
 };
 
@@ -54,7 +55,7 @@ module.exports = {
     proxy: {
       '/socket': {
         target: `${process.env.VUE_APP_APIHOST}:${process.env.VUE_APP_APIPORT}`,
-        ws: true,
+        ws: true
       },
       '/v1': {
         target: `${process.env.VUE_APP_APIHOST}:${process.env.VUE_APP_APIPORT}`,
@@ -64,9 +65,8 @@ module.exports = {
         }
       }
     },
-
     // 请求拦截
-    before: require('./mock/sever-app').default
+    before: fs.existsSync('./mock/dist/sever-app.js') ? require('./mock/dist/sever-app').default : null
   },
 
   // webpack配置
@@ -80,7 +80,7 @@ module.exports = {
     'style-resources-loader': {
       preProcessor: 'scss',
       patterns: [path.resolve(__dirname, 'src/assets/style/define.scss')]
-    },
+    }
   },
   css: {
     loaderOptions: {

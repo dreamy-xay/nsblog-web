@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "tsc:server-app": "tsc ./mock/sever-app.ts --downlevelIteration --resolveJsonModule",
+    "tsc:server-app": "tsc ./mock/sever-app.ts --downlevelIteration --resolveJsonModule --outDir ./mock/dist",
     "serve": "npm run tsc:server-app && vue-cli-service serve",
     "serve:server": "npm run tsc:server-app && cross-env VUE_APP_MOCK_SEVER=false vue-cli-service serve",
     "serve:mock": "cross-env VUE_APP_MOCK_SEVER=true vue-cli-service serve",
