@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:25:41
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-05-13 15:46:06
+ * @LastEditTime: 2023-05-17 15:51:45
  */
 
 const path = require('path');
@@ -12,9 +12,6 @@ const path = require('path');
 const resolve = dir => {
   return path.join(__dirname, dir);
 };
-
-// 调试模式下使用日志插件
-const debug = process.env.NODE_ENV !== 'production';
 
 module.exports = {
   // 基本路径
@@ -75,6 +72,11 @@ module.exports = {
   chainWebpack: config => {
     // 配置路径别名
     config.resolve.alias.set('@', resolve('src'));
+    // 配置网站标题
+    config.plugin('html').tap(args => {
+      args[0].title = 'nsblog - 笔记分享部落阁';
+      return args;
+    });
   },
 
   // 插件配置
