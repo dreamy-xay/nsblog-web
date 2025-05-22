@@ -17,7 +17,7 @@
       :key="index"
       role="button"
     >
-      <a
+      <a v-prefix
         :href="item.href"
         :target="item.href"
       >

@@ -15,7 +15,7 @@
       {{ users.length }} 人接令
     </div>
     <div class="solicitation-user-body">
-      <a
+      <a v-prefix
         v-for="(user, index) in users"
         :key="index"
         :href="`/user/${user.username}`"

@@ -23,7 +23,7 @@
         v-text="isPitch === 2 ? '问答历史' : '问答'"
       >
       </div>
-      <a
+      <a v-prefix
         href="/history"
         class="header-right"
       >
@@ -64,7 +64,7 @@
           </div>
         </div>
         <div class="bottom-item-other">
-          <a :href="'/user/' + item.username">
+          <a v-prefix :href="'/user/' + item.username">
             <div>{{ item.nickname }}</div>
           </a>
           <div>{{ dateGetText(new Date(item.time)) }}</div>

@@ -17,7 +17,7 @@
       :offset="10"
       :show-after="200"
     >
-      <a
+      <a v-prefix
         v-for="(item, index) in menu"
         :href="item.url"
         class="note-share-item"
@@ -32,7 +32,7 @@
         </div>
       </a>
       <template #reference>
-        <a :href="isLogin ? '/admin' : '/login/signIn'">
+        <a v-prefix :href="isLogin ? '/admin' : '/login/signIn'">
           <div
             class="button"
             role="button"

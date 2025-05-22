@@ -57,7 +57,7 @@ export default defineComponent({
     watch(
       () => tokenInfo.value.status,
       (value) => {
-        if (!value) router.push('/');
+        if (!value) router.push({name: "home"});
       }
     );
 

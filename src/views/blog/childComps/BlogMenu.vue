@@ -12,7 +12,7 @@
     :class="{'blog-menu-show': scrollShowMenu}"
   >
     <div class="blog-menu-inner">
-      <a
+      <a v-prefix
         class="menu-item"
         v-for="(item, index) in menu"
         :key="index"

@@ -11,7 +11,7 @@
     class="base-image"
     :style="imageStyle"
   >
-    <img
+    <img v-prefix
       :src="src"
       :alt="alt"
       @load="load"

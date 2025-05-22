@@ -22,7 +22,7 @@
         class="user-info-information-context-text1"
       >{{informData[index]}}</div>
 
-      <a
+      <a v-prefix
         v-else-if="index === 1"
         class="user-info-information-context-text2"
         role="button"
@@ -79,7 +79,7 @@
         role="button"
         class="iconfont blog-qq-s iconfontqq"
       ></i>
-      <a
+      <a v-prefix
         :href="'https://www.weibo.com/u/' + data.weibo"
         :target="'https://www.weibo.com/u/' + data.weibo"
       >
@@ -90,7 +90,7 @@
         ></i>
       </a>
 
-      <a :href="'mailto:' + data.email">
+      <a v-prefix :href="'mailto:' + data.email">
         <i
           role="button"
           class="iconfont blog-email1 iconfontemail"

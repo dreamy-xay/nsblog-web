@@ -9,15 +9,15 @@
 <template>
   <div class="top-bar-left">
     <div class="top-bar-left-logo">
-      <a href="/">
-        <img
+      <a v-prefix href="/">
+        <img v-prefix
           src="/logo.png"
           alt="logo"
         >
       </a>
     </div>
     <div class="top-bar-left-menu">
-      <a
+      <a v-prefix
         v-for="(item, index) in menu"
         :href="item.url"
         :key="index"

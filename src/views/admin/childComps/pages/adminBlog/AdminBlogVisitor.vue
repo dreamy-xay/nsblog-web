@@ -8,7 +8,7 @@
 -->
 <template>
   <admin-view class="admin-blog-visitor">
-    <img
+    <img v-prefix
       src="/admin/pages/adminBlogVisitor.png"
       alt=""
     >

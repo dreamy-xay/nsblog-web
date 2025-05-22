@@ -27,7 +27,7 @@
         popper-class="top-bar-right-inner"
       >
         <template #reference>
-          <a :href="item.url">
+          <a v-prefix :href="item.url">
             <div
               class="button"
               role="button"
@@ -41,7 +41,7 @@
           :content="item.content"
         />
       </el-popover>
-      <a
+      <a v-prefix
         v-else
         :href="item.url"
       >

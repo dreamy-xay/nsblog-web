@@ -14,7 +14,7 @@
       v-for="(item, index) in menuList"
       :key="index"
     >
-      <a
+      <a v-prefix
         :href="item.url"
         class="content"
         role="button"

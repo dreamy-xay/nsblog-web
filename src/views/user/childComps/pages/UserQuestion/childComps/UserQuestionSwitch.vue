@@ -17,7 +17,7 @@
       v-for="(item , index) in data"
       :key="index"
     >
-      <a
+      <a v-prefix
         v-if="!question"
         class="title"
         role="button"
@@ -36,7 +36,7 @@
             <div :class="question ? 'left-text-false' : 'left-text-true'">
               {{question ?'回答的问题' : item.reply_count+'回答' }}</div>
 
-            <a
+            <a v-prefix
               v-if="question"
               class="text"
               role="button"

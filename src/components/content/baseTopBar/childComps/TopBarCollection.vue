@@ -42,7 +42,7 @@
           v-for="(value, index) in List"
           :key="index"
         >
-          <a
+          <a v-prefix
             :href="(value.type === 1 ? '/article/' : (value.type === 2 ? '/question/' : '/resource/') )+ value.content_id"
             :target="(value.type === 1 ? '/article/' : (value.type === 2 ? '/question/' : '/resource/') )+ value.content_id"
           >
@@ -64,7 +64,7 @@
           role="button"
           v-show="favorites.length && List.length !== favorites[activeIndex].count"
         >
-          <a href="/userCenter/collection">查看全部</a>
+          <a v-prefix href="/userCenter/collection">查看全部</a>
         </div>
       </el-scrollbar>
     </div>

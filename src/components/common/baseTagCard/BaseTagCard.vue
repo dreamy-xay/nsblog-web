@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="base-tag-card-bottom">
-      <a
+      <a v-prefix
         v-show="!loading"
         class="tag"
         v-for="(item, index) in tags"

@@ -22,7 +22,7 @@
         >
           <template v-if="isSelf">
             {{data.nickname}}
-            <a
+            <a v-prefix
               href="/userCenter/profile"
               target="/userCenter/profile"
             ><i class="iconfont blog-edit"></i></a>

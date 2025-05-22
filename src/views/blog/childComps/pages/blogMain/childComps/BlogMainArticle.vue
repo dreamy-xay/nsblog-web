@@ -57,7 +57,7 @@
           <div class="abstract">摘要：{{item.content}} </div>
 
         </div>
-        <a
+        <a v-prefix
           class="context-bottom"
           role="button"
           @click="changePage(0,index)"
@@ -105,7 +105,7 @@ export default defineComponent({
      */
     function changePage(type, index) {
       if (type == 0) router.push('/article/' + props.data[index].id);
-      else router.push('/user/' + props.data[index].username);
+      else  router.push('/user/' + props.data[index].username);
     }
 
     return {

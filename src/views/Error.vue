@@ -350,7 +350,7 @@ export default defineComponent({
   setup() {
     // 回主页
     function goHome() {
-      router.push('/');
+      router.push({name: "home"});
     }
 
     return {

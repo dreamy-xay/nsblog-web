@@ -13,7 +13,7 @@
     @click.stop="click"
   >
     <slot v-if="slot"></slot>
-    <img
+    <img v-prefix
       :src="src"
       :alt="alt"
       @load="load"

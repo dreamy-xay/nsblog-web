@@ -41,7 +41,7 @@
           type="file"
           @change="changeImage"
         />
-        <img
+        <img v-prefix
           @click="pickImage"
           v-show="imageUrl!=null"
           class="cover-image"

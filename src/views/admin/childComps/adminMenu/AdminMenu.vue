@@ -4,22 +4,22 @@
  * @Autor: dreamy-xay
  * @Date: 2022-02-26 19:06:03
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-19 17:11:32
+ * @LastEditTime: 2025-05-22 15:25:43
 -->
 <template>
   <div class="admin-menu">
     <div class="admin-menu-main">
-      <a
+      <a v-prefix
         class="main-icon"
         href="/"
         target="_self"
       >
-        <img
+        <img v-prefix
           src="/favicon.ico"
           alt="nsblog icon"
         >
       </a>
-      <div class="main-inner">
+      <div class="main-inner" :style="{ background: `url('${prefix.resource}/admin/menu-background.png') no-repeat`}">
         <div
           class="menu-item"
           v-for="(item, index) in menuList"
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { computed, defineComponent, ref, watch } from 'vue';
+import { computed, defineComponent, ref, watch, inject } from 'vue';
 import AdminSubMenu from '@/views/admin/childComps/adminMenu/childComps/AdminSubMenu.vue';
 import router from '@/router';
 import { useRoute } from 'vue-router';
@@ -78,6 +78,7 @@ export default defineComponent({
     const route = useRoute(); // route
     const subMenuRef = ref(null); // 子菜单ref
     const activeIndex = ref(-1); // 激活菜单
+    const prefix = inject("prefix");
 
     const { adminRoutes } = mapState('global', ['adminRoutes']); // 获取adminRoutes
     // 计算显示的菜单列表
@@ -148,6 +149,7 @@ export default defineComponent({
       activeIndex,
       adminRoutes,
       goto,
+      prefix
     };
   },
 });
@@ -181,7 +183,6 @@ export default defineComponent({
     .main-inner {
       height: calc(100% - 60px);
       width: 100%;
-      background: url('/admin/menu-background.png') no-repeat;
       background-size: auto 100%;
       overflow-y: auto;
       overflow-x: hidden;

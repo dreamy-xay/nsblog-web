@@ -35,7 +35,7 @@
                 :to="info.unitData"
               />
             </div>
-            <img
+            <img v-prefix
               :src="info.icon"
               class="icon"
             />

@@ -7,7 +7,7 @@
  * @LastEditTime: 2021-09-16 17:54:16
 -->
 <template>
-  <div class="base-background">
+  <div class="base-background" :style="{ background: `url('${prefix.resource}/background.png')`}">
     <div
       class="base-background-mask"
       v-if="mask"
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, inject } from 'vue';
 
 /**
  * @description: 背景墙组件
@@ -32,6 +32,13 @@ export default defineComponent({
       default: true,
     },
   },
+  setup() {
+    const prefix = inject("prefix");
+
+    return {
+      prefix
+    }
+  }
 });
 </script>
 
@@ -42,7 +49,6 @@ export default defineComponent({
   left: 0;
   right: 0;
   bottom: 0;
-  background: url('/background.png');
   z-index: -99999;
 
   .base-background-mask {

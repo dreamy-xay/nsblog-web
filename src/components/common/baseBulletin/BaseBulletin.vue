@@ -23,7 +23,7 @@
       :key="index"
     >
       <div class="icon"> <i :class="type ? 'iconfont blog-gonggao1':'iconfont blog-zhiling'"></i> </div>
-      <a
+      <a v-prefix
         class="text"
         :href="item.href"
         :target="item.href"

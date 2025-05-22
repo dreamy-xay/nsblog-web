@@ -32,7 +32,7 @@
       </div>
     </div>
     <div class="base-rank-card-body">
-      <a
+      <a v-prefix
         v-show="!loading"
         class="info-item"
         v-for="(item, index) in rankData"

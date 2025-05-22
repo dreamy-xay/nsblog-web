@@ -10,7 +10,7 @@
   <div class="user-center-profile-edit-avatar">
     <div class="user-center-profile-edit-avatar-left">
       <div class="avatar">
-        <img
+        <img v-prefix
           :src="data.avatar"
           alt="image"
         >

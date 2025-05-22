@@ -28,7 +28,7 @@
             :hollow="true"
           />
         </div>
-        <a
+        <a v-prefix
           :href="(data.type === 1 ? '/article/' : '/question/') + data.id "
           class="content-right"
         >
@@ -50,7 +50,7 @@
           />
         </div>
         <div class="other-right">
-          <a :href="'/user/' + data.username">
+          <a v-prefix :href="'/user/' + data.username">
             <i class="iconfont blog-personal"></i>
             <span>{{data.nickname ? data.nickname : data.username}}</span>
           </a>

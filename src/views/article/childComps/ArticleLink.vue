@@ -9,15 +9,15 @@
 <template>
   <a
     class="article-link"
-    :href="href"
-    :target="target"
+    :href="`${prefix.url}${href}`"
+    :target="`${prefix.url}${target}`"
   >
     <slot></slot>
   </a>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, inject } from 'vue';
 
 /**
  * @description: 文章页面链接组件
@@ -38,6 +38,13 @@ export default defineComponent({
       default: null,
     },
   },
+  setup() {
+    const prefix = inject("prefix");
+
+    return {
+      prefix
+    }
+  }
 });
 </script>
 

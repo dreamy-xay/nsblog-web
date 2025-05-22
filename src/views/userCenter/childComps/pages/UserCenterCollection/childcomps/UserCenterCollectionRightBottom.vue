@@ -41,7 +41,7 @@
               v-for="(item3,index) in item1.typeList[choiceIndex].List"
               :key="index"
             >
-              <a
+              <a v-prefix
                 :href="(item3.type === 1 ? '/article/' : (item3.type === 2 ? '/question/' : '/resource/') )+ item3.content_id"
                 :target="(item3.type === 1 ? '/article/' : (item3.type === 2 ? '/question/' : '/resource/') )+ item3.content_id"
               >

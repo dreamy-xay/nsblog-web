@@ -15,7 +15,7 @@
         :key="index"
         :class="{'solicitation-item-last': solicitationList.length - 1 === index}"
       >
-        <a
+        <a v-prefix
           :href="`/solicitation/${item.id}`"
           :target="`/solicitation/${item.id}`"
           class="title"
@@ -32,7 +32,7 @@
               :target="`/user/${item.username}`"
               :size="24"
             />
-            <a
+            <a v-prefix
               class="username"
               :href="`/user/${item.username}`"
               :target="`/user/${item.username}`"

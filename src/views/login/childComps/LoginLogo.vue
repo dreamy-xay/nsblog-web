@@ -9,12 +9,12 @@
 <template>
   <div class="login-logo">
     <div class="login-logo-header">
-      <img
+      <img v-prefix
         class="favicon"
         src="/favicon.ico"
         alt="favicon"
       >
-      <img
+      <img v-prefix
         class="logo"
         src="/logo.png"
         alt="logo"

@@ -164,7 +164,7 @@ export default defineComponent({
       else {
         const reader = new FileReader();
         reader.onload = (event) => {
-          submit(e, `<img src="${event.target.result}" alt="image">`);
+          submit(e, `<img v-prefix src="${event.target.result}" alt="image">`);
         };
         reader.readAsDataURL(file);
       }

@@ -15,7 +15,7 @@
         </div>
         最新动态
       </div>
-      <a
+      <a v-prefix
         class="right"
         role="button"
         :href="`/user/${username}/dynamic`"
@@ -31,7 +31,7 @@
         :key="index"
       >
         <div class="avatar">
-          <img
+          <img v-prefix
             :src="avatarList[index]"
             alt="avatar"
           >

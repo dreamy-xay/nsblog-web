@@ -8,7 +8,7 @@
 -->
 <template>
   <admin-view class="admin-system-log">
-    <img
+    <img v-prefix
       src="/admin/pages/adminSystemLog.png"
       alt=""
     >

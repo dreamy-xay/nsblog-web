@@ -12,7 +12,7 @@
       class="base-avatar-cropper-image-container"
       v-show="show"
     >
-      <img
+      <img v-prefix
         ref="img"
         :src="imageUrl"
         alt="image"

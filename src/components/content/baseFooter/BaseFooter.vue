@@ -14,7 +14,7 @@
   >
     <div v-if="showAll">
       <div class="base-footer-first">
-        <a
+        <a v-prefix
           v-for="(content, index) in contents"
           :key="index"
           :href="content.url"
@@ -25,7 +25,7 @@
         </a>
       </div>
       <div class="base-footer-second">
-        <a
+        <a v-prefix
           v-for="(title, index) in titles"
           :href="title.url"
           :target="title.url"
@@ -42,7 +42,7 @@
       :style="{marginBottom: showAll ? '12px' : null}"
     >
       <div>© 2022 ·</div>
-      <a
+      <a v-prefix
         href="/"
         target="/"
       >笔记分享部落阁</a>

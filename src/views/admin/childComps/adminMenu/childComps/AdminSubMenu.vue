@@ -13,7 +13,7 @@
   >
     <div class="admin-sub-menu-container">
       <div class="admin-sub-menu-head">
-        <a
+        <a v-prefix
           class="logo"
           href="/admin"
           target="_self"

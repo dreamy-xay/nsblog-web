@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-09-24 20:04:12
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2021-10-01 21:35:26
+ * @LastEditTime: 2025-05-22 15:48:31
 -->
 <template>
   <div class="article-bottom-sponsor">
@@ -13,7 +13,7 @@
       :class="{'sponsor-blur': showBox}"
       role="button"
     >
-      <div class="img">
+      <div class="img" :style="{backgroundImage: `url('${prefix.resource}/article/o_like.png')`}">
         Sponsor
       </div>
       <div
@@ -52,7 +52,7 @@
 
 <script>
 import { useMessage } from 'naive-ui';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, inject } from 'vue';
 
 /**
  * @description: 文章页面打赏组件
@@ -74,6 +74,7 @@ export default defineComponent({
     const qrCodeImage = ref(null); // 二维码图片
     const mainClass = ref(null); // box类
     const showBox = ref(false); // 是否展示二维码
+    const prefix = inject("prefix");
 
     /**
      * @description: 显示二维码
@@ -127,6 +128,7 @@ export default defineComponent({
       qrCodeImage,
       showBox,
       mainClass,
+      prefix
     };
   },
 });
@@ -211,7 +213,7 @@ export default defineComponent({
       line-height: 70px;
       color: $grey-0;
       z-index: 0;
-      background: $yellow-0 url('/article/o_like.png') no-repeat center 10px;
+      background: $yellow-0 no-repeat center 10px;
       background-size: 20px;
       border-radius: 35px;
       text-align: center;

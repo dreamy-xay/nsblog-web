@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:02:59
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2022-02-27 10:45:59
+ * @LastEditTime: 2025-05-22 15:50:59
 -->
 <template>
   <n-config-provider
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, provide } from 'vue';
 import { zhCN, dateZhCN } from 'naive-ui';
 
 /**
@@ -35,6 +35,30 @@ import { zhCN, dateZhCN } from 'naive-ui';
 export default defineComponent({
   name: 'app',
   setup() {
+    const WindowOpenUrl = window.open;
+    const hashPrefix = process.env.VUE_APP_ROUTER_MODE === "false" ? "/#" : "";
+    const basePrefix = process.env.VUE_APP_BASE_PREFIX || '';
+
+    provide("prefix", {
+      "url": basePrefix + hashPrefix,
+      "resource": basePrefix,
+    });
+
+    function resolve(url) {
+      if (url.startsWith('/'))
+        return `${basePrefix}${hashPrefix}${url}`;
+      return url;
+    }
+
+    function open(url, target=null) {
+      if (target)
+        WindowOpenUrl(resolve(url), resolve(target));
+      else
+        WindowOpenUrl(resolve(url));
+    }
+
+    window.open = open
+
     return {
       zhCN,
       dateZhCN,

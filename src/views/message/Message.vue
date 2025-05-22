@@ -85,7 +85,7 @@ export default defineComponent({
       (value) => {
         if (!value) {
           offline('username'); // 下线
-          router.push('/');
+          router.push({name: "home"});
         }
       }
     );

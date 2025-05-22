@@ -8,7 +8,7 @@
 -->
 <template>
   <admin-view class="admin-creation-article-manage">
-    <img
+    <img v-prefix
       src="/admin/pages/adminCreationManage.png"
       alt=""
     >

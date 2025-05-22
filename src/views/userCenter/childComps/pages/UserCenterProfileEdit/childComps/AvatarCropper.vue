@@ -32,12 +32,12 @@
           class="right"
           v-show="effectShow"
         >
-          <img
+          <img v-prefix
             :src="avatarCropperImageSrc"
             alt="image"
             @error="error"
           >
-          <img
+          <img v-prefix
             :src="avatarCropperImageSrc"
             alt="image"
             @error="error"

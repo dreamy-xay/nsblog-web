@@ -8,7 +8,7 @@
 -->
 <template>
   <admin-view class="admin-upload-picture">
-    <img
+    <img v-prefix
       src="/admin/pages/adminUploadPicture.png"
       alt=""
     >

@@ -25,7 +25,7 @@
         <div
           class="text"
           role="button"
-        > <a
+        > <a v-prefix
             class="link"
             :href="(item.type === 1 ?'/article/' : ( item.type === 2 ? '/question/' : '/resource/')) + item.content_id"
             :target="(item.type === 1 ?'/article/' : ( item.type === 2 ? '/question/' : '/resource/')) + item.content_id"

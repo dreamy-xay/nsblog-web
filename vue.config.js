@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 12:25:41
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-05-17 15:51:45
+ * @LastEditTime: 2025-05-22 06:56:39
  */
 
 const path = require('path');
@@ -15,7 +15,7 @@ const resolve = dir => {
 
 module.exports = {
   // 基本路径
-  // publicPath: './',
+  publicPath: `${process.env.VUE_APP_BASE_PREFIX}/`,
 
   // 输出文件目录
   outputDir: 'dist',

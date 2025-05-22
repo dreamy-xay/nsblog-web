@@ -21,12 +21,12 @@
           v-for="(friendChain, index) in friendChains"
           :key="index"
         >
-          <a
+          <a v-prefix
             :href="friendChain.link"
             class="link"
           >
             <div class="back"></div>
-            <img
+            <img v-prefix
               src="/blog/none.jpg"
               class="img"
             >

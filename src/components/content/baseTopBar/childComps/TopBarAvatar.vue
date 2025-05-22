@@ -8,7 +8,7 @@
 -->
 <template>
   <div class="top-bar-avatar">
-    <a
+    <a v-prefix
       href="/login/signIn?back"
       v-if="!tokenInfo.status"
     >
@@ -34,7 +34,7 @@
       <div class="user-info">
         <div class="user-info-top">
           <a
-            :href="'/user/' + username"
+            :href="`${prefix}/user/${username}`"
             class="avatar"
             :class="{active: active}"
           >
@@ -65,7 +65,7 @@
               <i class="iconfont blog-zan"></i>
               {{likeCount}}
             </div>
-            <a :href="`mailto:${email}`">
+            <a v-prefix :href="`mailto:${email}`">
               <div
                 class="info-right"
                 role="button"
@@ -76,7 +76,7 @@
           </div>
         </div>
         <div class="user-info-mid">
-          <a
+          <a v-prefix
             v-for="(item, index) in detail"
             :key="index"
             :href="item.url"
@@ -88,7 +88,7 @@
           </a>
         </div>
         <div class="user-info-bottom">
-          <a
+          <a v-prefix
             v-for="(item, index) in menu"
             :href="item.url"
             :key="index"
@@ -134,7 +134,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, computed } from 'vue';
+import { defineComponent, ref, computed, inject } from 'vue';
 import BaseAvatar from '@/components/content/baseAvatar/BaseAvatar.vue';
 import { getUserInfo } from '@/network/api/user';
 import { authLogout } from '@/network/api/auth';
@@ -166,6 +166,7 @@ export default defineComponent({
     const recommendCount = ref(0); // 关注数
     const fansCount = ref(0); // 粉丝数
     const dynamicCount = ref(0); // 动态数
+    const prefix = inject("prefix");
     // 中间菜单
     const menu = [
       {
@@ -296,6 +297,7 @@ export default defineComponent({
       active,
       updateActive,
       showAvatar,
+      prefix
     };
   },
 });

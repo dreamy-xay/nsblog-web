@@ -12,7 +12,7 @@
     <div class="top-bar-not-login-content">
       {{ content }}
     </div>
-    <a
+    <a v-prefix
       href="/login/signIn?back"
       class="top-bar-not-login-link"
     >

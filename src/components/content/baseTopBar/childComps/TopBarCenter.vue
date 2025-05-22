@@ -135,8 +135,8 @@ export default defineComponent({
         visible.value = false;
         set(value);
         // console.log(`search: ${value}`);
-        if (route.path.split('/')[1] != 'search') router.push({ path: `/search`, query: { keyword: value } });
-        else router.push({ path: route.path, query: { keyword: value } });
+        if (route.path.split('/')[1] != 'search') router.push({ name: "search", query: { keyword: value } });
+        else router.push({ name: route.name, query: { keyword: value } });
       }
     }
 

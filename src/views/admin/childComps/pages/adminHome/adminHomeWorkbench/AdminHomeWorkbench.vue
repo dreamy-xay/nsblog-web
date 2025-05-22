@@ -47,7 +47,7 @@
       <div class="workbench-body-right">
         <workbench-navigation />
         <div class="img">
-          <img src="/admin/home/workbench/work.svg">
+          <img v-prefix src="/admin/home/workbench/work.svg">
         </div>
         <workbench-to-do />
       </div>

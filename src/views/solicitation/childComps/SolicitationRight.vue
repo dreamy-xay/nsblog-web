@@ -16,7 +16,7 @@
         :size="64"
         :alt="data.username"
       />
-      <a
+      <a v-prefix
         class="nickname"
         :href="`/user/${data.username}`"
         :target="`/user/${data.username}`"

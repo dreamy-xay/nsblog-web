@@ -4,7 +4,7 @@
  * @Autor: dreamy-xay
  * @Date: 2021-07-06 16:13:51
  * @LastEditors: dreamy-xay
- * @LastEditTime: 2023-03-04 16:31:08
+ * @LastEditTime: 2025-05-22 15:15:16
  */
 
 import { debounce, throttle } from 'lodash';
@@ -67,6 +67,24 @@ export default (app: App): void => {
       waitImageLoaded(el)
         .then(() => setTimeout(() => naiveUiLoadingBar.finish(), 0))
         .catch(() => setTimeout(() => naiveUiLoadingBar.error(), 0));
+    }
+  });
+
+  // url 前缀
+  app.directive('prefix', {
+    mounted(el: HTMLElement) {
+      const hashPrefix = process.env.VUE_APP_ROUTER_MODE === "false" ? "/#" : "";
+      const basePrefix = process.env.VUE_APP_BASE_PREFIX || '';
+      nextTick(() => {
+        if (basePrefix && el.tagName === 'IMG' && el.hasAttribute('src') && el.getAttribute('src')?.startsWith('/'))
+          el.setAttribute('src', `${basePrefix}${el.getAttribute('src')}`);
+        if ((hashPrefix || basePrefix) && el.tagName === 'A') {
+          if (el.hasAttribute('href') && el.getAttribute('href')?.startsWith('/'))
+            el.setAttribute('href', `${basePrefix}${hashPrefix}${el.getAttribute('href')}`);
+          if (el.hasAttribute('target') && el.getAttribute('target')?.startsWith('/'))
+            el.setAttribute('target', `${basePrefix}${hashPrefix}${el.getAttribute('target')}`);
+        }
+      });
     }
   });
 };
